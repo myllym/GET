@@ -1,0 +1,33 @@
+bibentry(
+    bibtype = 'Article',
+    journal = 'Journal of Universal Rejection',
+    title = 'Deviation test problem paper',
+    year = 'In preparation',
+    author = c(
+        person(
+            given = 'Mari',
+            family = 'Myllymäki',
+            email = list('mari.myllymaki@aalto.fi',
+                         'mari.j.myllymaki@gmail.com'),
+            role = c('aut', 'cre')
+        ),
+        person(
+            given = 'Pavel',
+            family = 'Grabarnik',
+            email = 'gpya@rambler.ru',
+            role = 'aut'
+        ),
+        person(
+            given = 'Henri',
+            family = 'Seijo',
+            email = 'henri.seijo@iki.fi',
+            role = c('aut', 'cre')
+        ),
+        person(
+            given = 'Dietrich',
+            family = 'Stoyan',
+            email = 'stoyan@math.tu-freiberg.de',
+            role = 'aut'
+        ),
+    )
+)

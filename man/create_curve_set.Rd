@@ -1,0 +1,26 @@
+\name{create_curve_set}
+\alias{create_curve_set}
+\title{Create a curve set out of a list in the right form.}
+\usage{
+  create_curve_set(curve_set)
+}
+\arguments{
+  \item{curve_set}{A list containing elements r, obs, sim_m
+  and optionally the element theo. r must be a vector
+  describing the radius vector. obs must be a vector
+  containing the summary function values for the observed
+  pattern. obs must have same length as r. sim_m must be a
+  matrix containing summary function values for all the
+  simulated patterns. Each column corresponds to a pattern.
+  The number of rows must match the length of r. If
+  included, theo corresponds to the theoretical summary
+  function curve. If present, its length must match the
+  length of r.}
+}
+\value{
+  The given list adorned with the proper class name.
+}
+\description{
+  Create a curve set out of a list in the right form.
+}
+

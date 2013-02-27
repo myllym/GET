@@ -1,0 +1,16 @@
+Spatial point process testing
+
+spptest provides envelope and deviation tests for spatial point processes.
+The main motivation for a new package are the power-correcting scalings for
+deviation tests, new deviation measures and new envelope tests.
+
+The user might need to only know about the functions random_labelling_test
+and scaled_deviation_test. The first tests the random labelling hypothesis
+for the given point pattern and returns the p-value. The latter function
+takes already calculated summary function curves (for example an envelope
+object from spatstat) and returns a p-value.
+
+If your summary function curves are in a different format than an envelope
+object from spatstat or the curve_set of this package, you can use
+create_curve_set after converting your data into the appropriate form. The
+object structure is described in the manual for create_curve_set.

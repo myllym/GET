@@ -1,0 +1,52 @@
+\name{random_labelling_L_f}
+\alias{random_labelling_L_f}
+\title{Generate L_f curves for a random labelling test.}
+\usage{
+  random_labelling_L_f(pattern, mtf_name = "m",
+    r_max = NULL, r_vec = NULL, n_sim = 999L,
+    calc_theo = TRUE, edge_correction = "translate",
+    method = "permute", use_biased_lambda2 = FALSE)
+}
+\arguments{
+  \item{calc_theo}{Whether to calculate the theoretical
+  summary function as well.}
+
+  \item{pattern}{A \code{\link[spatstat]{ppp}} object as
+  the simple marked point pattern to be analysed. The marks
+  need to be in the form of a numeric vector. The window
+  has to have the type "rectangle".}
+
+  \item{mtf_name}{A vector of mark test function names. "1"
+  stands for the unmarked K-function. Accepted values are
+  '1', 'm', 'mm', 'gamma', 'gammaAbs' and 'morAbs'.}
+
+  \item{r_max}{A positive scalar value representing the
+  maximum radius that should be considered. r_vec overrides
+  r_max. By default, r_max is NULL and will get a sensible
+  default.}
+
+  \item{r_vec}{A monotonically increasing vector of
+  non-negative r-values to act as the endpoints of the bins
+  for the K_f-functions. r_vec overrides r_max. The bins
+  are exclusive on the left and inclusive on the right. If
+  the first vector element has value zero, it will be
+  regarded as the collapsed bin [0, 0], and the next bin
+  will start from and exclude 0.}
+
+  \item{method}{The name of the method to create
+  simulations under the null hypothesis.}
+
+  \item{use_biased_lambda2}{A logical scalar on whether to
+  use the biased or the unbiased (in the Poisson case)
+  estimate of the intensity squared.}
+}
+\value{
+  A list with either two or three components. 'obs' has the
+  summary function that was asked for. 'r' contains the
+  radius values. 'theo' contains the unmarked L function,
+  if asked for.
+}
+\description{
+  Generate L_f curves for a random labelling test.
+}
+

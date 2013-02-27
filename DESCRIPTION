@@ -1,0 +1,30 @@
+Package: spptest
+Encoding: UTF-8
+Authors@R: c(
+    person(given = 'Henri', family = 'Seijo', role = c('aut', 'cre'),
+    email = 'henri.seijo@iki.fi'),
+    person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre',
+    'ths'),
+    email = list('mari.myllymaki@aalto.fi', 'mari.j.myllymaki@gmail.com'))
+    )
+Version: 0.1
+Date: 2013-02-27
+License: GPL-3
+Title: Spatial point process testing
+Description: Envelope and deviation tests for spatial point processes with
+    power-correcting scalings.
+Imports:
+    marksummary
+Suggests:
+    testthat,
+    roxygen2
+Collate:
+    'crop.r'
+    'curve-set.r'
+    'deviation.r'
+    'p-value.r'
+    'residual.r'
+    'scaling.r'
+    'spptest-package.r'
+    'summ-func.r'
+    'wrapper.r'
