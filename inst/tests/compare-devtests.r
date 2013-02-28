@@ -3,7 +3,7 @@ context('p-value correctness compared to devtests')
 test_that('spruces gives the same result', {
     pattern <- spatstat::spruces
 
-    # Random seed.
+    # Random generator seed.
     seed <- 1234L
 
     mtf_name <- 'm'
