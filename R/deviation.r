@@ -15,7 +15,12 @@ deviation <- function(curve_set, measure = 'max', ...) {
     usual_measures <- c('max', 'int', 'int2')
     possible_measures <- c(usual_measures, functional_depths)
 
-    curve_set <- convert_envelope(curve_set)
+    # deviation() should not accept envelope objects as they are not in
+    # residual form.
+    if (!is(curve_set, 'curve_set')) {
+        stop('curve_set must have class "curve_set".')
+    }
+    check_curve_set_content(curve_set)
     check_residualness(curve_set)
 
     if (length(measure) != 1L || !(measure %in% possible_measures)) {
