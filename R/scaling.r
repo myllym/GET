@@ -95,9 +95,12 @@ env_scaling <- function(curve_set, probs = c(0.025, 0.975), type = 8, ...) {
 #' Used by \code{\link{envdir_scaling}}.
 weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
     if (is.matrix(x)) {
-        y <- matrix(0, dim = dim(x))
+        dims <- dim(x)
+        y <- matrix(0, nrow = dims[1], ncol = dims[2],
+                    dimnames = dimnames(x))
     } else if (is.vector(x)) {
         y <- numeric(length(x))
+        names(y) <- names(x)
     } else {
         stop('x must be either a matrix or a vector.')
     }
