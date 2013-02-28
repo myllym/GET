@@ -43,6 +43,10 @@ L_f-functions.}
   \item{scaling}{The name of the scaling to use. Options
   include 'env', 'envdir', 'scale'. 'env' is default.}
 
+  \item{measure}{The deviation measure to use. Default is
+  'max'. Must be one of the following: 'max', 'int',
+  'int2', 'MBD', 'MHRD', 'MMHRD', 'ISD' or 'MISD'.}
+
   \item{ties}{The method to treat tied values with. If one
   or more of the elements of sim_vec are equal to obs, how
   should the rank of obs be determined? For 'conservative'
