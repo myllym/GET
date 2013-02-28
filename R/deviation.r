@@ -1,8 +1,12 @@
 #' Deviation of curves.
 #'
 #' @export
-deviation <- function(curve_set, measure = 'max') {
-    possible_measures <- c('max', 'int2', 'int')
+#' @import fastdepth
+deviation <- function(curve_set, measure = 'max', ...) {
+    functional_depths <- c('MBD', 'MHRD', 'MMHRD', 'ISD', 'MISD')
+    functional_depth_funcs <- c('mbd', 'mhrd', 'mmhrd', 'isd', 'misd')
+    usual_measures <- c('max', 'int', 'int2')
+    possible_measures <- c(usual_measures, functional_depths)
 
     curve_set <- convert_envelope(curve_set)
     check_residualness(curve_set)
@@ -21,6 +25,14 @@ deviation <- function(curve_set, measure = 'max') {
     } else if (measure %in% 'int2') {
         res <- with(curve_set, list(obs = sum(obs ^ 2L),
                                     sim = apply(sim_m ^ 2L, 2, sum)))
+    } else if (measure %in% functional_depths) {
+        curve_m <- with(curve_set, rbind(obs, t(sim_m)))
+        idx <- match(measure, functional_depths)
+        func <- get(functional_depth_funcs[idx])
+        # Large depth values correspond to small deviations so take the
+        # complement.
+        dev <- -func(curve_m, ...)
+        res <- list(obs = depth[1], sim = depth[-1])
     }
 
     res <- create_deviation_set(res)
