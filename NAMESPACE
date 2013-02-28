@@ -1,5 +1,4 @@
 export(check_deviation_set)
-export(convert_envelope)
 export(create_curve_set)
 export(deviation)
 export(envelope_to_curve_set)

@@ -1,4 +1,5 @@
 #' Turn an \code{\link[spatstat]{envelope}} object into a curve_set object.
+#' @param env An envelope object from spatstat.
 #' @export
 envelope_to_curve_set <- function(env) {
     if (!inherits(env, 'envelope')) {
@@ -148,8 +149,10 @@ check_curve_set_content <- function(curve_set) {
     curve_set
 }
 
-#' Check and possibly convert the object.
-#' @export
+#' Convert an envelope object to a curve_set object.
+#'
+#' If given an envelope object, convert it into a curve_set object. If given
+#' a curve_set object, check its correctness and give it back.
 convert_envelope <- function(curve_set) {
     if (inherits(curve_set, 'envelope')) {
         curve_set <- envelope_to_curve_set(curve_set)
