@@ -44,7 +44,7 @@ deviation <- function(curve_set, measure = 'max', ...) {
         # Large depth values correspond to small deviations so take the
         # complement.
         dev <- -func(curve_m, ...)
-        res <- list(obs = depth[1], sim = depth[-1])
+        res <- list(obs = dev[1], sim = dev[-1])
     }
 
     res <- create_deviation_set(res)
