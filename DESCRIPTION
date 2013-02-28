@@ -14,7 +14,8 @@ Title: Spatial point process testing
 Description: Envelope and deviation tests for spatial point processes with
     power-correcting scalings.
 Imports:
-    marksummary
+    marksummary,
+    fastdepth
 Suggests:
     testthat,
     roxygen2
