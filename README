@@ -14,3 +14,6 @@ If your summary function curves are in a different format than an envelope
 object from spatstat or the curve_set of this package, you can use
 create_curve_set after converting your data into the appropriate form. The
 object structure is described in the manual for create_curve_set.
+
+To calculate a summary function from a point pattern, use the function
+estimate_K_f or estimate_L_f.
