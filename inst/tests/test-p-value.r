@@ -5,9 +5,9 @@ context('p-values')
 # Helpers.
 
 case_no_ties <- function(position, n_sample) {
-    list(argument=list(data_sample=position,
-                       # Permuting the values just for a harder test.
-                       mc_samples=sample(seq_len(n_sample)[-position])),
+    list(argument=list(obs=position,
+                       # Permuting the values for a harder test.
+                       sim_vec=sample(seq_len(n_sample)[-position])),
          # Calculation modified from a separate source:
          # B. V. North, D. Curtis, and P. C. Sham, "A Note on the
          # Calculation of Empirical P Values from Monte Carlo Procedures,"
@@ -16,7 +16,7 @@ case_no_ties <- function(position, n_sample) {
 }
 
 do_no_ties_test <- function(position, n_sample) {
-    func <- 'estimate_p_value'
+    func <- 'estimate_p_value.default'
 
     case_l <- case_no_ties(position, n_sample)
     argument_l <- case_l[['argument']]
@@ -56,9 +56,9 @@ test_that('p-value is correct; several ties; one case', {
 
     p_reference_liberal <- 2 / 6
     p_reference_conservative <- 5 / 6
-    p_reference_midrank <- 1 - (rank(c(data_sample, mc_samples),
-                                     ties.method='midrank')[1]
-                                - 1L) / 6
+    p_reference_midrank <-
+        1 - (rank(c(data_sample, mc_samples), ties.method='midrank')[1]
+             - 1L) / 6
     p_reference_random_check <- function(x) {
         isTRUE(all.equal(x, 2 / 6)) ||
         isTRUE(all.equal(x, 3 / 6)) ||
