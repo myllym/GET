@@ -57,7 +57,7 @@ test_that('p-value is correct; several ties; one case', {
     p_reference_liberal <- 2 / 6
     p_reference_conservative <- 5 / 6
     p_reference_midrank <-
-        1 - (rank(c(data_sample, mc_samples), ties.method='midrank')[1]
+        1 - (rank(c(data_sample, mc_samples), ties.method='average')[1]
              - 1L) / 6
     p_reference_random_check <- function(x) {
         isTRUE(all.equal(x, 2 / 6)) ||
