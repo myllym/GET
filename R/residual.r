@@ -1,4 +1,9 @@
 #' Subtract S_{H_0} from the summary functions.
+#' @inheritParams convert_envelope
+#' @param use_theo Whether to use the theoretical summary function or the
+#'   mean of the simulations.
+#' @return A curve set object containing residual summary functions. theo is
+#'   no longer included.
 residual <- function(curve_set, use_theo = TRUE) {
     curve_set <- convert_envelope(curve_set)
 

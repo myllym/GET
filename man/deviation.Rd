@@ -5,14 +5,15 @@
   deviation(curve_set, measure = "max", ...)
 }
 \arguments{
-  \item{curve_set}{A residual curve_set object.}
+  \item{curve_set}{A residual curve_set object. Can be
+  obtained by using residual().}
 
   \item{measure}{The deviation measure to use. Default is
   'max'. Must be one of the following: 'max', 'int',
   'int2', 'MBD', 'MHRD', 'MMHRD', 'ISD' or 'MISD'.}
 
-  \item{...}{Further arguments delivered to the measure
-  function.}
+  \item{...}{Arguments to be passed to the measure
+  function, if applicable.}
 }
 \value{
   A deviation_set object. The list has two elements: obs

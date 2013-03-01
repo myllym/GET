@@ -5,7 +5,12 @@
   envelope_to_curve_set(env)
 }
 \arguments{
-  \item{env}{An envelope object from spatstat.}
+  \item{env}{An \code{\link[spatstat]{envelope}} object.
+  The envelope() functions must have been called with
+  savefuns = TRUE.}
+}
+\value{
+  A corresponding curve_set object.
 }
 \description{
   Turn an \code{\link[spatstat]{envelope}} object into a

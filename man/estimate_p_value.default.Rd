@@ -27,12 +27,11 @@
   1.
 }
 \description{
-  Estimates the p-value of the given data sample for the
+  Estimates the p-value of the given observation for the
   given set of Monte Carlo samples. User can choose which
-  method is used to treat tied values between the data
-  sample and the Monte Carlo samples.
+  method is used to treat possible tied values.
 }
 \references{
-  Hajek, Sidak, Sen. Theory of Rank Tests. 1999. ff. 130.
+  Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
 }
 

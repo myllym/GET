@@ -34,7 +34,10 @@
   will start from and exclude 0.}
 
   \item{method}{The name of the method to create
-  simulations under the null hypothesis.}
+  simulations under the null hypothesis. 'permute' results
+  in permutations of the marks. Using 'sample' will sample
+  the marks from the empirical mark distribution with
+  replacement. 'permute' is the default.}
 
   \item{use_biased_lambda2}{A logical scalar on whether to
   use the biased or the unbiased (in the Poisson case)

@@ -1,9 +1,8 @@
 #' Scale summary functions.
 #'
-#' @param curve_set The estimated summary functions. Either a curve_set
-#'   object or an \code{\link[spatstat]{envelope}} object.
-#' @param scaling The name of the scaling to use. Options include 'env',
-#'   'envdir', 'scale'. 'env' is default.
+#' @inheritParams convert_envelope
+#' @param scaling The name of the scaling to use. Options include 'none',
+#'   'env', 'envdir' and 'scale'. 'env' is default.
 #' @param ... Further arguments passed to the chosen scaling function.
 #' @export
 scale_curves <- function(curve_set, scaling = 'env', ...) {
@@ -35,12 +34,8 @@ divisor_to_coeff <- function(x) {
 
 #' Multiply by a coefficient.
 #'
-#' @param curve_set The curve_set to be weighted. Must be of class
-#'   curve_set.
+#' @inheritParams convert_envelope
 #' @param coeff The coefficient vector, often of the length of one curve.
-#' @param zero_idx Something that can be used to index the curve vectors.
-#'   These values of the curves will be set to zero. If NULL, nothing will
-#'   be zeroed unless coeff has zeros. Defaults to NULL.
 weigh_curves <- function(curve_set, coeff) {
     curve_set[['obs']] <- coeff * curve_set[['obs']]
     curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
@@ -63,15 +58,13 @@ check_probs <- function(probs) {
 
 #' Env scaling.
 #'
-#' @param curve_set The curves to be scaled.
+#' @inheritParams convert_envelope
 #' @param probs A two-element vector containing the lower and upper
 #'   quantiles for the envelope, in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975 as in the article by Møller and
 #'   Berthelsen.
-#' @param type The type of algorithm to use for the quantile function. Type
-#'   8 is the default.
-#' @param type The quantile algorithm to use. See
-#'   \code{\link[stats]{quantile}} for further details.
+#' @param type The type of algorithm to use for the
+#'   \code{\link[stats]{quantile}} function. Type 8 is the default.
 #' @param ... Further arguments passed to quantile.
 #' @return A scaled curve_set.
 #' @references J. Møller and K. K. Berthelsen, “Transforming spatial point
@@ -115,12 +108,11 @@ weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
 
 #' EnvDir scaling.
 #'
-#' @param curve_set The curves to be scaled.
-#' @param probs The quantile percentiles to use. Should be within [0, 1].
-#'   See \code{\link[stats]{quantile}} for further details.
-#' @param type The quantile algorithm to use. See
-#'   \code{\link[stats]{quantile}} for further details.
-#' @param ... Further arguments passed to quantile.
+#' @details Notice that this scaling is only defined for residuals.
+#'
+#' @inheritParams convert_envelope
+#' @inheritParams env_scaling
+#' @return A scaled curve_set.
 envdir_scaling <- function(curve_set, probs = c(0.025, 0.975), type = 8,
                            ...) {
     check_probs(probs)
@@ -146,7 +138,7 @@ envdir_scaling <- function(curve_set, probs = c(0.025, 0.975), type = 8,
 
 #' Scale with the standard deviation.
 #'
-#' @param curve_set The curves to be scaled.
+#' @inheritParams convert_envelope
 #' @return A scaled curve_set.
 scale_scaling <- function(curve_set) {
     sim_sd <- apply(curve_set[['sim_m']], 1, sd)

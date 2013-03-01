@@ -3,8 +3,11 @@
 #' Crop the curves to a certain interval in preparation for a deviation
 #' test.
 #'
-#' @param curve_set The collection of curves. Must either have class
-#'   \code{\link[spatstat]{envelope}} or class curve_set.
+#' @inheritParams convert_envelope
+#' @param r_min The minimum radius to include.
+#' @param r_max The maximum radius to include.
+#' @return A curve_set object containing the cropped summary functions and
+#'   the cropped radius vector.
 crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
     curve_set <- convert_envelope(curve_set)
 

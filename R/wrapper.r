@@ -39,6 +39,8 @@ random_labelling_test <- function(pattern,
 
 #' Scale the curve_set and perform a deviation test.
 #'
+#' @inheritParams convert_envelope
+#' @inheritParams crop_curves
 #' @export
 scaled_deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
                                   use_theo = TRUE, scaling = 'env',

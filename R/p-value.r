@@ -8,9 +8,9 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 # FIXME: north_note_2002 uses the term anti-conservative for the incorrect p-value.
 #' Estimate p-value.
 #'
-#' Estimates the p-value of the given data sample for the given set of
-#' Monte Carlo samples. User can choose which method is used to treat
-#' tied values between the data sample and the Monte Carlo samples.
+#' Estimates the p-value of the given observation for the given set of Monte
+#' Carlo samples. User can choose which method is used to treat possible
+#' tied values.
 #'
 #' @param obs The data sample. A scalar real value. Must not be
 #'   NULL.
@@ -26,7 +26,7 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #'   take the mid-rank within the tied values. 'random' is the default.
 #' @return The p-value estimate. A scalar real value between 0 and 1.
 #'
-#' @references Hajek, Sidak, Sen. Theory of Rank Tests. 1999. ff. 130.
+#' @references Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
 #' @export
 estimate_p_value.default <- function(obs, sim_vec, ties = 'random') {
     if (length(obs) != 1L || !is.finite(obs) || !is.numeric(obs)) {
@@ -66,6 +66,12 @@ estimate_p_value.default <- function(obs, sim_vec, ties = 'random') {
     p_estimate
 }
 
+#' Estimate p-value.
+#'
+#' Check \code{\link{estimate_p_value.default}} for details.
+#'
+#' @param deviation_set A deviation_set object. Use deviation() to get one.
+#' @return The p-value.
 estimate_p_value.deviation_set <- function(deviation_set, ...) {
     check_deviation_set(deviation_set)
     p <- with(deviation_set,

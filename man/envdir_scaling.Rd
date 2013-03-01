@@ -6,18 +6,30 @@
     type = 8, ...)
 }
 \arguments{
-  \item{curve_set}{The curves to be scaled.}
+  \item{curve_set}{A curve_set or an
+  \code{\link[spatstat]{envelope}} object. If an envelope
+  object is given, it must contain the summary functions
+  from the simulated patterns which can be achieved by
+  setting savefuns = TRUE when calling envelope().}
 
-  \item{probs}{The quantile percentiles to use. Should be
-  within [0, 1].  See \code{\link[stats]{quantile}} for
-  further details.}
+  \item{probs}{A two-element vector containing the lower
+  and upper quantiles for the envelope, in that order and
+  on the interval [0, 1].  The default values are 0.025 and
+  0.975 as in the article by Møller and Berthelsen.}
 
-  \item{type}{The quantile algorithm to use. See
-  \code{\link[stats]{quantile}} for further details.}
+  \item{type}{The type of algorithm to use for the
+  \code{\link[stats]{quantile}} function. Type 8 is the
+  default.}
 
   \item{...}{Further arguments passed to quantile.}
 }
+\value{
+  A scaled curve_set.
+}
 \description{
   EnvDir scaling.
+}
+\details{
+  Notice that this scaling is only defined for residuals.
 }
 

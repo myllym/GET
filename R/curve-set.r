@@ -1,5 +1,8 @@
 #' Turn an \code{\link[spatstat]{envelope}} object into a curve_set object.
-#' @param env An envelope object from spatstat.
+#'
+#' @param env An \code{\link[spatstat]{envelope}} object. The envelope()
+#'   functions must have been called with savefuns = TRUE.
+#' @return A corresponding curve_set object.
 #' @export
 envelope_to_curve_set <- function(env) {
     if (!inherits(env, 'envelope')) {
@@ -153,6 +156,14 @@ check_curve_set_content <- function(curve_set) {
 #'
 #' If given an envelope object, convert it into a curve_set object. If given
 #' a curve_set object, check its correctness and give it back.
+#'
+#' @param curve_set A curve_set or an \code{\link[spatstat]{envelope}}
+#'   object. If an envelope object is given, it must contain the summary
+#'   functions from the simulated patterns which can be achieved by setting
+#'   savefuns = TRUE when calling envelope().
+#' @return If an \code{\link[spatstat]{envelope}} object was given, return a
+#'   corresponding curve_set object. If a curve_set object was given, return
+#'   it unharmed.
 convert_envelope <- function(curve_set) {
     if (inherits(curve_set, 'envelope')) {
         curve_set <- envelope_to_curve_set(curve_set)
@@ -165,6 +176,7 @@ convert_envelope <- function(curve_set) {
 }
 
 #' Check that the curve_set object portrays residual curves.
+#' @inheritParams convert_envelope
 check_residualness <- function(curve_set) {
     is_residual <- curve_set[['is_residual']]
     if (length(is_residual) < 1L || !is_residual) {

@@ -34,14 +34,23 @@ L_f-functions.}
   will start from and exclude 0.}
 
   \item{method}{The name of the method to create
-  simulations under the null hypothesis.}
+  simulations under the null hypothesis. 'permute' results
+  in permutations of the marks. Using 'sample' will sample
+  the marks from the empirical mark distribution with
+  replacement. 'permute' is the default.}
 
   \item{use_biased_lambda2}{A logical scalar on whether to
   use the biased or the unbiased (in the Poisson case)
   estimate of the intensity squared.}
 
+  \item{r_min}{The minimum radius to include.}
+
+  \item{use_theo}{Whether to use the theoretical summary
+  function or the mean of the simulations.}
+
   \item{scaling}{The name of the scaling to use. Options
-  include 'env', 'envdir', 'scale'. 'env' is default.}
+  include 'none', 'env', 'envdir' and 'scale'. 'env' is
+  default.}
 
   \item{measure}{The deviation measure to use. Default is
   'max'. Must be one of the following: 'max', 'int',
