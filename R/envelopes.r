@@ -223,10 +223,9 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
 #' @examples
 #' library(spatstat)
 #' pp <- spruces
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE)
-#' curve_set <- spptest:::crop_curves(env, r_min = 0, r_max = 8)
-#' curve_set <- spptest:::residual(curve_set, use_theo = TRUE)
-#' res <- normal_envelope(curve_set, n_norm=20000)
+#' env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE, r=seq(0,8,length=50))
+#' curve_set <- spptest:::residual(env, use_theo = TRUE)
+#' system.time( res <- normal_envelope(curve_set, n_norm=200000) )
 #' plot(res)
 normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     curve_set <- spptest:::convert_envelope(curve_set)
