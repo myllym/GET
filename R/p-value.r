@@ -25,12 +25,12 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #'   possible. For 'random' the rank of the obs within the tied values is
 #'   uniformly sampled so that the resulting p-value is at most the
 #'   conservative option and at least the liberal option. For 'midrank' we
-#'   take the mid-rank within the tied values. 'random' is the default.
+#'   take the mid-rank within the tied values. 'midrank' is the default.
 #' @return The p-value estimate. A scalar real value between 0 and 1.
 #'
 #' @references Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
 #' @export
-estimate_p_value.default <- function(obs, sim_vec, ties = 'random') {
+estimate_p_value.default <- function(obs, sim_vec, ties = 'midrank') {
     if (length(obs) != 1L || !is.finite(obs) || !is.numeric(obs)) {
         stop('obs must be a scalar finite real value.')
     }
