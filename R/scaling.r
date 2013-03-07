@@ -113,14 +113,12 @@ weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
 #' @inheritParams convert_envelope
 #' @inheritParams env_scaling
 #' @return A scaled curve_set.
-envdir_scaling <- function(curve_set, probs = c(0.025, 0.975), type = 8,
-                           ...) {
+envdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_probs(probs)
     check_residualness(curve_set)
 
     # Dimensions: 2, r_idx.
-    quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs,
-                     type = type, ...)
+    quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs, ...)
     abs_coeff <- divisor_to_coeff(abs(quant_m))
     lower_coeff <- abs_coeff[1, , drop = TRUE]
     upper_coeff <- abs_coeff[2, , drop = TRUE]
