@@ -1,4 +1,6 @@
 #' Estimate p-value.
+#' @export
+#' @seealso estimate_p_value.default
 estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 
 # FIXME: Do we need to consider NA values at some point in life? Our

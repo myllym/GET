@@ -8,6 +8,7 @@
 #' @param r_max The maximum radius to include.
 #' @return A curve_set object containing the cropped summary functions and
 #'   the cropped radius vector.
+#' @export
 crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
     curve_set <- convert_envelope(curve_set)
 
