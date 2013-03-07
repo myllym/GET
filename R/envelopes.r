@@ -8,8 +8,8 @@
 #' library(spatstat)
 #' pp <- spruces
 #' env <- envelope(pp, fun="Lest", nsim=3999, savefuns=TRUE)
-#' curve_set <- spptest:::crop_curves(env, r_min = 1, r_max = 7)
-#' curve_set <- spptest:::residual(curve_set, use_theo = TRUE)
+#' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
+#' curve_set <- residual(curve_set, use_theo = TRUE)
 #' res <- rank_envelope(curve_set)
 #' plot(res)
 rank_envelope <- function(curve_set, alpha=0.05, ...) {
@@ -18,7 +18,7 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
     # Nsim  = number of simulations, that is nrow(stats) --> This argument not needed
     # alpha = the chosen significance level of the test
 
-    curve_set <- spptest:::convert_envelope(curve_set)
+    curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
     stats <- t(curve_set[['sim_m']])
@@ -36,7 +36,7 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
 
     #-- calculate the p-value
     u <- -distance
-    p <- spptest:::estimate_p_value(obs=u[Nsim+1], sim_vec=u[1:Nsim], ...)
+    p <- estimate_p_value(obs=u[Nsim+1], sim_vec=u[1:Nsim], ...)
     #    pm <- 1;pl <- 1;pu <- 1;
     #    for(i in 1:Nsim) {
     #        if (distance[i]<distance[Nsim+1]) {pm<-pm+1;pl<-pl+1;pu<-pu+1;}
@@ -88,14 +88,14 @@ plot.envelope_test <- function(x, ...) {
 #' library(spatstat)
 #' pp <- spruces
 #' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE)
-#' curve_set <- spptest:::crop_curves(env, r_min = 0, r_max = 8)
-#' curve_set <- spptest:::residual(curve_set, use_theo = TRUE)
+#' curve_set <- crop_curves(env, r_min = 0, r_max = 8)
+#' curve_set <- residual(curve_set, use_theo = TRUE)
 #' res <- sd_envelope(curve_set)
 #' plot(res)
 #' plot(res, xlab=expression(italic(r)), ylab=expression(italic(L(r)-r)))
 sd_envelope <- function(curve_set, alpha=0.05, ...) {
 
-    curve_set <- spptest:::convert_envelope(curve_set)
+    curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
     stats <- t(curve_set[['sim_m']])
@@ -125,7 +125,7 @@ sd_envelope <- function(curve_set, alpha=0.05, ...) {
     tmaxd <- max(ttt)
 
     #-- calculate the p-value
-    p <- spptest:::estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
+    p <- estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
 
     #-- calculate the 100(1-alpha)% envelopes
     talpha <- distancesorted[round((1-alpha)*Nsim)];
@@ -147,13 +147,13 @@ sd_envelope <- function(curve_set, alpha=0.05, ...) {
 #' library(spatstat)
 #' pp <- spruces
 #' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE)
-#' curve_set <- spptest:::crop_curves(env, r_min = 0, r_max = 8)
-#' curve_set <- spptest:::residual(curve_set, use_theo = TRUE)
+#' curve_set <- crop_curves(env, r_min = 0, r_max = 8)
+#' curve_set <- residual(curve_set, use_theo = TRUE)
 #' res <- as_quantile_envelope(curve_set)
 #' plot(res)
 as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
 
-    curve_set <- spptest:::convert_envelope(curve_set)
+    curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
     stats <- t(curve_set[['sim_m']])
@@ -198,7 +198,7 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
     }
 
     #-- calculate the p-value
-    p <- spptest:::estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
+    p <- estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
 
     #-- calculate the 100(1-alpha)% envelopes
     talpha <- distancesorted[round((1-alpha)*Nsim)];
@@ -224,11 +224,11 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
 #' library(spatstat)
 #' pp <- spruces
 #' env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE, r=seq(0,8,length=50))
-#' curve_set <- spptest:::residual(env, use_theo = TRUE)
+#' curve_set <- residual(env, use_theo = TRUE)
 #' system.time( res <- normal_envelope(curve_set, n_norm=200000) )
 #' plot(res)
 normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
-    curve_set <- spptest:::convert_envelope(curve_set)
+    curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
     stats <- t(curve_set[['sim_m']])
@@ -258,7 +258,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     tmaxd <- max(ttt)
 
     #-- calculate the p-value
-    p <- spptest:::estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
+    p <- estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
     #    p <- 1;
     #    for(i in 1:n_norm) {
     #        if(distance[i]>tmaxd) p<-p+1;
