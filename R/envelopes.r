@@ -183,10 +183,10 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
         tmax<-0;
         for(i in 1:length(EX)){
             if(sim_curves[j,i]-EX[i]>0) {
-                ttt <- (sim_curves[j,i]-EX[i])/abs(QQ[2,i]-EX[i])
+                ttt <- (sim_curves[j,i]-EX[i])/(QQ[2,i]-EX[i])
             }
             else {
-                ttt <- (sim_curves[j,i]-EX[i])/abs(QQ[1,i]-EX[i])
+                ttt <- (sim_curves[j,i]-EX[i])/(QQ[1,i]-EX[i])
             }
             if(!is.finite(ttt)) ttt <- 0
             if(tmax<ttt) {
@@ -201,10 +201,10 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
     tmaxd<-0;
     for(i in 1:length(EX)){
         if(data_curve[i]-EX[i]>0) {
-            ttt <- (data_curve[i]-EX[i])/abs(QQ[2,i]-EX[i])
+            ttt <- (data_curve[i]-EX[i])/(QQ[2,i]-EX[i])
         }
         else {
-            ttt <- (data_curve[i]-EX[i])/abs(QQ[1,i]-EX[i])
+            ttt <- (data_curve[i]-EX[i])/(QQ[1,i]-EX[i])
         }
         if(!is.finite(ttt)) ttt <- 0
         if(tmaxd<ttt) {
