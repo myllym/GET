@@ -101,8 +101,8 @@ weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
     upper_idx <- x > 0
     lower_or_equal_idx <- !upper_idx
 
-    y[upper_idx] <- upper_coeff * x[upper_idx]
-    y[lower_or_equal_idx] <- lower_coeff * x[lower_or_equal_idx]
+    y[upper_idx] <- (upper_coeff * x)[upper_idx]
+    y[lower_or_equal_idx] <- (lower_coeff * x)[lower_or_equal_idx]
     y
 }
 
