@@ -65,11 +65,25 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
     res
 }
 
+#' Print method for the class 'envelope_test'
+#' @usage \method{print}{envelope_test}(x)
+#'
+#' @param x an 'envelope_test' object
+#'
+#' @method print envelope_test
+#' @export
 print.envelope_test <- function(x, ...) {
     with(x, cat(method, "\n",
                 "p-value of the test:", p, "\n"))
 }
 
+#' Plot method for the class 'envelope_test'
+#' @usage \method{plot}{envelope_test}(x)
+#'
+#' @param x an 'envelope_test' object
+#'
+#' @method plot envelope_test
+#' @export
 plot.envelope_test <- function(x, ...) {
     with(x, {
          plot(r, data_curve, ylim=c(min(data_curve,lower,upper,central_curve), max(data_curve,lower,upper,central_curve)), type="l", lty=1, lwd=2,
