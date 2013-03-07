@@ -2,7 +2,7 @@
 \alias{estimate_p_value.default}
 \title{Estimate p-value.}
 \usage{
-  estimate_p_value.default(obs, sim_vec, ties = "random")
+  estimate_p_value.default(obs, sim_vec, ties = "midrank")
 }
 \arguments{
   \item{obs}{The data sample. A scalar real value. Must not
@@ -20,7 +20,7 @@
   uniformly sampled so that the resulting p-value is at
   most the conservative option and at least the liberal
   option. For 'midrank' we take the mid-rank within the
-  tied values. 'random' is the default.}
+  tied values. 'midrank' is the default.}
 }
 \value{
   The p-value estimate. A scalar real value between 0 and

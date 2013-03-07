@@ -7,4 +7,7 @@
 \description{
   Estimate p-value.
 }
+\seealso{
+  estimate_p_value.default
+}
 

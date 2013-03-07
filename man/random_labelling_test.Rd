@@ -65,7 +65,7 @@ L_f-functions.}
   uniformly sampled so that the resulting p-value is at
   most the conservative option and at least the liberal
   option. For 'midrank' we take the mid-rank within the
-  tied values. 'random' is the default.}
+  tied values. 'midrank' is the default.}
 }
 \description{
   Do a random labelling deviation test for a pattern using

@@ -14,7 +14,8 @@ Title: Spatial point process testing
 Description: Envelope and deviation tests for spatial point processes with
     power-correcting scalings.
 Imports:
-    fastdepth, mvtnorm
+    fastdepth,
+    mvtnorm
 Suggests:
     marksummary,
     testthat,
@@ -29,3 +30,4 @@ Collate:
     'spptest-package.r'
     'summ-func.r'
     'wrapper.r'
+    'envelopes.r'
