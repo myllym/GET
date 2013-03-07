@@ -66,7 +66,8 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
 }
 
 print.envelope_test <- function(x, ...) {
-
+    with(x, cat(method, "\n",
+                "p-value of the test:", p, "\n"))
 }
 
 plot.envelope_test <- function(x, ...) {
