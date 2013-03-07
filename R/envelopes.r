@@ -24,27 +24,27 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
     sim_curves <- t(curve_set[['sim_m']])
 
     Nsim <- dim(sim_curves)[1];
-    n <- dim(sim_curves)[2]
+    n <- length(curve_set$r)
     MX <- apply(sim_curves, MARGIN=2, FUN=median)
-    data_and_sim_curves <- rbind(sim_curves,Lm);
+    data_and_sim_curves <- rbind(data_curve, sim_curves)
     RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
     Rmin <- apply(RR, MARGIN=1, FUN=min)
-    Rmax <- apply(RR, MARGIN=1, FUN=max)
-    Rmax <- Nsim+2-Rmax
+    Rmax <- Nsim+2-apply(RR, MARGIN=1, FUN=max)
     RmRm <- rbind(Rmin,Rmax)
     distance <- apply(RmRm, MARGIN=2, FUN=min)
 
     #-- calculate the p-value
     u <- -distance
-    p <- estimate_p_value(obs=u[Nsim+1], sim_vec=u[1:Nsim], ...)
-    #    pm <- 1;pl <- 1;pu <- 1;
-    #    for(i in 1:Nsim) {
-    #        if (distance[i]<distance[Nsim+1]) {pm<-pm+1;pl<-pl+1;pu<-pu+1;}
-    #        if (distance[i]==distance[Nsim+1]) {pm<-pm+1/2;pu<-pu+1;}
-    #    }
-    #    pm <- pm/(Nsim+1);
-    #    pl <- pl/(Nsim+1);
-    #    pu <- pu/(Nsim+1);
+    p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ...)
+#        pm <- 1;pl <- 1;pu <- 1;
+#        for(i in 2:(Nsim+1)) {
+#            if (distance[i]<distance[1]) {pm<-pm+1;pl<-pl+1;pu<-pu+1;}
+#            if (distance[i]==distance[1]) {pm<-pm+1/2;pu<-pu+1;}
+#        }
+#        pm <- pm/(Nsim+1);
+#        pl <- pl/(Nsim+1);
+#        pu <- pu/(Nsim+1);
+#    p <- pm
 
     #-- calculate the 100(1-alpha)% envelopes
     distancesorted <- sort(distance[-(Nsim+1)]);
