@@ -23,8 +23,8 @@
 library(spatstat)
 pp <- spruces
 env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE)
-curve_set <- spptest:::crop_curves(env, r_min = 0, r_max = 8)
-curve_set <- spptest:::residual(curve_set, use_theo = TRUE)
+curve_set <- crop_curves(env, r_min = 0, r_max = 8)
+curve_set <- residual(curve_set, use_theo = TRUE)
 res <- sd_envelope(curve_set)
 plot(res)
 plot(res, xlab=expression(italic(r)), ylab=expression(italic(L(r)-r)))

@@ -1,3 +1,5 @@
+S3method(plot,envelope_test)
+S3method(print,envelope_test)
 export(as_quantile_envelope)
 export(check_deviation_set)
 export(create_curve_set)
