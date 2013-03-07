@@ -14,20 +14,20 @@
 #' plot(res)
 rank_envelope <- function(curve_set, alpha=0.05, ...) {
     # Lm    = the vector of L-function values for data
-    # stats = matrix where each row contains L function values of a simulation under null hypothesis
-    # Nsim  = number of simulations, that is nrow(stats) --> This argument not needed
+    # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
+    # Nsim  = number of simulations, that is nrow(sim_curves) --> This argument not needed
     # alpha = the chosen significance level of the test
 
     curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
-    stats <- t(curve_set[['sim_m']])
+    sim_curves <- t(curve_set[['sim_m']])
 
-    Nsim <- dim(stats)[1];
-    n <- dim(stats)[2]
-    MX <- apply(stats, MARGIN=2, FUN=median)
-    statsLm <- rbind(stats,Lm);
-    RR <- apply(statsLm, MARGIN=2, FUN=rank)
+    Nsim <- dim(sim_curves)[1];
+    n <- dim(sim_curves)[2]
+    MX <- apply(sim_curves, MARGIN=2, FUN=median)
+    data_and_sim_curves <- rbind(sim_curves,Lm);
+    RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
     Rmin <- apply(RR, MARGIN=1, FUN=min)
     Rmax <- apply(RR, MARGIN=1, FUN=max)
     Rmax <- Nsim+2-Rmax
@@ -53,7 +53,7 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
     UB <- array(0, n);
 
     for(i in 1:n){
-        Hod <- sort(stats[,i])
+        Hod <- sort(sim_curves[,i])
         LB[i]<- Hod[kalpha];
         UB[i]<- Hod[Nsim-kalpha+1];
     }
@@ -91,7 +91,8 @@ plot.envelope_test <- function(x, ...) {
          lines(r, lower, lty=2)
          lines(r, upper, lty=2)
          lines(r, central_curve, lty=1)
-                })
+         }
+    )
 }
 
 #' Variance stabilized envelope test
@@ -112,12 +113,12 @@ sd_envelope <- function(curve_set, alpha=0.05, ...) {
     curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
-    stats <- t(curve_set[['sim_m']])
+    sim_curves <- t(curve_set[['sim_m']])
 
-    Nsim <- dim(stats)[1];
-    n <- dim(stats)[2]
-    EX <- colMeans(stats);
-    sdX <- as.vector(apply(stats, MARGIN=2, FUN=sd))
+    Nsim <- dim(sim_curves)[1];
+    n <- dim(sim_curves)[2]
+    EX <- colMeans(sim_curves);
+    sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
 
     #    for(i in 1:n) {
     #        if(sdX[i]==0) {
@@ -127,7 +128,7 @@ sd_envelope <- function(curve_set, alpha=0.05, ...) {
 
     distance <- array(0, Nsim);
     for(j in 1:Nsim) {
-        ttt <- abs(stats[j,]-EX)/sdX
+        ttt <- abs(sim_curves[j,]-EX)/sdX
         ttt[!is.finite(ttt)] <- 0
         distance[j] <- max(ttt);
     }
@@ -170,22 +171,22 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
     curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
-    stats <- t(curve_set[['sim_m']])
+    sim_curves <- t(curve_set[['sim_m']])
 
-    Nsim <- dim(stats)[1];
-    n <- dim(stats)[2]
-    EX <- colMeans(stats);
-    QQ <- apply(stats,MARGIN=2,FUN=quantile, probs = c(0.025,0.975))
+    Nsim <- dim(sim_curves)[1];
+    n <- dim(sim_curves)[2]
+    EX <- colMeans(sim_curves);
+    QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = c(0.025,0.975))
 
     distance <- array(0, Nsim);
     for(j in 1:Nsim){
         tmax<-0;
         for(i in 1:length(EX)){
-            if(stats[j,i]-EX[i]>0) {
-                ttt <- (stats[j,i]-EX[i])/(QQ[2,i]-EX[i])
+            if(sim_curves[j,i]-EX[i]>0) {
+                ttt <- (sim_curves[j,i]-EX[i])/abs(QQ[2,i]-EX[i])
             }
             else {
-                ttt <- (stats[j,i]-EX[i])/(QQ[1,i]-EX[i])
+                ttt <- (sim_curves[j,i]-EX[i])/abs(QQ[1,i]-EX[i])
             }
             if(!is.finite(ttt)) ttt <- 0
             if(tmax<ttt) {
@@ -200,10 +201,10 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
     tmaxd<-0;
     for(i in 1:length(EX)){
         if(data_curve[i]-EX[i]>0) {
-            ttt <- (data_curve[i]-EX[i])/(QQ[2,i]-EX[i])
+            ttt <- (data_curve[i]-EX[i])/abs(QQ[2,i]-EX[i])
         }
         else {
-            ttt <- (data_curve[i]-EX[i])/(QQ[1,i]-EX[i])
+            ttt <- (data_curve[i]-EX[i])/abs(QQ[1,i]-EX[i])
         }
         if(!is.finite(ttt)) ttt <- 0
         if(tmaxd<ttt) {
@@ -216,8 +217,8 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
 
     #-- calculate the 100(1-alpha)% envelopes
     talpha <- distancesorted[round((1-alpha)*Nsim)];
-    LB <- EX - talpha*(EX-QQ[1,]);
-    UB <- EX + talpha*(QQ[2,]-EX);
+    LB <- EX - talpha*abs(QQ[1,]-EX);
+    UB <- EX + talpha*abs(QQ[2,]-EX);
 
     res <- list(r=curve_set[['r']], method="Asymmetric quantile envelope test", p=p,
                 central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
@@ -245,16 +246,16 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
-    stats <- t(curve_set[['sim_m']])
+    sim_curves <- t(curve_set[['sim_m']])
 
     n <-length(data_curve);
-    EX <- colMeans(stats, na.rm = TRUE);
-    varX <- var(stats, na.rm = TRUE);
+    EX <- colMeans(sim_curves, na.rm = TRUE);
+    varX <- var(sim_curves, na.rm = TRUE);
 
     #-- simulate from the normal distribution
     simnorm <- rmvnorm(n=n_norm, mean = EX, sigma = varX, method=c('svd'));
 
-    sdX <- as.vector(apply(stats, MARGIN=2, FUN=sd))
+    sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
     #    sdX <- array(0,n);
     #    for(i in 1:n){sdX[i] <- sqrt(varX[i,i])}
     #    for(i in 1:n){if(sdX[i]==0){sdX[i]<-0.00000001}}
