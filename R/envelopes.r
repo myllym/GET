@@ -87,7 +87,7 @@ print.envelope_test <- function(x, ...) {
 plot.envelope_test <- function(x, ...) {
     with(x, {
          plot(r, data_curve, ylim=c(min(data_curve,lower,upper,central_curve), max(data_curve,lower,upper,central_curve)), type="l", lty=1, lwd=2,
-              main=method, ...) #, xlab=expression(r), ylab=expression(S(r))
+              main=paste(method, ": p = ", round(p,3), sep=""), ...)
          lines(r, lower, lty=2)
          lines(r, upper, lty=2)
          lines(r, central_curve, lty=1)
