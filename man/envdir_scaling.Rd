@@ -2,8 +2,7 @@
 \alias{envdir_scaling}
 \title{EnvDir scaling.}
 \usage{
-  envdir_scaling(curve_set, probs = c(0.025, 0.975),
-    type = 8, ...)
+  envdir_scaling(curve_set, probs = c(0.025, 0.975), ...)
 }
 \arguments{
   \item{curve_set}{A curve_set or an
@@ -16,10 +15,6 @@
   and upper quantiles for the envelope, in that order and
   on the interval [0, 1].  The default values are 0.025 and
   0.975 as in the article by Møller and Berthelsen.}
-
-  \item{type}{The type of algorithm to use for the
-  \code{\link[stats]{quantile}} function. Type 8 is the
-  default.}
 
   \item{...}{Further arguments passed to quantile.}
 }

@@ -63,19 +63,16 @@ check_probs <- function(probs) {
 #'   quantiles for the envelope, in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975 as in the article by Møller and
 #'   Berthelsen.
-#' @param type The type of algorithm to use for the
-#'   \code{\link[stats]{quantile}} function. Type 8 is the default.
 #' @param ... Further arguments passed to quantile.
 #' @return A scaled curve_set.
 #' @references J. Møller and K. K. Berthelsen, “Transforming spatial point
 #'   processes into Poisson processes using random superposition,” Advances
 #'   in Applied Probability, vol. 44, no. 1, pp. 42–62, 2012.
-env_scaling <- function(curve_set, probs = c(0.025, 0.975), type = 8, ...) {
+env_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_probs(probs)
 
     # Dimensions: 2, r_idx.
-    quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs,
-                     type = type, ...)
+    quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs, ...)
     # upper - lower
     div <- as.vector(diff(quant_m))
     res <- weigh_curves(curve_set, divisor_to_coeff(div))

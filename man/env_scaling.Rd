@@ -2,18 +2,13 @@
 \alias{env_scaling}
 \title{Env scaling.}
 \usage{
-  env_scaling(curve_set, probs = c(0.025, 0.975), type = 8,
-    ...)
+  env_scaling(curve_set, probs = c(0.025, 0.975), ...)
 }
 \arguments{
   \item{probs}{A two-element vector containing the lower
   and upper quantiles for the envelope, in that order and
   on the interval [0, 1].  The default values are 0.025 and
   0.975 as in the article by Møller and Berthelsen.}
-
-  \item{type}{The type of algorithm to use for the
-  \code{\link[stats]{quantile}} function. Type 8 is the
-  default.}
 
   \item{...}{Further arguments passed to quantile.}
 
