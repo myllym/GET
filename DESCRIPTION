@@ -5,7 +5,11 @@ Authors@R: c(
     email = 'henri.seijo@iki.fi'),
     person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre',
     'ths'),
-    email = list('mari.myllymaki@aalto.fi', 'mari.j.myllymaki@gmail.com'))
+    email = list('mari.myllymaki@aalto.fi', 'mari.j.myllymaki@gmail.com')),
+    person(given = 'Tomáš', family = 'Mrkvička', role = c('aut'),
+    email = 'mrkvicka.toma@gmail.com'),
+    person(given = 'Pavel', family = 'Grabarnik', role = c('aut'),
+    email = list('gpya@rambler.ru', 'pavel.grabarnik@gmail.com'))
     )
 Version: 0.1
 Date: 2013-02-27
