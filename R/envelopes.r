@@ -31,6 +31,7 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
     Rmin <- apply(RR, MARGIN=1, FUN=min)
     Rmax <- Nsim+2-apply(RR, MARGIN=1, FUN=max)
     RmRm <- rbind(Rmin,Rmax)
+    # k:
     distance <- apply(RmRm, MARGIN=2, FUN=min)
 
     #-- calculate the p-value
