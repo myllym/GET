@@ -37,6 +37,8 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
     #-- calculate the p-value
     u <- -distance
     p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ...)
+    p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
+    p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
 #        pm <- 1;pl <- 1;pu <- 1;
 #        for(i in 2:(Nsim+1)) {
 #            if (distance[i]<distance[1]) {pm<-pm+1;pl<-pl+1;pu<-pu+1;}
@@ -59,7 +61,8 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
         UB[i]<- Hod[Nsim-kalpha+1];
     }
 
-    res <- list(r=curve_set[['r']], method="Rank envelope test", p=p,
+    res <- list(r=curve_set[['r']], method="Rank envelope test",
+                p=p, p_interval=c(p_low,p_upp),
                 central_curve=MX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
     class(res) <- "envelope_test"
@@ -76,6 +79,8 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
 print.envelope_test <- function(x, ...) {
     with(x, cat(method, "\n",
                 "p-value of the test:", p, "\n"))
+    with(x, if(exists('p_interval'))
+            cat(" p-interval         : (", p_interval[1], ", ", p_interval[2],")\n", sep=""))
 }
 
 #' Plot method for the class 'envelope_test'
@@ -86,9 +91,15 @@ print.envelope_test <- function(x, ...) {
 #' @method plot envelope_test
 #' @export
 plot.envelope_test <- function(x, ...) {
+    if(with(x, exists('p_interval')))
+        main <- paste(x$method, ": p-interval = (",
+                      round(x$p_interval[1],3),", ", round(x$p_interval[2],3), ")", sep="")
+    else
+        main <- paste(x$method, ": p = ", round(x$p,3), sep="")
+
     with(x, {
-         plot(r, data_curve, ylim=c(min(data_curve,lower,upper,central_curve), max(data_curve,lower,upper,central_curve)), type="l", lty=1, lwd=2,
-              main=paste(method, ": p = ", round(p,3), sep=""), ...)
+         plot(r, data_curve, ylim=c(min(data_curve,lower,upper,central_curve), max(data_curve,lower,upper,central_curve)),
+              type="l", lty=1, lwd=2, main=main, ...)
          lines(r, lower, lty=2)
          lines(r, upper, lty=2)
          lines(r, central_curve, lty=1)
