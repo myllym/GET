@@ -138,24 +138,25 @@ sd_envelope <- function(curve_set, alpha=0.05, ...) {
     #        }
     #    }
 
-    distance <- array(0, Nsim);
+    distance <- array(0, Nsim+1);
+    # data
+    ttt <- abs(data_curve-EX)/sdX;
+    ttt[!is.finite(ttt)] <- 0
+    distance[1] <- max(ttt)
+    # simulations
     for(j in 1:Nsim) {
         ttt <- abs(sim_curves[j,]-EX)/sdX
         ttt[!is.finite(ttt)] <- 0
-        distance[j] <- max(ttt);
+        distance[j+1] <- max(ttt);
     }
 
     distancesorted <- sort(distance);
 
-    ttt <- abs(data_curve-EX)/sdX;
-    ttt[!is.finite(ttt)] <- 0
-    tmaxd <- max(ttt)
-
     #-- calculate the p-value
-    p <- estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
+    p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the 100(1-alpha)% envelopes
-    talpha <- distancesorted[round((1-alpha)*Nsim)];
+    talpha <- distancesorted[round((1-alpha)*(Nsim+1))];
     LB <- EX - talpha*sdX;
     UB <- EX + talpha*sdX;
 
