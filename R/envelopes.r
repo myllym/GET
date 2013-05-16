@@ -50,15 +50,15 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
 #    p <- pm
 
     #-- calculate the 100(1-alpha)% envelopes
-    distancesorted <- sort(distance[-(Nsim+1)]);
-    kalpha <- distancesorted[round((alpha)*Nsim)];
+    distancesorted <- sort(distance, decreasing=TRUE)
+    kalpha <- distancesorted[round((1-alpha)*(Nsim+1))]
     LB <- array(0, n);
     UB <- array(0, n);
 
     for(i in 1:n){
-        Hod <- sort(sim_curves[,i])
+        Hod <- sort(data_and_sim_curves[,i])
         LB[i]<- Hod[kalpha];
-        UB[i]<- Hod[Nsim-kalpha+1];
+        UB[i]<- Hod[Nsim+1-kalpha+1];
     }
 
     res <- list(r=curve_set[['r']], method="Rank envelope test",
