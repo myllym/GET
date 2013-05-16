@@ -191,7 +191,21 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
     EX <- colMeans(sim_curves);
     QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = c(0.025,0.975))
 
-    distance <- array(0, Nsim);
+    distance <- array(0, Nsim+1);
+    tmaxd<-0;
+    for(i in 1:length(EX)){
+        if(data_curve[i]-EX[i]>0) {
+            ttt <- (data_curve[i]-EX[i])/(QQ[2,i]-EX[i])
+        }
+        else {
+            ttt <- (data_curve[i]-EX[i])/(QQ[1,i]-EX[i])
+        }
+        if(!is.finite(ttt)) ttt <- 0
+        if(tmaxd<ttt) {
+            tmaxd <- ttt
+        }
+    }
+    distance[1] <- tmaxd
     for(j in 1:Nsim){
         tmax<-0;
         for(i in 1:length(EX)){
@@ -203,33 +217,19 @@ as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
             }
             if(!is.finite(ttt)) ttt <- 0
             if(tmax<ttt) {
-                tmax<-ttt
+                tmax <- ttt
             }
         }
-        distance[j] <- tmax;
+        distance[j+1] <- tmax;
     }
 
     distancesorted <- sort(distance);
 
-    tmaxd<-0;
-    for(i in 1:length(EX)){
-        if(data_curve[i]-EX[i]>0) {
-            ttt <- (data_curve[i]-EX[i])/(QQ[2,i]-EX[i])
-        }
-        else {
-            ttt <- (data_curve[i]-EX[i])/(QQ[1,i]-EX[i])
-        }
-        if(!is.finite(ttt)) ttt <- 0
-        if(tmaxd<ttt) {
-            tmaxd<-ttt
-        }
-    }
-
     #-- calculate the p-value
-    p <- estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
+    p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the 100(1-alpha)% envelopes
-    talpha <- distancesorted[round((1-alpha)*Nsim)];
+    talpha <- distancesorted[round((1-alpha)*(Nsim+1))];
     LB <- EX - talpha*abs(QQ[1,]-EX);
     UB <- EX + talpha*abs(QQ[2,]-EX);
 
