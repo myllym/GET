@@ -15,8 +15,7 @@ Version: 0.1
 Date: 2013-02-27
 License: GPL-3
 Title: Spatial point process testing
-Description: Envelope and deviation tests for spatial point processes with
-    power-correcting scalings.
+Description: Envelope and deviation tests for spatial point patterns
 Imports:
     fastdepth,
     mvtnorm
