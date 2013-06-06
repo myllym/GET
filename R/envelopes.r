@@ -148,7 +148,19 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
     }
 }
 
-#' Variance stabilized envelope test
+#' Studentised envelope test
+#'
+#' Studentised envelope test
+#'
+#'
+#' The studentised envelope test is a semiparametric envelope test,
+#' which takes into account the unequal variances of the test function
+#' T(r) for different distances r.
+#'
+#' @references
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#'
+#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). New exact envelope tests for spatial point patterns.
 #'
 #' @inheritParams rank_envelope
 #' @export
@@ -158,10 +170,10 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE)
 #' curve_set <- crop_curves(env, r_min = 0, r_max = 8)
 #' curve_set <- residual(curve_set, use_theo = TRUE)
-#' res <- sd_envelope(curve_set)
+#' res <- st_envelope(curve_set)
 #' plot(res)
 #' plot(res, xlab=expression(italic(r)), ylab=expression(italic(L(r)-r)))
-sd_envelope <- function(curve_set, alpha=0.05, ...) {
+st_envelope <- function(curve_set, alpha=0.05, ...) {
 
     curve_set <- convert_envelope(curve_set)
 
@@ -208,7 +220,19 @@ sd_envelope <- function(curve_set, alpha=0.05, ...) {
     res
 }
 
-#' Asymmetric quantile envelope test
+#' Directional quantile envelope test
+#'
+#' Directional quantile envelope test
+#'
+#'
+#' The directional quantile envelope test is a semiparametric envelope test,
+#' which takes into account the unequal variances of the test function T(r)
+#' for different distances r and is also protected against asymmetry of T(r).
+#'
+#' @references
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#'
+#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). New exact envelope tests for spatial point patterns.
 #'
 #' @inheritParams rank_envelope
 #' @export
@@ -218,9 +242,9 @@ sd_envelope <- function(curve_set, alpha=0.05, ...) {
 #' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE)
 #' curve_set <- crop_curves(env, r_min = 0, r_max = 8)
 #' curve_set <- residual(curve_set, use_theo = TRUE)
-#' res <- as_quantile_envelope(curve_set)
+#' res <- qdir_envelope(curve_set)
 #' plot(res)
-as_quantile_envelope <- function(curve_set, alpha=0.05, ...) {
+qdir_envelope <- function(curve_set, alpha=0.05, ...) {
 
     curve_set <- convert_envelope(curve_set)
 
