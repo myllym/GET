@@ -120,6 +120,7 @@ print.envelope_test <- function(x, ...) {
 #'
 #' @method plot envelope_test
 #' @export
+#' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
 plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...) {
     if(missing('main')) {
         if(with(x, exists('p_interval')))
