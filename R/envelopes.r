@@ -222,7 +222,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # The studentised envelope test
-#' res <- st_envelope(curve_set); plot(res)
+#' res <- st_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 st_envelope <- function(curve_set, alpha=0.05, ...) {
 
     curve_set <- convert_envelope(curve_set)
@@ -309,7 +309,7 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # The directional quantile envelope test
-#' res <- qdir_envelope(curve_set); plot(res)
+#' res <- qdir_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 qdir_envelope <- function(curve_set, alpha=0.05, ...) {
 
     curve_set <- convert_envelope(curve_set)
