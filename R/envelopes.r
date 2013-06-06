@@ -86,24 +86,67 @@ print.envelope_test <- function(x, ...) {
 #' @usage \method{plot}{envelope_test}(x)
 #'
 #' @param x an 'envelope_test' object
+#' @param use_ggplot2 TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
+#' @param main See \code{\link{plot.default}}. A sensible default exists.
+#' @param ylim See \code{\link{plot.default}}. A sensible default exists.
+#' @param xlab See \code{\link{plot.default}}. A sensible default exists.
+#' @param ylab See \code{\link{plot.default}}. A sensible default exists.
+#' @param ... Additional parameters to be passed to plot (if use_ggplot2=FALSE).
 #'
 #' @method plot envelope_test
 #' @export
-plot.envelope_test <- function(x, ...) {
-    if(with(x, exists('p_interval')))
-        main <- paste(x$method, ": p-interval = (",
-                      round(x$p_interval[1],3),", ", round(x$p_interval[2],3), ")", sep="")
-    else
-        main <- paste(x$method, ": p = ", round(x$p,3), sep="")
+plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...) {
+    if(missing('main')) {
+        if(with(x, exists('p_interval')))
+            main <- paste(x$method, ": p-interval = (",
+                    round(x$p_interval[1],3),", ", round(x$p_interval[2],3), ")", sep="")
+        else
+            main <- paste(x$method, ": p = ", round(x$p,3), sep="")
+    }
+    if(missing('ylim')) {
+        ylim <- c(min(x$data_curve,x$lower,x$upper,x$central_curve),
+                  max(x$data_curve,x$lower,x$upper,x$central_curve))
+    }
+    if(missing('xlab')) xlab <- expression(italic(r))
+    if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-    with(x, {
-         plot(r, data_curve, ylim=c(min(data_curve,lower,upper,central_curve), max(data_curve,lower,upper,central_curve)),
-              type="l", lty=1, lwd=2, main=main, ...)
-         lines(r, lower, lty=2)
-         lines(r, upper, lty=2)
-         lines(r, central_curve, lty=1)
-         }
-    )
+    if(use_ggplot2) {
+        require(ggplot2)
+        linetype.values <- c('solid', 'dashed')
+        with(x, {
+                    df <- data.frame(r = rep(r, times=2),
+                                     curves = c(data_curve, central_curve),
+                                     type = factor(rep(c("Data function", "Central function"), each=length(r)), levels=c("Data function", "Central function")),
+                                     lower = rep(lower, times=2),
+                                     upper = rep(upper, times=2),
+                                     main = factor(rep(main, times=length(r)))
+                                     )
+                    p <- (ggplot(df, aes_string(x='r', y='curves', group='type', linetype='type'))
+                                + geom_line(aes_string(linetype='type'))
+                                + geom_ribbon(aes(ymin=lower, ymax=upper), fill='grey59',
+                                        alpha=1)
+                                + geom_line(aes(y=curves))
+                                + facet_grid('~ main', scales='free')
+                                + scale_x_continuous(name=xlab)
+                                + scale_y_continuous(name=ylab)
+                                + scale_linetype_manual(values=linetype.values, name='')
+                                + ThemePlain()
+                                )
+                    p <- p + geom_hline(yintercept=0, color='grey30', linetype='dashed', size=0.1)
+                    print(p)
+                }
+            )
+    }
+    else {
+        with(x, {
+                    plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+                            type="l", lty=1, lwd=2, ...)
+                    lines(r, lower, lty=2)
+                    lines(r, upper, lty=2)
+                    lines(r, central_curve, lty=1)
+                }
+        )
+    }
 }
 
 #' Variance stabilized envelope test
