@@ -236,7 +236,7 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
     LB <- EX - talpha*sdX;
     UB <- EX + talpha*sdX;
 
-    res <- list(r=curve_set[['r']], method="Variance stabilized envelope test", p=p,
+    res <- list(r=curve_set[['r']], method="Studentised envelope test", p=p,
                 central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
     class(res) <- "envelope_test"
@@ -332,7 +332,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, ...) {
     LB <- EX - talpha*abs(QQ[1,]-EX);
     UB <- EX + talpha*abs(QQ[2,]-EX);
 
-    res <- list(r=curve_set[['r']], method="Asymmetric quantile envelope test", p=p,
+    res <- list(r=curve_set[['r']], method="Directional quantile envelope test", p=p,
                 central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
     class(res) <- "envelope_test"
