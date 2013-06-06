@@ -221,12 +221,6 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
     EX <- colMeans(sim_curves);
     sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
 
-    #    for(i in 1:n) {
-    #        if(sdX[i]==0) {
-    #            sdX[i]<-0.00000001
-    #        }
-    #    }
-
     distance <- array(0, Nsim+1);
     # data
     ttt <- abs(data_curve-EX)/sdX;
