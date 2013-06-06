@@ -19,18 +19,21 @@
 #' @examples
 #' library(spatstat)
 #' pp <- spruces
-#' # Test of complete spatial randomness (CSR)
+#' ## Test of complete spatial randomness (CSR)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #' env <- envelope(pp, fun="Lest", nsim=4999, savefuns=TRUE, correction="translate")
-#' # Create a curve set on the interval of distances [r_min, r_max]
-#' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 #' # The rank envelope test
-#' res <- rank_envelope(curve_set)
+#' res <- rank_envelope(env)
 #' plot(res)
+#' # or (requires R library ggplot2)
+#' plot(res, use_ggplot2=TRUE)
 #'
-#' # For visualisation, take the L(r)-r function
+#' ## Advanced use:
+#' # Create a curve set, choosing the interval of distances [r_min, r_max]
+#' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
+#' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
-#' # The result of the rank envelope test stays the same
+#' # The rank envelope test
 #' res <- rank_envelope(curve_set); plot(res)
 rank_envelope <- function(curve_set, alpha=0.05, ...) {
     # data_curve = the vector of L-function values for data
@@ -190,12 +193,22 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' @examples
 #' library(spatstat)
 #' pp <- spruces
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE)
-#' curve_set <- crop_curves(env, r_min = 0, r_max = 8)
-#' curve_set <- residual(curve_set, use_theo = TRUE)
-#' res <- st_envelope(curve_set)
+#' ## Test for complete spatial randomness (CSR)
+#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
+#' # The studentised envelope test
+#' res <- st_envelope(env)
 #' plot(res)
-#' plot(res, xlab=expression(italic(r)), ylab=expression(italic(L(r)-r)))
+#' # or (requires R library ggplot2)
+#' plot(res, use_ggplot2=T)
+#'
+#' ## Advanced use:
+#' # Create a curve set, choosing the interval of distances [r_min, r_max]
+#' curve_set <- crop_curves(env, r_min = 1, r_max = 8)
+#' # For better visualisation, take the L(r)-r function
+#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' # The studentised envelope test
+#' res <- st_envelope(curve_set); plot(res)
 st_envelope <- function(curve_set, alpha=0.05, ...) {
 
     curve_set <- convert_envelope(curve_set)
@@ -273,11 +286,22 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
 #' @examples
 #' library(spatstat)
 #' pp <- spruces
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE)
-#' curve_set <- crop_curves(env, r_min = 0, r_max = 8)
-#' curve_set <- residual(curve_set, use_theo = TRUE)
-#' res <- qdir_envelope(curve_set)
+#' ## Test for complete spatial randomness (CSR)
+#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
+#' # The directional quantile envelope test
+#' res <- qdir_envelope(env)
 #' plot(res)
+#' # or (requires R library ggplot2)
+#' plot(res, use_ggplot2=T)
+#'
+#' ## Advanced use:
+#' # Create a curve set, choosing the interval of distances [r_min, r_max]
+#' curve_set <- crop_curves(env, r_min = 1, r_max = 8)
+#' # For better visualisation, take the L(r)-r function
+#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' # The directional quantile envelope test
+#' res <- qdir_envelope(curve_set); plot(res)
 qdir_envelope <- function(curve_set, alpha=0.05, ...) {
 
     curve_set <- convert_envelope(curve_set)
