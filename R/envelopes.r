@@ -7,11 +7,19 @@
 #' @examples
 #' library(spatstat)
 #' pp <- spruces
-#' env <- envelope(pp, fun="Lest", nsim=3999, savefuns=TRUE)
+#' # Test of complete spatial randomness (CSR)
+#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#' env <- envelope(pp, fun="Lest", nsim=4999, savefuns=TRUE, correction="translate")
+#' # Create a curve set on the interval of distances [r_min, r_max]
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
-#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' # The rank envelope test
 #' res <- rank_envelope(curve_set)
 #' plot(res)
+#'
+#' # For visualisation, take the L(r)-r function
+#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' # The result of the rank envelope test stays the same
+#' res <- rank_envelope(curve_set); plot(res)
 rank_envelope <- function(curve_set, alpha=0.05, ...) {
     # data_curve = the vector of L-function values for data
     # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
