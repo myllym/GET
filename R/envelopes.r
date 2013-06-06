@@ -1,5 +1,15 @@
 #' The rank envelope test
 #'
+#' The rank envelope test, p-value and exact simultaneous 100(1-alpha) percent envelopes
+#'
+#'
+#' The rank envelope test is a completely non-parametric test, which provides a p-value
+#' interval given by the most liberal and the most conservative p-value estimate and
+#' the simultaneous 100(1-alpha) percent envelopes for the chosen test function T(r) on
+#' the chosen interval of distances.
+#'
+#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). New exact envelope tests for spatial point patterns.
+#'
 #' @inheritParams convert_envelope
 #' @param alpha The significance level. Simultaneous 100(1-alpha) percent envelopes will be calculated.
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate for the p-value.
