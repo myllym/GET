@@ -3,6 +3,18 @@
 #' @inheritParams convert_envelope
 #' @param alpha The significance level. Simultaneous 100(1-alpha) percent envelopes will be calculated.
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate for the p-value.
+#' @return An "envelope_test" object containing the following fields:
+#' \itemize{
+#'   \item r Distances for which the test was made.
+#'   \item method The envelope method.
+#'   \item p A point estimate for the p-value.
+#'   \item p_interval The p-value interval [p_liberal, p_conservative].
+#'   \item central_curve The mean test function (median) calculated from simulations.
+#'   \item data_curve The test function for the data.
+#'   \item lower The lower envelope.
+#'   \item upper The upper envelope.
+#'   \item call The call of the function.
+#' }
 #' @export
 #' @examples
 #' library(spatstat)
@@ -163,6 +175,17 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). New exact envelope tests for spatial point patterns.
 #'
 #' @inheritParams rank_envelope
+#' @return An "envelope_test" object containing the following fields:
+#' \itemize{
+#'   \item r Distances for which the test was made.
+#'   \item method The envelope method.
+#'   \item p A point estimate for the p-value.
+#'   \item central_curve The mean test function (median) calculated from simulations.
+#'   \item data_curve The test function for the data.
+#'   \item lower The lower envelope.
+#'   \item upper The upper envelope.
+#'   \item call The call of the function.
+#' }
 #' @export
 #' @examples
 #' library(spatstat)
@@ -235,6 +258,17 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
 #' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). New exact envelope tests for spatial point patterns.
 #'
 #' @inheritParams rank_envelope
+#' @return An "envelope_test" object containing the following fields:
+#' \itemize{
+#'   \item r Distances for which the test was made.
+#'   \item method The envelope method.
+#'   \item p A point estimate for the p-value.
+#'   \item central_curve The mean test function (median) calculated from simulations.
+#'   \item data_curve The test function for the data.
+#'   \item lower The lower envelope.
+#'   \item upper The upper envelope.
+#'   \item call The call of the function.
+#' }
 #' @export
 #' @examples
 #' library(spatstat)
