@@ -1,8 +1,8 @@
 #' The rank envelope test
 #'
 #' @inheritParams convert_envelope
-#' @param alpha
-#' @param ... Additional parameters passed to \code{\link{estimate_p_value}}.
+#' @param alpha The significance level. Simultaneous 100(1-alpha) percent envelopes will be calculated.
+#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate for the p-value.
 #' @export
 #' @examples
 #' library(spatstat)
