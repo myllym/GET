@@ -424,9 +424,6 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     simnorm <- rmvnorm(n=n_norm, mean = EX, sigma = varX, method=c('svd'));
 
     sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
-    #    sdX <- array(0,n);
-    #    for(i in 1:n){sdX[i] <- sqrt(varX[i,i])}
-    #    for(i in 1:n){if(sdX[i]==0){sdX[i]<-0.00000001}}
     distance <- array(0, n_norm);
     for(j in 1:n_norm) {
         ttt <- abs(simnorm[j,]-EX)/sdX
