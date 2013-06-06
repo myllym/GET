@@ -47,15 +47,6 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
     p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ...)
     p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
     p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
-#        pm <- 1;pl <- 1;pu <- 1;
-#        for(i in 2:(Nsim+1)) {
-#            if (distance[i]<distance[1]) {pm<-pm+1;pl<-pl+1;pu<-pu+1;}
-#            if (distance[i]==distance[1]) {pm<-pm+1/2;pu<-pu+1;}
-#        }
-#        pm <- pm/(Nsim+1);
-#        pl <- pl/(Nsim+1);
-#        pu <- pu/(Nsim+1);
-#    p <- pm
 
     #-- calculate the 100(1-alpha)% envelopes
     distancesorted <- sort(distance, decreasing=TRUE)
