@@ -160,7 +160,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                                 + scale_linetype_manual(values=linetype.values, name='')
                                 + ThemePlain()
                                 )
-                    p <- p + geom_hline(yintercept=0, color='grey30', linetype='dashed', size=0.1)
+                    #p <- p + geom_hline(yintercept=0, color='grey30', linetype='dashed', size=0.1)
                     print(p)
                 }
             )
