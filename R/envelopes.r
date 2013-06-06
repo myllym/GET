@@ -27,10 +27,12 @@
 #' }
 #' @export
 #' @examples
-#' library(spatstat)
-#' pp <- spruces
-#' ## Test of complete spatial randomness (CSR)
-#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#'
+#' ## Testing complete spatial randomness (CSR)
+#' #-------------------------------------------
+#' require(spatstat)
+#' pp <- unmark(spruces)
+#' Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #' env <- envelope(pp, fun="Lest", nsim=4999, savefuns=TRUE, correction="translate")
 #' # The rank envelope test
 #' res <- rank_envelope(env)
@@ -390,11 +392,11 @@ qdir_envelope <- function(curve_set, alpha=0.05, ...) {
 #' studentised envelope test (see \code{\link{st_envelope}}), i.e. the semiparametric kth lower
 #' and upper envelopes
 #'
-#' T^u_{low}(r)= T_0(r) - u \sqrt{var_0(T(r))}
+#' T^u_{low}(r)= T_0(r) - u sqrt{var_0(T(r))}
 #' and
-#' T^u_{upp}(r)= T_0(r) + u \sqrt{var_0(T(r))},
+#' T^u_{upp}(r)= T_0(r) + u sqrt{var_0(T(r))},
 #'
-#' but the p-value and the simultaneous 100(1-\alpha) percent envelopes are calculated based
+#' but the p-value and the simultaneous 100(1-alpha) percent envelopes are calculated based
 #' on simulations from a multivariate normal distribution.
 #'
 #'
