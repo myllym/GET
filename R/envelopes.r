@@ -23,7 +23,6 @@
 rank_envelope <- function(curve_set, alpha=0.05, ...) {
     # data_curve = the vector of L-function values for data
     # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
-    # Nsim  = number of simulations, that is nrow(sim_curves) --> This argument not needed
     # alpha = the chosen significance level of the test
 
     curve_set <- convert_envelope(curve_set)
