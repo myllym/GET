@@ -262,6 +262,14 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # The studentised envelope test
 #' res <- st_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#'
+#' ## Random labeling test
+#' #----------------------
+#' mpp <- spruces
+#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' res <- st_envelope(curve_set)
+#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 st_envelope <- function(curve_set, alpha=0.05, ...) {
 
     curve_set <- convert_envelope(curve_set)
@@ -351,6 +359,14 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # The directional quantile envelope test
 #' res <- qdir_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#'
+#' ## Random labeling test
+#' #----------------------
+#' mpp <- spruces
+#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' res <- qdir_envelope(curve_set)
+#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, alpha=0.05, ...) {
 
     curve_set <- convert_envelope(curve_set)
