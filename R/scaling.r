@@ -1,22 +1,35 @@
-#' Scale summary functions.
+#' Scale curves.
 #'
+#' The most important use is: scale residuals of test functions.
+#'
+#' Given a set of curves in curve_set, the function scale_curves scales
+#' the curves by one of the following scalings:
+#' \itemize{
+#'   \item none No scaling. Nothing done.
+#'   \item q Quantile scaling.
+#'   \item qdir Directional quantile scaling.
+#'   \item st Studentised scaling.
+#' }
+#' See for details Myllymäki et al. (2013).
+#'
+#' @references Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
 #' @inheritParams convert_envelope
 #' @param scaling The name of the scaling to use. Options include 'none',
-#'   'env', 'envdir' and 'scale'. 'env' is default.
+#'   'q', 'qdir' and 'st'. 'qdir' is default.
 #' @param ... Further arguments passed to the chosen scaling function.
 #' @export
-scale_curves <- function(curve_set, scaling = 'env', ...) {
+scale_curves <- function(curve_set, scaling = 'qdir', ...) {
     curve_set <- convert_envelope(curve_set)
 
-    possible_scalings <- c('env', 'envdir', 'scale', 'none')
+    possible_scalings <- c('q', 'qdir', 'st', 'none')
     if (length(scaling) != 1L || !(scaling %in% possible_scalings)) {
         stop('scaling must be one of the following: ',
              paste(possible_scalings, collapse = ','))
     }
     scaler <- switch(scaling,
-                     env = env_scaling,
-                     envdir = envdir_scaling,
-                     scale = scale_scaling,
+                     q = q_scaling,
+                     qdir = qdir_scaling,
+                     st = st_scaling,
                      none = identity)
 
     scaled_set <- scaler(curve_set, ...)
@@ -56,7 +69,7 @@ check_probs <- function(probs) {
     }
 }
 
-#' Env scaling.
+#' Quantile scaling.
 #'
 #' @inheritParams convert_envelope
 #' @param probs A two-element vector containing the lower and upper
@@ -68,7 +81,7 @@ check_probs <- function(probs) {
 #' @references J. Møller and K. K. Berthelsen, “Transforming spatial point
 #'   processes into Poisson processes using random superposition,” Advances
 #'   in Applied Probability, vol. 44, no. 1, pp. 42–62, 2012.
-env_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
+q_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_probs(probs)
 
     # Dimensions: 2, r_idx.
@@ -82,7 +95,7 @@ env_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
 #' Weigh a matrix or a vector with two different coeffs depending on which
 #' side of middle curve each element is.
 #'
-#' Used by \code{\link{envdir_scaling}}.
+#' Used by \code{\link{qdir_scaling}}.
 weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
     if (is.matrix(x)) {
         dims <- dim(x)
@@ -103,14 +116,14 @@ weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
     y
 }
 
-#' EnvDir scaling.
+#' Directional quantile scaling.
 #'
 #' @details Notice that this scaling is only defined for residuals.
 #'
 #' @inheritParams convert_envelope
-#' @inheritParams env_scaling
+#' @inheritParams q_scaling
 #' @return A scaled curve_set.
-envdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
+qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_probs(probs)
     check_residualness(curve_set)
 
@@ -131,11 +144,13 @@ envdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     res
 }
 
+#' Studentised scaling
+#'
 #' Scale with the standard deviation.
 #'
 #' @inheritParams convert_envelope
 #' @return A scaled curve_set.
-scale_scaling <- function(curve_set) {
+st_scaling <- function(curve_set) {
     sim_sd <- apply(curve_set[['sim_m']], 1, sd)
     res <- weigh_curves(curve_set, divisor_to_coeff(sim_sd))
     res
