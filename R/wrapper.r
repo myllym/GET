@@ -12,7 +12,7 @@
 random_labelling_test <- function(pattern,
                                   mtf_name = 'm', n_sim = 999L,
                                   r_min = NULL, r_max = NULL, r_vec = NULL,
-                                  measure = 'max', scaling = 'env',
+                                  measure = 'max', scaling = 'qdir',
                                   use_L = TRUE,
                                   edge_correction = 'translate',
                                   use_theo = TRUE, method = 'permute',
