@@ -46,7 +46,44 @@
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # The rank envelope test
-#' res <- rank_envelope(curve_set); plot(res)
+#' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#'
+#' ## Random labeling test
+#' #----------------------
+#' mpp <- spruces
+#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' res <- rank_envelope(curve_set)
+#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
+#' # T(r) = \hat{L}_mm(r), an estimator of the L_mm(r) function
+#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=0, r_max=9.5)
+#' res <- rank_envelope(curve_set)
+#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
+#'
+#' ## Goodness-of-fit test
+#' #----------------------
+#' # FIXME What is a reasonable model to be fitted to this data?
+#' pp <- unmark(spruces)
+#' # Minimum distance between points in the pattern
+#' min(nndist(pp))
+#' # Fit a model
+#' # fittedmodel <- ppm(pp, interaction=Strauss(r=4))
+#' fittedmodel <- ppm(pp, interaction=Hardcore(hc=1))
+#'
+#' \dontrun{
+#' ## Simulating Strauss process by 'envelope' is slow
+#' #env <- envelope(fittedmodel, fun="Lest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 9.5, length=500))
+#'
+#' simulations <- NULL
+#' for(j in 1:999) {
+#'    #simulations[[j]] <- rStrauss(beta=exp(fittedmodel$coef[1]), gamma=exp(fittedmodel$coef[2]), R=fittedmodel$interaction$par$r, W=pp$window);
+#'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]), R = fittedmodel$interaction$par$hc, W = pp$window);
+#'    if(j%%10==0) cat(j, "...", sep="")
+#' }
+#' env <- envelope(pp, simulate=simulations, fun="Lest", nsim=length(simulations), savefuns=TRUE, correction="none", r=seq(0, 9.5, length=500))
+#' res <- rank_envelope(env); plot(res, use_ggplot2=TRUE)
+#' }
+#'
 rank_envelope <- function(curve_set, alpha=0.05, ...) {
     # data_curve = the vector of L-function values for data
     # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
