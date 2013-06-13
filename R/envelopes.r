@@ -242,6 +242,8 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' }
 #' @export
 #' @examples
+#' ## Testing complete spatial randomness (CSR)
+#' #-------------------------------------------
 #' library(spatstat)
 #' pp <- spruces
 #' ## Test for complete spatial randomness (CSR)
@@ -329,6 +331,8 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
 #' }
 #' @export
 #' @examples
+#' ## Testing complete spatial randomness (CSR)
+#' #-------------------------------------------
 #' library(spatstat)
 #' pp <- spruces
 #' ## Test for complete spatial randomness (CSR)
