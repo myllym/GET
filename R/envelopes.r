@@ -12,6 +12,7 @@
 #'
 #' @inheritParams convert_envelope
 #' @param alpha The significance level. Simultaneous 100(1-alpha) percent envelopes will be calculated.
+#' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate for the p-value.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
@@ -127,8 +128,10 @@ rank_envelope <- function(curve_set, alpha=0.05, ...) {
 
     res <- list(r=curve_set[['r']], method="Rank envelope test",
                 p=p, p_interval=c(p_low,p_upp),
+                k_alpha=kalpha,
                 central_curve=MX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
+    if(savedevs) res$k <- distance
     class(res) <- "envelope_test"
     res
 }
@@ -271,7 +274,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- st_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
-st_envelope <- function(curve_set, alpha=0.05, ...) {
+st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     curve_set <- convert_envelope(curve_set)
 
@@ -306,8 +309,10 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
     UB <- EX + talpha*sdX;
 
     res <- list(r=curve_set[['r']], method="Studentised envelope test", p=p,
+                u_alpha=talpha,
                 central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
+    if(savedevs) res$u <- distance
     class(res) <- "envelope_test"
     res
 }
@@ -368,7 +373,7 @@ st_envelope <- function(curve_set, alpha=0.05, ...) {
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
-qdir_envelope <- function(curve_set, alpha=0.05, ...) {
+qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     curve_set <- convert_envelope(curve_set)
 
@@ -423,8 +428,10 @@ qdir_envelope <- function(curve_set, alpha=0.05, ...) {
     UB <- EX + talpha*abs(QQ[2,]-EX);
 
     res <- list(r=curve_set[['r']], method="Directional quantile envelope test", p=p,
+                u_alpha=talpha,
                 central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
+    if(savedevs) res$u <- distance
     class(res) <- "envelope_test"
     res
 }
@@ -511,6 +518,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     UB <- EX + talpha*sdX
 
     res <- list(r=curve_set[['r']], method="Approximative normal envelope test", p=p,
+                u_alpha = talpha,
                 central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
     class(res) <- "envelope_test"
