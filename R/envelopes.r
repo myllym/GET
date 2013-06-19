@@ -338,7 +338,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'
 #' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
-#' @inheritParams rank_envelope
+#' @inheritParams st_envelope
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r Distances for which the test was made.
