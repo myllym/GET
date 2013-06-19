@@ -208,3 +208,16 @@ create_curve_set <- function(curve_set) {
 #' Check class.
 #' @export
 is.curve_set <- function(x) inherits(x, 'curve_set')
+
+
+#' Print method for the class 'curve_set'
+#' @usage \method{print}{curve_set}(x)
+#'
+#' @param x an 'curve_set' object
+#'
+#' @method print curve_set
+#' @export
+print.curve_set <- function(x, ...) {
+    cat("curve_set object containing :\n")
+    str(x)
+}
