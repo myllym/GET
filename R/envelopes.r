@@ -33,7 +33,7 @@
 #' #-------------------------------------------
 #' require(spatstat)
 #' pp <- unmark(spruces)
-#' Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #' env <- envelope(pp, fun="Lest", nsim=4999, savefuns=TRUE, correction="translate")
 #' # The rank envelope test
 #' res <- rank_envelope(env)
