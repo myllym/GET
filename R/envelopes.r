@@ -8,7 +8,7 @@
 #' the simultaneous 100(1-alpha) percent envelopes for the chosen test function T(r) on
 #' the chosen interval of distances.
 #'
-#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). New exact envelope tests for spatial point patterns.
+#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
 #' @inheritParams convert_envelope
 #' @param alpha The significance level. Simultaneous 100(1-alpha) percent envelopes will be calculated.
@@ -230,7 +230,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
 #'
-#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). New exact envelope tests for spatial point patterns.
+#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
 #' @inheritParams rank_envelope
 #' @return An "envelope_test" object containing the following fields:
@@ -329,7 +329,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
 #'
-#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). New exact envelope tests for spatial point patterns.
+#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
 #' @inheritParams rank_envelope
 #' @return An "envelope_test" object containing the following fields:
