@@ -6,7 +6,7 @@
 #' @inheritParams marksummary::summ_func_random_labelling
 #' @inheritParams crop_curves
 #' @inheritParams residual
-#' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}, \code{\link{deviation}}
+#' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}, \code{\link{deviation_test}}
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
 #' @export
