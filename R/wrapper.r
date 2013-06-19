@@ -10,7 +10,7 @@
 #' @inheritParams estimate_p_value.default
 #' @export
 random_labelling_test <- function(pattern,
-                                  mtf_name = 'm', n_sim = 999L,
+                                  mtf_name = 'm', nsim = 999L,
                                   r_min = NULL, r_max = NULL, r_vec = NULL,
                                   measure = 'max', scaling = 'qdir',
                                   use_L = TRUE,
@@ -25,7 +25,7 @@ random_labelling_test <- function(pattern,
     }
 
     curve_set <- func(pattern, mtf_name = mtf_name, r_max = r_max,
-                      r_vec = r_vec, n_sim = n_sim, calc_theo = use_theo,
+                      r_vec = r_vec, n_sim = nsim, calc_theo = use_theo,
                       edge_correction = edge_correction, method = method,
                       use_biased_lambda2 = use_biased_lambda2)
     # r_max has already been dealt with in marksummary.
