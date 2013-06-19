@@ -26,6 +26,7 @@
 #'   \item call The call of the function.
 #' }
 #' @export
+#' @seealso \code{\link{random_labeling}}
 #' @examples
 #'
 #' ## Testing complete spatial randomness (CSR)
