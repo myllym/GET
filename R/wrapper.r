@@ -59,20 +59,27 @@ random_labelling_test <- function(pattern,
                                   use_theo = TRUE, method = 'permute',
                                   use_biased_lambda2 = FALSE,
                                   ties = 'random') {
-    if (use_L) {
-        func <- random_labelling_L_f
-    } else {
-        func <- random_labelling_K_f
-    }
-
-    curve_set <- func(pattern, mtf_name = mtf_name, r_max = r_max,
-                      r_vec = r_vec, n_sim = nsim, calc_theo = use_theo,
-                      edge_correction = edge_correction, method = method,
-                      use_biased_lambda2 = use_biased_lambda2)
-    # r_max has already been dealt with in marksummary.
-    curve_set <- crop_curves(curve_set, r_min = r_min, r_max = NULL)
-    curve_set <- residual(curve_set, use_theo = use_theo)
-    curve_set <- scale_curves(curve_set, scaling = scaling)
+#    if (use_L) {
+#        func <- random_labelling_L_f
+#    } else {
+#        func <- random_labelling_K_f
+#    }
+#
+#    curve_set <- func(pattern, mtf_name = mtf_name, r_max = r_max,
+#                      r_vec = r_vec, n_sim = nsim, calc_theo = use_theo,
+#                      edge_correction = edge_correction, method = method,
+#                      use_biased_lambda2 = use_biased_lambda2)
+#    # r_max has already been dealt with in marksummary.
+#    curve_set <- crop_curves(curve_set, r_min = r_min, r_max = NULL)
+#    curve_set <- residual(curve_set, use_theo = use_theo)
+#    curve_set <- scale_curves(curve_set, scaling = scaling)
+    curve_set <- random_labelling(pattern=pattern,
+            mtf_name = mtf_name, nsim = nsim,
+            r_min = r_min, r_max = r_max, r_vec = r_vec,
+            use_L = use_L,
+            edge_correction = edge_correction,
+            use_theo = use_theo, method = method,
+            use_biased_lambda2 = use_biased_lambda2)
     devs <- deviation(curve_set, measure = measure)
     p <- estimate_p_value(devs)
     p
