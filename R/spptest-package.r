@@ -13,7 +13,7 @@
 #'
 #' For testing simple hypothesis, this can be done as follows
 #' \itemize{
-#'    \item Complete spatial randomness (CSR): use \code{\link{envelope}}.
+#'    \item Complete spatial randomness (CSR): use \code{\link[spatstat]{envelope}}.
 #'    \item Random labeling: use \code{\link{random_labelling}}.
 #' }
 #'
@@ -23,12 +23,12 @@
 #'    \item Fit the model to your data by means of the function
 #'          \code{\link{ppm}} or \code{\link{kppm}}.
 #'          See the help documentation for possible models.
-#'    \item Use \code{\link{envelope}} to create nsim simulations
+#'    \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
 #'          from the fitted model and to calculate T_1(r), T_2(r), ..., T_{nsim+1}(r).
 #'          Important: use the option 'savefuns=TRUE'.
-#'          See the help documentation in \code{\link{spatstat}} for possible test functions.
+#'          See the help documentation in \code{\link[spatstat]{spatstat}} for possible test functions.
 #'    \item Optional, needed only for 2) below: Use \code{\link{create_curve_set}}
-#'          to create a curve_set object from the object returned by \code{\link{envelope}}.
+#'          to create a curve_set object from the object returned by \code{\link[spatstat]{envelope}}.
 #' }
 #' or (ii) use your own programs
 #' \itemize{
