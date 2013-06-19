@@ -68,8 +68,8 @@
 #' # Minimum distance between points in the pattern
 #' min(nndist(pp))
 #' # Fit a model
-#' # fittedmodel <- ppm(pp, interaction=Strauss(r=4))
-#' fittedmodel <- ppm(pp, interaction=Hardcore(hc=1))
+#' ## fittedmodel <- ppm(pp, interaction=Strauss(r=4)) # Strauss process
+#' fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
 #'
 #' \dontrun{
 #' ## Simulating Strauss process by 'envelope' is slow
@@ -77,7 +77,7 @@
 #'
 #' simulations <- NULL
 #' for(j in 1:999) {
-#'    #simulations[[j]] <- rStrauss(beta=exp(fittedmodel$coef[1]), gamma=exp(fittedmodel$coef[2]), R=fittedmodel$interaction$par$r, W=pp$window);
+#'    ##simulations[[j]] <- rStrauss(beta=exp(fittedmodel$coef[1]), gamma=exp(fittedmodel$coef[2]), R=fittedmodel$interaction$par$r, W=pp$window);
 #'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]), R = fittedmodel$interaction$par$hc, W = pp$window);
 #'    if(j%%10==0) cat(j, "...", sep="")
 #' }
