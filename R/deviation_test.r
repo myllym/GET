@@ -37,6 +37,7 @@
 #' @inheritParams deviation
 #' @param scaling The name of the scaling to use. Options include 'none',
 #'   'q', 'qdir' and 'st'. 'qdir' is default.
+#' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @return If 'savedevs=FALSE' (default), the p-value is returned.
 #' If 'savedevs=TRUE', then a list containing the p-value and calculated deviation measures
 #' u_i, i=1,...,nsim+1 (where u_1 corresponds to the data pattern) is returned.

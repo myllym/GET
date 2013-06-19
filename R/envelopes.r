@@ -86,7 +86,7 @@
 #' res <- rank_envelope(env); plot(res, use_ggplot2=TRUE)
 #' }
 #'
-rank_envelope <- function(curve_set, alpha=0.05, ...) {
+rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     # data_curve = the vector of L-function values for data
     # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
     # alpha = the chosen significance level of the test
@@ -233,6 +233,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
 #' @inheritParams rank_envelope
+#' @param savedevs Logical. Should the global deviation values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r Distances for which the test was made.
