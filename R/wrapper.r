@@ -42,9 +42,21 @@ random_labelling_test <- function(pattern,
 #' @inheritParams convert_envelope
 #' @inheritParams crop_curves
 #' @export
-scaled_deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
-                                  use_theo = TRUE, scaling = 'env',
-                                  measure = 'max') {
+#' @examples
+#' ## Testing complete spatial randomness (CSR)
+#' #-------------------------------------------
+#' require(spatstat)
+#' pp <- unmark(spruces)
+#' Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
+#' # The deviation test using the integral deviation measure
+#' res <- deviation_test(env, measure = 'int')
+#' res
+#' # or
+#' res <- deviation_test(env, r_min=0, r_max=7, measure='int')
+deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
+                                  use_theo = TRUE, scaling = 'qdir',
+                                  measure = 'max', savedevs=FALSE) {
     curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
     curve_set <- residual(curve_set, use_theo = use_theo)
     curve_set <- scale_curves(curve_set, scaling = scaling)
