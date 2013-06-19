@@ -34,8 +34,14 @@ random_labelling <- function(pattern,
 }
 
 # FIXME: inheritParams does not work in the expected way here.
+#' Random labeling test
+#'
 #' Do a random labelling deviation test for a pattern using K_f- or
 #' L_f-functions.
+#'
+#' Given a marked point pattern, the function performs simulations under
+#' the random labelling hypothesis, estimates K_f- or L_f-functions
+#' for the pattern and simulations and makes a deviation test.
 #'
 #' @inheritParams marksummary::summ_func_random_labelling
 #' @inheritParams crop_curves
