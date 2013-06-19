@@ -93,6 +93,9 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     curve_set <- convert_envelope(curve_set)
 
+    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
+    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+
     data_curve <- curve_set[['obs']]
     sim_curves <- t(curve_set[['sim_m']])
 
@@ -279,6 +282,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     curve_set <- convert_envelope(curve_set)
 
+    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
+    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+
     data_curve <- curve_set[['obs']]
     sim_curves <- t(curve_set[['sim_m']])
 
@@ -377,6 +383,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     curve_set <- convert_envelope(curve_set)
+
+    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
+    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
 
     data_curve <- curve_set[['obs']]
     sim_curves <- t(curve_set[['sim_m']])
