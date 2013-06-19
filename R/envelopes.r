@@ -20,6 +20,8 @@
 #'   \item method The envelope method.
 #'   \item p A point estimate for the p-value.
 #'   \item p_interval The p-value interval [p_liberal, p_conservative].
+#'   \item k_alpha
+#'   \item k Global rank values. Returned only if savedevs = TRUE.
 #'   \item central_curve The mean test function (median) calculated from simulations.
 #'   \item data_curve The test function for the data.
 #'   \item lower The lower envelope.
@@ -236,12 +238,14 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
 #' @inheritParams rank_envelope
-#' @param savedevs Logical. Should the global deviation values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
+#' @param savedevs Logical. Should the global deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r Distances for which the test was made.
 #'   \item method The envelope method.
 #'   \item p A point estimate for the p-value.
+#'   \item u_alpha
+#'   \item u Global deviation values. Returned only if savedevs = TRUE.
 #'   \item central_curve The mean test function (median) calculated from simulations.
 #'   \item data_curve The test function for the data.
 #'   \item lower The lower envelope.
@@ -344,6 +348,8 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'   \item r Distances for which the test was made.
 #'   \item method The envelope method.
 #'   \item p A point estimate for the p-value.
+#'   \item u_alpha
+#'   \item u Global deviation values. Returned only if savedevs = TRUE.
 #'   \item central_curve The mean test function (median) calculated from simulations.
 #'   \item data_curve The test function for the data.
 #'   \item lower The lower envelope.
