@@ -9,7 +9,8 @@
   \item{savedevs}{Logical. Should the global deviation
   values u_i, i=1,...,nsim+1 be returned? Default: FALSE.}
 
-  \item{curve_set}{A curve_set or an
+  \item{curve_set}{A curve_set (see
+  \code{\link{create_curve_set}}) or an
   \code{\link[spatstat]{envelope}} object. If an envelope
   object is given, it must contain the summary functions
   from the simulated patterns which can be achieved by
@@ -35,13 +36,9 @@
   The call of the function. }
 }
 \description{
-  Studentised envelope test
-}
-\details{
-  The studentised envelope test is a semiparametric
-  envelope test, which takes into account the unequal
-  variances of the test function T(r) for different
-  distances r.
+  The studentised envelope test, which takes into account
+  the unequal variances of the test function T(r) for
+  different distances r.
 }
 \examples{
 ## Testing complete spatial randomness (CSR)

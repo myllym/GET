@@ -6,6 +6,13 @@
     ...)
 }
 \arguments{
+  \item{curve_set}{A curve_set (see
+  \code{\link{create_curve_set}}) or an
+  \code{\link[spatstat]{envelope}} object. If an envelope
+  object is given, it must contain the summary functions
+  from the simulated patterns which can be achieved by
+  setting savefuns = TRUE when calling envelope().}
+
   \item{alpha}{The significance level. Simultaneous
   100(1-alpha) percent envelopes will be calculated.}
 
@@ -15,12 +22,6 @@
   \item{...}{Additional parameters passed to
   \code{\link{estimate_p_value}} to obtain a point estimate
   for the p-value.}
-
-  \item{curve_set}{A curve_set or an
-  \code{\link[spatstat]{envelope}} object. If an envelope
-  object is given, it must contain the summary functions
-  from the simulated patterns which can be achieved by
-  setting savefuns = TRUE when calling envelope().}
 }
 \value{
   An "envelope_test" object containing the following
@@ -36,8 +37,8 @@
   \item call The call of the function. }
 }
 \description{
-  The rank envelope test, p-value and exact simultaneous
-  100(1-alpha) percent envelopes
+  The rank envelope test, p-value and simultaneous
+  envelopes
 }
 \details{
   The rank envelope test is a completely non-parametric

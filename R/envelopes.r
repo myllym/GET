@@ -1,6 +1,6 @@
 #' The rank envelope test
 #'
-#' The rank envelope test, p-value and exact simultaneous 100(1-alpha) percent envelopes
+#' The rank envelope test, p-value and simultaneous envelopes
 #'
 #'
 #' The rank envelope test is a completely non-parametric test, which provides a p-value
@@ -10,7 +10,10 @@
 #'
 #' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
-#' @inheritParams convert_envelope
+#' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
+#'  object. If an envelope object is given, it must contain the summary
+#'  functions from the simulated patterns which can be achieved by setting
+#'  savefuns = TRUE when calling envelope().
 #' @param alpha The significance level. Simultaneous 100(1-alpha) percent envelopes will be calculated.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate for the p-value.
@@ -29,7 +32,7 @@
 #'   \item call The call of the function.
 #' }
 #' @export
-#' @seealso \code{\link{random_labeling}}
+#' @seealso \code{\link{random_labelling}}
 #' @examples
 #'
 #' ## Testing complete spatial randomness (CSR)
@@ -225,12 +228,9 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 
 #' Studentised envelope test
 #'
-#' Studentised envelope test
+#' The studentised envelope test, which takes into account the unequal
+#' variances of the test function T(r) for different distances r.
 #'
-#'
-#' The studentised envelope test is a semiparametric envelope test,
-#' which takes into account the unequal variances of the test function
-#' T(r) for different distances r.
 #'
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
@@ -330,12 +330,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
 #' Directional quantile envelope test
 #'
-#' Directional quantile envelope test
-#'
-#'
-#' The directional quantile envelope test is a semiparametric envelope test,
-#' which takes into account the unequal variances of the test function T(r)
-#' for different distances r and is also protected against asymmetry of T(r).
+#' The directional quantile envelope test, which takes into account the unequal 
+#' variances of the test function T(r) for different distances r and is also 
+#' protected against asymmetry of T(r).
 #'
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
@@ -473,9 +470,9 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' studentised envelope test (see \code{\link{st_envelope}}), i.e. the semiparametric kth lower
 #' and upper envelopes
 #'
-#' T^u_{low}(r)= T_0(r) - u sqrt{var_0(T(r))}
+#' T^u_{low}(r)= T_0(r) - u sqrt(var_0(T(r)))
 #' and
-#' T^u_{upp}(r)= T_0(r) + u sqrt{var_0(T(r))},
+#' T^u_{upp}(r)= T_0(r) + u sqrt(var_0(T(r))),
 #'
 #' but the p-value and the simultaneous 100(1-alpha) percent envelopes are calculated based
 #' on simulations from a multivariate normal distribution.

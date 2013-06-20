@@ -7,7 +7,7 @@
   This spptest library provides envelope and deviation
   tests for spatial point processes. The main motivation
   for this package are the scalings for deviation tests and
-  new exact envelope tests.
+  new global envelope tests.
 }
 \details{
   A test is performed by three steps as follows. Examples
@@ -58,19 +58,20 @@
   library are the following:
 
   Envelope tests: \itemize{ \item
-  \code{\link{rank_envelope}}, completely non-parametric
-  rank envelope test \item \code{\link{st_envelope}}, a
-  semiparametric envelope test, protected against unequal
-  variance of T(r) for different distances r \item
-  \code{\link{qdir_envelope}}, a semiparametric envelope
-  test, protected against unequal variance and asymmetry of
-  T(r) for different distances r \item
-  \code{\link{normal_envelope}, a parametric envelope test,
-  which uses a normal approximation of T(r) } Note that the
-  recommended minimum number of simulations for the rank
-  envelope test is nsim=4999, while, for the studentised
-  and directional quantile envelope tests, it is nsim=999.
-  (For the normal test, see its documentation.) }
+  \code{\link{rank_envelope}}, the completely
+  non-parametric rank envelope test \item
+  \code{\link{st_envelope}}, the studentised envelope test,
+  protected against unequal variance of T(r) for different
+  distances r \item \code{\link{qdir_envelope}}, the
+  directional quantile envelope test, protected against
+  unequal variance and asymmetry of T(r) for different
+  distances r \item \code{\link{normal_envelope}}, a
+  parametric envelope test, which uses a normal
+  approximation of T(r) } Note that the recommended minimum
+  number of simulations for the rank envelope test is
+  nsim=4999, while, for the studentised and directional
+  quantile envelope tests, it is nsim=999. (For the normal
+  test, see its documentation.)
 
   Deviation tests (no graphical interpretation): \itemize{
   \item \code{\link{deviation_test}} }

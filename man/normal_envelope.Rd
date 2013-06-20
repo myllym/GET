@@ -10,7 +10,8 @@
   multivariate normal distribution (dimension = number of
   distances r).}
 
-  \item{curve_set}{A curve_set or an
+  \item{curve_set}{A curve_set (see
+  \code{\link{create_curve_set}}) or an
   \code{\link[spatstat]{envelope}} object. If an envelope
   object is given, it must contain the summary functions
   from the simulated patterns which can be achieved by
@@ -46,8 +47,8 @@
   test (see \code{\link{st_envelope}}), i.e. the
   semiparametric kth lower and upper envelopes
 
-  T^u_{low}(r)= T_0(r) - u sqrt{var_0(T(r))} and
-  T^u_{upp}(r)= T_0(r) + u sqrt{var_0(T(r))},
+  T^u_{low}(r)= T_0(r) - u sqrt(var_0(T(r))) and
+  T^u_{upp}(r)= T_0(r) + u sqrt(var_0(T(r))),
 
   but the p-value and the simultaneous 100(1-alpha) percent
   envelopes are calculated based on simulations from a

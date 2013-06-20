@@ -6,7 +6,8 @@
     ...)
 }
 \arguments{
-  \item{curve_set}{A curve_set or an
+  \item{curve_set}{A curve_set (see
+  \code{\link{create_curve_set}}) or an
   \code{\link[spatstat]{envelope}} object. If an envelope
   object is given, it must contain the summary functions
   from the simulated patterns which can be achieved by
@@ -35,13 +36,9 @@
   The call of the function. }
 }
 \description{
-  Directional quantile envelope test
-}
-\details{
-  The directional quantile envelope test is a
-  semiparametric envelope test, which takes into account
-  the unequal variances of the test function T(r) for
-  different distances r and is also protected against
+  The directional quantile envelope test, which takes into
+  account the unequal variances of the test function T(r)
+  for different distances r and is also protected against
   asymmetry of T(r).
 }
 \examples{
