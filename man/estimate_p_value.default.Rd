@@ -19,8 +19,8 @@
   'random' the rank of the obs within the tied values is
   uniformly sampled so that the resulting p-value is at
   most the conservative option and at least the liberal
-  option. For 'midrank' we take the mid-rank within the
-  tied values. 'midrank' is the default.}
+  option. For 'midrank' the mid-rank within the tied values
+  is taken. 'midrank' is the default.}
 }
 \value{
   The p-value estimate. A scalar real value between 0 and

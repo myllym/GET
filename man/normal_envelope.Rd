@@ -16,20 +16,53 @@
   from the simulated patterns which can be achieved by
   setting savefuns = TRUE when calling envelope().}
 
-  \item{alpha}{}
+  \item{alpha}{The significance level. Simultaneous
+  100(1-alpha) percent envelopes will be calculated.}
 
   \item{...}{Additional parameters passed to
-  \code{\link{estimate_p_value}}.}
+  \code{\link{estimate_p_value}} to obtain a point estimate
+  for the p-value.}
 }
 \description{
   Approximative normal envelope test
 }
+\details{
+  The normal envelope test is a parametric envelope test.
+  If simulation from the null model is extremely tedious,
+  for some test functions T(r) it is possible to use a
+  normal approximation as suggested by Mrkvicka (2009) in a
+  study of random closed sets. The basis of the test is the
+  approximation of the test function T(r), r in I=[r_min,
+  r_max], by a random vector (T(r_1), ...,T(r_m))', where m
+  is the number of distances, that follows multivariate
+  normal distribution with mean mu and variance matrix
+  Sigma which are estimated from T_j(r), j=2, ...,s+1. This
+  test employes T_j(r), j=2, ...,s+1, only for estimating
+  mu and Sigma, and for this s=100 simulations is enough to
+  reach needed accuracy.
+
+  This normal envelope test is not a Monte Carlo test. It
+  employes the same envelopes as the studentised envelope
+  test (see \code{\link{st_envelope}}), i.e. the
+  semiparametric kth lower and upper envelopes
+
+  T^u_{low}(r)= T_0(r) - u sqrt{var_0(T(r))} and
+  T^u_{upp}(r)= T_0(r) + u sqrt{var_0(T(r))},
+
+  but the p-value and the simultaneous 100(1-alpha) percent
+  envelopes are calculated based on simulations from a
+  multivariate normal distribution.
+}
 \examples{
 library(spatstat)
 pp <- spruces
-env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE, r=seq(0,8,length=50))
+env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE, correction="translate", r=seq(0,8,length=50))
 curve_set <- residual(env, use_theo = TRUE)
 system.time( res <- normal_envelope(curve_set, n_norm=200000) )
 plot(res)
+}
+\references{
+  Mrkvička, T. (2009). On testing of general random closed
+  set model hypothesis. Kybernetika 45, 293-308.
 }
 

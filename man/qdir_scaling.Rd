@@ -1,8 +1,8 @@
-\name{envdir_scaling}
-\alias{envdir_scaling}
-\title{EnvDir scaling.}
+\name{qdir_scaling}
+\alias{qdir_scaling}
+\title{Directional quantile scaling.}
 \usage{
-  envdir_scaling(curve_set, probs = c(0.025, 0.975), ...)
+  qdir_scaling(curve_set, probs = c(0.025, 0.975), ...)
 }
 \arguments{
   \item{curve_set}{A curve_set or an
@@ -22,7 +22,7 @@
   A scaled curve_set.
 }
 \description{
-  EnvDir scaling.
+  Directional quantile scaling.
 }
 \details{
   Notice that this scaling is only defined for residuals.

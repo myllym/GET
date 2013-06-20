@@ -34,3 +34,5 @@ Collate:
     'summ-func.r'
     'wrapper.r'
     'envelopes.r'
+    'plot-helper.r'
+    'deviation_test.r'

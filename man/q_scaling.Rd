@@ -1,8 +1,8 @@
-\name{env_scaling}
-\alias{env_scaling}
-\title{Env scaling.}
+\name{q_scaling}
+\alias{q_scaling}
+\title{Quantile scaling.}
 \usage{
-  env_scaling(curve_set, probs = c(0.025, 0.975), ...)
+  q_scaling(curve_set, probs = c(0.025, 0.975), ...)
 }
 \arguments{
   \item{probs}{A two-element vector containing the lower
@@ -22,7 +22,7 @@
   A scaled curve_set.
 }
 \description{
-  Env scaling.
+  Quantile scaling.
 }
 \references{
   J. Møller and K. K. Berthelsen, “Transforming spatial

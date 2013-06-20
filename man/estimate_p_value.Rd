@@ -8,6 +8,6 @@
   Estimate p-value.
 }
 \seealso{
-  estimate_p_value.default
+  \code{\link{estimate_p_value.default}}
 }
 

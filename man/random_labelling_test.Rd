@@ -1,11 +1,10 @@
 \name{random_labelling_test}
 \alias{random_labelling_test}
-\title{Do a random labelling deviation test for a pattern using K_f- or
-L_f-functions.}
+\title{Random labeling test}
 \usage{
   random_labelling_test(pattern, mtf_name = "m",
-    n_sim = 999L, r_min = NULL, r_max = NULL, r_vec = NULL,
-    measure = "max", scaling = "env", use_L = TRUE,
+    nsim = 999L, r_min = NULL, r_max = NULL, r_vec = NULL,
+    measure = "max", scaling = "qdir", use_L = TRUE,
     edge_correction = "translate", use_theo = TRUE,
     method = "permute", use_biased_lambda2 = FALSE,
     ties = "random")
@@ -49,8 +48,7 @@ L_f-functions.}
   function or the mean of the simulations.}
 
   \item{scaling}{The name of the scaling to use. Options
-  include 'none', 'env', 'envdir' and 'scale'. 'env' is
-  default.}
+  include 'none', 'q', 'qdir' and 'st'. 'qdir' is default.}
 
   \item{measure}{The deviation measure to use. Default is
   'max'. Must be one of the following: 'max', 'int',
@@ -64,11 +62,23 @@ L_f-functions.}
   'random' the rank of the obs within the tied values is
   uniformly sampled so that the resulting p-value is at
   most the conservative option and at least the liberal
-  option. For 'midrank' we take the mid-rank within the
-  tied values. 'midrank' is the default.}
+  option. For 'midrank' the mid-rank within the tied values
+  is taken. 'midrank' is the default.}
 }
 \description{
   Do a random labelling deviation test for a pattern using
   K_f- or L_f-functions.
+}
+\details{
+  Given a marked point pattern, the function performs
+  simulations under the random labelling hypothesis,
+  estimates K_f- or L_f-functions for the pattern and
+  simulations and makes a deviation test.
+}
+\examples{
+mpp <- spruces
+# T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
+p <- random_labelling_test(mpp, mtf_name = 'm', nsim=999, r_min=0, r_max=9.5)
+p
 }
 

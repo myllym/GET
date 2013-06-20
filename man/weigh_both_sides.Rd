@@ -6,6 +6,6 @@ side of middle curve each element is.}
   weigh_both_sides(x, upper_coeff, lower_coeff)
 }
 \description{
-  Used by \code{\link{envdir_scaling}}.
+  Used by \code{\link{qdir_scaling}}.
 }
 

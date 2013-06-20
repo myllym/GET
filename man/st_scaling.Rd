@@ -1,8 +1,8 @@
-\name{scale_scaling}
-\alias{scale_scaling}
-\title{Scale with the standard deviation.}
+\name{st_scaling}
+\alias{st_scaling}
+\title{Studentised scaling}
 \usage{
-  scale_scaling(curve_set)
+  st_scaling(curve_set)
 }
 \arguments{
   \item{curve_set}{A curve_set or an
