@@ -9,8 +9,8 @@
   obtained by using residual().}
 
   \item{measure}{The deviation measure to use. Default is
-  'max'. Must be one of the following: 'max', 'int',
-  'int2', 'MBD', 'MHRD', 'MMHRD', 'ISD' or 'MISD'.}
+  'max'. Must be one of the following: 'max', 'int' or
+  'int2'.}
 
   \item{...}{Arguments to be passed to the measure
   function, if applicable.}

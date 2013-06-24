@@ -51,8 +51,8 @@
   include 'none', 'q', 'qdir' and 'st'. 'qdir' is default.}
 
   \item{measure}{The deviation measure to use. Default is
-  'max'. Must be one of the following: 'max', 'int',
-  'int2', 'MBD', 'MHRD', 'MMHRD', 'ISD' or 'MISD'.}
+  'max'. Must be one of the following: 'max', 'int' or
+  'int2'.}
 
   \item{ties}{The method to treat tied values with. If one
   or more of the elements of sim_vec are equal to obs, how

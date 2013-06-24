@@ -27,8 +27,8 @@
   function or the mean of the simulations.}
 
   \item{measure}{The deviation measure to use. Default is
-  'max'. Must be one of the following: 'max', 'int',
-  'int2', 'MBD', 'MHRD', 'MMHRD', 'ISD' or 'MISD'.}
+  'max'. Must be one of the following: 'max', 'int' or
+  'int2'.}
 }
 \value{
   If 'savedevs=FALSE' (default), the p-value is returned.
