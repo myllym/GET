@@ -11,18 +11,15 @@ Authors@R: c(
     person(given = 'Pavel', family = 'Grabarnik', role = c('aut'),
     email = list('gpya@rambler.ru', 'pavel.grabarnik@gmail.com'))
     )
-Version: 0.1
-Date: 2013-02-27
+Version: 0.2
+Date: 2013-06-24
 License: GPL-3
 Title: Spatial point process testing
 Description: Envelope and deviation tests for spatial point patterns
-Imports:
-    fastdepth,
-    mvtnorm
 Suggests:
+    mvtnorm,
     marksummary,
-    testthat,
-    roxygen2
+    testthat
 Collate:
     'crop.r'
     'curve-set.r'
