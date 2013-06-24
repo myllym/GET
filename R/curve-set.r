@@ -221,3 +221,18 @@ print.curve_set <- function(x, ...) {
     cat("curve_set object containing :\n")
     str(x)
 }
+
+#' Plot method for the class 'curve_set'
+#' @usage \method{plot}{curve_set}(x)
+#'
+#' @param x an 'curve_set' object
+#'
+#' @method plot curve_set
+#' @export
+plot.curve_set <- function(x, ...) {
+    with(x, {
+                plot(r, obs, type="l", ylim=c(min(obs,sim_m), max(obs,sim_m)), ...)
+                for(i in 1:ncol(sim_m)) lines(r, sim_m[,i], col=grey(0.7))
+                lines(r, obs, type="l", ...)
+            })
+}
