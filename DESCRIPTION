@@ -19,6 +19,7 @@ Description: Envelope and deviation tests for spatial point patterns
 Suggests:
     mvtnorm,
     marksummary,
+    fastdepth,
     testthat
 Collate:
     'crop.r'
