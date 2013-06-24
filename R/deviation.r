@@ -9,7 +9,6 @@
 #' @return A deviation_set object. The list has two elements: obs and sim.
 #'   obs is scalar while sim is a vector with at least one element.
 #' @export
-#' @importFrom fastdepth mbd mhrd mmhrd isd misd
 deviation <- function(curve_set, measure = 'max', ...) {
     functional_depths <- c('MBD', 'MHRD', 'MMHRD', 'ISD', 'MISD')
     functional_depth_funcs <- c('mbd', 'mhrd', 'mmhrd', 'isd', 'misd')
@@ -39,6 +38,11 @@ deviation <- function(curve_set, measure = 'max', ...) {
         res <- with(curve_set, list(obs = sum(obs ^ 2L),
                                     sim = apply(sim_m ^ 2L, 2, sum)))
     } else if (measure %in% functional_depths) {
+        got_req <- require(fastdepth)
+        if (!got_req) {
+            stop('fastdepth must be installed to use functional depth ',
+                 'measures.')
+        }
         curve_m <- with(curve_set, rbind(obs, t(sim_m)))
         idx <- match(measure, functional_depths)
         func <- get(functional_depth_funcs[idx])

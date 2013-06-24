@@ -481,7 +481,6 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @references Mrkvička, T. (2009). On testing of general random closed set model hypothesis. Kybernetika 45, 293-308.
 #' @inheritParams rank_envelope
 #' @param n_norm Number of simulations drawn from the multivariate normal distribution (dimension = number of distances r).
-#' @importFrom mvtnorm rmvnorm
 #' @export
 #' @examples
 #' library(spatstat)
@@ -491,6 +490,11 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' system.time( res <- normal_envelope(curve_set, n_norm=200000) )
 #' plot(res)
 normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
+    got_req <- require(mvtnorm)
+    if (!got_req) {
+        stop('mvtnorm must be installed for normal_envelope.')
+    }
+
     curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]

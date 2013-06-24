@@ -110,6 +110,6 @@ res <- rank_envelope(env); plot(res, use_ggplot2=TRUE)
   (2013). Global envelope tests for spatial point patterns.
 }
 \seealso{
-  \code{\link{random_labeling}}
+  \code{\link{random_labelling}}
 }
 

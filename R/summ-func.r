@@ -8,11 +8,15 @@
 #' @return A list with either two or three components. 'obs' has the summary
 #'   function that was asked for. 'r' contains the radius values. 'unmarked'
 #'   contains the unmarked K or L function, if asked for.
-#' @importFrom marksummary summ_func
 call_summ_func <- function(pattern, do_besags_L,
                            edge_correction = 'translate', mtf_name = 'm',
                            r_max = NULL, r_vec = NULL, calc_unmarked = TRUE,
                            use_biased_lambda2 = FALSE) {
+    got_req <- require(marksummary)
+    if (!got_req) {
+        stop('marksummary must be installed for call_summ_func.')
+    }
+
     if (length(mtf_name) != 1L || mtf_name %in% '1') {
         stop('mtf_name must be a single string and not "1".')
     }
@@ -100,13 +104,17 @@ estimate_L_f <- function(pattern, mtf_name = 'm', r_max = NULL,
 #' @return A list with either two or three components. 'obs' has the summary
 #'   function that was asked for. 'r' contains the radius values. 'unmarked'
 #'   contains the unmarked K or L function, if asked for.
-#' @importFrom marksummary summ_func_random_labelling
 call_random_labelling <- function(pattern, do_besags_L, mtf_name = 'm',
                                   r_max = NULL, r_vec = NULL, n_sim = 999L,
                                   calc_theo = TRUE,
                                   edge_correction = 'translate',
                                   method = 'permute',
                                   use_biased_lambda2 = FALSE) {
+    got_req <- require(marksummary)
+    if (!got_req) {
+        stop('marksummary must be installed for call_random_labelling.')
+    }
+
     if (length(mtf_name) != 1L || mtf_name %in% '1') {
         stop('mtf_name must be a single string and not "1".')
     }
