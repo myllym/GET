@@ -77,3 +77,14 @@ deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
     class(res) <- 'deviation_test'
     res
 }
+
+#' Print method for the class 'deviation_test'
+#' @usage \method{print}{deviation_test}(x)
+#'
+#' @param x an 'deviation_test' object
+#'
+#' @method print deviation_test
+#' @export
+print.deviation_test <- function(x, ...) {
+    with(x, cat("p-value of the test: ", p, "\n", sep=""))
+}
