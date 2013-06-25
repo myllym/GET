@@ -183,7 +183,7 @@ check_residualness <- function(curve_set) {
         stop('curve_set must consist of residual curves. Run function ',
              'residual first.')
     }
-    curve_set
+    invisible(curve_set)
 }
 
 #' Create a curve set out of a list in the right form.
