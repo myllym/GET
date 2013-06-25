@@ -294,17 +294,18 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     Nsim <- dim(sim_curves)[1];
     n <- dim(sim_curves)[2]
-    EX <- colMeans(sim_curves);
+    if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
+    else T_0 <- colMeans(sim_curves);
     sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
 
     distance <- array(0, Nsim+1);
     # data
-    ttt <- abs(data_curve-EX)/sdX;
+    ttt <- abs(data_curve-T_0)/sdX;
     ttt[!is.finite(ttt)] <- 0
     distance[1] <- max(ttt)
     # simulations
     for(j in 1:Nsim) {
-        ttt <- abs(sim_curves[j,]-EX)/sdX
+        ttt <- abs(sim_curves[j,]-T_0)/sdX
         ttt[!is.finite(ttt)] <- 0
         distance[j+1] <- max(ttt);
     }
@@ -316,12 +317,12 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
     talpha <- distancesorted[round((1-alpha)*(Nsim+1))];
-    LB <- EX - talpha*sdX;
-    UB <- EX + talpha*sdX;
+    LB <- T_0 - talpha*sdX;
+    UB <- T_0 + talpha*sdX;
 
     res <- list(r=curve_set[['r']], method="Studentised envelope test", p=p,
                 u_alpha=talpha,
-                central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
+                central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
     if(savedevs) res$u <- distance
     class(res) <- "envelope_test"
@@ -340,6 +341,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
 #' @inheritParams st_envelope
+#' @param probs A two-element vector containing the lower and upper
+#'   quantiles for the envelope, in that order and on the interval [0, 1].
+#'   The default values are 0.025 and 0.975.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r Distances for which the test was made.
@@ -383,9 +387,10 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
-qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
+qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
 
     curve_set <- convert_envelope(curve_set)
+    check_probs(probs)
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
@@ -395,17 +400,18 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     Nsim <- dim(sim_curves)[1];
     n <- dim(sim_curves)[2]
-    EX <- colMeans(sim_curves);
-    QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = c(0.025,0.975))
+    if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
+    else T_0 <- colMeans(sim_curves);
+    QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = probs)
 
     distance <- array(0, Nsim+1);
     tmaxd<-0;
-    for(i in 1:length(EX)){
-        if(data_curve[i]-EX[i]>0) {
-            ttt <- (data_curve[i]-EX[i])/(QQ[2,i]-EX[i])
+    for(i in 1:length(T_0)){
+        if(data_curve[i]-T_0[i]>0) {
+            ttt <- (data_curve[i]-T_0[i])/(QQ[2,i]-T_0[i])
         }
         else {
-            ttt <- (data_curve[i]-EX[i])/(QQ[1,i]-EX[i])
+            ttt <- (data_curve[i]-T_0[i])/(QQ[1,i]-T_0[i])
         }
         if(!is.finite(ttt)) ttt <- 0
         if(tmaxd<ttt) {
@@ -415,12 +421,12 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     distance[1] <- tmaxd
     for(j in 1:Nsim){
         tmax<-0;
-        for(i in 1:length(EX)){
-            if(sim_curves[j,i]-EX[i]>0) {
-                ttt <- (sim_curves[j,i]-EX[i])/(QQ[2,i]-EX[i])
+        for(i in 1:length(T_0)){
+            if(sim_curves[j,i]-T_0[i]>0) {
+                ttt <- (sim_curves[j,i]-T_0[i])/(QQ[2,i]-T_0[i])
             }
             else {
-                ttt <- (sim_curves[j,i]-EX[i])/(QQ[1,i]-EX[i])
+                ttt <- (sim_curves[j,i]-T_0[i])/(QQ[1,i]-T_0[i])
             }
             if(!is.finite(ttt)) ttt <- 0
             if(tmax<ttt) {
@@ -437,12 +443,12 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
     talpha <- distancesorted[round((1-alpha)*(Nsim+1))];
-    LB <- EX - talpha*abs(QQ[1,]-EX);
-    UB <- EX + talpha*abs(QQ[2,]-EX);
+    LB <- T_0 - talpha*abs(QQ[1,]-T_0);
+    UB <- T_0 + talpha*abs(QQ[2,]-T_0);
 
     res <- list(r=curve_set[['r']], method="Directional quantile envelope test", p=p,
                 u_alpha=talpha,
-                central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
+                central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
     if(savedevs) res$u <- distance
     class(res) <- "envelope_test"

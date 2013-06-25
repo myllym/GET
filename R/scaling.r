@@ -75,7 +75,7 @@ check_probs <- function(probs) {
 #' @param probs A two-element vector containing the lower and upper
 #'   quantiles for the envelope, in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975 as in the article by Møller and
-#'   Berthelsen.
+#'   Berthelsen (2012).
 #' @param ... Further arguments passed to quantile.
 #' @return A scaled curve_set.
 #' @references J. Møller and K. K. Berthelsen, “Transforming spatial point
