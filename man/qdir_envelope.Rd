@@ -3,9 +3,14 @@
 \title{Directional quantile envelope test}
 \usage{
   qdir_envelope(curve_set, alpha = 0.05, savedevs = FALSE,
-    ...)
+    probs = c(0.025, 0.975), ...)
 }
 \arguments{
+  \item{probs}{A two-element vector containing the lower
+  and upper quantiles for the envelope, in that order and
+  on the interval [0, 1].  The default values are 0.025 and
+  0.975.}
+
   \item{curve_set}{A curve_set (see
   \code{\link{create_curve_set}}) or an
   \code{\link[spatstat]{envelope}} object. If an envelope

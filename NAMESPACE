@@ -1,6 +1,7 @@
 S3method(plot,curve_set)
 S3method(plot,envelope_test)
 S3method(print,curve_set)
+S3method(print,deviation_test)
 S3method(print,envelope_test)
 export(check_deviation_set)
 export(create_curve_set)

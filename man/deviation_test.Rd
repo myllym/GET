@@ -4,7 +4,7 @@
 \usage{
   deviation_test(curve_set, r_min = NULL, r_max = NULL,
     use_theo = TRUE, scaling = "qdir", measure = "max",
-    savedevs = FALSE)
+    savedevs = FALSE, ...)
 }
 \arguments{
   \item{scaling}{The name of the scaling to use. Options
@@ -29,6 +29,9 @@
   \item{measure}{The deviation measure to use. Default is
   'max'. Must be one of the following: 'max', 'int',
   'int2', 'MBD', 'MHRD', 'MMHRD', 'ISD' or 'MISD'.}
+
+  \item{...}{Arguments to be passed to the measure
+  function, if applicable.}
 }
 \value{
   If 'savedevs=FALSE' (default), the p-value is returned.

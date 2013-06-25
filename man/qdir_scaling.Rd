@@ -14,7 +14,7 @@
   \item{probs}{A two-element vector containing the lower
   and upper quantiles for the envelope, in that order and
   on the interval [0, 1].  The default values are 0.025 and
-  0.975 as in the article by Møller and Berthelsen.}
+  0.975 as in the article by Møller and Berthelsen (2012).}
 
   \item{...}{Further arguments passed to quantile.}
 }
