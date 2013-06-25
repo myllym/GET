@@ -341,6 +341,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
 #' @inheritParams st_envelope
+#' @param probs A two-element vector containing the lower and upper
+#'   quantiles for the envelope, in that order and on the interval [0, 1].
+#'   The default values are 0.025 and 0.975.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r Distances for which the test was made.
@@ -384,9 +387,10 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
-qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
+qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
 
     curve_set <- convert_envelope(curve_set)
+    check_probs(probs)
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
