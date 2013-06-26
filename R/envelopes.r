@@ -124,7 +124,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
     distancesorted <- sort(distance, decreasing=TRUE)
-    kalpha <- distancesorted[round((1-alpha)*(Nsim+1))]
+    kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
     LB <- array(0, n);
     UB <- array(0, n);
 
@@ -316,7 +316,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
-    talpha <- distancesorted[round((1-alpha)*(Nsim+1))];
+    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
 
@@ -442,7 +442,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
-    talpha <- distancesorted[round((1-alpha)*(Nsim+1))];
+    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*abs(QQ[1,]-T_0);
     UB <- T_0 + talpha*abs(QQ[2,]-T_0);
 
@@ -536,7 +536,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     #    p <- p/(n_norm+1);
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
-    talpha <- distancesorted[round((1-alpha)*n_norm)];
+    talpha <- distancesorted[floor((1-alpha)*n_norm)];
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
 
