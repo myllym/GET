@@ -191,6 +191,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
     if(use_ggplot2) {
         require(ggplot2)
         linetype.values <- c('solid', 'dashed')
+        size.values <- c(0.2, 0.2)
         with(x, {
                     df <- data.frame(r = rep(r, times=2),
                                      curves = c(data_curve, central_curve),
@@ -199,18 +200,18 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                                      upper = rep(upper, times=2),
                                      main = factor(rep(main, times=length(r)))
                                      )
-                    p <- (ggplot(df, aes_string(x='r', y='curves', group='type', linetype='type'))
-                                + geom_line(aes_string(linetype='type'))
-                                + geom_ribbon(aes(ymin=lower, ymax=upper), fill='grey59',
-                                        alpha=1)
-                                + geom_line(aes(y=curves))
+                    p <- (ggplot()
+                                + geom_ribbon(data = df, aes(x = r, ymin = lower, ymax = upper),
+                                        fill = 'grey59', alpha = 1)
+                                + geom_line(data = df, aes(x = r, y = curves, group = type,
+                                                linetype = type, size = type))
                                 + facet_grid('~ main', scales='free')
                                 + scale_x_continuous(name=xlab)
                                 + scale_y_continuous(name=ylab)
                                 + scale_linetype_manual(values=linetype.values, name='')
+                                + scale_size_manual(values=size.values, name='')
                                 + ThemePlain()
                                 )
-                    #p <- p + geom_hline(yintercept=0, color='grey30', linetype='dashed', size=0.1)
                     print(p)
                 }
             )
@@ -221,7 +222,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                             type="l", lty=1, lwd=2, ...)
                     lines(r, lower, lty=2)
                     lines(r, upper, lty=2)
-                    lines(r, central_curve, lty=1)
+                    lines(r, central_curve, lty=3)
                 }
         )
     }
