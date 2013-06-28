@@ -16,7 +16,8 @@
 #'  savefuns = TRUE when calling envelope().
 #' @param alpha The significance level. Simultaneous 100(1-alpha) percent envelopes will be calculated.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
-#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate for the p-value.
+#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain
+#' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r Distances for which the test was made.
@@ -57,8 +58,9 @@
 #'
 #' ## Random labeling test
 #' #----------------------
+#' # requires library 'marksummary'
 #' mpp <- spruces
-#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- rank_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
@@ -78,7 +80,7 @@
 #' fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
 #'
 #' \dontrun{
-#' ## Simulating Strauss process by 'envelope' is slow
+#' ## Simulating Strauss process by 'envelope' is slow (because it does not use perfect simulation, which 'rStrauss' uses)
 #' #env <- envelope(fittedmodel, fun="Lest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 9.5, length=500))
 #'
 #' simulations <- NULL
@@ -277,8 +279,9 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #'
 #' ## Random labeling test
 #' #----------------------
+#' # requires library 'marksummary'
 #' mpp <- spruces
-#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- st_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
@@ -382,8 +385,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'
 #' ## Random labeling test
 #' #----------------------
+#' # requires library 'marksummary'
 #' mpp <- spruces
-#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
