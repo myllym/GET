@@ -17,23 +17,32 @@
   setting savefuns = TRUE when calling envelope().}
 
   \item{alpha}{The significance level. Simultaneous
-  100(1-alpha) percent envelopes will be calculated.}
+  100(1-alpha)\% envelopes will be calculated.}
 
   \item{...}{Additional parameters passed to
   \code{\link{estimate_p_value}} to obtain a point estimate
-  for the p-value.}
+  for the p-value. The default point estimate is the
+  mid-rank p-value.}
 }
 \value{
   An "envelope_test" object containing the following
-  fields: \itemize{ \item r Distances for which the test
-  was made.  \item method The envelope method.  \item p A
-  point estimate for the p-value.  \item u_alpha \item u
-  Global deviation values. Returned only if savedevs =
-  TRUE.  \item central_curve The mean test function
-  (median) calculated from simulations.  \item data_curve
-  The test function for the data.  \item lower The lower
-  envelope.  \item upper The upper envelope.  \item call
-  The call of the function. }
+  fields: \itemize{ \item r = Distances for which the test
+  was made.  \item method = The name of the envelope test.
+  \item p = A point estimate for the p-value (default is
+  the mid-rank p-value).  \item p_interval = The p-value
+  interval [p_liberal, p_conservative].  \item u_alpha =
+  The value of u corresponding to the 100(1-alpha)\%
+  simultaneous envelope.  \item u = Global deviation values
+  (u[1] is the value for the data pattern). Returned only
+  if savedevs = TRUE.  \item central_curve = If the
+  curve_set (or envelope object) contains a component
+  'theo', then this function is used as the central curve
+  and returned in this component.  Otherwise, the
+  central_curve is the mean of the test functions T_i(r),
+  i=2, ..., s+1.  \item data_curve = The test function for
+  the data.  \item lower = The lower envelope.  \item upper
+  = The upper envelope.  \item call = The call of the
+  function. }
 }
 \description{
   The studentised envelope test, which takes into account
@@ -64,8 +73,9 @@ res <- st_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 
 ## Random labeling test
 #----------------------
+# requires library 'marksummary'
 mpp <- spruces
-# T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
+# Use the test function T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
 curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 res <- st_envelope(curve_set)
 plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))

@@ -18,11 +18,12 @@
   setting savefuns = TRUE when calling envelope().}
 
   \item{alpha}{The significance level. Simultaneous
-  100(1-alpha) percent envelopes will be calculated.}
+  100(1-alpha)\% envelopes will be calculated.}
 
   \item{...}{Additional parameters passed to
   \code{\link{estimate_p_value}} to obtain a point estimate
-  for the p-value.}
+  for the p-value. The default point estimate is the
+  mid-rank p-value.}
 }
 \description{
   Approximative normal envelope test
