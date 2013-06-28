@@ -4,7 +4,7 @@
 \usage{
   deviation_test(curve_set, r_min = NULL, r_max = NULL,
     use_theo = TRUE, scaling = "qdir", measure = "max",
-    savedevs = FALSE)
+    savedevs = FALSE, ...)
 }
 \arguments{
   \item{scaling}{The name of the scaling to use. Options

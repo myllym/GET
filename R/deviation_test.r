@@ -72,7 +72,19 @@ deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
     curve_set <- scale_curves(curve_set, scaling = scaling)
     devs <- deviation(curve_set, measure = measure)
     p <- estimate_p_value(devs, ...)
-    if(savedevs) res <- list(p=p, devs=devs)
-    else res <- p
+    if(savedevs) res <- list(p=p, devs=devs, call=match.call())
+    else res <- list(p=p, call=match.call())
+    class(res) <- 'deviation_test'
     res
+}
+
+#' Print method for the class 'deviation_test'
+#' @usage \method{print}{deviation_test}(x)
+#'
+#' @param x an 'deviation_test' object
+#'
+#' @method print deviation_test
+#' @export
+print.deviation_test <- function(x, ...) {
+    with(x, cat("p-value of the test: ", p, "\n", sep=""))
 }

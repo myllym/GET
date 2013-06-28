@@ -5,7 +5,7 @@
 #'
 #' The rank envelope test is a completely non-parametric test, which provides a p-value
 #' interval given by the most liberal and the most conservative p-value estimate and
-#' the simultaneous 100(1-alpha) percent envelopes for the chosen test function T(r) on
+#' the simultaneous 100(1-alpha)\% envelopes for the chosen test function T(r) on
 #' the chosen interval of distances.
 #'
 #' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
@@ -14,22 +14,25 @@
 #'  object. If an envelope object is given, it must contain the summary
 #'  functions from the simulated patterns which can be achieved by setting
 #'  savefuns = TRUE when calling envelope().
-#' @param alpha The significance level. Simultaneous 100(1-alpha) percent envelopes will be calculated.
+#' @param alpha The significance level. Simultaneous 100(1-alpha)\% envelopes will be calculated.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
-#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate for the p-value.
+#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain
+#' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
-#'   \item r Distances for which the test was made.
-#'   \item method The envelope method.
-#'   \item p A point estimate for the p-value.
-#'   \item p_interval The p-value interval [p_liberal, p_conservative].
-#'   \item k_alpha
-#'   \item k Global rank values. Returned only if savedevs = TRUE.
-#'   \item central_curve The mean test function (median) calculated from simulations.
-#'   \item data_curve The test function for the data.
-#'   \item lower The lower envelope.
-#'   \item upper The upper envelope.
-#'   \item call The call of the function.
+#'   \item r = Distances for which the test was made.
+#'   \item method = The name of the envelope test.
+#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
+#'   \item p_interval = The p-value interval [p_liberal, p_conservative].
+#'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% simultaneous envelope.
+#'   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
+#'         then this function is used as the central curve and returned in this component.
+#'         Otherwise, the central_curve is the median of the test functions T_i(r), i=2, ..., s+1.
+#'   \item data_curve = The test function for the data.
+#'   \item lower = The lower envelope.
+#'   \item upper = The upper envelope.
+#'   \item call = The call of the function.
 #' }
 #' @export
 #' @seealso \code{\link{random_labelling}}
@@ -43,6 +46,9 @@
 #' env <- envelope(pp, fun="Lest", nsim=4999, savefuns=TRUE, correction="translate")
 #' # The rank envelope test
 #' res <- rank_envelope(env)
+#' # Plot the result.
+#' # - The central curve is now obtained from env[['theo']], which is the
+#' # value of the L-function under the null hypothesis (L(r) = r).
 #' plot(res)
 #' # or (requires R library ggplot2)
 #' plot(res, use_ggplot2=TRUE)
@@ -52,43 +58,54 @@
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
-#' # The rank envelope test
+#' # Do the rank envelope test
 #' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #'
 #' ## Random labeling test
 #' #----------------------
+#' # requires library 'marksummary'
 #' mpp <- spruces
-#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' # 1) Perform simulations under the random labelling hypothesis and calculate
+#' # the test function T(r) for the data pattern (mpp) and each simulation.
+#' # The command below specifies that the test function is T(r) = \hat{L}_m(r),
+#' # which is an estimator of the mark-weighted L function, L_m(r),
+#' # with translational edge correction (default).
+#' # The random_labelling function returns the centred functions \hat{L}_m(r)-T_0(r),
+#' # where T_0(r) = \hat{L}(r) is the unmarked L function.
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' # 2) Do the rank envelope test
 #' res <- rank_envelope(curve_set)
+#' # 3) Plot the test result
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
-#' # T(r) = \hat{L}_mm(r), an estimator of the L_mm(r) function
+#'
+#' # Make the test using instead the test function T(r) = \hat{L}_mm(r);
+#' # which is an estimator of the mark-weighted L function, L_mm(r),
+#' # with translational edge correction (default).
 #' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- rank_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 #'
 #' ## Goodness-of-fit test
 #' #----------------------
-#' # FIXME What is a reasonable model to be fitted to this data?
 #' pp <- unmark(spruces)
 #' # Minimum distance between points in the pattern
 #' min(nndist(pp))
 #' # Fit a model
-#' ## fittedmodel <- ppm(pp, interaction=Strauss(r=4)) # Strauss process
 #' fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
 #'
 #' \dontrun{
-#' ## Simulating Strauss process by 'envelope' is slow
-#' #env <- envelope(fittedmodel, fun="Lest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 9.5, length=500))
+#' # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
+#' #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #'
+#' # Using direct algorihm can be faster, because the perfect simulation is used here.
 #' simulations <- NULL
-#' for(j in 1:999) {
-#'    ##simulations[[j]] <- rStrauss(beta=exp(fittedmodel$coef[1]), gamma=exp(fittedmodel$coef[2]), R=fittedmodel$interaction$par$r, W=pp$window);
+#' for(j in 1:4999) {
 #'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]), R = fittedmodel$interaction$par$hc, W = pp$window);
 #'    if(j%%10==0) cat(j, "...", sep="")
 #' }
-#' env <- envelope(pp, simulate=simulations, fun="Lest", nsim=length(simulations), savefuns=TRUE, correction="none", r=seq(0, 9.5, length=500))
-#' res <- rank_envelope(env); plot(res, use_ggplot2=TRUE)
+#' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations), savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+#' curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
+#' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
 #'
 rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
@@ -124,7 +141,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
     distancesorted <- sort(distance, decreasing=TRUE)
-    kalpha <- distancesorted[round((1-alpha)*(Nsim+1))]
+    kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
     LB <- array(0, n);
     UB <- array(0, n);
 
@@ -190,6 +207,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
     if(use_ggplot2) {
         require(ggplot2)
         linetype.values <- c('solid', 'dashed')
+        size.values <- c(0.2, 0.2)
         with(x, {
                     df <- data.frame(r = rep(r, times=2),
                                      curves = c(data_curve, central_curve),
@@ -198,18 +216,18 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                                      upper = rep(upper, times=2),
                                      main = factor(rep(main, times=length(r)))
                                      )
-                    p <- (ggplot(df, aes_string(x='r', y='curves', group='type', linetype='type'))
-                                + geom_line(aes_string(linetype='type'))
-                                + geom_ribbon(aes(ymin=lower, ymax=upper), fill='grey59',
-                                        alpha=1)
-                                + geom_line(aes(y=curves))
+                    p <- (ggplot()
+                                + geom_ribbon(data = df, aes(x = r, ymin = lower, ymax = upper),
+                                        fill = 'grey59', alpha = 1)
+                                + geom_line(data = df, aes(x = r, y = curves, group = type,
+                                                linetype = type, size = type))
                                 + facet_grid('~ main', scales='free')
                                 + scale_x_continuous(name=xlab)
                                 + scale_y_continuous(name=ylab)
                                 + scale_linetype_manual(values=linetype.values, name='')
+                                + scale_size_manual(values=size.values, name='')
                                 + ThemePlain()
                                 )
-                    #p <- p + geom_hline(yintercept=0, color='grey30', linetype='dashed', size=0.1)
                     print(p)
                 }
             )
@@ -220,7 +238,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                             type="l", lty=1, lwd=2, ...)
                     lines(r, lower, lty=2)
                     lines(r, upper, lty=2)
-                    lines(r, central_curve, lty=1)
+                    lines(r, central_curve, lty=3)
                 }
         )
     }
@@ -241,16 +259,19 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' @param savedevs Logical. Should the global deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
-#'   \item r Distances for which the test was made.
-#'   \item method The envelope method.
-#'   \item p A point estimate for the p-value.
-#'   \item u_alpha
-#'   \item u Global deviation values. Returned only if savedevs = TRUE.
-#'   \item central_curve The mean test function (median) calculated from simulations.
-#'   \item data_curve The test function for the data.
-#'   \item lower The lower envelope.
-#'   \item upper The upper envelope.
-#'   \item call The call of the function.
+#'   \item r = Distances for which the test was made.
+#'   \item method = The name of the envelope test.
+#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
+#'   \item p_interval = The p-value interval [p_liberal, p_conservative].
+#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% simultaneous envelope.
+#'   \item u = Global deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
+#'         then this function is used as the central curve and returned in this component.
+#'         Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'   \item data_curve = The test function for the data.
+#'   \item lower = The lower envelope.
+#'   \item upper = The upper envelope.
+#'   \item call = The call of the function.
 #' }
 #' @export
 #' @examples
@@ -277,8 +298,9 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #'
 #' ## Random labeling test
 #' #----------------------
+#' # requires library 'marksummary'
 #' mpp <- spruces
-#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- st_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
@@ -316,7 +338,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
-    talpha <- distancesorted[round((1-alpha)*(Nsim+1))];
+    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
 
@@ -346,16 +368,19 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'   The default values are 0.025 and 0.975.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
-#'   \item r Distances for which the test was made.
-#'   \item method The envelope method.
-#'   \item p A point estimate for the p-value.
-#'   \item u_alpha
-#'   \item u Global deviation values. Returned only if savedevs = TRUE.
-#'   \item central_curve The mean test function (median) calculated from simulations.
-#'   \item data_curve The test function for the data.
-#'   \item lower The lower envelope.
-#'   \item upper The upper envelope.
-#'   \item call The call of the function.
+#'   \item r = Distances for which the test was made.
+#'   \item method = The name of the envelope test.
+#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
+#'   \item p_interval = The p-value interval [p_liberal, p_conservative].
+#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% simultaneous envelope.
+#'   \item u = Global deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
+#'         then this function is used as the central curve and returned in this component.
+#'         Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'   \item data_curve = The test function for the data.
+#'   \item lower = The lower envelope.
+#'   \item upper = The upper envelope.
+#'   \item call = The call of the function.
 #' }
 #' @export
 #' @examples
@@ -382,8 +407,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'
 #' ## Random labeling test
 #' #----------------------
+#' # requires library 'marksummary'
 #' mpp <- spruces
-#' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
@@ -442,7 +468,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
-    talpha <- distancesorted[round((1-alpha)*(Nsim+1))];
+    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*abs(QQ[1,]-T_0);
     UB <- T_0 + talpha*abs(QQ[2,]-T_0);
 
@@ -536,7 +562,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     #    p <- p/(n_norm+1);
 
     #-- calculate the simultaneous 100(1-alpha)% envelopes
-    talpha <- distancesorted[round((1-alpha)*n_norm)];
+    talpha <- distancesorted[floor((1-alpha)*n_norm)];
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
 

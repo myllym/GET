@@ -62,10 +62,11 @@ weigh_curves <- function(curve_set, coeff) {
 check_probs <- function(probs) {
     # Leave further validity checking of probs and type to quantile.
     if (length(probs) != 2L || !all(is.finite(probs)) ||
-        probs[1] >= probs[2]) {
-        stop('probs must be a two-element vector with both values finite ',
-             'and within [0, 1]. The first value must be smaller than the ',
-             'second.')
+        probs[1] >= probs[2] ||
+        probs[1] < 0 || probs[2] < 0 || probs[1] > 1 || probs[2] > 1) {
+        stop('probs must be a two-element vector with both values finite \n',
+             ' and within [0, 1]. The first value must be smaller than the \n',
+             ' second.')
     }
 }
 
