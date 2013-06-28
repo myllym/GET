@@ -71,26 +71,25 @@
 #'
 #' ## Goodness-of-fit test
 #' #----------------------
-#' # FIXME What is a reasonable model to be fitted to this data?
 #' pp <- unmark(spruces)
 #' # Minimum distance between points in the pattern
 #' min(nndist(pp))
 #' # Fit a model
-#' ## fittedmodel <- ppm(pp, interaction=Strauss(r=4)) # Strauss process
 #' fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
 #'
 #' \dontrun{
-#' ## Simulating Strauss process by 'envelope' is slow (because it does not use perfect simulation, which 'rStrauss' uses)
-#' #env <- envelope(fittedmodel, fun="Lest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 9.5, length=500))
+#' # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
+#' #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #'
+#' # Using direct algorihm can be faster, because the perfect simulation is used here.
 #' simulations <- NULL
-#' for(j in 1:999) {
-#'    ##simulations[[j]] <- rStrauss(beta=exp(fittedmodel$coef[1]), gamma=exp(fittedmodel$coef[2]), R=fittedmodel$interaction$par$r, W=pp$window);
+#' for(j in 1:4999) {
 #'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]), R = fittedmodel$interaction$par$hc, W = pp$window);
 #'    if(j%%10==0) cat(j, "...", sep="")
 #' }
-#' env <- envelope(pp, simulate=simulations, fun="Lest", nsim=length(simulations), savefuns=TRUE, correction="none", r=seq(0, 9.5, length=500))
-#' res <- rank_envelope(env); plot(res, use_ggplot2=TRUE)
+#' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations), savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+#' curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
+#' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
 #'
 rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
