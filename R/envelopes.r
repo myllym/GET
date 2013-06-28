@@ -22,7 +22,7 @@
 #' \itemize{
 #'   \item r Distances for which the test was made.
 #'   \item method The envelope method.
-#'   \item p A point estimate for the p-value.
+#'   \item p A point estimate for the p-value (default the mid-rank p-value).
 #'   \item p_interval The p-value interval [p_liberal, p_conservative].
 #'   \item k_alpha The value of k corresponding to the 100(1-alpha)\% simultaneous envelope.
 #'   \item k Global rank values. Returned only if savedevs = TRUE.
