@@ -156,7 +156,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
     p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
 
-    #-- calculate the simultaneous 100(1-alpha)% envelopes
+    #-- calculate the simultaneous 100(1-alpha)% envelope
     distancesorted <- sort(distance, decreasing=TRUE)
     kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
     LB <- array(0, n);
@@ -354,7 +354,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
-    #-- calculate the simultaneous 100(1-alpha)% envelopes
+    #-- calculate the simultaneous 100(1-alpha)% envelope
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
@@ -484,7 +484,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
-    #-- calculate the simultaneous 100(1-alpha)% envelopes
+    #-- calculate the simultaneous 100(1-alpha)% envelope
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*abs(QQ[1,]-T_0);
     UB <- T_0 + talpha*abs(QQ[2,]-T_0);
@@ -578,7 +578,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     #    }
     #    p <- p/(n_norm+1);
 
-    #-- calculate the simultaneous 100(1-alpha)% envelopes
+    #-- calculate the simultaneous 100(1-alpha)% envelope
     talpha <- distancesorted[floor((1-alpha)*n_norm)];
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
