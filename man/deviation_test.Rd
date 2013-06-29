@@ -29,6 +29,9 @@
   \item{measure}{The deviation measure to use. Default is
   'max'. Must be one of the following: 'max', 'int' or
   'int2'.}
+
+  \item{...}{Arguments to be passed to the measure
+  function, if applicable.}
 }
 \value{
   If 'savedevs=FALSE' (default), the p-value is returned.
