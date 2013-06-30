@@ -45,8 +45,7 @@
   function. }
 }
 \description{
-  The rank envelope test, p-value and simultaneous
-  envelopes
+  The rank envelope test, p-value and simultaneous envelope
 }
 \details{
   The rank envelope test is a completely non-parametric
@@ -54,6 +53,27 @@
   liberal and the most conservative p-value estimate and
   the simultaneous 100(1-alpha)\% envelopes for the chosen
   test function T(r) on the chosen interval of distances.
+
+  Given a curve_set object, the test is carried out as
+  follows.
+
+  For each curve in the curve_set, both the data curve and
+  the simulations, the global rank measure k is determined.
+  If savedevs = TRUE, then the global rank values k_1, k_2,
+  ..., k_(s+1) are returned in the component 'k', where
+  k[1] is the value for the data.
+
+  Based on k_i, i=1, ..., s+1, the p-interval is
+  calculated. This interval is by default plotted for the
+  object returned by the rank_envelope function. Also a
+  single p-value is calculated and returned in component
+  'p'. By default this p-value is the mid-rank p-value, but
+  another option can be used by passing additional
+  parameters to \code{\link{estimate_p_value}}.
+
+  The simultaneous 100(1-alpha)\% envelope is given by the
+  'k_alpha'th lower and upper envelope. For details see
+  Myllymäki et al. (2013).
 }
 \examples{
 ## Testing complete spatial randomness (CSR)
@@ -90,7 +110,7 @@ mpp <- spruces
 # with translational edge correction (default).
 # The random_labelling function returns the centred functions \\hat{L}_m(r)-T_0(r),
 # where T_0(r) = \\hat{L}(r) is the unmarked L function.
-curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 # 2) Do the rank envelope test
 res <- rank_envelope(curve_set)
 # 3) Plot the test result
@@ -99,7 +119,7 @@ plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 # Make the test using instead the test function T(r) = \\hat{L}_mm(r);
 # which is an estimator of the mark-weighted L function, L_mm(r),
 # with translational edge correction (default).
-curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=0, r_max=9.5)
+curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=1.5, r_max=9.5)
 res <- rank_envelope(curve_set)
 plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 
