@@ -14,7 +14,7 @@
 #' For testing simple hypothesis, this can be done as follows
 #' \itemize{
 #'    \item Complete spatial randomness (CSR): use \code{\link[spatstat]{envelope}}.
-#'    \item Random labeling: use \code{\link{random_labelling}}.
+#'    \item Random labeling: use \code{\link{random_labelling}} (requires R library marksummary).
 #' }
 #'
 #' For testing the goodness-of-fit of parametric models,
