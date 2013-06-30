@@ -89,7 +89,7 @@
 #' # with translational edge correction (default).
 #' # The random_labelling function returns the centred functions \hat{L}_m(r)-T_0(r),
 #' # where T_0(r) = \hat{L}(r) is the unmarked L function.
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 #' # 2) Do the rank envelope test
 #' res <- rank_envelope(curve_set)
 #' # 3) Plot the test result
@@ -98,7 +98,7 @@
 #' # Make the test using instead the test function T(r) = \hat{L}_mm(r);
 #' # which is an estimator of the mark-weighted L function, L_mm(r),
 #' # with translational edge correction (default).
-#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=1.5, r_max=9.5)
 #' res <- rank_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 #'
@@ -318,7 +318,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 #' res <- st_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
@@ -427,7 +427,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
