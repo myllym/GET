@@ -69,6 +69,11 @@
   scaling.  } \item Calculates the global deviation measure
   u_i, i=1,...,nsim+1, see options for 'measure'.  \item
   Calculates the p-value. }
+
+  Currently, there is no special way to take care of the
+  same values of T_i(r) occuring possibly for small
+  distances. Thus, it is preferable to exclude from the
+  test the very small distances r for which ties occur.
 }
 \examples{
 ## Testing complete spatial randomness (CSR)
@@ -87,7 +92,7 @@ res <- deviation_test(env, r_min=0, r_max=7, measure='int')
 #----------------------
 mpp <- spruces
 # T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
-curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 res <- deviation_test(curve_set, measure='int')
 res
 }

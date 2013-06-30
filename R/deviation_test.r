@@ -31,6 +31,11 @@
 #'   \item Calculates the p-value.
 #'}
 #'
+#' Currently, there is no special way to take care of the same values of T_i(r)
+#' occuring possibly for small distances. Thus, it is preferable to exclude from
+#' the test the very small distances r for which ties occur.
+#'
+#'
 #' @inheritParams convert_envelope
 #' @inheritParams crop_curves
 #' @inheritParams residual
@@ -61,7 +66,7 @@
 #' #----------------------
 #' mpp <- spruces
 #' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 #' res <- deviation_test(curve_set, measure='int')
 #' res
 deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,

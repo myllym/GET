@@ -1,12 +1,29 @@
 #' The rank envelope test
 #'
-#' The rank envelope test, p-value and simultaneous envelopes
+#' The rank envelope test, p-value and simultaneous envelope
 #'
 #'
 #' The rank envelope test is a completely non-parametric test, which provides a p-value
 #' interval given by the most liberal and the most conservative p-value estimate and
 #' the simultaneous 100(1-alpha)\% envelopes for the chosen test function T(r) on
 #' the chosen interval of distances.
+#'
+#' Given a curve_set object, the test is carried out as follows.
+#'
+#' For each curve in the curve_set, both the data curve and the simulations,
+#' the global rank measure k is determined. If savedevs = TRUE, then the
+#' global rank values k_1, k_2, ..., k_(s+1) are returned in the component 'k',
+#' where k[1] is the value for the data.
+#'
+#' Based on k_i, i=1, ..., s+1, the p-interval is calculated. This interval is
+#' by default plotted for the object returned by the rank_envelope function.
+#' Also a single p-value is calculated and returned in component 'p'. By default
+#' this p-value is the mid-rank p-value, but another option can be used by passing
+#' additional parameters to \code{\link{estimate_p_value}}.
+#'
+#' The simultaneous 100(1-alpha)\% envelope is given by the 'k_alpha'th lower and
+#' upper envelope. For details see Myllymäki  et al. (2013).
+#'
 #'
 #' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
 #'
@@ -72,7 +89,7 @@
 #' # with translational edge correction (default).
 #' # The random_labelling function returns the centred functions \hat{L}_m(r)-T_0(r),
 #' # where T_0(r) = \hat{L}(r) is the unmarked L function.
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 #' # 2) Do the rank envelope test
 #' res <- rank_envelope(curve_set)
 #' # 3) Plot the test result
@@ -81,7 +98,7 @@
 #' # Make the test using instead the test function T(r) = \hat{L}_mm(r);
 #' # which is an estimator of the mark-weighted L function, L_mm(r),
 #' # with translational edge correction (default).
-#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=1.5, r_max=9.5)
 #' res <- rank_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 #'
@@ -139,7 +156,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
     p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
 
-    #-- calculate the simultaneous 100(1-alpha)% envelopes
+    #-- calculate the simultaneous 100(1-alpha)% envelope
     distancesorted <- sort(distance, decreasing=TRUE)
     kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
     LB <- array(0, n);
@@ -301,7 +318,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 #' res <- st_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
@@ -337,7 +354,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
-    #-- calculate the simultaneous 100(1-alpha)% envelopes
+    #-- calculate the simultaneous 100(1-alpha)% envelope
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
@@ -410,7 +427,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=0, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
@@ -467,7 +484,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
-    #-- calculate the simultaneous 100(1-alpha)% envelopes
+    #-- calculate the simultaneous 100(1-alpha)% envelope
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*abs(QQ[1,]-T_0);
     UB <- T_0 + talpha*abs(QQ[2,]-T_0);
@@ -561,7 +578,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     #    }
     #    p <- p/(n_norm+1);
 
-    #-- calculate the simultaneous 100(1-alpha)% envelopes
+    #-- calculate the simultaneous 100(1-alpha)% envelope
     talpha <- distancesorted[floor((1-alpha)*n_norm)];
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
