@@ -7,7 +7,7 @@
   This spptest library provides envelope and deviation
   tests for spatial point processes. The main motivation
   for this package are the scalings for deviation tests and
-  new global envelope tests.
+  global envelope tests.
 }
 \details{
   A test is performed by three steps as follows. Examples
@@ -21,7 +21,8 @@
   For testing simple hypothesis, this can be done as
   follows \itemize{ \item Complete spatial randomness
   (CSR): use \code{\link[spatstat]{envelope}}.  \item
-  Random labeling: use \code{\link{random_labelling}}. }
+  Random labeling: use \code{\link{random_labelling}}
+  (requires R library marksummary). }
 
   For testing the goodness-of-fit of parametric models, (i)
   you can utilize \code{\link{spatstat}}, \itemize{ \item
