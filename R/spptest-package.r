@@ -1,7 +1,7 @@
 #' Spatial point process testing
 #'
 #' This spptest library provides envelope and deviation tests for spatial point processes.
-#' The main motivation for this package are the scalings for deviation tests and new global
+#' The main motivation for this package are the scalings for deviation tests and global
 #' envelope tests.
 #'
 #'
