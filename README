@@ -2,7 +2,7 @@ Spatial point process testing
 
 spptest provides envelope and deviation tests for spatial point processes.
 The main motivation for a new package are the scalings for deviation tests
-and new global envelope tests.
+and global envelope tests.
 
 To start: install the library, load it to R and see help(spptest). This main
 help page describes the usage of the functions of the library.
