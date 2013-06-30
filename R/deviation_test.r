@@ -31,6 +31,11 @@
 #'   \item Calculates the p-value.
 #'}
 #'
+#' Currently, there is no special way to take care of the same values of T_i(r)
+#' occuring possibly for small distances. Thus, it is preferable to exclude from
+#' the test the very small distances r for which ties occur.
+#'
+#'
 #' @inheritParams convert_envelope
 #' @inheritParams crop_curves
 #' @inheritParams residual
