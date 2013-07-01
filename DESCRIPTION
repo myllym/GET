@@ -20,6 +20,7 @@ Suggests:
     mvtnorm,
     marksummary,
     fastdepth,
+    ggplot2,
     testthat
 Collate:
     'crop.r'
