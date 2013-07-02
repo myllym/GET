@@ -469,6 +469,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     lower_coeff <- abs_coeff[1, , drop = TRUE]
     upper_coeff <- abs_coeff[2, , drop = TRUE]
 
+    # Calculate deviation measures
     distance <- array(0, Nsim+1);
     # u_1
     raw_residuals <- curve_set[['obs']]
