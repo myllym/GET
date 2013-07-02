@@ -448,23 +448,35 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     nr <- dim(sim_curves)[2]
 
     if(!curve_set$is_residual) {
-        if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
-        else T_0 <- colMeans(sim_curves);
+        if(with(curve_set, exists('theo'))) {
+            T_0 <- curve_set[['theo']]
+            curve_set <- residual(curve_set, use_theo = T)
+        }
+        else {
+            T_0 <- colMeans(sim_curves);
+            curve_set <- residual(curve_set, use_theo = F)
+        }
     }
-    else T_0 <- rep(0, times=nr)
-    QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = probs)
-    abs_coeff <- divisor_to_coeff(abs(QQ-T_0))
+    else {
+        T_0 <- rep(0, times=nr)
+        # Note: we already have residuals in curve_set.
+    }
+
+    # calculate quantiles for residuals (i.e. curves minus T_0(r))
+    quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs)
+    abs_coeff <- divisor_to_coeff(abs(quant_m))
     lower_coeff <- abs_coeff[1, , drop = TRUE]
     upper_coeff <- abs_coeff[2, , drop = TRUE]
 
     distance <- array(0, Nsim+1);
     # u_1
-    raw_residuals <- data_curve-T_0
+    raw_residuals <- curve_set[['obs']]
     scaled_residuals <- weigh_both_sides(raw_residuals, upper_coeff, lower_coeff)
     distance[1] <- max(abs(scaled_residuals))
     # u_2, ..., u_{s+1}
+    sim_curves <- t(curve_set[['sim_m']])
     for(j in 1:Nsim){
-        raw_residuals <- sim_curves[j,]-T_0
+        raw_residuals <- sim_curves[j,]
         scaled_residuals <- weigh_both_sides(raw_residuals, upper_coeff, lower_coeff)
         distance[j+1] <- max(abs(scaled_residuals))
     }
@@ -475,8 +487,8 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     #-- calculate the simultaneous 100(1-alpha)% envelope
     distancesorted <- sort(distance);
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
-    LB <- T_0 - talpha*abs(QQ[1,]-T_0);
-    UB <- T_0 + talpha*abs(QQ[2,]-T_0);
+    LB <- T_0 - talpha*abs(quant_m[1,]);
+    UB <- T_0 + talpha*abs(quant_m[2,]);
 
     res <- list(r=curve_set[['r']], method="Directional quantile envelope test", p=p,
                 u_alpha=talpha,
