@@ -2,7 +2,8 @@
 \alias{plot.envelope_test}
 \title{Plot method for the class 'envelope_test'}
 \usage{
-  \method{plot}{envelope_test}(x)
+  \method{plot}{envelope_test}(x, use_ggplot2=FALSE, main,
+    ylim, xlab, ylab, ...)
 }
 \arguments{
   \item{x}{an 'envelope_test' object}
