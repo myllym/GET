@@ -139,7 +139,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     sim_curves <- t(curve_set[['sim_m']])
 
     Nsim <- dim(sim_curves)[1];
-    n <- length(curve_set$r)
+    nr <- length(curve_set$r)
     MX <- apply(sim_curves, MARGIN=2, FUN=median)
     data_and_sim_curves <- rbind(data_curve, sim_curves)
     RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
@@ -159,10 +159,10 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     #-- calculate the simultaneous 100(1-alpha)% envelope
     distancesorted <- sort(distance, decreasing=TRUE)
     kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
-    LB <- array(0, n);
-    UB <- array(0, n);
+    LB <- array(0, nr);
+    UB <- array(0, nr);
 
-    for(i in 1:n){
+    for(i in 1:nr){
         Hod <- sort(data_and_sim_curves[,i])
         LB[i]<- Hod[kalpha];
         UB[i]<- Hod[Nsim+1-kalpha+1];
@@ -193,7 +193,7 @@ print.envelope_test <- function(x, ...) {
 }
 
 #' Plot method for the class 'envelope_test'
-#' @usage \method{plot}{envelope_test}(x)
+#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...)
 #'
 #' @param x an 'envelope_test' object
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
@@ -303,7 +303,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' res <- st_envelope(env)
 #' plot(res)
 #' # or (requires R library ggplot2)
-#' plot(res, use_ggplot2=T)
+#' plot(res, use_ggplot2=TRUE)
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -332,29 +332,40 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     sim_curves <- t(curve_set[['sim_m']])
 
     Nsim <- dim(sim_curves)[1];
-    n <- dim(sim_curves)[2]
-    if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
-    else T_0 <- colMeans(sim_curves);
-    sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
+    nr <- dim(sim_curves)[2]
 
-    distance <- array(0, Nsim+1);
-    # data
-    ttt <- abs(data_curve-T_0)/sdX;
-    ttt[!is.finite(ttt)] <- 0
-    distance[1] <- max(ttt)
-    # simulations
-    for(j in 1:Nsim) {
-        ttt <- abs(sim_curves[j,]-T_0)/sdX
-        ttt[!is.finite(ttt)] <- 0
-        distance[j+1] <- max(ttt);
+    # Define T_0 and residual curve_set
+    if(!curve_set$is_residual) {
+        if(with(curve_set, exists('theo'))) {
+            T_0 <- curve_set[['theo']]
+            curve_set <- residual(curve_set, use_theo = T)
+        }
+        else {
+            T_0 <- colMeans(sim_curves);
+            curve_set <- residual(curve_set, use_theo = F)
+        }
+    }
+    else {
+        T_0 <- rep(0, times=nr)
+        # Note: we already have residuals in curve_set.
     }
 
-    distancesorted <- sort(distance);
+    sdX <- as.vector(apply(curve_set[['sim_m']], MARGIN=1, FUN=sd))
+
+    # Calculate deviation measures
+    distance <- array(0, Nsim+1);
+    scaled_curve_set <- weigh_curves(curve_set, divisor_to_coeff(sdX))
+    #devs <- deviation(scaled_curve_set, measure = 'max', scaling='qdir')
+    # u_1
+    distance[1] <- max(abs(scaled_curve_set$obs))
+    # u_2, ..., u_{s+1}
+    distance[2:(Nsim+1)] <- apply(abs(scaled_curve_set[['sim_m']]), 2, max)
 
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the simultaneous 100(1-alpha)% envelope
+    distancesorted <- sort(distance);
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
@@ -412,7 +423,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' res <- qdir_envelope(env)
 #' plot(res)
 #' # or (requires R library ggplot2)
-#' plot(res, use_ggplot2=T)
+#' plot(res, use_ggplot2=TRUE)
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -442,52 +453,47 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     sim_curves <- t(curve_set[['sim_m']])
 
     Nsim <- dim(sim_curves)[1];
-    n <- dim(sim_curves)[2]
-    if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
-    else T_0 <- colMeans(sim_curves);
-    QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = probs)
+    nr <- dim(sim_curves)[2]
 
-    distance <- array(0, Nsim+1);
-    tmaxd<-0;
-    for(i in 1:length(T_0)){
-        if(data_curve[i]-T_0[i]>0) {
-            ttt <- (data_curve[i]-T_0[i])/(QQ[2,i]-T_0[i])
+    # Define T_0 and residual curve_set
+    if(!curve_set$is_residual) {
+        if(with(curve_set, exists('theo'))) {
+            T_0 <- curve_set[['theo']]
+            curve_set <- residual(curve_set, use_theo = T)
         }
         else {
-            ttt <- (data_curve[i]-T_0[i])/(QQ[1,i]-T_0[i])
-        }
-        if(!is.finite(ttt)) ttt <- 0
-        if(tmaxd<ttt) {
-            tmaxd <- ttt
+            T_0 <- colMeans(sim_curves);
+            curve_set <- residual(curve_set, use_theo = F)
         }
     }
-    distance[1] <- tmaxd
-    for(j in 1:Nsim){
-        tmax<-0;
-        for(i in 1:length(T_0)){
-            if(sim_curves[j,i]-T_0[i]>0) {
-                ttt <- (sim_curves[j,i]-T_0[i])/(QQ[2,i]-T_0[i])
-            }
-            else {
-                ttt <- (sim_curves[j,i]-T_0[i])/(QQ[1,i]-T_0[i])
-            }
-            if(!is.finite(ttt)) ttt <- 0
-            if(tmax<ttt) {
-                tmax <- ttt
-            }
-        }
-        distance[j+1] <- tmax;
+    else {
+        T_0 <- rep(0, times=nr)
+        # Note: we already have residuals in curve_set.
     }
 
-    distancesorted <- sort(distance);
+    # calculate quantiles for residual curve_set (i.e. for sim_curves - T_0)
+    quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs)
+    abs_coeff <- divisor_to_coeff(abs(quant_m))
+    lower_coeff <- abs_coeff[1, , drop = TRUE]
+    upper_coeff <- abs_coeff[2, , drop = TRUE]
+
+    # Calculate deviation measures
+    distance <- array(0, Nsim+1);
+    # u_1
+    scaled_residuals <- weigh_both_sides(curve_set[['obs']], upper_coeff, lower_coeff)
+    distance[1] <- max(abs(scaled_residuals))
+    # u_2, ..., u_{s+1}
+    sim_scaled_residuals <- weigh_both_sides(curve_set[['sim_m']], upper_coeff, lower_coeff)
+    distance[2:(Nsim+1)] <- apply(abs(sim_scaled_residuals), 2, max)
 
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the simultaneous 100(1-alpha)% envelope
+    distancesorted <- sort(distance);
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
-    LB <- T_0 - talpha*abs(QQ[1,]-T_0);
-    UB <- T_0 + talpha*abs(QQ[2,]-T_0);
+    LB <- T_0 - talpha*abs(quant_m[1,]);
+    UB <- T_0 + talpha*abs(quant_m[2,]);
 
     res <- list(r=curve_set[['r']], method="Directional quantile envelope test", p=p,
                 u_alpha=talpha,

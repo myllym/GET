@@ -54,7 +54,7 @@
 #' #-------------------------------------------
 #' require(spatstat)
 #' pp <- unmark(spruces)
-#' Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
 #' # The deviation test using the integral deviation measure
 #' res <- deviation_test(env, measure = 'int')
@@ -74,6 +74,8 @@ deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
         measure = 'max', savedevs=FALSE, ...) {
     curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
     if(!curve_set$is_residual) curve_set <- residual(curve_set, use_theo = use_theo)
+    else if(use_theo) cat("The curve_set object contains already residuals T_i(r) - T_0(r), \n",
+                          "use_theo ignored.\n")
     curve_set <- scale_curves(curve_set, scaling = scaling)
     devs <- deviation(curve_set, measure = measure)
     p <- estimate_p_value(devs, ...)
