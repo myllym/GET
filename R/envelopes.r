@@ -139,7 +139,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     sim_curves <- t(curve_set[['sim_m']])
 
     Nsim <- dim(sim_curves)[1];
-    n <- length(curve_set$r)
+    nr <- length(curve_set$r)
     MX <- apply(sim_curves, MARGIN=2, FUN=median)
     data_and_sim_curves <- rbind(data_curve, sim_curves)
     RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
@@ -159,10 +159,10 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     #-- calculate the simultaneous 100(1-alpha)% envelope
     distancesorted <- sort(distance, decreasing=TRUE)
     kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
-    LB <- array(0, n);
-    UB <- array(0, n);
+    LB <- array(0, nr);
+    UB <- array(0, nr);
 
-    for(i in 1:n){
+    for(i in 1:nr){
         Hod <- sort(data_and_sim_curves[,i])
         LB[i]<- Hod[kalpha];
         UB[i]<- Hod[Nsim+1-kalpha+1];
@@ -442,7 +442,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     sim_curves <- t(curve_set[['sim_m']])
 
     Nsim <- dim(sim_curves)[1];
-    n <- dim(sim_curves)[2]
+    nr <- dim(sim_curves)[2]
     if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
     else T_0 <- colMeans(sim_curves);
     QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = probs)
