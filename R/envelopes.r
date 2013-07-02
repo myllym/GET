@@ -333,12 +333,24 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     Nsim <- dim(sim_curves)[1];
     nr <- dim(sim_curves)[2]
+
+    # Define T_0 and residual curve_set
     if(!curve_set$is_residual) {
-        if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
-        else T_0 <- colMeans(sim_curves);
+        if(with(curve_set, exists('theo'))) {
+            T_0 <- curve_set[['theo']]
+            curve_set <- residual(curve_set, use_theo = T)
+        }
+        else {
+            T_0 <- colMeans(sim_curves);
+            curve_set <- residual(curve_set, use_theo = F)
+        }
     }
-    else T_0 <- rep(0, times=nr)
-    sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
+    else {
+        T_0 <- rep(0, times=nr)
+        # Note: we already have residuals in curve_set.
+    }
+
+    sdX <- as.vector(apply(curve_set[['sim_m']], MARGIN=1, FUN=sd))
 
     distance <- array(0, Nsim+1);
     # data
