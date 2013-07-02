@@ -332,9 +332,12 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     sim_curves <- t(curve_set[['sim_m']])
 
     Nsim <- dim(sim_curves)[1];
-    n <- dim(sim_curves)[2]
-    if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
-    else T_0 <- colMeans(sim_curves);
+    nr <- dim(sim_curves)[2]
+    if(!curve_set$is_residual) {
+        if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
+        else T_0 <- colMeans(sim_curves);
+    }
+    else T_0 <- rep(0, times=nr)
     sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
 
     distance <- array(0, Nsim+1);
@@ -443,8 +446,12 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 
     Nsim <- dim(sim_curves)[1];
     nr <- dim(sim_curves)[2]
-    if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
-    else T_0 <- colMeans(sim_curves);
+
+    if(!curve_set$is_residual) {
+        if(with(curve_set, exists('theo'))) T_0 <- curve_set[['theo']]
+        else T_0 <- colMeans(sim_curves);
+    }
+    else T_0 <- rep(0, times=nr)
     QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = probs)
 
     distance <- array(0, Nsim+1);
