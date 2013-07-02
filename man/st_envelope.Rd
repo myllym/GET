@@ -61,7 +61,7 @@ env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
 res <- st_envelope(env)
 plot(res)
 # or (requires R library ggplot2)
-plot(res, use_ggplot2=T)
+plot(res, use_ggplot2=TRUE)
 
 ## Advanced use:
 # Create a curve set, choosing the interval of distances [r_min, r_max]
