@@ -472,16 +472,11 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     # Calculate deviation measures
     distance <- array(0, Nsim+1);
     # u_1
-    raw_residuals <- curve_set[['obs']]
-    scaled_residuals <- weigh_both_sides(raw_residuals, upper_coeff, lower_coeff)
+    scaled_residuals <- weigh_both_sides(curve_set[['obs']], upper_coeff, lower_coeff)
     distance[1] <- max(abs(scaled_residuals))
     # u_2, ..., u_{s+1}
-    sim_curves <- t(curve_set[['sim_m']])
-    for(j in 1:Nsim){
-        raw_residuals <- sim_curves[j,]
-        scaled_residuals <- weigh_both_sides(raw_residuals, upper_coeff, lower_coeff)
-        distance[j+1] <- max(abs(scaled_residuals))
-    }
+    sim_scaled_residuals <- weigh_both_sides(curve_set[['sim_m']], upper_coeff, lower_coeff)
+    distance[2:(Nsim+1)] <- apply(abs(sim_scaled_residuals), 2, max)
 
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
