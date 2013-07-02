@@ -453,19 +453,21 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     }
     else T_0 <- rep(0, times=nr)
     QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = probs)
+    lower_div <- as.numeric(abs(QQ[1,]-T_0))
+    upper_div <- as.numeric(abs(QQ[2,]-T_0))
 
     distance <- array(0, Nsim+1);
     tmaxd<-0;
     for(i in 1:length(T_0)){
         if(data_curve[i]-T_0[i]>0) {
-            ttt <- (data_curve[i]-T_0[i])/(QQ[2,i]-T_0[i])
+            scaled_residual <- (data_curve[i]-T_0[i])/upper_div[i]
         }
         else {
-            ttt <- (data_curve[i]-T_0[i])/(QQ[1,i]-T_0[i])
+            scaled_residual <- (data_curve[i]-T_0[i])/lower_div[i]
         }
-        if(!is.finite(ttt)) ttt <- 0
-        if(tmaxd<ttt) {
-            tmaxd <- ttt
+        if(!is.finite(scaled_residual)) scaled_residual <- 0
+        if(tmaxd<abs(scaled_residual)) {
+            tmaxd <- abs(scaled_residual)
         }
     }
     distance[1] <- tmaxd
@@ -473,14 +475,14 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
         tmax<-0;
         for(i in 1:length(T_0)){
             if(sim_curves[j,i]-T_0[i]>0) {
-                ttt <- (sim_curves[j,i]-T_0[i])/(QQ[2,i]-T_0[i])
+                scaled_residual <- (sim_curves[j,i]-T_0[i])/upper_div[i]
             }
             else {
-                ttt <- (sim_curves[j,i]-T_0[i])/(QQ[1,i]-T_0[i])
+                scaled_residual <- (sim_curves[j,i]-T_0[i])/lower_div[i]
             }
-            if(!is.finite(ttt)) ttt <- 0
-            if(tmax<ttt) {
-                tmax <- ttt
+            if(!is.finite(scaled_residual)) scaled_residual <- 0
+            if(tmax<abs(scaled_residual)) {
+                tmax <- abs(scaled_residual)
             }
         }
         distance[j+1] <- tmax;
