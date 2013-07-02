@@ -459,7 +459,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 
     distance <- array(0, Nsim+1);
     tmaxd<-0;
-    for(i in 1:length(T_0)){
+    for(i in 1:nr){
         if(data_curve[i]-T_0[i]>0) {
             scaled_residual <- upper_coeff[i]*(data_curve[i]-T_0[i])
         }
@@ -474,7 +474,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     distance[1] <- tmaxd
     for(j in 1:Nsim){
         tmax<-0;
-        for(i in 1:length(T_0)){
+        for(i in 1:nr){
             if(sim_curves[j,i]-T_0[i]>0) {
                 scaled_residual <- upper_coeff[i]*(sim_curves[j,i]-T_0[i])
             }
