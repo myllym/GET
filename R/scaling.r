@@ -41,7 +41,7 @@ scale_curves <- function(curve_set, scaling = 'qdir', ...) {
 #' Takes the inverse of the input and replaces non-finite values with 1.
 divisor_to_coeff <- function(x) {
     y <- 1 / x
-    y[!is.finite(y)] <- 1
+    y[!is.finite(y)] <- 0 # 0 so that these distances do not affect the test result.
     y
 }
 
