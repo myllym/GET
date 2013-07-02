@@ -352,17 +352,14 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     sdX <- as.vector(apply(curve_set[['sim_m']], MARGIN=1, FUN=sd))
 
+    # Calculate deviation measures
     distance <- array(0, Nsim+1);
-    # data
-    ttt <- abs(data_curve-T_0)/sdX;
-    ttt[!is.finite(ttt)] <- 0
-    distance[1] <- max(ttt)
-    # simulations
-    for(j in 1:Nsim) {
-        ttt <- abs(sim_curves[j,]-T_0)/sdX
-        ttt[!is.finite(ttt)] <- 0
-        distance[j+1] <- max(ttt);
-    }
+    scaled_curve_set <- weigh_curves(curve_set, divisor_to_coeff(sdX))
+    #devs <- deviation(scaled_curve_set, measure = 'max', scaling='qdir')
+    # u_1
+    distance[1] <- max(abs(scaled_curve_set$obs))
+    # u_2, ..., u_{s+1}
+    distance[2:(Nsim+1)] <- apply(abs(scaled_curve_set[['sim_m']]), 2, max)
 
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
