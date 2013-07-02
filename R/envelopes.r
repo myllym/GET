@@ -453,17 +453,18 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     }
     else T_0 <- rep(0, times=nr)
     QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = probs)
-    lower_div <- as.numeric(abs(QQ[1,]-T_0))
-    upper_div <- as.numeric(abs(QQ[2,]-T_0))
+    abs_coeff <- divisor_to_coeff(abs(QQ))
+    lower_coeff <- abs_coeff[1, , drop = TRUE]
+    upper_coeff <- abs_coeff[2, , drop = TRUE]
 
     distance <- array(0, Nsim+1);
     tmaxd<-0;
     for(i in 1:length(T_0)){
         if(data_curve[i]-T_0[i]>0) {
-            scaled_residual <- (data_curve[i]-T_0[i])/upper_div[i]
+            scaled_residual <- upper_coeff*(data_curve[i]-T_0[i])
         }
         else {
-            scaled_residual <- (data_curve[i]-T_0[i])/lower_div[i]
+            scaled_residual <- lower_coeff*(data_curve[i]-T_0[i])
         }
         if(!is.finite(scaled_residual)) scaled_residual <- 0
         if(tmaxd<abs(scaled_residual)) {
@@ -475,10 +476,10 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
         tmax<-0;
         for(i in 1:length(T_0)){
             if(sim_curves[j,i]-T_0[i]>0) {
-                scaled_residual <- (sim_curves[j,i]-T_0[i])/upper_div[i]
+                scaled_residual <- upper_coeff*(sim_curves[j,i]-T_0[i])
             }
             else {
-                scaled_residual <- (sim_curves[j,i]-T_0[i])/lower_div[i]
+                scaled_residual <- lower_coeff*(sim_curves[j,i]-T_0[i])
             }
             if(!is.finite(scaled_residual)) scaled_residual <- 0
             if(tmax<abs(scaled_residual)) {
