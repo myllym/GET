@@ -303,7 +303,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' res <- st_envelope(env)
 #' plot(res)
 #' # or (requires R library ggplot2)
-#' plot(res, use_ggplot2=T)
+#' plot(res, use_ggplot2=TRUE)
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -423,7 +423,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' res <- qdir_envelope(env)
 #' plot(res)
 #' # or (requires R library ggplot2)
-#' plot(res, use_ggplot2=T)
+#' plot(res, use_ggplot2=TRUE)
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
