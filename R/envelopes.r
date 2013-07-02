@@ -453,7 +453,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     }
     else T_0 <- rep(0, times=nr)
     QQ <- apply(sim_curves, MARGIN=2, FUN=quantile, probs = probs)
-    abs_coeff <- divisor_to_coeff(abs(QQ))
+    abs_coeff <- divisor_to_coeff(abs(QQ-T_0))
     lower_coeff <- abs_coeff[1, , drop = TRUE]
     upper_coeff <- abs_coeff[2, , drop = TRUE]
 
