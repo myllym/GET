@@ -193,7 +193,7 @@ print.envelope_test <- function(x, ...) {
 }
 
 #' Plot method for the class 'envelope_test'
-#' @usage \method{plot}{envelope_test}(x)
+#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...)
 #'
 #' @param x an 'envelope_test' object
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
