@@ -51,6 +51,7 @@ random_labelling <- function(pattern,
 #' @inheritParams estimate_p_value.default
 #' @export
 #' @examples
+#' require(spatstat)
 #' mpp <- spruces
 #' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' p <- random_labelling_test(mpp, mtf_name = 'm', nsim=999, r_min=0, r_max=9.5)
