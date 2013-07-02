@@ -463,7 +463,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
         # Note: we already have residuals in curve_set.
     }
 
-    # calculate quantiles for residuals (i.e. curves minus T_0(r))
+    # calculate quantiles for residual curve_set (i.e. for sim_curves - T_0)
     quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs)
     abs_coeff <- divisor_to_coeff(abs(quant_m))
     lower_coeff <- abs_coeff[1, , drop = TRUE]
