@@ -469,12 +469,11 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
         distance[j+1] <- max(abs(scaled_residuals))
     }
 
-    distancesorted <- sort(distance);
-
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the simultaneous 100(1-alpha)% envelope
+    distancesorted <- sort(distance);
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*abs(QQ[1,]-T_0);
     UB <- T_0 + talpha*abs(QQ[2,]-T_0);
