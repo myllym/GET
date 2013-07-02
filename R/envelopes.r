@@ -458,35 +458,15 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     upper_coeff <- abs_coeff[2, , drop = TRUE]
 
     distance <- array(0, Nsim+1);
-    tmaxd<-0;
-    for(i in 1:nr){
-        if(data_curve[i]-T_0[i]>0) {
-            scaled_residual <- upper_coeff[i]*(data_curve[i]-T_0[i])
-        }
-        else {
-            scaled_residual <- lower_coeff[i]*(data_curve[i]-T_0[i])
-        }
-        if(!is.finite(scaled_residual)) scaled_residual <- 0
-        if(tmaxd<abs(scaled_residual)) {
-            tmaxd <- abs(scaled_residual)
-        }
-    }
-    distance[1] <- tmaxd
+    # u_1
+    raw_residuals <- data_curve-T_0
+    scaled_residuals <- weigh_both_sides(raw_residuals, upper_coeff, lower_coeff)
+    distance[1] <- max(abs(scaled_residuals))
+    # u_2, ..., u_{s+1}
     for(j in 1:Nsim){
-        tmax<-0;
-        for(i in 1:nr){
-            if(sim_curves[j,i]-T_0[i]>0) {
-                scaled_residual <- upper_coeff[i]*(sim_curves[j,i]-T_0[i])
-            }
-            else {
-                scaled_residual <- lower_coeff[i]*(sim_curves[j,i]-T_0[i])
-            }
-            if(!is.finite(scaled_residual)) scaled_residual <- 0
-            if(tmax<abs(scaled_residual)) {
-                tmax <- abs(scaled_residual)
-            }
-        }
-        distance[j+1] <- tmax;
+        raw_residuals <- sim_curves[j,]-T_0
+        scaled_residuals <- weigh_both_sides(raw_residuals, upper_coeff, lower_coeff)
+        distance[j+1] <- max(abs(scaled_residuals))
     }
 
     distancesorted <- sort(distance);
