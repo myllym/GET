@@ -140,7 +140,14 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     Nsim <- dim(sim_curves)[1];
     nr <- length(curve_set$r)
-    MX <- apply(sim_curves, MARGIN=2, FUN=median)
+    # Define the central curve T_0
+    if(with(curve_set, exists('theo'))) {
+        T_0 <- curve_set[['theo']]
+    }
+    else {
+        T_0 <- apply(sim_curves, MARGIN=2, FUN=median)
+    }
+
     data_and_sim_curves <- rbind(data_curve, sim_curves)
     RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
     Rmin <- apply(RR, MARGIN=1, FUN=min)
@@ -171,7 +178,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     res <- list(r=curve_set[['r']], method="Rank envelope test",
                 p=p, p_interval=c(p_low,p_upp),
                 k_alpha=kalpha,
-                central_curve=MX, data_curve=data_curve, lower=LB, upper=UB,
+                central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
     if(savedevs) res$k <- distance
     class(res) <- "envelope_test"
