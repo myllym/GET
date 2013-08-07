@@ -141,11 +141,16 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     Nsim <- dim(sim_curves)[1];
     nr <- length(curve_set$r)
     # Define the central curve T_0
-    if(with(curve_set, exists('theo'))) {
-        T_0 <- curve_set[['theo']]
+    if(!curve_set$is_residual) {
+        if(with(curve_set, exists('theo'))) {
+            T_0 <- curve_set[['theo']]
+        }
+        else {
+            T_0 <- apply(sim_curves, MARGIN=2, FUN=median)
+        }
     }
     else {
-        T_0 <- apply(sim_curves, MARGIN=2, FUN=median)
+        T_0 <- rep(0, times=nr)
     }
 
     data_and_sim_curves <- rbind(data_curve, sim_curves)
