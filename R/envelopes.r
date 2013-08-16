@@ -258,6 +258,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                                 + ThemePlain()
                                 )
                     print(p)
+                    return(invisible(p))
                 }
             )
     }
