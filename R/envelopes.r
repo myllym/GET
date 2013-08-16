@@ -146,7 +146,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
             T_0 <- curve_set[['theo']]
         }
         else {
-            T_0 <- apply(sim_curves, MARGIN=2, FUN=median)
+            T_0 <- colMeans(sim_curves)
         }
     }
     else {
