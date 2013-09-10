@@ -5,7 +5,7 @@
 #'
 #' The rank envelope test is a completely non-parametric test, which provides a p-value
 #' interval given by the most liberal and the most conservative p-value estimate and
-#' the simultaneous 100(1-alpha)\% envelopes for the chosen test function T(r) on
+#' the simultaneous 100(1-alpha)\% envelope for the chosen test function T(r) on
 #' the chosen interval of distances.
 #'
 #' Given a curve_set object, the test is carried out as follows.
@@ -22,7 +22,7 @@
 #' additional parameters to \code{\link{estimate_p_value}}.
 #'
 #' The simultaneous 100(1-alpha)\% envelope is given by the 'k_alpha'th lower and
-#' upper envelope. For details see Myllymäki  et al. (2013).
+#' upper envelope. For details see Myllymäki et al. (2013).
 #'
 #'
 #' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
@@ -35,6 +35,7 @@
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain
 #' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
+#'
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r = Distances for which the test was made.
@@ -45,7 +46,8 @@
 #'   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
 #'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
 #'         then this function is used as the central curve and returned in this component.
-#'         Otherwise, the central_curve is the median of the test functions T_i(r), i=2, ..., s+1.
+#'         Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'         Used for visualization only.
 #'   \item data_curve = The test function for the data.
 #'   \item lower = The lower envelope.
 #'   \item upper = The upper envelope.
