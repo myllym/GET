@@ -33,6 +33,9 @@
   regarded as the collapsed bin [0, 0], and the next bin
   will start from and exclude 0.}
 
+  \item{edge_correction}{The name of the edge correction to
+  be used. Options are 'translate' and 'none'.}
+
   \item{method}{The name of the method to create
   simulations under the null hypothesis. 'permute' results
   in permutations of the marks. Using 'sample' will sample

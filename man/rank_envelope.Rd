@@ -38,11 +38,11 @@
   curve_set (or envelope object) contains a component
   'theo', then this function is used as the central curve
   and returned in this component.  Otherwise, the
-  central_curve is the median of the test functions T_i(r),
-  i=2, ..., s+1.  \item data_curve = The test function for
-  the data.  \item lower = The lower envelope.  \item upper
-  = The upper envelope.  \item call = The call of the
-  function. }
+  central_curve is the mean of the test functions T_i(r),
+  i=2, ..., s+1.  Used for visualization only.  \item
+  data_curve = The test function for the data.  \item lower
+  = The lower envelope.  \item upper = The upper envelope.
+  \item call = The call of the function. }
 }
 \description{
   The rank envelope test, p-value and simultaneous envelope
@@ -51,7 +51,7 @@
   The rank envelope test is a completely non-parametric
   test, which provides a p-value interval given by the most
   liberal and the most conservative p-value estimate and
-  the simultaneous 100(1-alpha)\% envelopes for the chosen
+  the simultaneous 100(1-alpha)\% envelope for the chosen
   test function T(r) on the chosen interval of distances.
 
   Given a curve_set object, the test is carried out as
@@ -149,6 +149,7 @@ res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 \references{
   Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P.
   (2013). Global envelope tests for spatial point patterns.
+  arXiv:1307.0239 [stat.ME]
 }
 \seealso{
   \code{\link{random_labelling}}
