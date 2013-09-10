@@ -5,7 +5,7 @@
 #'
 #' The rank envelope test is a completely non-parametric test, which provides a p-value
 #' interval given by the most liberal and the most conservative p-value estimate and
-#' the simultaneous 100(1-alpha)\% envelopes for the chosen test function T(r) on
+#' the simultaneous 100(1-alpha)\% envelope for the chosen test function T(r) on
 #' the chosen interval of distances.
 #'
 #' Given a curve_set object, the test is carried out as follows.
@@ -22,10 +22,10 @@
 #' additional parameters to \code{\link{estimate_p_value}}.
 #'
 #' The simultaneous 100(1-alpha)\% envelope is given by the 'k_alpha'th lower and
-#' upper envelope. For details see Myllymäki  et al. (2013).
+#' upper envelope. For details see Myllymäki et al. (2013).
 #'
 #'
-#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
+#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
@@ -35,6 +35,7 @@
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain
 #' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
+#'
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r = Distances for which the test was made.
@@ -45,7 +46,8 @@
 #'   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
 #'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
 #'         then this function is used as the central curve and returned in this component.
-#'         Otherwise, the central_curve is the median of the test functions T_i(r), i=2, ..., s+1.
+#'         Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'         Used for visualization only.
 #'   \item data_curve = The test function for the data.
 #'   \item lower = The lower envelope.
 #'   \item upper = The upper envelope.
@@ -140,7 +142,19 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     Nsim <- dim(sim_curves)[1];
     nr <- length(curve_set$r)
-    MX <- apply(sim_curves, MARGIN=2, FUN=median)
+    # Define the central curve T_0
+    if(!curve_set$is_residual) {
+        if(with(curve_set, exists('theo'))) {
+            T_0 <- curve_set[['theo']]
+        }
+        else {
+            T_0 <- colMeans(sim_curves)
+        }
+    }
+    else {
+        T_0 <- rep(0, times=nr)
+    }
+
     data_and_sim_curves <- rbind(data_curve, sim_curves)
     RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
     Rmin <- apply(RR, MARGIN=1, FUN=min)
@@ -171,7 +185,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     res <- list(r=curve_set[['r']], method="Rank envelope test",
                 p=p, p_interval=c(p_low,p_upp),
                 k_alpha=kalpha,
-                central_curve=MX, data_curve=data_curve, lower=LB, upper=UB,
+                central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
     if(savedevs) res$k <- distance
     class(res) <- "envelope_test"
@@ -246,6 +260,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                                 + ThemePlain()
                                 )
                     print(p)
+                    return(invisible(p))
                 }
             )
     }
@@ -268,9 +283,9 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #'
 #'
 #' @references
-#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028 [stat.ME]
 #'
-#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
+#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
 #' @inheritParams rank_envelope
 #' @param savedevs Logical. Should the global deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
@@ -386,9 +401,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' protected against asymmetry of T(r).
 #'
 #' @references
-#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028 [stat.ME]
 #'
-#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
+#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
 #' @inheritParams st_envelope
 #' @param probs A two-element vector containing the lower and upper
