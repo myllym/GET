@@ -25,7 +25,7 @@
 #' upper envelope. For details see Myllymäki  et al. (2013).
 #'
 #'
-#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
+#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
@@ -281,9 +281,9 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #'
 #'
 #' @references
-#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028 [stat.ME]
 #'
-#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
+#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
 #' @inheritParams rank_envelope
 #' @param savedevs Logical. Should the global deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
@@ -399,9 +399,9 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' protected against asymmetry of T(r).
 #'
 #' @references
-#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028 [stat.ME]
 #'
-#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns.
+#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
 #' @inheritParams st_envelope
 #' @param probs A two-element vector containing the lower and upper
