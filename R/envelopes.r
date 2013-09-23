@@ -143,7 +143,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     Nsim <- dim(sim_curves)[1];
     nr <- length(curve_set$r)
     # Define the central curve T_0
-    if(!curve_set$is_residual) {
+    if(!curve_set[['is_residual']]) {
         if(with(curve_set, exists('theo'))) {
             T_0 <- curve_set[['theo']]
         }
@@ -350,7 +350,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     nr <- dim(sim_curves)[2]
 
     # Define T_0 and residual curve_set
-    if(!curve_set$is_residual) {
+    if(!curve_set[['is_residual']]) {
         if(with(curve_set, exists('theo'))) {
             T_0 <- curve_set[['theo']]
             curve_set <- residual(curve_set, use_theo = T)
@@ -471,7 +471,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     nr <- dim(sim_curves)[2]
 
     # Define T_0 and residual curve_set
-    if(!curve_set$is_residual) {
+    if(!curve_set[['is_residual']]) {
         if(with(curve_set, exists('theo'))) {
             T_0 <- curve_set[['theo']]
             curve_set <- residual(curve_set, use_theo = T)
