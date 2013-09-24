@@ -143,17 +143,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     Nsim <- dim(sim_curves)[1];
     nr <- length(curve_set$r)
     # Define the central curve T_0
-    if(!curve_set$is_residual) {
-        if(with(curve_set, exists('theo'))) {
-            T_0 <- curve_set[['theo']]
-        }
-        else {
-            T_0 <- colMeans(sim_curves)
-        }
-    }
-    else {
-        T_0 <- rep(0, times=nr)
-    }
+    T_0 <- get_T_0(curve_set)
 
     data_and_sim_curves <- rbind(data_curve, sim_curves)
     RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
@@ -350,20 +340,8 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     nr <- dim(sim_curves)[2]
 
     # Define T_0 and residual curve_set
-    if(!curve_set$is_residual) {
-        if(with(curve_set, exists('theo'))) {
-            T_0 <- curve_set[['theo']]
-            curve_set <- residual(curve_set, use_theo = T)
-        }
-        else {
-            T_0 <- colMeans(sim_curves);
-            curve_set <- residual(curve_set, use_theo = F)
-        }
-    }
-    else {
-        T_0 <- rep(0, times=nr)
-        # Note: we already have residuals in curve_set.
-    }
+    T_0 <- get_T_0(curve_set)
+    curve_set <- residual(curve_set, use_theo = TRUE)
 
     sdX <- as.vector(apply(curve_set[['sim_m']], MARGIN=1, FUN=sd))
 
@@ -471,20 +449,8 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     nr <- dim(sim_curves)[2]
 
     # Define T_0 and residual curve_set
-    if(!curve_set$is_residual) {
-        if(with(curve_set, exists('theo'))) {
-            T_0 <- curve_set[['theo']]
-            curve_set <- residual(curve_set, use_theo = T)
-        }
-        else {
-            T_0 <- colMeans(sim_curves);
-            curve_set <- residual(curve_set, use_theo = F)
-        }
-    }
-    else {
-        T_0 <- rep(0, times=nr)
-        # Note: we already have residuals in curve_set.
-    }
+    T_0 <- get_T_0(curve_set)
+    curve_set <- residual(curve_set, use_theo = TRUE)
 
     # calculate quantiles for residual curve_set (i.e. for sim_curves - T_0)
     quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs)
