@@ -73,9 +73,7 @@ deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
         use_theo = TRUE, scaling = 'qdir',
         measure = 'max', savedevs=FALSE, ...) {
     curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
-    if(with(curve_set, exists('is_residual')) && !curve_set[['is_residual']]) curve_set <- residual(curve_set, use_theo = use_theo)
-    else if(use_theo) cat("The curve_set object contains already residuals T_i(r) - T_0(r), \n",
-                          "use_theo ignored.\n")
+    curve_set <- residual(curve_set, use_theo = use_theo)
     curve_set <- scale_curves(curve_set, scaling = scaling)
     devs <- deviation(curve_set, measure = measure)
     p <- estimate_p_value(devs, ...)
