@@ -1,3 +1,34 @@
+#' Define T_0 from a curve_set object
+#'
+#' Define T_0 from a curve_set object
+#'
+#'
+#' T_0 is the expectation of the test function under H_0.
+get_T_0 <- function(curve_set) {
+    if(with(curve_set, exists('is_residual'))) {
+        if(!curve_set[['is_residual']]) {
+            if(with(curve_set, exists('theo'))) {
+                T_0 <- curve_set[['theo']]
+            }
+            else {
+                T_0 <- colMeans(sim_curves)
+            }
+        }
+        else {
+            T_0 <- rep(0, times=length(curve_set$r))
+        }
+    }
+    else { # Assume curve_set does not contain residuals
+        if(with(curve_set, exists('theo'))) {
+            T_0 <- curve_set[['theo']]
+        }
+        else {
+            T_0 <- colMeans(sim_curves)
+        }
+    }
+    T_0
+}
+
 #' The rank envelope test
 #'
 #' The rank envelope test, p-value and simultaneous envelope
