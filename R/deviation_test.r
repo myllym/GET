@@ -14,12 +14,12 @@
 #' 2) The deviation_test function then
 #'\itemize{
 #'   \item Crops the functions to the chosen range of distances [r_min, r_max].
-#'   \item If the curve_set is not consist of residuals, i.e. curve_set$is_residual
-#'     is FALSE, then the residuals d_i(r) = T_i(r) - T_0(r) are calculated,
-#'     where T_0(r) is the expectation of T(r) under the null hypothesis.
-#'     If use_theo = TRUE, as T_0(r) the theoretical value given in the curve_set$theo
-#'     is used, if it is given. Otherwise, T_0(r) is estimated by the mean of 
-#'     T_j(r), j=2,...,nsim+1.
+#'   \item If the curve_set does not consist of residuals, i.e. curve_set$is_residual
+#'     is FALSE (or does not exists), then the residuals d_i(r) = T_i(r) - T_0(r) are
+#'     calculated, where T_0(r) is the expectation of T(r) under the null hypothesis.
+#'     If use_theo = TRUE, the theoretical value given in the curve_set$theo is used for
+#'     as T_0(r), if it is given. Otherwise, T_0(r) is estimated by the mean of T_j(r),
+#'     j=2,...,nsim+1.
 #'   \item Scales the residuals. Options are
 #'         \itemize{
 #'           \item 'none' No scaling. Nothing done.
@@ -27,7 +27,23 @@
 #'           \item 'qdir' Directional quantile scaling.
 #'           \item 'st' Studentised scaling.
 #'         }
-#'   \item Calculates the global deviation measure u_i, i=1,...,nsim+1, see options for 'measure'.
+#'         See for details Myllymäki et al. (2013).
+#'   \item Calculates the global deviation measure u_i, i=1,...,nsim+1, see options
+#'         for 'measure'.
+#'         \itemize{
+#'           \item 'max' is the maximum deviation measure
+#'
+#'           u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |
+#'
+#'           \item 'int2'is the integral deviation measure
+#'
+#'           u_i = int_([r_min, r_max]) ( w(r)(T_i(r) - T_0(r)) )^2 dr
+#'
+#'           \item 'int' is the 'absolute' integral deviation measure
+#'
+#'           u_i = int_([r_min, r_max]) | w(r)(T_i(r) - T_0(r)) | dr
+#'
+#'         }
 #'   \item Calculates the p-value.
 #'}
 #'
