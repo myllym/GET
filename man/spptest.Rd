@@ -20,8 +20,16 @@
 
   For testing simple hypothesis, this can be done as
   follows \itemize{ \item Complete spatial randomness
-  (CSR): use \code{\link[spatstat]{envelope}}.  \item
-  Random labeling: use \code{\link{random_labelling}}
+  (CSR): \itemize{ \item Use
+  \code{\link[spatstat]{envelope}}.  Important: use the
+  option 'savefuns=TRUE'.  See the help documentation in
+  \code{\link[spatstat]{spatstat}} for possible test
+  functions.  \item Optional, needed only for 2) below: Use
+  \code{\link{create_curve_set}} to create a curve_set
+  object from the object returned by
+  \code{\link[spatstat]{envelope}}.  }
+
+  \item Random labeling: use \code{\link{random_labelling}}
   (requires R library marksummary). }
 
   For testing the goodness-of-fit of parametric models, (i)
