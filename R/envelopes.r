@@ -219,8 +219,10 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
             main <- paste(x$method, ": p = ", round(x$p,3), sep="")
     }
     if(missing('ylim')) {
-        ylim <- c(min(x$data_curve,x$lower,x$upper,x$central_curve),
-                  max(x$data_curve,x$lower,x$upper,x$central_curve))
+        if(!use_ggplot2)
+            ylim <- c(min(x$data_curve,x$lower,x$upper,x$central_curve),
+                      max(x$data_curve,x$lower,x$upper,x$central_curve))
+        else ylim <- NULL
     }
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
@@ -244,7 +246,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                                                 linetype = type, size = type))
                                 + facet_grid('~ main', scales='free')
                                 + scale_x_continuous(name=xlab)
-                                + scale_y_continuous(name=ylab)
+                                + scale_y_continuous(name=ylab, limits=ylim)
                                 + scale_linetype_manual(values=linetype.values, name='')
                                 + scale_size_manual(values=size.values, name='')
                                 + ThemePlain()
