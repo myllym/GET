@@ -34,7 +34,7 @@
   will start from and exclude 0.}
 
   \item{edge_correction}{The name of the edge correction to
-  be used. Options are 'translate' and 'none'.}
+  be used. Options are 'translate', 'none' and 'periodic'.}
 
   \item{method}{The name of the method to create
   simulations under the null hypothesis. 'permute' results
