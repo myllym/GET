@@ -100,5 +100,6 @@
 
   Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P.
   (2013). Global envelope tests for spatial point patterns.
+  arXiv:1307.0239 [stat.ME]
 }
 
