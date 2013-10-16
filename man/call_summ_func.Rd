@@ -21,7 +21,7 @@
   has to have the type "rectangle".}
 
   \item{edge_correction}{The name of the edge correction to
-  be used. Options are 'translate' and 'none'.}
+  be used. Options are 'translate', 'none' and 'periodic'.}
 
   \item{mtf_name}{A vector of mark test function names. "1"
   stands for the unmarked K-function. Accepted values are

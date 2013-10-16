@@ -24,10 +24,7 @@
   \code{\link[spatstat]{envelope}}.  Important: use the
   option 'savefuns=TRUE'.  See the help documentation in
   \code{\link[spatstat]{spatstat}} for possible test
-  functions.  \item Optional, needed only for 2) below: Use
-  \code{\link{create_curve_set}} to create a curve_set
-  object from the object returned by
-  \code{\link[spatstat]{envelope}}.  }
+  functions.  }
 
   \item Random labeling: use \code{\link{random_labelling}}
   (requires R library marksummary). }
@@ -42,16 +39,13 @@
   T_1(r), T_2(r), ..., T_{nsim+1}(r).  Important: use the
   option 'savefuns=TRUE'.  See the help documentation in
   \code{\link[spatstat]{spatstat}} for possible test
-  functions.  \item Optional, needed only for 2) below: Use
-  \code{\link{create_curve_set}} to create a curve_set
-  object from the object returned by
-  \code{\link[spatstat]{envelope}}. } or (ii) use your own
-  programs \itemize{ \item Fit the model and create nsim
-  simulations from the fitted model.  \item Calculate
-  T_1(r), T_2(r), ..., T_{nsim+1}(r).  \item Use
-  \code{\link{create_curve_set}} to create a curve_set
-  object from the estimated functions T_i(r), i=1,...,s+1.
-  } See \code{\link{rank_envelope}} for examples.
+  functions. } or (ii) use your own programs \itemize{
+  \item Fit the model and create nsim simulations from the
+  fitted model.  \item Calculate T_1(r), T_2(r), ...,
+  T_{nsim+1}(r).  \item Use \code{\link{create_curve_set}}
+  to create a curve_set object from the estimated functions
+  T_i(r), i=1,...,s+1. } See \code{\link{rank_envelope}}
+  for examples.
 
   2) Optional: modify the curve set T_1(r), T_2(r), ...,
   T_{nsim+1}(r) for the test.
@@ -62,6 +56,13 @@
   (ii) For better visualisation, take T(r)-T_0(r) by
   \code{\link{residual}}. T_0(r) is the expectation of T(r)
   under the null hypothesis.
+
+  The function \code{\link{envelope_to_curve_set}} can be
+  used to create a curve_set object from the object
+  returned by \code{\link[spatstat]{envelope}}. The
+  "envelope" object can also directly be given to the
+  functions \code{\link{crop_curves}} and
+  \code{\link{residual}}.
 
   3) Perform the test. The alternatives provided in this
   library are the following:
