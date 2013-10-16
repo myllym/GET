@@ -18,7 +18,7 @@
 #'            \item Use \code{\link[spatstat]{envelope}}.
 #'                  Important: use the option 'savefuns=TRUE'.
 #'                  See the help documentation in \code{\link[spatstat]{spatstat}} for possible test functions.
-#'            \item Optional, needed only for 2) below: Use \code{\link{create_curve_set}}
+#'            \item Optional, needed only for 2) below: Use \code{\link{envelope_to_curve_set}}
 #'                  to create a curve_set object from the object returned by \code{\link[spatstat]{envelope}}.
 #'          }
 #'
@@ -35,7 +35,7 @@
 #'          from the fitted model and to calculate T_1(r), T_2(r), ..., T_{nsim+1}(r).
 #'          Important: use the option 'savefuns=TRUE'.
 #'          See the help documentation in \code{\link[spatstat]{spatstat}} for possible test functions.
-#'    \item Optional, needed only for 2) below: Use \code{\link{create_curve_set}}
+#'    \item Optional, needed only for 2) below: Use \code{\link{envelope_to_curve_set}}
 #'          to create a curve_set object from the object returned by \code{\link[spatstat]{envelope}}.
 #' }
 #' or (ii) use your own programs
