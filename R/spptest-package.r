@@ -24,10 +24,10 @@
 #' }
 #'
 #' For testing the goodness-of-fit of parametric models,
-#' (i) you can utilize \code{\link{spatstat}},
+#' (i) you can utilize \code{\link[spatstat]{spatstat}},
 #' \itemize{
 #'    \item Fit the model to your data by means of the function
-#'          \code{\link{ppm}} or \code{\link{kppm}}.
+#'          \code{\link[spatstat]{ppm}} or \code{\link[spatstat]{kppm}}.
 #'          See the help documentation for possible models.
 #'    \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
 #'          from the fitted model and to calculate T_1(r), T_2(r), ..., T_{nsim+1}(r).
