@@ -45,9 +45,7 @@ random_labelling <- function(pattern,
 #' the random labelling hypothesis, estimates K_f- or L_f-functions
 #' for the pattern and simulations and makes a deviation test.
 #'
-#' @inheritParams marksummary::summ_func_random_labelling
-#' @inheritParams crop_curves
-#' @inheritParams residual
+#' @inheritParams random_labelling
 #' @inheritParams scale_curves
 #' @inheritParams deviation
 #' @inheritParams estimate_p_value.default
