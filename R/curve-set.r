@@ -61,6 +61,8 @@ envelope_to_curve_set <- function(env) {
 }
 
 #' Check the content validity of a potential curve_set object.
+#'
+#' @param curve_set A curve_set object to be checked.
 check_curve_set_content <- function(curve_set) {
     possible_names <- c('r', 'obs', 'sim_m', 'theo', 'is_residual')
 
@@ -214,6 +216,7 @@ is.curve_set <- function(x) inherits(x, 'curve_set')
 #' @usage \method{print}{curve_set}(x)
 #'
 #' @param x an 'curve_set' object
+#' @param ... Ignored.
 #'
 #' @method print curve_set
 #' @export
@@ -226,6 +229,7 @@ print.curve_set <- function(x, ...) {
 #' @usage \method{plot}{curve_set}(x)
 #'
 #' @param x an 'curve_set' object
+#' @param ... Additional parameters to be passed to plot and lines.
 #'
 #' @method plot curve_set
 #' @export

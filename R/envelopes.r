@@ -186,6 +186,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @usage \method{print}{envelope_test}(x)
 #'
 #' @param x an 'envelope_test' object
+#' @param ... Ignored.
 #'
 #' @method print envelope_test
 #' @export

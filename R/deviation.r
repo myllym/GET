@@ -57,6 +57,8 @@ deviation <- function(curve_set, measure = 'max', ...) {
 }
 
 #' Check the content validity of a potential deviation_set object.
+#'
+#' @param deviation_set A potential deviation_set object.
 check_deviation_set_content <- function(deviation_set) {
     possible_names <- c('obs', 'sim')
 
@@ -103,6 +105,8 @@ check_deviation_set_content <- function(deviation_set) {
 }
 
 #' Check the object.
+#'
+#' @param deviation_set A potential deviation_set object.
 #' @export
 check_deviation_set <- function(deviation_set) {
     if (!inherits(deviation_set, 'deviation_set')) {
@@ -113,6 +117,8 @@ check_deviation_set <- function(deviation_set) {
 }
 
 #' Create a deviation set out of a list in the right form.
+#'
+#' @param deviation_set The list to be turned into a deviation_set object.
 create_deviation_set <- function(deviation_set) {
     check_deviation_set_content(deviation_set)
     class(deviation_set) <- 'deviation_set'
@@ -120,5 +126,7 @@ create_deviation_set <- function(deviation_set) {
 }
 
 #' Check class.
+#'
+#' @param x An object to be checked.
 #' @export
 is.deviation_set <- function(x) inherits(x, 'deviation_set')
