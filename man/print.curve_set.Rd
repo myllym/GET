@@ -6,6 +6,8 @@
 }
 \arguments{
   \item{x}{an 'curve_set' object}
+
+  \item{...}{Ignored.}
 }
 \description{
   Print method for the class 'curve_set'

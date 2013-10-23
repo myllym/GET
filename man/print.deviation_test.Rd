@@ -6,6 +6,8 @@
 }
 \arguments{
   \item{x}{an 'deviation_test' object}
+
+  \item{...}{Ignored.}
 }
 \description{
   Print method for the class 'deviation_test'

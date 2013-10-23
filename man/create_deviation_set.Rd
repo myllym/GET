@@ -4,6 +4,10 @@
 \usage{
   create_deviation_set(deviation_set)
 }
+\arguments{
+  \item{deviation_set}{The list to be turned into a
+  deviation_set object.}
+}
 \description{
   Create a deviation set out of a list in the right form.
 }

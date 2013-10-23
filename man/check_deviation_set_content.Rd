@@ -4,6 +4,9 @@
 \usage{
   check_deviation_set_content(deviation_set)
 }
+\arguments{
+  \item{deviation_set}{A potential deviation_set object.}
+}
 \description{
   Check the content validity of a potential deviation_set
   object.

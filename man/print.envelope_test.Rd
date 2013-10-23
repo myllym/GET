@@ -6,6 +6,8 @@
 }
 \arguments{
   \item{x}{an 'envelope_test' object}
+
+  \item{...}{Ignored.}
 }
 \description{
   Print method for the class 'envelope_test'

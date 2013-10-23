@@ -6,6 +6,9 @@
 }
 \arguments{
   \item{x}{an 'curve_set' object}
+
+  \item{...}{Additional parameters to be passed to plot and
+  lines.}
 }
 \description{
   Plot method for the class 'curve_set'
