@@ -26,7 +26,7 @@ random_labelling <- function(pattern,
     }
 
     curve_set <- func(pattern, mtf_name = mtf_name, r_max = r_max,
-            r_vec = r_vec, n_sim = nsim, calc_theo = use_theo,
+            r_vec = r_vec, nsim = nsim, calc_theo = use_theo,
             edge_correction = edge_correction, method = method,
             use_biased_lambda2 = use_biased_lambda2)
     # r_max has already been dealt with in marksummary.
@@ -72,7 +72,7 @@ random_labelling_test <- function(pattern,
 #    }
 #
 #    curve_set <- func(pattern, mtf_name = mtf_name, r_max = r_max,
-#                      r_vec = r_vec, n_sim = nsim, calc_theo = use_theo,
+#                      r_vec = r_vec, nsim = nsim, calc_theo = use_theo,
 #                      edge_correction = edge_correction, method = method,
 #                      use_biased_lambda2 = use_biased_lambda2)
 #    # r_max has already been dealt with in marksummary.
