@@ -56,6 +56,7 @@ get_T_0 <- function(curve_set) {
                 T_0 <- curve_set[['theo']]
             }
             else {
+                sim_curves <- t(curve_set[['sim_m']])
                 T_0 <- colMeans(sim_curves)
             }
         }
@@ -68,6 +69,7 @@ get_T_0 <- function(curve_set) {
             T_0 <- curve_set[['theo']]
         }
         else {
+            sim_curves <- t(curve_set[['sim_m']])
             T_0 <- colMeans(sim_curves)
         }
     }
