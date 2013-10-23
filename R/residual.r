@@ -50,6 +50,8 @@ residual <- function(curve_set, use_theo = TRUE) {
 #'
 #' T_0 is the expectation of the test function under H_0.
 get_T_0 <- function(curve_set) {
+    curve_set <- convert_envelope(curve_set)
+
     if(with(curve_set, exists('is_residual'))) {
         if(!curve_set[['is_residual']]) {
             if(with(curve_set, exists('theo'))) {
