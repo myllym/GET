@@ -208,6 +208,8 @@ create_curve_set <- function(curve_set) {
 }
 
 #' Check class.
+#'
+#' @param x An object to be checked.
 #' @export
 is.curve_set <- function(x) inherits(x, 'curve_set')
 
