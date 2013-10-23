@@ -86,6 +86,7 @@ random_labelling_test <- function(pattern,
             edge_correction = edge_correction,
             use_theo = use_theo, method = method,
             use_biased_lambda2 = use_biased_lambda2)
+    curve_set <- scale_curves(curve_set, scaling = scaling)
     devs <- deviation(curve_set, measure = measure)
     p <- estimate_p_value(devs)
     p
