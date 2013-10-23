@@ -6,14 +6,14 @@
 #'   no longer included.
 #' @export
 residual <- function(curve_set, use_theo = TRUE) {
+    curve_set <- convert_envelope(curve_set)
+
     if(with(curve_set, exists('is_residual')) && curve_set[['is_residual']]) {
         cat("The curve_set object contains already residuals T_i(r) - T_0(r), \n",
             "use_theo ignored.\n")
         res <- curve_set
     }
     else {
-        curve_set <- convert_envelope(curve_set)
-
         if (length(use_theo) != 1L || !inherits(use_theo, 'logical') ||
             !is.finite(use_theo)) {
             stop('use_theo must be either TRUE or FALSE.')
