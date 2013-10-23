@@ -45,10 +45,10 @@ residual <- function(curve_set, use_theo = TRUE) {
 
 #' Define T_0 from a curve_set object
 #'
-#' Define T_0 from a curve_set object
+#' Define T_0, the expectation of the test function under H_0, from a curve_set object.
 #'
-#'
-#' T_0 is the expectation of the test function under H_0.
+#' @inheritParams convert_envelope
+#' @export
 get_T_0 <- function(curve_set) {
     curve_set <- convert_envelope(curve_set)
 
