@@ -215,7 +215,7 @@ is.curve_set <- function(x) inherits(x, 'curve_set')
 
 
 #' Print method for the class 'curve_set'
-#' @usage \method{print}{curve_set}(x)
+#' @usage \method{print}{curve_set}(x, ...)
 #'
 #' @param x an 'curve_set' object
 #' @param ... Ignored.
@@ -228,7 +228,7 @@ print.curve_set <- function(x, ...) {
 }
 
 #' Plot method for the class 'curve_set'
-#' @usage \method{plot}{curve_set}(x)
+#' @usage \method{plot}{curve_set}(x, ...)
 #'
 #' @param x an 'curve_set' object
 #' @param ... Additional parameters to be passed to plot and lines.
