@@ -1,4 +1,7 @@
 #' Estimate p-value.
+#'
+#' @param x The first argument.
+#' @param ... Additional arguments.
 #' @export
 #' @seealso \code{\link{estimate_p_value.default}}
 estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
@@ -73,6 +76,7 @@ estimate_p_value.default <- function(obs, sim_vec, ties = 'midrank') {
 #' Check \code{\link{estimate_p_value.default}} for details.
 #'
 #' @param deviation_set A deviation_set object. Use deviation() to get one.
+#' @param ... Additional parameters to be passed to \code{\link{estimate_p_value.default}}.
 #' @return The p-value.
 estimate_p_value.deviation_set <- function(deviation_set, ...) {
     check_deviation_set(deviation_set)
