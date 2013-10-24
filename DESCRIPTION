@@ -1,4 +1,7 @@
 Package: spptest
+Version: 0.2
+Date: 2013-10-24
+Title: Spatial point process testing
 Encoding: UTF-8
 Authors@R: c(
     person(given = 'Henri', family = 'Seijo', role = c('aut', 'cre'),
@@ -14,17 +17,14 @@ Authors@R: c(
 Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička and Pavel Grabarnik
 Maintainer: Mari Myllymäki <mari.j.myllymaki@gmail.com> and Henri Seijo
     <henri.seijo@iki.fi>
-Version: 0.2
-Date: 2013-06-24
-License: GPL-3
-Title: Spatial point process testing
-Description: Envelope and deviation tests for spatial point patterns
 Suggests:
     mvtnorm,
     marksummary,
     fastdepth,
     ggplot2,
     testthat
+Description: Envelope and deviation tests for spatial point patterns
+License: GPL-3
 Collate:
     'crop.r'
     'curve-set.r'
