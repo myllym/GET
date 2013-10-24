@@ -6,9 +6,9 @@ Authors@R: c(
     person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre',
     'ths'),
     email = list('mari.myllymaki@aalto.fi', 'mari.j.myllymaki@gmail.com')),
-    person(given = 'Tomáš', family = 'Mrkvička', role = c('aut'),
+    person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
-    person(given = 'Pavel', family = 'Grabarnik', role = c('aut'),
+    person(given = 'Pavel', family = 'Grabarnik', role = 'aut',
     email = list('gpya@rambler.ru', 'pavel.grabarnik@gmail.com'))
     )
 Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička and Pavel Grabarnik
