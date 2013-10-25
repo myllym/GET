@@ -17,7 +17,7 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #' Carlo samples. User can choose which method is used to treat possible
 #' tied values.
 #'
-#' @usage \method{estimate_p_value}{default}(obs, sim_vec, ties = 'midrank', ...)
+#' @usage \method{estimate_p_value}{default}(obs, sim_vec, ties = 'midrank')
 #'
 #' @param obs The data sample. A scalar real value. Must not be
 #'   NULL.
