@@ -56,7 +56,7 @@
   multivariate normal distribution.
 }
 \examples{
-library(spatstat)
+require(spatstat)
 pp <- spruces
 env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE, correction="translate", r=seq(0,8,length=50))
 curve_set <- residual(env, use_theo = TRUE)

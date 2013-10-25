@@ -2,7 +2,8 @@
 \alias{estimate_p_value.default}
 \title{Estimate p-value.}
 \usage{
-  estimate_p_value.default(obs, sim_vec, ties = "midrank")
+  \method{estimate_p_value}{default}(obs, sim_vec, ties =
+    'midrank')
 }
 \arguments{
   \item{obs}{The data sample. A scalar real value. Must not

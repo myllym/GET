@@ -52,7 +52,7 @@
 \examples{
 ## Testing complete spatial randomness (CSR)
 #-------------------------------------------
-library(spatstat)
+require(spatstat)
 pp <- spruces
 ## Test for complete spatial randomness (CSR)
 # Generate nsim simulations under CSR, calculate L-function for the data and simulations

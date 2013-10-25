@@ -17,23 +17,37 @@
 
   \item{mtf_name}{A vector of mark test function names. "1"
   stands for the unmarked K-function. Accepted values are
-  '1', 'm', 'mm', 'gamma', 'gammaAbs' and 'morAbs'.}
+  '1', 'm', 'mm', 'gamma', 'gammaAbs' and 'morAbs'. See
+  \code{\link[marksummary]{summ_func_random_labelling}}.}
+
+  \item{nsim}{The number of permutations.}
+
+  \item{r_min}{The minimum radius to include.}
 
   \item{r_max}{A positive scalar value representing the
   maximum radius that should be considered. r_vec overrides
-  r_max. By default, r_max is NULL and will get a sensible
-  default.}
+  r_max in calculation of functions.  However, after
+  calculation of functions, they are cropped to the
+  interval [r_min, r_max] (if max(r_vec) > r_max loss in
+  computing time).  By default, r_max is NULL and will get
+  a sensible default.}
 
   \item{r_vec}{A monotonically increasing vector of
   non-negative r-values to act as the endpoints of the bins
-  for the K_f-functions. r_vec overrides r_max. The bins
-  are exclusive on the left and inclusive on the right. If
-  the first vector element has value zero, it will be
-  regarded as the collapsed bin [0, 0], and the next bin
-  will start from and exclude 0.}
+  for the K_f-functions. The bins are exclusive on the left
+  and inclusive on the right. If the first vector element
+  has value zero, it will be regarded as the collapsed bin
+  [0, 0], and the next bin will start from and exclude 0.}
+
+  \item{use_L}{A boolean describing whether the L_f
+  function, L_f = sqrt(K_f/pi), should be used instead of
+  the K_f function.}
 
   \item{edge_correction}{The name of the edge correction to
   be used. Options are 'translate' and 'none'.}
+
+  \item{use_theo}{Whether to use the theoretical summary
+  function or the mean of the simulations.}
 
   \item{method}{The name of the method to create
   simulations under the null hypothesis. 'permute' results
@@ -44,11 +58,6 @@
   \item{use_biased_lambda2}{A logical scalar on whether to
   use the biased or the unbiased (in the Poisson case)
   estimate of the intensity squared.}
-
-  \item{r_min}{The minimum radius to include.}
-
-  \item{use_theo}{Whether to use the theoretical summary
-  function or the mean of the simulations.}
 
   \item{scaling}{The name of the scaling to use. Options
   include 'none', 'q', 'qdir' and 'st'. 'qdir' is default.}

@@ -3,7 +3,7 @@
 \title{Generate L_f curves for a random labelling test.}
 \usage{
   random_labelling_L_f(pattern, mtf_name = "m",
-    r_max = NULL, r_vec = NULL, n_sim = 999L,
+    r_max = NULL, r_vec = NULL, nsim = 999L,
     calc_theo = TRUE, edge_correction = "translate",
     method = "permute", use_biased_lambda2 = FALSE)
 }
@@ -33,7 +33,7 @@
   regarded as the collapsed bin [0, 0], and the next bin
   will start from and exclude 0.}
 
-  \item{n_sim}{The number of permutations.}
+  \item{nsim}{The number of permutations.}
 
   \item{edge_correction}{The name of the edge correction to
   be used. Options are 'translate' and 'none'.}

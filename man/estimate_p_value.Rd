@@ -4,6 +4,11 @@
 \usage{
   estimate_p_value(x, ...)
 }
+\arguments{
+  \item{x}{The first argument.}
+
+  \item{...}{Additional arguments.}
+}
 \description{
   Estimate p-value.
 }
