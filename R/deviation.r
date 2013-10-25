@@ -56,6 +56,12 @@ deviation <- function(curve_set, measure = 'max', ...) {
     res
 }
 
+print.deviation_set <- function(x, ...) {
+    with(x, cat(" Data value u_1:", obs, "\n",
+                "Rank of u_1:", rank(c(devs$obs, devs$sim))[1], "\n",
+                "The number of simulations:", length(devs$sim), "\n"))
+}
+
 #' Check the content validity of a potential deviation_set object.
 #'
 #' @param deviation_set A potential deviation_set object.
