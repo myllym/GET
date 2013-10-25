@@ -1,33 +1,23 @@
-bibentry(
-    bibtype = 'Article',
-    journal = 'Journal of Universal Rejection',
-    title = 'Deviation test problem paper',
-    year = 'In preparation',
-    author = c(
-        person(
-            given = 'Mari',
-            family = 'Myllymäki',
-            email = list('mari.myllymaki@aalto.fi',
-                         'mari.j.myllymaki@gmail.com'),
-            role = c('aut', 'cre')
-        ),
-        person(
-            given = 'Pavel',
-            family = 'Grabarnik',
-            email = 'gpya@rambler.ru',
-            role = 'aut'
-        ),
-        person(
-            given = 'Henri',
-            family = 'Seijo',
-            email = 'henri.seijo@iki.fi',
-            role = c('aut', 'cre')
-        ),
-        person(
-            given = 'Dietrich',
-            family = 'Stoyan',
-            email = 'stoyan@math.tu-freiberg.de',
-            role = 'aut'
-        ),
-    )
+citHeader("To cite package ‘spptest’ in publications use:")
+
+citEntry(
+    entry = "Article",
+    title = "Deviation test construction and power comparison for marked spatial point patterns",
+    journal = "arXiv:1306.1028 [stat.ME]",
+    year = "2013",
+    author = "M. Myllymäki, P. Grabarnik, H. Seijo and D. Stoyan",
+    textVersion = "Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2013).
+Deviation test construction and power comparison for marked spatial point patterns.
+arXiv:1306.1028 [stat.ME]."
+)
+
+citEntry(
+    entry = "Article",
+    title = "Global envelope tests for spatial processes",
+    journal = "arXiv:1307.0239 [stat.ME]",
+    year = "2013",
+    author = "M. Myllymäki, T. Mrkvička, H. Seijo and P. Grabarnik",
+    textVersion = "Myllymäki, M., Mrkvička, T., Seijo, H., and Grabarnik, P. (2013).
+Deviation test construction and power comparison for marked spatial point patterns.
+arXiv:1306.1028 [stat.ME]."
 )

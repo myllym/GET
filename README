@@ -7,5 +7,5 @@ and global envelope tests.
 To start: install the library, load it to R and see help(spptest). This main
 help page describes the usage of the functions of the library.
 
-In order to use the function random_labeling, the R library 'marksummary' is
+In order to use the function random_labelling, the R library 'marksummary' is
 needed.

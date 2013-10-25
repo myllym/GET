@@ -2,10 +2,12 @@
 \alias{print.envelope_test}
 \title{Print method for the class 'envelope_test'}
 \usage{
-  \method{print}{envelope_test}(x)
+  \method{print}{envelope_test}(x, ...)
 }
 \arguments{
   \item{x}{an 'envelope_test' object}
+
+  \item{...}{Ignored.}
 }
 \description{
   Print method for the class 'envelope_test'

@@ -6,14 +6,14 @@
 #'   no longer included.
 #' @export
 residual <- function(curve_set, use_theo = TRUE) {
+    curve_set <- convert_envelope(curve_set)
+
     if(with(curve_set, exists('is_residual')) && curve_set[['is_residual']]) {
         cat("The curve_set object contains already residuals T_i(r) - T_0(r), \n",
             "use_theo ignored.\n")
         res <- curve_set
     }
     else {
-        curve_set <- convert_envelope(curve_set)
-
         if (length(use_theo) != 1L || !inherits(use_theo, 'logical') ||
             !is.finite(use_theo)) {
             stop('use_theo must be either TRUE or FALSE.')
@@ -45,17 +45,20 @@ residual <- function(curve_set, use_theo = TRUE) {
 
 #' Define T_0 from a curve_set object
 #'
-#' Define T_0 from a curve_set object
+#' Define T_0, the expectation of the test function under H_0, from a curve_set object.
 #'
-#'
-#' T_0 is the expectation of the test function under H_0.
+#' @inheritParams convert_envelope
+#' @export
 get_T_0 <- function(curve_set) {
+    curve_set <- convert_envelope(curve_set)
+
     if(with(curve_set, exists('is_residual'))) {
         if(!curve_set[['is_residual']]) {
             if(with(curve_set, exists('theo'))) {
                 T_0 <- curve_set[['theo']]
             }
             else {
+                sim_curves <- t(curve_set[['sim_m']])
                 T_0 <- colMeans(sim_curves)
             }
         }
@@ -68,6 +71,7 @@ get_T_0 <- function(curve_set) {
             T_0 <- curve_set[['theo']]
         }
         else {
+            sim_curves <- t(curve_set[['sim_m']])
             T_0 <- colMeans(sim_curves)
         }
     }

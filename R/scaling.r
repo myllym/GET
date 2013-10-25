@@ -39,6 +39,8 @@ scale_curves <- function(curve_set, scaling = 'qdir', ...) {
 #' Turns a divisor into a coeff.
 #'
 #' Takes the inverse of the input and replaces non-finite values with 1.
+#'
+#' @param x A number.
 divisor_to_coeff <- function(x) {
     y <- 1 / x
     y[!is.finite(y)] <- 0 # 0 so that these distances do not affect the test result.
@@ -59,6 +61,8 @@ weigh_curves <- function(curve_set, coeff) {
 }
 
 #' Check for an increasing two-element vector of probabilities.
+#'
+#' @param probs A vector to be checked.
 check_probs <- function(probs) {
     # Leave further validity checking of probs and type to quantile.
     if (length(probs) != 2L || !all(is.finite(probs)) ||
@@ -97,6 +101,10 @@ q_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
 #' side of middle curve each element is.
 #'
 #' Used by \code{\link{qdir_scaling}}.
+#'
+#' @param x The matrix
+#' @param upper_coeff Upper coefficient.
+#' @param lower_coeff Lower coefficient.
 weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
     if (is.matrix(x)) {
         dims <- dim(x)

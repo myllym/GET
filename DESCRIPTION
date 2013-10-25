@@ -1,4 +1,7 @@
 Package: spptest
+Version: 0.2
+Date: 2013-10-24
+Title: Spatial point process testing
 Encoding: UTF-8
 Authors@R: c(
     person(given = 'Henri', family = 'Seijo', role = c('aut', 'cre'),
@@ -6,21 +9,21 @@ Authors@R: c(
     person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre',
     'ths'),
     email = list('mari.myllymaki@aalto.fi', 'mari.j.myllymaki@gmail.com')),
-    person(given = 'Tomáš', family = 'Mrkvička', role = c('aut'),
+    person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
-    person(given = 'Pavel', family = 'Grabarnik', role = c('aut'),
+    person(given = 'Pavel', family = 'Grabarnik', role = 'aut',
     email = list('gpya@rambler.ru', 'pavel.grabarnik@gmail.com'))
     )
-Version: 0.2
-Date: 2013-06-24
-License: GPL-3
-Title: Spatial point process testing
-Description: Envelope and deviation tests for spatial point patterns
+Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička and Pavel Grabarnik
+Maintainer: Mari Myllymäki <mari.j.myllymaki@gmail.com> and Henri Seijo
+    <henri.seijo@iki.fi>
 Suggests:
     mvtnorm,
     marksummary,
     ggplot2,
     testthat
+Description: Envelope and deviation tests for spatial point patterns
+License: GPL-3
 Collate:
     'crop.r'
     'curve-set.r'

@@ -4,6 +4,9 @@
 \usage{
   check_probs(probs)
 }
+\arguments{
+  \item{probs}{A vector to be checked.}
+}
 \description{
   Check for an increasing two-element vector of
   probabilities.

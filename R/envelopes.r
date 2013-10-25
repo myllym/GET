@@ -183,9 +183,10 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 }
 
 #' Print method for the class 'envelope_test'
-#' @usage \method{print}{envelope_test}(x)
+#' @usage \method{print}{envelope_test}(x, ...)
 #'
 #' @param x an 'envelope_test' object
+#' @param ... Ignored.
 #'
 #' @method print envelope_test
 #' @export
@@ -301,7 +302,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
-#' library(spatstat)
+#' require(spatstat)
 #' pp <- spruces
 #' ## Test for complete spatial randomness (CSR)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
@@ -409,7 +410,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
-#' library(spatstat)
+#' require(spatstat)
 #' pp <- spruces
 #' ## Test for complete spatial randomness (CSR)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
@@ -521,7 +522,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' @param n_norm Number of simulations drawn from the multivariate normal distribution (dimension = number of distances r).
 #' @export
 #' @examples
-#' library(spatstat)
+#' require(spatstat)
 #' pp <- spruces
 #' env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE, correction="translate", r=seq(0,8,length=50))
 #' curve_set <- residual(env, use_theo = TRUE)
