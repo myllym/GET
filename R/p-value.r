@@ -17,6 +17,8 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #' Carlo samples. User can choose which method is used to treat possible
 #' tied values.
 #'
+#' @usage \method{estimate_p_value}{default}(obs, sim_vec, ties = 'midrank', ...)
+#'
 #' @param obs The data sample. A scalar real value. Must not be
 #'   NULL.
 #' @param sim_vec The Monte Carlo samples. A vector of real values.
@@ -74,6 +76,8 @@ estimate_p_value.default <- function(obs, sim_vec, ties = 'midrank') {
 #' Estimate p-value.
 #'
 #' Check \code{\link{estimate_p_value.default}} for details.
+#'
+#' @usage \method{estimate_p_value}{deviation_set}(deviation_set, ...)
 #'
 #' @param deviation_set A deviation_set object. Use deviation() to get one.
 #' @param ... Additional parameters to be passed to \code{\link{estimate_p_value.default}}.
