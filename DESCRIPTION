@@ -18,6 +18,7 @@ Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička and Pavel Grabarnik
 Maintainer: Mari Myllymäki <mari.j.myllymaki@gmail.com> and Henri Seijo
     <henri.seijo@iki.fi>
 Suggests:
+    spatstat,
     mvtnorm,
     marksummary,
     fastdepth,
