@@ -486,6 +486,110 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     res
 }
 
+#' Unscaled envelope test
+#'
+#' The unscaled envelope test, which leads to envelopes with constant width
+#' over the distances r. It corresponds to the classical maximum deviation test
+#' without scaling.
+#'
+#'
+#' This test suffers from unequal variance of T(r) over the distances r and from
+#' the asymmetry of distribution of T(r). We recommend to use the rank_envelope
+#' (if number of simulations close to 5000 can be afforded) or st_envelope/qdir_envelope
+#' (if large number of simulations cannot be afforded) instead.
+#'
+#' @references
+#' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
+#'
+#' @inheritParams rank_envelope
+#' @param savedevs Logical. Should the deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
+#' @return An "envelope_test" object containing the following fields:
+#' \itemize{
+#'   \item r = Distances for which the test was made.
+#'   \item method = The name of the envelope test.
+#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
+#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% simultaneous envelope.
+#'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
+#'         then this function is used as the central curve and returned in this component.
+#'         Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'   \item data_curve = The test function for the data.
+#'   \item lower = The lower envelope.
+#'   \item upper = The upper envelope.
+#'   \item call = The call of the function.
+#' }
+#' @export
+#' @examples
+#' ## Testing complete spatial randomness (CSR)
+#' #-------------------------------------------
+#' require(spatstat)
+#' pp <- spruces
+#' ## Test for complete spatial randomness (CSR)
+#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
+#' # The studentised envelope test
+#' res <- unscaled_envelope(env)
+#' plot(res)
+#' # or (requires R library ggplot2)
+#' plot(res, use_ggplot2=TRUE)
+#'
+#' ## Advanced use:
+#' # Create a curve set, choosing the interval of distances [r_min, r_max]
+#' curve_set <- crop_curves(env, r_min = 1, r_max = 8)
+#' # For better visualisation, take the L(r)-r function
+#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' # The studentised envelope test
+#' res <- unscaled_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#'
+#' ## Random labeling test
+#' #----------------------
+#' # requires library 'marksummary'
+#' mpp <- spruces
+#' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
+#' res <- unscaled_envelope(curve_set)
+#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
+unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
+
+    curve_set <- convert_envelope(curve_set)
+
+    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
+    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+
+    data_curve <- curve_set[['obs']]
+    sim_curves <- t(curve_set[['sim_m']])
+
+    Nsim <- dim(sim_curves)[1];
+    nr <- dim(sim_curves)[2]
+
+    # Define T_0 and residual curve_set
+    T_0 <- get_T_0(curve_set)
+    curve_set <- residual(curve_set, use_theo = TRUE)
+
+    # Calculate deviation measures
+    distance <- array(0, Nsim+1);
+    # u_1
+    distance[1] <- max(abs(curve_set$obs))
+    # u_2, ..., u_{s+1}
+    distance[2:(Nsim+1)] <- apply(abs(curve_set[['sim_m']]), 2, max)
+
+    #-- calculate the p-value
+    p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
+
+    #-- calculate the simultaneous 100(1-alpha)% envelope
+    distancesorted <- sort(distance);
+    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
+    LB <- T_0 - talpha;
+    UB <- T_0 + talpha;
+
+    res <- list(r=curve_set[['r']], method="Unscaled envelope test", p=p,
+            u_alpha=talpha,
+            central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
+            call=match.call())
+    if(savedevs) res$u <- distance
+    class(res) <- "envelope_test"
+    res
+}
 
 
 #' Approximative normal envelope test
