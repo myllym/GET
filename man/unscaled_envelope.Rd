@@ -1,9 +1,9 @@
-\name{st_envelope}
-\alias{st_envelope}
-\title{Studentised envelope test}
+\name{unscaled_envelope}
+\alias{unscaled_envelope}
+\title{Unscaled envelope test}
 \usage{
-  st_envelope(curve_set, alpha = 0.05, savedevs = FALSE,
-    ...)
+  unscaled_envelope(curve_set, alpha = 0.05,
+    savedevs = FALSE, ...)
 }
 \arguments{
   \item{savedevs}{Logical. Should the deviation values u_i,
@@ -43,9 +43,17 @@
   \item call = The call of the function. }
 }
 \description{
-  The studentised envelope test, which takes into account
-  the unequal variances of the test function T(r) for
-  different distances r.
+  The unscaled envelope test, which leads to envelopes with
+  constant width over the distances r. It corresponds to
+  the classical maximum deviation test without scaling.
+}
+\details{
+  This test suffers from unequal variance of T(r) over the
+  distances r and from the asymmetry of distribution of
+  T(r). We recommend to use the rank_envelope (if number of
+  simulations close to 5000 can be afforded) or
+  st_envelope/qdir_envelope (if large number of simulations
+  cannot be afforded) instead.
 }
 \examples{
 ## Testing complete spatial randomness (CSR)
@@ -56,7 +64,7 @@ pp <- spruces
 # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
 # The studentised envelope test
-res <- st_envelope(env)
+res <- unscaled_envelope(env)
 plot(res)
 # or (requires R library ggplot2)
 plot(res, use_ggplot2=TRUE)
@@ -67,7 +75,7 @@ curve_set <- crop_curves(env, r_min = 1, r_max = 8)
 # For better visualisation, take the L(r)-r function
 curve_set <- residual(curve_set, use_theo = TRUE)
 # The studentised envelope test
-res <- st_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+res <- unscaled_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 
 ## Random labeling test
 #----------------------
@@ -75,17 +83,11 @@ res <- st_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 mpp <- spruces
 # Use the test function T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
 curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
-res <- st_envelope(curve_set)
+res <- unscaled_envelope(curve_set)
 plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 }
 \references{
-  Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D.
-  (2013). Deviation test construction and power comparison
-  for marked spatial point patterns. arXiv:1306.1028
-  [stat.ME]
-
-  Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P.
-  (2013). Global envelope tests for spatial point patterns.
-  arXiv:1307.0239 [stat.ME]
+  Ripley, B.D. (1981). Spatial statistics. Wiley, New
+  Jersey.
 }
 
