@@ -21,7 +21,7 @@ If you do not have the library ´devtools´ installed, install it first by
 install.packages("devtools")
 ```
 
-After installation, in order to start using ´spptest´, load it to R and see
+After installation, in order to start using `spptest`, load it to R and see
 the main help page, which describes the usage of the functions of the library:
 ```R
 library(spptest)
