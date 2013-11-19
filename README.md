@@ -8,15 +8,21 @@ and global envelope tests.
 
 ## Installation
 
-Install the library to R as follows:
+Install the library to R with the following two R commands:
 
 ```R
 library(devtools)
 install_github('spptest', username = 'myllym', ref = 'no_fastdepth')
 ```
 
-To start using the library, load it to R and see the main help page, which
-describes the usage of the functions of the library:
+If you do not have the library ´devtools´ installed, install it first by
+
+```R
+install.packages("devtools")
+```
+
+After installation, in order to start using ´spptest´, load it to R and see
+the main help page, which describes the usage of the functions of the library:
 ```R
 library(spptest)
 help(spptest) # or help(spptest, help="html")
