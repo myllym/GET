@@ -77,29 +77,3 @@ test_that('p-value is correct; several ties; one case', {
     expect_that(p_midrank, equals(p_reference_midrank))
     expect_that(p_reference_random_check(p_random), is_true())
 })
-
-#test_that('p-value is correct; tied values', {
-#    # FIXME: should be defined by n_mc_samples
-#    n_mc_sample <- 9L
-#    coeff <- 1 / (n_mc_sample + 1L)
-#    mc_samples <- seq_len(n_mc_sample)
-#    # Check that range is below n_sample.
-#
-#    # To do a little scrambling.
-#    mc_samples <- sample(mc_samples)
-#
-#    # Some higher value than before.
-#    new_value <- n_mc_sample + 1L
-#    n_same_as_data <- sample(n_mc_sample, 1L)
-#    mc_samples[seq_len(n_same_as_data)] <- new_value
-#    data_sample <- new_value
-#
-#    p_ref_lib <- coeff
-#    p_ref_cons <- coeff * (n_same_as_data + 1L)
-#    p_ref_mid <- coeff * ((n_same_as_data + 2L) / 2L)
-#    p_ref_rand_low <- p_ref_lib
-#    p_ref_rand_low <- p_ref_lib
-#    mc
-#    lapply(seq_len(10L), do_no_ties_test, 10L)
-#    NULL
-#})
