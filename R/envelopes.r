@@ -33,6 +33,8 @@
 #'  savefuns = TRUE when calling envelope().
 #' @param alpha The significance level. Simultaneous 100(1-alpha)\% envelopes will be calculated.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
+#' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
+#'         "two.sided" (default), "less" or "greater".
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain
 #' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
 #'
@@ -40,6 +42,7 @@
 #' \itemize{
 #'   \item r = Distances for which the test was made.
 #'   \item method = The name of the envelope test.
+#'   \item alternative = The alternative specified in the function call.
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% simultaneous envelope.
@@ -127,7 +130,7 @@
 #' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
 #'
-rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
+rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="two.sided", ...) {
     # data_curve = the vector of L-function values for data
     # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
     # alpha = the chosen significance level of the test
@@ -136,6 +139,9 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+    if(alternative != "two.sided" & alternative != "less" & alternative != "greater")
+        stop(paste("Error: Possible values for \"alternative\" are \n",
+             "\"two.sided\" (default), \"less\" or \"greater\"\n."))
 
     data_curve <- curve_set[['obs']]
     sim_curves <- t(curve_set[['sim_m']])
@@ -151,7 +157,16 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     Rmax <- Nsim+2-apply(RR, MARGIN=1, FUN=max)
     RmRm <- rbind(Rmin,Rmax)
     # k:
-    distance <- apply(RmRm, MARGIN=2, FUN=min)
+    switch(alternative,
+           "two.sided" = {
+               distance <- apply(RmRm, MARGIN=2, FUN=min)
+           },
+           "less" = {
+               distance <- Rmin
+           },
+           "greater" = {
+               distance <- Rmax
+           })
 
     #-- calculate the p-value
     u <- -distance
@@ -172,7 +187,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
         UB[i]<- Hod[Nsim+1-kalpha+1];
     }
 
-    res <- list(r=curve_set[['r']], method="Rank envelope test",
+    res <- list(r=curve_set[['r']], method="Rank envelope test", alternative = alternative,
                 p=p, p_interval=c(p_low,p_upp),
                 k_alpha=kalpha,
                 central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
