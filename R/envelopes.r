@@ -245,15 +245,15 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
         }
     }
     if(missing('ylim')) {
-        if(!use_ggplot2)
-            ylim <- c(min(x$data_curve,x$lower,x$upper,x$central_curve),
-                      max(x$data_curve,x$lower,x$upper,x$central_curve))
+        if(!use_ggplot2 || x$alternative != "two.sided")
+            ylim <- with(x, c(min(data_curve,lower,upper,central_curve),
+                              max(data_curve,lower,upper,central_curve)))
         else ylim <- NULL
     }
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-    if(use_ggplot2) {
+    if(use_ggplot2 & x$alternative == "two.sided") {
         require(ggplot2)
         linetype.values <- c('solid', 'dashed')
         size.values <- c(0.2, 0.2)
@@ -286,8 +286,8 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
         with(x, {
                     plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
                             type="l", lty=1, lwd=2, ...)
-                    lines(r, lower, lty=2)
-                    lines(r, upper, lty=2)
+                    if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
+                    if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
                     lines(r, central_curve, lty=3)
                 }
         )
