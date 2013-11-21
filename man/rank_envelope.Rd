@@ -3,7 +3,7 @@
 \title{The rank envelope test}
 \usage{
   rank_envelope(curve_set, alpha = 0.05, savedevs = FALSE,
-    ...)
+    alternative = "two.sided", ...)
 }
 \arguments{
   \item{curve_set}{A curve_set (see
@@ -19,6 +19,10 @@
   \item{savedevs}{Logical. Should the global rank values
   k_i, i=1,...,nsim+1 be returned? Default: FALSE.}
 
+  \item{alternative}{A character string specifying the
+  alternative hypothesis. Must be one of the following:
+  "two.sided" (default), "less" or "greater".}
+
   \item{...}{Additional parameters passed to
   \code{\link{estimate_p_value}} to obtain a point estimate
   for the p-value. The default point estimate is the
@@ -28,21 +32,23 @@
   An "envelope_test" object containing the following
   fields: \itemize{ \item r = Distances for which the test
   was made.  \item method = The name of the envelope test.
-  \item p = A point estimate for the p-value (default is
-  the mid-rank p-value).  \item p_interval = The p-value
-  interval [p_liberal, p_conservative].  \item k_alpha =
-  The value of k corresponding to the 100(1-alpha)\%
-  simultaneous envelope.  \item k = Global rank values
-  (k[1] is the value for the data pattern). Returned only
-  if savedevs = TRUE.  \item central_curve = If the
-  curve_set (or envelope object) contains a component
-  'theo', then this function is used as the central curve
-  and returned in this component.  Otherwise, the
-  central_curve is the mean of the test functions T_i(r),
-  i=2, ..., s+1.  Used for visualization only.  \item
-  data_curve = The test function for the data.  \item lower
-  = The lower envelope.  \item upper = The upper envelope.
-  \item call = The call of the function. }
+  \item alternative = The alternative specified in the
+  function call.  \item p = A point estimate for the
+  p-value (default is the mid-rank p-value).  \item
+  p_interval = The p-value interval [p_liberal,
+  p_conservative].  \item k_alpha = The value of k
+  corresponding to the 100(1-alpha)\% simultaneous
+  envelope.  \item k = Global rank values (k[1] is the
+  value for the data pattern). Returned only if savedevs =
+  TRUE.  \item central_curve = If the curve_set (or
+  envelope object) contains a component 'theo', then this
+  function is used as the central curve and returned in
+  this component.  Otherwise, the central_curve is the mean
+  of the test functions T_i(r), i=2, ..., s+1.  Used for
+  visualization only.  \item data_curve = The test function
+  for the data.  \item lower = The lower envelope.  \item
+  upper = The upper envelope.  \item call = The call of the
+  function. }
 }
 \description{
   The rank envelope test, p-value and simultaneous envelope
