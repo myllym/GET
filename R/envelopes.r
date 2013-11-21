@@ -229,10 +229,20 @@ print.envelope_test <- function(x, ...) {
 plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...) {
     if(missing('main')) {
         if(with(x, exists('p_interval')))
-            main <- paste(x$method, ": p-interval = (",
-                    round(x$p_interval[1],3),", ", round(x$p_interval[2],3), ")", sep="")
-        else
-            main <- paste(x$method, ": p = ", round(x$p,3), sep="")
+            if(x$alternative == "two.sided")
+                main <- with(x, paste(method, ": p-interval = (",
+                              round(p_interval[1],3),", ", round(p_interval[2],3), ")", sep=""))
+            else
+                main <- with(x, paste(method, ": p-interval = (",
+                              round(p_interval[1],3),", ", round(p_interval[2],3), ") \n",
+                              "Alternative = \"", alternative, "\"\n", sep=""))
+        else {
+            if(x$alternative == "two.sided")
+                main <- with(x, paste(method, ": p = ", round(p,3), sep=""))
+            else
+                main <- with(x, paste(method, ": p = ", round(p,3), "\n",
+                             "Alternative = \"", alternative, "\"\n", sep=""))
+        }
     }
     if(missing('ylim')) {
         if(!use_ggplot2)
