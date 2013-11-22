@@ -99,14 +99,14 @@ env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
 res <- deviation_test(env, measure = 'int')
 res
 # or
-res <- deviation_test(env, r_min=0, r_max=7, measure='int')
+res <- deviation_test(env, r_min=0, r_max=7, measure='int2')
 
 ## Random labeling test
 #----------------------
 mpp <- spruces
 # T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
 curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
-res <- deviation_test(curve_set, measure='int')
+res <- deviation_test(curve_set, measure='int2')
 res
 }
 \references{
