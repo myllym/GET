@@ -59,7 +59,6 @@ crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
         res[['theo']] <- theo_cut
     }
     if(with(curve_set, exists('is_residual'))) res[['is_residual']] <- curve_set[['is_residual']]
-    else res[['is_residual']] <- FALSE
 
     res <- create_curve_set(res)
     res
