@@ -235,9 +235,10 @@ print.curve_set <- function(x, ...) {
 #'
 #' @method plot curve_set
 #' @export
-plot.curve_set <- function(x, ...) {
+plot.curve_set <- function(x, ylim, ...) {
+    if(missing('ylim')) ylim <- with(x, c(min(obs,sim_m), max(obs,sim_m)))
     with(x, {
-                plot(r, obs, type="l", ylim=c(min(obs,sim_m), max(obs,sim_m)), ...)
+                plot(r, obs, type="l", ylim=ylim, ...)
                 for(i in 1:ncol(sim_m)) lines(r, sim_m[,i], col=grey(0.7))
                 lines(r, obs, type="l", ...)
             })
