@@ -257,6 +257,8 @@ print.envelope_test <- function(x, ...) {
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors. Only applicable if \code{use_ggplot2} is FALSE.
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
+#' @param color_outside Logical. Whether to color the places where the data function goes outside the envelope.
+#' Currently red color is used and coloring is only used if \code{use_ggplot2} is FALSE.
 #' @param main See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylim See \code{\link{plot.default}}. A sensible default exists.
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
@@ -266,7 +268,7 @@ print.envelope_test <- function(x, ...) {
 #' @method plot envelope_test
 #' @export
 #' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
-plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, main, ylim, xlab, ylab, ...) {
+plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...) {
 
     if(with(x, lexo)) warning("The graphical representation is not valid for the lexical ordering (lexo is TRUE)!\n")
 
@@ -328,7 +330,6 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, mai
     else {
         if(dotplot) {
             with(x, {
-                        outside <- data_curve < lower | data_curve > upper
                         plot(1:length(r), central_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
                         if(alternative!="greater")
                             arrows(1:length(r), lower, 1:length(r), central_curve, code = 1, angle = 75, length = .1)
@@ -340,17 +341,24 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, mai
                             arrows(1:length(r), upper, 1:length(r), central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
                         axis(1, 1:length(r), label=paste(round(r, digits=2)))
                         points(1:length(r), data_curve, pch='x')
-                        points((1:length(r))[outside], data_curve[outside], pch='x', col="red")
+                        if(color_outside) {
+                            outside <- data_curve < lower | data_curve > upper
+                            points((1:length(r))[outside], data_curve[outside], pch='x', col="red")
+                        }
                     }
             )
         }
         else {
             with(x, {
-                    plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
-                            type="l", lty=1, lwd=2, ...)
-                    if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
-                    if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
-                    lines(r, central_curve, lty=3)
+                        plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+                                type="l", lty=1, lwd=2, ...)
+                        if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
+                        if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
+                        lines(r, central_curve, lty=3)
+                        if(color_outside) {
+                            outside <- data_curve < lower | data_curve > upper
+                            points(r[outside], data_curve[outside], col="red")
+                        }
                     }
             )
         }
