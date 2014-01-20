@@ -24,6 +24,11 @@
 #' The simultaneous 100(1-alpha)\% envelope is given by the 'k_alpha'th lower and
 #' upper envelope. For details see Myllymäki et al. (2013).
 #'
+#' The above holds if \code{lexo == FALSE} and then the test corresponds to the rank
+#' envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE}, then all the
+#' pointwise ranks are used to rank the curves, by so called lexical ordering.
+#' The test is no longer usable as a graphical test. If \code{lexo} was set to a value
+#' \code{TRUE}, a warning is issued when plotting using \code{\link{plot.envelope_test}}).
 #'
 #' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
@@ -35,6 +40,7 @@
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
 #'         "two.sided" (default), "less" or "greater".
+#' @param lexo Logical, whether or not to use lexical ordering when ranking. See details.
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain
 #' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
 #'
@@ -44,6 +50,7 @@
 #'   \item method = The name of the envelope test.
 #'   \item alternative = The alternative specified in the function call.
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
+#'   \item lexo = As the argument \code{lexo}.
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% simultaneous envelope.
 #'   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
