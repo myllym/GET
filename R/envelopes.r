@@ -175,6 +175,9 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
 
     if(!lexo) {
         distance <- apply(allranks, MARGIN=1, FUN=min)
+        #-- calculate the p-value
+        u <- -distance
+        p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ...)
     }
     #-- Lexical rank test if lexo == TRUE
     else {
@@ -200,12 +203,12 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
         newranks <- 1:(Nsim+1)
         newranks[tied] <- tieranks[tied]
 
-        distance <- newranks[order(lexo_values)]
+        distance_lexo <- newranks[order(lexo_values)]
+        #-- calculate the p-value
+        u_lexo <- -distance_lexo
+        p <- estimate_p_value(obs=u_lexo[1], sim_vec=u_lexo[-1], ...)
     }
 
-    #-- calculate the p-value
-    u <- -distance
-    p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ...)
     # p-interval
     p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
     p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
