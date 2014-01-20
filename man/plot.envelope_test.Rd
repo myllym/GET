@@ -12,6 +12,17 @@
   a coloured envelope ribbon is provided. Requires R
   library ggplot2.}
 
+  \item{dotplot}{Logical. If TRUE, then instead of
+  envelopes a dot plot is done. Suitable for low
+  dimensional test vectors. Only applicable if
+  \code{use_ggplot2} is FALSE. Default: TRUE if the
+  dimension is less than 10, FALSE otherwise.}
+
+  \item{color_outside}{Logical. Whether to color the places
+  where the data function goes outside the envelope.
+  Currently red color is used and coloring is only used if
+  \code{use_ggplot2} is FALSE.}
+
   \item{main}{See \code{\link{plot.default}}. A sensible
   default exists.}
 
