@@ -173,15 +173,18 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
                allranks <- hiranks
            })
 
+    distance <- apply(allranks, MARGIN=1, FUN=min)
+    #-- calculate p-values
+    u <- -distance
+    # p-interval
+    p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
+    p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
+
+    # p-value
     if(!lexo) {
-        distance <- apply(allranks, MARGIN=1, FUN=min)
-        #-- calculate the p-value
-        u <- -distance
         p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ...)
     }
-    #-- Lexical rank test if lexo == TRUE
-    else {
-        # now rank the curves by lexical ordering
+    else { # rank the curves by lexical ordering
         # order ranks within each curve
         sortranks <- apply(allranks, 1, sort) # curves now represented as columns
         lexo_values <- do.call("order", split(sortranks, row(sortranks)))
@@ -208,10 +211,6 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
         u_lexo <- -distance_lexo
         p <- estimate_p_value(obs=u_lexo[1], sim_vec=u_lexo[-1], ...)
     }
-
-    # p-interval
-    p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
-    p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
 
     #-- calculate the simultaneous 100(1-alpha)% envelope
     distancesorted <- sort(distance, decreasing=TRUE)
