@@ -130,7 +130,7 @@
 #' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
 #'
-rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="two.sided", ...) {
+rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="two.sided", lexo=FALSE, ...) {
     # data_curve = the vector of L-function values for data
     # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
     # alpha = the chosen significance level of the test
@@ -152,21 +152,49 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
     T_0 <- get_T_0(curve_set)
 
     data_and_sim_curves <- rbind(data_curve, sim_curves)
-    RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
-    Rmin <- apply(RR, MARGIN=1, FUN=min)
-    Rmax <- Nsim+2-apply(RR, MARGIN=1, FUN=max)
-    RmRm <- rbind(Rmin,Rmax)
+    loranks <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
+    hiranks <- Nsim+2-loranks
     # k:
     switch(alternative,
            "two.sided" = {
-               distance <- apply(RmRm, MARGIN=2, FUN=min)
+               allranks <- pmin(loranks, hiranks)
            },
            "less" = {
-               distance <- Rmin
+               allranks <- loranks
            },
            "greater" = {
-               distance <- Rmax
+               allranks <- hiranks
            })
+
+    if(!lexo) {
+        distance <- apply(allranks, MARGIN=1, FUN=min)
+    }
+    #-- Lexical rank test if lexo == TRUE
+    else {
+        # now rank the curves by lexical ordering
+        # order ranks within each curve
+        sortranks <- apply(allranks, 1, sort) # curves now represented as columns
+        lexo_values <- do.call("order", split(sortranks, row(sortranks)))
+
+        # find ties
+        sorted <- sortranks[ ,lexo_values]
+        dupp <- duplicated(split(sorted, col(sorted)))
+        tied <- dupp | c(dupp[-1], FALSE)
+
+        # replace ranks of tied values by mean ranks
+        # (maybe a little bit awkward, but isntitcool)
+        tie.rle <- rle(tied)
+        tie.end <- cumsum(tie.rle$lengths)
+        tie.start <- cumsum(c(1,tie.rle$lengths))
+        tie.start <- tie.start[-length(tie.start)]
+        rank.rle <- tie.rle
+        rank.rle$values <- (tie.start + tie.end)/2
+        tieranks <- inverse.rle(rank.rle)
+        newranks <- 1:(Nsim+1)
+        newranks[tied] <- tieranks[tied]
+
+        distance <- newranks[order(lexo_values)]
+    }
 
     #-- calculate the p-value
     u <- -distance
@@ -188,7 +216,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
     }
 
     res <- list(r=curve_set[['r']], method="Rank envelope test", alternative = alternative,
-                p=p, p_interval=c(p_low,p_upp),
+                p=p, p_interval=c(p_low,p_upp), lexo=lexo,
                 k_alpha=kalpha,
                 central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
