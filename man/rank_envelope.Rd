@@ -84,14 +84,13 @@
   'k_alpha'th lower and upper envelope. For details see
   Myllymäki et al. (2013).
 
-  The above holds if \code{lexo == FALSE} and then the test
-  corresponds to the rank envelope test by Myllymaki et. al
-  (2013). If \code{lexo == TRUE}, then all the pointwise
-  ranks are used to rank the curves, by so called lexical
-  ordering. The test is no longer usable as a graphical
-  test. If \code{lexo} was set to a value \code{TRUE}, a
-  warning is issued when plotting using
-  \code{\link{plot.envelope_test}}).
+  The above holds for p-value calculation if \code{lexo ==
+  FALSE} and then the test corresponds to the rank envelope
+  test by Myllymaki et. al (2013). If \code{lexo == TRUE},
+  then all the pointwise ranks are used to rank the curves,
+  by so called lexical ordering. This may allow a lower
+  number of simulations to be used, but then the test is no
+  longer usable as a graphical test.
 }
 \examples{
 ## Testing complete spatial randomness (CSR)
