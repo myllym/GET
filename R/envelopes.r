@@ -64,7 +64,7 @@
 #'   \item call = The call of the function.
 #' }
 #' @export
-#' @seealso \code{\link{random_labelling}}
+#' @seealso \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
 #' @examples
 #'
 #' ## Testing complete spatial randomness (CSR)
