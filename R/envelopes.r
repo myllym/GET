@@ -18,8 +18,9 @@
 #' Based on k_i, i=1, ..., s+1, the p-interval is calculated. This interval is
 #' by default plotted for the object returned by the rank_envelope function.
 #' Also a single p-value is calculated and returned in component 'p'. By default
-#' this p-value is the mid-rank p-value, but another option can be used by passing
-#' additional parameters to \code{\link{estimate_p_value}}.
+#' this p-value is the mid-rank p-value, but another option can be used by specifying
+#' \code{ties} argument which is passed to \code{\link{estimate_p_value}}. For
+#' options see \code{\link{estimate_p_value}}.
 #'
 #' The simultaneous 100(1-alpha)\% envelope is given by the 'k_alpha'th lower and
 #' upper envelope. For details see Myllymäki et al. (2013).
@@ -27,7 +28,7 @@
 #' The above holds for p-value calculation if \code{lexo == FALSE} and then the test
 #' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
 #' then all the pointwise ranks are used to rank the curves, by so called lexical ordering.
-#' This may allow a lower number of simulations to be used, but then the test is no longer
+#' This may allow a lower number of simulations to be used, but then the test may no longer be
 #' usable as a graphical test.
 #'
 #' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
