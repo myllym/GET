@@ -41,7 +41,7 @@
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
 #'         "two.sided" (default), "less" or "greater".
 #' @param lexo Logical, whether or not to use lexical ordering when ranking. See details.
-#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain
+#' @param ties Ties method to be passed to \code{\link{estimate_p_value}}. Used to obtain
 #' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
 #'
 #' @return An "envelope_test" object containing the following fields:
@@ -150,6 +150,14 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
         stop(paste("Error: Possible values for \"alternative\" are \n",
              "\"two.sided\" (default), \"less\" or \"greater\"\n."))
 
+    # The type of the p-value
+    if(missing(ties))
+        ties <- p_value_ties_default()
+    else if(lexo) cat("The argument ties ignored, because lexo = TRUE. \n")
+    if(lexo) ties <- "lexical"
+
+    # data_curve = the vector of test function values for data
+    # sim_curves = matrix where each row contains test function values of a simulation under null hypothesis
     data_curve <- curve_set[['obs']]
     sim_curves <- t(curve_set[['sim_m']])
 
@@ -182,7 +190,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
 
     # p-value
     if(!lexo) {
-        p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ...)
+        p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties=ties)
     }
     else { # rank the curves by lexical ordering
         # order ranks within each curve
@@ -209,7 +217,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
         distance_lexo <- newranks[order(lexo_values)]
         #-- calculate the p-value
         u_lexo <- -distance_lexo
-        p <- estimate_p_value(obs=u_lexo[1], sim_vec=u_lexo[-1], ...)
+        p <- estimate_p_value(obs=u_lexo[1], sim_vec=u_lexo[-1])
     }
 
     #-- calculate the simultaneous 100(1-alpha)% envelope
@@ -225,7 +233,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
     }
 
     res <- list(r=curve_set[['r']], method="Rank envelope test", alternative = alternative,
-                p=p, p_interval=c(p_low,p_upp), lexo=lexo,
+                p=p, p_interval=c(p_low,p_upp), ties=ties,
                 k_alpha=kalpha,
                 central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
