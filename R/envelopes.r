@@ -329,7 +329,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, col
             )
     }
     else {
-        if(use_qqplot2) cat("The use_ggplot2 option is valid only for the alternative \'two-sided\'. use_ggplot2 ignored.\n")
+        if(use_ggplot2) cat("The use_ggplot2 option is valid only for the alternative \'two.sided\'. use_ggplot2 ignored.\n")
         if(dotplot) {
             with(x, {
                         plot(1:length(r), central_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
