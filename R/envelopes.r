@@ -138,11 +138,7 @@
 #' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
 #'
-rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="two.sided", lexo=FALSE, ...) {
-    # data_curve = the vector of L-function values for data
-    # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
-    # alpha = the chosen significance level of the test
-
+rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="two.sided", lexo=FALSE, ties) {
     curve_set <- convert_envelope(curve_set)
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
@@ -183,13 +179,12 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
            })
 
     distance <- apply(allranks, MARGIN=1, FUN=min)
-    #-- calculate p-values
     u <- -distance
-    # p-interval
+    #-- p-interval
     p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
     p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
 
-    # p-value
+    #-- p-value
     if(!lexo) {
         p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties=ties)
     }
