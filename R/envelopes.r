@@ -459,7 +459,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
 
-    res <- list(r=curve_set[['r']], method="Studentised envelope test", alternative = "two-sided",
+    res <- list(r=curve_set[['r']], method="Studentised envelope test", alternative = "two.sided",
                 p=p,
                 u_alpha=talpha,
                 central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
@@ -572,7 +572,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     LB <- T_0 - talpha*abs(quant_m[1,]);
     UB <- T_0 + talpha*abs(quant_m[2,]);
 
-    res <- list(r=curve_set[['r']], method="Directional quantile envelope test", alternative = "two-sided",
+    res <- list(r=curve_set[['r']], method="Directional quantile envelope test", alternative = "two.sided",
                 p=p,
                 u_alpha=talpha,
                 central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
@@ -678,7 +678,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     LB <- T_0 - talpha;
     UB <- T_0 + talpha;
 
-    res <- list(r=curve_set[['r']], method="Unscaled envelope test", alternative = "two-sided",
+    res <- list(r=curve_set[['r']], method="Unscaled envelope test", alternative = "two.sided",
             p=p,
             u_alpha=talpha,
             central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
