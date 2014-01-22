@@ -51,7 +51,7 @@
 #'   \item method = The name of the envelope test.
 #'   \item alternative = The alternative specified in the function call.
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item lexo = As the argument \code{lexo}.
+#'   \item ties = As the argument \code{ties}.
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% simultaneous envelope.
 #'   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
