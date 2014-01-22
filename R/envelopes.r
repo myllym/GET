@@ -248,7 +248,9 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
 #' @export
 print.envelope_test <- function(x, ...) {
     with(x, cat(method, "\n",
-                " p-value of the test: ", p, " (ties method: ", ties, ")\n", sep=""))
+                " p-value of the test: ", p, sep=""))
+    with(x, if(exists('ties')) cat(" (ties method: ", ties, ")\n", sep="")
+            else cat("\n"))
     with(x, if(exists('p_interval'))
             cat(" p-interval         : (", p_interval[1], ", ", p_interval[2],")\n", sep=""))
 }
