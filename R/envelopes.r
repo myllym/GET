@@ -301,6 +301,30 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, col
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
+    # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
+    nr <- length(x[['r']])
+    if( length(unique(x[['r']])) < nr ) {
+        retick_xaxis <- TRUE
+        r_values <- x[['r']]
+        x[['r']] <- 1:nr
+        r_values_newstart_id <- which(!(r_values[1:(nr-1)] < r_values[2:nr])) + 1
+        # number of ticks per a sub test
+        nticks <- 5
+        # r-values for labeling ticks
+        r_starts <- r_values[c(1, r_values_newstart_id)]
+        r_ends <- r_values[c(r_values_newstart_id - 1, nr)]
+        r_break_values <- NULL
+        # indeces for ticks in the running numbering from 1 to nr
+        loc_starts <- (1:nr)[c(1, r_values_newstart_id)]
+        loc_ends <- (1:nr)[c(r_values_newstart_id - 1, nr)]
+        loc_break_values <- NULL
+        for(i in 1:length(r_starts)) {
+            r_break_values <- c(r_break_values, seq(r_starts[i], r_ends[i], length=nticks))
+            loc_break_values <- c(loc_break_values, seq(loc_starts[i], loc_ends[i], length=nticks))
+        }
+    }
+    else retick_xaxis <- FALSE
+
     if(use_ggplot2 & x$alternative == "two.sided") {
         require(ggplot2)
         linetype.values <- c('solid', 'dashed')
@@ -318,13 +342,19 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, col
                                         fill = 'grey59', alpha = 1)
                                 + geom_line(data = df, aes(x = r, y = curves, group = type,
                                                 linetype = type, size = type))
-                                + facet_grid('~ main', scales='free')
-                                + scale_x_continuous(name=xlab)
-                                + scale_y_continuous(name=ylab, limits=ylim)
-                                + scale_linetype_manual(values=linetype.values, name='')
-                                + scale_size_manual(values=size.values, name='')
+                                + facet_grid('~ main', scales = 'free')
+                                + scale_y_continuous(name = ylab, limits = ylim)
+                                + scale_linetype_manual(values = linetype.values, name = '')
+                                + scale_size_manual(values = size.values, name = '')
                                 + ThemePlain()
-                                )
+                          )
+                    if(retick_xaxis) {
+                        p <- p + scale_x_continuous(name = xlab,
+                                                    breaks = loc_break_values,
+                                                    labels = paste(round(r_break_values, digits=2)))
+                        p <- p + geom_vline(xintercept = (1:nr)[r_values_newstart_id], linetype = "dotted")
+                    }
+                    else p <- p + scale_x_continuous(name = xlab)
                     print(p)
                     return(invisible(p))
                 }
@@ -334,34 +364,42 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, col
         if(use_ggplot2) cat("The use_ggplot2 option is valid only for the alternative \'two.sided\'. use_ggplot2 ignored.\n")
         if(dotplot) {
             with(x, {
-                        plot(1:length(r), central_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
+                        plot(1:nr, central_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
                         if(alternative!="greater")
-                            arrows(1:length(r), lower, 1:length(r), central_curve, code = 1, angle = 75, length = .1)
+                            arrows(1:nr, lower, 1:nr, central_curve, code = 1, angle = 75, length = .1)
                         else
-                            arrows(1:length(r), lower, 1:length(r), central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
+                            arrows(1:nr, lower, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
                         if(alternative!="less")
-                            arrows(1:length(r), upper, 1:length(r), central_curve, code = 1, angle = 75, length = .1)
+                            arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1)
                         else
-                            arrows(1:length(r), upper, 1:length(r), central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
-                        axis(1, 1:length(r), label=paste(round(r, digits=2)))
-                        points(1:length(r), data_curve, pch='x')
+                            arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
+                        axis(1, 1:nr, label=paste(round(r, digits=2)))
+                        points(1:nr, data_curve, pch='x')
                         if(color_outside) {
                             outside <- data_curve < lower | data_curve > upper
-                            points((1:length(r))[outside], data_curve[outside], pch='x', col="red")
+                            points((1:nr)[outside], data_curve[outside], pch='x', col="red")
                         }
                     }
             )
         }
         else {
             with(x, {
-                        plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
-                                type="l", lty=1, lwd=2, ...)
+                        if(!retick_xaxis)
+                            plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+                                 type="l", lty=1, lwd=2, ...)
+                        else
+                            plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+                                 type="l", lty=1, lwd=2, xaxt="n", ...)
                         if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
                         if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
                         lines(r, central_curve, lty=3)
                         if(color_outside) {
                             outside <- data_curve < lower | data_curve > upper
                             points(r[outside], data_curve[outside], col="red")
+                        }
+                        if(retick_xaxis) {
+                            axis(1, loc_break_values, label=paste(round(r_break_values, digits=2)))
+                            abline(v = (1:nr)[r_values_newstart_id], lty=3)
                         }
                     }
             )
