@@ -319,10 +319,13 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
         loc_starts <- (1:nr)[c(1, r_values_newstart_id)]
         loc_ends <- (1:nr)[c(r_values_newstart_id - 1, nr)]
         loc_break_values <- NULL
-        for(i in 1:length(r_starts)) {
-            r_break_values <- c(r_break_values, seq(r_starts[i], r_ends[i], length=nticks))
-            loc_break_values <- c(loc_break_values, seq(loc_starts[i], loc_ends[i], length=nticks))
+        nslots <- length(r_starts) # number of combined tests/slots
+        for(i in 1:(nslots-1)) {
+            r_break_values <- c(r_break_values, seq(r_starts[i], r_ends[i], length=nticks)[1:(nticks-1)])
+            loc_break_values <- c(loc_break_values, seq(loc_starts[i], loc_ends[i], length=nticks)[1:(nticks-1)])
         }
+        r_break_values <- c(r_break_values, seq(r_starts[nslots], r_ends[nslots], length=nticks))
+        loc_break_values <- c(loc_break_values, seq(loc_starts[nslots], loc_ends[nslots], length=nticks))
     }
     else retick_xaxis <- FALSE
 
