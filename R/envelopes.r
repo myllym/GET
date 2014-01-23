@@ -763,7 +763,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'
 #'
 #' @references Mrkvička, T. (2009). On testing of general random closed set model hypothesis. Kybernetika 45, 293-308.
-#' @inheritParams rank_envelope
+#' @inheritParams st_envelope
 #' @param n_norm Number of simulations drawn from the multivariate normal distribution (dimension = number of distances r).
 #' @export
 #' @examples
