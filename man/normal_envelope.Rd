@@ -23,7 +23,8 @@
   \item{...}{Additional parameters passed to
   \code{\link{estimate_p_value}} to obtain a point estimate
   for the p-value. The default point estimate is the
-  mid-rank p-value.}
+  mid-rank p-value. The choice should not affect the
+  result, since no ties are expected to occur.}
 }
 \description{
   Approximative normal envelope test

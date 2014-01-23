@@ -3,7 +3,7 @@
 \title{The rank envelope test}
 \usage{
   rank_envelope(curve_set, alpha = 0.05, savedevs = FALSE,
-    alternative = "two.sided", lexo = FALSE, ...)
+    alternative = "two.sided", lexo = FALSE, ties)
 }
 \arguments{
   \item{curve_set}{A curve_set (see
@@ -26,10 +26,10 @@
   \item{lexo}{Logical, whether or not to use lexical
   ordering when ranking. See details.}
 
-  \item{...}{Additional parameters passed to
-  \code{\link{estimate_p_value}} to obtain a point estimate
-  for the p-value. The default point estimate is the
-  mid-rank p-value.}
+  \item{ties}{Ties method to be passed to
+  \code{\link{estimate_p_value}}. Used to obtain a point
+  estimate for the p-value. The default point estimate is
+  the mid-rank p-value.}
 }
 \value{
   An "envelope_test" object containing the following
@@ -37,8 +37,8 @@
   was made.  \item method = The name of the envelope test.
   \item alternative = The alternative specified in the
   function call.  \item p = A point estimate for the
-  p-value (default is the mid-rank p-value).  \item lexo =
-  As the argument \code{lexo}.  \item p_interval = The
+  p-value (default is the mid-rank p-value).  \item ties =
+  As the argument \code{ties}.  \item p_interval = The
   p-value interval [p_liberal, p_conservative].  \item
   k_alpha = The value of k corresponding to the
   100(1-alpha)\% simultaneous envelope.  \item k = Global
@@ -77,8 +77,10 @@
   object returned by the rank_envelope function. Also a
   single p-value is calculated and returned in component
   'p'. By default this p-value is the mid-rank p-value, but
-  another option can be used by passing additional
-  parameters to \code{\link{estimate_p_value}}.
+  another option can be used by specifying \code{ties}
+  argument which is passed to
+  \code{\link{estimate_p_value}}. For options see
+  \code{\link{estimate_p_value}}.
 
   The simultaneous 100(1-alpha)\% envelope is given by the
   'k_alpha'th lower and upper envelope. For details see
@@ -89,8 +91,8 @@
   test by Myllymaki et. al (2013). If \code{lexo == TRUE},
   then all the pointwise ranks are used to rank the curves,
   by so called lexical ordering. This may allow a lower
-  number of simulations to be used, but then the test is no
-  longer usable as a graphical test.
+  number of simulations to be used, but then the test may
+  no longer be usable as a graphical test.
 }
 \examples{
 ## Testing complete spatial randomness (CSR)
@@ -169,6 +171,7 @@ res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
   arXiv:1307.0239 [stat.ME]
 }
 \seealso{
-  \code{\link{random_labelling}}
+  \code{\link{random_labelling}},
+  \code{\link{plot.envelope_test}}
 }
 

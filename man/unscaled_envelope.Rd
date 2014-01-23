@@ -6,9 +6,6 @@
     savedevs = FALSE, ...)
 }
 \arguments{
-  \item{savedevs}{Logical. Should the deviation values u_i,
-  i=1,...,nsim+1 be returned? Default: FALSE.}
-
   \item{curve_set}{A curve_set (see
   \code{\link{create_curve_set}}) or an
   \code{\link[spatstat]{envelope}} object. If an envelope
@@ -19,10 +16,14 @@
   \item{alpha}{The significance level. Simultaneous
   100(1-alpha)\% envelopes will be calculated.}
 
+  \item{savedevs}{Logical. Should the deviation values u_i,
+  i=1,...,nsim+1 be returned? Default: FALSE.}
+
   \item{...}{Additional parameters passed to
   \code{\link{estimate_p_value}} to obtain a point estimate
   for the p-value. The default point estimate is the
-  mid-rank p-value.}
+  mid-rank p-value. The choice should not affect the
+  result, since no ties are expected to occur.}
 }
 \value{
   An "envelope_test" object containing the following
