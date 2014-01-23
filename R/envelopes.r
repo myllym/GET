@@ -260,6 +260,7 @@ print.envelope_test <- function(x, ...) {
 #'
 #' @param x an 'envelope_test' object
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
+#' @param base_size Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors. Only applicable if \code{use_ggplot2} is FALSE.
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
@@ -274,7 +275,7 @@ print.envelope_test <- function(x, ...) {
 #' @method plot envelope_test
 #' @export
 #' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
-plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...) {
+plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...) {
     if(missing('main')) {
         if(with(x, exists('p_interval')))
             if(x$alternative == "two.sided")
@@ -346,7 +347,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, dotplot=length(x$r)<10, col
                                 + scale_y_continuous(name = ylab, limits = ylim)
                                 + scale_linetype_manual(values = linetype.values, name = '')
                                 + scale_size_manual(values = size.values, name = '')
-                                + ThemePlain()
+                                + ThemePlain(base_size=base_size)
                           )
                     if(retick_xaxis) {
                         p <- p + scale_x_continuous(name = xlab,

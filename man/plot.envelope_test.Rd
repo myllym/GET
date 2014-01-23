@@ -12,6 +12,9 @@
   a coloured envelope ribbon is provided. Requires R
   library ggplot2.}
 
+  \item{base_size}{Base font size, to be passed to theme
+  style when \code{use_ggplot2 = TRUE}.}
+
   \item{dotplot}{Logical. If TRUE, then instead of
   envelopes a dot plot is done. Suitable for low
   dimensional test vectors. Only applicable if
