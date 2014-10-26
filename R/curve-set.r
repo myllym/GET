@@ -31,7 +31,6 @@ envelope_to_curve_set <- function(env) {
     if (!('r' %in% simulation_df_names)) {
         stop('The env attribute simfuns did not include r.')
     }
-    r <- simulation_df[['r']]
     if (!identical(r, simulation_df[['r']])) {
         stop('env[["r"]] must be equal to ',
              'attributes(env)[["simfuns"]][["r"]].')
