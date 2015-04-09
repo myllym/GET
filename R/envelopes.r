@@ -822,7 +822,8 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
 
-    res <- list(r=curve_set[['r']], method="Approximative normal envelope test", p=p,
+    res <- list(r=curve_set[['r']], method="Approximative normal envelope test", alternative = "two.sided",
+                p=p,
                 u_alpha = talpha,
                 central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
