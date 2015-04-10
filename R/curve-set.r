@@ -231,6 +231,7 @@ print.curve_set <- function(x, ...) {
 #' @usage \method{plot}{curve_set}(x, ...)
 #'
 #' @param x an 'curve_set' object
+#' @param ylim The y limits of the plot with the default being the minimum and maximum over all curves.
 #' @param ... Additional parameters to be passed to plot and lines.
 #'
 #' @method plot curve_set
