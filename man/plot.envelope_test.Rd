@@ -4,7 +4,7 @@
 \alias{plot.envelope_test}
 \title{Plot method for the class 'envelope_test'}
 \usage{
-\method{plot}{envelope_test}(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...)
+\method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...)
 }
 \arguments{
 \item{x}{an 'envelope_test' object}

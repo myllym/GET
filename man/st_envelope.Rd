@@ -68,7 +68,7 @@ res <- st_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 # requires library 'marksummary'
 mpp <- spruces
 # Use the test function T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
-curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
+curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 res <- st_envelope(curve_set)
 plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 }
