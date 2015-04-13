@@ -155,4 +155,3 @@ Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope 
 \seealso{
 \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
 }
-

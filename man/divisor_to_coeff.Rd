@@ -12,4 +12,3 @@ divisor_to_coeff(x)
 \description{
 Takes the inverse of the input and replaces non-finite values with 1.
 }
-

@@ -26,16 +26,3 @@ Suggests:
     testthat
 Description: Envelope and deviation tests for spatial point patterns
 License: GPL-3
-Collate:
-    'crop.r'
-    'curve-set.r'
-    'deviation.r'
-    'p-value.r'
-    'residual.r'
-    'scaling.r'
-    'spptest-package.r'
-    'summ-func.r'
-    'wrapper.r'
-    'envelopes.r'
-    'plot-helper.r'
-    'deviation_test.r'

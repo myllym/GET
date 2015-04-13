@@ -12,4 +12,3 @@ create_deviation_set(deviation_set)
 \description{
 Create a deviation set out of a list in the right form.
 }
-

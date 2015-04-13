@@ -82,4 +82,3 @@ plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 \references{
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
-

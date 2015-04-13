@@ -23,4 +23,3 @@ A deviation_set object. The list has two elements: obs and sim.
 \description{
 Deviation of curves.
 }
-

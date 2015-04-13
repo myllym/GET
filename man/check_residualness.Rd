@@ -15,4 +15,3 @@ savefuns = TRUE when calling envelope().}
 \description{
 Check that the curve_set object portrays residual curves.
 }
-

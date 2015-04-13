@@ -84,4 +84,3 @@ mpp <- spruces
 p <- random_labelling_test(mpp, mtf_name = 'm', nsim=999, r_min=0, r_max=9.5)
 p
 }
-

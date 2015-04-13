@@ -30,4 +30,3 @@ J. Møller and K. K. Berthelsen, “Transforming spatial point
   processes into Poisson processes using random superposition,” Advances
   in Applied Probability, vol. 44, no. 1, pp. 42–62, 2012.
 }
-

@@ -18,4 +18,3 @@ A scaled curve_set.
 \description{
 Scale with the standard deviation.
 }
-

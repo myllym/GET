@@ -16,4 +16,3 @@ A corresponding curve_set object.
 \description{
 Turn an \code{\link[spatstat]{envelope}} object into a curve_set object.
 }
-

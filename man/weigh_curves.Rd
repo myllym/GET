@@ -17,4 +17,3 @@ savefuns = TRUE when calling envelope().}
 \description{
 Multiply by a coefficient.
 }
-
