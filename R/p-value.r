@@ -73,6 +73,13 @@ estimate_p_value.default <- function(obs, sim_vec, ties = 'midrank') {
     p_estimate
 }
 
+#' The default ties method for the p-value
+#'
+#' The default ties method for the p-value calculated by estimate_p_value
+p_value_ties_default <- function() {
+    'midrank'
+}
+
 #' Estimate p-value.
 #'
 #' Check \code{\link{estimate_p_value.default}} for details.

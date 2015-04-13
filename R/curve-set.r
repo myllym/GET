@@ -31,7 +31,6 @@ envelope_to_curve_set <- function(env) {
     if (!('r' %in% simulation_df_names)) {
         stop('The env attribute simfuns did not include r.')
     }
-    r <- simulation_df[['r']]
     if (!identical(r, simulation_df[['r']])) {
         stop('env[["r"]] must be equal to ',
              'attributes(env)[["simfuns"]][["r"]].')
@@ -228,16 +227,18 @@ print.curve_set <- function(x, ...) {
 }
 
 #' Plot method for the class 'curve_set'
-#' @usage \method{plot}{curve_set}(x, ...)
+#' @usage \method{plot}{curve_set}(x, ylim, ...)
 #'
 #' @param x an 'curve_set' object
+#' @param ylim The y limits of the plot with the default being the minimum and maximum over all curves.
 #' @param ... Additional parameters to be passed to plot and lines.
 #'
 #' @method plot curve_set
 #' @export
-plot.curve_set <- function(x, ...) {
+plot.curve_set <- function(x, ylim, ...) {
+    if(missing('ylim')) ylim <- with(x, c(min(obs,sim_m), max(obs,sim_m)))
     with(x, {
-                plot(r, obs, type="l", ylim=c(min(obs,sim_m), max(obs,sim_m)), ...)
+                plot(r, obs, type="l", ylim=ylim, ...)
                 for(i in 1:ncol(sim_m)) lines(r, sim_m[,i], col=grey(0.7))
                 lines(r, obs, type="l", ...)
             })

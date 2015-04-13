@@ -18,12 +18,18 @@
 #' Based on k_i, i=1, ..., s+1, the p-interval is calculated. This interval is
 #' by default plotted for the object returned by the rank_envelope function.
 #' Also a single p-value is calculated and returned in component 'p'. By default
-#' this p-value is the mid-rank p-value, but another option can be used by passing
-#' additional parameters to \code{\link{estimate_p_value}}.
+#' this p-value is the mid-rank p-value, but another option can be used by specifying
+#' \code{ties} argument which is passed to \code{\link{estimate_p_value}}. For
+#' options see \code{\link{estimate_p_value}}.
 #'
 #' The simultaneous 100(1-alpha)\% envelope is given by the 'k_alpha'th lower and
 #' upper envelope. For details see Myllymäki et al. (2013).
 #'
+#' The above holds for p-value calculation if \code{lexo == FALSE} and then the test
+#' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
+#' then all the pointwise ranks are used to rank the curves, by so called lexical ordering.
+#' This may allow a lower number of simulations to be used, but then the test may no longer be
+#' usable as a graphical test.
 #'
 #' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
@@ -33,14 +39,19 @@
 #'  savefuns = TRUE when calling envelope().
 #' @param alpha The significance level. Simultaneous 100(1-alpha)\% envelopes will be calculated.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
-#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain
+#' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
+#'         "two.sided" (default), "less" or "greater".
+#' @param lexo Logical, whether or not to use lexical ordering when ranking. See details.
+#' @param ties Ties method to be passed to \code{\link{estimate_p_value}}. Used to obtain
 #' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
 #'
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r = Distances for which the test was made.
 #'   \item method = The name of the envelope test.
+#'   \item alternative = The alternative specified in the function call.
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
+#'   \item ties = As the argument \code{ties}.
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% simultaneous envelope.
 #'   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
@@ -54,7 +65,7 @@
 #'   \item call = The call of the function.
 #' }
 #' @export
-#' @seealso \code{\link{random_labelling}}
+#' @seealso \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
 #' @examples
 #'
 #' ## Testing complete spatial randomness (CSR)
@@ -62,7 +73,7 @@
 #' require(spatstat)
 #' pp <- unmark(spruces)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=4999, savefuns=TRUE, correction="translate")
+#' env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate")
 #' # The rank envelope test
 #' res <- rank_envelope(env)
 #' # Plot the result.
@@ -91,7 +102,7 @@
 #' # with translational edge correction (default).
 #' # The random_labelling function returns the centred functions \hat{L}_m(r)-T_0(r),
 #' # where T_0(r) = \hat{L}(r) is the unmarked L function.
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' # 2) Do the rank envelope test
 #' res <- rank_envelope(curve_set)
 #' # 3) Plot the test result
@@ -100,7 +111,7 @@
 #' # Make the test using instead the test function T(r) = \hat{L}_mm(r);
 #' # which is an estimator of the mark-weighted L function, L_mm(r),
 #' # with translational edge correction (default).
-#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=4999, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- rank_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 #'
@@ -118,7 +129,7 @@
 #'
 #' # Using direct algorihm can be faster, because the perfect simulation is used here.
 #' simulations <- NULL
-#' for(j in 1:4999) {
+#' for(j in 1:2499) {
 #'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]), R = fittedmodel$interaction$par$hc, W = pp$window);
 #'    if(j%%10==0) cat(j, "...", sep="")
 #' }
@@ -127,16 +138,23 @@
 #' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
 #'
-rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
-    # data_curve = the vector of L-function values for data
-    # sim_curves = matrix where each row contains L function values of a simulation under null hypothesis
-    # alpha = the chosen significance level of the test
-
+rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="two.sided", lexo=FALSE, ties) {
     curve_set <- convert_envelope(curve_set)
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+    if(alternative != "two.sided" & alternative != "less" & alternative != "greater")
+        stop(paste("Error: Possible values for \"alternative\" are \n",
+             "\"two.sided\" (default), \"less\" or \"greater\"\n."))
 
+    # The type of the p-value
+    if(missing(ties))
+        ties <- p_value_ties_default()
+    else if(lexo) cat("The argument ties ignored, because lexo = TRUE. \n")
+    if(lexo) ties <- "lexical"
+
+    # data_curve = the vector of test function values for data
+    # sim_curves = matrix where each row contains test function values of a simulation under null hypothesis
     data_curve <- curve_set[['obs']]
     sim_curves <- t(curve_set[['sim_m']])
 
@@ -146,19 +164,57 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     T_0 <- get_T_0(curve_set)
 
     data_and_sim_curves <- rbind(data_curve, sim_curves)
-    RR <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
-    Rmin <- apply(RR, MARGIN=1, FUN=min)
-    Rmax <- Nsim+2-apply(RR, MARGIN=1, FUN=max)
-    RmRm <- rbind(Rmin,Rmax)
+    loranks <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
+    hiranks <- Nsim+2-loranks
     # k:
-    distance <- apply(RmRm, MARGIN=2, FUN=min)
+    switch(alternative,
+           "two.sided" = {
+               allranks <- pmin(loranks, hiranks)
+           },
+           "less" = {
+               allranks <- loranks
+           },
+           "greater" = {
+               allranks <- hiranks
+           })
 
-    #-- calculate the p-value
+    distance <- apply(allranks, MARGIN=1, FUN=min)
     u <- -distance
-    p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ...)
-    # p-interval
+    #-- p-interval
     p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
     p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
+
+    #-- p-value
+    if(!lexo) {
+        p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties=ties)
+    }
+    else { # rank the curves by lexical ordering
+        # order ranks within each curve
+        sortranks <- apply(allranks, 1, sort) # curves now represented as columns
+        lexo_values <- do.call("order", split(sortranks, row(sortranks)))
+
+        # find ties
+        sorted <- sortranks[ ,lexo_values]
+        dupp <- duplicated(split(sorted, col(sorted)))
+        tied <- dupp | c(dupp[-1], FALSE)
+
+        # replace ranks of tied values by mean ranks
+        # (maybe a little bit awkward, but isntitcool)
+        tie.rle <- rle(tied)
+        tie.end <- cumsum(tie.rle$lengths)
+        tie.start <- cumsum(c(1,tie.rle$lengths))
+        tie.start <- tie.start[-length(tie.start)]
+        rank.rle <- tie.rle
+        rank.rle$values <- (tie.start + tie.end)/2
+        tieranks <- inverse.rle(rank.rle)
+        newranks <- 1:(Nsim+1)
+        newranks[tied] <- tieranks[tied]
+
+        distance_lexo <- newranks[order(lexo_values)]
+        #-- calculate the p-value
+        u_lexo <- -distance_lexo
+        p <- estimate_p_value(obs=u_lexo[1], sim_vec=u_lexo[-1])
+    }
 
     #-- calculate the simultaneous 100(1-alpha)% envelope
     distancesorted <- sort(distance, decreasing=TRUE)
@@ -172,8 +228,8 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
         UB[i]<- Hod[Nsim+1-kalpha+1];
     }
 
-    res <- list(r=curve_set[['r']], method="Rank envelope test",
-                p=p, p_interval=c(p_low,p_upp),
+    res <- list(r=curve_set[['r']], method="Rank envelope test", alternative = alternative,
+                p=p, p_interval=c(p_low,p_upp), ties=ties,
                 k_alpha=kalpha,
                 central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
@@ -192,16 +248,24 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @export
 print.envelope_test <- function(x, ...) {
     with(x, cat(method, "\n",
-                "p-value of the test:", p, "\n"))
+                " p-value of the test: ", p, sep=""))
+    with(x, if(exists('ties')) cat(" (ties method: ", ties, ")\n", sep="")
+            else cat("\n"))
     with(x, if(exists('p_interval'))
             cat(" p-interval         : (", p_interval[1], ", ", p_interval[2],")\n", sep=""))
 }
 
 #' Plot method for the class 'envelope_test'
-#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...)
+#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...)
 #'
 #' @param x an 'envelope_test' object
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
+#' @param base_size Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.
+#' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
+#' Suitable for low dimensional test vectors. Only applicable if \code{use_ggplot2} is FALSE.
+#' Default: TRUE if the dimension is less than 10, FALSE otherwise.
+#' @param color_outside Logical. Whether to color the places where the data function goes outside the envelope.
+#' Currently red color is used and coloring is only used if \code{use_ggplot2} is FALSE.
 #' @param main See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylim See \code{\link{plot.default}}. A sensible default exists.
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
@@ -211,25 +275,65 @@ print.envelope_test <- function(x, ...) {
 #' @method plot envelope_test
 #' @export
 #' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
-plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...) {
+plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...) {
     if(missing('main')) {
         if(with(x, exists('p_interval')))
-            main <- paste(x$method, ": p-interval = (",
-                    round(x$p_interval[1],3),", ", round(x$p_interval[2],3), ")", sep="")
-        else
-            main <- paste(x$method, ": p = ", round(x$p,3), sep="")
+            if(x$alternative == "two.sided")
+                main <- with(x, paste(method, ": p-interval = (",
+                              round(p_interval[1],3),", ", round(p_interval[2],3), ")", sep=""))
+            else
+                main <- with(x, paste(method, ": p-interval = (",
+                              round(p_interval[1],3),", ", round(p_interval[2],3), ") \n",
+                              "Alternative = \"", alternative, "\"\n", sep=""))
+        else {
+            if(x$alternative == "two.sided")
+                main <- with(x, paste(method, ": p = ", round(p,3), sep=""))
+            else
+                main <- with(x, paste(method, ": p = ", round(p,3), "\n",
+                             "Alternative = \"", alternative, "\"\n", sep=""))
+        }
     }
     if(missing('ylim')) {
-        if(!use_ggplot2)
-            ylim <- c(min(x$data_curve,x$lower,x$upper,x$central_curve),
-                      max(x$data_curve,x$lower,x$upper,x$central_curve))
+        if(!use_ggplot2 || x$alternative != "two.sided")
+            ylim <- with(x, c(min(data_curve,lower,upper,central_curve),
+                              max(data_curve,lower,upper,central_curve)))
         else ylim <- NULL
     }
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-    if(use_ggplot2) {
-        require(ggplot2)
+    # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
+    nr <- length(x[['r']])
+    if( length(unique(x[['r']])) < nr ) {
+        retick_xaxis <- TRUE
+        r_values <- x[['r']]
+        x[['r']] <- 1:nr
+        r_values_newstart_id <- which(!(r_values[1:(nr-1)] < r_values[2:nr])) + 1
+        # number of ticks per a sub test
+        nticks <- 5
+        # r-values for labeling ticks
+        r_starts <- r_values[c(1, r_values_newstart_id)]
+        r_ends <- r_values[c(r_values_newstart_id - 1, nr)]
+        r_break_values <- NULL
+        # indeces for ticks in the running numbering from 1 to nr
+        loc_starts <- (1:nr)[c(1, r_values_newstart_id)]
+        loc_ends <- (1:nr)[c(r_values_newstart_id - 1, nr)]
+        loc_break_values <- NULL
+        nslots <- length(r_starts) # number of combined tests/slots
+        for(i in 1:(nslots-1)) {
+            r_break_values <- c(r_break_values, seq(r_starts[i], r_ends[i], length=nticks)[1:(nticks-1)])
+            loc_break_values <- c(loc_break_values, seq(loc_starts[i], loc_ends[i], length=nticks)[1:(nticks-1)])
+        }
+        r_break_values <- c(r_break_values, seq(r_starts[nslots], r_ends[nslots], length=nticks))
+        loc_break_values <- c(loc_break_values, seq(loc_starts[nslots], loc_ends[nslots], length=nticks))
+    }
+    else retick_xaxis <- FALSE
+
+    if(use_ggplot2 & x$alternative == "two.sided") {
+        got_req <- require(ggplot2)
+        if (!got_req) {
+            stop('ggplot2 must be installed to use ggplot plots.')
+        }
         linetype.values <- c('solid', 'dashed')
         size.values <- c(0.2, 0.2)
         with(x, {
@@ -245,27 +349,68 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
                                         fill = 'grey59', alpha = 1)
                                 + geom_line(data = df, aes(x = r, y = curves, group = type,
                                                 linetype = type, size = type))
-                                + facet_grid('~ main', scales='free')
-                                + scale_x_continuous(name=xlab)
-                                + scale_y_continuous(name=ylab, limits=ylim)
-                                + scale_linetype_manual(values=linetype.values, name='')
-                                + scale_size_manual(values=size.values, name='')
-                                + ThemePlain()
-                                )
+                                + facet_grid('~ main', scales = 'free')
+                                + scale_y_continuous(name = ylab, limits = ylim)
+                                + scale_linetype_manual(values = linetype.values, name = '')
+                                + scale_size_manual(values = size.values, name = '')
+                                + ThemePlain(base_size=base_size)
+                          )
+                    if(retick_xaxis) {
+                        p <- p + scale_x_continuous(name = xlab,
+                                                    breaks = loc_break_values,
+                                                    labels = paste(round(r_break_values, digits=2)))
+                        p <- p + geom_vline(xintercept = (1:nr)[r_values_newstart_id], linetype = "dotted")
+                    }
+                    else p <- p + scale_x_continuous(name = xlab)
                     print(p)
                     return(invisible(p))
                 }
             )
     }
     else {
-        with(x, {
-                    plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
-                            type="l", lty=1, lwd=2, ...)
-                    lines(r, lower, lty=2)
-                    lines(r, upper, lty=2)
-                    lines(r, central_curve, lty=3)
-                }
-        )
+        if(use_ggplot2) cat("The use_ggplot2 option is valid only for the alternative \'two.sided\'. use_ggplot2 ignored.\n")
+        if(dotplot) {
+            with(x, {
+                        plot(1:nr, central_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
+                        if(alternative!="greater")
+                            arrows(1:nr, lower, 1:nr, central_curve, code = 1, angle = 75, length = .1)
+                        else
+                            arrows(1:nr, lower, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
+                        if(alternative!="less")
+                            arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1)
+                        else
+                            arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
+                        axis(1, 1:nr, label=paste(round(r, digits=2)))
+                        points(1:nr, data_curve, pch='x')
+                        if(color_outside) {
+                            outside <- data_curve < lower | data_curve > upper
+                            points((1:nr)[outside], data_curve[outside], pch='x', col="red")
+                        }
+                    }
+            )
+        }
+        else {
+            with(x, {
+                        if(!retick_xaxis)
+                            plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+                                 type="l", lty=1, lwd=2, ...)
+                        else
+                            plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+                                 type="l", lty=1, lwd=2, xaxt="n", ...)
+                        if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
+                        if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
+                        lines(r, central_curve, lty=3)
+                        if(color_outside) {
+                            outside <- data_curve < lower | data_curve > upper
+                            points(r[outside], data_curve[outside], col="red")
+                        }
+                        if(retick_xaxis) {
+                            axis(1, loc_break_values, label=paste(round(r_break_values, digits=2)))
+                            abline(v = (1:nr)[r_values_newstart_id], lty=3)
+                        }
+                    }
+            )
+        }
     }
 }
 
@@ -282,6 +427,9 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #'
 #' @inheritParams rank_envelope
 #' @param savedevs Logical. Should the deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
+#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate
+#' for the p-value. The default point estimate is the mid-rank p-value. The choice should not affect the
+#' result, since no ties are expected to occur.
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r = Distances for which the test was made.
@@ -325,7 +473,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, main, ylim, xlab, ylab, ...
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- st_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
@@ -365,7 +513,8 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
 
-    res <- list(r=curve_set[['r']], method="Studentised envelope test", p=p,
+    res <- list(r=curve_set[['r']], method="Studentised envelope test", alternative = "two.sided",
+                p=p,
                 u_alpha=talpha,
                 central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
@@ -432,7 +581,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
@@ -477,7 +626,8 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     LB <- T_0 - talpha*abs(quant_m[1,]);
     UB <- T_0 + talpha*abs(quant_m[2,]);
 
-    res <- list(r=curve_set[['r']], method="Directional quantile envelope test", p=p,
+    res <- list(r=curve_set[['r']], method="Directional quantile envelope test", alternative = "two.sided",
+                p=p,
                 u_alpha=talpha,
                 central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())
@@ -501,8 +651,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' @references
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'
-#' @inheritParams rank_envelope
-#' @param savedevs Logical. Should the deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
+#' @inheritParams st_envelope
 #' @return An "envelope_test" object containing the following fields:
 #' \itemize{
 #'   \item r = Distances for which the test was made.
@@ -546,7 +695,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- unscaled_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
@@ -582,7 +731,8 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     LB <- T_0 - talpha;
     UB <- T_0 + talpha;
 
-    res <- list(r=curve_set[['r']], method="Unscaled envelope test", p=p,
+    res <- list(r=curve_set[['r']], method="Unscaled envelope test", alternative = "two.sided",
+            p=p,
             u_alpha=talpha,
             central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
             call=match.call())
@@ -620,7 +770,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'
 #'
 #' @references Mrkvička, T. (2009). On testing of general random closed set model hypothesis. Kybernetika 45, 293-308.
-#' @inheritParams rank_envelope
+#' @inheritParams st_envelope
 #' @param n_norm Number of simulations drawn from the multivariate normal distribution (dimension = number of distances r).
 #' @export
 #' @examples
@@ -675,7 +825,8 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
 
-    res <- list(r=curve_set[['r']], method="Approximative normal envelope test", p=p,
+    res <- list(r=curve_set[['r']], method="Approximative normal envelope test", alternative = "two.sided",
+                p=p,
                 u_alpha = talpha,
                 central_curve=EX, data_curve=data_curve, lower=LB, upper=UB,
                 call=match.call())

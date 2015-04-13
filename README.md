@@ -38,4 +38,14 @@ same features as the `master` branch. The only difference is that the `master`
 branch includes references to functional depth measures provided by the R 
 library fastdepth which is not yet publicly available.
 
+## References
+
+Myllymäki, M., Mrkvička, T., Seijo, H., and Grabarnik, P. (2013).
+Global envelope tests for spatial processes. arXiv:1307.0239 [stat.ME].
+http://arxiv.org/abs/1307.0239
+
+Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2013).
+Deviation test construction and power comparison for marked spatial point
+patterns. arXiv:1306.1028 [stat.ME].
+http://arxiv.org/abs/1306.1028
 

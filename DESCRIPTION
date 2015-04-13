@@ -1,5 +1,5 @@
 Package: spptest
-Version: 0.2
+Version: 0.3
 Date: 2013-10-24
 Title: Spatial point process testing
 Encoding: UTF-8
@@ -25,16 +25,3 @@ Suggests:
     testthat
 Description: Envelope and deviation tests for spatial point patterns
 License: GPL-3
-Collate:
-    'crop.r'
-    'curve-set.r'
-    'deviation.r'
-    'p-value.r'
-    'residual.r'
-    'scaling.r'
-    'spptest-package.r'
-    'summ-func.r'
-    'wrapper.r'
-    'envelopes.r'
-    'plot-helper.r'
-    'deviation_test.r'
