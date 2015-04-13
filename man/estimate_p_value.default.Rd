@@ -33,3 +33,4 @@ tied values.
 \references{
 Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
 }
+

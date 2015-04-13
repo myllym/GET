@@ -17,3 +17,4 @@ Estimate p-value.
 \seealso{
 \code{\link{estimate_p_value.default}}
 }
+

@@ -45,3 +45,4 @@ A list with either two or three components. 'obs' has the summary
 \description{
 Estimate L_f.
 }
+

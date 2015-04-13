@@ -14,3 +14,4 @@ ThemePlain(base_size = 15, base_family = "")
 \description{
 A plain ggplot2 theme.
 }
+

@@ -36,3 +36,4 @@ Plot method for the class 'envelope_test'
 \seealso{
 \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
 }
+

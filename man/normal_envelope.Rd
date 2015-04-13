@@ -56,3 +56,4 @@ plot(res)
 \references{
 Mrkvička, T. (2009). On testing of general random closed set model hypothesis. Kybernetika 45, 293-308.
 }
+

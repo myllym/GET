@@ -62,3 +62,4 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test c
 \seealso{
 \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}, \code{\link{deviation_test}}.
 }
+

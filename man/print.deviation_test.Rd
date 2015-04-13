@@ -15,4 +15,3 @@
 Print method for the class 'deviation_test'
 }
 
-

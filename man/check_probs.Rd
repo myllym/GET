@@ -12,3 +12,4 @@ check_probs(probs)
 \description{
 Check for an increasing two-element vector of probabilities.
 }
+

@@ -71,8 +71,8 @@ Envelope tests:
   \item \code{\link{normal_envelope}}, a parametric envelope test, which uses a normal approximation of T(r)
 }
 Note that the recommended minimum number of simulations for the rank
-envelope test is nsim=4999, while, for the studentised and directional
-quantile envelope tests, it is nsim=999. (For the normal test, see its documentation.)
+envelope test is nsim=2499, while, for the studentised and directional
+quantile envelope tests, it is nsim=99. (For the normal test, see its documentation.)
 
 Deviation tests (no graphical interpretation):
 \itemize{
@@ -90,3 +90,4 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test c
 
 Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 }
+

@@ -53,3 +53,4 @@ A list with either two or three components. 'obs' has the summary
 \description{
 Generate L_f curves for a random labelling test.
 }
+
