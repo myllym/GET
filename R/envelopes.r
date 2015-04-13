@@ -330,7 +330,10 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     else retick_xaxis <- FALSE
 
     if(use_ggplot2 & x$alternative == "two.sided") {
-        require(ggplot2)
+        got_req <- require(ggplot2)
+        if (!got_req) {
+            stop('ggplot2 must be installed to use ggplot plots.')
+        }
         linetype.values <- c('solid', 'dashed')
         size.values <- c(0.2, 0.2)
         with(x, {
