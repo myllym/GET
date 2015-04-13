@@ -82,7 +82,7 @@
 #' #----------------------
 #' mpp <- spruces
 #' # T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=4999, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=999, r_min=1.5, r_max=9.5)
 #' res <- deviation_test(curve_set, measure='int2')
 #' res
 deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
