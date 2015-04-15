@@ -136,15 +136,19 @@ fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
 
 \dontrun{
 # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
-#env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+#env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
+                 correction="none", r=seq(0, 4, length=500))
 
 # Using direct algorihm can be faster, because the perfect simulation is used here.
 simulations <- NULL
 for(j in 1:2499) {
-   simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]), R = fittedmodel$interaction$par$hc, W = pp$window);
+   simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
+                                 R = fittedmodel$interaction$par$hc,
+                                 W = pp$window);
    if(j\%\%10==0) cat(j, "...", sep="")
 }
-env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations), savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
+                savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
 res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 }
