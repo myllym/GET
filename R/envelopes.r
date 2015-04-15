@@ -787,11 +787,6 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' system.time( res <- normal_envelope(curve_set, n_norm=200000) )
 #' plot(res)
 normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
-    got_req <- require(mvtnorm)
-    if (!got_req) {
-        stop('mvtnorm must be installed for normal_envelope.')
-    }
-
     curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
@@ -802,7 +797,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     varX <- var(sim_curves, na.rm = TRUE);
 
     #-- simulate from the normal distribution
-    simnorm <- rmvnorm(n=n_norm, mean = EX, sigma = varX, method=c('svd'));
+    simnorm <- mvtnorm::rmvnorm(n=n_norm, mean = EX, sigma = varX, method=c('svd'));
 
     sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
     distance <- array(0, n_norm);
