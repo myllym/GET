@@ -335,10 +335,6 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     else retick_xaxis <- FALSE
 
     if(use_ggplot2 & x$alternative == "two.sided") {
-        got_req <- require(ggplot2)
-        if (!got_req) {
-            stop('ggplot2 must be installed to use ggplot plots.')
-        }
         linetype.values <- c('solid', 'dashed')
         size.values <- c(0.2, 0.2)
         with(x, {
@@ -349,24 +345,24 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
                                      upper = rep(upper, times=2),
                                      main = factor(rep(main, times=length(r)))
                                      )
-                    p <- (ggplot()
-                                + geom_ribbon(data = df, aes(x = r, ymin = lower, ymax = upper),
+                    p <- (ggplot2::ggplot()
+                                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
                                         fill = 'grey59', alpha = 1)
-                                + geom_line(data = df, aes(x = r, y = curves, group = type,
+                                + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
                                                 linetype = type, size = type))
-                                + facet_grid('~ main', scales = 'free')
-                                + scale_y_continuous(name = ylab, limits = ylim)
-                                + scale_linetype_manual(values = linetype.values, name = '')
-                                + scale_size_manual(values = size.values, name = '')
+                                + ggplot2::facet_grid('~ main', scales = 'free')
+                                + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
+                                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+                                + ggplot2::scale_size_manual(values = size.values, name = '')
                                 + ThemePlain(base_size=base_size)
                           )
                     if(retick_xaxis) {
-                        p <- p + scale_x_continuous(name = xlab,
+                        p <- p + ggplot2::scale_x_continuous(name = xlab,
                                                     breaks = loc_break_values,
                                                     labels = paste(round(r_break_values, digits=2)))
-                        p <- p + geom_vline(xintercept = (1:nr)[r_values_newstart_id], linetype = "dotted")
+                        p <- p + ggplot2::geom_vline(xintercept = (1:nr)[r_values_newstart_id], linetype = "dotted")
                     }
-                    else p <- p + scale_x_continuous(name = xlab)
+                    else p <- p + ggplot2::scale_x_continuous(name = xlab)
                     print(p)
                     return(invisible(p))
                 }
