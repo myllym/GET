@@ -125,15 +125,19 @@
 #'
 #' \dontrun{
 #' # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
-#' #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+#' #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
+#'                  correction="none", r=seq(0, 4, length=500))
 #'
 #' # Using direct algorihm can be faster, because the perfect simulation is used here.
 #' simulations <- NULL
 #' for(j in 1:2499) {
-#'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]), R = fittedmodel$interaction$par$hc, W = pp$window);
+#'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
+#'                                  R = fittedmodel$interaction$par$hc,
+#'                                  W = pp$window);
 #'    if(j%%10==0) cat(j, "...", sep="")
 #' }
-#' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations), savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+#' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
+#'                 savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
 #' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
@@ -256,7 +260,8 @@ print.envelope_test <- function(x, ...) {
 }
 
 #' Plot method for the class 'envelope_test'
-#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...)
+#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10,
+#'                                      color_outside=TRUE, main, ylim, xlab, ylab, ...)
 #'
 #' @param x an 'envelope_test' object
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
@@ -776,7 +781,8 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @examples
 #' require(spatstat)
 #' pp <- spruces
-#' env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE, correction="translate", r=seq(0,8,length=50))
+#' env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE,
+#'                 correction="translate", r=seq(0,8,length=50))
 #' curve_set <- residual(env, use_theo = TRUE)
 #' system.time( res <- normal_envelope(curve_set, n_norm=200000) )
 #' plot(res)
