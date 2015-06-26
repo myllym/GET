@@ -19,5 +19,6 @@
 #'
 #' @keywords datasets
 #' @keywords spatial
+#' @name saplings
 #' @docType data
 #'

@@ -19,5 +19,6 @@
 #'
 #' @keywords datasets
 #' @keywords spatial
+#' @name adult_trees
 #' @docType data
 #'
