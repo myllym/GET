@@ -90,7 +90,7 @@
 #' plot(res, use_ggplot2=TRUE)
 #'
 #' ## Advanced use:
-#' # Create a curve set, choosing the interval of distances [r_min, r_max]
+#' # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
@@ -121,8 +121,8 @@
 #' res <- rank_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 #'
-#' ## Goodness-of-fit test
-#' #----------------------
+#' ## Goodness-of-fit test (typically conservative)
+#' #-----------------------------------------------
 #' pp <- unmark(spruces)
 #' # Minimum distance between points in the pattern
 #' min(nndist(pp))
