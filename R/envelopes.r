@@ -8,14 +8,15 @@
 #' the simultaneous 100(1-alpha)\% envelope for the chosen test function T(r) on
 #' the chosen interval of distances.
 #'
-#' Given a curve_set object, the test is carried out as follows.
+#' Given a \code{curve_set} (or an \code{\link[spatstat]{envelope}}) object,
+#' the test is carried out as follows.
 #'
 #' For each curve in the curve_set, both the data curve and the simulations,
-#' the global rank measure k is determined. If savedevs = TRUE, then the
-#' global rank values k_1, k_2, ..., k_(s+1) are returned in the component 'k',
+#' the global rank measure R is determined. If savedevs = TRUE, then the
+#' global rank values R_1, R_2, ..., R_(s+1) are returned in the component 'k',
 #' where k[1] is the value for the data.
 #'
-#' Based on k_i, i=1, ..., s+1, the p-interval is calculated. This interval is
+#' Based on R_i, i=1, ..., s+1, the p-interval is calculated. This interval is
 #' by default plotted for the object returned by the rank_envelope function.
 #' Also a single p-value is calculated and returned in component 'p'. By default
 #' this p-value is the mid-rank p-value, but another option can be used by specifying
@@ -27,9 +28,8 @@
 #'
 #' The above holds for p-value calculation if \code{lexo == FALSE} and then the test
 #' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
-#' then all the pointwise ranks are used to rank the curves, by so called lexical ordering.
-#' This may allow a lower number of simulations to be used, but then the test may no longer be
-#' usable as a graphical test.
+#' then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2015)
+#' and the single p-value in \code{p} is the p-value based on the rank count ordering.
 #'
 #' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 #'
