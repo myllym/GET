@@ -365,7 +365,8 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
                     if(retick_xaxis) {
                         p <- p + ggplot2::scale_x_continuous(name = xlab,
                                                     breaks = loc_break_values,
-                                                    labels = paste(round(r_break_values, digits=2)))
+                                                    labels = paste(round(r_break_values, digits=2),
+                                                    limits = c(1, nr)))
                         p <- p + ggplot2::geom_vline(xintercept = (1:nr)[r_values_newstart_id], linetype = "dotted")
                     }
                     else p <- p + ggplot2::scale_x_continuous(name = xlab)
