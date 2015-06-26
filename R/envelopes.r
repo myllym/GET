@@ -8,14 +8,15 @@
 #' the simultaneous 100(1-alpha)\% envelope for the chosen test function T(r) on
 #' the chosen interval of distances.
 #'
-#' Given a curve_set object, the test is carried out as follows.
+#' Given a \code{curve_set} (or an \code{\link[spatstat]{envelope}}) object,
+#' the test is carried out as follows.
 #'
 #' For each curve in the curve_set, both the data curve and the simulations,
-#' the global rank measure k is determined. If savedevs = TRUE, then the
-#' global rank values k_1, k_2, ..., k_(s+1) are returned in the component 'k',
+#' the global rank measure R is determined. If savedevs = TRUE, then the
+#' global rank values R_1, R_2, ..., R_(s+1) are returned in the component 'k',
 #' where k[1] is the value for the data.
 #'
-#' Based on k_i, i=1, ..., s+1, the p-interval is calculated. This interval is
+#' Based on R_i, i=1, ..., s+1, the p-interval is calculated. This interval is
 #' by default plotted for the object returned by the rank_envelope function.
 #' Also a single p-value is calculated and returned in component 'p'. By default
 #' this p-value is the mid-rank p-value, but another option can be used by specifying
@@ -27,11 +28,16 @@
 #'
 #' The above holds for p-value calculation if \code{lexo == FALSE} and then the test
 #' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
-#' then all the pointwise ranks are used to rank the curves, by so called lexical ordering.
-#' This may allow a lower number of simulations to be used, but then the test may no longer be
-#' usable as a graphical test.
+#' then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2015)
+#' and the single p-value in \code{p} is the p-value based on the rank count ordering.
 #'
-#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
+#' The rank count ordering test allows in principle a lower number of simulations to be used,
+#' but then the test may no longer be usable as a graphical test.
+#'
+#' @references
+#' Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
+#'
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v3 [stat.ME]
 #'
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
@@ -84,7 +90,7 @@
 #' plot(res, use_ggplot2=TRUE)
 #'
 #' ## Advanced use:
-#' # Create a curve set, choosing the interval of distances [r_min, r_max]
+#' # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
@@ -115,8 +121,8 @@
 #' res <- rank_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 #'
-#' ## Goodness-of-fit test
-#' #----------------------
+#' ## Goodness-of-fit test (typically conservative)
+#' #-----------------------------------------------
 #' pp <- unmark(spruces)
 #' # Minimum distance between points in the pattern
 #' min(nndist(pp))
@@ -125,15 +131,19 @@
 #'
 #' \dontrun{
 #' # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
-#' #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+#' #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
+#'                  correction="none", r=seq(0, 4, length=500))
 #'
 #' # Using direct algorihm can be faster, because the perfect simulation is used here.
 #' simulations <- NULL
 #' for(j in 1:2499) {
-#'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]), R = fittedmodel$interaction$par$hc, W = pp$window);
+#'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
+#'                                  R = fittedmodel$interaction$par$hc,
+#'                                  W = pp$window);
 #'    if(j%%10==0) cat(j, "...", sep="")
 #' }
-#' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations), savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+#' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
+#'                 savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
 #' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
@@ -256,7 +266,8 @@ print.envelope_test <- function(x, ...) {
 }
 
 #' Plot method for the class 'envelope_test'
-#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...)
+#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10,
+#'                                      color_outside=TRUE, main, ylim, xlab, ylab, ...)
 #'
 #' @param x an 'envelope_test' object
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
@@ -330,10 +341,6 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     else retick_xaxis <- FALSE
 
     if(use_ggplot2 & x$alternative == "two.sided") {
-        got_req <- require(ggplot2)
-        if (!got_req) {
-            stop('ggplot2 must be installed to use ggplot plots.')
-        }
         linetype.values <- c('solid', 'dashed')
         size.values <- c(0.2, 0.2)
         with(x, {
@@ -344,24 +351,25 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
                                      upper = rep(upper, times=2),
                                      main = factor(rep(main, times=length(r)))
                                      )
-                    p <- (ggplot()
-                                + geom_ribbon(data = df, aes(x = r, ymin = lower, ymax = upper),
+                    p <- (ggplot2::ggplot()
+                                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
                                         fill = 'grey59', alpha = 1)
-                                + geom_line(data = df, aes(x = r, y = curves, group = type,
+                                + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
                                                 linetype = type, size = type))
-                                + facet_grid('~ main', scales = 'free')
-                                + scale_y_continuous(name = ylab, limits = ylim)
-                                + scale_linetype_manual(values = linetype.values, name = '')
-                                + scale_size_manual(values = size.values, name = '')
+                                + ggplot2::facet_grid('~ main', scales = 'free')
+                                + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
+                                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+                                + ggplot2::scale_size_manual(values = size.values, name = '')
                                 + ThemePlain(base_size=base_size)
                           )
                     if(retick_xaxis) {
-                        p <- p + scale_x_continuous(name = xlab,
+                        p <- p + ggplot2::scale_x_continuous(name = xlab,
                                                     breaks = loc_break_values,
-                                                    labels = paste(round(r_break_values, digits=2)))
-                        p <- p + geom_vline(xintercept = (1:nr)[r_values_newstart_id], linetype = "dotted")
+                                                    labels = paste(round(r_break_values, digits=2),
+                                                    limits = c(1, nr)))
+                        p <- p + ggplot2::geom_vline(xintercept = (1:nr)[r_values_newstart_id], linetype = "dotted")
                     }
-                    else p <- p + scale_x_continuous(name = xlab)
+                    else p <- p + ggplot2::scale_x_continuous(name = xlab)
                     print(p)
                     return(invisible(p))
                 }
@@ -776,16 +784,12 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @examples
 #' require(spatstat)
 #' pp <- spruces
-#' env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE, correction="translate", r=seq(0,8,length=50))
+#' env <- envelope(pp, fun="Lest", nsim=99, savefuns=TRUE,
+#'                 correction="translate", r=seq(0,8,length=50))
 #' curve_set <- residual(env, use_theo = TRUE)
 #' system.time( res <- normal_envelope(curve_set, n_norm=200000) )
 #' plot(res)
 normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
-    got_req <- require(mvtnorm)
-    if (!got_req) {
-        stop('mvtnorm must be installed for normal_envelope.')
-    }
-
     curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
@@ -796,7 +800,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     varX <- var(sim_curves, na.rm = TRUE);
 
     #-- simulate from the normal distribution
-    simnorm <- rmvnorm(n=n_norm, mean = EX, sigma = varX, method=c('svd'));
+    simnorm <- mvtnorm::rmvnorm(n=n_norm, mean = EX, sigma = varX, method=c('svd'));
 
     sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
     distance <- array(0, n_norm);

@@ -1,61 +1,113 @@
 #' Spatial point process testing
 #'
-#' This spptest library provides envelope and deviation tests for spatial point processes.
-#' The main motivation for this package are the scalings for deviation tests and global
-#' envelope tests.
+#' The spptest library provides global envelope and deviation tests. Both type of tests are
+#' Monte Carlo tests, which demand simulations from the tested null model. Examples are
+#' mainly for spatial point processes, but the methods are applicable for any functional (or
+#' multivariate vector) data. (In the case of point processes, the functions are typically
+#' estimators of summary functions.) The main motivation for this package are the scalings
+#' for deviation tests and global envelope tests.
 #'
 #'
-#' A test is performed by three steps as follows. Examples are provided in the test functions.
+#' The package supports the use of the R library \code{\link[spatstat]{spatstat}} for generating
+#' simulations and calculating estimators of the chosen summary function, but alternatively these
+#' can be done by any other methods, thus allowing for any models/functions.
 #'
-#' 1) First, make nsim simulations from the null model and estimate your chosen
-#' test function T(r) for your data (T_1(r)) and for each simulation (T_2(r),
-#' ..., T_{nsim+1}(r)).
+#' In the following, the use of the library is demonstrated by its main function \code{\link{rank_envelope}},
+#' but alternatively this step can be replaced by a call of another function for envelope or
+#' deviation test (the options are \code{\link{st_envelope}}, \code{\link{qdir_envelope}},
+#' \code{\link{normal_envelope}}, \code{\link{deviation_test}}).
 #'
-#' For testing simple hypothesis, this can be done as follows
+#'
+#' 1) The workflow utilizing spatstat:
+#'
+#' E.g. Say we have a point pattern, for which we would like to test a hypothesis, as a \code{\link[spatstat]{ppp}} object.
+#'
+#' \code{X <- spruces # an example pattern from spatstat}
+#'
 #' \itemize{
-#'    \item Complete spatial randomness (CSR):
+#'    \item Test complete spatial randomness (CSR):
 #'          \itemize{
 #'            \item Use \code{\link[spatstat]{envelope}}.
-#'                  Important: use the option 'savefuns=TRUE'.
-#'                  See the help documentation in \code{\link[spatstat]{spatstat}} for possible test functions.
+#'                  Important: use the option 'savefuns=TRUE' and
+#'                  specify the number of simulations \code{nsim}.
+#'                  See the help documentation in \code{\link[spatstat]{spatstat}}
+#'                  for possible test functions (if \code{fun} not given, \code{Kest} is used,
+#'                  i.e. an estimator of the K function).
+#'
+#'                  Making 2499 simulations of CSR (note the number of points is not fixed here)
+#'                  and estimating K-function for each of them and data:
+#'
+#'                  \code{
+#'                    env <- envelope(X, nsim=2499, savefuns=TRUE)
+#'                  }
+#'            \item Perform the test
+#'
+#'                  \code{
+#'                    res <- rank_envelope(env)
+#'                  }
+#'            \item Plot the result
+#'
+#'                  \code{
+#'                    plot(res)
+#'                  }
+#'          }
+#'    \item A goodness-of-fit of a parametric model
+#'          \itemize{
+#'            \item Fit the model to your data by means of the function
+#'                  \code{\link[spatstat]{ppm}} or \code{\link[spatstat]{kppm}}.
+#'                  See the help documentation for possible models.
+#'            \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
+#'                  from the fitted model and to calculate the functions you want.
+#'            \item Perform the test (This test is in general conservative!)
+#'
+#'                  \code{
+#'                    res <- rank_envelope(env) # 'env' is the object returned by 'envelope'
+#'                  }
+#'            \item Plot the result
+#'
+#'                  \code{
+#'                    plot(res)
+#'                  }
 #'          }
 #'
-#'    \item Random labeling: use \code{\link{random_labelling}} (requires R library marksummary).
 #' }
 #'
-#' For testing the goodness-of-fit of parametric models,
-#' (i) you can utilize \code{\link[spatstat]{spatstat}},
+#' 2) The random labeling test
+#'\itemize{
+#' \item Generate simulations (permuting marks) and estimate the chosen marked K_f-function for each pattern
+#'       using the function \code{\link{random_labelling}} (requires R library \code{marksummary} available from
+#'       \code{https://github.com/myllym/}).
+#'
+#'       \code{
+#'       curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#'       }
+#' \item Then do the test and plot the result
+#'
+#'       \code{
+#'       res <- rank_envelope(curve_set); plot(res)
+#'       }
+#'}
+#'
+#'
+#' 3) The workflow when using your own programs for simulations:
+#'
 #' \itemize{
-#'    \item Fit the model to your data by means of the function
-#'          \code{\link[spatstat]{ppm}} or \code{\link[spatstat]{kppm}}.
-#'          See the help documentation for possible models.
-#'    \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
-#'          from the fitted model and to calculate T_1(r), T_2(r), ..., T_{nsim+1}(r).
-#'          Important: use the option 'savefuns=TRUE'.
-#'          See the help documentation in \code{\link[spatstat]{spatstat}} for possible test functions.
+#' \item (Fit the model and) Create nsim simulations from the (fitted) null model.
+#' \item Calculate the functions T_1(r), T_2(r), ..., T_{nsim+1}(r).
+#' \item Use \code{\link{create_curve_set}} to create a curve_set object
+#'       from the functions T_i(r), i=1,...,s+1.
+#' \item Perform the test and plot the result
+#'
+#'       \code{res <- rank_envelope(curve_set) # curve_set is the 'curve_set'-object you created}
+#'
+#'       \code{plot(res)}
 #' }
-#' or (ii) use your own programs
-#' \itemize{
-#'    \item Fit the model and create nsim simulations from the fitted model.
-#'    \item Calculate T_1(r), T_2(r), ..., T_{nsim+1}(r).
-#'    \item Use \code{\link{create_curve_set}} to create a curve_set object
-#'          from the estimated functions T_i(r), i=1,...,s+1.
-#' }
-#' See \code{\link{rank_envelope}} for examples.
 #'
-#' 2) Optional: modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for the test.
 #'
-#' (i) Choose the interval of distances [r_min, r_max] by \code{\link{crop_curves}}.
-#'
-#' (ii) For better visualisation, take T(r)-T_0(r) by \code{\link{residual}}.
-#' T_0(r) is the expectation of T(r) under the null hypothesis.
-#'
-#' The function \code{\link{envelope_to_curve_set}} can be used to create a curve_set object
-#' from the object returned by \code{\link[spatstat]{envelope}}. The "envelope" object can also
-#' directly be given to the functions \code{\link{crop_curves}} and \code{\link{residual}}.
-#'
-#' 3) Perform the test. The alternatives provided in this library are
-#' the following:
+#' Thus, to perform a test you always first need to obtain the test function T(r)
+#' for your data (T_1(r)) and for each simulation (T_2(r), ..., T_{nsim+1}(r)) in one way or another.
+#' Given the set of the functions T_i(r), i=1,...,nsim+1, you can perform a test
+#' by one of the following functions provided in this library:
 #'
 #' Envelope tests:
 #' \itemize{
@@ -64,14 +116,30 @@
 #'   \item \code{\link{qdir_envelope}}, the directional quantile envelope test, protected against unequal variance and asymmetry of T(r) for different distances r
 #'   \item \code{\link{normal_envelope}}, a parametric envelope test, which uses a normal approximation of T(r)
 #' }
-#' Note that the recommended minimum number of simulations for the rank
-#' envelope test is nsim=2499, while, for the studentised and directional
-#' quantile envelope tests, it is nsim=99. (For the normal test, see its documentation.)
-#'
 #' Deviation tests (no graphical interpretation):
 #' \itemize{
 #'   \item \code{\link{deviation_test}}
 #' }
+#' Note that the recommended minimum number of simulations for the rank
+#' envelope test is nsim=2499, while, for the studentised and directional
+#' quantile envelope tests and deviation tests, it is nsim=99 (or 999).
+#' (For the normal test, see its documentation.)
+#'
+#' See, in particular, \code{\link{rank_envelope}} for further examples.
+#'
+#'
+#' Further options / functions:
+#' It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for the test.
+#'
+#' (i) You can choose the interval of distances [r_min, r_max] by \code{\link{crop_curves}}.
+#'
+#' (ii) For better visualisation, you can take T(r)-T_0(r) by \code{\link{residual}}.
+#' Here T_0(r) is the expectation of T(r) under the null hypothesis.
+#'
+#' The function \code{\link{envelope_to_curve_set}} can be used to create a curve_set object
+#' from the object returned by \code{\link[spatstat]{envelope}}. An \code{envelope} object can also
+#' directly be given to the functions \code{\link{crop_curves}} and \code{\link{residual}}.
+#'
 #'
 #' @author
 #' Mari Myllymäki (mari.myllymaki@@aalto.fi, mari.j.myllymaki@@gmail.com),
@@ -80,10 +148,11 @@
 #' Pavel Grabarnik (gpya@@rambler.ru)
 #'
 #' @references
-#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34.
 #'
-#' Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v3 [stat.ME]
 #'
+#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
 #' @name spptest
 #' @docType package
 #' @aliases spptest-package spptest

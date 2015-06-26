@@ -30,7 +30,7 @@ call_summ_func <- function(pattern, do_besags_L,
     } else {
         call_mtf_name <- mtf_name
     }
-    summ <- summ_func(pattern = pattern, edge_correction = edge_correction,
+    summ <- marksummary::summ_func(pattern = pattern, edge_correction = edge_correction,
                      mtf_name = call_mtf_name, r_max = r_max, r_vec = r_vec,
                      do_besags_L = do_besags_L,
                      use_biased_lambda2 = use_biased_lambda2)
@@ -128,7 +128,7 @@ call_random_labelling <- function(pattern, do_besags_L, mtf_name = 'm',
     } else {
         call_mtf_name <- mtf_name
     }
-    summ <- summ_func_random_labelling(pattern,
+    summ <- marksummary::summ_func_random_labelling(pattern,
                                        edge_correction = edge_correction,
                                        mtf_name = call_mtf_name,
                                        nsim = nsim, r_max = r_max,
