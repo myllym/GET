@@ -31,7 +31,13 @@
 #' then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2015)
 #' and the single p-value in \code{p} is the p-value based on the rank count ordering.
 #'
-#' @references Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
+#' The rank count ordering test allows in principle a lower number of simulations to be used,
+#' but then the test may no longer be usable as a graphical test.
+#'
+#' @references
+#' Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
+#'
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v3 [stat.ME]
 #'
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
