@@ -55,14 +55,15 @@ interval given by the most liberal and the most conservative p-value estimate an
 the simultaneous 100(1-alpha)\% envelope for the chosen test function T(r) on
 the chosen interval of distances.
 
-Given a curve_set object, the test is carried out as follows.
+Given a \code{curve_set} (or an \code{\link[spatstat]{envelope}}) object,
+the test is carried out as follows.
 
 For each curve in the curve_set, both the data curve and the simulations,
-the global rank measure k is determined. If savedevs = TRUE, then the
-global rank values k_1, k_2, ..., k_(s+1) are returned in the component 'k',
+the global rank measure R is determined. If savedevs = TRUE, then the
+global rank values R_1, R_2, ..., R_(s+1) are returned in the component 'k',
 where k[1] is the value for the data.
 
-Based on k_i, i=1, ..., s+1, the p-interval is calculated. This interval is
+Based on R_i, i=1, ..., s+1, the p-interval is calculated. This interval is
 by default plotted for the object returned by the rank_envelope function.
 Also a single p-value is calculated and returned in component 'p'. By default
 this p-value is the mid-rank p-value, but another option can be used by specifying
@@ -74,9 +75,11 @@ upper envelope. For details see Myllymäki et al. (2013).
 
 The above holds for p-value calculation if \code{lexo == FALSE} and then the test
 corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
-then all the pointwise ranks are used to rank the curves, by so called lexical ordering.
-This may allow a lower number of simulations to be used, but then the test may no longer be
-usable as a graphical test.
+then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2015)
+and the single p-value in \code{p} is the p-value based on the rank count ordering.
+
+The rank count ordering test allows in principle a lower number of simulations to be used,
+but then the test may no longer be usable as a graphical test.
 }
 \examples{
 ## Testing complete spatial randomness (CSR)
@@ -95,7 +98,7 @@ plot(res)
 plot(res, use_ggplot2=TRUE)
 
 ## Advanced use:
-# Create a curve set, choosing the interval of distances [r_min, r_max]
+# Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
 curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 # For better visualisation, take the L(r)-r function
 curve_set <- residual(curve_set, use_theo = TRUE)
@@ -126,8 +129,8 @@ curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=
 res <- rank_envelope(curve_set)
 plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 
-## Goodness-of-fit test
-#----------------------
+## Goodness-of-fit test (typically conservative)
+#-----------------------------------------------
 pp <- unmark(spruces)
 # Minimum distance between points in the pattern
 min(nndist(pp))
@@ -155,6 +158,8 @@ res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 }
 \references{
 Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
+
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v3 [stat.ME]
 }
 \seealso{
 \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}

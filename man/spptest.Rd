@@ -43,7 +43,7 @@ Making 2499 simulations of CSR (note the number of points is not fixed here)
                  and estimating K-function for each of them and data:
 
 \code{
-                   env <- envelope(X, nsim=2499, savefunc=TRUE)
+                   env <- envelope(X, nsim=2499, savefuns=TRUE)
                  }
            \item Perform the test
 
