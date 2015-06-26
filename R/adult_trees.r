@@ -21,4 +21,4 @@
 #' @keywords spatial
 #' @name adult_trees
 #' @docType data
-#'
+NULL

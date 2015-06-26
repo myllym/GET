@@ -21,4 +21,4 @@
 #' @keywords spatial
 #' @name saplings
 #' @docType data
-#'
+NULL
