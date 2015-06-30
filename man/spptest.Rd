@@ -20,8 +20,8 @@ can be done by any other methods, thus allowing for any models/functions.
 
 In the following, the use of the library is demonstrated by its main function \code{\link{rank_envelope}},
 but alternatively this step can be replaced by a call of another function for envelope or
-deviation test (the options are \code{\link{st_envelope}}, \code{\link{qdir_envelope}},
-\code{\link{normal_envelope}}, \code{\link{deviation_test}}).
+deviation test (the main options are \code{\link{st_envelope}}, \code{\link{qdir_envelope}},
+\code{\link{deviation_test}}).
 
 1) The workflow utilizing spatstat:
 
