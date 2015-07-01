@@ -143,10 +143,11 @@ from the object returned by \code{\link[spatstat]{envelope}}. An \code{envelope}
 directly be given to the functions \code{\link{crop_curves}} and \code{\link{residual}}.
 }
 \author{
-Mari Myllymäki (mari.myllymaki@aalto.fi, mari.j.myllymaki@gmail.com),
-Henri Seijo (henri.seijo@aalto.fi),
+Mari Myllymäki (mari.j.myllymaki@gmail.com, mari.myllymaki@luke.fi),
+Henri Seijo (henri.seijo@aalto.fi, henri.seijo@iki.fi),
 Tomáš Mrkvička (mrkvicka.toma@gmail.com),
-Pavel Grabarnik (gpya@rambler.ru)
+Pavel Grabarnik (gpya@rambler.ru),
+Ute Hahn (ute@math.au.dk)
 }
 \references{
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34.
