@@ -72,7 +72,7 @@
 #'
 #' }
 #'
-#' 2) The random labeling test
+#' 2) The random labeling test with a mark-weighted K-function
 #'\itemize{
 #' \item Generate simulations (permuting marks) and estimate the chosen marked K_f-function for each pattern
 #'       using the function \code{\link{random_labelling}} (requires R library \code{marksummary} available from
