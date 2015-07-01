@@ -12,7 +12,7 @@ Install the library to R with the following two R commands:
 
 ```R
 library(devtools)
-install_github('spptest', username = 'myllym', ref = 'no_fastdepth')
+install_github('myllym/spptest', ref = 'no_fastdepth')
 ```
 
 If you do not have the library ´devtools´ installed, install it first by
