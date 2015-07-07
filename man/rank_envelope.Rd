@@ -13,7 +13,7 @@ object. If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling envelope().}
 
-\item{alpha}{The significance level. Simultaneous 100(1-alpha)\% envelopes will be calculated.}
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
 \item{savedevs}{Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.}
 
@@ -34,7 +34,7 @@ An "envelope_test" object containing the following fields:
   \item p = A point estimate for the p-value (default is the mid-rank p-value).
   \item ties = As the argument \code{ties}.
   \item p_interval = The p-value interval [p_liberal, p_conservative].
-  \item k_alpha = The value of k corresponding to the 100(1-alpha)\% simultaneous envelope.
+  \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
         then this function is used as the central curve and returned in this component.
@@ -47,12 +47,12 @@ An "envelope_test" object containing the following fields:
 }
 }
 \description{
-The rank envelope test, p-value and simultaneous envelope
+The rank envelope test, p-value and global envelope
 }
 \details{
 The rank envelope test is a completely non-parametric test, which provides a p-value
 interval given by the most liberal and the most conservative p-value estimate and
-the simultaneous 100(1-alpha)\% envelope for the chosen test function T(r) on
+the 100(1-alpha)\% global envelope for the chosen test function T(r) on
 the chosen interval of distances.
 
 Given a \code{curve_set} (or an \code{\link[spatstat]{envelope}}) object,
@@ -70,7 +70,7 @@ this p-value is the mid-rank p-value, but another option can be used by specifyi
 \code{ties} argument which is passed to \code{\link{estimate_p_value}}. For
 options see \code{\link{estimate_p_value}}.
 
-The simultaneous 100(1-alpha)\% envelope is given by the 'k_alpha'th lower and
+The 100(1-alpha)\% global envelope is given by the 'k_alpha'th lower and
 upper envelope. For details see Myllymäki et al. (2013).
 
 The above holds for p-value calculation if \code{lexo == FALSE} and then the test
