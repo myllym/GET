@@ -12,7 +12,7 @@ object. If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling envelope().}
 
-\item{alpha}{The significance level. Simultaneous 100(1-alpha)\% envelopes will be calculated.}
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
 \item{n_norm}{Number of simulations drawn from the multivariate normal distribution (dimension = number of distances r).}
 
@@ -42,7 +42,7 @@ T^u_{low}(r)= T_0(r) - u sqrt(var_0(T(r)))
 and
 T^u_{upp}(r)= T_0(r) + u sqrt(var_0(T(r))),
 
-but the p-value and the simultaneous 100(1-alpha) percent envelopes are calculated based
+but the p-value and the 100(1-alpha) percent global envelope are calculated based
 on simulations from a multivariate normal distribution.
 }
 \examples{
