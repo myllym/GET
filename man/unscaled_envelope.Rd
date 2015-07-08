@@ -12,7 +12,7 @@ object. If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling envelope().}
 
-\item{alpha}{The significance level. Simultaneous 100(1-alpha)\% envelopes will be calculated.}
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
 \item{savedevs}{Logical. Should the deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.}
 
@@ -26,7 +26,7 @@ An "envelope_test" object containing the following fields:
   \item r = Distances for which the test was made.
   \item method = The name of the envelope test.
   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-  \item u_alpha = The value of u corresponding to the 100(1-alpha)\% simultaneous envelope.
+  \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
         then this function is used as the central curve and returned in this component.

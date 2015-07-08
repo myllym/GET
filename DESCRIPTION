@@ -12,9 +12,11 @@ Authors@R: c(
     person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
     person(given = 'Pavel', family = 'Grabarnik', role = 'aut',
-    email = list('gpya@rambler.ru', 'pavel.grabarnik@gmail.com'))
+    email = list('gpya@rambler.ru', 'pavel.grabarnik@gmail.com')),
+    person(given = 'Ute', family = 'Hahn', role = 'aut',
+    email = 'ute@math.au.dk')
     )
-Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička and Pavel Grabarnik
+Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička, Pavel Grabarnik and Ute Hahn
 Maintainer: Mari Myllymäki <mari.j.myllymaki@gmail.com> and Henri Seijo
     <henri.seijo@iki.fi>
 Suggests:

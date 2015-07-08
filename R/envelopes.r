@@ -1,11 +1,11 @@
 #' The rank envelope test
 #'
-#' The rank envelope test, p-value and simultaneous envelope
+#' The rank envelope test, p-value and global envelope
 #'
 #'
 #' The rank envelope test is a completely non-parametric test, which provides a p-value
 #' interval given by the most liberal and the most conservative p-value estimate and
-#' the simultaneous 100(1-alpha)\% envelope for the chosen test function T(r) on
+#' the 100(1-alpha)\% global envelope for the chosen test function T(r) on
 #' the chosen interval of distances.
 #'
 #' Given a \code{curve_set} (or an \code{\link[spatstat]{envelope}}) object,
@@ -23,7 +23,7 @@
 #' \code{ties} argument which is passed to \code{\link{estimate_p_value}}. For
 #' options see \code{\link{estimate_p_value}}.
 #'
-#' The simultaneous 100(1-alpha)\% envelope is given by the 'k_alpha'th lower and
+#' The 100(1-alpha)\% global envelope is given by the 'k_alpha'th lower and
 #' upper envelope. For details see Myllymäki et al. (2013).
 #'
 #' The above holds for p-value calculation if \code{lexo == FALSE} and then the test
@@ -43,7 +43,7 @@
 #'  object. If an envelope object is given, it must contain the summary
 #'  functions from the simulated patterns which can be achieved by setting
 #'  savefuns = TRUE when calling envelope().
-#' @param alpha The significance level. Simultaneous 100(1-alpha)\% envelopes will be calculated.
+#' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
 #'         "two.sided" (default), "less" or "greater".
@@ -59,7 +59,7 @@
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item ties = As the argument \code{ties}.
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
-#'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% simultaneous envelope.
+#'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
 #'   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
 #'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
 #'         then this function is used as the central curve and returned in this component.
@@ -226,7 +226,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
         p <- estimate_p_value(obs=u_lexo[1], sim_vec=u_lexo[-1])
     }
 
-    #-- calculate the simultaneous 100(1-alpha)% envelope
+    #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance, decreasing=TRUE)
     kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
     LB <- array(0, nr);
@@ -443,7 +443,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
 #'   \item r = Distances for which the test was made.
 #'   \item method = The name of the envelope test.
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% simultaneous envelope.
+#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
 #'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
 #'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
 #'         then this function is used as the central curve and returned in this component.
@@ -515,7 +515,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
-    #-- calculate the simultaneous 100(1-alpha)% envelope
+    #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance);
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*sdX;
@@ -551,7 +551,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'   \item r = Distances for which the test was made.
 #'   \item method = The name of the envelope test.
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% simultaneous envelope.
+#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
 #'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
 #'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
 #'         then this function is used as the central curve and returned in this component.
@@ -628,7 +628,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
-    #-- calculate the simultaneous 100(1-alpha)% envelope
+    #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance);
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha*abs(quant_m[1,]);
@@ -665,7 +665,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #'   \item r = Distances for which the test was made.
 #'   \item method = The name of the envelope test.
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% simultaneous envelope.
+#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
 #'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
 #'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
 #'         then this function is used as the central curve and returned in this component.
@@ -733,7 +733,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     #-- calculate the p-value
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
-    #-- calculate the simultaneous 100(1-alpha)% envelope
+    #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance);
     talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
     LB <- T_0 - talpha;
@@ -773,7 +773,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' and
 #' T^u_{upp}(r)= T_0(r) + u sqrt(var_0(T(r))),
 #'
-#' but the p-value and the simultaneous 100(1-alpha) percent envelopes are calculated based
+#' but the p-value and the 100(1-alpha) percent global envelope are calculated based
 #' on simulations from a multivariate normal distribution.
 #'
 #'
@@ -824,7 +824,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     #    }
     #    p <- p/(n_norm+1);
 
-    #-- calculate the simultaneous 100(1-alpha)% envelope
+    #-- calculate the 100(1-alpha)% global envelope
     talpha <- distancesorted[floor((1-alpha)*n_norm)];
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
