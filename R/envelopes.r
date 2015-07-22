@@ -47,7 +47,7 @@
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
 #'         "two.sided" (default), "less" or "greater".
-#' @param lexo Logical, whether or not to use lexical ordering when ranking. See details.
+#' @param lexo Logical, whether or not to use lexical ordering for calculation of the p-value. See details.
 #' @param ties Ties method to be passed to \code{\link{estimate_p_value}}. Used to obtain
 #' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
 #'
