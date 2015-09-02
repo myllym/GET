@@ -20,7 +20,7 @@ savefuns = TRUE when calling envelope().}
 \item{alternative}{A character string specifying the alternative hypothesis. Must be one of the following:
 "two.sided" (default), "less" or "greater".}
 
-\item{lexo}{Logical, whether or not to use lexical ordering when ranking. See details.}
+\item{lexo}{Logical, whether or not to use rank count ordering when ranking. See details.}
 
 \item{ties}{Ties method to be passed to \code{\link{estimate_p_value}}. Used to obtain
 a point estimate for the p-value. The default point estimate is the mid-rank p-value.}

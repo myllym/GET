@@ -27,7 +27,8 @@
 #' \itemize{
 #'    \item Test complete spatial randomness (CSR):
 #'          \itemize{
-#'            \item Use \code{\link[spatstat]{envelope}}.
+#'            \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
+#'                  under CSR and to calculate the functions you want.
 #'                  Important: use the option 'savefuns=TRUE' and
 #'                  specify the number of simulations \code{nsim}.
 #'                  See the help documentation in \code{\link[spatstat]{spatstat}}
