@@ -153,7 +153,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="tw
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-    if(alternative != "two.sided" & alternative != "less" & alternative != "greater")
+    if(!(alternative %in% c("two.sided","less","greater")))
         stop(paste("Error: Possible values for \"alternative\" are \n",
              "\"two.sided\" (default), \"less\" or \"greater\"\n."))
 
