@@ -28,3 +28,4 @@ Suggests:
     testthat
 Description: Envelope and deviation tests for spatial point patterns
 License: GPL-3
+RoxygenNote: 5.0.1
