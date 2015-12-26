@@ -306,6 +306,7 @@ combine_curve_sets <- function(x) {
 #' one or several test functions. Find out breaking r values for plotting.
 #' @param x A \code{\link{curve_set}} or \code{\link{envelope_test}} object.
 curve_set_check_r <- function(x) {
+    if(!with(x, exists('r'))) stop("The argument \'x\' should contain the element 'r'.\n")
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     r_values <- x[['r']]
     nr <- length(r_values)
