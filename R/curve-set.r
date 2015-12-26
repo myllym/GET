@@ -337,6 +337,7 @@ curve_set_check_r <- function(x) {
         new_r_values <- NULL
         r_break_values <- NULL
         loc_break_values <- NULL
+        r_values_newstart_id <- NULL
     }
 
     list(r_values = r_values,
