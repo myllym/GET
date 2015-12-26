@@ -237,11 +237,23 @@ print.curve_set <- function(x, ...) {
 #' @export
 plot.curve_set <- function(x, ylim, ...) {
     if(missing('ylim')) ylim <- with(x, c(min(obs,sim_m), max(obs,sim_m)))
-    with(x, {
-                plot(r, obs, type="l", ylim=ylim, ...)
-                for(i in 1:ncol(sim_m)) lines(r, sim_m[,i], col=grey(0.7))
-                lines(r, obs, type="l", ...)
-            })
+    rdata <- curve_set_check_r(x)
+    if(rdata$retick_xaxis) {
+        rvalues <- rdata$new_r_values
+    }
+    else rvalues <- x$r
+    nr <- length(rvalues)
+    # Plot
+    if(!retick_xaxis)
+        plot(rvalues, x$obs, type="l", ylim=ylim, ...)
+    else
+        plot(rvalues, x$obs, type="l", ylim=ylim, xaxt="n", ...)
+    for(i in 1:ncol(x$sim_m)) lines(rvalues, x$sim_m[,i], col=grey(0.7))
+    lines(rvalues, x$obs, type="l", ...)
+    if(retick_xaxis) {
+        axis(1, rdata$loc_break_values, label=paste(round(rdata$r_break_values, digits=2)))
+        abline(v = (1:nr)[rdata$r_values_newstart_id], lty=3)
+    }
 }
 
 #' Combine curve sets.
