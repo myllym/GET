@@ -315,30 +315,8 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
 
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     nr <- length(x[['r']])
-    if( length(unique(x[['r']])) < nr ) {
-        retick_xaxis <- TRUE
-        r_values <- x[['r']]
-        x[['r']] <- 1:nr
-        r_values_newstart_id <- which(!(r_values[1:(nr-1)] < r_values[2:nr])) + 1
-        # number of ticks per a sub test
-        nticks <- 5
-        # r-values for labeling ticks
-        r_starts <- r_values[c(1, r_values_newstart_id)]
-        r_ends <- r_values[c(r_values_newstart_id - 1, nr)]
-        r_break_values <- NULL
-        # indeces for ticks in the running numbering from 1 to nr
-        loc_starts <- (1:nr)[c(1, r_values_newstart_id)]
-        loc_ends <- (1:nr)[c(r_values_newstart_id - 1, nr)]
-        loc_break_values <- NULL
-        nslots <- length(r_starts) # number of combined tests/slots
-        for(i in 1:(nslots-1)) {
-            r_break_values <- c(r_break_values, seq(r_starts[i], r_ends[i], length=nticks)[1:(nticks-1)])
-            loc_break_values <- c(loc_break_values, seq(loc_starts[i], loc_ends[i], length=nticks)[1:(nticks-1)])
-        }
-        r_break_values <- c(r_break_values, seq(r_starts[nslots], r_ends[nslots], length=nticks))
-        loc_break_values <- c(loc_break_values, seq(loc_starts[nslots], loc_ends[nslots], length=nticks))
-    }
-    else retick_xaxis <- FALSE
+    rdata <- curve_set_check_r(x)
+    if(rdata$retick_xaxis) x[['r']] <- 1:nr
 
     if(use_ggplot2 & x$alternative == "two.sided") {
         linetype.values <- c('solid', 'dashed')
@@ -362,12 +340,12 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
                                 + ggplot2::scale_size_manual(values = size.values, name = '')
                                 + ThemePlain(base_size=base_size)
                           )
-                    if(retick_xaxis) {
+                    if(rdata$retick_xaxis) {
                         p <- p + ggplot2::scale_x_continuous(name = xlab,
-                                                    breaks = loc_break_values,
-                                                    labels = paste(round(r_break_values, digits=2),
+                                                    breaks = rdata$loc_break_values,
+                                                    labels = paste(round(rdata$r_break_values, digits=2),
                                                     limits = c(1, nr)))
-                        p <- p + ggplot2::geom_vline(xintercept = (1:nr)[r_values_newstart_id], linetype = "dotted")
+                        p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id], linetype = "dotted")
                     }
                     else p <- p + ggplot2::scale_x_continuous(name = xlab)
                     print(p)
@@ -399,7 +377,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
         }
         else {
             with(x, {
-                        if(!retick_xaxis)
+                        if(!rdata$retick_xaxis)
                             plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
                                  type="l", lty=1, lwd=2, ...)
                         else
@@ -412,9 +390,9 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
                             outside <- data_curve < lower | data_curve > upper
                             points(r[outside], data_curve[outside], col="red")
                         }
-                        if(retick_xaxis) {
-                            axis(1, loc_break_values, label=paste(round(r_break_values, digits=2)))
-                            abline(v = (1:nr)[r_values_newstart_id], lty=3)
+                        if(rdata$retick_xaxis) {
+                            axis(1, rdata$loc_break_values, label=paste(round(rdata$r_break_values, digits=2)))
+                            abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
                         }
                     }
             )
