@@ -287,38 +287,16 @@ print.envelope_test <- function(x, ...) {
 #' @export
 #' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
 plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...) {
-    if(missing('main')) {
-        if(with(x, exists('p_interval')))
-            if(x$alternative == "two.sided")
-                main <- with(x, paste(method, ": p-interval = (",
-                              round(p_interval[1],3),", ", round(p_interval[2],3), ")", sep=""))
-            else
-                main <- with(x, paste(method, ": p-interval = (",
-                              round(p_interval[1],3),", ", round(p_interval[2],3), ") \n",
-                              "Alternative = \"", alternative, "\"\n", sep=""))
-        else {
-            if(x$alternative == "two.sided")
-                main <- with(x, paste(method, ": p = ", round(p,3), sep=""))
-            else
-                main <- with(x, paste(method, ": p = ", round(p,3), "\n",
-                             "Alternative = \"", alternative, "\"\n", sep=""))
-        }
-    }
-    if(missing('ylim')) {
-        if(!use_ggplot2 || x$alternative != "two.sided")
-            ylim <- with(x, c(min(data_curve,lower,upper,central_curve),
-                              max(data_curve,lower,upper,central_curve)))
-        else ylim <- NULL
-    }
+    if(missing('main')) main <- env_main_default(x)
+    if(missing('ylim')) ylim <- env_ylim_default(x, use_ggplot2)
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-    # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-    nr <- length(x[['r']])
-    rdata <- curve_set_check_r(x)
-    if(rdata$retick_xaxis) x[['r']] <- 1:nr
-
     if(use_ggplot2 & x$alternative == "two.sided") {
+        # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
+        rdata <- curve_set_check_r(x)
+        if(rdata$retick_xaxis) x[['r']] <- 1:nr
+
         linetype.values <- c('solid', 'dashed')
         size.values <- c(0.2, 0.2)
         with(x, {
@@ -344,7 +322,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
                         p <- p + ggplot2::scale_x_continuous(name = xlab,
                                                     breaks = rdata$loc_break_values,
                                                     labels = paste(round(rdata$r_break_values, digits=2),
-                                                    limits = c(1, nr)))
+                                                    limits = range(rdata$new_r_values)))
                         p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id], linetype = "dotted")
                     }
                     else p <- p + ggplot2::scale_x_continuous(name = xlab)
@@ -356,46 +334,10 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     else {
         if(use_ggplot2) cat("The use_ggplot2 option is valid only for the alternative \'two.sided\'. use_ggplot2 ignored.\n")
         if(dotplot) {
-            with(x, {
-                        plot(1:nr, central_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
-                        if(alternative!="greater")
-                            arrows(1:nr, lower, 1:nr, central_curve, code = 1, angle = 75, length = .1)
-                        else
-                            arrows(1:nr, lower, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
-                        if(alternative!="less")
-                            arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1)
-                        else
-                            arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
-                        axis(1, 1:nr, label=paste(round(r, digits=2)))
-                        points(1:nr, data_curve, pch='x')
-                        if(color_outside) {
-                            outside <- data_curve < lower | data_curve > upper
-                            points((1:nr)[outside], data_curve[outside], pch='x', col="red")
-                        }
-                    }
-            )
+            env_dotplot(x, main, ylim, xlab, ylab, color_outside, ...)
         }
         else {
-            with(x, {
-                        if(!rdata$retick_xaxis)
-                            plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
-                                 type="l", lty=1, lwd=2, ...)
-                        else
-                            plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
-                                 type="l", lty=1, lwd=2, xaxt="n", ...)
-                        if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
-                        if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
-                        lines(r, central_curve, lty=3)
-                        if(color_outside) {
-                            outside <- data_curve < lower | data_curve > upper
-                            points(r[outside], data_curve[outside], col="red")
-                        }
-                        if(rdata$retick_xaxis) {
-                            axis(1, rdata$loc_break_values, label=paste(round(rdata$r_break_values, digits=2)))
-                            abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
-                        }
-                    }
-            )
+            env_basic_plot(x, main, ylim, xlab, ylab, color_outside, ...)
         }
     }
 }
