@@ -279,14 +279,22 @@ print.envelope_test <- function(x, ...) {
 #' Currently red color is used and coloring is only used if \code{use_ggplot2} is FALSE.
 #' @param main See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylim See \code{\link{plot.default}}. A sensible default exists.
-#' @param xlab See \code{\link{plot.default}}. A sensible default exists.
-#' @param ylab See \code{\link{plot.default}}. A sensible default exists.
+#' @param xlab See \code{\link{plot.default}}. A sensible default exists. If the test is a combined
+#' test and the argument separate_yaxis is TRUE, then a vector containing xlabs for each part of the
+#' test can be given.
+#' @param ylab See \code{\link{plot.default}}. A sensible default exists. If the test is a combined
+#' test and the argument separate_yaxis is TRUE, then a vector containing ylabs for each part of the
+#' test can be given.
+#' @param separate_yaxis Logical (default FALSE). By default also the combined envelope plots have
+#' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
+#' @param max_ncols_of_plots If separate_yaxis is TRUE, then max_ncols_of_plots gives the maximum
 #' @param ... Additional parameters to be passed to plot (if use_ggplot2=FALSE).
 #'
 #' @method plot envelope_test
 #' @export
 #' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
-plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10, color_outside=TRUE, main, ylim, xlab, ylab, ...) {
+plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10,
+        color_outside=TRUE, main, ylim, xlab, ylab, separate_yaxis=FALSE, max_ncols_of_plots=2, ...) {
     if(missing('main')) main <- env_main_default(x)
     if(missing('ylim')) ylim <- env_ylim_default(x, use_ggplot2)
     if(missing('xlab')) xlab <- expression(italic(r))
@@ -334,10 +342,11 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     else {
         if(use_ggplot2) cat("The use_ggplot2 option is valid only for the alternative \'two.sided\'. use_ggplot2 ignored.\n")
         if(dotplot) {
+            warning("The plot style \'dotplot'\ does not search automatically for combined tests.\n")
             env_dotplot(x, main, ylim, xlab, ylab, color_outside, ...)
         }
         else {
-            env_basic_plot(x, main, ylim, xlab, ylab, color_outside, ...)
+            env_basic_plot(x, main, ylim, xlab, ylab, color_outside, separate_yaxis, max_ncols_of_plots, ...)
         }
     }
 }
