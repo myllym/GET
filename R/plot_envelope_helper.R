@@ -123,31 +123,74 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, ...) {
 #' @param ylab See \code{\link{plot.default}}.
 #' @param color_outside Logical. Whether to color the places where the data function goes
 #' outside the envelope. Currently red color is used.
+#' @param separate_yaxis Logical (default FALSE). By default also the combined envelope plots have
+#' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
+#' @param max_ncols_of_plots If separate_yaxis is TRUE, then max_ncols_of_plots gives the maximum
+#' number of columns for figures. Default 2.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
-env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside, ...) {
+env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside,
+                           separate_yaxis=FALSE, max_ncols_of_plots=2, ...) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     nr <- length(x[['r']])
     rdata <- curve_set_check_r(x)
     if(rdata$retick_xaxis) x[['r']] <- 1:nr
     # Plot
-    with(x, {
-                if(!rdata$retick_xaxis)
-                    plot(r, data_curve, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                            type="l", lty=1, lwd=2, ...)
-                else
-                    plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
-                            type="l", lty=1, lwd=2, xaxt="n", ...)
-                if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
-                if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
-                lines(r, central_curve, lty=3)
-                if(color_outside) {
-                    outside <- data_curve < lower | data_curve > upper
-                    points(r[outside], data_curve[outside], col="red")
+    if(!separate_yaxis) {
+        with(x, {
+                    if(!rdata$retick_xaxis)
+                        plot(r, data_curve, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                                type="l", lty=1, lwd=2, ...)
+                    else
+                        plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+                                type="l", lty=1, lwd=2, xaxt="n", ...)
+                    if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
+                    if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
+                    lines(r, central_curve, lty=3)
+                    if(color_outside) {
+                        outside <- data_curve < lower | data_curve > upper
+                        points(r[outside], data_curve[outside], col="red")
+                    }
+                    if(rdata$retick_xaxis) {
+                        axis(1, rdata$loc_break_values, label=paste(round(rdata$r_break_values, digits=2)))
+                        abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
+                    }
                 }
-                if(rdata$retick_xaxis) {
-                    axis(1, rdata$loc_break_values, label=paste(round(rdata$r_break_values, digits=2)))
-                    abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
+        )
+    }
+    else {
+        n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
+        ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
+        nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
+        if(length(xlab)!=n_of_plots) {
+            if(length(xlab)==1) xlab <- rep(xlab, times=n_of_plots)
+            else warning("The length of the vector xlab is unreasonable.\n")
+        }
+        if(length(ylab)!=n_of_plots) {
+            if(length(ylab)==1) ylab <- rep(ylab, times=n_of_plots)
+            else warning("The length of the vector ylab is unreasonable.\n")
+        }
+        par(mfrow=c(nrows_of_plots, ncols_of_plots))
+        with(x, {
+                    cat("Note: \"main\" and \"ylim\" ignored as separate plots are produced.\n")
+                    tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
+                    for(i in 1:n_of_plots) {
+                        plot(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                             data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                             main="", xlab=xlab[i], ylab=ylab[i],
+                             type="l", lty=1, lwd=2, ...)
+                        if(alternative!="greater")
+                            lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
+                        else lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+                        if(alternative!="less")
+                            lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
+                        else lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+                        lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], central_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=3)
+                        if(color_outside) {
+                            outside <- data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)] < lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)] | data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)] > upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)]
+                            points(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
+                        }
+                    }
                 }
-            }
-    )
+        )
+    }
 }
