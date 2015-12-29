@@ -124,19 +124,19 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, ...) {
 #' @param ylab See \code{\link{plot.default}}.
 #' @param color_outside Logical. Whether to color the places where the data function goes
 #' outside the envelope. Currently red color is used.
-#' @param separate_yaxis Logical (default FALSE). By default also the combined envelope plots have
+#' @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
 #' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
-#' @param max_ncols_of_plots If separate_yaxis is TRUE, then max_ncols_of_plots gives the maximum
+#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside,
-                           separate_yaxis=FALSE, max_ncols_of_plots=2, ...) {
+                           separate_yaxes=FALSE, max_ncols_of_plots=2, ...) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     nr <- length(x[['r']])
     rdata <- curve_set_check_r(x)
     if(rdata$retick_xaxis) x[['r']] <- 1:nr
     # Plot
-    if(!separate_yaxis) {
+    if(!separate_yaxes) {
         with(x, {
                     if(!rdata$retick_xaxis)
                         plot(r, data_curve, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
@@ -207,11 +207,11 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside,
 #' @param ylim See \code{\link{plot.default}}.
 #' @param xlab See \code{\link{plot.default}}.
 #' @param ylab See \code{\link{plot.default}}.
-#' @param separate_yaxis Logical (default FALSE). By default also the combined envelope plots have
+#' @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
 #' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
-#' @param max_ncols_of_plots If separate_yaxis is TRUE, then max_ncols_of_plots gives the maximum
+#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
-env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxis, max_ncols_of_plots=2) {
+env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes, max_ncols_of_plots=2) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     nr <- length(x[['r']])
     rdata <- curve_set_check_r(x)
@@ -220,7 +220,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxis, max
     linetype.values <- c('solid', 'dashed')
     size.values <- c(0.2, 0.2)
 
-    if(!separate_yaxis | is.null(rdata$r_values_newstart_id)) {
+    if(!separate_yaxes | is.null(rdata$r_values_newstart_id)) {
         with(x, {
                     df <- data.frame(r = rep(r, times=2),
                             curves = c(data_curve, central_curve),
