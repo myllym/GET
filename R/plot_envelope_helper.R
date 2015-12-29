@@ -195,3 +195,108 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside,
         )
     }
 }
+
+
+#' An internal spptest function for making a ggplot2 style "global envelope plot".
+#'
+#' An internal spptest function for making a ggplot2 style "global envelope plot".
+#'
+#' @param x An 'envelope_test' object.
+#' @param base_size Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.
+#' @param main See \code{\link{plot.default}}.
+#' @param ylim See \code{\link{plot.default}}.
+#' @param xlab See \code{\link{plot.default}}.
+#' @param ylab See \code{\link{plot.default}}.
+#' @param separate_yaxis Logical (default FALSE). By default also the combined envelope plots have
+#' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
+#' @param max_ncols_of_plots If separate_yaxis is TRUE, then max_ncols_of_plots gives the maximum
+#' number of columns for figures. Default 2.
+env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxis, max_ncols_of_plots=2) {
+    # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
+    nr <- length(x[['r']])
+    rdata <- curve_set_check_r(x)
+    if(rdata$retick_xaxis) x[['r']] <- 1:nr
+
+    linetype.values <- c('solid', 'dashed')
+    size.values <- c(0.2, 0.2)
+
+    if(!separate_yaxis | is.null(rdata$r_values_newstart_id)) {
+        with(x, {
+                    df <- data.frame(r = rep(r, times=2),
+                            curves = c(data_curve, central_curve),
+                            type = factor(rep(c("Data function", "Central function"), each=length(r)), levels=c("Data function", "Central function")),
+                            lower = rep(lower, times=2),
+                            upper = rep(upper, times=2),
+                            main = factor(rep(main, times=length(r)))
+                    )
+                    p <- (ggplot2::ggplot()
+                                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
+                                        fill = 'grey59', alpha = 1)
+                                + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
+                                                linetype = type, size = type))
+                                + ggplot2::facet_grid('~ main', scales = 'free')
+                                + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
+                                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+                                + ggplot2::scale_size_manual(values = size.values, name = '')
+                                + ThemePlain(base_size=base_size)
+                                )
+                    if(rdata$retick_xaxis) {
+                        p <- p + ggplot2::scale_x_continuous(name = xlab,
+                                breaks = rdata$loc_break_values,
+                                labels = paste(round(rdata$r_break_values, digits=2),
+                                        limits = range(rdata$new_r_values)))
+                        p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id], linetype = "dotted")
+                    }
+                    else p <- p + ggplot2::scale_x_continuous(name = xlab)
+                    print(p)
+                    return(invisible(p))
+                }
+        )
+    }
+    else {
+        cat("Note: \"ylim\" ignored as separate plots are produced.\n")
+        n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
+        ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
+        nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
+        if(length(ylab)!=n_of_plots) {
+            if(length(ylab)==1) {
+                ylab <- paste(ylab, " - ", 1:n_of_plots, sep="")
+                warning(paste("Consider giving ylab as a vector of length ", n_of_plots,
+                              " containing the label for each test function/vector used.\n", sep=""))
+            }
+            else warning("The length of the vector ylab is unreasonable.\n")
+        }
+
+        tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
+        func_index <- NULL
+        for(i in 1:(length(tmp_indeces)-1)) {
+            func_index <- c(func_index, rep(ylab[i], tmp_indeces[i+1]-tmp_indeces[i]))
+        }
+
+        with(x, {
+                    df <- data.frame(r = rep(r, times=2),
+                            curves = c(data_curve, central_curve),
+                            type = factor(rep(c("Data function", "Central function"), each=length(r)), levels=c("Data function", "Central function")),
+                            lower = rep(lower, times=2),
+                            upper = rep(upper, times=2),
+                            main = factor(rep(main, times=length(r))),
+                            test_function = factor(rep(func_index, times=2))
+                    )
+                    p <- (ggplot2::ggplot()
+                                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
+                                        fill = 'grey59', alpha = 1)
+                                + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
+                                                linetype = type, size = type))
+                                + ggplot2::facet_wrap(~ test_function, scales="free", nrow=nrows_of_plots, ncol=ncols_of_plots)
+                                + ggplot2::scale_y_continuous(name = "")
+                                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+                                + ggplot2::scale_size_manual(values = size.values, name = '')
+                                + ThemePlain(base_size=base_size)
+                                + labs(title=main)
+                                )
+                    print(p)
+                    return(invisible(p))
+                }
+        )
+    }
+}
