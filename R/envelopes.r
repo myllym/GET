@@ -301,43 +301,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
     if(use_ggplot2 & x$alternative == "two.sided") {
-        # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-        rdata <- curve_set_check_r(x)
-        if(rdata$retick_xaxis) x[['r']] <- 1:nr
-
-        linetype.values <- c('solid', 'dashed')
-        size.values <- c(0.2, 0.2)
-        with(x, {
-                    df <- data.frame(r = rep(r, times=2),
-                                     curves = c(data_curve, central_curve),
-                                     type = factor(rep(c("Data function", "Central function"), each=length(r)), levels=c("Data function", "Central function")),
-                                     lower = rep(lower, times=2),
-                                     upper = rep(upper, times=2),
-                                     main = factor(rep(main, times=length(r)))
-                                     )
-                    p <- (ggplot2::ggplot()
-                                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
-                                        fill = 'grey59', alpha = 1)
-                                + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
-                                                linetype = type, size = type))
-                                + ggplot2::facet_grid('~ main', scales = 'free')
-                                + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
-                                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
-                                + ggplot2::scale_size_manual(values = size.values, name = '')
-                                + ThemePlain(base_size=base_size)
-                          )
-                    if(rdata$retick_xaxis) {
-                        p <- p + ggplot2::scale_x_continuous(name = xlab,
-                                                    breaks = rdata$loc_break_values,
-                                                    labels = paste(round(rdata$r_break_values, digits=2),
-                                                    limits = range(rdata$new_r_values)))
-                        p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id], linetype = "dotted")
-                    }
-                    else p <- p + ggplot2::scale_x_continuous(name = xlab)
-                    print(p)
-                    return(invisible(p))
-                }
-            )
+        env_ggplot(x, base_size, main, ylim, xlab, ylab, separate_yaxis, max_ncols_of_plots)
     }
     else {
         if(use_ggplot2) cat("The use_ggplot2 option is valid only for the alternative \'two.sided\'. use_ggplot2 ignored.\n")
