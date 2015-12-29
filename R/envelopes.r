@@ -148,14 +148,14 @@
 #' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 #' }
 #'
-rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, alternative="two.sided", lexo=FALSE, ties) {
+rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
+                          alternative=c("two.sided", "less", "greater"),
+                          lexo=FALSE, ties) {
     curve_set <- convert_envelope(curve_set)
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-    if(alternative != "two.sided" & alternative != "less" & alternative != "greater")
-        stop(paste("Error: Possible values for \"alternative\" are \n",
-             "\"two.sided\" (default), \"less\" or \"greater\"\n."))
+    alternative <- match.arg(alternative)
 
     # The type of the p-value
     if(missing(ties))
