@@ -91,6 +91,7 @@ env_ylim_default <- function(x, use_ggplot2) {
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, ...) {
     nr <- length(x[['r']])
+    if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
     with(x, {
                 plot(1:nr, central_curve, main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
                 if(alternative!="greater")
