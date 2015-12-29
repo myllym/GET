@@ -113,9 +113,9 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, ...) {
 }
 
 
-#' An internal spptest function for making a dotplot style "global envelope plot".
+#' An internal spptest function for making a basic "global envelope plot".
 #'
-#' An internal spptest function for making a dotplot style "global envelope plot".
+#' An internal spptest function for making a basic "global envelope plot".
 #'
 #' @param x An 'envelope_test' object.
 #' @param main See \code{\link{plot.default}}.
