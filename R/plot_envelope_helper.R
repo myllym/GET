@@ -300,3 +300,52 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes, max
         )
     }
 }
+
+#' A helper function for plotting two global envelopes into a same plot.
+#'
+#' @param env1 An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
+#' must contain arguments '$r', '$data_curve', '$lower', '$upper' and '$central_curve$.
+#' @param env2 An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
+#' must contain arguments '$r', '$data_curve', '$lower', '$upper' and '$central_curve$.
+#' @param base_size Base font size, to be passed to theme style.
+#' @param main See \code{\link{plot.default}}.
+#' @param ylim See \code{\link{plot.default}}.
+#' @param xlab See \code{\link{plot.default}}.
+#' @param ylab See \code{\link{plot.default}}.
+#' @export
+two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, ylab, ...) {
+    linetype.values <- c('solid', 'dashed')
+    size.values <- c(0.2, 0.2)
+    if(missing(xlab)) xlab <- expression(italic(r))
+    if(missing(ylab)) ylab <- expression(italic(T(r)))
+    if(missing(main)) main <- "Rank envelope test"
+    if(missing(ylim)) ylim <- c(min(env1$data_curve,env1$lower,env1$upper,env1$central_curve,
+                                    env2$data_curve,env2$lower,env2$upper,env2$central_curve),
+                                max(env1$data_curve,env1$lower,env1$upper,env1$central_curve,
+                                    env2$data_curve,env2$lower,env2$upper,env2$central_curve))
+    df <- data.frame(r = rep(env1$r, times=2),
+            curves = c(env1$data_curve, env1$central_curve),
+            type = factor(rep(c("Data function", "Central function"), each=length(env1$r)), levels=c("Data function", "Central function")),
+            lower = rep(env1$lower, times=2),
+            upper = rep(env1$upper, times=2),
+            lower2 = rep(env2$lower, times=2),
+            upper2 = rep(env2$upper, times=2),
+            main = factor(rep(main, times=length(env1$r)))
+    )
+    p <- (ggplot2::ggplot()
+                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower2, ymax = upper2),
+                        fill = 'grey80', alpha = 1)
+                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
+                        fill = 'grey59', alpha = 1)
+                + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
+                                linetype = type, size = type))
+                + ggplot2::facet_grid('~ main', scales = 'free')
+                + ggplot2::scale_x_continuous(name = xlab)
+                + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
+                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+                + ggplot2::scale_size_manual(values = size.values, name = '')
+                + ThemePlain(base_size=base_size)
+                )
+    print(p)
+    invisible(p)
+}
