@@ -234,7 +234,11 @@ print.adjusted_envelope_test <- function (x, ...) {
 #' @method plot adjusted_envelope_test
 #' @export
 #' @seealso \code{\link{plot.envelope_test}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
-plot.adjusted_envelope_test <- function (x, main, ...) {
+plot.adjusted_envelope_test <- function (x, main,
+        plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...) {
     if(missing(main)) main <- x$method
-    p <- spptest:::plot.envelope_test(x$adj_envelope_test, main=main, ...)
+    if(!plot_unadjusted) p <- spptest:::plot.envelope_test(x$adj_envelope_test, main=main, ...)
+    else {
+        two_envelopes_ggplot(env1 = x$adj_envelope_test, env2 = attr(x, "unadjusted_envelope_test"))
+    }
 }
