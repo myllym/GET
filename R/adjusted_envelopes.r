@@ -225,11 +225,15 @@ print.adjusted_envelope_test <- function (x, ...) {
 }
 
 #' Plot method for the class 'adjusted_envelope_test'
-#' @usage \method{plot}{adjusted_envelope_test}(x, main, ...)
+#' @usage \method{plot}{adjusted_envelope_test}(x, main,
+#' plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...)
 #'
 #' @param x an 'adjusted_envelope_test' object
 #' @param main See \code{\link{plot.default}}. Default is x$method.
-#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}}.
+#' @param plot_unadjusted Logical whether or not to plot also the unadjusted envelope.
+#' Only available if these have been saved in 'x'.
+#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}}, if plot_unadjusted
+#' is FALSE, or to \code{\link{two_envelopes_ggplot}}, if plot_unadjusted is TRUE.
 #'
 #' @method plot adjusted_envelope_test
 #' @export
