@@ -234,7 +234,7 @@ print.adjusted_envelope_test <- function (x, ...) {
 #' @method plot adjusted_envelope_test
 #' @export
 #' @seealso \code{\link{plot.envelope_test}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
-plot.adjusted_envelope_test <- function (x, main, ...,) {
+plot.adjusted_envelope_test <- function (x, main, ...) {
     if(missing(main)) main <- x$method
     p <- spptest:::plot.envelope_test(x$adj_envelope_test, main=main, ...)
 }
