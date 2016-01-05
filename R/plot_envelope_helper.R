@@ -296,7 +296,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
                                                 linetype = type, size = type))
                                 + ggplot2::facet_wrap(~ test_function, scales="free",
                                                       nrow=nrows_of_plots, ncol=ncols_of_plots)
-                                + ggplot2::scale_y_continuous(name = "")
+                                + ggplot2::scale_y_continuous(name = ylab)
                                 + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
                                 + ggplot2::scale_size_manual(values = size.values, name = '')
                                 + ThemePlain(base_size=base_size)
