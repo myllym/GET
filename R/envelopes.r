@@ -288,7 +288,7 @@ print.envelope_test <- function(x, ...) {
 #' @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
 #' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
-#' @param ... Additional parameters to be passed to plot (if use_ggplot2=FALSE).
+#' @param ... Additional parameters to be passed to plot (if use_ggplot2=FALSE) or \code{\link{dotplot}}.
 #'
 #' @method plot envelope_test
 #' @export
