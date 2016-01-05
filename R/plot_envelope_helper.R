@@ -211,9 +211,11 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside,
 #' @param ylab See \code{\link{plot.default}}.
 #' @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
 #' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
+#' @param labels Labels for the separate plots. Ignored if separate_yaxes is FALSE.
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
-env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes, max_ncols_of_plots=2) {
+env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALSE, max_ncols_of_plots=2,
+                       labels=NULL) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     nr <- length(x[['r']])
     rdata <- curve_set_check_r(x)
@@ -260,19 +262,22 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes, max
         n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
         ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
         nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
-        if(length(ylab)!=n_of_plots) {
-            if(length(ylab)==1) {
-                ylab <- paste(ylab, " - ", 1:n_of_plots, sep="")
-                warning(paste("Consider giving ylab as a vector of length ", n_of_plots,
+        if(length(labels)!=n_of_plots) {
+            if(length(labels)==1) {
+                labels <- paste(labels, " - ", 1:n_of_plots, sep="")
+                warning(paste("Consider giving labels as a vector of length ", n_of_plots,
                               " containing the label for each test function/vector used.\n", sep=""))
             }
-            else warning("The length of the vector ylab is unreasonable.\n")
+            else {
+                warning("The length of the vector labels is unreasonable. Setting labels to empty.\n")
+                labels <- rep("", times=n_of_plots)
+            }
         }
 
         tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
         func_labels <- NULL
         for(i in 1:(length(tmp_indeces)-1)) {
-            func_labels <- c(func_labels, rep(ylab[i], times=tmp_indeces[i+1]-tmp_indeces[i]))
+            func_labels <- c(func_labels, rep(labels[i], times=tmp_indeces[i+1]-tmp_indeces[i]))
         }
 
         with(x, {
@@ -282,7 +287,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes, max
                             lower = rep(lower, times=2),
                             upper = rep(upper, times=2),
                             main = factor(rep(main, times=length(r))),
-                            test_function = factor(rep(func_labels, times=2), levels=ylab)
+                            test_function = factor(rep(func_labels, times=2), levels=labels)
                     )
                     p <- (ggplot2::ggplot()
                                 + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
