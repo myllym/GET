@@ -88,9 +88,11 @@ env_ylim_default <- function(x, use_ggplot2) {
 #' @param ylab See \code{\link{plot.default}}.
 #' @param color_outside Logical. Whether to color the places where the data function goes
 #' outside the envelope. Currently red color is used.
+#' @param labels Labels for the tests at x-axis.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
-env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, ...) {
+env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, labels, ...) {
     nr <- length(x[['r']])
+    if(missing(labels)) labels <- paste(round(x[['r']], digits=2))
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
     with(x, {
                 plot(1:nr, central_curve, main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
@@ -102,7 +104,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, ...) {
                     arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1)
                 else
                     arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
-                axis(1, 1:nr, label=paste(round(r, digits=2)))
+                axis(1, 1:nr, label=labels)
                 points(1:nr, data_curve, pch='x')
                 if(color_outside) {
                     outside <- data_curve < lower | data_curve > upper
