@@ -268,9 +268,9 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes, max
         }
 
         tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
-        func_index <- NULL
+        func_labels <- NULL
         for(i in 1:(length(tmp_indeces)-1)) {
-            func_index <- c(func_index, rep(ylab[i], tmp_indeces[i+1]-tmp_indeces[i]))
+            func_labels <- c(func_labels, rep(ylab[i], times=tmp_indeces[i+1]-tmp_indeces[i]))
         }
 
         with(x, {
@@ -280,7 +280,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes, max
                             lower = rep(lower, times=2),
                             upper = rep(upper, times=2),
                             main = factor(rep(main, times=length(r))),
-                            test_function = factor(rep(func_index, times=2))
+                            test_function = factor(rep(func_labels, times=2), levels=ylab)
                     )
                     p <- (ggplot2::ggplot()
                                 + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
