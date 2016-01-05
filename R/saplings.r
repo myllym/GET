@@ -1,12 +1,16 @@
 #' Saplings data set
 #'
+#' Saplings data set
+#'
+#'
 #' A pattern of small trees (height <= 15 m) originating from an uneven aged multi-species
 #' broadleaf nonmanaged forest in Kaluzhskie Zaseki, Russia.
 #'
-#' @format   An object of class \code{"ppp"}
-#' representing the point pattern of tree locations.
+#' The pattern is a sample part of data collected over 10 ha plot as a part of a research
+#' program headed by project leader Prof. O.V. Smirnova.
 #'
-#' See \code{\link[spatstat]{ppp.object}} for details of the format.
+#' @format An object of class \code{\link[spatstat]{ppp.object}} representing the point
+#' pattern of tree locations.
 #'
 #' @usage data(saplings)
 #' @references
