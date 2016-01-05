@@ -287,7 +287,8 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes, max
                                         fill = 'grey59', alpha = 1)
                                 + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
                                                 linetype = type, size = type))
-                                + ggplot2::facet_wrap(~ test_function, scales="free", nrow=nrows_of_plots, ncol=ncols_of_plots)
+                                + ggplot2::facet_wrap(~ test_function, scales="free",
+                                                      nrow=nrows_of_plots, ncol=ncols_of_plots)
                                 + ggplot2::scale_y_continuous(name = "")
                                 + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
                                 + ggplot2::scale_size_manual(values = size.values, name = '')
