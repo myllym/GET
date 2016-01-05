@@ -306,7 +306,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     else {
         if(use_ggplot2) cat("The use_ggplot2 option is valid only for the alternative \'two.sided\'. use_ggplot2 ignored.\n")
         if(dotplot) {
-            warning("The plot style \'dotplot'\ does not search automatically for combined tests.\n")
+            warning("The plot style \'dotplot'\ does not search for combined tests.\n")
             env_dotplot(x, main, ylim, xlab, ylab, color_outside, ...)
         }
         else {
