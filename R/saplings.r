@@ -33,6 +33,7 @@
 #' data(saplings)
 #'
 #' # First choose the r-distances for L (r) and J (rJ) functions, respectively.
+#' nr <- 500
 #' rmin <- 0.3; rminJ <- 0.3
 #' rmax <- 10; rmaxJ <- 6;
 #' rstep <- (rmax-rmin)/nr; rstepJ <- (rmaxJ-rminJ)/nr;
