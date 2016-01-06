@@ -90,7 +90,7 @@ env_ylim_default <- function(x, use_ggplot2) {
 #' outside the envelope. Currently red color is used.
 #' @param labels Labels for the tests at x-axis.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
-env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, labels, ...) {
+env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, ...) {
     nr <- length(x[['r']])
     if(missing(labels)) labels <- paste(round(x[['r']], digits=2))
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
@@ -131,7 +131,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside, labels, ...) {
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
-env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside,
+env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                            separate_yaxes=FALSE, max_ncols_of_plots=2, ...) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     nr <- length(x[['r']])
