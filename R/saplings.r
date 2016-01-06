@@ -47,12 +47,13 @@
 #' # Note: CSR is simulated by fixing the number of points and generating nsim simulations
 #' # from the binomial process, i.e. we deal with a simple hypothesis.
 #' env <- envelope(saplings, nsim=2499,
-#'           simulate=expression(runifpoint(saplings$n, win=saplings$window)), # Simulate CSR
-#'           fun="Lest", correction="translate", # T(r) = estimator of L with translational edge correction
-#'           transform = expression(.-r),        # Take the L(r)-r function instead of L(r)
-#'           r=r,                                # Specify the distance vector
-#'           savefuns=TRUE)                      # Save the estimated functions
-#' # Crop the curves to the interval of distances [rmin, rmax] (at the same time create a curve_set from 'env')
+#'  simulate=expression(runifpoint(saplings$n, win=saplings$window)), # Simulate CSR
+#'  fun="Lest", correction="translate", # T(r) = estimator of L with translational edge correction
+#'  transform = expression(.-r),        # Take the L(r)-r function instead of L(r)
+#'  r=r,                                # Specify the distance vector
+#'  savefuns=TRUE)                      # Save the estimated functions
+#' # Crop the curves to the interval of distances [rmin, rmax]
+#' # (at the same time create a curve_set from 'env')
 #' curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
 #' # Perform the rank envelope test
 #' res <- rank_envelope(curve_set)
