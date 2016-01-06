@@ -104,7 +104,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, .
                     arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1)
                 else
                     arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
-                axis(1, 1:nr, label=labels)
+                axis(1, 1:nr, labels=labels)
                 points(1:nr, data_curve, pch='x')
                 if(color_outside) {
                     outside <- data_curve < lower | data_curve > upper
@@ -154,7 +154,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                         points(r[outside], data_curve[outside], col="red")
                     }
                     if(rdata$retick_xaxis) {
-                        axis(1, rdata$loc_break_values, label=paste(round(rdata$r_break_values, digits=2)))
+                        axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
                         abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
                     }
                 }
