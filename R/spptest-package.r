@@ -52,18 +52,16 @@
 #'                    plot(res)
 #'                  }
 #'          }
-#'    \item A goodness-of-fit of a parametric model
+#'    \item A goodness-of-fit of a parametric model (composite hypothesis case)
 #'          \itemize{
 #'            \item Fit the model to your data by means of the function
 #'                  \code{\link[spatstat]{ppm}} or \code{\link[spatstat]{kppm}}.
 #'                  See the help documentation for possible models.
-#'            \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
-#'                  from the fitted model and to calculate the functions you want.
-#'            \item Perform the test (This test is in general conservative!)
-#'
-#'                  \code{
-#'                    res <- rank_envelope(env) # 'env' is the object returned by 'envelope'
-#'                  }
+#'            \item Use \code{\link{dg.global_envelope}} to create nsim simulations
+#'                  from the fitted model, to calculate the functions you want,
+#'                  and to make an adjusted global envelope test (either rank,
+#'                  directional quantile or studentized global envelope test).
+#'                  See the detailed example in \code{\link{saplings}}.
 #'            \item Plot the result
 #'
 #'                  \code{
@@ -102,6 +100,9 @@
 #'       \code{res <- rank_envelope(curve_set) # curve_set is the 'curve_set'-object you created}
 #'
 #'       \code{plot(res)}
+#' \item Note that for calculating an adjusted global envelope test for a composite hypothesis test,
+#' you need to write some of your own code as the function \code{\link{dg.global_envelope}}
+#' allows just models that can be simulated and fitted using spatstat.
 #' }
 #'
 #'
@@ -142,6 +143,9 @@
 #' directly be given to the functions \code{\link{crop_curves}} and \code{\link{residual}}.
 #'
 #'
+#' Further, as a further reminder, for composite hypotheses the library provides the function
+#' \code{\link{dg.global_envelope}}. See a detailed example in \code{\link{saplings}}.
+#'
 #' @author
 #' Mari Myllymäki (mari.j.myllymaki@@gmail.com, mari.myllymaki@@luke.fi),
 #' Henri Seijo (henri.seijo@@aalto.fi, henri.seijo@@iki.fi),
@@ -152,7 +156,7 @@
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34.
 #'
-#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v3 [stat.ME]
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
 #'
 #' Mrkvička, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
 #' @name spptest

@@ -1,5 +1,5 @@
 Package: spptest
-Version: 0.3
+Version: 0.4
 Date: 2013-10-24
 Title: Spatial point process testing
 Encoding: UTF-8
@@ -16,7 +16,8 @@ Authors@R: c(
     person(given = 'Ute', family = 'Hahn', role = 'aut',
     email = 'ute@math.au.dk')
     )
-Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička, Pavel Grabarnik and Ute Hahn
+Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička, Pavel Grabarnik and Ute
+    Hahn
 Maintainer: Mari Myllymäki <mari.j.myllymaki@gmail.com> and Henri Seijo
     <henri.seijo@iki.fi>
 Suggests:
@@ -25,6 +26,8 @@ Suggests:
     marksummary,
     ggplot2,
     testthat
-Description: Envelope and deviation tests for spatial point patterns
+Description: The library provides global envelope and deviation tests, in particular
+    for spatial point patterns. The tests can however be used generally for testing
+    with functional test statistics.
 License: GPL-3
 RoxygenNote: 5.0.1
