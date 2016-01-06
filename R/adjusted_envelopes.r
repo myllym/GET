@@ -54,7 +54,7 @@ global_envelope_with_sims <- function(X, ..., test = c("rank", "qdir", "st"),
     test <- match.arg(test)
     alt <- match.arg(alternative)
     # Create simulations from the given model
-    X <- envelope(X, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    X <- spatstat::envelope(X, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
     # Crop curves (if r_min or r_max given)
     curve_set <- crop_curves(X, r_min = r_min, r_max = r_max)
     # Make the test
