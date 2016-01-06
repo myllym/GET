@@ -5,7 +5,7 @@
 \title{Plot method for the class 'envelope_test'}
 \usage{
 \method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10,
-                                     color_outside=TRUE, main, ylim, xlab, ylab, ...)
+                                     main, ylim, xlab, ylab, ...)
 }
 \arguments{
 \item{x}{an 'envelope_test' object}
@@ -18,18 +18,20 @@
 Suitable for low dimensional test vectors. Only applicable if \code{use_ggplot2} is FALSE.
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
-\item{color_outside}{Logical. Whether to color the places where the data function goes outside the envelope.
-Currently red color is used and coloring is only used if \code{use_ggplot2} is FALSE.}
-
 \item{main}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{ylim}{See \code{\link{plot.default}}. A sensible default exists.}
 
-\item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{xlab}{See \code{\link{plot.default}}. A sensible default exists. If the test is a combined
+test and the argument separate_yaxes is TRUE, then a vector containing xlabs for each part of the
+test can be given.}
 
-\item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{ylab}{See \code{\link{plot.default}}. A sensible default exists. If the test is a combined
+test and the argument separate_yaxes is TRUE, then a vector containing ylabs for each part of the
+test can be given.}
 
-\item{...}{Additional parameters to be passed to plot (if use_ggplot2=FALSE).}
+\item{...}{Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
+(if dotplot=TRUE) or \code{\link{env_ggplot}} (if use_ggplot2=TRUE).}
 }
 \description{
 Plot method for the class 'envelope_test'
