@@ -147,7 +147,7 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
         tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, ...,
                 test = test,
                 alpha = 0.05, alternative = alt,
-                r_min=r_min, r_max=r_max, take_residual=take_residual, theo_opt=theo_opt,
+                r_min=r_min, r_max=r_max, take_residual=take_residual,
                 lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
                 verbose = verbose)
