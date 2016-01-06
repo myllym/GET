@@ -72,7 +72,7 @@
 #'
 #' # Make the adjusted directional quantile global envelope test using the L(r)-r function
 #' # (For the rank envelope test, choose test = "rank" instead and increase nsim.)
-#' system.time( # timing; takes a lot of time, if nsim is reasonably large
+#' system.time( # timing; takes a lot of time, if nsim is reasonably large (for 'qdir' & nsim=499, about 1,6 h)
 #'   adjenvL <- dg.global_envelope(X = fitted_model,
 #'                                fun="Lest", correction="translate",
 #'                                transform = expression(.-r), r=r,
