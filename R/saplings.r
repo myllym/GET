@@ -30,6 +30,7 @@
 #' @docType data
 #' @examples
 #' # This is an example analysis of the saplings data set, see Myllymäki et al. (2015).
+#' require(spatstat)
 #' data(saplings)
 #'
 #' # First choose the r-distances for L (r) and J (rJ) functions, respectively.
