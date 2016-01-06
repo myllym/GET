@@ -70,6 +70,8 @@ env_main_default <- function(x) {
 
 #' An internal spptest function for setting the default ylim for a global envelope plot.
 #' @param x An 'envelope_test' object.
+#' @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
+#' Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
     if(!use_ggplot2 || x$alternative != "two.sided")
         ylim <- with(x, c(min(data_curve,lower,upper,central_curve),
