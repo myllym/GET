@@ -123,7 +123,7 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
         #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
         verbose=TRUE) {
-    Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
+    Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
     test <- match.arg(test)
     alt <- match.arg(alternative)
     if(verbose) cat("Applying test to original data...\n")
