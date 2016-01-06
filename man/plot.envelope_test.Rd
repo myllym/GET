@@ -33,12 +33,8 @@ test can be given.}
 test and the argument separate_yaxes is TRUE, then a vector containing ylabs for each part of the
 test can be given.}
 
-\item{separate_yaxes}{Logical (default FALSE). By default also the combined envelope plots have
-a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.}
-
-\item{max_ncols_of_plots}{If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum}
-
-\item{...}{Additional parameters to be passed to plot (if use_ggplot2=FALSE).}
+\item{...}{Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
+(if dotplot=TRUE) or \code{\link{env_ggplot}} (if use_ggplot2=TRUE).}
 }
 \description{
 Plot method for the class 'envelope_test'

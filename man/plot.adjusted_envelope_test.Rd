@@ -4,14 +4,19 @@
 \alias{plot.adjusted_envelope_test}
 \title{Plot method for the class 'adjusted_envelope_test'}
 \usage{
-\method{plot}{adjusted_envelope_test}(x, main, ...)
+\method{plot}{adjusted_envelope_test}(x, main,
+plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...)
 }
 \arguments{
 \item{x}{an 'adjusted_envelope_test' object}
 
 \item{main}{See \code{\link{plot.default}}. Default is x$method.}
 
-\item{...}{Additional parameters to be passed to \code{\link{plot.envelope_test}}.}
+\item{plot_unadjusted}{Logical whether or not to plot also the unadjusted envelope.
+Only available if these have been saved in 'x'.}
+
+\item{...}{Additional parameters to be passed to \code{\link{plot.envelope_test}}, if plot_unadjusted
+is FALSE, or to \code{\link{two_envelopes_ggplot}}, if plot_unadjusted is TRUE.}
 }
 \description{
 Plot method for the class 'adjusted_envelope_test'

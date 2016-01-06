@@ -4,7 +4,7 @@
 \alias{env_dotplot}
 \title{An internal spptest function for making a dotplot style "global envelope plot".}
 \usage{
-env_dotplot(x, main, ylim, xlab, ylab, color_outside, ...)
+env_dotplot(x, main, ylim, xlab, ylab, color_outside, labels, ...)
 }
 \arguments{
 \item{x}{An 'envelope_test' object.}
@@ -19,6 +19,8 @@ env_dotplot(x, main, ylim, xlab, ylab, color_outside, ...)
 
 \item{color_outside}{Logical. Whether to color the places where the data function goes
 outside the envelope. Currently red color is used.}
+
+\item{labels}{Labels for the tests at x-axis.}
 
 \item{...}{Additional parameters to be passed to the function \code{\link{plot}}.}
 }

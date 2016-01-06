@@ -4,16 +4,20 @@
 \name{saplings}
 \alias{saplings}
 \title{Saplings data set}
-\format{An object of class \code{"ppp"}
-representing the point pattern of tree locations.
-
-See \code{\link[spatstat]{ppp.object}} for details of the format.}
+\format{An object of class \code{\link[spatstat]{ppp.object}} representing the point
+pattern of tree locations.}
 \usage{
 data(saplings)
 }
 \description{
+Saplings data set
+}
+\details{
 A pattern of small trees (height <= 15 m) originating from an uneven aged multi-species
 broadleaf nonmanaged forest in Kaluzhskie Zaseki, Russia.
+
+The pattern is a sample part of data collected over 10 ha plot as a part of a research
+program headed by project leader Prof. O.V. Smirnova.
 }
 \references{
 Grabarnik, P. and Chiu, S. N. (2002) Goodness-of-fit test for complete spatial randomness against
