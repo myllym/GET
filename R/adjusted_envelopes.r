@@ -136,7 +136,7 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
     if(verbose) cat("Done.\n")
     simpatterns <- attr(tX, "simpatterns")
 
-    if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... "))
+    if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... \n"))
     # For each of the simulated patterns in 'simpatterns', perform the test and calculate
     # the extreme rank (or deviation) measure and p-value
     stats <- numeric(nsim)
