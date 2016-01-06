@@ -251,7 +251,7 @@ plot.curve_set <- function(x, ylim, ...) {
     for(i in 1:ncol(x$sim_m)) lines(rvalues, x$sim_m[,i], col=grey(0.7))
     lines(rvalues, x$obs, type="l", ...)
     if(rdata$retick_xaxis) {
-        axis(1, rdata$loc_break_values, label=paste(round(rdata$r_break_values, digits=2)))
+        axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
         abline(v = (1:nr)[rdata$r_values_newstart_id], lty=3)
     }
 }
