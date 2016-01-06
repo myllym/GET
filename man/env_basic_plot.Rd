@@ -4,7 +4,7 @@
 \alias{env_basic_plot}
 \title{An internal spptest function for making a basic "global envelope plot".}
 \usage{
-env_basic_plot(x, main, ylim, xlab, ylab, color_outside,
+env_basic_plot(x, main, ylim, xlab, ylab, color_outside = TRUE,
   separate_yaxes = FALSE, max_ncols_of_plots = 2, ...)
 }
 \arguments{

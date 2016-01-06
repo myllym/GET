@@ -4,7 +4,7 @@
 \alias{two_envelopes_ggplot}
 \title{A helper function for plotting two global envelopes into a same plot.}
 \usage{
-two_envelopes_ggplot(env1, env2, base_size = 15, main, ylim, xlab, ylab, ...)
+two_envelopes_ggplot(env1, env2, base_size = 15, main, ylim, xlab, ylab)
 }
 \arguments{
 \item{env1}{An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object

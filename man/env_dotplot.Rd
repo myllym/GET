@@ -4,7 +4,7 @@
 \alias{env_dotplot}
 \title{An internal spptest function for making a dotplot style "global envelope plot".}
 \usage{
-env_dotplot(x, main, ylim, xlab, ylab, color_outside, labels, ...)
+env_dotplot(x, main, ylim, xlab, ylab, color_outside = TRUE, labels, ...)
 }
 \arguments{
 \item{x}{An 'envelope_test' object.}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_envelope_helper.R
 \name{curve_set_check_r}
 \alias{curve_set_check_r}
-\title{Check r values of a \code{\link{curve_set}} object for plotting}
+\title{Check r values of a curve_set object for plotting}
 \usage{
 curve_set_check_r(x)
 }
@@ -10,7 +10,10 @@ curve_set_check_r(x)
 \item{x}{A curve_set or envelope_test object.}
 }
 \description{
-Check r values of a \code{\link{curve_set}} object to find out if there is
+Check r values of a curve_set object to find out if there is
 one or several test functions. Find out breaking r values for plotting.
+}
+\seealso{
+\code{\link{create_curve_set}}
 }
 

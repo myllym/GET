@@ -8,6 +8,9 @@ env_ylim_default(x, use_ggplot2)
 }
 \arguments{
 \item{x}{An 'envelope_test' object.}
+
+\item{use_ggplot2}{TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
+Otherwise the ylim are for \code{\link{env_basic_plot}}.}
 }
 \description{
 An internal spptest function for setting the default ylim for a global envelope plot.
