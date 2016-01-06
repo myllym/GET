@@ -322,6 +322,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
 #' @param ylab See \code{\link{plot.default}}.
 #' @export
 two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, ylab, ...) {
+    if(!all(env1$r == env2$r)) stop("The two envelopes are for different r-values.\n")
     linetype.values <- c('solid', 'dashed')
     size.values <- c(0.2, 0.2)
     if(missing(xlab)) xlab <- expression(italic(r))
