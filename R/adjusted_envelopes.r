@@ -241,7 +241,7 @@ print.adjusted_envelope_test <- function (x, ...) {
 plot.adjusted_envelope_test <- function (x, main,
         plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...) {
     if(missing(main)) main <- x$method
-    if(!plot_unadjusted) p <- spptest:::plot.envelope_test(x$adj_envelope_test, main=main, ...)
+    if(!plot_unadjusted) p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
     else {
         two_envelopes_ggplot(env1 = x$adj_envelope_test, env2 = attr(x, "unadjusted_envelope_test"))
     }
