@@ -180,10 +180,16 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                     cat("Note: \"main\" and \"ylim\" ignored as separate plots are produced.\n")
                     tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
                     for(i in 1:n_of_plots) {
+                        ylim <- c(min(data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                                      lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                                      upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)]),
+                                  max(data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                                      lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                                      upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
                         plot(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              main="", xlab=xlab[i], ylab=ylab[i],
-                             type="l", lty=1, lwd=2, ...)
+                             type="l", lty=1, lwd=2, ylim=ylim, ...)
                         if(alternative!="greater")
                             lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
                         else lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
