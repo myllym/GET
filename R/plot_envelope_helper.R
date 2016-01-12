@@ -139,9 +139,9 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     nr <- length(x[['r']])
     rdata <- curve_set_check_r(x)
-    if(rdata$retick_xaxis) x[['r']] <- 1:nr
     # Plot
     if(!separate_yaxes) {
+        if(rdata$retick_xaxis) x[['r']] <- 1:nr
         with(x, {
                     if(!rdata$retick_xaxis)
                         plot(r, data_curve, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
@@ -222,12 +222,12 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     nr <- length(x[['r']])
     rdata <- curve_set_check_r(x)
-    if(rdata$retick_xaxis) x[['r']] <- 1:nr
 
     linetype.values <- c('solid', 'dashed')
     size.values <- c(0.2, 0.2)
 
     if(!separate_yaxes | is.null(rdata$r_values_newstart_id)) {
+        if(rdata$retick_xaxis) x[['r']] <- 1:nr
         with(x, {
                     df <- data.frame(r = rep(r, times=2),
                             curves = c(data_curve, central_curve),
