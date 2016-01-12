@@ -97,7 +97,7 @@
 #' system.time( # timing;takes a lot of time if nsim is reasonably large
 #'   adjenvJ <- dg.global_envelope(X = fitted_model,
 #'                                 fun="Jest", correction="none", r=rJ,
-#'                                 test = test, nsim = nsim, nsimsub = nsim,
+#'                                 test = "qdir", nsim = nsim, nsimsub = nsim,
 #'                                 r_min=rminJ, r_max=rmaxJ,
 #'                                 save.cons.envelope=TRUE)
 #' )
