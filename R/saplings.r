@@ -94,7 +94,7 @@
 #' # a reasonable model for the saplings pattern.
 #' # To further explore the goodness-of-fit of the Matérn cluster process, test the
 #' # model with the J function:
-#' system.time( # timing;takes a lot of time if nsim is reasonably large
+#' system.time( # timing; takes a lot of time if nsim is reasonably large
 #'   adjenvJ <- dg.global_envelope(X = fitted_model,
 #'                                 fun="Jest", correction="none", r=rJ,
 #'                                 test = "qdir", nsim = nsim, nsimsub = nsim,
