@@ -271,6 +271,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
         n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
         ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
         nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
+        if(is.null(labels)) labels <- paste(1:n_of_plots)
         if(length(labels)!=n_of_plots) {
             if(length(labels)==1) {
                 labels <- paste(labels, " - ", 1:n_of_plots, sep="")
