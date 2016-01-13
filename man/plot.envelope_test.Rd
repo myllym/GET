@@ -22,13 +22,9 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
 \item{ylim}{See \code{\link{plot.default}}. A sensible default exists.}
 
-\item{xlab}{See \code{\link{plot.default}}. A sensible default exists. If the test is a combined
-test and the argument separate_yaxes is TRUE, then a vector containing xlabs for each part of the
-test can be given.}
+\item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
 
-\item{ylab}{See \code{\link{plot.default}}. A sensible default exists. If the test is a combined
-test and the argument separate_yaxes is TRUE, then a vector containing ylabs for each part of the
-test can be given.}
+\item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{...}{Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
 (if dotplot=TRUE) or \code{\link{env_ggplot}} (if use_ggplot2=TRUE).}
