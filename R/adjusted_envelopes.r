@@ -130,8 +130,8 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
     test <- match.arg(test)
     alt <- match.arg(alternative)
     if(verbose) cat("Applying test to original data...\n")
-    tX <- global_envelope_with_sims(X, nsim=nsim, ..., test = test,
-            alpha = 0.05, alternative = alt,
+    tX <- global_envelope_with_sims(X, nsim=nsim, ...,
+            test = test, alpha = 0.05, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
             lexo = FALSE, ties='midrank',
             save.envelope = save.cons.envelope, savefuns = savefuns, savepatterns = TRUE,
@@ -148,8 +148,7 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
         Xsim <- simpatterns[[rep]]
         if(Xismodel) Xsim <- update(X, Xsim)
         tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, ...,
-                test = test,
-                alpha = 0.05, alternative = alt,
+                test = test, alpha = 0.05, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
                 lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
