@@ -106,6 +106,9 @@ global_envelope_with_sims <- function(X, ..., test = c("rank", "qdir", "st"),
 #' basic test, each involving nsimsub simulated realisations, so there will be a total of
 #' nsim * (1 + nsimsub) simulations.
 #' @param save.cons.envelope Logical flag indicating whether to save the unadjusted envelope test results.
+#' @param mc.cores The number of cores to use, i.e. at most how many child processes will be run simultaneously.
+#' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
+#' (no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
 #'
 #' @return An object of class adjusted_envelope_test.
 #' @references
@@ -122,7 +125,7 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
         #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
-        verbose=TRUE) {
+        verbose=TRUE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
     test <- match.arg(test)
     alt <- match.arg(alternative)
