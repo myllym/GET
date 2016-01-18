@@ -146,7 +146,7 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
     pvals <- numeric(nsim)
     for(rep in 1:nsim) {
         Xsim <- simpatterns[[rep]]
-        if(Xismodel) Xsim <- update(X, Xsim)
+        if(Xismodel) Xsim <- spatstat::update(X, Xsim)
         tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, ...,
                 test = test, alpha = 0.05, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
