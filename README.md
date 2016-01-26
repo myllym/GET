@@ -46,8 +46,8 @@ patterns. Spatial Statistics 11, 19-34.
 (Preprint of the article: http://arxiv.org/abs/1306.1028)
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015).
-Global envelope tests for spatial processes. arXiv:1307.0239v3 [stat.ME].
-http://arxiv.org/abs/1307.0239v3
+Global envelope tests for spatial processes. arXiv:1307.0239v4 [stat.ME].
+http://arxiv.org/abs/1307.0239v4
 
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2015).
 Multiple Monte Carlo testing with applications in spatial point processes.

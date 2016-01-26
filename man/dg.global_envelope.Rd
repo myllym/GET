@@ -8,7 +8,7 @@ dg.global_envelope(X, ..., test = c("rank", "qdir", "st"), nsim = 499,
   nsimsub = nsim, alpha = 0.05, alternative = c("two.sided", "less",
   "greater"), r_min = NULL, r_max = NULL, take_residual = FALSE,
   save.cons.envelope = savefuns || savepatterns, savefuns = FALSE,
-  savepatterns = FALSE, verbose = TRUE)
+  savepatterns = FALSE, verbose = TRUE, mc.cores = 1L)
 }
 \arguments{
 \item{X}{An object containing point pattern data. A point pattern (object of class "ppp")
@@ -53,6 +53,10 @@ See \code{\link[spatstat]{envelope}}.}
 
 \item{verbose}{Logical flag indicating whether to print progress reports during the simulations.
 See \code{\link[spatstat]{envelope}}.}
+
+\item{mc.cores}{The number of cores to use, i.e. at most how many child processes will be run simultaneously.
+Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
+(no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.}
 }
 \value{
 An object of class adjusted_envelope_test.

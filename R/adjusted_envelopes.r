@@ -106,6 +106,9 @@ global_envelope_with_sims <- function(X, ..., test = c("rank", "qdir", "st"),
 #' basic test, each involving nsimsub simulated realisations, so there will be a total of
 #' nsim * (1 + nsimsub) simulations.
 #' @param save.cons.envelope Logical flag indicating whether to save the unadjusted envelope test results.
+#' @param mc.cores The number of cores to use, i.e. at most how many child processes will be run simultaneously.
+#' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
+#' (no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
 #'
 #' @return An object of class adjusted_envelope_test.
 #' @references
@@ -122,13 +125,13 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
         #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
-        verbose=TRUE) {
+        verbose=TRUE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
     test <- match.arg(test)
     alt <- match.arg(alternative)
     if(verbose) cat("Applying test to original data...\n")
-    tX <- global_envelope_with_sims(X, nsim=nsim, ..., test = test,
-            alpha = 0.05, alternative = alt,
+    tX <- global_envelope_with_sims(X, nsim=nsim, ...,
+            test = test, alpha = 0.05, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
             lexo = FALSE, ties='midrank',
             save.envelope = save.cons.envelope, savefuns = savefuns, savepatterns = TRUE,
@@ -139,22 +142,20 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
     if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... \n"))
     # For each of the simulated patterns in 'simpatterns', perform the test and calculate
     # the extreme rank (or deviation) measure and p-value
-    stats <- numeric(nsim)
-    pvals <- numeric(nsim)
-    for(rep in 1:nsim) {
+    loopfun <- function(rep) {
         Xsim <- simpatterns[[rep]]
-        if(Xismodel) Xsim <- update(X, Xsim)
+        if(Xismodel) Xsim <- spatstat::update(X, Xsim)
         tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, ...,
-                test = test,
-                alpha = 0.05, alternative = alt,
+                test = test, alpha = 0.05, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
                 lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
                 verbose = verbose)
-        stats[rep] <- tXsim$statistic
-        pvals[rep] <- tXsim$p.value
-        if(verbose) cat(paste("Simulation ", rep, "done.\n\n"))
+        list(stat = tXsim$statistic, pval = tXsim$p.value)
     }
+    mclapply_res <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores)
+    stats <- sapply(mclapply_res, function(x) x$stat)
+    pvals <- sapply(mclapply_res, function(x) x$pval)
 
     # Calculate the critical rank / alpha
     switch(test,

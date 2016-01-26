@@ -25,7 +25,8 @@ Suggests:
     mvtnorm,
     marksummary,
     ggplot2,
-    testthat
+    testthat,
+    parallel
 Description: The library provides global envelope and deviation tests, in particular
     for spatial point patterns. The tests can however be used generally for testing
     with functional test statistics.
