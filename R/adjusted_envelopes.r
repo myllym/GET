@@ -148,8 +148,8 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
 #' \code{\link{plot.adjusted_envelope_test}}
 #' @export
-dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
-        nsim = 499, nsimsub = nsim,
+dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
+        simfun=NULL, fitfun=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided","less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
         #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
