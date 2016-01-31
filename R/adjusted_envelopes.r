@@ -26,7 +26,9 @@
 #' @param simfun.arg The parameter to be passed to simfun. The function simfun should handle
 #' with the structure of simfun.param.
 #' @param ... Additional parameters passed to \code{\link[spatstat]{envelope}}.
-#' For example, the test function in the argument 'fun'.
+#' For example, the test function in the argument 'fun' and further specifications regarding that.
+#' If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
+#' (if simfun not provided), then also recall to specify how to generate the simulations.
 #' @param test Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
 #' \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
