@@ -16,6 +16,15 @@
 #' @param X An object containing point pattern data. A point pattern (object of class "ppp")
 #' or a fitted point process model (object of class "ppm" or "kppm"). See
 #' \code{\link[spatstat]{envelope}}.
+#' @param nsim The number of simulations.
+#' @param simfun A function for generating simulations from the null model. If given, this function
+#' is called by replicate(n=nsim, simfun(simfun.param), simplify=FALSE) to make nsim simulations.
+#' The function should return an \code{\link[spatstat]{ppp}} object as those are further passed to
+#' \code{\link[spatstat]{envelope}}.
+#' If the function is not provided, then \code{\link[spatstat]{envelope}} is used also for generating
+#' the point patterns from the null hypothesis.
+#' @param simfun.arg The parameter to be passed to simfun. The function simfun should handle
+#' with the structure of simfun.param.
 #' @param ... Additional parameters passed to \code{\link[spatstat]{envelope}}.
 #' For example, the test function in the argument 'fun'.
 #' @param test Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
