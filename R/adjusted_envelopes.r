@@ -130,6 +130,10 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
 #' @param nsimsub Number of simulations in each basic test. There will be nsim repetitions of the
 #' basic test, each involving nsimsub simulated realisations, so there will be a total of
 #' nsim * (1 + nsimsub) simulations.
+#' @param fitfun A function for estimating the parameters of the null model. If not given, then
+#' \code{\link[spatstat]{envelope}} takes care of the parameter estimation as well (and X should be a fitted
+#' model object). The function 'fitfun' should return the fitted model in the form that it can be directly
+#' passed to 'simfun' as the argument 'simfun.arg'.
 #' @param save.cons.envelope Logical flag indicating whether to save the unadjusted envelope test results.
 #' @param mc.cores The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 #' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
