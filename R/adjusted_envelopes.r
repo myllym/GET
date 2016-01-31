@@ -156,6 +156,11 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
         verbose=TRUE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
+    if(is.null(simfun) != is.null(fitfun)) stop("Either both \'simfun\' and \'fitfun\' should be provided or neither of them.\n")
+    if((is.null(simfun) | is.null(fitfun)) & !Xismodel)
+        warning("\'simfun\' and/or \'fitfun\' not provided and \'X\' is not a fitted model object.\n",
+                "As \'envelope\' is used for simulations and model fitting, \n",
+                "\'X\' should be a fitted model object.")
     test <- match.arg(test)
     alt <- match.arg(alternative)
     if(verbose) cat("Applying test to original data...\n")
