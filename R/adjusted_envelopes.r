@@ -45,7 +45,7 @@
 #' See \code{\link[spatstat]{envelope}}.
 #' @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
 #' \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
-global_envelope_with_sims <- function(X, ..., test = c("rank", "qdir", "st"),
+global_envelope_with_sims <- function(X, nsim, simfun, simfun.arg=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided", "less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
         lexo = TRUE, ties=NULL,
