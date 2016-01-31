@@ -64,8 +64,16 @@ global_envelope_with_sims <- function(X, nsim, simfun, simfun.arg=NULL, ..., tes
         verbose = FALSE) {
     test <- match.arg(test)
     alt <- match.arg(alternative)
-    # Create simulations from the given model
-    X <- spatstat::envelope(X, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    if(!missing(simfun)) {
+        # Create simulations by the given function
+        simpatterns <- replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)
+        # Calculate the test functions
+        X <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    }
+    else {
+        # Create simulations from the given model and calculate the test functions
+        X <- spatstat::envelope(X, nsim=nsim, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    }
     # Crop curves (if r_min or r_max given)
     curve_set <- crop_curves(X, r_min = r_min, r_max = r_max)
     # Make the test
