@@ -8,10 +8,16 @@
 #' (studentized envelope test).
 #'
 #' The specification of X is important here:
+#' if simfun is not provided, the function \code{\link[spatstat]{envelope}} is used to generate
+#' simulations under the null hypothesis and to calculate the test functions (specified in the
+#' arguments ...) and then
 #' \itemize{
 #' \item If X is a point pattern, the null hypothesis is CSR.
 #' \item If X is a fitted model, the null hypothesis is that model.
 #' }
+#' If simfun is provided, then the null model is the one simulated by this given function,
+#' and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
+#' pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
 #'
 #' @param X An object containing point pattern data. A point pattern (object of class "ppp")
 #' or a fitted point process model (object of class "ppm" or "kppm"). See
