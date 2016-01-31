@@ -164,8 +164,9 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     test <- match.arg(test)
     alt <- match.arg(alternative)
     if(verbose) cat("Applying test to original data...\n")
-    tX <- global_envelope_with_sims(X, nsim=nsim, ...,
-            test = test, alpha = 0.05, alternative = alt,
+    if(!is.null(fitfun)) simfun.arg <- fitfun(X) # a fitted model to be passed to simfun
+    tX <- spptest:::global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
+            test = test, alpha = alpha, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
             lexo = FALSE, ties='midrank',
             save.envelope = save.cons.envelope, savefuns = savefuns, savepatterns = TRUE,
@@ -178,9 +179,10 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     # the extreme rank (or deviation) measure and p-value
     loopfun <- function(rep) {
         Xsim <- simpatterns[[rep]]
+        if(!is.null(fitfun)) simfun.arg <- fitfun(Xsim) # a fitted model to be passed to simfun
         if(Xismodel) Xsim <- spatstat::update(X, Xsim)
-        tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, ...,
-                test = test, alpha = 0.05, alternative = alt,
+        tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
+                test = test, alpha = alpha, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
                 lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
