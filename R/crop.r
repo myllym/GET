@@ -10,7 +10,7 @@
 #'   the cropped radius vector.
 #' @export
 crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
-    curve_set <- convert_envelope(curve_set)
+    curve_set <- convert_envelope(curve_set, allow_Inf_values = TRUE)
 
     n_r_min <- length(r_min)
     if (n_r_min > 0L && (n_r_min != 1L || !is.finite(r_min))) {
@@ -37,7 +37,7 @@ crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
         if (n_r_max == 1L) {
             cut_idx <- which(r <= r_max)
         } else {
-            return(curve_set)
+            return(check_curve_set_content(curve_set, allow_Inf_values = FALSE))
         }
     }
 
@@ -60,6 +60,6 @@ crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
     }
     if(with(curve_set, exists('is_residual'))) res[['is_residual']] <- curve_set[['is_residual']]
 
-    res <- create_curve_set(res)
+    res <- create_curve_set(res, allow_Inf_values = FALSE)
     res
 }

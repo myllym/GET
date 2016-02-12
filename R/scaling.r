@@ -1,82 +1,18 @@
-#' Scale curves.
+#' Studentised scaling
 #'
-#' The most important use is: scale residuals of test functions.
-#'
-#' Given a set of curves in curve_set, the function scale_curves scales
-#' the curves by one of the following scalings:
-#' \itemize{
-#'   \item none No scaling. Nothing done.
-#'   \item q Quantile scaling.
-#'   \item qdir Directional quantile scaling.
-#'   \item st Studentised scaling.
-#' }
-#' See for details Myllymäki et al. (2013).
-#'
-#' @references Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
-#' @inheritParams convert_envelope
-#' @param scaling The name of the scaling to use. Options include 'none',
-#'   'q', 'qdir' and 'st'. 'qdir' is default.
-#' @param ... Further arguments passed to the chosen scaling function.
-#' @export
-scale_curves <- function(curve_set, scaling = 'qdir', ...) {
-    curve_set <- convert_envelope(curve_set)
-
-    possible_scalings <- c('q', 'qdir', 'st', 'none')
-    if (length(scaling) != 1L || !(scaling %in% possible_scalings)) {
-        stop('scaling must be one of the following: ',
-             paste(possible_scalings, collapse = ','))
-    }
-    scaler <- switch(scaling,
-                     q = q_scaling,
-                     qdir = qdir_scaling,
-                     st = st_scaling,
-                     none = identity)
-
-    scaled_set <- scaler(curve_set, ...)
-    scaled_set
-}
-
-#' Turns a divisor into a coeff.
-#'
-#' Takes the inverse of the input and replaces non-finite values with 1.
-#'
-#' @param x A number.
-divisor_to_coeff <- function(x) {
-    y <- 1 / x
-    y[!is.finite(y)] <- 0 # 0 so that these distances do not affect the test result.
-    y
-}
-
-#' Multiply by a coefficient.
+#' Scale with the standard deviation.
 #'
 #' @inheritParams convert_envelope
-#' @param coeff The coefficient vector, often of the length of one curve.
-weigh_curves <- function(curve_set, coeff) {
-    curve_set[['obs']] <- coeff * curve_set[['obs']]
-    curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
-    if (length(curve_set[['theo']]) > 0L) {
-        curve_set[['theo']] <- coeff * curve_set[['theo']]
-    }
-    curve_set
-}
-
-#' Check for an increasing two-element vector of probabilities.
-#'
-#' @param probs A vector to be checked.
-check_probs <- function(probs) {
-    # Leave further validity checking of probs and type to quantile.
-    if (length(probs) != 2L || !all(is.finite(probs)) ||
-        probs[1] >= probs[2] ||
-        probs[1] < 0 || probs[2] < 0 || probs[1] > 1 || probs[2] > 1) {
-        stop('probs must be a two-element vector with both values finite \n',
-             ' and within [0, 1]. The first value must be smaller than the \n',
-             ' second.')
-    }
+#' @return A scaled curve_set.
+st_scaling <- function(curve_set) {
+    sim_sd <- apply(curve_set[['sim_m']], 1, sd)
+    res <- weigh_curves(curve_set, divisor_to_coeff(sim_sd))
+    res
 }
 
 #' Quantile scaling.
 #'
-#' @inheritParams convert_envelope
+#' @inheritParams st_scaling
 #' @param probs A two-element vector containing the lower and upper
 #'   quantiles for the envelope, in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975 as in the article by Møller and
@@ -129,7 +65,6 @@ weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
 #'
 #' @details Notice that this scaling is only defined for residuals.
 #'
-#' @inheritParams convert_envelope
 #' @inheritParams q_scaling
 #' @return A scaled curve_set.
 qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
@@ -143,24 +78,88 @@ qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     upper_coeff <- abs_coeff[2, , drop = TRUE]
 
     res <- with(curve_set, list(r = r,
-                                obs = weigh_both_sides(obs, upper_coeff,
-                                                       lower_coeff),
-                                sim_m = weigh_both_sides(sim_m, upper_coeff,
-                                                         lower_coeff)))
+                    obs = weigh_both_sides(obs, upper_coeff,
+                            lower_coeff),
+                    sim_m = weigh_both_sides(sim_m, upper_coeff,
+                            lower_coeff)))
     res[['is_residual']] <- TRUE
 
     res <- create_curve_set(res)
     res
 }
 
-#' Studentised scaling
+#' Scale curves.
 #'
-#' Scale with the standard deviation.
+#' The most important use is: scale residuals of test functions.
 #'
-#' @inheritParams convert_envelope
-#' @return A scaled curve_set.
-st_scaling <- function(curve_set) {
-    sim_sd <- apply(curve_set[['sim_m']], 1, sd)
-    res <- weigh_curves(curve_set, divisor_to_coeff(sim_sd))
-    res
+#' Given a set of curves in curve_set, the function scale_curves scales
+#' the curves by one of the following scalings:
+#' \itemize{
+#'   \item none No scaling. Nothing done.
+#'   \item q Quantile scaling.
+#'   \item qdir Directional quantile scaling.
+#'   \item st Studentised scaling.
+#' }
+#' See for details Myllymäki et al. (2013).
+#'
+#' @references Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#' @inheritParams st_scaling
+#' @param scaling The name of the scaling to use. Options include 'none',
+#'   'q', 'qdir' and 'st'. 'qdir' is default.
+#' @param ... Further arguments passed to the chosen scaling function.
+#' @export
+scale_curves <- function(curve_set, scaling = 'qdir', ...) {
+    curve_set <- convert_envelope(curve_set)
+
+    possible_scalings <- c('q', 'qdir', 'st', 'none')
+    if (length(scaling) != 1L || !(scaling %in% possible_scalings)) {
+        stop('scaling must be one of the following: ',
+             paste(possible_scalings, collapse = ','))
+    }
+    scaler <- switch(scaling,
+                     q = q_scaling,
+                     qdir = qdir_scaling,
+                     st = st_scaling,
+                     none = identity)
+
+    scaled_set <- scaler(curve_set, ...)
+    scaled_set
+}
+
+#' Turns a divisor into a coeff.
+#'
+#' Takes the inverse of the input and replaces non-finite values with 1.
+#'
+#' @param x A number.
+divisor_to_coeff <- function(x) {
+    y <- 1 / x
+    y[!is.finite(y)] <- 0 # 0 so that these distances do not affect the test result.
+    y
+}
+
+#' Multiply by a coefficient.
+#'
+#' @inheritParams st_scaling
+#' @param coeff The coefficient vector, often of the length of one curve.
+weigh_curves <- function(curve_set, coeff) {
+    curve_set[['obs']] <- coeff * curve_set[['obs']]
+    curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
+    if (length(curve_set[['theo']]) > 0L) {
+        curve_set[['theo']] <- coeff * curve_set[['theo']]
+    }
+    curve_set
+}
+
+#' Check for an increasing two-element vector of probabilities.
+#'
+#' @param probs A vector to be checked.
+check_probs <- function(probs) {
+    # Leave further validity checking of probs and type to quantile.
+    if (length(probs) != 2L || !all(is.finite(probs)) ||
+        probs[1] >= probs[2] ||
+        probs[1] < 0 || probs[2] < 0 || probs[1] > 1 || probs[2] > 1) {
+        stop('probs must be a two-element vector with both values finite \n',
+             ' and within [0, 1]. The first value must be smaller than the \n',
+             ' second.')
+    }
 }

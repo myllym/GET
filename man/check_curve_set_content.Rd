@@ -4,10 +4,14 @@
 \alias{check_curve_set_content}
 \title{Check the content validity of a potential curve_set object.}
 \usage{
-check_curve_set_content(curve_set)
+check_curve_set_content(curve_set, allow_Inf_values = FALSE)
 }
 \arguments{
 \item{curve_set}{A curve_set object to be checked.}
+
+\item{allow_Inf_values}{Logical, for internal use. Can be used to allow infinite or nonnumeric
+values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
+away (in \code{\link{crop_curves}}).}
 }
 \description{
 Check the content validity of a potential curve_set object.

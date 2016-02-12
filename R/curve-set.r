@@ -3,8 +3,9 @@
 #' @param env An \code{\link[spatstat]{envelope}} object. The envelope()
 #'   functions must have been called with savefuns = TRUE.
 #' @return A corresponding curve_set object.
+#' @param ... Do not use. (For internal use only.)
 #' @export
-envelope_to_curve_set <- function(env) {
+envelope_to_curve_set <- function(env, ...) {
     if (!inherits(env, 'envelope')) {
         stop('env is not an envelope object.')
     }
@@ -55,14 +56,17 @@ envelope_to_curve_set <- function(env) {
     }
     res[['is_residual']] <- FALSE
 
-    res <- create_curve_set(res)
+    res <- create_curve_set(res, ...)
     res
 }
 
 #' Check the content validity of a potential curve_set object.
 #'
 #' @param curve_set A curve_set object to be checked.
-check_curve_set_content <- function(curve_set) {
+#' @param allow_Inf_values Logical, for internal use. Can be used to allow infinite or nonnumeric
+#' values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
+#' away (in \code{\link{crop_curves}}).
+check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     possible_names <- c('r', 'obs', 'sim_m', 'theo', 'is_residual')
 
     n <- length(curve_set)
@@ -102,7 +106,7 @@ check_curve_set_content <- function(curve_set) {
     if (!is.vector(obs)) {
         stop('curve_set[["obs"]] must be a vector.')
     }
-    if (!all(is.numeric(obs)) || !all(is.finite(obs))) {
+    if (!(allow_Inf_values | ( all(is.numeric(obs)) && all(is.finite(obs)) ))) {
         stop('curve_set[["obs"]] must have only finite numeric values.')
     }
 
@@ -118,7 +122,7 @@ check_curve_set_content <- function(curve_set) {
     if (dim_sim_m[2] < 1L) {
         stop('curve_set[["sim_m"]] must have at least one column.')
     }
-    if (!all(is.numeric(sim_m)) || !all(is.finite(sim_m))) {
+    if (!(allow_Inf_values | ( all(is.numeric(sim_m)) && all(is.finite(sim_m)) ))) {
         stop('curve_set[["sim_m"]] must have only finite numeric values.')
     }
 
@@ -132,7 +136,7 @@ check_curve_set_content <- function(curve_set) {
         if (!is.vector(theo)) {
             stop('curve_set[["theo"]] must be a vector.')
         }
-        if (!all(is.numeric(theo)) || !all(is.finite(theo))) {
+        if (!(allow_Inf_values | ( all(is.numeric(theo)) && all(is.finite(theo)) ))) {
             stop('curve_set[["theo"]] must have only finite numeric ',
                  'values.')
         }
@@ -162,22 +166,25 @@ check_curve_set_content <- function(curve_set) {
 #'   object. If an envelope object is given, it must contain the summary
 #'   functions from the simulated patterns which can be achieved by setting
 #'   savefuns = TRUE when calling envelope().
+#' @param ... Allows to pass arguments to \code{\link{check_curve_set_content}}
+#' and \code{\link{envelope_to_curve_set}} (to be passed further through
+#' \code{\link{create_curve_set}} to \code{\link{check_curve_set_content}}).
 #' @return If an \code{\link[spatstat]{envelope}} object was given, return a
 #'   corresponding curve_set object. If a curve_set object was given, return
 #'   it unharmed.
-convert_envelope <- function(curve_set) {
+convert_envelope <- function(curve_set, ...) {
     if (inherits(curve_set, 'envelope')) {
-        curve_set <- envelope_to_curve_set(curve_set)
+        curve_set <- envelope_to_curve_set(curve_set, ...)
     } else if (!is(curve_set, 'curve_set')) {
         stop('curve_set must either have class "envelope" (from spatstat) ',
              'or class "curve_set".')
     }
-    check_curve_set_content(curve_set)
+    check_curve_set_content(curve_set, ...)
     curve_set
 }
 
 #' Check that the curve_set object portrays residual curves.
-#' @inheritParams convert_envelope
+#' @param curve_set A 'curve_set' object
 check_residualness <- function(curve_set) {
     is_residual <- curve_set[['is_residual']]
     if (length(is_residual) < 1L || !is_residual) {
@@ -198,10 +205,11 @@ check_residualness <- function(curve_set) {
 #'   match the length of r. If included, theo corresponds to the theoretical
 #'   summary function curve. If present, its length must match the length of
 #'   r.
+#' @param ... Do not use. (For internal use only.)
 #' @return The given list adorned with the proper class name.
 #' @export
-create_curve_set <- function(curve_set) {
-    check_curve_set_content(curve_set)
+create_curve_set <- function(curve_set, ...) {
+    check_curve_set_content(curve_set, ...)
     class(curve_set) <- 'curve_set'
     curve_set
 }
