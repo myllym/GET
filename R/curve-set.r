@@ -184,7 +184,7 @@ convert_envelope <- function(curve_set, ...) {
 }
 
 #' Check that the curve_set object portrays residual curves.
-#' @inheritParams convert_envelope
+#' @param A 'curve_set' object
 check_residualness <- function(curve_set) {
     is_residual <- curve_set[['is_residual']]
     if (length(is_residual) < 1L || !is_residual) {
