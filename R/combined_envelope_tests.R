@@ -40,21 +40,20 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     UB_ls <- lapply(1:ntests, FUN = up)
 
     # Create a combined envelope object for plotting
-    res_env <- NULL
-    res_env$r <- do.call(c, lapply(res_ls, FUN = function(x) x$r), quote=FALSE)
-    res_env$method <- res_ls[[1]]$method
-    res_env$alternative <- res_ls[[1]]$alternative
-    res_env$p <- res_rank$p
-    res_env$p_interval <- res_rank$p_interval
-    res_env$central_curve <- do.call(c, lapply(res_ls, FUN = function(x) x$central_curve), quote=FALSE)
-    res_env$data_curve <- do.call(c, lapply(res_ls, FUN = function(x) x$data_curve), quote=FALSE)
-    res_env$lower <- do.call(c, LB_ls, quote=FALSE)
-    res_env$upper <- do.call(c, UB_ls, quote=FALSE)
-    class(res_env) <- c("combined_scaled_MAD_envelope", "envelope_test")
+    res_env <- structure(list(r = do.call(c, lapply(res_ls, FUN = function(x) x$r), quote=FALSE),
+                              method = res_ls[[1]]$method,
+                              alternative = res_ls[[1]]$alternative,
+                              p = res_rank$p,
+                              p_interval = res_rank$p_interval,
+                              central_curve = do.call(c, lapply(res_ls, FUN = function(x) x$central_curve), quote=FALSE),
+                              data_curve = do.call(c, lapply(res_ls, FUN = function(x) x$data_curve), quote=FALSE),
+                              lower = do.call(c, LB_ls, quote=FALSE),
+                              upper = do.call(c, UB_ls, quote=FALSE)),
+                         class = c("combined_scaled_MAD_envelope", "envelope_test"))
 
     # return
-    res <- list(rank_test = res_rank, envelope = res_env)
-    class(res) <- "combined_scaled_MAD_test"
+    res <- structure(list(rank_test = res_rank, envelope = res_env),
+                     class = "combined_scaled_MAD_test")
     res
 }
 
