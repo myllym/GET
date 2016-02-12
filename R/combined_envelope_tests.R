@@ -34,18 +34,10 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     # Find the k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test
     max_u <- res_rank$upper
     # Lower and upper envelope
-    switch(test,
-           qdir = {
-               lower <- function(i) { res_ls[[i]]$central_curve - max_u[i]*attr(res_ls[[i]], "lower_quantile") }
-               upper <- function(i) { res_ls[[i]]$central_curve + max_u[i]*attr(res_ls[[i]], "upper_quantile") }
-           },
-           st = {
-               lower <- function(i) { res_ls[[i]]$central_curve - max_u[i]*attr(res_ls[[i]], "sd") }
-               upper <- function(i) { res_ls[[i]]$central_curve + max_u[i]*attr(res_ls[[i]], "sd") }
-           })
-
-    LB_ls <- lapply(1:ntests, FUN = lower)
-    UB_ls <- lapply(1:ntests, FUN = upper)
+    lo <- function(i) { as.vector(res_ls[[i]]$central_curve - max_u[i]*lower_f[[i]]) }
+    up <- function(i) { as.vector(res_ls[[i]]$central_curve + max_u[i]*upper_f[[i]]) }
+    LB_ls <- lapply(1:ntests, FUN = lo)
+    UB_ls <- lapply(1:ntests, FUN = up)
 
     # Create a combined envelope object for plotting
     res_env <- NULL
