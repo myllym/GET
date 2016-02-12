@@ -223,8 +223,8 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
                UB <- array(0, nr);
                for(i in 1:nr){
                    Hod <- sort(data_and_sim_curves[,i])
-                   LB[i]<- Hod[kalpha_star];
-                   UB[i]<- Hod[nsim+1-kalpha_star+1];
+                   LB[i]<- Hod[kalpha_star]
+                   UB[i]<- Hod[nsim+1-kalpha_star+1]
                }
 
                adjenv <- list(r=tX$curve_set[['r']], method="Adjusted rank envelope test",
