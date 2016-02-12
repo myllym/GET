@@ -76,7 +76,7 @@ check_probs <- function(probs) {
 
 #' Quantile scaling.
 #'
-#' @inheritParams convert_envelope
+#' @inheritParams st_scaling
 #' @param probs A two-element vector containing the lower and upper
 #'   quantiles for the envelope, in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975 as in the article by Møller and
@@ -129,7 +129,6 @@ weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
 #'
 #' @details Notice that this scaling is only defined for residuals.
 #'
-#' @inheritParams convert_envelope
 #' @inheritParams q_scaling
 #' @return A scaled curve_set.
 qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
