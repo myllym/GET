@@ -181,7 +181,20 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     loopfun <- function(rep) {
         Xsim <- simpatterns[[rep]]
         if(!is.null(fitfun)) simfun.arg <- fitfun(Xsim) # a fitted model to be passed to simfun
-        if(Xismodel) Xsim <- spatstat::update(X, Xsim)
+        if(Xismodel)
+            switch(class(X)[1],
+                   ppm = {
+                       Xsim <- spatstat::update.ppm(X, Xsim)
+                   },
+                   kppm = {
+                       Xsim <- spatstat::update.kppm(X, Xsim)
+                   },
+                   lppm = {
+                       Xsim <- spatstat::update.lppm(X, Xsim)
+                   },
+                   slrm = {
+                       Xsim <- spatstat::update.slrm(X, Xsim)
+                   })
         tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
                 test = test, alpha = alpha, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
