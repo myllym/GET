@@ -55,14 +55,17 @@ envelope_to_curve_set <- function(env) {
     }
     res[['is_residual']] <- FALSE
 
-    res <- create_curve_set(res)
+    res <- create_curve_set(res, ...)
     res
 }
 
 #' Check the content validity of a potential curve_set object.
 #'
 #' @param curve_set A curve_set object to be checked.
-check_curve_set_content <- function(curve_set) {
+#' @param allow_Inf_values Logical, for internal use. Can be used to allow infinite or nonnumeric
+#' values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
+#' away (in \code{\link{crop_curves}}).
+check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     possible_names <- c('r', 'obs', 'sim_m', 'theo', 'is_residual')
 
     n <- length(curve_set)
@@ -102,7 +105,7 @@ check_curve_set_content <- function(curve_set) {
     if (!is.vector(obs)) {
         stop('curve_set[["obs"]] must be a vector.')
     }
-    if (!all(is.numeric(obs)) || !all(is.finite(obs))) {
+    if (!(allow_Inf_values | ( all(is.numeric(obs)) && all(is.finite(obs)) ))) {
         stop('curve_set[["obs"]] must have only finite numeric values.')
     }
 
@@ -118,7 +121,7 @@ check_curve_set_content <- function(curve_set) {
     if (dim_sim_m[2] < 1L) {
         stop('curve_set[["sim_m"]] must have at least one column.')
     }
-    if (!all(is.numeric(sim_m)) || !all(is.finite(sim_m))) {
+    if (!(allow_Inf_values | ( all(is.numeric(sim_m)) && all(is.finite(sim_m)) ))) {
         stop('curve_set[["sim_m"]] must have only finite numeric values.')
     }
 
@@ -132,7 +135,7 @@ check_curve_set_content <- function(curve_set) {
         if (!is.vector(theo)) {
             stop('curve_set[["theo"]] must be a vector.')
         }
-        if (!all(is.numeric(theo)) || !all(is.finite(theo))) {
+        if (!(allow_Inf_values | ( all(is.numeric(theo)) && all(is.finite(theo)) ))) {
             stop('curve_set[["theo"]] must have only finite numeric ',
                  'values.')
         }
