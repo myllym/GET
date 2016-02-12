@@ -3,8 +3,9 @@
 #' @param env An \code{\link[spatstat]{envelope}} object. The envelope()
 #'   functions must have been called with savefuns = TRUE.
 #' @return A corresponding curve_set object.
+#' @param ... Do not use. (For internal use only.)
 #' @export
-envelope_to_curve_set <- function(env) {
+envelope_to_curve_set <- function(env, ...) {
     if (!inherits(env, 'envelope')) {
         stop('env is not an envelope object.')
     }
@@ -165,17 +166,20 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
 #'   object. If an envelope object is given, it must contain the summary
 #'   functions from the simulated patterns which can be achieved by setting
 #'   savefuns = TRUE when calling envelope().
+#' @param ... Allows to pass arguments to \code{\link{check_curve_set_content}}
+#' and \code{\link{envelope_to_curve_set}} (to be passed further through
+#' \code{\link{create_curve_set}} to \code{\link{check_curve_set_content}}).
 #' @return If an \code{\link[spatstat]{envelope}} object was given, return a
 #'   corresponding curve_set object. If a curve_set object was given, return
 #'   it unharmed.
-convert_envelope <- function(curve_set) {
+convert_envelope <- function(curve_set, ...) {
     if (inherits(curve_set, 'envelope')) {
-        curve_set <- envelope_to_curve_set(curve_set)
+        curve_set <- envelope_to_curve_set(curve_set, ...)
     } else if (!is(curve_set, 'curve_set')) {
         stop('curve_set must either have class "envelope" (from spatstat) ',
              'or class "curve_set".')
     }
-    check_curve_set_content(curve_set)
+    check_curve_set_content(curve_set, ...)
     curve_set
 }
 
