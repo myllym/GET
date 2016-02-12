@@ -4,13 +4,17 @@
 \alias{convert_envelope}
 \title{Convert an envelope object to a curve_set object.}
 \usage{
-convert_envelope(curve_set)
+convert_envelope(curve_set, ...)
 }
 \arguments{
 \item{curve_set}{A curve_set or an \code{\link[spatstat]{envelope}}
 object. If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling envelope().}
+
+\item{...}{Allows to pass arguments to \code{\link{check_curve_set_content}}
+and \code{\link{envelope_to_curve_set}} (to be passed further through
+\code{\link{create_curve_set}} to \code{\link{check_curve_set_content}}).}
 }
 \value{
 If an \code{\link[spatstat]{envelope}} object was given, return a

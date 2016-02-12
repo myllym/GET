@@ -4,7 +4,7 @@
 \alias{create_curve_set}
 \title{Create a curve set out of a list in the right form.}
 \usage{
-create_curve_set(curve_set)
+create_curve_set(curve_set, ...)
 }
 \arguments{
 \item{curve_set}{A list containing elements r, obs, sim_m and optionally
@@ -16,6 +16,8 @@ patterns. Each column corresponds to a pattern. The number of rows must
 match the length of r. If included, theo corresponds to the theoretical
 summary function curve. If present, its length must match the length of
 r.}
+
+\item{...}{Do not use. (For internal use only.)}
 }
 \value{
 The given list adorned with the proper class name.
