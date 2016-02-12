@@ -13,10 +13,13 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
 
     switch(test, 
            qdir = {
-              res_ls <- lapply(curve_sets, FUN = function(x) { qdir_envelope(x, savedevs=TRUE, save_env_details=TRUE, ...) })
+              res_ls <- lapply(curve_sets, FUN = function(x) { qdir_envelope(x, alpha=alpha, savedevs=TRUE, probs = probs, ...) })
+              lower_f <- lapply(curve_sets, FUN = function(x) { as.vector(apply(x[['sim_m']], MARGIN=1, quantile, probs = probs[1])) } )
+              upper_f <- lapply(curve_sets, FUN = function(x) { as.vector(apply(x[['sim_m']], MARGIN=1, quantile, probs = probs[2])) } )
            },
            st = {
-              res_ls <- lapply(curve_sets, FUN = function(x) { st_envelope(x, savedevs=TRUE, save_env_details=TRUE, ...) })
+              res_ls <- lapply(curve_sets, FUN = function(x) { st_envelope(x, alpha=alpha, savedevs=TRUE, ...) })
+              lower_f <- upper_f <- lapply(curve_sets, FUN = function(x) { as.vector(apply(t(x[['sim_m']]), MARGIN=2, FUN=sd)) })
            })
 
     # Create a curve_set for the rank test
