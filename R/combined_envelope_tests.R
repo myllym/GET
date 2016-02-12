@@ -90,7 +90,7 @@ print.combined_scaled_MAD_test <- function(x, ...) {
 #'
 #' @method plot combined_scaled_MAD_test
 #' @export
-plot.combined_scaled_MAD_test <- function(x, plot_type = c("rank", "envelopes"), ...) {
+plot.combined_scaled_MAD_test <- function(x, plot_type = c("envelopes", "rank"), ...) {
     plot_type <- match.arg(plot_type)
     switch(plot_type,
            rank = {
