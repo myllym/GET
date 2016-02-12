@@ -99,7 +99,7 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
            })
 
     res <- structure(list(statistic = as.numeric(stat), p.value = global_envtest$p,
-                         method = test, curve_set = curve_set), class = "global_envelope_with_sims")
+                          method = test, curve_set = curve_set), class = "global_envelope_with_sims")
     if(save.envelope) {
         attr(res, "envelope_test") <- global_envtest
     }
