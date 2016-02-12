@@ -72,7 +72,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
 #'
 #' @method print combined_scaled_MAD_test
 #' @export
-print.envelope_test <- function(x, ...) {
+print.combined_scaled_MAD_test <- function(x, ...) {
     print(x$rank_test)
 }
 
@@ -90,7 +90,7 @@ print.envelope_test <- function(x, ...) {
 #'
 #' @method plot combined_scaled_MAD_test
 #' @export
-plot.envelope_test <- function(x, plot_type = c("rank", "envelopes"), ...) {
+plot.combined_scaled_MAD_test <- function(x, plot_type = c("rank", "envelopes"), ...) {
     plot_type <- match.arg(plot_type)
     switch(plot_type,
            rank = {
