@@ -8,16 +8,33 @@
 #' (studentized envelope test).
 #'
 #' The specification of X is important here:
+#' if simfun is not provided, the function \code{\link[spatstat]{envelope}} is used to generate
+#' simulations under the null hypothesis and to calculate the test functions (specified in the
+#' arguments ...) and then
 #' \itemize{
 #' \item If X is a point pattern, the null hypothesis is CSR.
 #' \item If X is a fitted model, the null hypothesis is that model.
 #' }
+#' If simfun is provided, then the null model is the one simulated by this given function,
+#' and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
+#' pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
 #'
 #' @param X An object containing point pattern data. A point pattern (object of class "ppp")
 #' or a fitted point process model (object of class "ppm" or "kppm"). See
 #' \code{\link[spatstat]{envelope}}.
+#' @param nsim The number of simulations.
+#' @param simfun A function for generating simulations from the null model. If given, this function
+#' is called by replicate(n=nsim, simfun(simfun.param), simplify=FALSE) to make nsim simulations.
+#' The function should return an \code{\link[spatstat]{ppp}} object as those are further passed to
+#' \code{\link[spatstat]{envelope}}.
+#' If the function is not provided, then \code{\link[spatstat]{envelope}} is used also for generating
+#' the point patterns from the null hypothesis.
+#' @param simfun.arg The parameter to be passed to simfun. The function simfun should handle
+#' with the structure of simfun.param.
 #' @param ... Additional parameters passed to \code{\link[spatstat]{envelope}}.
-#' For example, the test function in the argument 'fun'.
+#' For example, the test function in the argument 'fun' and further specifications regarding that.
+#' If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
+#' (if simfun not provided), then also recall to specify how to generate the simulations.
 #' @param test Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
 #' \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
@@ -45,7 +62,7 @@
 #' See \code{\link[spatstat]{envelope}}.
 #' @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
 #' \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
-global_envelope_with_sims <- function(X, ..., test = c("rank", "qdir", "st"),
+global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided", "less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
         lexo = TRUE, ties=NULL,
@@ -53,8 +70,16 @@ global_envelope_with_sims <- function(X, ..., test = c("rank", "qdir", "st"),
         verbose = FALSE) {
     test <- match.arg(test)
     alt <- match.arg(alternative)
-    # Create simulations from the given model
-    X <- spatstat::envelope(X, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    if(!is.null(simfun)) {
+        # Create simulations by the given function
+        simpatterns <- replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)
+        # Calculate the test functions
+        X <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    }
+    else {
+        # Create simulations from the given model and calculate the test functions
+        X <- spatstat::envelope(X, nsim=nsim, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    }
     # Crop curves (if r_min or r_max given)
     curve_set <- crop_curves(X, r_min = r_min, r_max = r_max)
     # Make the test
@@ -105,6 +130,10 @@ global_envelope_with_sims <- function(X, ..., test = c("rank", "qdir", "st"),
 #' @param nsimsub Number of simulations in each basic test. There will be nsim repetitions of the
 #' basic test, each involving nsimsub simulated realisations, so there will be a total of
 #' nsim * (1 + nsimsub) simulations.
+#' @param fitfun A function for estimating the parameters of the null model. If not given, then
+#' \code{\link[spatstat]{envelope}} takes care of the parameter estimation as well (and X should be a fitted
+#' model object). The function 'fitfun' should return the fitted model in the form that it can be directly
+#' passed to 'simfun' as the argument 'simfun.arg'.
 #' @param save.cons.envelope Logical flag indicating whether to save the unadjusted envelope test results.
 #' @param mc.cores The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 #' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
@@ -119,19 +148,25 @@ global_envelope_with_sims <- function(X, ..., test = c("rank", "qdir", "st"),
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
 #' \code{\link{plot.adjusted_envelope_test}}
 #' @export
-dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
-        nsim = 499, nsimsub = nsim,
+dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
+        simfun=NULL, fitfun=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided","less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
         #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
         verbose=TRUE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
+    if(is.null(simfun) != is.null(fitfun)) stop("Either both \'simfun\' and \'fitfun\' should be provided or neither of them.\n")
+    if((is.null(simfun) | is.null(fitfun)) & !Xismodel)
+        warning("\'simfun\' and/or \'fitfun\' not provided and \'X\' is not a fitted model object.\n",
+                "As \'envelope\' is used for simulations and model fitting, \n",
+                "\'X\' should be a fitted model object.")
     test <- match.arg(test)
     alt <- match.arg(alternative)
     if(verbose) cat("Applying test to original data...\n")
-    tX <- global_envelope_with_sims(X, nsim=nsim, ...,
-            test = test, alpha = 0.05, alternative = alt,
+    if(!is.null(fitfun)) simfun.arg <- fitfun(X) # a fitted model to be passed to simfun
+    tX <- spptest:::global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
+            test = test, alpha = alpha, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
             lexo = FALSE, ties='midrank',
             save.envelope = save.cons.envelope, savefuns = savefuns, savepatterns = TRUE,
@@ -144,9 +179,10 @@ dg.global_envelope <- function(X, ..., test = c("rank", "qdir", "st"),
     # the extreme rank (or deviation) measure and p-value
     loopfun <- function(rep) {
         Xsim <- simpatterns[[rep]]
+        if(!is.null(fitfun)) simfun.arg <- fitfun(Xsim) # a fitted model to be passed to simfun
         if(Xismodel) Xsim <- spatstat::update(X, Xsim)
-        tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, ...,
-                test = test, alpha = 0.05, alternative = alt,
+        tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
+                test = test, alpha = alpha, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
                 lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
