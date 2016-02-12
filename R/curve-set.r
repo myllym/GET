@@ -205,10 +205,11 @@ check_residualness <- function(curve_set) {
 #'   match the length of r. If included, theo corresponds to the theoretical
 #'   summary function curve. If present, its length must match the length of
 #'   r.
+#' @param ... Do not use. (For internal use only.)
 #' @return The given list adorned with the proper class name.
 #' @export
-create_curve_set <- function(curve_set) {
-    check_curve_set_content(curve_set)
+create_curve_set <- function(curve_set, ...) {
+    check_curve_set_content(curve_set, ...)
     class(curve_set) <- 'curve_set'
     curve_set
 }
