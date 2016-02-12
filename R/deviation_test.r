@@ -52,7 +52,6 @@
 #' the test the very small distances r for which ties occur.
 #'
 #'
-#' @inheritParams convert_envelope
 #' @inheritParams crop_curves
 #' @inheritParams residual
 #' @inheritParams deviation
