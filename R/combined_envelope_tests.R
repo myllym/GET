@@ -5,7 +5,7 @@
 #' "st" for the \code{\link{st_envelope}} test.
 #' @inheritParams qdir_envelope
 #' @export
-combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05, ...) {
+combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05, probs = c(0.025, 0.975), ...) {
 
     ntests <- length(curve_sets)
     test <- match.arg(test)
