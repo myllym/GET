@@ -13,9 +13,14 @@ combined_scaled_MAD_envelope(curve_sets, test = c("qdir", "st"),
 \item{test}{Either "qdir" for the \code{\link{qdir_envelope}} test or
 "st" for the \code{\link{st_envelope}} test.}
 
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
+
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the envelope, in that order and on the interval [0, 1].
 The default values are 0.025 and 0.975.}
+
+\item{...}{Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
+or \code{\link{st_envelope}} (if test = "st").}
 }
 \description{
 Combined global scaled maximum absolute difference (MAD) envelope tests
