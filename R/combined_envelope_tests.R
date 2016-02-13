@@ -3,7 +3,12 @@
 #' @param curve_sets A list of objects of type 
 #' @param test Either "qdir" for the \code{\link{qdir_envelope}} test or
 #' "st" for the \code{\link{st_envelope}} test.
-#' @inheritParams qdir_envelope
+#' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
+#' @param probs A two-element vector containing the lower and upper
+#' quantiles for the envelope, in that order and on the interval [0, 1].
+#' The default values are 0.025 and 0.975.
+#' @param ... Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
+#' or \code{\link{st_envelope}} (if test = "st").
 #' @export
 combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05, probs = c(0.025, 0.975), ...) {
 
