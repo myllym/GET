@@ -10,6 +10,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     ntests <- length(curve_sets)
     test <- match.arg(test)
     curve_sets <- lapply(curve_sets, FUN = function(x) convert_envelope(x))
+    curve_sets_res <- lapply(curve_sets, FUN = function(x) residual(x, use_theo = TRUE))
 
     switch(test, 
            qdir = {
