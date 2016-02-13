@@ -166,7 +166,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     simfun.arg <- NULL
     if(!is.null(fitfun)) simfun.arg <- fitfun(X) # a fitted model parameters to be passed to simfun
     if(verbose) cat("Applying test to original data...\n")
-    tX <- spptest:::global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
+    tX <- global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
             test = test, alpha = alpha, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
             lexo = FALSE, ties='midrank',
