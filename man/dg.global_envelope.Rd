@@ -4,28 +4,43 @@
 \alias{dg.global_envelope}
 \title{Adjusted global envelope tests}
 \usage{
-dg.global_envelope(X, ..., test = c("rank", "qdir", "st"), nsim = 499,
-  nsimsub = nsim, alpha = 0.05, alternative = c("two.sided", "less",
-  "greater"), r_min = NULL, r_max = NULL, take_residual = FALSE,
-  save.cons.envelope = savefuns || savepatterns, savefuns = FALSE,
-  savepatterns = FALSE, verbose = TRUE, mc.cores = 1L)
+dg.global_envelope(X, nsim = 499, nsimsub = nsim, simfun = NULL,
+  fitfun = NULL, ..., test = c("rank", "qdir", "st"), alpha = 0.05,
+  alternative = c("two.sided", "less", "greater"), r_min = NULL,
+  r_max = NULL, take_residual = FALSE, save.cons.envelope = savefuns ||
+  savepatterns, savefuns = FALSE, savepatterns = FALSE, verbose = TRUE,
+  mc.cores = 1L)
 }
 \arguments{
 \item{X}{An object containing point pattern data. A point pattern (object of class "ppp")
 or a fitted point process model (object of class "ppm" or "kppm"). See
 \code{\link[spatstat]{envelope}}.}
 
-\item{...}{Additional parameters passed to \code{\link[spatstat]{envelope}}.
-For example, the test function in the argument 'fun'.}
-
-\item{test}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
-\code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
-
 \item{nsim}{The number of simulations to be generated in the primary test.}
 
 \item{nsimsub}{Number of simulations in each basic test. There will be nsim repetitions of the
 basic test, each involving nsimsub simulated realisations, so there will be a total of
 nsim * (1 + nsimsub) simulations.}
+
+\item{simfun}{A function for generating simulations from the null model. If given, this function
+is called by replicate(n=nsim, simfun(simfun.param), simplify=FALSE) to make nsim simulations.
+The function should return an \code{\link[spatstat]{ppp}} object as those are further passed to
+\code{\link[spatstat]{envelope}}.
+If the function is not provided, then \code{\link[spatstat]{envelope}} is used also for generating
+the point patterns from the null hypothesis.}
+
+\item{fitfun}{A function for estimating the parameters of the null model. If not given, then
+\code{\link[spatstat]{envelope}} takes care of the parameter estimation as well (and X should be a fitted
+model object). The function 'fitfun' should return the fitted model in the form that it can be directly
+passed to 'simfun' as the argument 'simfun.arg'.}
+
+\item{...}{Additional parameters passed to \code{\link[spatstat]{envelope}}.
+For example, the test function in the argument 'fun' and further specifications regarding that.
+If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
+(if simfun not provided), then also recall to specify how to generate the simulations.}
+
+\item{test}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
+\code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
