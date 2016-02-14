@@ -210,11 +210,9 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
 
     res <- structure(list(statistic = as.numeric(stat), p.value = pval,
                     method = test, curve_set = curve_set_combined), class = "global_envelope_with_sims")
-    if(save.envelope) {
-        attr(res, "envelope_test") <- global_envtest
-    }
-    if(savefuns) attr(res, "simfuns") <- attr(X, "simfuns")
-    if(savepatterns) attr(res, "simpatterns") <- attr(X, "simpatterns")
+    if(save.envelope) attr(res, "envelope_test") <- global_envtest
+    if(savefuns) attr(res, "simfuns") <- curve_sets_ls
+    if(savepatterns) attr(res, "simpatterns") <- simpatterns
 
     res
 }
