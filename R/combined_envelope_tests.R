@@ -59,19 +59,16 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     ntests <- length(curve_sets)
     test <- match.arg(test)
     curve_sets <- lapply(curve_sets, FUN = function(x) convert_envelope(x))
-    curve_sets_res <- lapply(curve_sets, FUN = function(x) residual(x, use_theo = TRUE))
-
+    # Make the individual tests saving the deviations
     switch(test, 
-           qdir = {
-              res_ls <- lapply(curve_sets, FUN = function(x) { qdir_envelope(x, alpha=alpha, savedevs=TRUE, probs = probs, ...) })
-              quant_m_ls <- lapply(curve_sets_res, FUN = function(x) apply(x[['sim_m']], 1, quantile, probs = probs))
-              lower_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[1,])))
-              upper_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[2,])))
-           },
-           st = {
-              res_ls <- lapply(curve_sets, FUN = function(x) { st_envelope(x, alpha=alpha, savedevs=TRUE, ...) })
-              lower_f <- upper_f <- lapply(curve_sets_res, FUN = function(x) { as.vector(apply(x[['sim_m']], MARGIN=1, FUN=sd)) })
-           })
+            qdir = {
+                res_ls <- lapply(curve_sets, FUN = function(x) { qdir_envelope(x, alpha=alpha, savedevs=TRUE, probs = probs, ...) })
+            },
+            st = {
+                res_ls <- lapply(curve_sets, FUN = function(x) { st_envelope(x, alpha=alpha, savedevs=TRUE, ...) })
+            })
+    # Calculate quantiles (qdir) or sds (st)
+    envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, test=test, probs=probs)
 
     # Create a curve_set for the rank test
     u_ls <- lapply(res_ls, FUN = function(x) x$u)
@@ -81,14 +78,9 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     # Perform the one-sided (greater is significant) rank test
     res_rank <- rank_envelope(curve_set_u, alpha=alpha, savedevs=TRUE, alternative="greater", lexo=TRUE)
 
-    # The global 100(1-alpha)% envelope
-    # Find the k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test
-    max_u <- res_rank$upper
-    # Lower and upper envelope
-    lo <- function(i) { as.vector(res_ls[[i]]$central_curve - max_u[i]*lower_f[[i]]) }
-    up <- function(i) { as.vector(res_ls[[i]]$central_curve + max_u[i]*upper_f[[i]]) }
-    LB_ls <- lapply(1:ntests, FUN = lo)
-    UB_ls <- lapply(1:ntests, FUN = up)
+    central_curves_ls <- lapply(res_ls, function(x) x$central_curve)
+    bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$upper,
+                                                           lower_f=envchars$lower_f, upper_f=envchars$upper_f)
 
     # Create a combined envelope object for plotting
     res_env <- structure(list(r = do.call(c, lapply(res_ls, FUN = function(x) x$r), quote=FALSE),
@@ -98,8 +90,8 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
                               p_interval = res_rank$p_interval,
                               central_curve = do.call(c, lapply(res_ls, FUN = function(x) x$central_curve), quote=FALSE),
                               data_curve = do.call(c, lapply(res_ls, FUN = function(x) x$data_curve), quote=FALSE),
-                              lower = do.call(c, LB_ls, quote=FALSE),
-                              upper = do.call(c, UB_ls, quote=FALSE)),
+                              lower = do.call(c, bounding_curves$lower_ls, quote=FALSE),
+                              upper = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
                          class = c("combined_scaled_MAD_envelope", "envelope_test"))
 
     # return
