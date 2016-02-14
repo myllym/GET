@@ -61,6 +61,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     # return
     res <- structure(list(rank_test = res_rank, envelope = res_env),
                      class = "combined_scaled_MAD_test")
+    attr(res, "rank_test_curve_set") <- curve_set_u
     res
 }
 
