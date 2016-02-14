@@ -370,6 +370,154 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
 }
 
 
+#' Adjusted combined global envelope tests
+#'
+#' Adjusted combined global rank envelope test, studentized envelope test or directional quantile envelope test.
+#'
+#'
+#' The specification of X is important here:
+#' \itemize{
+#' \item If X is a point pattern, the null hypothesis is CSR.
+#' \item If X is a fitted model, the null hypothesis is that model.
+#' }
+#'
+#' The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though the function
+#' \code{\link{global_envelope_with_sims}}, mimics the structure in the function
+#' \code{\link[spatstat]{dg.envelope}} in the use of \code{\link[spatstat]{envelope}}.
+#'
+#' @inheritParams combined_global_envelope_with_sims
+#' @inheritParams dg.global_envelope
+#'
+#' @return An object of class adjusted_envelope_test.
+#' @references
+#' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
+#'
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
+#'
+#' Dao, N.A. and Genton, M. (2014). A Monte Carlo adjusted goodness-of-fit test for parametric models describing spatial point patterns. Journal of Graphical and Computational Statistics 23, 497-517.
+#'
+#' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
+#' \code{\link{plot.adjusted_envelope_test}}
+#' @export
+dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
+        simfun=NULL, fitfun=NULL, ...,
+        testfuns = NULL, test = c("qdir", "st", "rank"),
+        alpha = 0.05, alternative = c("two.sided","less", "greater"),
+        r_min=NULL, r_max=NULL, take_residual=FALSE,
+        #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
+        save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
+        verbose=TRUE, mc.cores=1L) {
+    Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
+    if(is.null(simfun) != is.null(fitfun)) stop("Either both \'simfun\' and \'fitfun\' should be provided or neither of them.\n")
+    if((is.null(simfun) | is.null(fitfun)) & !Xismodel)
+        warning("\'simfun\' and/or \'fitfun\' not provided and \'X\' is not a fitted model object.\n",
+                "As \'envelope\' is used for simulations and model fitting, \n",
+                "\'X\' should be a fitted model object.")
+    test <- match.arg(test)
+    alt <- match.arg(alternative)
+    simfun.arg <- NULL
+    if(!is.null(fitfun)) simfun.arg <- fitfun(X) # a fitted model parameters to be passed to simfun
+    if(verbose) cat("Applying test to original data...\n")
+    tX <- combined_global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
+            testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
+            r_min=r_min, r_max=r_max, take_residual=take_residual,
+            lexo = FALSE, ties='midrank',
+            save.envelope = save.cons.envelope, savefuns = savefuns, savepatterns = TRUE,
+            verbose = verbose)
+    if(verbose) cat("Done.\n")
+    simpatterns <- attr(tX, "simpatterns")
+
+    if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... \n"))
+    # For each of the simulated patterns in 'simpatterns', perform the test and calculate
+    # the extreme rank (or deviation) measure and p-value
+    loopfun <- function(rep) {
+        Xsim <- simpatterns[[rep]]
+        if(!is.null(fitfun)) simfun.arg <- fitfun(Xsim) # a fitted model to be passed to simfun
+        if(Xismodel)
+            switch(class(X)[1],
+                    ppm = {
+                        Xsim <- spatstat::update.ppm(X, Xsim)
+                    },
+                    kppm = {
+                        Xsim <- spatstat::update.kppm(X, Xsim)
+                    },
+                    lppm = {
+                        Xsim <- spatstat::update.lppm(X, Xsim)
+                    },
+                    slrm = {
+                        Xsim <- spatstat::update.slrm(X, Xsim)
+                    })
+        tXsim <- combined_global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
+                testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
+                r_min=r_min, r_max=r_max, take_residual=take_residual,
+                lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
+                save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
+                verbose = verbose)
+        list(stat = tXsim$statistic, pval = tXsim$p.value)
+    }
+    mclapply_res <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores)
+    stats <- sapply(mclapply_res, function(x) x$stat)
+    pvals <- sapply(mclapply_res, function(x) x$pval)
+
+    #-- The rank test
+    # Calculate the critical rank / alpha
+    kalpha_star <- quantile(stats, probs=alpha, type=1)
+    #alpha_star <- quantile(pvals, probs=alpha, type=1)
+
+    data_curve <- tX$curve_set[['obs']]
+    sim_curves <- t(tX$curve_set[['sim_m']])
+    data_and_sim_curves <- rbind(data_curve, sim_curves)
+    T_0 <- get_T_0(tX$curve_set)
+
+    nr <- length(tX$curve_set$r)
+    LB <- array(0, nr);
+    UB <- array(0, nr);
+    for(i in 1:nr){
+        Hod <- sort(data_and_sim_curves[,i])
+        LB[i]<- Hod[kalpha_star]
+        UB[i]<- Hod[nsim+1-kalpha_star+1]
+    }
+    # -> kalpha_stat, LB, UB of the rank test
+    adjenv <- list(r=tX$curve_set[['r']], method="Adjusted rank envelope test",
+            alternative = alt,
+            p=NULL, p_interval=NULL,
+            k_alpha=kalpha_star, k=stats,
+            central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
+            call=match.call())
+    test_name <- "Adjusted rank envelope test"
+
+    # In the case of the combined scaled MAD envelope tests, we also need to calculate the new qdir/st envelopes
+    res_env <- NULL
+    if(test != "rank") {
+        envchars <- combined_scaled_MAD_bounding_curves_chars(attr(tX, "simfuns"), test = test)
+        central_curves_ls <- lapply(attr(tX, "simfuns"), function(x) get_T_0(x))
+        bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=adjenv$upper,
+                                                               lower_f=envchars$lower_f, upper_f=envchars$upper_f)
+        # Create a combined envelope object for plotting
+        res_env <- structure(list(r = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x$r), quote=FALSE),
+                                  method = "Adjusted combined scaled MAD envelope test",
+                                  alternative = "two.sided",
+                                  p = adjenv$p,
+                                  p_interval = adjenv$p_interval,
+                                  central_curve = as.vector(do.call(c, central_curves_ls, quote=FALSE)),
+                                  data_curve = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x[['obs']]), quote=FALSE),
+                                  lower = do.call(c, bounding_curves$lower_ls, quote=FALSE),
+                                  upper = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
+                             class = c("combined_scaled_MAD_envelope", "envelope_test"))
+    }
+
+    res <- structure(list(adj_envelope_test = adjenv,
+                          method = test_name), class = "adjusted_envelope_test")
+    if(savepatterns) attr(res, "simpatterns") <- simpatterns
+    if(savefuns) attr(res, "simfuns") <- attr(tX, "simfuns")
+    if(save.cons.envelope) attr(res, "unadjusted_envelope_test") <- attr(tX, "envelope_test")
+    if(!is.null(res_env)) attr(res, "adjusted_scaled_MAD_envelope") <- res_env
+    attr(res, "alternative") <- alt
+    attr(res, "call") <- match.call()
+    res
+}
+
+
 #' Print method for the class 'envelope_test'
 #' @usage \method{print}{adjusted_envelope_test}(x, ...)
 #'
