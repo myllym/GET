@@ -130,6 +130,8 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
 #' and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
 #' pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
 #'
+#' If savefuns is TRUE, all the simulated functions are saved in an attribute "simfuns" as a list
+#' of curve sets for each test function.
 #' @inheritParams global_envelope_with_sims
 #' @param testfuns A list of arguments for different test functions to be passed to \code{\link[spatstat]{envelope}}.
 #' @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
