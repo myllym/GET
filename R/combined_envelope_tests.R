@@ -51,6 +51,8 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' The default values are 0.025 and 0.975.
 #' @param ... Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
 #' or \code{\link{st_envelope}} (if test = "st").
+#' @references
+#' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
 #' @export
 combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05, probs = c(0.025, 0.975), ...) {
 
