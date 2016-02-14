@@ -155,21 +155,28 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
         simpatterns <- replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)
         # Calculate the test functions
         for(i in 1:nfuns) {
-            tmpstring <- "X <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, "
+            tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
             for(j in 1:length(testfuns_argnames_ls[[i]]))
                 tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-            tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = savepatterns, verbose=verbose, ...)", sep="")
-            assign(paste("X.testfunc", i, sep=""), eval(parse(text = tmpstring)))
+            tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = FALSE, verbose=verbose, ...)", sep="")
+            eval(parse(text = tmpstring))
         }
     }
     else {
         # Create simulations from the given model and calculate the test functions
-        for(i in 1:nfuns) {
-            tmpstring <- "X <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, "
+        i = 1
+        tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, ", sep="")
+        for(j in 1:length(testfuns_argnames_ls[[i]]))
+            tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
+        tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = TRUE, verbose=verbose, ...)", sep="")
+        eval(parse(text = tmpstring))
+        simpatterns <- attr(X.testfunc1, "simpatterns")
+        for(i in 2:nfuns) {
+            tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
             for(j in 1:length(testfuns_argnames_ls[[i]]))
                 tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-            tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = savepatterns, verbose=verbose, ...)", sep="")
-            assign(paste("X.testfunc", i, sep=""), eval(parse(text = tmpstring)))
+            tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = FALSE, verbose=verbose, ...)", sep="")
+            eval(parse(text = tmpstring))
         }
     }
     curve_sets_ls <- NULL
