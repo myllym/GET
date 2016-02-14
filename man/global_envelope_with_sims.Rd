@@ -4,19 +4,34 @@
 \alias{global_envelope_with_sims}
 \title{A global envelope test}
 \usage{
-global_envelope_with_sims(X, ..., test = c("rank", "qdir", "st"),
-  alpha = 0.05, alternative = c("two.sided", "less", "greater"),
-  r_min = NULL, r_max = NULL, take_residual = FALSE, lexo = TRUE,
-  ties = NULL, save.envelope = TRUE, savefuns = FALSE,
-  savepatterns = FALSE, verbose = FALSE)
+global_envelope_with_sims(X, nsim, simfun = NULL, simfun.arg = NULL, ...,
+  test = c("rank", "qdir", "st"), alpha = 0.05,
+  alternative = c("two.sided", "less", "greater"), r_min = NULL,
+  r_max = NULL, take_residual = FALSE, lexo = TRUE, ties = NULL,
+  save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
+  verbose = FALSE)
 }
 \arguments{
 \item{X}{An object containing point pattern data. A point pattern (object of class "ppp")
 or a fitted point process model (object of class "ppm" or "kppm"). See
 \code{\link[spatstat]{envelope}}.}
 
+\item{nsim}{The number of simulations.}
+
+\item{simfun}{A function for generating simulations from the null model. If given, this function
+is called by replicate(n=nsim, simfun(simfun.param), simplify=FALSE) to make nsim simulations.
+The function should return an \code{\link[spatstat]{ppp}} object as those are further passed to
+\code{\link[spatstat]{envelope}}.
+If the function is not provided, then \code{\link[spatstat]{envelope}} is used also for generating
+the point patterns from the null hypothesis.}
+
+\item{simfun.arg}{The parameter to be passed to simfun. The function simfun should handle
+with the structure of simfun.param.}
+
 \item{...}{Additional parameters passed to \code{\link[spatstat]{envelope}}.
-For example, the test function in the argument 'fun'.}
+For example, the test function in the argument 'fun' and further specifications regarding that.
+If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
+(if simfun not provided), then also recall to specify how to generate the simulations.}
 
 \item{test}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
 \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
@@ -64,10 +79,16 @@ Details of the tests are given in \code{\link{rank_envelope}} (rank envelope tes
 (studentized envelope test).
 
 The specification of X is important here:
+if simfun is not provided, the function \code{\link[spatstat]{envelope}} is used to generate
+simulations under the null hypothesis and to calculate the test functions (specified in the
+arguments ...) and then
 \itemize{
 \item If X is a point pattern, the null hypothesis is CSR.
 \item If X is a fitted model, the null hypothesis is that model.
 }
+If simfun is provided, then the null model is the one simulated by this given function,
+and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
+pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
 }
 \seealso{
 \code{\link[spatstat]{envelope}} (that is used to perform simulations),

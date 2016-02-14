@@ -514,10 +514,10 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the 100(1-alpha)% global envelope
-    distancesorted <- sort(distance);
-    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
-    LB <- T_0 - talpha*abs(quant_m[1,]);
-    UB <- T_0 + talpha*abs(quant_m[2,]);
+    distancesorted <- sort(distance)
+    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
+    LB <- T_0 - talpha*abs(quant_m[1,])
+    UB <- T_0 + talpha*abs(quant_m[2,])
 
     res <- list(r=curve_set[['r']], method="Directional quantile envelope test", alternative = "two.sided",
                 p=p,
