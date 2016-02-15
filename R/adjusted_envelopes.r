@@ -591,8 +591,9 @@ plot.adjusted_combined_envelope_test <- function (x, main, plot_type = c("rank",
                p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
            },
            MAD = {
+               tmp <- attr(x, "adjusted_scaled_MAD_envelope")
                if(missing(main)) main <- tmp$method
-               p <- plot(attr(x, "adjusted_scaled_MAD_envelope"), main=main, ...)
+               p <- plot(tmp, main=main, ...)
            })
     invisible(p)
 }
