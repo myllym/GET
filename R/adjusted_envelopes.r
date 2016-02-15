@@ -385,8 +385,7 @@ print.adjusted_envelope_test <- function (x, ...) {
 }
 
 #' Plot method for the class 'adjusted_envelope_test'
-#' @usage \method{plot}{adjusted_envelope_test}(x, main,
-#' plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...)
+#' @usage \method{plot}{adjusted_envelope_test}(x, main, plot_unadjusted=FALSE, ...)
 #'
 #' @param x an 'adjusted_envelope_test' object
 #' @param main See \code{\link{plot.default}}. Default is x$method.
