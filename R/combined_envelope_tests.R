@@ -24,8 +24,8 @@ combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, test = c("qdir
 #'
 #' @param central_curves_ls A list containing the central functions for different test functions.
 #' @param max_u The k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test.
-#' @param lower_f The first component in the object returned by \code{\link{combined_scaled_MAD_envelopefuns}}.
-#' @param upper_f The second component in the object returned by \code{\link{combined_scaled_MAD_envelopefuns}}.
+#' @param lower_f The first component in the object returned by \code{\link{combined_scaled_MAD_bounding_curves_chars}}.
+#' @param upper_f The second component in the object returned by \code{\link{combined_scaled_MAD_bounding_curves_chars}}.
 combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_f, upper_f) {
     ntests <- length(central_curves_ls)
     if(length(max_u) != ntests | length(lower_f) != ntests | length(upper_f) != ntests)
