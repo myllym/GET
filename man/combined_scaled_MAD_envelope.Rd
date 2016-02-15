@@ -25,4 +25,7 @@ or \code{\link{st_envelope}} (if test = "st").}
 \description{
 Combined global scaled maximum absolute difference (MAD) envelope tests
 }
+\references{
+Mrkvicka, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
+}
 

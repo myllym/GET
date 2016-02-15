@@ -4,7 +4,7 @@
 \alias{plot.combined_scaled_MAD_test}
 \title{Plot method for the class 'combined_scaled_MAD_test'}
 \usage{
-\method{plot}{combined_scaled_MAD_test}(x, plot_type = c("envelopes", "rank"), ...)
+\method{plot}{combined_scaled_MAD_test}(x, plot_type = c("envelope", "rank"), ...)
 }
 \arguments{
 \item{x}{An 'combined_scaled_MAD_test' object}

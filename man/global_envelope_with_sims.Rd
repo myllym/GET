@@ -39,8 +39,8 @@ If \code{\link[spatstat]{envelope}} is also used to generate simulations under t
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
 \item{alternative}{A character string specifying the alternative hypothesis. Must be one of
-the following: "two.sided" (default), "less" or "greater" for "rank". For "st" and "qdir" tests,
-the argument is ignored (only "two-sided" possible).}
+the following: "two.sided" (default), "less" or "greater" for "rank". Relevant only for the
+rank test (otherwise ignored).}
 
 \item{r_min}{The minimum radius to include in the test.}
 

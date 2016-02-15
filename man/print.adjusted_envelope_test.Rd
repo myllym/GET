@@ -2,7 +2,7 @@
 % Please edit documentation in R/adjusted_envelopes.r
 \name{print.adjusted_envelope_test}
 \alias{print.adjusted_envelope_test}
-\title{Print method for the class 'envelope_test'}
+\title{Print method for the class 'adjusted_envelope_test'}
 \usage{
 \method{print}{adjusted_envelope_test}(x, ...)
 }
@@ -12,6 +12,6 @@
 \item{...}{Ignored.}
 }
 \description{
-Print method for the class 'envelope_test'
+Print method for the class 'adjusted_envelope_test'
 }
 
