@@ -437,7 +437,7 @@ plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
 dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         simfun=NULL, fitfun=NULL, ...,
         testfuns = NULL, test = c("qdir", "st", "rank"),
-        alpha = 0.05, alternative = c("two.sided","less", "greater"),
+        alpha = 0.05, alternative = c("two.sided", "less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
         #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
