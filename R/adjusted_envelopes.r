@@ -167,11 +167,11 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
     else {
         # Create simulations from the given model and calculate the test functions
         i = 1
-        tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, ", sep="")
+        tmpstring <- paste("spatstat::envelope(X, nsim=nsim, ", sep="")
         for(j in 1:length(testfuns_argnames_ls[[i]]))
             tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
         tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = TRUE, verbose=verbose, ...)", sep="")
-        eval(parse(text = tmpstring))
+        X.testfunc1 <- eval(parse(text = tmpstring))
         simpatterns <- attr(X.testfunc1, "simpatterns")
         for(i in 2:nfuns) {
             tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
