@@ -449,7 +449,8 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
                 "As \'envelope\' is used for simulations and model fitting, \n",
                 "\'X\' should be a fitted model object.")
     test <- match.arg(test)
-    alt <- match.arg(alternative)
+    if(test == "rank") alt <- match.arg(alternative)
+    else alt <- "greater"
     simfun.arg <- NULL
     if(!is.null(fitfun)) simfun.arg <- fitfun(X) # a fitted model parameters to be passed to simfun
     if(verbose) cat("Applying test to original data...\n")
