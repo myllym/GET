@@ -33,6 +33,9 @@ For example, the test function in the argument 'fun' and further specifications 
 If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
 (if simfun not provided), then also recall to specify how to generate the simulations.}
 
+\item{testfuns}{A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
+A list of parameters should be provided for each test function that is to be used in the combined test.}
+
 \item{test}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
 \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
 

@@ -11,9 +11,9 @@ combined_scaled_MAD_bounding_curves(central_curves_ls, max_u, lower_f, upper_f)
 
 \item{max_u}{The k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test.}
 
-\item{lower_f}{The first component in the object returned by \code{\link{combined_scaled_MAD_envelopefuns}}.}
+\item{lower_f}{The first component in the object returned by \code{\link{combined_scaled_MAD_bounding_curves_chars}}.}
 
-\item{upper_f}{The second component in the object returned by \code{\link{combined_scaled_MAD_envelopefuns}}.}
+\item{upper_f}{The second component in the object returned by \code{\link{combined_scaled_MAD_bounding_curves_chars}}.}
 }
 \description{
 Calculate the lower and upper bounding curves of a combined global scaled MAD envelope test

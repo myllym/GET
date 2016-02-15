@@ -4,8 +4,7 @@
 \alias{plot.adjusted_envelope_test}
 \title{Plot method for the class 'adjusted_envelope_test'}
 \usage{
-\method{plot}{adjusted_envelope_test}(x, main,
-plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...)
+\method{plot}{adjusted_envelope_test}(x, main, plot_unadjusted=FALSE, ...)
 }
 \arguments{
 \item{x}{an 'adjusted_envelope_test' object}

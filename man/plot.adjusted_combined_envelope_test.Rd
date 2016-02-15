@@ -4,20 +4,19 @@
 \alias{plot.adjusted_combined_envelope_test}
 \title{Plot method for the class 'adjusted_envelope_test'}
 \usage{
-\method{plot}{adjusted_combined_envelope_test}(x, main,
-plot_unadjusted=!is.null(attr(x, "adjusted_combined_envelope_test")), ...)
+\method{plot}{adjusted_combined_envelope_test}(x, main, plot_type = c("rank", "MAD"), ...)
 }
 \arguments{
 \item{x}{an 'adjusted_combined_envelope_test' object}
 
 \item{main}{See \code{\link{plot.default}}. Default is x$method.}
 
+\item{plot_type}{"rank" for the result of the rank envelope test; "MAD" for the
+adjusted combined scaled MAD envelope. The latter only available if saved in 'x'.}
+
 \item{...}{Additional parameters to be passed to \code{\link{plot.envelope_test}},
 if plot_type is "rank" or to \code{\link{plot.combined_scaled_MAD_test}}, if
 plot_type is "MAD".}
-
-\item{test_type}{"rank" for the result of the rank envelope test; "MAD" for the
-adjusted combined scaled MAD envelope. The latter only available if saved in 'x'.}
 }
 \description{
 Plot method for the class 'adjusted_envelope_test'
