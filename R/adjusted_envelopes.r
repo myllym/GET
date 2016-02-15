@@ -336,10 +336,11 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
 
                adjenv <- list(r=tX$curve_set[['r']], method="Adjusted rank envelope test",
                        alternative = alt,
-                       p=NULL, p_interval=NULL, 
+                       p=NULL, p_interval=NULL,
                        k_alpha=kalpha_star, k=stats,
                        central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                        call=match.call())
+               class(adjenv) <- "envelope_test"
                test_name <- "Adjusted rank envelope test"
            },
            qdir = {
