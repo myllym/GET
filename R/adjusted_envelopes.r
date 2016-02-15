@@ -370,6 +370,40 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     res
 }
 
+#' Print method for the class 'adjusted_envelope_test'
+#' @usage \method{print}{adjusted_envelope_test}(x, ...)
+#'
+#' @param x an 'adjusted_envelope_test' object
+#' @param ... Ignored.
+#'
+#' @method print adjusted_envelope_test
+#' @export
+print.adjusted_envelope_test <- function (x, ...) {
+    cat("Plot the object instead.\n")
+}
+
+#' Plot method for the class 'adjusted_envelope_test'
+#' @usage \method{plot}{adjusted_envelope_test}(x, main,
+#' plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...)
+#'
+#' @param x an 'adjusted_envelope_test' object
+#' @param main See \code{\link{plot.default}}. Default is x$method.
+#' @param plot_unadjusted Logical whether or not to plot also the unadjusted envelope.
+#' Only available if these have been saved in 'x'.
+#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}}, if plot_unadjusted
+#' is FALSE, or to \code{\link{two_envelopes_ggplot}}, if plot_unadjusted is TRUE.
+#'
+#' @method plot adjusted_envelope_test
+#' @export
+#' @seealso \code{\link{plot.envelope_test}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
+plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
+    if(missing(main)) main <- x$method
+    if(!plot_unadjusted) p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
+    else {
+        p <- two_envelopes_ggplot(env1 = x$adj_envelope_test, env2 = attr(x, "unadjusted_envelope_test"))
+    }
+    invisible(p)
+}
 
 #' Adjusted combined global envelope tests
 #'
