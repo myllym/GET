@@ -544,7 +544,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     }
 
     res <- structure(list(adj_envelope_test = adjenv,
-                          method = test_name), class = "adjusted_envelope_test")
+                          method = test_name), class = "adjusted_combined_envelope_test")
     if(savepatterns) attr(res, "simpatterns") <- simpatterns
     if(savefuns) attr(res, "simfuns") <- attr(tX, "simfuns")
     if(save.cons.envelope) attr(res, "unadjusted_envelope_test") <- attr(tX, "envelope_test")
