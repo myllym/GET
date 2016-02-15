@@ -458,7 +458,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
             testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
             lexo = FALSE, ties='midrank',
-            save.envelope = save.cons.envelope, savefuns = savefuns, savepatterns = TRUE,
+            save.envelope = save.cons.envelope, savefuns = TRUE, savepatterns = TRUE,
             verbose = verbose)
     if(verbose) cat("Done.\n")
     simpatterns <- attr(tX, "simpatterns")
