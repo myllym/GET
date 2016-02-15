@@ -39,8 +39,8 @@
 #' \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of
-#' the following: "two.sided" (default), "less" or "greater" for "rank". For "st" and "qdir" tests,
-#' the argument is ignored (only "two-sided" possible).
+#' the following: "two.sided" (default), "less" or "greater" for "rank". Relevant only for the
+#' rank test (otherwise ignored).
 #' @param r_min The minimum radius to include in the test.
 #' @param r_max The maximum radius to include in the test. Note: cannot be larger than r-values used
 #' in calculating functions by \code{\link[spatstat]{envelope}}.
