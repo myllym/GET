@@ -520,6 +520,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
             k_alpha=kalpha_star, k=stats,
             central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
             call=match.call())
+    class(adjenv) <- "envelope_test"
     test_name <- "Adjusted rank envelope test"
 
     # In the case of the combined scaled MAD envelope tests, we also need to calculate the new qdir/st envelopes
