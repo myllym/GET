@@ -137,8 +137,8 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
 #' \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
 combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...,
         testfuns = NULL,
-        test = c("qdir", "st", "rank"),
-        alpha = 0.05, alternative = c("two.sided", "less", "greater"),
+        test = c("rank", "qdir", "st"),
+        alpha = 0.05, alternative = c("two.sided", "greater", "less"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
         lexo = TRUE, ties=NULL,
         save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
