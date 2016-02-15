@@ -119,7 +119,7 @@ print.combined_scaled_MAD_test <- function(x, ...) {
 #' If plot_type is "rank", then the output of the combined rank envelope test
 #' is plotted. If plot_type is "envelope", then the combined scaled MAD envelope
 #' is plotted.
-#' @usage \method{plot}{combined_scaled_MAD_test}(x, plot_type = c("envelopes", "rank"), ...)
+#' @usage \method{plot}{combined_scaled_MAD_test}(x, plot_type = c("envelope", "rank"), ...)
 #'
 #' @param x An 'combined_scaled_MAD_test' object
 #' @param plot_type "rank" or "qdir_envelopes".
@@ -127,13 +127,13 @@ print.combined_scaled_MAD_test <- function(x, ...) {
 #'
 #' @method plot combined_scaled_MAD_test
 #' @export
-plot.combined_scaled_MAD_test <- function(x, plot_type = c("envelopes", "rank"), ...) {
+plot.combined_scaled_MAD_test <- function(x, plot_type = c("envelope", "rank"), ...) {
     plot_type <- match.arg(plot_type)
     switch(plot_type,
            rank = {
                plot(x[['rank_test']], ...)
            },
-           envelopes = {
+           envelope = {
                plot(x[['envelope']], ...)
            })
 }
