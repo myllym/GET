@@ -573,7 +573,7 @@ print.adjusted_combined_envelope_test <- function (x, ...) {
 #'
 #' @param x an 'adjusted_combined_envelope_test' object
 #' @param main See \code{\link{plot.default}}. Default is x$method.
-#' @param test_type "rank" for the result of the rank envelope test; "MAD" for the
+#' @param plot_type "rank" for the result of the rank envelope test; "MAD" for the
 #' adjusted combined scaled MAD envelope. The latter only available if saved in 'x'.
 #' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}},
 #' if plot_type is "rank" or to \code{\link{plot.combined_scaled_MAD_test}}, if
