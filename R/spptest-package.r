@@ -1,6 +1,6 @@
 #' Spatial point process testing
 #'
-#' The spptest library provides global envelope and deviation tests. Both type of tests are
+#' The \pkg{spptest} library provides global envelope and deviation tests. Both type of tests are
 #' Monte Carlo tests, which demand simulations from the tested null model. Examples are
 #' mainly for spatial point processes, but the methods are applicable for any functional (or
 #' multivariate vector) data. (In the case of point processes, the functions are typically
@@ -8,17 +8,18 @@
 #' for deviation tests and global envelope tests.
 #'
 #'
-#' The package supports the use of the R library \code{\link[spatstat]{spatstat}} for generating
+#' The package supports the use of the R library \pkg{spatstat} for generating
 #' simulations and calculating estimators of the chosen summary function, but alternatively these
 #' can be done by any other methods, thus allowing for any models/functions.
 #'
-#' In the following, the use of the library is demonstrated by its main function \code{\link{rank_envelope}},
+#' @section Typical workflow:
+#' In the following, the use of the \pkg{spptest} library is demonstrated by its main function \code{\link{rank_envelope}},
 #' but alternatively this step can be replaced by a call of another function for envelope or
 #' deviation test (the main options are \code{\link{st_envelope}}, \code{\link{qdir_envelope}},
 #' \code{\link{deviation_test}}).
 #'
 #'
-#' 1) The workflow utilizing spatstat:
+#' 1) The workflow utilizing \pkg{spatstat}:
 #'
 #' E.g. Say we have a point pattern, for which we would like to test a hypothesis, as a \code{\link[spatstat]{ppp}} object.
 #'
@@ -106,6 +107,7 @@
 #' }
 #'
 #'
+#' @section Summary:
 #' Thus, to perform a test you always first need to obtain the test function T(r)
 #' for your data (T_1(r)) and for each simulation (T_2(r), ..., T_{nsim+1}(r)) in one way or another.
 #' Given the set of the functions T_i(r), i=1,...,nsim+1, you can perform a test
@@ -130,7 +132,7 @@
 #' See, in particular, \code{\link{rank_envelope}} for further examples.
 #'
 #'
-#' Further options / functions:
+#' @section Further options and functions:
 #' It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for the test.
 #'
 #' (i) You can choose the interval of distances [r_min, r_max] by \code{\link{crop_curves}}.
