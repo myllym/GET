@@ -6,7 +6,7 @@
 \alias{spptest-package}
 \title{Spatial point process testing}
 \description{
-The spptest library provides global envelope and deviation tests. Both type of tests are
+The \pkg{spptest} library provides global envelope and deviation tests. Both type of tests are
 Monte Carlo tests, which demand simulations from the tested null model. Examples are
 mainly for spatial point processes, but the methods are applicable for any functional (or
 multivariate vector) data. (In the case of point processes, the functions are typically
@@ -14,16 +14,19 @@ estimators of summary functions.) The main motivation for this package are the s
 for deviation tests and global envelope tests.
 }
 \details{
-The package supports the use of the R library \code{\link[spatstat]{spatstat}} for generating
+The package supports the use of the R library \pkg{spatstat} for generating
 simulations and calculating estimators of the chosen summary function, but alternatively these
 can be done by any other methods, thus allowing for any models/functions.
+}
+\section{Typical workflow}{
 
-In the following, the use of the library is demonstrated by its main function \code{\link{rank_envelope}},
+In the following, the use of the \pkg{spptest} library is demonstrated by its main function \code{\link{rank_envelope}},
 but alternatively this step can be replaced by a call of another function for envelope or
 deviation test (the main options are \code{\link{st_envelope}}, \code{\link{qdir_envelope}},
 \code{\link{deviation_test}}).
 
-1) The workflow utilizing spatstat:
+
+1) The workflow utilizing \pkg{spatstat}:
 
 E.g. Say we have a point pattern, for which we would like to test a hypothesis, as a \code{\link[spatstat]{ppp}} object.
 
@@ -40,20 +43,20 @@ E.g. Say we have a point pattern, for which we would like to test a hypothesis, 
                  for possible test functions (if \code{fun} not given, \code{Kest} is used,
                  i.e. an estimator of the K function).
 
-Making 2499 simulations of CSR (note the number of points is not fixed here)
+                 Making 2499 simulations of CSR (note the number of points is not fixed here)
                  and estimating K-function for each of them and data:
 
-\code{
+                 \code{
                    env <- envelope(X, nsim=2499, savefuns=TRUE)
                  }
            \item Perform the test
 
-\code{
+                 \code{
                    res <- rank_envelope(env)
                  }
            \item Plot the result
 
-\code{
+                 \code{
                    plot(res)
                  }
          }
@@ -69,7 +72,7 @@ Making 2499 simulations of CSR (note the number of points is not fixed here)
                  See the detailed example in \code{\link{saplings}}.
            \item Plot the result
 
-\code{
+                 \code{
                    plot(res)
                  }
          }
@@ -82,15 +85,16 @@ Making 2499 simulations of CSR (note the number of points is not fixed here)
       using the function \code{\link{random_labelling}} (requires R library \code{marksummary} available from
       \code{https://github.com/myllym/}).
 
-\code{
+      \code{
       curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
       }
 \item Then do the test and plot the result
 
-\code{
+      \code{
       res <- rank_envelope(curve_set); plot(res)
       }
 }
+
 
 3) The workflow when using your own programs for simulations:
 
@@ -101,13 +105,16 @@ Making 2499 simulations of CSR (note the number of points is not fixed here)
       from the functions T_i(r), i=1,...,s+1.
 \item Perform the test and plot the result
 
-\code{res <- rank_envelope(curve_set) # curve_set is the 'curve_set'-object you created}
+      \code{res <- rank_envelope(curve_set) # curve_set is the 'curve_set'-object you created}
 
-\code{plot(res)}
+      \code{plot(res)}
 \item Note that for calculating an adjusted global envelope test for a composite hypothesis test,
 you need to write some of your own code as the function \code{\link{dg.global_envelope}}
 allows just models that can be simulated and fitted using spatstat.
 }
+}
+
+\section{Summary}{
 
 Thus, to perform a test you always first need to obtain the test function T(r)
 for your data (T_1(r)) and for each simulation (T_2(r), ..., T_{nsim+1}(r)) in one way or another.
@@ -131,8 +138,10 @@ quantile envelope tests and deviation tests, it is nsim=99 (or 999).
 (For the normal test, see its documentation.)
 
 See, in particular, \code{\link{rank_envelope}} for further examples.
+}
 
-Further options / functions:
+\section{Further options and functions}{
+
 It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for the test.
 
 (i) You can choose the interval of distances [r_min, r_max] by \code{\link{crop_curves}}.
@@ -143,6 +152,7 @@ Here T_0(r) is the expectation of T(r) under the null hypothesis.
 The function \code{\link{envelope_to_curve_set}} can be used to create a curve_set object
 from the object returned by \code{\link[spatstat]{envelope}}. An \code{envelope} object can also
 directly be given to the functions \code{\link{crop_curves}} and \code{\link{residual}}.
+
 
 Further, as a further reminder, for composite hypotheses the library provides the function
 \code{\link{dg.global_envelope}}. See a detailed example in \code{\link{saplings}}.
