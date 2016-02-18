@@ -39,8 +39,8 @@
 #' \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of
-#' the following: "two.sided" (default), "less" or "greater" for "rank". For "st" and "qdir" tests,
-#' the argument is ignored (only "two-sided" possible).
+#' the following: "two.sided" (default), "less" or "greater" for "rank". Relevant only for the
+#' rank test (otherwise ignored).
 #' @param r_min The minimum radius to include in the test.
 #' @param r_max The maximum radius to include in the test. Note: cannot be larger than r-values used
 #' in calculating functions by \code{\link[spatstat]{envelope}}.
@@ -109,6 +109,115 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
     res
 }
 
+
+#' A combined global envelope test
+#'
+#' A combined global envelope test including simulations from a point process model.
+#'
+#'
+#' Details of the tests are given in \code{\link{rank_envelope}} (rank envelope test),
+#' \code{\link{combined_scaled_MAD_envelope}} (directional quantile and studentized envelope tests).
+#'
+#' The specification of X is important here:
+#' if simfun is not provided, the function \code{\link[spatstat]{envelope}} is used to generate
+#' simulations under the null hypothesis and to calculate the test functions (specified in the
+#' arguments ...) and then
+#' \itemize{
+#' \item If X is a point pattern, the null hypothesis is CSR.
+#' \item If X is a fitted model, the null hypothesis is that model.
+#' }
+#' If simfun is provided, then the null model is the one simulated by this given function,
+#' and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
+#' pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
+#'
+#' If savefuns is TRUE, all the simulated functions are saved in an attribute "simfuns" as a list
+#' of curve sets for each test function.
+#' @inheritParams global_envelope_with_sims
+#' @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
+#' A list of parameters should be provided for each test function that is to be used in the combined test.
+#' @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
+#' \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
+combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...,
+        testfuns = NULL,
+        test = c("rank", "qdir", "st"),
+        alpha = 0.05, alternative = c("two.sided", "greater", "less"),
+        r_min=NULL, r_max=NULL, take_residual=FALSE,
+        lexo = TRUE, ties=NULL,
+        save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
+        verbose = FALSE) {
+    test <- match.arg(test)
+    alt <- match.arg(alternative)
+
+    nfuns <- length(testfuns)
+    if(length(r_min) != nfuns) stop("r_min should give the minimum distances for each of the test functions.\n")
+    if(length(r_max) != nfuns) stop("r_max should give the maximum distances for each of the test functions.\n")
+    testfuns_argnames_ls <- lapply(testfuns, function(x) names(x))
+    if(!is.null(simfun)) {
+        # Create simulations by the given function
+        simpatterns <- replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)
+        # Calculate the test functions
+        for(i in 1:nfuns) {
+            tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
+            for(j in 1:length(testfuns_argnames_ls[[i]]))
+                tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
+            tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = FALSE, verbose=verbose, ...)", sep="")
+            eval(parse(text = tmpstring))
+        }
+    }
+    else {
+        # Create simulations from the given model and calculate the test functions
+        i = 1
+        tmpstring <- paste("spatstat::envelope(X, nsim=nsim, ", sep="")
+        for(j in 1:length(testfuns_argnames_ls[[i]]))
+            tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
+        tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = TRUE, verbose=verbose, ...)", sep="")
+        X.testfunc1 <- eval(parse(text = tmpstring))
+        simpatterns <- attr(X.testfunc1, "simpatterns")
+        for(i in 2:nfuns) {
+            tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
+            for(j in 1:length(testfuns_argnames_ls[[i]]))
+                tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
+            tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = FALSE, verbose=verbose, ...)", sep="")
+            eval(parse(text = tmpstring))
+        }
+    }
+    curve_sets_ls <- NULL
+    for(i in 1:nfuns) curve_sets_ls[[i]] <- get(paste("X.testfunc", i, sep=""))
+    # Crop curves (if r_min or r_max given)
+    tmpfunc <- function(i) crop_curves(curve_sets_ls[[i]], r_min = r_min[i], r_max = r_max[i])
+    curve_sets_ls <- lapply(1:nfuns, FUN = tmpfunc)
+
+    # Make the test
+    switch(test,
+            rank = {
+                # Create a combined curve_set
+                curve_set_combined <- combine_curve_sets(curve_sets_ls)
+                global_envtest <- rank_envelope(curve_set_combined, alpha=alpha, savedevs=TRUE,
+                        alternative=alt, lexo=lexo, ties=ties)
+                stat <- global_envtest$k[1]
+                pval <- global_envtest$p
+            },
+            qdir = {
+                global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, test="qdir", alpha=alpha)
+                stat <- global_envtest$rank_test$k[1]
+                pval <- global_envtest$rank_test$p
+                curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
+            },
+            st = {
+                global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, test="st", alpha=alpha)
+                stat <- global_envtest$rank_test$k[1]
+                pval <- global_envtest$rank_test$p
+                curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
+            })
+
+    res <- structure(list(statistic = as.numeric(stat), p.value = pval,
+                    method = test, curve_set = curve_set_combined), class = "global_envelope_with_sims")
+    if(save.envelope) attr(res, "envelope_test") <- global_envtest
+    if(savefuns) attr(res, "simfuns") <- curve_sets_ls
+    if(savepatterns) attr(res, "simpatterns") <- simpatterns
+
+    res
+}
 
 #' Adjusted global envelope tests
 #'
@@ -229,10 +338,11 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
 
                adjenv <- list(r=tX$curve_set[['r']], method="Adjusted rank envelope test",
                        alternative = alt,
-                       p=NULL, p_interval=NULL, 
+                       p=NULL, p_interval=NULL,
                        k_alpha=kalpha_star, k=stats,
                        central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
                        call=match.call())
+               class(adjenv) <- "envelope_test"
                test_name <- "Adjusted rank envelope test"
            },
            qdir = {
@@ -262,8 +372,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     res
 }
 
-
-#' Print method for the class 'envelope_test'
+#' Print method for the class 'adjusted_envelope_test'
 #' @usage \method{print}{adjusted_envelope_test}(x, ...)
 #'
 #' @param x an 'adjusted_envelope_test' object
@@ -276,8 +385,7 @@ print.adjusted_envelope_test <- function (x, ...) {
 }
 
 #' Plot method for the class 'adjusted_envelope_test'
-#' @usage \method{plot}{adjusted_envelope_test}(x, main,
-#' plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...)
+#' @usage \method{plot}{adjusted_envelope_test}(x, main, plot_unadjusted=FALSE, ...)
 #'
 #' @param x an 'adjusted_envelope_test' object
 #' @param main See \code{\link{plot.default}}. Default is x$method.
@@ -289,11 +397,203 @@ print.adjusted_envelope_test <- function (x, ...) {
 #' @method plot adjusted_envelope_test
 #' @export
 #' @seealso \code{\link{plot.envelope_test}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
-plot.adjusted_envelope_test <- function (x, main,
-        plot_unadjusted=!is.null(attr(x, "unadjusted_envelope_test")), ...) {
+plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
     if(missing(main)) main <- x$method
     if(!plot_unadjusted) p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
     else {
-        two_envelopes_ggplot(env1 = x$adj_envelope_test, env2 = attr(x, "unadjusted_envelope_test"))
+        p <- two_envelopes_ggplot(env1 = x$adj_envelope_test, env2 = attr(x, "unadjusted_envelope_test"))
     }
+    invisible(p)
+}
+
+#' Adjusted combined global envelope tests
+#'
+#' Adjusted combined global rank envelope test, studentized envelope test or directional quantile envelope test.
+#'
+#'
+#' The specification of X is important here:
+#' \itemize{
+#' \item If X is a point pattern, the null hypothesis is CSR.
+#' \item If X is a fitted model, the null hypothesis is that model.
+#' }
+#'
+#' The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though the function
+#' \code{\link{global_envelope_with_sims}}, mimics the structure in the function
+#' \code{\link[spatstat]{dg.envelope}} in the use of \code{\link[spatstat]{envelope}}.
+#'
+#' @inheritParams combined_global_envelope_with_sims
+#' @inheritParams dg.global_envelope
+#'
+#' @return An object of class adjusted_envelope_test.
+#' @references
+#' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
+#'
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
+#'
+#' Dao, N.A. and Genton, M. (2014). A Monte Carlo adjusted goodness-of-fit test for parametric models describing spatial point patterns. Journal of Graphical and Computational Statistics 23, 497-517.
+#'
+#' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
+#' \code{\link{plot.adjusted_envelope_test}}
+#' @export
+dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
+        simfun=NULL, fitfun=NULL, ...,
+        testfuns = NULL, test = c("qdir", "st", "rank"),
+        alpha = 0.05, alternative = c("two.sided", "less", "greater"),
+        r_min=NULL, r_max=NULL, take_residual=FALSE,
+        #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
+        save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
+        verbose=TRUE, mc.cores=1L) {
+    Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
+    if(is.null(simfun) != is.null(fitfun)) stop("Either both \'simfun\' and \'fitfun\' should be provided or neither of them.\n")
+    if((is.null(simfun) | is.null(fitfun)) & !Xismodel)
+        warning("\'simfun\' and/or \'fitfun\' not provided and \'X\' is not a fitted model object.\n",
+                "As \'envelope\' is used for simulations and model fitting, \n",
+                "\'X\' should be a fitted model object.")
+    test <- match.arg(test)
+    if(test == "rank") alt <- match.arg(alternative)
+    else alt <- "greater"
+    simfun.arg <- NULL
+    if(!is.null(fitfun)) simfun.arg <- fitfun(X) # a fitted model parameters to be passed to simfun
+    if(verbose) cat("Applying test to original data...\n")
+    tX <- combined_global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
+            testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
+            r_min=r_min, r_max=r_max, take_residual=take_residual,
+            lexo = FALSE, ties='midrank',
+            save.envelope = save.cons.envelope, savefuns = TRUE, savepatterns = TRUE,
+            verbose = verbose)
+    if(verbose) cat("Done.\n")
+    simpatterns <- attr(tX, "simpatterns")
+
+    if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... \n"))
+    # For each of the simulated patterns in 'simpatterns', perform the test and calculate
+    # the extreme rank (or deviation) measure and p-value
+    loopfun <- function(rep) {
+        Xsim <- simpatterns[[rep]]
+        if(!is.null(fitfun)) simfun.arg <- fitfun(Xsim) # a fitted model to be passed to simfun
+        if(Xismodel)
+            switch(class(X)[1],
+                    ppm = {
+                        Xsim <- spatstat::update.ppm(X, Xsim)
+                    },
+                    kppm = {
+                        Xsim <- spatstat::update.kppm(X, Xsim)
+                    },
+                    lppm = {
+                        Xsim <- spatstat::update.lppm(X, Xsim)
+                    },
+                    slrm = {
+                        Xsim <- spatstat::update.slrm(X, Xsim)
+                    })
+        tXsim <- combined_global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
+                testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
+                r_min=r_min, r_max=r_max, take_residual=take_residual,
+                lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
+                save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
+                verbose = verbose)
+        list(stat = tXsim$statistic, pval = tXsim$p.value)
+    }
+    mclapply_res <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores)
+    stats <- sapply(mclapply_res, function(x) x$stat)
+    pvals <- sapply(mclapply_res, function(x) x$pval)
+
+    #-- The rank test
+    # Calculate the critical rank / alpha
+    kalpha_star <- quantile(stats, probs=alpha, type=1)
+    #alpha_star <- quantile(pvals, probs=alpha, type=1)
+
+    data_curve <- tX$curve_set[['obs']]
+    sim_curves <- t(tX$curve_set[['sim_m']])
+    data_and_sim_curves <- rbind(data_curve, sim_curves)
+    T_0 <- get_T_0(tX$curve_set)
+
+    nr <- length(tX$curve_set$r)
+    LB <- array(0, nr);
+    UB <- array(0, nr);
+    for(i in 1:nr){
+        Hod <- sort(data_and_sim_curves[,i])
+        LB[i]<- Hod[kalpha_star]
+        UB[i]<- Hod[nsim+1-kalpha_star+1]
+    }
+    # -> kalpha_stat, LB, UB of the rank test
+    adjenv <- list(r=tX$curve_set[['r']], method="Adjusted rank envelope test",
+            alternative = alt,
+            p=NULL, p_interval=NULL,
+            k_alpha=kalpha_star, k=stats,
+            central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
+            call=match.call())
+    class(adjenv) <- "envelope_test"
+    test_name <- "Adjusted rank envelope test"
+
+    # In the case of the combined scaled MAD envelope tests, we also need to calculate the new qdir/st envelopes
+    res_env <- NULL
+    if(test != "rank") {
+        envchars <- combined_scaled_MAD_bounding_curves_chars(attr(tX, "simfuns"), test = test)
+        central_curves_ls <- lapply(attr(tX, "simfuns"), function(x) get_T_0(x))
+        bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=adjenv$upper,
+                                                               lower_f=envchars$lower_f, upper_f=envchars$upper_f)
+        # Create a combined envelope object for plotting
+        res_env <- structure(list(r = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x$r), quote=FALSE),
+                                  method = "Adjusted combined scaled MAD envelope test",
+                                  alternative = "two.sided",
+                                  p = adjenv$p,
+                                  p_interval = adjenv$p_interval,
+                                  central_curve = as.vector(do.call(c, central_curves_ls, quote=FALSE)),
+                                  data_curve = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x[['obs']]), quote=FALSE),
+                                  lower = do.call(c, bounding_curves$lower_ls, quote=FALSE),
+                                  upper = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
+                             class = c("combined_scaled_MAD_envelope", "envelope_test"))
+    }
+
+    res <- structure(list(adj_envelope_test = adjenv,
+                          method = test_name), class = "adjusted_combined_envelope_test")
+    if(savepatterns) attr(res, "simpatterns") <- simpatterns
+    if(savefuns) attr(res, "simfuns") <- attr(tX, "simfuns")
+    if(save.cons.envelope) attr(res, "unadjusted_envelope_test") <- attr(tX, "envelope_test")
+    if(!is.null(res_env)) attr(res, "adjusted_scaled_MAD_envelope") <- res_env
+    attr(res, "alternative") <- alt
+    attr(res, "call") <- match.call()
+    res
+}
+
+
+#' Print method for the class 'adjusted_combined_envelope_test'
+#' @usage \method{print}{adjusted_combined_envelope_test}(x, ...)
+#'
+#' @param x an 'adjusted_combined_envelope_test' object
+#' @param ... Ignored.
+#'
+#' @method print adjusted_combined_envelope_test
+#' @export
+print.adjusted_combined_envelope_test <- function (x, ...) {
+    cat("Plot the object instead.\n")
+}
+
+#' Plot method for the class 'adjusted_envelope_test'
+#' @usage \method{plot}{adjusted_combined_envelope_test}(x, main, plot_type = c("rank", "MAD"), ...)
+#'
+#' @param x an 'adjusted_combined_envelope_test' object
+#' @param main See \code{\link{plot.default}}. Default is x$method.
+#' @param plot_type "rank" for the result of the rank envelope test; "MAD" for the
+#' adjusted combined scaled MAD envelope. The latter only available if saved in 'x'.
+#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}},
+#' if plot_type is "rank" or to \code{\link{plot.combined_scaled_MAD_test}}, if
+#' plot_type is "MAD".
+#'
+#' @method plot adjusted_combined_envelope_test
+#' @export
+#' @seealso \code{\link{plot.envelope_test}}, \code{\link{plot.combined_scaled_MAD_test}}.
+plot.adjusted_combined_envelope_test <- function (x, main, plot_type = c("rank", "MAD"), ...) {
+    plot_type <- match.arg(plot_type)
+    if(plot_type=="MAD" & is.null(attr(x, "adjusted_scaled_MAD_envelope"))) stop("The adjusted combined scaled MAD envelope not found in 'x'.\n")
+    switch(plot_type,
+           rank = {
+               if(missing(main)) main <- x$method
+               p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
+           },
+           MAD = {
+               adjtest <- attr(x, "adjusted_scaled_MAD_envelope")
+               if(missing(main)) main <- adjtest$method
+               p <- plot(adjtest, main=main, ...)
+           })
+    invisible(p)
 }
