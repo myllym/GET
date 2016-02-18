@@ -1,6 +1,6 @@
 #' Spatial point process testing
 #'
-#' The spptest library provides global envelope and deviation tests. Both type of tests are
+#' The \pkg{spptest} library provides global envelope and deviation tests. Both type of tests are
 #' Monte Carlo tests, which demand simulations from the tested null model. Examples are
 #' mainly for spatial point processes, but the methods are applicable for any functional (or
 #' multivariate vector) data. (In the case of point processes, the functions are typically
@@ -8,7 +8,7 @@
 #' for deviation tests and global envelope tests.
 #'
 #'
-#' The package supports the use of the R library \code{\link[spatstat]{spatstat}} for generating
+#' The package supports the use of the R library \pkg{spatstat} for generating
 #' simulations and calculating estimators of the chosen summary function, but alternatively these
 #' can be done by any other methods, thus allowing for any models/functions.
 #'
