@@ -8,7 +8,7 @@ combined_scaled_MAD_bounding_curves_chars(curve_sets, test = c("qdir", "st"),
   probs = c(0.025, 0.975))
 }
 \arguments{
-\item{curve_sets}{A list of objects of type}
+\item{curve_sets}{A list of objects of type \code{\link{curve_set}} or \code{\link[spatstat]{envelope}}.}
 
 \item{test}{Either "qdir" for the \code{\link{qdir_envelope}} test or
 "st" for the \code{\link{st_envelope}} test.}

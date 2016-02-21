@@ -2,7 +2,7 @@
 % Please edit documentation in R/adjusted_envelopes.r
 \name{plot.adjusted_combined_envelope_test}
 \alias{plot.adjusted_combined_envelope_test}
-\title{Plot method for the class 'adjusted_envelope_test'}
+\title{Plot method for the class 'adjusted_combined_envelope_test'}
 \usage{
 \method{plot}{adjusted_combined_envelope_test}(x, main, plot_type = c("rank", "MAD"), ...)
 }
@@ -19,7 +19,7 @@ if plot_type is "rank" or to \code{\link{plot.combined_scaled_MAD_test}}, if
 plot_type is "MAD".}
 }
 \description{
-Plot method for the class 'adjusted_envelope_test'
+Plot method for the class 'adjusted_combined_envelope_test'
 }
 \seealso{
 \code{\link{plot.envelope_test}}, \code{\link{plot.combined_scaled_MAD_test}}.

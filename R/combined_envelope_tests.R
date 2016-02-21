@@ -42,7 +42,11 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 
 #' Combined global scaled maximum absolute difference (MAD) envelope tests
 #'
-#' @param curve_sets A list of objects of type 
+#' Given a list of \code{\link{curve_set}} objects, a combined global scaled (directional quantile
+#' or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
+#' Details of the combined test can be found in Mrkvicka et al.
+#'
+#' @param curve_sets A list of objects of type \code{\link{curve_set}} or \code{\link[spatstat]{envelope}}.
 #' @param test Either "qdir" for the \code{\link{qdir_envelope}} test or
 #' "st" for the \code{\link{st_envelope}} test.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
@@ -52,13 +56,14 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' @param ... Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
 #' or \code{\link{st_envelope}} (if test = "st").
 #' @references
-#' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
+#' Mrkvicka, T., Myllymäki, M. and Hahn, U. Multiple Monte Carlo testing, with applications in spatial point processes.
+#' Revision submitted to Statistics & Computing.
 #' @export
 combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05, probs = c(0.025, 0.975), ...) {
 
     ntests <- length(curve_sets)
     test <- match.arg(test)
-    curve_sets <- lapply(curve_sets, FUN = function(x) convert_envelope(x))
+    curve_sets <- check_curve_set_dimensions(curve_sets)
     # Make the individual tests saving the deviations
     switch(test, 
             qdir = {

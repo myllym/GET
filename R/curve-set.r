@@ -267,11 +267,38 @@ plot.curve_set <- function(x, ylim, ...) {
 #' Combine curve sets.
 #'
 #' Combine curve sets to a one curve set, e.g. for testing by means of several test functions.
-#' @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
+#' @inheritParams check_curve_set_dimensions
 #' @return A curve set that is a combination of the curve sets given in 'x'.
 #' @export
 combine_curve_sets <- function(x) {
     curve_set <- NULL
+    # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
+    # If the latter, then convert the objects to curve sets.
+    x <- check_curve_set_dimensions(x)
+    if('r' %in% name_vec[[1]])
+        curve_set$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
+    if('obs' %in% name_vec[[1]])
+        curve_set$obs <- c(sapply(x, FUN=function(curve_set) { curve_set['obs'] }), recursive=TRUE)
+    if('sim_m' %in% name_vec[[1]]) {
+        # check_curve_set_dimensions was used above to check that dimensions match
+        # Combine
+        curve_set$sim_m <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$sim_m)[1]})), ncol=dim(x[[1]]$sim_m)[2])
+        for(i in 1:dim(x[[1]]$sim_m)[2]) {
+            curve_set$sim_m[,i] <- c(sapply(x, FUN=function(curve_set) { curve_set$sim_m[,i] }), recursive=TRUE)
+        }
+    }
+    if('theo' %in% name_vec[[1]])
+        curve_set$theo <- c(sapply(x, FUN=function(curve_set) { curve_set['theo'] }), recursive=TRUE)
+    # check_curve_set_dimensions has checked that 'is_residual' is the same for all curve sets.
+    if('is_residual' %in% name_vec[[1]])
+        curve_set$is_residual <- x[[1]]$is_residual
+
+    create_curve_set(curve_set)
+}
+
+#' Check curve set dimensions
+#' @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
+check_curve_set_dimensions <- function(x) {
     # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
     # If the latter, then convert the objects to curve sets.
     x <- lapply(x, FUN=convert_envelope)
@@ -281,29 +308,14 @@ combine_curve_sets <- function(x) {
     if(!all(sapply(name_vec, FUN=identical, y=name_vec[[1]])))
         stop("The curve sets in \'x\' contain different elements.\n")
     # Check that 'is_residual' is the same for all curve sets.
-    # If yes, then set the element of the curve set to be created to this TRUE/FALSE value below.
     if('is_residual' %in% name_vec[[1]]) {
         if(!all(sapply(x, FUN=function(curve_set) { curve_set$is_residual == x[[1]]$is_residual })))
             stop("The element \'is_residual\' should be the same for each curve set.\n")
     }
-    if('r' %in% name_vec[[1]])
-        curve_set$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
-    if('obs' %in% name_vec[[1]])
-        curve_set$obs <- c(sapply(x, FUN=function(curve_set) { curve_set['obs'] }), recursive=TRUE)
+    # Check that the number of simulations in curve sets are equal.
     if('sim_m' %in% name_vec[[1]]) {
-        # Check that the number of simulations in curve sets equal.
         if(!all(sapply(x, FUN=function(curve_set) { dim(curve_set$sim_m)[2] == dim(x[[1]]$sim_m)[2] })))
             stop("The numbers of simulations in curve sets differ.\n")
-        # Then combine
-        curve_set$sim_m <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$sim_m)[1]})), ncol=dim(x[[1]]$sim_m)[2])
-        for(i in 1:dim(x[[1]]$sim_m)[2]) {
-            curve_set$sim_m[,i] <- c(sapply(x, FUN=function(curve_set) { curve_set$sim_m[,i] }), recursive=TRUE)
-        }
     }
-    if('theo' %in% name_vec[[1]])
-        curve_set$theo <- c(sapply(x, FUN=function(curve_set) { curve_set['theo'] }), recursive=TRUE)
-    if('is_residual' %in% name_vec[[1]])
-        curve_set$is_residual <- x[[1]]$is_residual
-
-    create_curve_set(curve_set)
+    x
 }
