@@ -267,7 +267,7 @@ plot.curve_set <- function(x, ylim, ...) {
 #' Combine curve sets.
 #'
 #' Combine curve sets to a one curve set, e.g. for testing by means of several test functions.
-#' @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
+#' @inheritParams check_curve_set_dimensions
 #' @return A curve set that is a combination of the curve sets given in 'x'.
 #' @export
 combine_curve_sets <- function(x) {
