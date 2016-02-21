@@ -46,7 +46,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
 #' Details of the combined test can be found in Mrkvicka et al.
 #'
-#' @param curve_sets A list of objects of type 
+#' @param curve_sets A list of objects of type \code{\link{curve_set}} or \code{\link[spatstat]{envelope}}.
 #' @param test Either "qdir" for the \code{\link{qdir_envelope}} test or
 #' "st" for the \code{\link{st_envelope}} test.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
