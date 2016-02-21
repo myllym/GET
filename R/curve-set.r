@@ -307,3 +307,27 @@ combine_curve_sets <- function(x) {
 
     create_curve_set(curve_set)
 }
+
+#' Check curve set dimensions
+#' @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
+check_curve_set_dimensions <- function(x) {
+    # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
+    # If the latter, then convert the objects to curve sets.
+    x <- lapply(x, FUN=convert_envelope)
+    name_vec <- lapply(x, FUN=names)
+    # Possible_names in curve_sets are 'r', 'obs', 'sim_m', 'theo' and 'is_residual'.
+    # Check that all curve sets contain the same elements
+    if(!all(sapply(name_vec, FUN=identical, y=name_vec[[1]])))
+        stop("The curve sets in \'x\' contain different elements.\n")
+    # Check that 'is_residual' is the same for all curve sets.
+    if('is_residual' %in% name_vec[[1]]) {
+        if(!all(sapply(x, FUN=function(curve_set) { curve_set$is_residual == x[[1]]$is_residual })))
+            stop("The element \'is_residual\' should be the same for each curve set.\n")
+    }
+    # Check that the number of simulations in curve sets are equal.
+    if('sim_m' %in% name_vec[[1]]) {
+        if(!all(sapply(x, FUN=function(curve_set) { dim(curve_set$sim_m)[2] == dim(x[[1]]$sim_m)[2] })))
+            stop("The numbers of simulations in curve sets differ.\n")
+    }
+    x
+}
