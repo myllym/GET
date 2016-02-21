@@ -454,7 +454,7 @@ plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
 #'
 #' @return An object of class adjusted_envelope_test.
 #' @references
-#' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
+#' Mrkvicka, T., Myllymäki, M. and Hahn, U. Multiple Monte Carlo testing, with applications in spatial point processes. Revision submitted to Statistics & Computing.
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
 #'
