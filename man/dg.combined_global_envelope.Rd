@@ -84,17 +84,31 @@ Adjusted combined global rank envelope test, studentized envelope test or direct
 }
 \details{
 The specification of X is important here:
+
+1) If simfun = NULL and fitfun = NULL (default), then \code{\link[spatstat]{envelope}}
+is used for generating simulations under the null hypothesis and
 \itemize{
 \item If X is a point pattern, the null hypothesis is CSR.
 \item If X is a fitted model, the null hypothesis is that model.
 }
 
-The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though the function
-\code{\link{global_envelope_with_sims}}, mimics the structure in the function
-\code{\link[spatstat]{dg.envelope}} in the use of \code{\link[spatstat]{envelope}}.
+2) The user can provide the function for fitting the model (fitfun) and for simulating
+from the fitted model (simfun). These functions should be coupled with each other such
+that the object returned by 'fitfun' is directly accepted as the (single) argument in 'simfun'.
+Further X should then be an \code{\link[spastat]{ppp}} object and 'fitfun' should accept as
+the argument an \code{\link[spastat]{ppp}} object (X and further simulated point patterns).
+
+Several test functions are allowed and these are to be estimated for the data and generated
+point patterns using the function \code{\link[spatstat]{envelope}}. The test functions are
+specified through the argument testfuns, which is passed to \code{\link{combined_global_envelope_with_sims}}.
+
+If test = 'rank', then the test is the combined global rank envelope test.
+If test = 'qdir', then the test is the combined global directional quantile maximum absolute difference (MAD)
+envelope test, and if test = 'st', the test is the combined global studentized MAD envelope test,
+see Mrkvicka et al.
 }
 \references{
-Mrkvicka, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
+Mrkvicka, T., Myllymäki, M. and Hahn, U. Multiple Monte Carlo testing, with applications in spatial point processes. Revision submitted to Statistics & Computing.
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
 

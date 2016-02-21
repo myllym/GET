@@ -8,7 +8,7 @@ combined_scaled_MAD_envelope(curve_sets, test = c("qdir", "st"),
   alpha = 0.05, probs = c(0.025, 0.975), ...)
 }
 \arguments{
-\item{curve_sets}{A list of objects of type}
+\item{curve_sets}{A list of objects of type \code{\link{curve_set}} or \code{\link[spatstat]{envelope}}.}
 
 \item{test}{Either "qdir" for the \code{\link{qdir_envelope}} test or
 "st" for the \code{\link{st_envelope}} test.}
@@ -23,9 +23,12 @@ The default values are 0.025 and 0.975.}
 or \code{\link{st_envelope}} (if test = "st").}
 }
 \description{
-Combined global scaled maximum absolute difference (MAD) envelope tests
+Given a list of \code{\link{curve_set}} objects, a combined global scaled (directional quantile
+or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
+Details of the combined test can be found in Mrkvicka et al.
 }
 \references{
-Mrkvicka, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
+Mrkvicka, T., Myllymäki, M. and Hahn, U. Multiple Monte Carlo testing, with applications in spatial point processes.
+Revision submitted to Statistics & Computing.
 }
 
