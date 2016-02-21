@@ -597,7 +597,7 @@ print.adjusted_combined_envelope_test <- function (x, ...) {
     cat("Plot the object instead.\n")
 }
 
-#' Plot method for the class 'adjusted_envelope_test'
+#' Plot method for the class 'adjusted_combined_envelope_test'
 #' @usage \method{plot}{adjusted_combined_envelope_test}(x, main, plot_type = c("rank", "MAD"), ...)
 #'
 #' @param x an 'adjusted_combined_envelope_test' object
