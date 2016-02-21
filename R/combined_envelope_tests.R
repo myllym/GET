@@ -63,7 +63,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
 
     ntests <- length(curve_sets)
     test <- match.arg(test)
-    curve_sets <- lapply(curve_sets, FUN = function(x) convert_envelope(x))
+    curve_sets <- check_curve_set_dimensions(curve_sets)
     # Make the individual tests saving the deviations
     switch(test, 
             qdir = {
