@@ -116,6 +116,6 @@ Dao, N.A. and Genton, M. (2014). A Monte Carlo adjusted goodness-of-fit test for
 }
 \seealso{
 \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
-\code{\link{plot.adjusted_envelope_test}}
+\code{\link{plot.adjusted_combined_envelope_test}}
 }
 
