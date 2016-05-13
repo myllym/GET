@@ -275,6 +275,7 @@ combine_curve_sets <- function(x) {
     # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
     # If the latter, then convert the objects to curve sets.
     x <- check_curve_set_dimensions(x)
+    name_vec <- lapply(x, FUN=names)
     if('r' %in% name_vec[[1]])
         curve_set$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
     if('obs' %in% name_vec[[1]])
