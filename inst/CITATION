@@ -2,21 +2,34 @@ citHeader("To cite package ‘spptest’ in publications use:")
 
 citEntry(
     entry = "Article",
-    title = "Deviation test construction and power comparison for marked spatial point patterns",
-    journal = "arXiv:1306.1028 [stat.ME]",
-    year = "2013",
-    author = "M. Myllymäki, P. Grabarnik, H. Seijo and D. Stoyan",
-    textVersion = "Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2013).
-Deviation test construction and power comparison for marked spatial point patterns.
-arXiv:1306.1028 [stat.ME]."
+    title = "Global envelope tests for spatial processes",
+    author = personList(as.person("M. Myllymäki"),
+                        as.person("T. Mrkvička"),
+                        as.person("P. Grabarnik"),
+                        as.person("H. Seijo"),
+                        as.person("U. Hahn")),
+    journal = "Journal of the Royal Statistical Society: Series B (Statistical Methodology)",
+    year = "2016",
+    url = "https://dx.doi.org/10.1111/rssb.12172",
+    textVersion  =
+    paste("Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2016).",
+          "Global envelope tests for spatial processes. Journal of the Royal Statistical Society:",
+          "Series B (Statistical Methodology). doi: 10.1111/rssb.12172")
 )
 
 citEntry(
     entry = "Article",
-    title = "Global envelope tests for spatial processes",
-    journal = "arXiv:1307.0239 [stat.ME]",
-    year = "2013",
-    author = "M. Myllymäki, T. Mrkvička, H. Seijo and P. Grabarnik",
-    textVersion = "Myllymäki, M., Mrkvička, T., Seijo, H., and Grabarnik, P. (2013).
-Global envelope tests for spatial processes. arXiv:1307.0239 [stat.ME]."
+    title = "Deviation test construction and power comparison for marked spatial point patterns",
+	author = personList(as.person("M. Myllymäki"),
+                        as.person("P. Grabarnik"),
+                        as.person("H. Seijo"),
+                        as.person("D. Stoyan")),
+    journal = "Spatial Statistics",
+    year = "2015",
+    volume = "11",
+    pages = "19--34",
+    url = "https://dx.doi.org/10.1016/j.spasta.2014.11.004",
+    textVersion = "Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
+Deviation test construction and power comparison for marked spatial point patterns.
+Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004"
 )
