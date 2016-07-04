@@ -160,7 +160,7 @@
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2016). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology). doi: 10.1111/rssb.12172
 #'
-#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2015). Multiple Monte Carlo testing with applications in spatial point processes. arXiv:1506.01646 [stat.ME]
+#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2016). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing, accepted. (Preprint: arXiv:1506.01646 [stat.ME])
 #' @name spptest
 #' @docType package
 #' @aliases spptest-package spptest
