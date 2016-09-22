@@ -30,7 +30,8 @@ needed. It is available at https://github.com/myllym/marksummary.
 ## Branches
 
 The branch for public use is called `master`. There are no other public branches at the moment.
-
+The branch 'no_fastdepth' of the library `spptest` was taken as the master branch of GET September 21, 2016.
+The library `spptest` has become `GET`.
 
 ## References
 
