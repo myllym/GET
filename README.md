@@ -1,10 +1,6 @@
-# spptest
+# GET
 
-An R library for spatial point pattern testing
-
-spptest provides envelope and deviation tests for spatial point processes.
-The main motivation for a new package are the scalings for deviation tests
-and global envelope tests.
+An R library for Global Envelope Tests
 
 ## Installation
 
@@ -12,7 +8,7 @@ Install the library to R with the following two R commands:
 
 ```R
 library(devtools)
-install_github('myllym/spptest', ref = 'no_fastdepth')
+install_github('myllym/GET')
 ```
 
 If you do not have the library ´devtools´ installed, install it first by
@@ -21,15 +17,15 @@ If you do not have the library ´devtools´ installed, install it first by
 install.packages("devtools")
 ```
 
-After installation, in order to start using `spptest`, load it to R and see
+After installation, in order to start using `GET`, load it to R and see
 the main help page, which describes the usage of the functions of the library:
 ```R
-library(spptest)
-help(spptest) # or help(spptest, help="html")
+library(GET)
+help(GET) # or help(GET, help="html")
 ```
 
 In order to use the function random_labelling, the R library `marksummary` is
-needed. It is currently available by request.
+needed. It is available at https://github.com/myllym/marksummary.
 
 ## Branches
 
