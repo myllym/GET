@@ -29,10 +29,8 @@ needed. It is available at https://github.com/myllym/marksummary.
 
 ## Branches
 
-The branch for current public use is called `no_fastdepth`. It includes all the
-same features as the `master` branch. The only difference is that the `master` 
-branch includes references to functional depth measures provided by the R 
-library fastdepth which is not yet publicly available.
+The branch for public use is called `master`. There are no other public branches at the moment.
+
 
 ## References
 
