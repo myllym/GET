@@ -1,14 +1,13 @@
-Package: spptest
-Version: 0.4
-Date: 2013-10-24
-Title: Spatial point process testing
+Package: GET
+Date: 2016-09-22
+Title: Global Envelope Tests
 Encoding: UTF-8
 Authors@R: c(
-    person(given = 'Henri', family = 'Seijo', role = c('aut', 'cre'),
-    email = 'henri.seijo@iki.fi'),
     person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre',
     'ths'),
     email = list('mari.myllymaki@aalto.fi', 'mari.j.myllymaki@gmail.com')),
+    person(given = 'Henri', family = 'Seijo', role = c('aut', 'cre'),
+    email = 'henri.seijo@iki.fi'),
     person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
     person(given = 'Pavel', family = 'Grabarnik', role = 'aut',
@@ -18,8 +17,7 @@ Authors@R: c(
     )
 Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička, Pavel Grabarnik and Ute
     Hahn
-Maintainer: Mari Myllymäki <mari.j.myllymaki@gmail.com> and Henri Seijo
-    <henri.seijo@iki.fi>
+Maintainer: Mari Myllymäki <mari.j.myllymaki@gmail.com>
 Suggests:
     spatstat,
     mvtnorm,
@@ -27,8 +25,7 @@ Suggests:
     ggplot2,
     testthat,
     parallel
-Description: The library provides global envelope and deviation tests, in particular
-    for spatial point patterns. The tests can however be used generally for testing
+Description: The library provides Global Envelope Tests (GET) for testing
     with functional test statistics.
 License: GPL-3
 RoxygenNote: 5.0.1
