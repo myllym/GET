@@ -1,4 +1,4 @@
-citHeader("To cite package ‘spptest’ in publications use:")
+citHeader("To cite package ‘GET’ in publications use:")
 
 citEntry(
     entry = "Article",
