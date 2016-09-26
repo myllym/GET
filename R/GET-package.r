@@ -1,6 +1,6 @@
-#' Spatial point process testing
+#' Global Envelope Tests (GET)
 #'
-#' The \pkg{spptest} library provides global envelope and deviation tests. Both type of tests are
+#' The \pkg{GET} library provides global envelope and deviation tests. Both type of tests are
 #' Monte Carlo tests, which demand simulations from the tested null model. Examples are
 #' mainly for spatial point processes, but the methods are applicable for any functional (or
 #' multivariate vector) data. (In the case of point processes, the functions are typically
@@ -13,7 +13,7 @@
 #' can be done by any other methods, thus allowing for any models/functions.
 #'
 #' @section Typical workflow:
-#' In the following, the use of the \pkg{spptest} library is demonstrated by its main function \code{\link{rank_envelope}},
+#' In the following, the use of the \pkg{GET} library is demonstrated by its main function \code{\link{rank_envelope}},
 #' but alternatively this step can be replaced by a call of another function for envelope or
 #' deviation test (the main options are \code{\link{st_envelope}}, \code{\link{qdir_envelope}},
 #' \code{\link{deviation_test}}).
@@ -160,8 +160,11 @@
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2016). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology). doi: 10.1111/rssb.12172
 #'
-#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2016). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing, accepted. (Preprint: arXiv:1506.01646 [stat.ME])
-#' @name spptest
+#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2016). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing. doi: 10.1007/s11222-016-9683-9
+#'
+#' Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016). Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
+#'
+#' @name GET
 #' @docType package
-#' @aliases spptest-package spptest
+#' @aliases GET-package GET
 NULL
