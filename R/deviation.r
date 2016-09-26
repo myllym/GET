@@ -13,7 +13,7 @@ deviation <- function(curve_set, measure = 'max', ...) {
 
     # deviation() should not accept envelope objects as they are not in
     # residual form.
-    if (!is(curve_set, 'curve_set')) {
+    if (!methods::is(curve_set, 'curve_set')) {
         stop('curve_set must have class "curve_set".')
     }
     check_curve_set_content(curve_set)

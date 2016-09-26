@@ -175,7 +175,7 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
 convert_envelope <- function(curve_set, ...) {
     if (inherits(curve_set, 'envelope')) {
         curve_set <- envelope_to_curve_set(curve_set, ...)
-    } else if (!is(curve_set, 'curve_set')) {
+    } else if (!methods::is(curve_set, 'curve_set')) {
         stop('curve_set must either have class "envelope" (from spatstat) ',
              'or class "curve_set".')
     }
@@ -231,7 +231,7 @@ is.curve_set <- function(x) inherits(x, 'curve_set')
 #' @export
 print.curve_set <- function(x, ...) {
     cat("curve_set object containing :\n")
-    str(x)
+    utils::str(x)
 }
 
 #' Plot method for the class 'curve_set'
@@ -253,14 +253,14 @@ plot.curve_set <- function(x, ylim, ...) {
     nr <- length(rvalues)
     # Plot
     if(!rdata$retick_xaxis)
-        plot(rvalues, x$obs, type="l", ylim=ylim, ...)
+        graphics::plot(rvalues, x$obs, type="l", ylim=ylim, ...)
     else
-        plot(rvalues, x$obs, type="l", ylim=ylim, xaxt="n", ...)
-    for(i in 1:ncol(x$sim_m)) lines(rvalues, x$sim_m[,i], col=grey(0.7))
-    lines(rvalues, x$obs, type="l", ...)
+        graphics::plot(rvalues, x$obs, type="l", ylim=ylim, xaxt="n", ...)
+    for(i in 1:ncol(x$sim_m)) graphics::lines(rvalues, x$sim_m[,i], col=grDevices::grey(0.7))
+    graphics::lines(rvalues, x$obs, type="l", ...)
     if(rdata$retick_xaxis) {
-        axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
-        abline(v = (1:nr)[rdata$r_values_newstart_id], lty=3)
+        graphics::axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
+        graphics::abline(v = (1:nr)[rdata$r_values_newstart_id], lty=3)
     }
 }
 

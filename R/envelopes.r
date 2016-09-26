@@ -386,7 +386,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     T_0 <- get_T_0(curve_set)
     curve_set <- residual(curve_set, use_theo = TRUE)
 
-    sdX <- as.vector(apply(curve_set[['sim_m']], MARGIN=1, FUN=sd))
+    sdX <- as.vector(apply(curve_set[['sim_m']], MARGIN=1, FUN=stats::sd))
 
     # Calculate deviation measures
     distance <- array(0, Nsim+1);
@@ -496,7 +496,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     curve_set <- residual(curve_set, use_theo = TRUE)
 
     # calculate quantiles for residual curve_set (i.e. for sim_curves - T_0)
-    quant_m <- apply(curve_set[['sim_m']], 1, quantile, probs = probs)
+    quant_m <- apply(curve_set[['sim_m']], 1, stats::quantile, probs = probs)
     abs_coeff <- divisor_to_coeff(abs(quant_m))
     lower_coeff <- abs_coeff[1, , drop = TRUE]
     upper_coeff <- abs_coeff[2, , drop = TRUE]
@@ -682,12 +682,12 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
 
     n <-length(data_curve);
     EX <- colMeans(sim_curves, na.rm = TRUE);
-    varX <- var(sim_curves, na.rm = TRUE);
+    varX <- stats::var(sim_curves, na.rm = TRUE);
 
     #-- simulate from the normal distribution
     simnorm <- mvtnorm::rmvnorm(n=n_norm, mean = EX, sigma = varX, method=c('svd'));
 
-    sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=sd))
+    sdX <- as.vector(apply(sim_curves, MARGIN=2, FUN=stats::sd))
     distance <- array(0, n_norm);
     for(j in 1:n_norm) {
         ttt <- abs(simnorm[j,]-EX)/sdX

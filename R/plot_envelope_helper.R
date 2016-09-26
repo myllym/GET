@@ -175,7 +175,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
             if(length(ylab)==1) ylab <- rep(ylab, times=n_of_plots)
             else warning("The length of the vector ylab is unreasonable.\n")
         }
-        par(mfrow=c(nrows_of_plots, ncols_of_plots))
+        graphics::par(mfrow=c(nrows_of_plots, ncols_of_plots))
         with(x, {
                     cat("Note: \"main\" and \"ylim\" ignored as separate plots are produced.\n")
                     tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)

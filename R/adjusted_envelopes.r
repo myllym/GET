@@ -331,8 +331,8 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     # Calculate the critical rank / alpha
     switch(test,
            rank = {
-               kalpha_star <- quantile(stats, probs=alpha, type=1)
-               #alpha_star <- quantile(pvals, probs=alpha, type=1)
+               kalpha_star <- stats::quantile(stats, probs=alpha, type=1)
+               #alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
 
                data_curve <- tX$curve_set[['obs']]
                sim_curves <- t(tX$curve_set[['sim_m']])
@@ -358,7 +358,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
                test_name <- "Adjusted rank envelope test"
            },
            qdir = {
-               alpha_star <- quantile(pvals, probs=alpha, type=1)
+               alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
                adjenv <- qdir_envelope(tX$curve_set, alpha=alpha_star)
                adjenv$alpha_star <- alpha_star
                adjenv$p_values <- pvals
@@ -366,7 +366,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
                test_name <- "Adjusted directional quantile envelope test"
            },
            st = {
-               alpha_star <- quantile(pvals, probs=alpha, type=1)
+               alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
                adjenv <- st_envelope(tX$curve_set, alpha=alpha_star)
                adjenv$alpha_star <- alpha_star
                adjenv$p_values <- pvals
@@ -527,8 +527,8 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
 
     #-- The rank test
     # Calculate the critical rank / alpha
-    kalpha_star <- quantile(stats, probs=alpha, type=1)
-    #alpha_star <- quantile(pvals, probs=alpha, type=1)
+    kalpha_star <- stats::quantile(stats, probs=alpha, type=1)
+    #alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
 
     data_curve <- tX$curve_set[['obs']]
     sim_curves <- t(tX$curve_set[['sim_m']])
