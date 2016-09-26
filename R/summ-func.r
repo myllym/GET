@@ -12,8 +12,7 @@ call_summ_func <- function(pattern, do_besags_L,
                            edge_correction = 'translate', mtf_name = 'm',
                            r_max = NULL, r_vec = NULL, calc_unmarked = TRUE,
                            use_biased_lambda2 = FALSE) {
-    got_req <- require(marksummary)
-    if (!got_req) {
+    if (!requireNamespace("marksummary", quietly=TRUE)) {
         stop('marksummary must be installed for call_summ_func.')
     }
 
@@ -110,8 +109,7 @@ call_random_labelling <- function(pattern, do_besags_L, mtf_name = 'm',
                                   edge_correction = 'translate',
                                   method = 'permute',
                                   use_biased_lambda2 = FALSE) {
-    got_req <- require(marksummary)
-    if (!got_req) {
+    if (!requireNamespace("marksummary", quietly=TRUE)) {
         stop('marksummary must be installed for call_random_labelling.')
     }
 
