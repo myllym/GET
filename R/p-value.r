@@ -17,9 +17,9 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #' Carlo samples. User can choose which method is used to treat possible
 #' tied values.
 #'
-#' @usage \method{estimate_p_value}{default}(obs, sim_vec, ties = 'midrank')
+#' @usage \method{estimate_p_value}{default}(x, sim_vec, ties = 'midrank', ...)
 #'
-#' @param obs The data sample. A scalar real value. Must not be
+#' @param x The data sample. A scalar real value. Must not be
 #'   NULL.
 #' @param sim_vec The Monte Carlo samples. A vector of real values.
 #'   Must not be NULL.
@@ -31,11 +31,13 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #'   uniformly sampled so that the resulting p-value is at most the
 #'   conservative option and at least the liberal option. For 'midrank'
 #'   the mid-rank within the tied values is taken. 'midrank' is the default.
+#' @param ... Additional arguments.
 #' @return The p-value estimate. A scalar real value between 0 and 1.
 #'
 #' @references Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
 #' @export
-estimate_p_value.default <- function(obs, sim_vec, ties = 'midrank') {
+estimate_p_value.default <- function(x, sim_vec, ties = 'midrank', ...) {
+    obs <- x
     if (length(obs) != 1L || !is.finite(obs) || !is.numeric(obs)) {
         stop('obs must be a scalar finite real value.')
     }

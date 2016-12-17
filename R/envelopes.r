@@ -191,12 +191,12 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     distance <- apply(allranks, MARGIN=1, FUN=min)
     u <- -distance
     #-- p-interval
-    p_low <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='liberal')
-    p_upp <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties='conservative')
+    p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
+    p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
 
     #-- p-value
     if(!lexo) {
-        p <- estimate_p_value(obs=u[1], sim_vec=u[-1], ties=ties)
+        p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties)
     }
     else { # rank the curves by lexical ordering
         # order ranks within each curve
@@ -223,7 +223,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
         distance_lexo <- newranks[order(lexo_values)]
         #-- calculate the p-value
         u_lexo <- -distance_lexo
-        p <- estimate_p_value(obs=u_lexo[1], sim_vec=u_lexo[-1])
+        p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1])
     }
 
     #-- calculate the 100(1-alpha)% global envelope
@@ -399,7 +399,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     distance[2:(Nsim+1)] <- apply(abs(scaled_curve_set[['sim_m']]), 2, max)
 
     #-- calculate the p-value
-    p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
+    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance);
@@ -513,7 +513,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     distance[2:(Nsim+1)] <- apply(abs(sim_scaled_residuals), 2, max)
 
     #-- calculate the p-value
-    p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
+    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance)
@@ -618,7 +618,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     distance[2:(Nsim+1)] <- apply(abs(curve_set[['sim_m']]), 2, max)
 
     #-- calculate the p-value
-    p <- estimate_p_value(obs=distance[1], sim_vec=distance[-1], ...)
+    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1], ...)
 
     #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance);
@@ -707,7 +707,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     tmaxd <- max(ttt)
 
     #-- calculate the p-value
-    p <- estimate_p_value(obs=tmaxd, sim_vec=distance, ...)
+    p <- estimate_p_value(x=tmaxd, sim_vec=distance, ...)
     #    p <- 1;
     #    for(i in 1:n_norm) {
     #        if(distance[i]>tmaxd) p<-p+1;
