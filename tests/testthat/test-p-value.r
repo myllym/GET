@@ -5,7 +5,7 @@ context('p-values')
 # Helpers.
 
 case_no_ties <- function(position, n_sample) {
-    list(argument=list(obs=position,
+    list(argument=list(x=position,
                        # Permuting the values for a harder test.
                        sim_vec=sample(seq_len(n_sample)[-position])),
          # Calculation modified from a separate source:
