@@ -6,8 +6,8 @@ Encoding: UTF-8
 Authors@R: c(
     person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre',
     'ths'),
-    email = list('mari.myllymaki@aalto.fi', 'mari.j.myllymaki@gmail.com')),
-    person(given = 'Henri', family = 'Seijo', role = c('aut', 'cre'),
+    email = 'mari.j.myllymaki@gmail.com'),
+    person(given = 'Henri', family = 'Seijo', role = 'aut',
     email = 'henri.seijo@iki.fi'),
     person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
