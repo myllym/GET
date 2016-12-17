@@ -56,7 +56,7 @@ citEntry(
 	author = personList(as.person("T. Mrkvička"),
 	                    as.person("S. Soubeyrand"),
 	                    as.person("M. Myllymäki"),
-                        as.person("P. Grabarnik")),
+                        as.person("P. Grabarnik"),
                         as.person("U. Hahn")),
     journal = "Spatial Statistics",
     year = "2016",
