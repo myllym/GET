@@ -138,9 +138,9 @@ plot.combined_scaled_MAD_test <- function(x, plot_type = c("envelope", "rank"), 
     plot_type <- match.arg(plot_type)
     switch(plot_type,
            rank = {
-               plot(x[['rank_test']], ...)
+               plot.envelope_test(x[['rank_test']], ...)
            },
            envelope = {
-               plot(x[['envelope']], ...)
+               plot.envelope_test(x[['envelope']], ...)
            })
 }
