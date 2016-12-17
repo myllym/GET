@@ -1,4 +1,4 @@
 library(testthat)
 library(spptest)
 
-test_package('spptest')
+test_package('GET')
