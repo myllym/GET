@@ -236,7 +236,7 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
 #' 2) The user can provide the function for fitting the model (fitfun) and for simulating
 #' from the fitted model (simfun). These functions should be coupled with each other such
 #' that the object returned by 'fitfun' is directly accepted as the (single) argument in 'simfun'.
-#' Further X should then be an \code{\link[spastat]{ppp}} object and 'fitfun' should accept as
+#' Further X should then be an \code{\link[spatstat]{ppp}} object and 'fitfun' should accept as
 #' the argument an \code{\link[spastat]{ppp}} object (X and further simulated point patterns).
 #'
 #'
