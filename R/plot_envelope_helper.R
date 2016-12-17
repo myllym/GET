@@ -224,17 +224,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @param labels Labels for the separate plots. Ignored if separate_yaxes is FALSE.
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
-#' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 geom_ribbon
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 geom_line
-#' @importFrom ggplot2 facet_grid
-#' @importFrom ggplot2 scale_y_continuous
-#' @importFrom ggplot2 scale_linetype_manual
-#' @importFrom ggplot2 scale_size_manual
-#' @importFrom ggplot2 scale_x_continuous
-#' @importFrom ggplot2 geom_vline
-
+#' @import ggplot2
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALSE, max_ncols_of_plots=2,
                        labels=NULL) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
@@ -343,6 +333,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
 #' @param xlab See \code{\link{plot.default}}.
 #' @param ylab See \code{\link{plot.default}}.
 #' @export
+#' @import ggplot2
 two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, ylab) {
     if(!(class(env1) %in% c("envelope_test", "adjusted_envelope_test")) |
        !(class(env2) %in% c("envelope_test", "adjusted_envelope_test"))) stop("env1 and/or env2 is not desired object type.\n")
