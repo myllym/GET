@@ -134,6 +134,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, .
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
+#' @importFrom graphics par
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                            separate_yaxes=FALSE, max_ncols_of_plots=2, ...) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
@@ -223,6 +224,17 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @param labels Labels for the separate plots. Ignored if separate_yaxes is FALSE.
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_ribbon
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_line
+#' @importFrom ggplot2 facet_grid
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom ggplot2 scale_linetype_manual
+#' @importFrom ggplot2 scale_size_manual
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 geom_vline
+
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALSE, max_ncols_of_plots=2,
                        labels=NULL) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values

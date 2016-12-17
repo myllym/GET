@@ -4,6 +4,7 @@
 #'
 #' @inheritParams convert_envelope
 #' @return A scaled curve_set.
+#' @importFrom stats sd
 st_scaling <- function(curve_set) {
     sim_sd <- apply(curve_set[['sim_m']], 1, stats::sd)
     res <- weigh_curves(curve_set, divisor_to_coeff(sim_sd))
@@ -19,6 +20,7 @@ st_scaling <- function(curve_set) {
 #'   Berthelsen (2012).
 #' @param ... Further arguments passed to quantile.
 #' @return A scaled curve_set.
+#' @importFrom stats quantile
 #' @references J. Møller and K. K. Berthelsen, “Transforming spatial point
 #'   processes into Poisson processes using random superposition,” Advances
 #'   in Applied Probability, vol. 44, no. 1, pp. 42–62, 2012.
@@ -67,6 +69,7 @@ weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
 #'
 #' @inheritParams q_scaling
 #' @return A scaled curve_set.
+#' @importFrom stats quantile
 qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_probs(probs)
     check_residualness(curve_set)

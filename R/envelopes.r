@@ -339,6 +339,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
 #'   \item call = The call of the function.
 #' }
 #' @export
+#' @importFrom stats sd
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
@@ -447,6 +448,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #'   \item call = The call of the function.
 #' }
 #' @export
+#' @importFrom stats quantile
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
@@ -666,6 +668,9 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @inheritParams st_envelope
 #' @param n_norm Number of simulations drawn from the multivariate normal distribution (dimension = number of distances r).
 #' @export
+#' @importFrom stats var
+#' @importFrom stats sd
+#' @importFrom mvtnorm rmvnorm
 #' @examples
 #' require(spatstat)
 #' pp <- spruces

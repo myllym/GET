@@ -4,6 +4,8 @@
 #' the quantities are calculated for all the curve sets provided in the list "curve_sets"
 #' and the results are returned in corresponding lists.
 #' @inheritParams combined_scaled_MAD_envelope
+#' @importFrom stats quantile
+#' @importFrom stats sd
 combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, test = c("qdir", "st"), probs = c(0.025, 0.975)) {
     curve_sets_res <- lapply(curve_sets, FUN = function(x) residual(x, use_theo = TRUE))
 

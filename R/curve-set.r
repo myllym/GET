@@ -172,6 +172,7 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
 #' @return If an \code{\link[spatstat]{envelope}} object was given, return a
 #'   corresponding curve_set object. If a curve_set object was given, return
 #'   it unharmed.
+#' @importFrom methods is
 convert_envelope <- function(curve_set, ...) {
     if (inherits(curve_set, 'envelope')) {
         curve_set <- envelope_to_curve_set(curve_set, ...)
@@ -229,6 +230,7 @@ is.curve_set <- function(x) inherits(x, 'curve_set')
 #'
 #' @method print curve_set
 #' @export
+#' @importFrom utils str
 print.curve_set <- function(x, ...) {
     cat("curve_set object containing :\n")
     utils::str(x)
@@ -243,6 +245,11 @@ print.curve_set <- function(x, ...) {
 #'
 #' @method plot curve_set
 #' @export
+#' @importFrom graphics plot
+#' @importFrom graphics lines
+#' @importFrom grDevices grey
+#' @importFrom graphics axis
+#' @importFrom graphics abline
 plot.curve_set <- function(x, ylim, ...) {
     if(missing('ylim')) ylim <- with(x, c(min(obs,sim_m), max(obs,sim_m)))
     rdata <- curve_set_check_r(x)

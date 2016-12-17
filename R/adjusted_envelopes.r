@@ -62,6 +62,7 @@
 #' See \code{\link[spatstat]{envelope}}.
 #' @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
 #' \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
+#' @importFrom spatstat envelope
 global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided", "less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
@@ -137,6 +138,7 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
 #' A list of parameters should be provided for each test function that is to be used in the combined test.
 #' @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
 #' \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
+#' @importFrom spatstat envelope
 combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...,
         testfuns = NULL,
         test = c("rank", "qdir", "st"),
@@ -268,6 +270,17 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
 #' \code{\link{plot.adjusted_envelope_test}}
 #' @export
+#' @importFrom spatstat is.ppm
+#' @importFrom spatstat is.kppm
+#' @importFrom spatstat is.lppm
+#' @importFrom spatstat is.slrm
+#' @importFrom spatstat is.ppp
+#' @importFrom spatstat update.ppm
+#' @importFrom spatstat update.kppm
+#' @importFrom spatstat update.lppm
+#' @importFrom spatstat update.slrm
+#' @importFrom parallel mclapply
+#' @importFrom stats quantile
 dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         simfun=NULL, fitfun=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided","less", "greater"),
@@ -463,6 +476,17 @@ plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
 #' \code{\link{plot.adjusted_combined_envelope_test}}
 #' @export
+#' @importFrom spatstat is.ppm
+#' @importFrom spatstat is.kppm
+#' @importFrom spatstat is.lppm
+#' @importFrom spatstat is.slrm
+#' @importFrom spatstat is.ppp
+#' @importFrom spatstat update.ppm
+#' @importFrom spatstat update.kppm
+#' @importFrom spatstat update.lppm
+#' @importFrom spatstat update.slrm
+#' @importFrom parallel mclapply
+#' @importFrom stats quantile
 dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         simfun=NULL, fitfun=NULL, ...,
         testfuns = NULL, test = c("qdir", "st", "rank"),
