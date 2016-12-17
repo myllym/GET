@@ -23,8 +23,8 @@ mean of the simulations.}
 \item{scaling}{The name of the scaling to use. Options include 'none',
 'q', 'qdir' and 'st'. 'qdir' is default.}
 
-\item{measure}{The deviation measure to use. Default is 'max'. Must be 
-one of the following: 'max', 'int', 'int2'.}
+\item{measure}{The deviation measure to use. Default is 'max'. Must be
+one of the following: 'max', 'int' or 'int2'.}
 
 \item{savedevs}{Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.}
 

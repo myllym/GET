@@ -35,7 +35,7 @@ element has value zero, it will be regarded as the collapsed bin [0, 0],
 and the next bin will start from and exclude 0.}
 
 \item{measure}{The deviation measure to use. Default is 'max'. Must be
-one of the following: 'max', 'int', 'int2'.}
+one of the following: 'max', 'int' or 'int2'.}
 
 \item{scaling}{The name of the scaling to use. Options include 'none',
 'q', 'qdir' and 'st'. 'qdir' is default.}
@@ -83,3 +83,4 @@ mpp <- spruces
 p <- random_labelling_test(mpp, mtf_name = 'm', nsim=999, r_min=0, r_max=9.5)
 p
 }
+

@@ -4,10 +4,10 @@
 \alias{estimate_p_value.default}
 \title{Estimate p-value.}
 \usage{
-\method{estimate_p_value}{default}(obs, sim_vec, ties = 'midrank')
+\method{estimate_p_value}{default}(x, sim_vec, ties = 'midrank', ...)
 }
 \arguments{
-\item{obs}{The data sample. A scalar real value. Must not be
+\item{x}{The data sample. A scalar real value. Must not be
 NULL.}
 
 \item{sim_vec}{The Monte Carlo samples. A vector of real values.
@@ -21,6 +21,8 @@ possible. For 'random' the rank of the obs within the tied values is
 uniformly sampled so that the resulting p-value is at most the
 conservative option and at least the liberal option. For 'midrank'
 the mid-rank within the tied values is taken. 'midrank' is the default.}
+
+\item{...}{Additional arguments.}
 }
 \value{
 The p-value estimate. A scalar real value between 0 and 1.

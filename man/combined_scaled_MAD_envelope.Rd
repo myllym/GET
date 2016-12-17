@@ -8,7 +8,7 @@ combined_scaled_MAD_envelope(curve_sets, test = c("qdir", "st"),
   alpha = 0.05, probs = c(0.025, 0.975), ...)
 }
 \arguments{
-\item{curve_sets}{A list of objects of type \code{\link{curve_set}} or \code{\link[spatstat]{envelope}}.}
+\item{curve_sets}{A list of objects of type 'curve_set' or \code{\link[spatstat]{envelope}}.}
 
 \item{test}{Either "qdir" for the \code{\link{qdir_envelope}} test or
 "st" for the \code{\link{st_envelope}} test.}
@@ -23,7 +23,7 @@ The default values are 0.025 and 0.975.}
 or \code{\link{st_envelope}} (if test = "st").}
 }
 \description{
-Given a list of \code{\link{curve_set}} objects, a combined global scaled (directional quantile
+Given a list of 'curve_set' objects (see \code{\link{create_curve_set}}), a combined global scaled (directional quantile
 or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
 Details of the combined test can be found in Mrkvicka et al.
 }

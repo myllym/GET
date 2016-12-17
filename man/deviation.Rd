@@ -10,9 +10,8 @@ deviation(curve_set, measure = "max", ...)
 \item{curve_set}{A residual curve_set object. Can be obtained by using
 residual().}
 
-\item{measure}{The deviation measure to use. Default is 
-'max'. Must be one of the following: 'max', 'int' or 
-'int2'.}
+\item{measure}{The deviation measure to use. Default is 'max'. Must be
+one of the following: 'max', 'int' or 'int2'.}
 
 \item{...}{Arguments to be passed to the measure function, if applicable.}
 }
