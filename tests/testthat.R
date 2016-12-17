@@ -1,4 +1,4 @@
 library(testthat)
 library(GET)
 
-test_package('GET')
+test_check('GET')
