@@ -35,10 +35,7 @@ The library `spptest` has become `GET`.
 
 ## References
 
-Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
-Deviation test construction and power comparison for marked spatial point
-patterns. Spatial Statistics 11, 19-34.
-(Preprint of the article: http://arxiv.org/abs/1306.1028)
+To cite GET in publications use:
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2016).
 Global envelope tests for spatial processes. Journal of the Royal Statistical Society:
@@ -49,6 +46,21 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2016).
 Multiple Monte Carlo testing, with applications in spatial point processes.
 Statistics and Computing. doi: 10.1007/s11222-016-9683-9
 
+If you use deviation tests, please also cite:
+
+Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
+Deviation test construction and power comparison for marked spatial point
+patterns. Spatial Statistics 11, 19-34.
+(Preprint of the article: http://arxiv.org/abs/1306.1028)
+
+If you use apply tests to spatial residuals, please also cite:
+
 Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016).
 Monte Carlo testing in spatial statistics, with applications to spatial residuals.
 Spatial Statistics. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
+
+If you use functional ANOVA, please also cite:
+
+Mrkvicka, T., Hahn, U. and Myllymäki, M. (2016).
+A one-way ANOVA test for functional data with graphical interpretation.
+arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
