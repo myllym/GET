@@ -23,7 +23,7 @@ ThemePlain <- function(base_size=15, base_family='') {
                     legend.key=ggplot2::element_blank(),
                     legend.position='bottom',
                     legend.key.height=grid::unit(0, "inches"),
-                    legend.margin=grid::unit(0, "inches"),
+                    legend.spacing=grid::unit(0, "inches"),
                     plot.margin=grid::unit(c(0.01,0.01,0,0), "inches")
             )
 }
