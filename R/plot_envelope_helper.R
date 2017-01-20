@@ -9,7 +9,7 @@ curve_set_check_r <- function(x) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     r_values <- x[['r']]
     nr <- length(r_values)
-    if( !all(rvalues[-1] - rvalues[-nr] > 0) ) {
+    if( !all(r_values[-1] - r_values[-nr] > 0) ) {
         retick_xaxis <- TRUE
         new_r_values <- 1:nr # to be used in plotting
         r_values_newstart_id <- which(!(r_values[1:(nr-1)] < r_values[2:nr])) + 1
