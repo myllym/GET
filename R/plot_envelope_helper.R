@@ -47,7 +47,7 @@ curve_set_check_r <- function(x) {
 }
 
 
-#' An internal spptest function for setting the default main for a global envelope plot.
+#' An internal GET function for setting the default main for a global envelope plot.
 #' @param x An 'envelope_test' object.
 env_main_default <- function(x) {
     if(with(x, exists('p_interval')))
@@ -68,7 +68,7 @@ env_main_default <- function(x) {
     main
 }
 
-#' An internal spptest function for setting the default ylim for a global envelope plot.
+#' An internal GET function for setting the default ylim for a global envelope plot.
 #' @param x An 'envelope_test' object.
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
 #' Otherwise the ylim are for \code{\link{env_basic_plot}}.
@@ -80,9 +80,9 @@ env_ylim_default <- function(x, use_ggplot2) {
     ylim
 }
 
-#' An internal spptest function for making a dotplot style "global envelope plot".
+#' An internal GET function for making a dotplot style "global envelope plot".
 #'
-#' An internal spptest function for making a dotplot style "global envelope plot".
+#' An internal GET function for making a dotplot style "global envelope plot".
 #'
 #' @param x An 'envelope_test' object.
 #' @param main See \code{\link{plot.default}}.
@@ -118,9 +118,9 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, .
 }
 
 
-#' An internal spptest function for making a basic "global envelope plot".
+#' An internal GET function for making a basic "global envelope plot".
 #'
-#' An internal spptest function for making a basic "global envelope plot".
+#' An internal GET function for making a basic "global envelope plot".
 #'
 #' @param x An 'envelope_test' object.
 #' @param main See \code{\link{plot.default}}.
@@ -209,9 +209,9 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 }
 
 
-#' An internal spptest function for making a ggplot2 style "global envelope plot".
+#' An internal GET function for making a ggplot2 style "global envelope plot".
 #'
-#' An internal spptest function for making a ggplot2 style "global envelope plot".
+#' An internal GET function for making a ggplot2 style "global envelope plot".
 #'
 #' @param x An 'envelope_test' object.
 #' @param base_size Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.
