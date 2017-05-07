@@ -78,7 +78,7 @@ env_main_default <- function(x) {
 env_ylim_default <- function(x, use_ggplot2) {
     if(!use_ggplot2 || attr(x, "test_details")$alternative != "two.sided")
         ylim <- with(x, c(min(data_curve,lower,upper,central_curve),
-                        max(data_curve,lower,upper,central_curve)))
+                          max(data_curve,lower,upper,central_curve)))
     else ylim <- NULL
     ylim
 }
