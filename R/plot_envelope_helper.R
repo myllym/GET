@@ -50,22 +50,25 @@ curve_set_check_r <- function(x) {
 #' An internal GET function for setting the default main for a global envelope plot.
 #' @param x An 'envelope_test' object.
 env_main_default <- function(x) {
-    if(with(x, exists('p_interval')))
-        if(x$alternative == "two.sided")
-            main <- with(x, paste(method, ": p-interval = (",
-                            round(p_interval[1],3),", ", round(p_interval[2],3), ")", sep=""))
-        else
-            main <- with(x, paste(method, ": p-interval = (",
-                            round(p_interval[1],3),", ", round(p_interval[2],3), ") \n",
-                            "Alternative = \"", alternative, "\"\n", sep=""))
-    else {
-        if(x$alternative == "two.sided")
-            main <- with(x, paste(method, ": p = ", round(p,3), sep=""))
-        else
-            main <- with(x, paste(method, ": p = ", round(p,3), "\n",
-                            "Alternative = \"", alternative, "\"\n", sep=""))
-    }
-    main
+    with(attr(x, "test_details"),
+        {
+            if(exists('p_interval')) {
+                if(alternative == "two.sided")
+                    paste(method, ": p-interval = (",
+                          round(p_interval[1],3),", ", round(p_interval[2],3), ")", sep="")
+                else
+                    paste(method, ": p-interval = (",
+                          round(p_interval[1],3),", ", round(p_interval[2],3), ") \n",
+                          "Alternative = \"", alternative, "\"\n", sep="")
+            }
+            else {
+                if(alternative == "two.sided")
+                    paste(method, ": p = ", round(p,3), sep="")
+                else
+                    paste(method, ": p = ", round(p,3), "\n",
+                                  "Alternative = \"", alternative, "\"\n", sep="")
+            }
+        })
 }
 
 #' An internal GET function for setting the default ylim for a global envelope plot.
@@ -73,7 +76,7 @@ env_main_default <- function(x) {
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
 #' Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
-    if(!use_ggplot2 || x$alternative != "two.sided")
+    if(!use_ggplot2 || attr(x, "test_details")$alternative != "two.sided")
         ylim <- with(x, c(min(data_curve,lower,upper,central_curve),
                         max(data_curve,lower,upper,central_curve)))
     else ylim <- NULL

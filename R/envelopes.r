@@ -258,11 +258,11 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
 #' @method print envelope_test
 #' @export
 print.envelope_test <- function(x, ...) {
-    with(x, cat(method, "\n",
+    with(attr(x, "test_details"), cat(method, "\n",
                 " p-value of the test: ", p, sep=""))
-    with(x, if(exists('ties')) cat(" (ties method: ", ties, ")\n", sep="")
+    with(attr(x, "test_details"), if(exists('ties')) cat(" (ties method: ", ties, ")\n", sep="")
             else cat("\n"))
-    with(x, if(exists('p_interval'))
+    with(attr(x, "test_details"), if(exists('p_interval'))
             cat(" p-interval         : (", p_interval[1], ", ", p_interval[2],")\n", sep=""))
 }
 
@@ -293,7 +293,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-    if(use_ggplot2 & x$alternative == "two.sided") {
+    if(use_ggplot2 & attr(x, "test_details")$alternative == "two.sided") {
         env_ggplot(x, base_size, main, ylim, xlab, ylab, ...)
     }
     else {
