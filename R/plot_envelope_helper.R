@@ -40,10 +40,10 @@ curve_set_check_r <- function(x) {
     }
     
     list(r_values = r_values,
-            retick_xaxis = retick_xaxis,
-            new_r_values = new_r_values,
-            r_break_values = r_break_values, loc_break_values = loc_break_values,
-            r_values_newstart_id = r_values_newstart_id)
+         retick_xaxis = retick_xaxis,
+         new_r_values = new_r_values,
+         r_break_values = r_break_values, loc_break_values = loc_break_values,
+         r_values_newstart_id = r_values_newstart_id)
 }
 
 
