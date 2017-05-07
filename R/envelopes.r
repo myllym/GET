@@ -411,8 +411,8 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=T_0),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "test_details") <- list(method = "Studentised envelope test",
-            alternative = "two.sided", p=p,
-            u_alpha=talpha)
+                                      alternative = "two.sided", p=p,
+                                      u_alpha=talpha)
     if(savedevs) attr(res, "u") <- distance
     attr(res, "call") <- match.call()
     res
@@ -525,8 +525,8 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=T_0),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "test_details") <- list(method = "Directional quantile envelope test",
-            alternative = "two.sided", p=p,
-            u_alpha=talpha)
+                                      alternative = "two.sided", p=p,
+                                      u_alpha=talpha)
     if(savedevs) attr(res, "u") <- distance
     attr(res, "call") <- match.call()
     res
@@ -630,8 +630,8 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=T_0),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "test_details") <- list(method = "Unscaled envelope test",
-            alternative = "two.sided", p=p,
-            u_alpha=talpha)
+                                      alternative = "two.sided", p=p,
+                                      u_alpha=talpha)
     if(savedevs) attr(res, "u") <- distance
     attr(res, "call") <- match.call()
     res
@@ -723,8 +723,8 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=EX),
             class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "test_details") <- list(method = "Approximative normal envelope test",
-            alternative = "two.sided", p=p,
-            u_alpha=talpha)
+                                      alternative = "two.sided", p=p,
+                                      u_alpha=talpha)
     attr(res, "call") <- match.call()
     res
 }
