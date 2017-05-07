@@ -725,7 +725,6 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     attr(res, "test_details") <- list(method = "Approximative normal envelope test",
             alternative = "two.sided", p=p,
             u_alpha=talpha)
-    if(savedevs) attr(res, "u") <- distance
     attr(res, "call") <- match.call()
     res
 }
