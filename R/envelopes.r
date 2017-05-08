@@ -260,12 +260,12 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
 #' @method print envelope_test
 #' @export
 print.envelope_test <- function(x, ...) {
-    with(attr(x, "test_details"), cat(method, "\n",
-                " p-value of the test: ", p, sep=""))
-    with(attr(x, "test_details"), if(exists('ties')) cat(" (ties method: ", ties, ")\n", sep="")
-            else cat("\n"))
-    with(attr(x, "test_details"), if(exists('p_interval'))
-            cat(" p-interval         : (", p_interval[1], ", ", p_interval[2],")\n", sep=""))
+    cat(attr(x, "method"), "\n",
+        " p-value of the test: ", attr(x, "p"), sep="")
+    if(!is.null(attr(x, "ties"))) cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
+    else cat("\n")
+    if(!is.null(attr(x, "p_interval")))
+        cat(" p-interval         : (", attr(x, "p_interval")[1], ", ", attr(x, "p_interval")[2],")\n", sep="")
 }
 
 #' Plot method for the class 'envelope_test'

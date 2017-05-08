@@ -50,25 +50,22 @@ curve_set_check_r <- function(x) {
 #' An internal GET function for setting the default main for a global envelope plot.
 #' @param x An 'envelope_test' object.
 env_main_default <- function(x) {
-    with(attr(x, "test_details"),
-        {
-            if(exists('p_interval')) {
-                if(alternative == "two.sided")
-                    paste(method, ": p-interval = (",
-                          round(p_interval[1],3),", ", round(p_interval[2],3), ")", sep="")
-                else
-                    paste(method, ": p-interval = (",
-                          round(p_interval[1],3),", ", round(p_interval[2],3), ") \n",
-                          "Alternative = \"", alternative, "\"\n", sep="")
-            }
-            else {
-                if(alternative == "two.sided")
-                    paste(method, ": p = ", round(p,3), sep="")
-                else
-                    paste(method, ": p = ", round(p,3), "\n",
-                                  "Alternative = \"", alternative, "\"\n", sep="")
-            }
-        })
+    if(!is.null(attr(x, "p_interval"))) {
+        if(attr(x, "alternative") == "two.sided")
+            paste(attr(x, "method"), ": p-interval = (",
+                  round(attr(x, "p_interval")[1],3),", ", round(attr(x, "p_interval")[2],3), ")", sep="")
+        else
+            paste(attr(x, "method"), ": p-interval = (",
+                  round(attr(x, "p_interval")[1],3),", ", round(attr(x, "p_interval")[2],3), ") \n",
+                  "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
+    }
+    else {
+        if(attr(x, "alternative") == "two.sided")
+            paste(attr(x, "method"), ": p = ", round(attr(x, "p"),3), sep="")
+        else
+            paste(attr(x, "method"), ": p = ", round(attr(x, "p"),3), "\n",
+                  "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
+    }
 }
 
 #' An internal GET function for setting the default ylim for a global envelope plot.
@@ -76,7 +73,7 @@ env_main_default <- function(x) {
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
 #' Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
-    if(!use_ggplot2 || attr(x, "test_details")$alternative != "two.sided")
+    if(!use_ggplot2 || attr(x, "alternative")!= "two.sided")
         ylim <- c(min(x[['data_curve']],x[['lower']],x[['upper']],x[['central_curve']]),
                   max(x[['data_curve']],x[['lower']],x[['upper']],x[['central_curve']]))
     else ylim <- NULL
@@ -106,11 +103,11 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, .
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
 
     graphics::plot(1:nr, x[['central_curve']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
-    if(attr(x, "test_details")$alternative!="greater")
+    if(attr(x, "alternative")!="greater")
         graphics::arrows(1:nr, x[['lower']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1)
     else
         graphics::arrows(1:nr, x[['lower']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1, col=grey(0.8))
-    if(attr(x, "test_details")$alternative!="less")
+    if(attr(x, "alternative")!="less")
         graphics::arrows(1:nr, x[['upper']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1)
     else
         graphics::arrows(1:nr, x[['upper']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1, col=grey(0.8))
@@ -158,8 +155,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         else
             graphics::plot(x[['r']], x[['data_curve']], ylim=ylim, main=main, xlab=xlab, ylab=ylab,
                     type="l", lty=1, lwd=2, xaxt="n", ...)
-        if(attr(x, "test_details")$alternative!="greater") lines(x[['r']], x[['lower']], lty=2) else lines(x[['r']], x[['lower']], lty=2, col=grey(0.8))
-        if(attr(x, "test_details")$alternative!="less") lines(x[['r']], x[['upper']], lty=2) else lines(x[['r']], x[['upper']], lty=2, col=grey(0.8))
+        if(attr(x, "alternative")!="greater") lines(x[['r']], x[['lower']], lty=2) else lines(x[['r']], x[['lower']], lty=2, col=grey(0.8))
+        if(attr(x, "alternative")!="less") lines(x[['r']], x[['upper']], lty=2) else lines(x[['r']], x[['upper']], lty=2, col=grey(0.8))
         lines(x[['r']], x[['central_curve']], lty=3)
         if(color_outside) {
             outside <- x[['data_curve']] < x[['lower']] | x[['data_curve']] > x[['upper']]
@@ -196,10 +193,10 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                     x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                  main="", xlab=xlab[i], ylab=ylab[i],
                  type="l", lty=1, lwd=2, ylim=ylim, ...)
-            if(attr(x, "test_details")$alternative!="greater")
+            if(attr(x, "alternative")!="greater")
                 graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
             else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
-            if(attr(x, "test_details")$alternative!="less")
+            if(attr(x, "alternative")!="less")
                 graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
             else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
             graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['central_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=3)
