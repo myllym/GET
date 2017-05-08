@@ -96,6 +96,10 @@ env_ylim_default <- function(x, use_ggplot2) {
 #' outside the envelope. Currently red color is used.
 #' @param labels Labels for the tests at x-axis.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
+#' @importFrom graphics plot
+#' @importFrom graphics arrows
+#' @importFrom graphics points
+#' @importFrom graphics axis
 env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, ...) {
     nr <- length(x[['r']])
     if(missing(labels)) labels <- paste(round(x[['r']], digits=2))
@@ -136,6 +140,11 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, .
 #' number of columns for figures. Default 2.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics par
+#' @importFrom graphics plot
+#' @importFrom graphics points
+#' @importFrom graphics lines
+#' @importFrom graphics axis
+#' @importFrom graphics abline
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                            separate_yaxes=FALSE, max_ncols_of_plots=2, ...) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
