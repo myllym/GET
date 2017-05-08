@@ -339,10 +339,10 @@ two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, yla
     if(missing(xlab)) xlab <- expression(italic(r))
     if(missing(ylab)) ylab <- expression(italic(T(r)))
     if(missing(main)) main <- "Rank envelope test"
-    if(missing(ylim)) ylim <- c(min(env1[['data_curve']],env1[['lower']],env1[['upper']],env1$central_curve,
-                                    env2[['data_curve']],env2[['lower']],env2[['upper']],env2$central_curve),
-                                max(env1[['data_curve']],env1[['lower']],env1[['upper']],env1$central_curve,
-                                    env2[['data_curve']],env2[['lower']],env2[['upper']],env2$central_curve))
+    if(missing(ylim)) ylim <- c(min(env1[['data_curve']],env1[['lower']],env1[['upper']],env1[['central_curve']],
+                                    env2[['data_curve']],env2[['lower']],env2[['upper']],env2[['central_curve']]),
+                                max(env1[['data_curve']],env1[['lower']],env1[['upper']],env1[['central_curve']],
+                                    env2[['data_curve']],env2[['lower']],env2[['upper']],env2[['central_curve']]))
     df <- data.frame(r = rep(env1[['r']], times=2),
             curves = c(env1[['data_curve']], env1$central_curve),
             type = factor(rep(c("Data function", "Central function"), each=length(env1[['r']])), levels=c("Data function", "Central function")),
