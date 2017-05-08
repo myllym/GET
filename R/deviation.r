@@ -40,6 +40,12 @@ deviation <- function(curve_set, measure = 'max', ...) {
     res
 }
 
+#' Print method for the class 'deviation_set'
+#'
+#' @usage \method{print}{deviation_set}(x, ...)
+#' @param x A deviation_set object.
+#' @param ... Ignored.
+#' @export
 print.deviation_set <- function(x, ...) {
     with(x, cat(" Data value u_1:", obs, "\n",
                 "Rank of u_1:", rank(c(devs$obs, devs$sim))[1], "\n",
