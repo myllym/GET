@@ -295,7 +295,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-    if(use_ggplot2 & attr(x, "test_details")$alternative == "two.sided") {
+    if(use_ggplot2 & attr(x, "alternative") == "two.sided") {
         env_ggplot(x, base_size, main, ylim, xlab, ylab, ...)
     }
     else {
