@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_envelope_helper.R
 \name{env_basic_plot}
 \alias{env_basic_plot}
-\title{An internal spptest function for making a basic "global envelope plot".}
+\title{An internal GET function for making a basic "global envelope plot".}
 \usage{
 env_basic_plot(x, main, ylim, xlab, ylab, color_outside = TRUE,
   separate_yaxes = FALSE, max_ncols_of_plots = 2, ...)
@@ -30,6 +30,6 @@ number of columns for figures. Default 2.}
 \item{...}{Additional parameters to be passed to the function \code{\link{plot}}.}
 }
 \description{
-An internal spptest function for making a basic "global envelope plot".
+An internal GET function for making a basic "global envelope plot".
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_envelope_helper.R
 \name{env_dotplot}
 \alias{env_dotplot}
-\title{An internal spptest function for making a dotplot style "global envelope plot".}
+\title{An internal GET function for making a dotplot style "global envelope plot".}
 \usage{
 env_dotplot(x, main, ylim, xlab, ylab, color_outside = TRUE, labels, ...)
 }
@@ -25,6 +25,6 @@ outside the envelope. Currently red color is used.}
 \item{...}{Additional parameters to be passed to the function \code{\link{plot}}.}
 }
 \description{
-An internal spptest function for making a dotplot style "global envelope plot".
+An internal GET function for making a dotplot style "global envelope plot".
 }
 

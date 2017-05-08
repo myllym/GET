@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_envelope_helper.R
 \name{env_ggplot}
 \alias{env_ggplot}
-\title{An internal spptest function for making a ggplot2 style "global envelope plot".}
+\title{An internal GET function for making a ggplot2 style "global envelope plot".}
 \usage{
 env_ggplot(x, base_size, main, ylim, xlab, ylab, separate_yaxes = FALSE,
   max_ncols_of_plots = 2, labels = NULL)
@@ -29,6 +29,6 @@ number of columns for figures. Default 2.}
 \item{labels}{Labels for the separate plots. Ignored if separate_yaxes is FALSE.}
 }
 \description{
-An internal spptest function for making a ggplot2 style "global envelope plot".
+An internal GET function for making a ggplot2 style "global envelope plot".
 }
 

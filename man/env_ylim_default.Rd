@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_envelope_helper.R
 \name{env_ylim_default}
 \alias{env_ylim_default}
-\title{An internal spptest function for setting the default ylim for a global envelope plot.}
+\title{An internal GET function for setting the default ylim for a global envelope plot.}
 \usage{
 env_ylim_default(x, use_ggplot2)
 }
@@ -13,6 +13,6 @@ env_ylim_default(x, use_ggplot2)
 Otherwise the ylim are for \code{\link{env_basic_plot}}.}
 }
 \description{
-An internal spptest function for setting the default ylim for a global envelope plot.
+An internal GET function for setting the default ylim for a global envelope plot.
 }
 

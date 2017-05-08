@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_envelope_helper.R
 \name{env_main_default}
 \alias{env_main_default}
-\title{An internal spptest function for setting the default main for a global envelope plot.}
+\title{An internal GET function for setting the default main for a global envelope plot.}
 \usage{
 env_main_default(x)
 }
@@ -10,6 +10,6 @@ env_main_default(x)
 \item{x}{An 'envelope_test' object.}
 }
 \description{
-An internal spptest function for setting the default main for a global envelope plot.
+An internal GET function for setting the default main for a global envelope plot.
 }
 
