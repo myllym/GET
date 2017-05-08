@@ -353,12 +353,12 @@ two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, yla
             main = factor(rep(main, times=length(env1[['r']])))
     )
     p <- (ggplot2::ggplot()
-                + ggplot2::geom_ribbon(data = df, ggplot2::aes_string(x = 'r', ymin = 'lower2', ymax = 'upper2'),
+                + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower2, ymax = ~upper2),
                         fill = 'grey80', alpha = 1)
-                + ggplot2::geom_ribbon(data = df, ggplot2::aes_string(x = 'r', ymin = 'lower', ymax = 'upper'),
+                + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
                         fill = 'grey59', alpha = 1)
-                + ggplot2::geom_line(data = df, ggplot2::aes_string(x = 'r', y = 'curves', group = 'type',
-                                linetype = 'type', size = 'type'))
+                + ggplot2::geom_line(data = df, ggplot2::aes_(x = ~r, y = ~curves, group = ~type,
+                                linetype = ~type, size = ~type))
                 + ggplot2::facet_grid('~ main', scales = 'free')
                 + ggplot2::scale_x_continuous(name = xlab)
                 + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
