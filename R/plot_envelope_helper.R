@@ -333,24 +333,24 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
 two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, ylab) {
     if(!(class(env1) %in% c("envelope_test", "adjusted_envelope_test")) |
        !(class(env2) %in% c("envelope_test", "adjusted_envelope_test"))) stop("env1 and/or env2 is not desired object type.\n")
-    if(!all(env1$r == env2$r)) stop("The two envelopes are for different r-values.\n")
+    if(!all(env1[['r']] == env2[['r']])) stop("The two envelopes are for different r-values.\n")
     linetype.values <- c('solid', 'dashed')
     size.values <- c(0.2, 0.2)
     if(missing(xlab)) xlab <- expression(italic(r))
     if(missing(ylab)) ylab <- expression(italic(T(r)))
     if(missing(main)) main <- "Rank envelope test"
-    if(missing(ylim)) ylim <- c(min(env1$data_curve,env1$lower,env1$upper,env1$central_curve,
-                                    env2$data_curve,env2$lower,env2$upper,env2$central_curve),
-                                max(env1$data_curve,env1$lower,env1$upper,env1$central_curve,
-                                    env2$data_curve,env2$lower,env2$upper,env2$central_curve))
-    df <- data.frame(r = rep(env1$r, times=2),
-            curves = c(env1$data_curve, env1$central_curve),
-            type = factor(rep(c("Data function", "Central function"), each=length(env1$r)), levels=c("Data function", "Central function")),
-            lower = rep(env1$lower, times=2),
-            upper = rep(env1$upper, times=2),
-            lower2 = rep(env2$lower, times=2),
-            upper2 = rep(env2$upper, times=2),
-            main = factor(rep(main, times=length(env1$r)))
+    if(missing(ylim)) ylim <- c(min(env1[['data_curve']],env1[['lower']],env1[['upper']],env1$central_curve,
+                                    env2[['data_curve']],env2[['lower']],env2[['upper']],env2$central_curve),
+                                max(env1[['data_curve']],env1[['lower']],env1[['upper']],env1$central_curve,
+                                    env2[['data_curve']],env2[['lower']],env2[['upper']],env2$central_curve))
+    df <- data.frame(r = rep(env1[['r']], times=2),
+            curves = c(env1[['data_curve']], env1$central_curve),
+            type = factor(rep(c("Data function", "Central function"), each=length(env1[['r']])), levels=c("Data function", "Central function")),
+            lower = rep(env1[['lower']], times=2),
+            upper = rep(env1[['upper']], times=2),
+            lower2 = rep(env2[['lower']], times=2),
+            upper2 = rep(env2[['upper']], times=2),
+            main = factor(rep(main, times=length(env1[['r']])))
     )
     p <- (ggplot2::ggplot()
                 + ggplot2::geom_ribbon(data = df, ggplot2::aes_string(x = 'r', ymin = 'lower2', ymax = 'upper2'),
