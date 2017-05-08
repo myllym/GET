@@ -103,7 +103,6 @@ check_deviation_set_content <- function(deviation_set) {
 #' Check the object.
 #'
 #' @param deviation_set A potential deviation_set object.
-#' @export
 check_deviation_set <- function(deviation_set) {
     if (!inherits(deviation_set, 'deviation_set')) {
         stop('deviation_set must have class "deviation_set".')
