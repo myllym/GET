@@ -148,11 +148,10 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, .
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                            separate_yaxes=FALSE, max_ncols_of_plots=2, ...) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-    nr <- length(x[['r']])
     rdata <- curve_set_check_r(x)
     # Plot
     if(!separate_yaxes) {
-        if(rdata$retick_xaxis) x[['r']] <- 1:nr
+        if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
         if(!rdata$retick_xaxis)
             graphics::plot(x[['r']], x[['data_curve']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                     type="l", lty=1, lwd=2, ...)
@@ -232,14 +231,13 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALSE, max_ncols_of_plots=2,
                        labels=NULL) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-    nr <- length(x[['r']])
     rdata <- curve_set_check_r(x)
 
     linetype.values <- c('solid', 'dashed')
     size.values <- c(0.2, 0.2)
 
     if(!separate_yaxes | is.null(rdata$r_values_newstart_id)) {
-        if(rdata$retick_xaxis) x[['r']] <- 1:nr
+        if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
         df <- data.frame(r = rep(x[['r']], times=2),
                 curves = c(x[['data_curve']], x[['central_curve']]),
                 type = factor(rep(c("Data function", "Central function"), each=length(x[['r']])), levels=c("Data function", "Central function")),
