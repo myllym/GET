@@ -42,7 +42,7 @@
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
 #'  functions from the simulated patterns which can be achieved by setting
-#'  savefuns = TRUE when calling envelope().
+#'  savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
