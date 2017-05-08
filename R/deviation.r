@@ -40,6 +40,12 @@ deviation <- function(curve_set, measure = 'max', ...) {
     res
 }
 
+#' Print method for the class 'deviation_set'
+#'
+#' @usage \method{print}{deviation_set}(x, ...)
+#' @param x A deviation_set object.
+#' @param ... Ignored.
+#' @export
 print.deviation_set <- function(x, ...) {
     with(x, cat(" Data value u_1:", obs, "\n",
                 "Rank of u_1:", rank(c(devs$obs, devs$sim))[1], "\n",
@@ -97,7 +103,6 @@ check_deviation_set_content <- function(deviation_set) {
 #' Check the object.
 #'
 #' @param deviation_set A potential deviation_set object.
-#' @export
 check_deviation_set <- function(deviation_set) {
     if (!inherits(deviation_set, 'deviation_set')) {
         stop('deviation_set must have class "deviation_set".')
