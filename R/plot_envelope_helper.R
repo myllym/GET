@@ -5,7 +5,7 @@
 #' @param x A curve_set or envelope_test object.
 #' @seealso \code{\link{create_curve_set}}
 curve_set_check_r <- function(x) {
-    if(!with(x, exists('r'))) stop("The argument \'x\' should contain the element 'r'.\n")
+    if(is.null(x[['r']])) stop("The argument \'x\' should contain the element 'r'.\n")
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     r_values <- x[['r']]
     nr <- length(r_values)
