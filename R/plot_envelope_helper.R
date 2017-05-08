@@ -77,8 +77,8 @@ env_main_default <- function(x) {
 #' Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
     if(!use_ggplot2 || attr(x, "test_details")$alternative != "two.sided")
-        ylim <- with(x, c(min(data_curve,lower,upper,central_curve),
-                          max(data_curve,lower,upper,central_curve)))
+        ylim <- c(min(x[['data_curve']],x[['lower']],x[['upper']],x[['central_curve']]),
+                  max(x[['data_curve']],x[['lower']],x[['upper']],x[['central_curve']]))
     else ylim <- NULL
     ylim
 }
@@ -100,24 +100,22 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, .
     nr <- length(x[['r']])
     if(missing(labels)) labels <- paste(round(x[['r']], digits=2))
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
-    with(x, {
-                plot(1:nr, central_curve, main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
-                if(alternative!="greater")
-                    arrows(1:nr, lower, 1:nr, central_curve, code = 1, angle = 75, length = .1)
-                else
-                    arrows(1:nr, lower, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
-                if(alternative!="less")
-                    arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1)
-                else
-                    arrows(1:nr, upper, 1:nr, central_curve, code = 1, angle = 75, length = .1, col=grey(0.8))
-                axis(1, 1:nr, labels=labels)
-                points(1:nr, data_curve, pch='x')
-                if(color_outside) {
-                    outside <- data_curve < lower | data_curve > upper
-                    points((1:nr)[outside], data_curve[outside], pch='x', col="red")
-                }
-            }
-    )
+
+    graphics::plot(1:nr, x[['central_curve']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
+    if(attr(x, "test_details")$alternative!="greater")
+        graphics::arrows(1:nr, x[['lower']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1)
+    else
+        graphics::arrows(1:nr, x[['lower']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1, col=grey(0.8))
+    if(attr(x, "test_details")$alternative!="less")
+        graphics::arrows(1:nr, x[['upper']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1)
+    else
+        graphics::arrows(1:nr, x[['upper']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1, col=grey(0.8))
+    graphics::axis(1, 1:nr, labels=labels)
+    graphics::points(1:nr, x[['data_curve']], pch='x')
+    if(color_outside) {
+        outside <- x[['data_curve']] < x[['lower']] | x[['data_curve']] > x[['upper']]
+        graphics::points((1:nr)[outside], x[['data_curve']][outside], pch='x', col="red")
+    }
 }
 
 
@@ -146,26 +144,23 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     # Plot
     if(!separate_yaxes) {
         if(rdata$retick_xaxis) x[['r']] <- 1:nr
-        with(x, {
-                    if(!rdata$retick_xaxis)
-                        plot(r, data_curve, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                                type="l", lty=1, lwd=2, ...)
-                    else
-                        plot(r, data_curve, ylim=ylim, main=main, xlab=xlab, ylab=ylab,
-                                type="l", lty=1, lwd=2, xaxt="n", ...)
-                    if(alternative!="greater") lines(r, lower, lty=2) else lines(r, lower, lty=2, col=grey(0.8))
-                    if(alternative!="less") lines(r, upper, lty=2) else lines(r, upper, lty=2, col=grey(0.8))
-                    lines(r, central_curve, lty=3)
-                    if(color_outside) {
-                        outside <- data_curve < lower | data_curve > upper
-                        points(r[outside], data_curve[outside], col="red")
-                    }
-                    if(rdata$retick_xaxis) {
-                        axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
-                        abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
-                    }
-                }
-        )
+        if(!rdata$retick_xaxis)
+            graphics::plot(x[['r']], x[['data_curve']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                    type="l", lty=1, lwd=2, ...)
+        else
+            graphics::plot(x[['r']], x[['data_curve']], ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+                    type="l", lty=1, lwd=2, xaxt="n", ...)
+        if(attr(x, "test_details")$alternative!="greater") lines(x[['r']], x[['lower']], lty=2) else lines(x[['r']], x[['lower']], lty=2, col=grey(0.8))
+        if(attr(x, "test_details")$alternative!="less") lines(x[['r']], x[['upper']], lty=2) else lines(x[['r']], x[['upper']], lty=2, col=grey(0.8))
+        lines(x[['r']], x[['central_curve']], lty=3)
+        if(color_outside) {
+            outside <- x[['data_curve']] < x[['lower']] | x[['data_curve']] > x[['upper']]
+            graphics::points(x[['r']][outside], x[['data_curve']][outside], col="red")
+        }
+        if(rdata$retick_xaxis) {
+            graphics::axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
+            graphics::abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
+        }
     }
     else {
         n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
@@ -180,34 +175,31 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
             else warning("The length of the vector ylab is unreasonable.\n")
         }
         graphics::par(mfrow=c(nrows_of_plots, ncols_of_plots))
-        with(x, {
-                    cat("Note: \"main\" and \"ylim\" ignored as separate plots are produced.\n")
-                    tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
-                    for(i in 1:n_of_plots) {
-                        ylim <- c(min(data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                                      lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                                      upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)]),
-                                  max(data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                                      lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                                      upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
-                        plot(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                             data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                             main="", xlab=xlab[i], ylab=ylab[i],
-                             type="l", lty=1, lwd=2, ylim=ylim, ...)
-                        if(alternative!="greater")
-                            lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
-                        else lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
-                        if(alternative!="less")
-                            lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
-                        else lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
-                        lines(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)], central_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=3)
-                        if(color_outside) {
-                            outside <- data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)] < lower[tmp_indeces[i]:(tmp_indeces[i+1]-1)] | data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)] > upper[tmp_indeces[i]:(tmp_indeces[i+1]-1)]
-                            points(r[tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], data_curve[tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
-                        }
-                    }
-                }
-        )
+        cat("Note: \"main\" and \"ylim\" ignored as separate plots are produced.\n")
+        tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
+        for(i in 1:n_of_plots) {
+            ylim <- c(min(x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                          x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                          x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]),
+                      max(x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                          x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                          x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
+            graphics::plot(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                    x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                 main="", xlab=xlab[i], ylab=ylab[i],
+                 type="l", lty=1, lwd=2, ylim=ylim, ...)
+            if(attr(x, "test_details")$alternative!="greater")
+                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
+            else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+            if(attr(x, "test_details")$alternative!="less")
+                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
+            else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+            graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['central_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=3)
+            if(color_outside) {
+                outside <- x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] < x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] | x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] > x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]
+                graphics::points(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
+            }
+        }
     }
 }
 
@@ -239,37 +231,34 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
 
     if(!separate_yaxes | is.null(rdata$r_values_newstart_id)) {
         if(rdata$retick_xaxis) x[['r']] <- 1:nr
-        with(x, {
-                    df <- data.frame(r = rep(r, times=2),
-                            curves = c(data_curve, central_curve),
-                            type = factor(rep(c("Data function", "Central function"), each=length(r)), levels=c("Data function", "Central function")),
-                            lower = rep(lower, times=2),
-                            upper = rep(upper, times=2),
-                            main = factor(rep(main, times=length(r)))
-                    )
-                    p <- (ggplot2::ggplot()
-                                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
-                                        fill = 'grey59', alpha = 1)
-                                + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
-                                                linetype = type, size = type))
-                                + ggplot2::facet_grid('~ main', scales = 'free')
-                                + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
-                                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
-                                + ggplot2::scale_size_manual(values = size.values, name = '')
-                                + ThemePlain(base_size=base_size)
-                                )
-                    if(rdata$retick_xaxis) {
-                        p <- p + ggplot2::scale_x_continuous(name = xlab,
-                                breaks = rdata$loc_break_values,
-                                labels = paste(round(rdata$r_break_values, digits=2),
-                                        limits = range(rdata$new_r_values)))
-                        p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id], linetype = "dotted")
-                    }
-                    else p <- p + ggplot2::scale_x_continuous(name = xlab)
-                    print(p)
-                    return(invisible(p))
-                }
+        df <- data.frame(r = rep(x[['r']], times=2),
+                curves = c(x[['data_curve']], x[['central_curve']]),
+                type = factor(rep(c("Data function", "Central function"), each=length(x[['r']])), levels=c("Data function", "Central function")),
+                lower = rep(x[['lower']], times=2),
+                upper = rep(x[['upper']], times=2),
+                main = factor(rep(main, times=length(x[['r']])))
         )
+        p <- (ggplot2::ggplot()
+                    + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
+                            fill = 'grey59', alpha = 1)
+                    + ggplot2::geom_line(data = df, ggplot2::aes_(x = ~r, y = ~curves, group = ~type,
+                                    linetype = ~type, size = ~type))
+                    + ggplot2::facet_grid('~ main', scales = 'free')
+                    + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
+                    + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+                    + ggplot2::scale_size_manual(values = size.values, name = '')
+                    + ThemePlain(base_size=base_size)
+                    )
+        if(rdata$retick_xaxis) {
+            p <- p + ggplot2::scale_x_continuous(name = xlab,
+                    breaks = rdata$loc_break_values,
+                    labels = paste(round(rdata$r_break_values, digits=2),
+                            limits = range(rdata$new_r_values)))
+            p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id], linetype = "dotted")
+        }
+        else p <- p + ggplot2::scale_x_continuous(name = xlab)
+        print(p)
+        return(invisible(p))
     }
     else {
         cat("Note: \"ylim\" ignored as separate plots are produced.\n")
@@ -295,32 +284,29 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
             func_labels <- c(func_labels, rep(labels[i], times=tmp_indeces[i+1]-tmp_indeces[i]))
         }
 
-        with(x, {
-                    df <- data.frame(r = rep(r, times=2),
-                            curves = c(data_curve, central_curve),
-                            type = factor(rep(c("Data function", "Central function"), each=length(r)), levels=c("Data function", "Central function")),
-                            lower = rep(lower, times=2),
-                            upper = rep(upper, times=2),
-                            main = factor(rep(main, times=length(r))),
-                            test_function = factor(rep(func_labels, times=2), levels=labels)
-                    )
-                    p <- (ggplot2::ggplot()
-                                + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = r, ymin = lower, ymax = upper),
-                                        fill = 'grey59', alpha = 1)
-                                + ggplot2::geom_line(data = df, ggplot2::aes(x = r, y = curves, group = type,
-                                                linetype = type, size = type))
-                                + ggplot2::facet_wrap(~ test_function, scales="free",
-                                                      nrow=nrows_of_plots, ncol=ncols_of_plots)
-                                + ggplot2::scale_y_continuous(name = ylab)
-                                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
-                                + ggplot2::scale_size_manual(values = size.values, name = '')
-                                + ThemePlain(base_size=base_size)
-                                + labs(title=main)
-                                )
-                    print(p)
-                    return(invisible(p))
-                }
+        df <- data.frame(r = rep(x[['r']], times=2),
+                curves = c(x[['data_curve']], x[['central_curve']]),
+                type = factor(rep(c("Data function", "Central function"), each=length(x[['r']])), levels=c("Data function", "Central function")),
+                lower = rep(x[['lower']], times=2),
+                upper = rep(x[['upper']], times=2),
+                main = factor(rep(main, times=length(x[['r']]))),
+                test_function = factor(rep(func_labels, times=2), levels=labels)
         )
+        p <- (ggplot2::ggplot()
+                    + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
+                            fill = 'grey59', alpha = 1)
+                    + ggplot2::geom_line(data = df, ggplot2::aes_(x = ~r, y = ~curves, group = ~type,
+                                    linetype = ~type, size = ~type))
+                    + ggplot2::facet_wrap(~ test_function, scales="free",
+                                          nrow=nrows_of_plots, ncol=ncols_of_plots)
+                    + ggplot2::scale_y_continuous(name = ylab)
+                    + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+                    + ggplot2::scale_size_manual(values = size.values, name = '')
+                    + ThemePlain(base_size=base_size)
+                    + labs(title=main)
+                    )
+        print(p)
+        return(invisible(p))
     }
 }
 
