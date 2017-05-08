@@ -24,7 +24,7 @@
 #' options see \code{\link{estimate_p_value}}.
 #'
 #' The 100(1-alpha)\% global envelope is given by the 'k_alpha'th lower and
-#' upper envelope. For details see Myllymäki et al. (2013).
+#' upper envelope. For details see Myllymäki et al. (2017).
 #'
 #' The above holds for p-value calculation if \code{lexo == FALSE} and then the test
 #' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
@@ -35,9 +35,9 @@
 #' but then the test may no longer be usable as a graphical test.
 #'
 #' @references
-#' Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
+#' Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
-#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
 #'
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
