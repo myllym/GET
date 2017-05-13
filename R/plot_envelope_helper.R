@@ -74,8 +74,8 @@ env_main_default <- function(x) {
 #' Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
     if(!use_ggplot2 || attr(x, "alternative")!= "two.sided")
-        ylim <- c(min(x[['data_curve']],x[['lower']],x[['upper']],x[['central_curve']]),
-                  max(x[['data_curve']],x[['lower']],x[['upper']],x[['central_curve']]))
+        ylim <- c(min(x[['obs']],x[['lo']],x[['hi']],x[['central']]),
+                  max(x[['obs']],x[['lo']],x[['hi']],x[['central']]))
     else ylim <- NULL
     ylim
 }
@@ -102,20 +102,20 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, .
     if(missing(labels)) labels <- paste(round(x[['r']], digits=2))
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
 
-    graphics::plot(1:nr, x[['central_curve']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
+    graphics::plot(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
     if(attr(x, "alternative")!="greater")
-        graphics::arrows(1:nr, x[['lower']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1)
+        graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1)
     else
-        graphics::arrows(1:nr, x[['lower']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1, col=grey(0.8))
+        graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
     if(attr(x, "alternative")!="less")
-        graphics::arrows(1:nr, x[['upper']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1)
+        graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1)
     else
-        graphics::arrows(1:nr, x[['upper']], 1:nr, x[['central_curve']], code = 1, angle = 75, length = .1, col=grey(0.8))
+        graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
     graphics::axis(1, 1:nr, labels=labels)
-    graphics::points(1:nr, x[['data_curve']], pch='x')
+    graphics::points(1:nr, x[['obs']], pch='x')
     if(color_outside) {
-        outside <- x[['data_curve']] < x[['lower']] | x[['data_curve']] > x[['upper']]
-        graphics::points((1:nr)[outside], x[['data_curve']][outside], pch='x', col="red")
+        outside <- x[['obs']] < x[['lo']] | x[['obs']] > x[['hi']]
+        graphics::points((1:nr)[outside], x[['obs']][outside], pch='x', col="red")
     }
 }
 
@@ -150,17 +150,17 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     if(!separate_yaxes) {
         if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
         if(!rdata$retick_xaxis)
-            graphics::plot(x[['r']], x[['data_curve']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+            graphics::plot(x[['r']], x[['obs']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                     type="l", lty=1, lwd=2, ...)
         else
-            graphics::plot(x[['r']], x[['data_curve']], ylim=ylim, main=main, xlab=xlab, ylab=ylab,
+            graphics::plot(x[['r']], x[['obs']], ylim=ylim, main=main, xlab=xlab, ylab=ylab,
                     type="l", lty=1, lwd=2, xaxt="n", ...)
-        if(attr(x, "alternative")!="greater") lines(x[['r']], x[['lower']], lty=2) else lines(x[['r']], x[['lower']], lty=2, col=grey(0.8))
-        if(attr(x, "alternative")!="less") lines(x[['r']], x[['upper']], lty=2) else lines(x[['r']], x[['upper']], lty=2, col=grey(0.8))
-        lines(x[['r']], x[['central_curve']], lty=3)
+        if(attr(x, "alternative")!="greater") lines(x[['r']], x[['lo']], lty=2) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
+        if(attr(x, "alternative")!="less") lines(x[['r']], x[['hi']], lty=2) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
+        lines(x[['r']], x[['central']], lty=3)
         if(color_outside) {
-            outside <- x[['data_curve']] < x[['lower']] | x[['data_curve']] > x[['upper']]
-            graphics::points(x[['r']][outside], x[['data_curve']][outside], col="red")
+            outside <- x[['obs']] < x[['lo']] | x[['obs']] > x[['hi']]
+            graphics::points(x[['r']][outside], x[['obs']][outside], col="red")
         }
         if(rdata$retick_xaxis) {
             graphics::axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
@@ -183,26 +183,26 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         cat("Note: \"main\" and \"ylim\" ignored as separate plots are produced.\n")
         tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
         for(i in 1:n_of_plots) {
-            ylim <- c(min(x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                          x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                          x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]),
-                      max(x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                          x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                          x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
+            ylim <- c(min(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                          x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                          x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]),
+                      max(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                          x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                          x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
             graphics::plot(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                    x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                    x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                  main="", xlab=xlab[i], ylab=ylab[i],
                  type="l", lty=1, lwd=2, ylim=ylim, ...)
             if(attr(x, "alternative")!="greater")
-                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
-            else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
+            else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
             if(attr(x, "alternative")!="less")
-                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
-            else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
-            graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['central_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=3)
+                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
+            else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+            graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=3)
             if(color_outside) {
-                outside <- x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] < x[['lower']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] | x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] > x[['upper']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]
-                graphics::points(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], x[['data_curve']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
+                outside <- x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] < x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] | x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] > x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]
+                graphics::points(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
             }
         }
     }
@@ -236,10 +236,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
     if(!separate_yaxes | is.null(rdata$r_values_newstart_id)) {
         if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
         df <- data.frame(r = rep(x[['r']], times=2),
-                curves = c(x[['data_curve']], x[['central_curve']]),
+                curves = c(x[['obs']], x[['central']]),
                 type = factor(rep(c("Data function", "Central function"), each=length(x[['r']])), levels=c("Data function", "Central function")),
-                lower = rep(x[['lower']], times=2),
-                upper = rep(x[['upper']], times=2),
+                lower = rep(x[['lo']], times=2),
+                upper = rep(x[['hi']], times=2),
                 main = factor(rep(main, times=length(x[['r']])))
         )
         p <- (ggplot2::ggplot()
@@ -289,10 +289,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
         }
 
         df <- data.frame(r = rep(x[['r']], times=2),
-                curves = c(x[['data_curve']], x[['central_curve']]),
+                curves = c(x[['obs']], x[['central']]),
                 type = factor(rep(c("Data function", "Central function"), each=length(x[['r']])), levels=c("Data function", "Central function")),
-                lower = rep(x[['lower']], times=2),
-                upper = rep(x[['upper']], times=2),
+                lower = rep(x[['lo']], times=2),
+                upper = rep(x[['hi']], times=2),
                 main = factor(rep(main, times=length(x[['r']]))),
                 test_function = factor(rep(func_labels, times=2), levels=labels)
         )
@@ -317,9 +317,9 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
 #' A helper function for plotting two global envelopes into a same plot.
 #'
 #' @param env1 An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
-#' must contain arguments '$r', '$data_curve', '$lower', '$upper' and '$central_curve$.
+#' must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.
 #' @param env2 An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
-#' must contain arguments '$r', '$data_curve', '$lower', '$upper' and '$central_curve$.
+#' must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.
 #' @param base_size Base font size, to be passed to theme style.
 #' @param main See \code{\link{plot.default}}.
 #' @param ylim See \code{\link{plot.default}}.
@@ -336,17 +336,17 @@ two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, yla
     if(missing(xlab)) xlab <- expression(italic(r))
     if(missing(ylab)) ylab <- expression(italic(T(r)))
     if(missing(main)) main <- "Rank envelope test"
-    if(missing(ylim)) ylim <- c(min(env1[['data_curve']],env1[['lower']],env1[['upper']],env1[['central_curve']],
-                                    env2[['data_curve']],env2[['lower']],env2[['upper']],env2[['central_curve']]),
-                                max(env1[['data_curve']],env1[['lower']],env1[['upper']],env1[['central_curve']],
-                                    env2[['data_curve']],env2[['lower']],env2[['upper']],env2[['central_curve']]))
+    if(missing(ylim)) ylim <- c(min(env1[['obs']],env1[['lo']],env1[['hi']],env1[['central']],
+                                    env2[['obs']],env2[['lo']],env2[['hi']],env2[['central']]),
+                                max(env1[['obs']],env1[['lo']],env1[['hi']],env1[['central']],
+                                    env2[['obs']],env2[['lo']],env2[['hi']],env2[['central']]))
     df <- data.frame(r = rep(env1[['r']], times=2),
-            curves = c(env1[['data_curve']], env1$central_curve),
+            curves = c(env1[['obs']], env1$central),
             type = factor(rep(c("Data function", "Central function"), each=length(env1[['r']])), levels=c("Data function", "Central function")),
-            lower = rep(env1[['lower']], times=2),
-            upper = rep(env1[['upper']], times=2),
-            lower2 = rep(env2[['lower']], times=2),
-            upper2 = rep(env2[['upper']], times=2),
+            lower = rep(env1[['lo']], times=2),
+            upper = rep(env1[['hi']], times=2),
+            lower2 = rep(env2[['lo']], times=2),
+            upper2 = rep(env2[['hi']], times=2),
             main = factor(rep(main, times=length(env1[['r']])))
     )
     p <- (ggplot2::ggplot()

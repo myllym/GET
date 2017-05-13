@@ -60,10 +60,10 @@
 #' Essentially a data frame containing columns
 #' \itemize{
 #' \item r = the vector of values of the argument r at which the test was made
-#' \item data_curve = values of the test function for the data point pattern
-#' \item lower = the lower envelope based on the simulated functions
-#' \item upper = the upper envelope based on the simulated functions
-#' \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
+#' \item obs = values of the test function for the data point pattern
+#' \item lo = the lower envelope based on the simulated functions
+#' \item hi = the upper envelope based on the simulated functions
+#' \item central = If the curve_set (or envelope object) contains a component 'theo',
 #'       then this function is used as the central curve and returned in this component.
 #'       Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
 #'       Used for visualization only.
@@ -275,7 +275,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
         UB[i]<- Hod[Nsim+1-kalpha+1];
     }
 
-    res <- structure(list(r=curve_set[['r']], obs=data_curve, theo=T_0, lo=LB, hi=UB),
+    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Rank envelope test"
     attr(res, "alternative") <- alternative
@@ -287,14 +287,14 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     # for fv
     attr(res, "fname") <- fname
     attr(res, "argu") <- "r"
-    attr(res, "valu") <- "data_curve"
+    attr(res, "valu") <- "obs"
     attr(res, "ylab") <- "%s(r)"
     attr(res, "fmla") <- ". ~ r"
     attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']])) # FIXME, ?
     attr(res, "labl") <- labl
     attr(res, "desc") <- desc
     #attr(res, "unitname") <- "unit / units"
-    attr(res, "shade") <- c("lower", "upper")
+    attr(res, "shade") <- c("lo", "hi")
     attr(res, "call") <- match.call()
     res
 }
@@ -467,7 +467,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
 
-    res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=T_0),
+    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Studentised envelope test"
     attr(res, "alternative") <- "two.sided"
@@ -591,7 +591,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     LB <- T_0 - talpha*abs(quant_m[1,])
     UB <- T_0 + talpha*abs(quant_m[2,])
 
-    res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=T_0),
+    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Directional quantile envelope test"
     attr(res, "alternative") <- "two.sided"
@@ -706,7 +706,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     LB <- T_0 - talpha;
     UB <- T_0 + talpha;
 
-    res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=T_0),
+    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Unscaled envelope test"
     attr(res, "alternative") <- "two.sided"
@@ -824,7 +824,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
 
-    res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=EX),
+    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
             class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Approximative normal envelope test"
     attr(res, "alternative") <- "two.sided"
