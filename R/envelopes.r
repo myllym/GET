@@ -154,6 +154,33 @@
 rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
                           lexo=FALSE, ties) {
+    # saving for attributes / plotting purposes
+    lo.name <- "lower critical boundary for %s"
+    hi.name <- "upper critical boundary for %s"
+    switch(alternative,
+            two.sided = {},
+            less = {
+                hi.name <- "infinite upper boundary"
+            },
+            greater = {
+                lo.name <- "infinite lower boundary"
+            })
+    if(inherits(curve_set, 'envelope')) {
+        fname <- attr(curve_set, "fname")
+        labl <- attr(curve_set, "labl")
+        desc <- attr(curve_set, "desc")
+        desc[4] <- lo.name
+        desc[5] <- hi.name
+    }
+    else {
+        fname <- "T"
+        labl <- c("r", "T[obs](r)", "T[0](r)", "T[lo](r)", "T[hi](r)")
+        desc <- c("distance argument r",
+                  "observed value of %s for data pattern",
+                  "central curve under the null hypothesis",
+                  lo.name, hi.name)
+    }
+
     curve_set <- convert_envelope(curve_set)
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
@@ -241,15 +268,26 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
         UB[i]<- Hod[Nsim+1-kalpha+1];
     }
 
-    res <- structure(list(r=curve_set[['r']], data_curve=data_curve, lower=LB, upper=UB, central_curve=T_0),
+    res <- structure(list(r=curve_set[['r']], obs=data_curve, theo=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Rank envelope test"
     attr(res, "alternative") <- alternative
     attr(res, "p") <- p
-    attr(res, "p_interval") <- c(p_low,p_upp)
+    attr(res, "p_interval") <- c(p_low, p_upp)
     attr(res, "ties") <- ties
     attr(res, "k_alpha") <- kalpha
     if(savedevs) attr(res, "k") <- distance
+    # for fv
+    attr(res, "fname") <- fname
+    attr(res, "argu") <- "r"
+    attr(res, "valu") <- "data_curve"
+    attr(res, "ylab") <- "%s(r)"
+    attr(res, "fmla") <- ". ~ r"
+    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']])) # FIXME, ?
+    attr(res, "labl") <- labl
+    attr(res, "desc") <- desc
+    #attr(res, "unitname") <- "unit / units"
+    attr(res, "shade") <- c("lower", "upper")
     attr(res, "call") <- match.call()
     res
 }
