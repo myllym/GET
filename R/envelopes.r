@@ -3,12 +3,13 @@
 #' The rank envelope test, p-value and global envelope
 #'
 #'
-#' The rank envelope test is a completely non-parametric test, which provides a p-value
-#' interval given by the most liberal and the most conservative p-value estimate and
+#' The rank envelope test is a completely non-parametric test, which provides
 #' the 100(1-alpha)\% global envelope for the chosen test function T(r) on
-#' the chosen interval of distances.
+#' the chosen interval of distances and a p-value interval given by the most
+#' liberal and the most conservative p-value estimate.
 #'
 #' Given a \code{curve_set} (or an \code{\link[spatstat]{envelope}}) object,
+#' which contains both the data curve T_1(r) and the simulated curves T_2(r),...T_(s+1)(r),
 #' the test is carried out as follows.
 #'
 #' For each curve in the curve_set, both the data curve and the simulations,
@@ -28,7 +29,7 @@
 #'
 #' The above holds for p-value calculation if \code{lexo == FALSE} and then the test
 #' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
-#' then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2015)
+#' then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2017)
 #' and the single p-value in \code{p} is the p-value based on the rank count ordering.
 #'
 #' The rank count ordering test allows in principle a lower number of simulations to be used,
@@ -38,6 +39,8 @@
 #' Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
+#'
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2013) Global envelope tests for spatial point patterns. arXiv:1307.0239v1 [stat.ME]
 #'
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
