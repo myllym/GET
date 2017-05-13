@@ -182,6 +182,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
         desc <- attr(curve_set, "desc")
         desc[4] <- lo.name
         desc[5] <- hi.name
+        ylab <- attr(curve_set, "ylab")
     }
     else {
         fname <- "T"
@@ -190,6 +191,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
                   "observed value of %s for data pattern",
                   "central curve under the null hypothesis",
                   lo.name, hi.name)
+        ylab <- "T(r)"
     }
 
     curve_set <- convert_envelope(curve_set)
@@ -288,7 +290,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     attr(res, "fname") <- fname
     attr(res, "argu") <- "r"
     attr(res, "valu") <- "obs"
-    attr(res, "ylab") <- "%s(r)"
+    attr(res, "ylab") <- ylab
     attr(res, "fmla") <- ". ~ r"
     attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']])) # FIXME, ?
     attr(res, "labl") <- labl
