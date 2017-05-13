@@ -161,6 +161,10 @@
 rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
                           lexo=FALSE, ties) {
+    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
+    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+    alternative <- match.arg(alternative)
+
     # saving for attributes / plotting purposes
     lo.name <- "lower critical boundary for %s"
     hi.name <- "upper critical boundary for %s"
@@ -189,10 +193,6 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     }
 
     curve_set <- convert_envelope(curve_set)
-
-    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
-    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-    alternative <- match.arg(alternative)
 
     # The type of the p-value
     if(missing(ties))
