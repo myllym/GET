@@ -374,21 +374,30 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
 #' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate
 #' for the p-value. The default point estimate is the mid-rank p-value. The choice should not affect the
 #' result, since no ties are expected to occur.
-#' @return An "envelope_test" object containing the following fields:
+#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' which can be printed and plotted directly.
+#'
+#' Essentially a data frame containing columns
 #' \itemize{
-#'   \item r = Distances for which the test was made.
-#'   \item method = The name of the envelope test.
+#' \item r = the vector of values of the argument r at which the test was made
+#' \item obs = values of the test function for the data point pattern
+#' \item lo = the lower envelope based on the simulated functions
+#' \item hi = the upper envelope based on the simulated functions
+#' \item central = If the curve_set (or envelope object) contains a component 'theo',
+#'       then this function is used as the central curve and returned in this component.
+#'       Otherwise, the central curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'       Used for visualization only.
+#' }
+#' Additionally, the return value has attributes
+#' \itemize{
+#'   \item method = The name of the envelope test ("Studentised envelope test" for the studentised envelope test)
+#'   \item alternative = "two-sided
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
 #'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
-#'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
-#'         then this function is used as the central curve and returned in this component.
-#'         Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-#'   \item data_curve = The test function for the data.
-#'   \item lower = The lower envelope.
-#'   \item upper = The upper envelope.
 #'   \item call = The call of the function.
 #' }
+#' and a punch of attributes for the "fv" object type.
 #' @export
 #' @importFrom stats sd
 #' @examples
@@ -484,21 +493,30 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @param probs A two-element vector containing the lower and upper
 #'   quantiles for the envelope, in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975.
-#' @return An "envelope_test" object containing the following fields:
+#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' which can be printed and plotted directly.
+#'
+#' Essentially a data frame containing columns
 #' \itemize{
-#'   \item r = Distances for which the test was made.
-#'   \item method = The name of the envelope test.
+#' \item r = the vector of values of the argument r at which the test was made
+#' \item obs = values of the test function for the data point pattern
+#' \item lo = the lower envelope based on the simulated functions
+#' \item hi = the upper envelope based on the simulated functions
+#' \item central = If the curve_set (or envelope object) contains a component 'theo',
+#'       then this function is used as the central curve and returned in this component.
+#'       Otherwise, the central curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'       Used for visualization only.
+#' }
+#' Additionally, the return value has attributes
+#' \itemize{
+#'   \item method = The name of the envelope test ("Directional quantile envelope test" for the directional quantile envelope test)
+#'   \item alternative = "two-sided
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
 #'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
-#'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
-#'         then this function is used as the central curve and returned in this component.
-#'         Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-#'   \item data_curve = The test function for the data.
-#'   \item lower = The lower envelope.
-#'   \item upper = The upper envelope.
 #'   \item call = The call of the function.
 #' }
+#' and a punch of attributes for the "fv" object type.
 #' @export
 #' @importFrom stats quantile
 #' @examples
@@ -600,21 +618,30 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'
 #' @inheritParams st_envelope
-#' @return An "envelope_test" object containing the following fields:
+#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' which can be printed and plotted directly.
+#'
+#' Essentially a data frame containing columns
 #' \itemize{
-#'   \item r = Distances for which the test was made.
-#'   \item method = The name of the envelope test.
+#' \item r = the vector of values of the argument r at which the test was made
+#' \item obs = values of the test function for the data point pattern
+#' \item lo = the lower envelope based on the simulated functions
+#' \item hi = the upper envelope based on the simulated functions
+#' \item central = If the curve_set (or envelope object) contains a component 'theo',
+#'       then this function is used as the central curve and returned in this component.
+#'       Otherwise, the central curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'       Used for visualization only.
+#' }
+#' Additionally, the return value has attributes
+#' \itemize{
+#'   \item method = The name of the envelope test ("Studentised envelope test" for the studentised envelope test)
+#'   \item alternative = "two-sided
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
 #'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
-#'   \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
-#'         then this function is used as the central curve and returned in this component.
-#'         Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-#'   \item data_curve = The test function for the data.
-#'   \item lower = The lower envelope.
-#'   \item upper = The upper envelope.
 #'   \item call = The call of the function.
 #' }
+#' and a punch of attributes for the "fv" object type.
 #' @export
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
@@ -725,6 +752,30 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' @importFrom stats var
 #' @importFrom stats sd
 #' @importFrom mvtnorm rmvnorm
+#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' which can be printed and plotted directly.
+#'
+#' Essentially a data frame containing columns
+#' \itemize{
+#' \item r = the vector of values of the argument r at which the test was made
+#' \item obs = values of the test function for the data point pattern
+#' \item lo = the lower envelope based on the simulated functions
+#' \item hi = the upper envelope based on the simulated functions
+#' \item central = If the curve_set (or envelope object) contains a component 'theo',
+#'       then this function is used as the central curve and returned in this component.
+#'       Otherwise, the central curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+#'       Used for visualization only.
+#' }
+#' Additionally, the return value has attributes
+#' \itemize{
+#'   \item method = The name of the envelope test ("Approximative normal envelope test")
+#'   \item alternative = "two-sided
+#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
+#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
+#'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item call = The call of the function.
+#' }
+#' and a punch of attributes for the "fv" object type.
 #' @examples
 #' require(spatstat)
 #' pp <- spruces
