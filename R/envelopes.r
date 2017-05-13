@@ -824,7 +824,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
 
-    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=EX, lo=LB, hi=UB),
             class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Approximative normal envelope test"
     attr(res, "alternative") <- "two.sided"
