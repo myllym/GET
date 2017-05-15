@@ -1,3 +1,36 @@
+# A helper function for avoiding repetition of code (in envelope tests).
+pick_attributes <- function(curve_set, alternative="two.sided") {
+    # saving for attributes / plotting purposes
+    lo.name <- "lower critical boundary for %s"
+    hi.name <- "upper critical boundary for %s"
+    switch(alternative,
+            two.sided = {},
+            less = {
+                hi.name <- "infinite upper boundary"
+            },
+            greater = {
+                lo.name <- "infinite lower boundary"
+            })
+    if(inherits(curve_set, 'envelope')) {
+        fname <- attr(curve_set, "fname")
+        labl <- attr(curve_set, "labl")
+        desc <- attr(curve_set, "desc")
+        desc[4] <- lo.name
+        desc[5] <- hi.name
+        ylab <- attr(curve_set, "ylab")
+    }
+    else {
+        fname <- "T"
+        labl <- c("r", "T[obs](r)", "T[0](r)", "T[lo](r)", "T[hi](r)")
+        desc <- c("distance argument r",
+                "observed value of %s for data pattern",
+                "central curve under the null hypothesis",
+                lo.name, hi.name)
+        ylab <- "T(r)"
+    }
+    list(fname=fname, labl=labl, desc=desc, ylab=ylab)
+}
+
 #' Check r values of a curve_set object for plotting
 #'
 #' Check r values of a curve_set object to find out if there is
