@@ -85,7 +85,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     # Perform the one-sided (greater is significant) rank test
     res_rank <- rank_envelope(curve_set_u, alpha=alpha, savedevs=TRUE, alternative="greater", lexo=TRUE)
 
-    central_curves_ls <- lapply(res_ls, function(x) x$central_curve)
+    central_curves_ls <- lapply(res_ls, function(x) x$central)
     bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$upper,
                                                            lower_f=envchars$lower_f, upper_f=envchars$upper_f)
 
@@ -95,10 +95,10 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
                               alternative = res_ls[[1]]$alternative,
                               p = res_rank$p,
                               p_interval = res_rank$p_interval,
-                              central_curve = do.call(c, lapply(res_ls, FUN = function(x) x$central_curve), quote=FALSE),
-                              data_curve = do.call(c, lapply(res_ls, FUN = function(x) x$data_curve), quote=FALSE),
-                              lower = do.call(c, bounding_curves$lower_ls, quote=FALSE),
-                              upper = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
+                              central = do.call(c, lapply(res_ls, FUN = function(x) x$central), quote=FALSE),
+                              obs = do.call(c, lapply(res_ls, FUN = function(x) x$obs), quote=FALSE),
+                              lo = do.call(c, bounding_curves$lower_ls, quote=FALSE),
+                              hi = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
                          class = c("combined_scaled_MAD_envelope", "envelope_test"))
 
     # return
