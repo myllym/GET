@@ -65,6 +65,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' # As an example test CSR of the saplings point pattern from spatstat by means of
 #' # L, F, G and J functions.
 #' require(spatstat)
+#' data(saplings)
 #' X <- saplings
 #'
 #' nsim <- 499 # the number of simulations for the tests
