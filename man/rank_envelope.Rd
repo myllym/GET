@@ -26,36 +26,44 @@ savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 a point estimate for the p-value. The default point estimate is the mid-rank p-value.}
 }
 \value{
-An "envelope_test" object containing the following fields:
+An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+which can be printed and plotted directly.
+
+Essentially a data frame containing columns
 \itemize{
-  \item r = Distances for which the test was made.
-  \item method = The name of the envelope test.
+\item r = the vector of values of the argument r at which the test was made
+\item obs = values of the test function for the data point pattern
+\item lo = the lower envelope based on the simulated functions
+\item hi = the upper envelope based on the simulated functions
+\item central = If the curve_set (or envelope object) contains a component 'theo',
+      then this function is used as the central curve and returned in this component.
+      Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
+      Used for visualization only.
+}
+Additionally, the return value has attributes
+\itemize{
+  \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
   \item alternative = The alternative specified in the function call.
   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-  \item ties = As the argument \code{ties}.
   \item p_interval = The p-value interval [p_liberal, p_conservative].
+  \item ties = As the argument \code{ties}.
   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
-  \item central_curve = If the curve_set (or envelope object) contains a component 'theo',
-        then this function is used as the central curve and returned in this component.
-        Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-        Used for visualization only.
-  \item data_curve = The test function for the data.
-  \item lower = The lower envelope.
-  \item upper = The upper envelope.
   \item call = The call of the function.
 }
+and a punch of attributes for the "fv" object type.
 }
 \description{
 The rank envelope test, p-value and global envelope
 }
 \details{
-The rank envelope test is a completely non-parametric test, which provides a p-value
-interval given by the most liberal and the most conservative p-value estimate and
+The rank envelope test is a completely non-parametric test, which provides
 the 100(1-alpha)\% global envelope for the chosen test function T(r) on
-the chosen interval of distances.
+the chosen interval of distances and a p-value interval given by the most
+liberal and the most conservative p-value estimate.
 
 Given a \code{curve_set} (or an \code{\link[spatstat]{envelope}}) object,
+which contains both the data curve T_1(r) and the simulated curves T_2(r),...T_(s+1)(r),
 the test is carried out as follows.
 
 For each curve in the curve_set, both the data curve and the simulations,
@@ -75,7 +83,7 @@ upper envelope. For details see Myllymäki et al. (2017).
 
 The above holds for p-value calculation if \code{lexo == FALSE} and then the test
 corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
-then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2015)
+then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2017)
 and the single p-value in \code{p} is the p-value based on the rank count ordering.
 
 The rank count ordering test allows in principle a lower number of simulations to be used,
@@ -162,6 +170,8 @@ res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
+
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2013) Global envelope tests for spatial point patterns. arXiv:1307.0239v1 [stat.ME]
 }
 \seealso{
 \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}

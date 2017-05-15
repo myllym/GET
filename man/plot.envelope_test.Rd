@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{an 'envelope_test' object}
 
-\item{use_ggplot2}{TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.}
+\item{use_ggplot2}{Logical. If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.}
 
 \item{base_size}{Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.}
 

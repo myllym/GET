@@ -8,10 +8,10 @@ two_envelopes_ggplot(env1, env2, base_size = 15, main, ylim, xlab, ylab)
 }
 \arguments{
 \item{env1}{An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
-must contain arguments '$r', '$data_curve', '$lower', '$upper' and '$central_curve$.}
+must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.}
 
 \item{env2}{An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
-must contain arguments '$r', '$data_curve', '$lower', '$upper' and '$central_curve$.}
+must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.}
 
 \item{base_size}{Base font size, to be passed to theme style.}
 
