@@ -361,29 +361,31 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
                    UB[i]<- Hod[nsim+1-kalpha_star+1]
                }
 
-               adjenv <- list(r=tX$curve_set[['r']], method="Adjusted rank envelope test",
-                       alternative = alt,
-                       p=NULL, p_interval=NULL,
-                       k_alpha=kalpha_star, k=stats,
-                       central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
-                       call=match.call())
-               class(adjenv) <- "envelope_test"
+               adjenv <- structure(list(r=tX$curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+                                   class="envelope_test")
+               attr(adjenv, "method") <- "Adjusted rank envelope test"
+               attr(adjenv, "alternative") <- alt
+               attr(adjenv, "p") <- NULL
+               attr(adjenv, "p_interval") <- NULL
+               attr(adjenv, "k_alpha") <- kalpha_star
+               attr(adjenv, "k") <- stats
+               attr(adjenv, "call") <- match.call()
                test_name <- "Adjusted rank envelope test"
            },
            qdir = {
                alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
                adjenv <- qdir_envelope(tX$curve_set, alpha=alpha_star)
-               adjenv$alpha_star <- alpha_star
-               adjenv$p_values <- pvals
-               adjenv$alpha <- alpha
+               attr(adjenv, "alpha_star") <- alpha_star
+               attr(adjenv, "p_values") <- pvals
+               attr(adjenv, "alpha") <- alpha
                test_name <- "Adjusted directional quantile envelope test"
            },
            st = {
                alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
                adjenv <- st_envelope(tX$curve_set, alpha=alpha_star)
-               adjenv$alpha_star <- alpha_star
-               adjenv$p_values <- pvals
-               adjenv$alpha <- alpha
+               attr(adjenv, "alpha_star") <- alpha_star
+               attr(adjenv, "p_values") <- pvals
+               attr(adjenv, "alpha") <- alpha
                test_name <- "Adjusted studentized envelope test"
            })
 
@@ -568,33 +570,35 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         UB[i]<- Hod[nsim+1-kalpha_star+1]
     }
     # -> kalpha_stat, LB, UB of the rank test
-    adjenv <- list(r=tX$curve_set[['r']], method="Adjusted rank envelope test",
-            alternative = alt,
-            p=NULL, p_interval=NULL,
-            k_alpha=kalpha_star, k=stats,
-            central_curve=T_0, data_curve=data_curve, lower=LB, upper=UB,
-            call=match.call())
-    class(adjenv) <- "envelope_test"
-    test_name <- "Adjusted rank envelope test"
+    adjenv <- structure(list(r=tX$curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+                        class="envelope_test")
+    attr(adjenv, "method") <- "adjusted rank envelope test"
+    attr(adjenv, "alternative") <- alt
+    attr(adjenv, "p") <- NULL
+    attr(adjenv, "p_interval") <- NULL
+    attr(adjenv, "k_alpha") <- kalpha_star
+    attr(adjenv, "k") <- stats
+    attr(adjenv, "call") <- match.call()
+    test_name <- "adjusted rank envelope test"
 
     # In the case of the combined scaled MAD envelope tests, we also need to calculate the new qdir/st envelopes
     res_env <- NULL
     if(test != "rank") {
         envchars <- combined_scaled_MAD_bounding_curves_chars(attr(tX, "simfuns"), test = test)
         central_curves_ls <- lapply(attr(tX, "simfuns"), function(x) get_T_0(x))
-        bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=adjenv$upper,
+        bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=adjenv$hi,
                                                                lower_f=envchars$lower_f, upper_f=envchars$upper_f)
         # Create a combined envelope object for plotting
         res_env <- structure(list(r = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x$r), quote=FALSE),
-                                  method = "Adjusted combined scaled MAD envelope test",
-                                  alternative = "two.sided",
-                                  p = adjenv$p,
-                                  p_interval = adjenv$p_interval,
-                                  central_curve = as.vector(do.call(c, central_curves_ls, quote=FALSE)),
-                                  data_curve = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x[['obs']]), quote=FALSE),
-                                  lower = do.call(c, bounding_curves$lower_ls, quote=FALSE),
-                                  upper = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
+                                  obs = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x[['obs']]), quote=FALSE),
+                                  central = as.vector(do.call(c, central_curves_ls, quote=FALSE)),
+                                  lo = do.call(c, bounding_curves$lower_ls, quote=FALSE),
+                                  hi = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
                              class = c("combined_scaled_MAD_envelope", "envelope_test"))
+        attr(res_env, "method") <- "adjusted combined scaled MAD envelope test"
+        attr(res_env, "alternative") <- "two.sided"
+        attr(res_env, "p") <- attr(adjenv, "p")
+        attr(res_env, "p_interval") <- attr(adjenv, "p_interval")
     }
 
     res <- structure(list(adj_envelope_test = adjenv,
