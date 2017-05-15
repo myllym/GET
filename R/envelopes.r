@@ -295,7 +295,7 @@ print.envelope_test <- function(x, ...) {
 #'                                      main, ylim, xlab, ylab, ...)
 #'
 #' @param x an 'envelope_test' object
-#' @param use_ggplot2 TRUE/FALSE, If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
+#' @param use_ggplot2 Logical. If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
 #' @param base_size Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors. Only applicable if \code{use_ggplot2} is FALSE.
