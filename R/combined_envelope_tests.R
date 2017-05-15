@@ -46,7 +46,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'
 #' Given a list of 'curve_set' objects (see \code{\link{create_curve_set}}), a combined global scaled (directional quantile
 #' or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
-#' Details of the combined test can be found in Mrkvicka et al.
+#' Details of the combined test can be found in Mrkvicka et al. (2017)
 #'
 #' @param curve_sets A list of objects of type 'curve_set' or \code{\link[spatstat]{envelope}}.
 #' @param test Either "qdir" for the \code{\link{qdir_envelope}} test or
@@ -58,8 +58,8 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' @param ... Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
 #' or \code{\link{st_envelope}} (if test = "st").
 #' @references
-#' Mrkvicka, T., Myllymäki, M. and Hahn, U. Multiple Monte Carlo testing, with applications in spatial point processes.
-#' Revision submitted to Statistics & Computing.
+#' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
+#' Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
 #' @export
 combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05, probs = c(0.025, 0.975), ...) {
 
@@ -79,8 +79,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
 
     # Create a curve_set for the rank test
     u_ls <- lapply(res_ls, FUN = function(x) x$u)
-    u_mat <- do.call(cbind, u_ls, quote=FALSE)
-    u_mat <- rbind(res_ls[[1]]$u, res_ls[[2]]$u, res_ls[[3]]$u, res_ls[[4]]$u)
+    u_mat <- do.call(rbind, u_ls, quote=FALSE)
     curve_set_u <- create_curve_set(list(r=1:ntests, obs=u_mat[,1], sim_m=u_mat[,-1], is_residual=FALSE))
     # Perform the one-sided (greater is significant) rank test
     res_rank <- rank_envelope(curve_set_u, alpha=alpha, savedevs=TRUE, alternative="greater", lexo=TRUE)
