@@ -9,12 +9,14 @@ citEntry(
                         as.person("H. Seijo"),
                         as.person("U. Hahn")),
     journal = "Journal of the Royal Statistical Society: Series B (Statistical Methodology)",
-    year = "2016",
+    year = "2017",
+    volume = "79",
+    pages = "381-404",
     url = "https://dx.doi.org/10.1111/rssb.12172",
     textVersion  =
-    paste("Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2016).",
+    paste("Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).",
           "Global envelope tests for spatial processes. Journal of the Royal Statistical Society:",
-          "Series B (Statistical Methodology). doi: 10.1111/rssb.12172")
+          "Series B (Statistical Methodology) 79: 381-404. doi: 10.1111/rssb.12172")
 )
 
 citEntry(
@@ -24,12 +26,14 @@ citEntry(
 	                    as.person("M. Myllymäki"),
                         as.person("U. Hahn")),
     journal = "Statistics and Computing",
-    year = "2016",
-    pages = "1--17",
+    year = "2017",
+    volume = "27",
+    number = "5",
+    pages = "1239-1255",
     url = "http://dx.doi.org/10.1007/s11222-016-9683-9",
-    textVersion = "Mrkvička, T., Myllymäki, M., and Hahn, U. (2016).
+    textVersion = "Mrkvička, T., Myllymäki, M., and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
-Statistics and Computing. doi:10.1007/s11222-016-9683-9"
+Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9"
 )
 
 citEntry(
