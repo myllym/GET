@@ -165,35 +165,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
     alternative <- match.arg(alternative)
 
-    # saving for attributes / plotting purposes
-    lo.name <- "lower critical boundary for %s"
-    hi.name <- "upper critical boundary for %s"
-    switch(alternative,
-            two.sided = {},
-            less = {
-                hi.name <- "infinite upper boundary"
-            },
-            greater = {
-                lo.name <- "infinite lower boundary"
-            })
-    if(inherits(curve_set, 'envelope')) {
-        fname <- attr(curve_set, "fname")
-        labl <- attr(curve_set, "labl")
-        desc <- attr(curve_set, "desc")
-        desc[4] <- lo.name
-        desc[5] <- hi.name
-        ylab <- attr(curve_set, "ylab")
-    }
-    else {
-        fname <- "T"
-        labl <- c("r", "T[obs](r)", "T[0](r)", "T[lo](r)", "T[hi](r)")
-        desc <- c("distance argument r",
-                  "observed value of %s for data pattern",
-                  "central curve under the null hypothesis",
-                  lo.name, hi.name)
-        ylab <- "T(r)"
-    }
-
+    picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
     curve_set <- convert_envelope(curve_set)
 
     # The type of the p-value
@@ -287,14 +259,14 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     attr(res, "k_alpha") <- kalpha
     if(savedevs) attr(res, "k") <- distance
     # for fv
-    attr(res, "fname") <- fname
+    attr(res, "fname") <- picked_attr$fname
     attr(res, "argu") <- "r"
     attr(res, "valu") <- "obs"
-    attr(res, "ylab") <- ylab
+    attr(res, "ylab") <- picked_attr$ylab
     attr(res, "fmla") <- ". ~ r"
-    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']])) # FIXME, ?
-    attr(res, "labl") <- labl
-    attr(res, "desc") <- desc
+    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
+    attr(res, "labl") <- picked_attr$labl
+    attr(res, "desc") <- picked_attr$desc
     #attr(res, "unitname") <- "unit / units"
     attr(res, "shade") <- c("lo", "hi")
     attr(res, "call") <- match.call()
