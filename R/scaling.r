@@ -103,9 +103,9 @@ qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
 #'   \item qdir Directional quantile scaling.
 #'   \item st Studentised scaling.
 #' }
-#' See for details Myllymäki et al. (2013).
+#' See for details Myllymäki et al. (2015).
 #'
-#' @references Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#' @references Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004
 #' @inheritParams st_scaling
 #' @param scaling The name of the scaling to use. Options include 'none',
 #'   'q', 'qdir' and 'st'. 'qdir' is default.
