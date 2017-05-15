@@ -461,7 +461,7 @@ plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
 #' If test = 'rank', then the test is the combined global rank envelope test.
 #' If test = 'qdir', then the test is the combined global directional quantile maximum absolute difference (MAD)
 #' envelope test, and if test = 'st', the test is the combined global studentized MAD envelope test,
-#' see Mrkvicka et al.
+#' see Mrkvicka et al. (2017).
 #'
 #'
 #' @inheritParams combined_global_envelope_with_sims
@@ -469,9 +469,10 @@ plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
 #'
 #' @return An object of class adjusted_envelope_test.
 #' @references
-#' Mrkvicka, T., Myllymäki, M. and Hahn, U. Multiple Monte Carlo testing, with applications in spatial point processes. Revision submitted to Statistics & Computing.
+#' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
+#' Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
 #'
-#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for spatial point patterns. arXiv:1307.0239v4 [stat.ME]
+#' Myllymäki, M., Mrkvička, T., Seijo, H., Grabarnik, P. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
 #' Dao, N.A. and Genton, M. (2014). A Monte Carlo adjusted goodness-of-fit test for parametric models describing spatial point patterns. Journal of Graphical and Computational Statistics 23, 497-517.
 #'
