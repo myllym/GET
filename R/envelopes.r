@@ -815,7 +815,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
 
     distancesorted <- sort(distance);
 
-    ttt<-abs(data_curve-EX)/sdX;
+    ttt <- abs(data_curve-EX)/sdX;
     ttt[!is.finite(ttt)] <- 0
     tmaxd <- max(ttt)
 
