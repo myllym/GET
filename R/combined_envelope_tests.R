@@ -34,7 +34,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
         stop("The lengths of different arguments do not match.\n")
     # The global 100(1-alpha)% envelope
     # Find the k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test
-    # Typically max_u <- res_rank$upper, where res_rank is the combined rank envelope test done.
+    # Typically max_u <- res_rank$hi, where res_rank is the combined rank envelope test done.
     # Lower and upper envelope
     lo <- function(i) { as.vector(central_curves_ls[[i]] - max_u[i]*lower_f[[i]]) }
     up <- function(i) { as.vector(central_curves_ls[[i]] + max_u[i]*upper_f[[i]]) }
@@ -130,28 +130,27 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, test=test, probs=probs)
 
     # Create a curve_set for the rank test
-    u_ls <- lapply(res_ls, FUN = function(x) x$u)
+    u_ls <- lapply(res_ls, FUN = function(x) attr(x, "u"))
     u_mat <- do.call(rbind, u_ls, quote=FALSE)
     curve_set_u <- create_curve_set(list(r=1:ntests, obs=u_mat[,1], sim_m=u_mat[,-1], is_residual=FALSE))
     # Perform the one-sided (greater is significant) rank test
     res_rank <- rank_envelope(curve_set_u, alpha=alpha, savedevs=TRUE, alternative="greater", lexo=TRUE)
 
     central_curves_ls <- lapply(res_ls, function(x) x$central)
-    bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$upper,
+    bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$hi,
                                                            lower_f=envchars$lower_f, upper_f=envchars$upper_f)
 
     # Create a combined envelope object for plotting
     res_env <- structure(list(r = do.call(c, lapply(res_ls, FUN = function(x) x$r), quote=FALSE),
-                              method = res_ls[[1]]$method,
-                              alternative = res_ls[[1]]$alternative,
-                              p = res_rank$p,
-                              p_interval = res_rank$p_interval,
-                              central = do.call(c, lapply(res_ls, FUN = function(x) x$central), quote=FALSE),
                               obs = do.call(c, lapply(res_ls, FUN = function(x) x$obs), quote=FALSE),
+                              central = do.call(c, lapply(res_ls, FUN = function(x) x$central), quote=FALSE),
                               lo = do.call(c, bounding_curves$lower_ls, quote=FALSE),
                               hi = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
                          class = c("combined_scaled_MAD_envelope", "envelope_test"))
-
+    attr(res_env, "method") <- paste0("combined ", attr(res_ls[[1]], "method"))
+    attr(res_env, "alternative") <- attr(res_ls[[1]], "alternative")
+    attr(res_env, "p") <- attr(res_rank, "p")
+    attr(res_env, "p_interval") <- attr(res_rank, "p_interval")
     # return
     res <- structure(list(rank_test = res_rank, envelope = res_env),
                      class = "combined_scaled_MAD_test")
