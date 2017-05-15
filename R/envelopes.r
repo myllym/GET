@@ -406,6 +406,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
+    picked_attr <- pick_attributes(curve_set, alternative="two.sided")
     curve_set <- convert_envelope(curve_set)
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
@@ -448,6 +449,16 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     attr(res, "p") <- p
     attr(res, "u_alpha") <- talpha
     if(savedevs) attr(res, "u") <- distance
+    # for fv
+    attr(res, "fname") <- picked_attr$fname
+    attr(res, "argu") <- "r"
+    attr(res, "valu") <- "obs"
+    attr(res, "ylab") <- picked_attr$ylab
+    attr(res, "fmla") <- ". ~ r"
+    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
+    attr(res, "labl") <- picked_attr$labl
+    attr(res, "desc") <- picked_attr$desc
+    attr(res, "shade") <- c("lo", "hi")
     attr(res, "call") <- match.call()
     res
 }
@@ -525,6 +536,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
 
+    picked_attr <- pick_attributes(curve_set, alternative="two.sided")
     curve_set <- convert_envelope(curve_set)
     check_probs(probs)
 
@@ -572,6 +584,16 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     attr(res, "p") <- p
     attr(res, "u_alpha") <- talpha
     if(savedevs) attr(res, "u") <- distance
+    # for fv
+    attr(res, "fname") <- picked_attr$fname
+    attr(res, "argu") <- "r"
+    attr(res, "valu") <- "obs"
+    attr(res, "ylab") <- picked_attr$ylab
+    attr(res, "fmla") <- ". ~ r"
+    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
+    attr(res, "labl") <- picked_attr$labl
+    attr(res, "desc") <- picked_attr$desc
+    attr(res, "shade") <- c("lo", "hi")
     attr(res, "call") <- match.call()
     res
 }
@@ -649,6 +671,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
 unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
+    picked_attr <- pick_attributes(curve_set, alternative="two.sided")
     curve_set <- convert_envelope(curve_set)
 
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
@@ -687,6 +710,16 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     attr(res, "p") <- p
     attr(res, "u_alpha") <- talpha
     if(savedevs) attr(res, "u") <- distance
+    # for fv
+    attr(res, "fname") <- picked_attr$fname
+    attr(res, "argu") <- "r"
+    attr(res, "valu") <- "obs"
+    attr(res, "ylab") <- picked_attr$ylab
+    attr(res, "fmla") <- ". ~ r"
+    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
+    attr(res, "labl") <- picked_attr$labl
+    attr(res, "desc") <- picked_attr$desc
+    attr(res, "shade") <- c("lo", "hi")
     attr(res, "call") <- match.call()
     res
 }
@@ -759,6 +792,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' system.time( res <- normal_envelope(curve_set, n_norm=200000) )
 #' plot(res)
 normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
+    picked_attr <- pick_attributes(curve_set, alternative="two.sided")
     curve_set <- convert_envelope(curve_set)
 
     data_curve <- curve_set[['obs']]
@@ -804,6 +838,16 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     attr(res, "alternative") <- "two.sided"
     attr(res, "p") <- p
     attr(res, "u_alpha") <- talpha
+    # for fv
+    attr(res, "fname") <- picked_attr$fname
+    attr(res, "argu") <- "r"
+    attr(res, "valu") <- "obs"
+    attr(res, "ylab") <- picked_attr$ylab
+    attr(res, "fmla") <- ". ~ r"
+    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
+    attr(res, "labl") <- picked_attr$labl
+    attr(res, "desc") <- picked_attr$desc
+    attr(res, "shade") <- c("lo", "hi")
     attr(res, "call") <- match.call()
     res
 }
