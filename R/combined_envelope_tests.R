@@ -78,12 +78,12 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'
 #' # Perform simulations of CSR and calculate the L-functions
 #' system.time( env_L <- envelope(X, nsim=nsim,
-#'                                simulate=expression(runifpoint(X$n, win=X$window)),
-#'                                fun="Lest", correction="translate",
-#'                                transform = expression(.-r), # Take the L(r)-r function instead of L(r)
-#'                                r=r,                         # Specify the distance vector
-#'                                savefuns=TRUE,               # Save the estimated functions
-#'                                savepatterns=TRUE) )         # Save the simulated patterns
+#'  simulate=expression(runifpoint(X$n, win=X$window)),
+#'  fun="Lest", correction="translate",
+#'  transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+#'  r=r,                         # Specify the distance vector
+#'  savefuns=TRUE,               # Save the estimated functions
+#'  savepatterns=TRUE) )         # Save the simulated patterns
 #' # Take the simulations from the returned object
 #' simulations <- attr(env_L, "simpatterns")
 #' # Then calculate the other test functions F, G, J for each simulated pattern
