@@ -25,10 +25,10 @@ or \code{\link{st_envelope}} (if test = "st").}
 \description{
 Given a list of 'curve_set' objects (see \code{\link{create_curve_set}}), a combined global scaled (directional quantile
 or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
-Details of the combined test can be found in Mrkvicka et al.
+Details of the combined test can be found in Mrkvicka et al. (2017)
 }
 \references{
-Mrkvicka, T., Myllymäki, M. and Hahn, U. Multiple Monte Carlo testing, with applications in spatial point processes.
-Revision submitted to Statistics & Computing.
+Mrkvicka, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
+Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
 }
 
