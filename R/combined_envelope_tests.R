@@ -123,9 +123,11 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     switch(test, 
             qdir = {
                 res_ls <- lapply(curve_sets, FUN = function(x) { qdir_envelope(x, alpha=alpha, savedevs=TRUE, probs = probs, ...) })
+                method <- "Combined studentised envelope test"
             },
             st = {
                 res_ls <- lapply(curve_sets, FUN = function(x) { st_envelope(x, alpha=alpha, savedevs=TRUE, ...) })
+                method <- "Combined directional quantile envelope test"
             })
     # Calculate quantiles (qdir) or sds (st)
     envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, test=test, probs=probs)
@@ -148,7 +150,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
                               lo = do.call(c, bounding_curves$lower_ls, quote=FALSE),
                               hi = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
                          class = c("combined_scaled_MAD_envelope", "envelope_test"))
-    attr(res_env, "method") <- paste0("combined ", attr(res_ls[[1]], "method"))
+    attr(res_env, "method") <- method
     attr(res_env, "alternative") <- attr(res_ls[[1]], "alternative")
     attr(res_env, "p") <- attr(res_rank, "p")
     attr(res_env, "p_interval") <- attr(res_rank, "p_interval")
