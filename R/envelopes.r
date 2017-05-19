@@ -121,7 +121,7 @@
 #' res <- rank_envelope(curve_set)
 #' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
 #'
-#' ## Goodness-of-fit test (typically conservative)
+#' ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
 #' #-----------------------------------------------
 #' pp <- unmark(spruces)
 #' # Minimum distance between points in the pattern
