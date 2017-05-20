@@ -88,18 +88,18 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
            rank = {
                global_envtest <- rank_envelope(curve_set, alpha=alpha, savedevs=TRUE,
                        alternative=alt, lexo=lexo, ties=ties)
-               stat <- global_envtest$k[1]
+               stat <- attr(global_envtest, "k")[1]
            },
            qdir = {
                global_envtest <- qdir_envelope(curve_set, alpha=alpha, savedevs=TRUE)
-               stat <- global_envtest$u[1]
+               stat <- attr(global_envtest, "u")[1]
            },
            st = {
                global_envtest <- st_envelope(curve_set, alpha=alpha, savedevs=TRUE)
-               stat <- global_envtest$u[1]
+               stat <- attr(global_envtest, "u")[1]
            })
 
-    res <- structure(list(statistic = as.numeric(stat), p.value = global_envtest$p,
+    res <- structure(list(statistic = as.numeric(stat), p.value = attr(global_envtest, "p"),
                           method = test, curve_set = curve_set), class = "global_envelope_with_sims")
     if(save.envelope) {
         attr(res, "envelope_test") <- global_envtest
@@ -196,19 +196,19 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
                 curve_set_combined <- combine_curve_sets(curve_sets_ls)
                 global_envtest <- rank_envelope(curve_set_combined, alpha=alpha, savedevs=TRUE,
                         alternative=alt, lexo=lexo, ties=ties)
-                stat <- global_envtest$k[1]
-                pval <- global_envtest$p
+                stat <- attr(global_envtest, "k")[1]
+                pval <- attr(global_envtest, "p")
             },
             qdir = {
                 global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, test="qdir", alpha=alpha)
-                stat <- global_envtest$rank_test$k[1]
-                pval <- global_envtest$rank_test$p
+                stat <- attr(global_envtest$rank_test, "k")[1]
+                pval <- attr(global_envtest$rank_test, "p")
                 curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
             },
             st = {
                 global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, test="st", alpha=alpha)
-                stat <- global_envtest$rank_test$k[1]
-                pval <- global_envtest$rank_test$p
+                stat <- attr(global_envtest$rank_test, "k")[1]
+                pval <- attr(global_envtest$rank_test, "p")
                 curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
             })
 
