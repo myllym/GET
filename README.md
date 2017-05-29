@@ -37,14 +37,14 @@ The library `spptest` has become `GET`.
 
 To cite GET in publications use:
 
-Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2016).
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).
 Global envelope tests for spatial processes. Journal of the Royal Statistical Society:
-Series B (Statistical Methodology). doi: 10.1111/rssb.12172
+Series B (Statistical Methodology) 79: 381-404. doi: 10.1111/rssb.12172
 (Preprint of the article: http://arxiv.org/abs/1307.0239v4)
 
-Mrkvička, T., Myllymäki, M. and Hahn, U. (2016).
+Mrkvička, T., Myllymäki, M. and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
-Statistics and Computing. doi: 10.1007/s11222-016-9683-9
+Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
 
 If you use deviation tests, please also cite:
 
@@ -57,7 +57,7 @@ If you use apply tests to spatial residuals, please also cite:
 
 Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016).
 Monte Carlo testing in spatial statistics, with applications to spatial residuals.
-Spatial Statistics. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
+Spatial Statistics 18, Part A, 40--53. doi: 10.1016/j.spasta.2016.04.005
 
 If you use functional ANOVA, please also cite:
 
