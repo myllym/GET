@@ -144,7 +144,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
                                                            lower_f=envchars$lower_f, upper_f=envchars$upper_f)
 
     # Create a combined envelope object for plotting
-    res_env <- structure(list(r = do.call(c, lapply(res_ls, FUN = function(x) x$r), quote=FALSE),
+    res_env <- structure(data.frame(r = do.call(c, lapply(res_ls, FUN = function(x) x$r), quote=FALSE),
                               obs = do.call(c, lapply(res_ls, FUN = function(x) x$obs), quote=FALSE),
                               central = do.call(c, lapply(res_ls, FUN = function(x) x$central), quote=FALSE),
                               lo = do.call(c, bounding_curves$lower_ls, quote=FALSE),

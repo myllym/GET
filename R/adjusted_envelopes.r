@@ -361,7 +361,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
                    UB[i]<- Hod[nsim+1-kalpha_star+1]
                }
 
-               adjenv <- structure(list(r=tX$curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+               adjenv <- structure(data.frame(r=tX$curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                                    class="envelope_test")
                attr(adjenv, "method") <- "Adjusted rank envelope test"
                attr(adjenv, "alternative") <- alt
@@ -571,7 +571,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         UB[i]<- Hod[nsim+1-kalpha_star+1]
     }
     # -> kalpha_stat, LB, UB of the rank test
-    adjenv <- structure(list(r=tX$curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+    adjenv <- structure(data.frame(r=tX$curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                         class="envelope_test")
     attr(adjenv, "method") <- "adjusted rank envelope test"
     attr(adjenv, "alternative") <- alt
@@ -590,11 +590,11 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=adjenv$hi,
                                                                lower_f=envchars$lower_f, upper_f=envchars$upper_f)
         # Create a combined envelope object for plotting
-        res_env <- structure(list(r = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x$r), quote=FALSE),
-                                  obs = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x[['obs']]), quote=FALSE),
-                                  central = as.vector(do.call(c, central_curves_ls, quote=FALSE)),
-                                  lo = do.call(c, bounding_curves$lower_ls, quote=FALSE),
-                                  hi = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
+        res_env <- structure(data.frame(r = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x$r), quote=FALSE),
+                                        obs = do.call(c, lapply(attr(tX, "simfuns"), FUN = function(x) x[['obs']]), quote=FALSE),
+                                        central = as.vector(do.call(c, central_curves_ls, quote=FALSE)),
+                                        lo = do.call(c, bounding_curves$lower_ls, quote=FALSE),
+                                        hi = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
                              class = c("combined_scaled_MAD_envelope", "envelope_test"))
         attr(res_env, "method") <- "adjusted combined scaled MAD envelope test"
         attr(res_env, "alternative") <- "two.sided"

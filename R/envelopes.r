@@ -270,7 +270,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
         UB[i]<- Hod[Nsim+1-kalpha+1];
     }
 
-    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Rank envelope test"
     attr(res, "alternative") <- alternative
@@ -463,7 +463,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     LB <- T_0 - talpha*sdX;
     UB <- T_0 + talpha*sdX;
 
-    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Studentised envelope test"
     attr(res, "alternative") <- "two.sided"
@@ -598,7 +598,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     LB <- T_0 - talpha*abs(quant_m[1,])
     UB <- T_0 + talpha*abs(quant_m[2,])
 
-    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Directional quantile envelope test"
     attr(res, "alternative") <- "two.sided"
@@ -724,7 +724,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     LB <- T_0 - talpha;
     UB <- T_0 + talpha;
 
-    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
+    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Unscaled envelope test"
     attr(res, "alternative") <- "two.sided"
@@ -853,7 +853,7 @@ normal_envelope <- function(curve_set, alpha=0.05, n_norm=200000, ...) {
     LB <- EX - talpha*sdX
     UB <- EX + talpha*sdX
 
-    res <- structure(list(r=curve_set[['r']], obs=data_curve, central=EX, lo=LB, hi=UB),
+    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=EX, lo=LB, hi=UB),
             class = c("envelope_test", "envelope", "fv", "data.frame"))
     attr(res, "method") <- "Approximative normal envelope test"
     attr(res, "alternative") <- "two.sided"
