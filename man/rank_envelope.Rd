@@ -165,8 +165,8 @@ curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
 res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
 }
 
-
 ## A test based on a low dimensional random vector
+#-------------------------------------------------
 # Let us generate some example data.
 X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
 Y <- mvtnorm::rmvnorm(200,c(0,0),matrix(c(1,0.5,0.5,1),2,2)) # simulations
