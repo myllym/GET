@@ -109,7 +109,8 @@ env_ylim_default <- function(x, use_ggplot2) {
     if(!use_ggplot2)
         switch(attr(x, "alternative"),
                 two.sided = {
-                    ylim <- NULL
+                    ylim <- c(min(x[['obs']],x[['lo']],x[['hi']],x[['central']]),
+                              max(x[['obs']],x[['lo']],x[['hi']],x[['central']]))
                 },
                 less = {
                     ylim <- c(min(x[['obs']],x[['lo']],x[['central']]),
