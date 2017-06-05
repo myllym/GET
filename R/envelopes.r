@@ -269,6 +269,10 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
         LB[i]<- Hod[kalpha];
         UB[i]<- Hod[Nsim+1-kalpha+1];
     }
+    switch(alternative,
+            "two.sided" = {},
+            "less" = { UB <- Inf },
+            "greater" = { LB <- -Inf })
 
     res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
                      class = c("envelope_test", "envelope", "fv", "data.frame"))
