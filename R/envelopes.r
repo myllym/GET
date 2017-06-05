@@ -342,11 +342,10 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-    if(use_ggplot2 & attr(x, "alternative") == "two.sided") {
+    if(use_ggplot2) {
         env_ggplot(x, base_size, main, ylim, xlab, ylab, ...)
     }
     else {
-        if(use_ggplot2) cat("The use_ggplot2 option is valid only for the alternative \'two.sided\'. use_ggplot2 ignored.\n")
         if(dotplot) {
             warning("The plot style \'dotplot'\ does not search for combined tests.\n")
             env_dotplot(x, main, ylim, xlab, ylab, ...)
