@@ -106,9 +106,19 @@ env_main_default <- function(x) {
 #' @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
 #' Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
-    if(!use_ggplot2 || attr(x, "alternative")!= "two.sided")
-        ylim <- c(min(x[['obs']],x[['lo']],x[['hi']],x[['central']]),
-                  max(x[['obs']],x[['lo']],x[['hi']],x[['central']]))
+    if(!use_ggplot2)
+        switch(attr(x, "alternative"),
+                two.sided = {
+                    ylim <- NULL
+                },
+                less = {
+                    ylim <- c(min(x[['obs']],x[['lo']],x[['central']]),
+                              max(x[['obs']],x[['lo']],x[['central']]))
+                },
+                greater = {
+                    ylim <- c(min(x[['obs']],x[['hi']],x[['central']]),
+                              max(x[['obs']],x[['hi']],x[['central']]))
+                })
     else ylim <- NULL
     ylim
 }
