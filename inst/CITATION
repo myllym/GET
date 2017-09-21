@@ -50,7 +50,7 @@ citEntry(
     url = "https://dx.doi.org/10.1016/j.spasta.2014.11.004",
     textVersion = "Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
 Deviation test construction and power comparison for marked spatial point patterns.
-Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004",
+Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004",
     header = "If you use deviation tests, please also cite:"
 )
 
@@ -69,6 +69,6 @@ citEntry(
     url = "        http://dx.doi.org/10.1016/j.spasta.2016.04.005",
     textVersion = "Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P. and Hahn, U. (2016).
 Monte Carlo testing in spatial statistics, with applications to spatial residuals.
-Spatial Statistics 18, Part A, 40--53. doi: 10.1016/j.spasta.2016.04.005",
+Spatial Statistics 18, Part A: 40--53. doi: 10.1016/j.spasta.2016.04.005",
     header = "If you use apply tests to spatial residuals, please also cite:"
 )
