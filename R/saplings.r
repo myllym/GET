@@ -57,7 +57,7 @@
 #' # Perform the rank envelope test
 #' res <- rank_envelope(curve_set)
 #' # Plot the result.
-#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(hat(L)(r)-r)))
+#' plot(res, plot_style="ggplot2", ylab=expression(italic(hat(L)(r)-r)))
 #'
 #' # -> The CSR hypothesis is clearly rejected and the rank envelope indicates clear
 #' # clustering of saplings. Next we explore the Matern cluster process as a null model.
@@ -86,7 +86,7 @@
 #' # Plot the test result
 #' # As save.cons.envelope was set above to TRUE, the unadjusted global envelope can be plotted
 #' # together with the adjusted envelope.
-#' plot(adjenvL, use_ggplot2=TRUE, ylab=expression(italic(L(r)-r)), plot_unadjusted=TRUE)
+#' plot(adjenvL, plot_style="ggplot2", ylab=expression(italic(L(r)-r)), plot_unadjusted=TRUE)
 #' # Setting plot_unadjusted=FALSE only the adjusted envelope is plotted.
 #'
 #' # From the test with the L(r)-r function, it appears that the Matern cluster model would be

@@ -97,7 +97,7 @@
 #' # value of the L-function under the null hypothesis (L(r) = r).
 #' plot(res)
 #' # or (requires R library ggplot2)
-#' plot(res, use_ggplot2=TRUE)
+#' plot(res, plot_style="ggplot2")
 #'
 #' ## Advanced use:
 #' # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
@@ -105,7 +105,7 @@
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # Do the rank envelope test
-#' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#' res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 #'
 #' ## Random labeling test
 #' #----------------------
@@ -122,14 +122,14 @@
 #' # 2) Do the rank envelope test
 #' res <- rank_envelope(curve_set)
 #' # 3) Plot the test result
-#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
+#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 #'
 #' # Make the test using instead the test function T(r) = \hat{L}_mm(r);
 #' # which is an estimator of the mark-weighted L function, L_mm(r),
 #' # with translational edge correction (default).
 #' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- rank_envelope(curve_set)
-#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
+#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 #'
 #' ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
 #' #-----------------------------------------------
@@ -155,7 +155,7 @@
 #' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
 #'                 savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
-#' res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#' res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 #' }
 #'
 #' ## A test based on a low dimensional random vector
@@ -316,44 +316,64 @@ print.envelope_test <- function(x, ...) {
 }
 
 #' Plot method for the class 'envelope_test'
-#' @usage \method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10,
-#'                                      main, ylim, xlab, ylab, ...)
+#' @usage \method{plot}{envelope_test}(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
+#'                                      main, ylim, xlab, ylab, use_ggplot2, ...)
 #'
 #' @param x an 'envelope_test' object
-#' @param use_ggplot2 Logical. If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
-#' @param base_size Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.
+#' @param plot_style One of the following "basic", "fv" or "ggplot2".
+#' The option "basic" (default) offers a very basic global envelope plot.
+#' The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
+#' For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
+#' The option "fv" is currently only available for tests with one test function, whereas the other true allow
+#' also tests with several tests functions.
+#' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
-#' Suitable for low dimensional test vectors. Only applicable if \code{use_ggplot2} is FALSE.
+#' Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
 #' @param main See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylim See \code{\link{plot.default}}. A sensible default exists.
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylab See \code{\link{plot.default}}. A sensible default exists.
+#' @param use_ggplot2 Logical, whether plot_style is "ggplot2" or not. Outdated, use the argument plot_style instead.
 #' @param ... Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
-#' (if dotplot=TRUE) or \code{\link{env_ggplot}} (if use_ggplot2=TRUE).
+#' (if dotplot=TRUE) or \code{\link{env_ggplot}} (if plot_style="ggplot2").
 #'
 #' @method plot envelope_test
 #' @export
 #' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
-plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10,
-        main, ylim, xlab, ylab, ...) {
+plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
+        main, ylim, xlab, ylab, use_ggplot2, ...) {
+    if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
+    else use_ggplot2 <- FALSE
+
     if(missing('main')) main <- env_main_default(x)
     if(missing('ylim')) ylim <- env_ylim_default(x, use_ggplot2)
     if(missing('xlab')) xlab <- expression(italic(r))
     if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-    if(use_ggplot2) {
-        env_ggplot(x, base_size, main, ylim, xlab, ylab, ...)
-    }
-    else {
-        if(dotplot) {
-            warning("The plot style \'dotplot'\ does not search for combined tests.\n")
-            env_dotplot(x, main, ylim, xlab, ylab, ...)
-        }
-        else {
-            env_basic_plot(x, main, ylim, xlab, ylab, ...)
-        }
-    }
+    plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
+                                                            b = "basic",
+                                                            fv = "fv",
+                                                            f = "fv",
+                                                            ggplot2 = "ggplot2",
+                                                            ggplot = "ggplot2",
+                                                            g = "ggplot2"))
+
+    switch(plot_style,
+           basic = {
+             if(dotplot) {
+               env_dotplot(x, main, ylim, xlab, ylab, ...)
+             }
+             else {
+               env_basic_plot(x, main, ylim, xlab, ylab, ...)
+             }
+           },
+           fv = {
+             spatstat::plot.fv(x, main=main, ylim=ylim, ...)
+           },
+           ggplot2 = {
+             env_ggplot(x, base_size, main, ylim, xlab, ylab, ...)
+           })
 }
 
 #' Studentised envelope test
@@ -410,7 +430,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
 #' res <- st_envelope(env)
 #' plot(res)
 #' # or (requires R library ggplot2)
-#' plot(res, use_ggplot2=TRUE)
+#' plot(res, plot_style="ggplot2")
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -418,7 +438,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # The studentised envelope test
-#' res <- st_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#' res <- st_envelope(curve_set); plot(res, plot_style="ggplot2")
 #'
 #' ## Random labeling test
 #' #----------------------
@@ -427,7 +447,7 @@ plot.envelope_test <- function(x, use_ggplot2=FALSE, base_size=15, dotplot=lengt
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- st_envelope(curve_set)
-#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
+#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     picked_attr <- pick_attributes(curve_set, alternative="two.sided")
@@ -540,7 +560,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' res <- qdir_envelope(env)
 #' plot(res)
 #' # or (requires R library ggplot2)
-#' plot(res, use_ggplot2=TRUE)
+#' plot(res, plot_style="ggplot2")
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -548,7 +568,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # The directional quantile envelope test
-#' res <- qdir_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#' res <- qdir_envelope(curve_set); plot(res, plot_style="ggplot2")
 #'
 #' ## Random labeling test
 #' #----------------------
@@ -557,7 +577,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
-#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
+#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
 
     picked_attr <- pick_attributes(curve_set, alternative="two.sided")
@@ -675,7 +695,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' res <- unscaled_envelope(env)
 #' plot(res)
 #' # or (requires R library ggplot2)
-#' plot(res, use_ggplot2=TRUE)
+#' plot(res, plot_style="ggplot2")
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -683,7 +703,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # The studentised envelope test
-#' res <- unscaled_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+#' res <- unscaled_envelope(curve_set); plot(res, plot_style="ggplot2")
 #'
 #' ## Random labeling test
 #' #----------------------
@@ -692,7 +712,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- unscaled_envelope(curve_set)
-#' plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
+#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 
     picked_attr <- pick_attributes(curve_set, alternative="two.sided")

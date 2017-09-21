@@ -110,7 +110,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
 #'                                                     curve_set_G, curve_set_J),
 #'                                     test = "qdir")
-#' plot(res, use_ggplot2=TRUE,
+#' plot(res, plot_style="ggplot2",
 #'      labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
 #'      separate_yaxes=TRUE, base_size=12)
 #'
