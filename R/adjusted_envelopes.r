@@ -268,7 +268,7 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
 #'
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
-#' \code{\link{plot.adjusted_envelope_test}}
+#' \code{\link{plot.adjusted_envelope_test}}, \code{\link{saplings}}
 #' @export
 #' @importFrom spatstat is.ppm
 #' @importFrom spatstat is.kppm
