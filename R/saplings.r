@@ -21,15 +21,14 @@
 #' Gelfand, P. J. Diggle, M. Fuentes and P. Guttorp), Handbooks of Modern Statistical Methods. Boca
 #' Raton: CRC Press.
 #'
-#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for
-#' spatial point patterns. arXiv:1307.0239v4 [stat.ME]
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
 #'
 #' @keywords datasets
 #' @keywords spatial
 #' @name saplings
 #' @docType data
 #' @examples
-#' # This is an example analysis of the saplings data set, see Myllymäki et al. (2015).
+#' # This is an example analysis of the saplings data set, see Myllymäki et al. (2017).
 #' require(spatstat)
 #' data(saplings)
 #'

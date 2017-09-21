@@ -158,7 +158,7 @@
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004
 #'
-#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2016). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology). doi: 10.1111/rssb.12172
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology). doi: 10.1111/rssb.12172
 #'
 #' Mrkvička, T., Myllymäki, M. and Hahn, U. (2016). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing. doi: 10.1007/s11222-016-9683-9
 #'
