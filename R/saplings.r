@@ -67,7 +67,7 @@
 #' #----------------------------------------#
 #' # Fit the Matern cluster process to the pattern (using minimum contrast estimation with the pair
 #' # correction function)
-#' fitted_model <- kppm(saplings, clusters = "MatClust", statistic="pcf")
+#' fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="pcf")
 #' summary(fitted_model)
 #'
 #' nsim <- 499 # 19 for experimenting; 499 ok for test = 'qdir'
