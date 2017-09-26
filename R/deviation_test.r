@@ -57,7 +57,11 @@
 #'
 #' @inheritParams crop_curves
 #' @inheritParams residual
-#' @inheritParams deviation
+#' @param curve_set A residual curve_set object. Can be obtained by using
+#'   residual().
+#' @param measure The deviation measure to use. Default is 'max'. Must be
+#'   one of the following: 'max', 'int' or 'int2'.
+#' @param ... Arguments to be passed to the measure function, if applicable.
 #' @param scaling The name of the scaling to use. Options include 'none',
 #'   'q', 'qdir' and 'st'. 'qdir' is default.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
