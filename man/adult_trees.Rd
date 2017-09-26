@@ -29,4 +29,3 @@ Raton: CRC Press.
 }
 \keyword{datasets}
 \keyword{spatial}
-

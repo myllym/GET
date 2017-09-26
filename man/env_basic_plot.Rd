@@ -32,4 +32,3 @@ number of columns for figures. Default 2.}
 \description{
 An internal GET function for making a basic "global envelope plot".
 }
-

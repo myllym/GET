@@ -104,7 +104,7 @@ res <- rank_envelope(env)
 # value of the L-function under the null hypothesis (L(r) = r).
 plot(res)
 # or (requires R library ggplot2)
-plot(res, use_ggplot2=TRUE)
+plot(res, plot_style="ggplot2")
 
 ## Advanced use:
 # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
@@ -112,7 +112,7 @@ curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 # For better visualisation, take the L(r)-r function
 curve_set <- residual(curve_set, use_theo = TRUE)
 # Do the rank envelope test
-res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 
 ## Random labeling test
 #----------------------
@@ -129,14 +129,14 @@ curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9
 # 2) Do the rank envelope test
 res <- rank_envelope(curve_set)
 # 3) Plot the test result
-plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
+plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 
 # Make the test using instead the test function T(r) = \\hat{L}_mm(r);
 # which is an estimator of the mark-weighted L function, L_mm(r),
 # with translational edge correction (default).
 curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
 res <- rank_envelope(curve_set)
-plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[mm](r)-L(r))))
+plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 
 ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
 #-----------------------------------------------
@@ -162,7 +162,7 @@ for(j in 1:2499) {
 env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
                 savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
-res <- rank_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 }
 
 ## A test based on a low dimensional random vector
@@ -197,4 +197,3 @@ Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2013) Glob
 \seealso{
 \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
 }
-

@@ -24,4 +24,3 @@ Plot method for the class 'adjusted_combined_envelope_test'
 \seealso{
 \code{\link{plot.envelope_test}}, \code{\link{plot.combined_scaled_MAD_test}}.
 }
-

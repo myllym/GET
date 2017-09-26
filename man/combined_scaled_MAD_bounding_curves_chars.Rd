@@ -22,4 +22,3 @@ Quantiles (qdir) or sds (st) for the combined scaled MAD envelope tests, i.e.
 the quantities are calculated for all the curve sets provided in the list "curve_sets"
 and the results are returned in corresponding lists.
 }
-

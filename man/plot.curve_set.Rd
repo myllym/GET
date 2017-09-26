@@ -16,4 +16,3 @@
 \description{
 Plot method for the class 'curve_set'
 }
-

@@ -26,4 +26,3 @@ must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.}
 \description{
 A helper function for plotting two global envelopes into a same plot.
 }
-

@@ -58,4 +58,3 @@ A list with either two or three components. 'obs' has the summary
 Helper function for both \code{\link{random_labelling_K_f}} and
 \code{\link{random_labelling_L_f}}.
 }
-

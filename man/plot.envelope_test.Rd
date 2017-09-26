@@ -4,18 +4,23 @@
 \alias{plot.envelope_test}
 \title{Plot method for the class 'envelope_test'}
 \usage{
-\method{plot}{envelope_test}(x, use_ggplot2=FALSE, base_size=15, dotplot=length(x$r)<10,
-                                     main, ylim, xlab, ylab, ...)
+\method{plot}{envelope_test}(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
+                                     main, ylim, xlab, ylab, use_ggplot2, ...)
 }
 \arguments{
 \item{x}{an 'envelope_test' object}
 
-\item{use_ggplot2}{Logical. If TRUE, then a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.}
+\item{plot_style}{One of the following "basic", "fv" or "ggplot2".
+The option "basic" (default) offers a very basic global envelope plot.
+The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
+For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
+The option "fv" is currently only available for tests with one test function, whereas the other true allow
+also tests with several tests functions.}
 
-\item{base_size}{Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.}
+\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
 \item{dotplot}{Logical. If TRUE, then instead of envelopes a dot plot is done.
-Suitable for low dimensional test vectors. Only applicable if \code{use_ggplot2} is FALSE.
+Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
 \item{main}{See \code{\link{plot.default}}. A sensible default exists.}
@@ -26,8 +31,10 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
 
+\item{use_ggplot2}{Logical, whether plot_style is "ggplot2" or not. Outdated, use the argument plot_style instead.}
+
 \item{...}{Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
-(if dotplot=TRUE) or \code{\link{env_ggplot}} (if use_ggplot2=TRUE).}
+(if dotplot=TRUE) or \code{\link{env_ggplot}} (if plot_style="ggplot2").}
 }
 \description{
 Plot method for the class 'envelope_test'
@@ -35,4 +42,3 @@ Plot method for the class 'envelope_test'
 \seealso{
 \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
 }
-

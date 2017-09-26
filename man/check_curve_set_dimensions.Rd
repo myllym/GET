@@ -12,4 +12,3 @@ check_curve_set_dimensions(x)
 \description{
 Check curve set dimensions
 }
-

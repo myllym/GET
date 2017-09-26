@@ -8,10 +8,8 @@ deviation_test(curve_set, r_min = NULL, r_max = NULL, use_theo = TRUE,
   scaling = "qdir", measure = "max", savedevs = FALSE, ...)
 }
 \arguments{
-\item{curve_set}{A curve_set or an \code{\link[spatstat]{envelope}}
-object. If an envelope object is given, it must contain the summary
-functions from the simulated patterns which can be achieved by setting
-savefuns = TRUE when calling envelope().}
+\item{curve_set}{A residual curve_set object. Can be obtained by using
+residual().}
 
 \item{r_min}{The minimum radius to include.}
 
@@ -69,15 +67,18 @@ and given to the deviation_test function.
         \itemize{
           \item 'max' is the maximum deviation measure
 
-u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |
+\deqn{u_i = \max_{r \in [r_{\text{min}}, r_{\text{max}}]} | w(r)(T_i(r) - T_0(r))|}{%
+                u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
 
-\item 'int2'is the integral deviation measure
+\item 'int2' is the integral deviation measure
 
-u_i = int_([r_min, r_max]) ( w(r)(T_i(r) - T_0(r)) )^2 dr
+\deqn{u_i = \int_{r_{\text{min}}}^{r_{\text{max}}} ( w(r)(T_i(r) - T_0(r)) )^2 dr}{%
+                u_i = int_([r_min, r_max]) ( w(r)(T_i(r) - T_0(r)) )^2 dr}
 
 \item 'int' is the 'absolute' integral deviation measure
 
-u_i = int_([r_min, r_max]) | w(r)(T_i(r) - T_0(r)) | dr
+\deqn{u_i = \int_{r_{\text{min}}}^{r_{\text{max}}} |w(r)(T_i(r) - T_0(r))| dr}{%
+                u_i = int_([r_min, r_max]) | w(r)(T_i(r) - T_0(r)) | dr}
 
 }
   \item Calculates the p-value.
@@ -109,6 +110,5 @@ res <- deviation_test(curve_set, measure='int2')
 res
 }
 \references{
-Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 }
-

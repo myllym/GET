@@ -14,4 +14,3 @@
 \description{
 Print method for the class 'envelope_test'
 }
-

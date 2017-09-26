@@ -15,4 +15,3 @@ A curve set that is a combination of the curve sets given in 'x'.
 \description{
 Combine curve sets to a one curve set, e.g. for testing by means of several test functions.
 }
-

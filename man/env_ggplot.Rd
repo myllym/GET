@@ -10,7 +10,7 @@ env_ggplot(x, base_size, main, ylim, xlab, ylab, separate_yaxes = FALSE,
 \arguments{
 \item{x}{An 'envelope_test' object.}
 
-\item{base_size}{Base font size, to be passed to theme style when \code{use_ggplot2 = TRUE}.}
+\item{base_size}{Base font size, to be passed to theme style when \code{plot_type="ggplot2"}.}
 
 \item{main}{See \code{\link{plot.default}}.}
 
@@ -31,4 +31,3 @@ number of columns for figures. Default 2.}
 \description{
 An internal GET function for making a ggplot2 style "global envelope plot".
 }
-

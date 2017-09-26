@@ -23,4 +23,3 @@ Plot method for the class 'adjusted_envelope_test'
 \seealso{
 \code{\link{plot.envelope_test}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
 }
-

@@ -27,4 +27,3 @@ outside the envelope. Currently red color is used.}
 \description{
 An internal GET function for making a dotplot style "global envelope plot".
 }
-

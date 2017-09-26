@@ -14,4 +14,3 @@
 \description{
 Print method for the class 'adjusted_combined_envelope_test'
 }
-

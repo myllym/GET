@@ -25,4 +25,3 @@ If an \code{\link[spatstat]{envelope}} object was given, return a
 If given an envelope object, convert it into a curve_set object. If given
 a curve_set object, check its correctness and give it back.
 }
-

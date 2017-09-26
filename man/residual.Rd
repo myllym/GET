@@ -22,4 +22,3 @@ A curve set object containing residual summary functions. theo is
 \description{
 Subtract S_{H_0} from the summary functions.
 }
-

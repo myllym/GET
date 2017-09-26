@@ -68,7 +68,7 @@ env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
 res <- qdir_envelope(env)
 plot(res)
 # or (requires R library ggplot2)
-plot(res, use_ggplot2=TRUE)
+plot(res, plot_style="ggplot2")
 
 ## Advanced use:
 # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -76,7 +76,7 @@ curve_set <- crop_curves(env, r_min = 1, r_max = 8)
 # For better visualisation, take the L(r)-r function
 curve_set <- residual(curve_set, use_theo = TRUE)
 # The directional quantile envelope test
-res <- qdir_envelope(curve_set); plot(res, use_ggplot2=TRUE)
+res <- qdir_envelope(curve_set); plot(res, plot_style="ggplot2")
 
 ## Random labeling test
 #----------------------
@@ -85,11 +85,10 @@ mpp <- spruces
 # Use the test function T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
 curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 res <- qdir_envelope(curve_set)
-plot(res, use_ggplot2=TRUE, ylab=expression(italic(L[m](r)-L(r))))
+plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 }
 \references{
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028 [stat.ME]
 
 Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
 }
-

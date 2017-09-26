@@ -25,4 +25,3 @@ The given list adorned with the proper class name.
 \description{
 Create a curve set out of a list in the right form.
 }
-

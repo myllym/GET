@@ -2,7 +2,7 @@
 % Please edit documentation in R/p-value.r
 \name{estimate_p_value}
 \alias{estimate_p_value}
-\title{Estimate p-value.}
+\title{Internal GET function for estimating p-value.}
 \usage{
 estimate_p_value(x, ...)
 }
@@ -12,9 +12,8 @@ estimate_p_value(x, ...)
 \item{...}{Additional arguments.}
 }
 \description{
-Estimate p-value.
+Internal GET function for estimating p-value.
 }
 \seealso{
 \code{\link{estimate_p_value.default}}
 }
-

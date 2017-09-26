@@ -12,4 +12,3 @@ is.curve_set(x)
 \description{
 Check class.
 }
-

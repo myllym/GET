@@ -2,7 +2,7 @@
 % Please edit documentation in R/p-value.r
 \name{estimate_p_value.default}
 \alias{estimate_p_value.default}
-\title{Estimate p-value.}
+\title{Internal GET function for estimating p-value.}
 \usage{
 \method{estimate_p_value}{default}(x, sim_vec, ties = 'midrank', ...)
 }
@@ -35,4 +35,3 @@ tied values.
 \references{
 Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
 }
-

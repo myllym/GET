@@ -50,4 +50,3 @@ A list with either two or three components. 'obs' has the summary
 Helper function for both \code{\link{estimate_K_f}} and
 \code{\link{estimate_L_f}}.
 }
-

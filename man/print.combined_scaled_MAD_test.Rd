@@ -14,4 +14,3 @@
 \description{
 Print method for the class 'combined_scaled_MAD_test'
 }
-

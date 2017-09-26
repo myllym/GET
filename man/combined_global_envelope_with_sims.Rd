@@ -58,9 +58,8 @@ the theoretical function is taken as the mean of the simulations.}
 \item{lexo}{Logical, whether or not to use lexical ordering for calculation of the p-value.
 in the rank envelope test. See \code{\link{rank_envelope}}.}
 
-\item{ties}{Ties method to be passed to \code{\link{rank_envelope}} (and then to
-\code{\link{estimate_p_value}}. Used to obtain a point estimate for the p-value, if lexo=FALSE.
-The default point estimate is the mid-rank p-value.}
+\item{ties}{Ties method to be passed to \code{\link{rank_envelope}}. Used to obtain a point estimate
+for the p-value, if lexo=FALSE. The default point estimate is the mid-rank p-value.}
 
 \item{save.envelope}{Logical flag indicating whether to save all envelope test results.}
 
@@ -99,4 +98,3 @@ of curve sets for each test function.
 \code{\link[spatstat]{envelope}} (that is used to perform simulations),
 \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
 }
-

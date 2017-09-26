@@ -15,4 +15,3 @@ savefuns = TRUE when calling envelope().}
 \description{
 Define T_0, the expectation of the test function under H_0, from a curve_set object.
 }
-

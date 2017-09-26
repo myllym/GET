@@ -14,4 +14,3 @@
 \description{
 Print method for the class 'curve_set'
 }
-

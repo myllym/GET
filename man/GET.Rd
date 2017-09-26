@@ -4,6 +4,7 @@
 \name{GET}
 \alias{GET}
 \alias{GET-package}
+\alias{GET-package}
 \title{Global Envelope Tests (GET)}
 \description{
 The \pkg{GET} library provides global envelope and deviation tests. Both type of tests are
@@ -157,6 +158,16 @@ directly be given to the functions \code{\link{crop_curves}} and \code{\link{res
 Further, as a further reminder, for composite hypotheses the library provides the function
 \code{\link{dg.global_envelope}}. See a detailed example in \code{\link{saplings}}.
 }
+
+\references{
+Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
+
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+
+Mrkvička, T., Myllymäki, M. and Hahn, U. (2016). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
+
+Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016). Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A: 40-53. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
+}
 \author{
 Mari Myllymäki (mari.j.myllymaki@gmail.com, mari.myllymaki@luke.fi),
 Henri Seijo (henri.seijo@aalto.fi, henri.seijo@iki.fi),
@@ -164,13 +175,3 @@ Tomáš Mrkvička (mrkvicka.toma@gmail.com),
 Pavel Grabarnik (gpya@rambler.ru),
 Ute Hahn (ute@math.au.dk)
 }
-\references{
-Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004
-
-Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2016). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology). doi: 10.1111/rssb.12172
-
-Mrkvička, T., Myllymäki, M. and Hahn, U. (2016). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing. doi: 10.1007/s11222-016-9683-9
-
-Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016). Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
-}
-

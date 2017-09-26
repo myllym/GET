@@ -18,4 +18,3 @@ combined_scaled_MAD_bounding_curves(central_curves_ls, max_u, lower_f, upper_f)
 \description{
 Calculate the lower and upper bounding curves of a combined global scaled MAD envelope test
 }
-

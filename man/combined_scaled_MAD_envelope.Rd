@@ -76,7 +76,7 @@ curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
 res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
                                                     curve_set_G, curve_set_J),
                                     test = "qdir")
-plot(res, use_ggplot2=TRUE,
+plot(res, plot_style="ggplot2",
      labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
      separate_yaxes=TRUE, base_size=12)
 
@@ -85,4 +85,3 @@ plot(res, use_ggplot2=TRUE,
 Mrkvicka, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
 Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
 }
-

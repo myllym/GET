@@ -24,4 +24,3 @@ A curve_set object containing the cropped summary functions and
 Crop the curves to a certain interval in preparation for a deviation
 test.
 }
-

@@ -16,4 +16,3 @@ away (in \code{\link{crop_curves}}).}
 \description{
 Check the content validity of a potential curve_set object.
 }
-

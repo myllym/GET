@@ -19,4 +19,3 @@ If plot_type is "rank", then the output of the combined rank envelope test
 is plotted. If plot_type is "envelope", then the combined scaled MAD envelope
 is plotted.
 }
-
