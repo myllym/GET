@@ -1,29 +1,29 @@
-#' Studentised scaling
-#'
-#' Scale with the standard deviation.
-#'
-#' @inheritParams convert_envelope
-#' @return A scaled curve_set.
-#' @importFrom stats sd
+# Studentised scaling
+#
+# Scale with the standard deviation.
+#
+# @inheritParams convert_envelope
+# @return A scaled curve_set.
+# @importFrom stats sd
 st_scaling <- function(curve_set) {
     sim_sd <- apply(curve_set[['sim_m']], 1, stats::sd)
     res <- weigh_curves(curve_set, divisor_to_coeff(sim_sd))
     res
 }
 
-#' Quantile scaling.
-#'
-#' @inheritParams st_scaling
-#' @param probs A two-element vector containing the lower and upper
-#'   quantiles for the envelope, in that order and on the interval [0, 1].
-#'   The default values are 0.025 and 0.975 as in the article by Møller and
-#'   Berthelsen (2012).
-#' @param ... Further arguments passed to quantile.
-#' @return A scaled curve_set.
-#' @importFrom stats quantile
-#' @references J. Møller and K. K. Berthelsen, “Transforming spatial point
-#'   processes into Poisson processes using random superposition,” Advances
-#'   in Applied Probability, vol. 44, no. 1, pp. 42–62, 2012.
+# Quantile scaling.
+#
+# @inheritParams st_scaling
+# @param probs A two-element vector containing the lower and upper
+#   quantiles for the envelope, in that order and on the interval [0, 1].
+#   The default values are 0.025 and 0.975 as in the article by Møller and
+#   Berthelsen (2012).
+# @param ... Further arguments passed to quantile.
+# @return A scaled curve_set.
+# @importFrom stats quantile
+# @references J. Møller and K. K. Berthelsen, “Transforming spatial point
+#   processes into Poisson processes using random superposition,” Advances
+#   in Applied Probability, vol. 44, no. 1, pp. 42–62, 2012.
 q_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_probs(probs)
 
@@ -35,14 +35,14 @@ q_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     res
 }
 
-#' Weigh a matrix or a vector with two different coeffs depending on which
-#' side of middle curve each element is.
-#'
-#' Used by \code{\link{qdir_scaling}}.
-#'
-#' @param x The matrix
-#' @param upper_coeff Upper coefficient.
-#' @param lower_coeff Lower coefficient.
+# Weigh a matrix or a vector with two different coeffs depending on which
+# side of middle curve each element is.
+#
+# Used by \code{\link{qdir_scaling}}.
+#
+# @param x The matrix
+# @param upper_coeff Upper coefficient.
+# @param lower_coeff Lower coefficient.
 weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
     if (is.matrix(x)) {
         dims <- dim(x)
@@ -63,13 +63,13 @@ weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
     y
 }
 
-#' Directional quantile scaling.
-#'
-#' @details Notice that this scaling is only defined for residuals.
-#'
-#' @inheritParams q_scaling
-#' @return A scaled curve_set.
-#' @importFrom stats quantile
+# Directional quantile scaling.
+#
+# @details Notice that this scaling is only defined for residuals.
+#
+# @inheritParams q_scaling
+# @return A scaled curve_set.
+# @importFrom stats quantile
 qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_probs(probs)
     check_residualness(curve_set)
@@ -91,26 +91,25 @@ qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     res
 }
 
-#' Scale curves.
-#'
-#' The most important use is: scale residuals of test functions.
-#'
-#' Given a set of curves in curve_set, the function scale_curves scales
-#' the curves by one of the following scalings:
-#' \itemize{
-#'   \item none No scaling. Nothing done.
-#'   \item q Quantile scaling.
-#'   \item qdir Directional quantile scaling.
-#'   \item st Studentised scaling.
-#' }
-#' See for details Myllymäki et al. (2015).
-#'
-#' @references Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004
-#' @inheritParams st_scaling
-#' @param scaling The name of the scaling to use. Options include 'none',
-#'   'q', 'qdir' and 'st'. 'qdir' is default.
-#' @param ... Further arguments passed to the chosen scaling function.
-#' @export
+# Scale curves.
+#
+# The most important use is: scale residuals of test functions.
+#
+# Given a set of curves in curve_set, the function scale_curves scales
+# the curves by one of the following scalings:
+# \itemize{
+#   \item none No scaling. Nothing done.
+#   \item q Quantile scaling.
+#   \item qdir Directional quantile scaling.
+#   \item st Studentised scaling.
+# }
+# See for details Myllymäki et al. (2015).
+#
+# @references Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004
+# @inheritParams st_scaling
+# @param scaling The name of the scaling to use. Options include 'none',
+#   'q', 'qdir' and 'st'. 'qdir' is default.
+# @param ... Further arguments passed to the chosen scaling function.
 scale_curves <- function(curve_set, scaling = 'qdir', ...) {
     curve_set <- convert_envelope(curve_set)
 
@@ -129,21 +128,21 @@ scale_curves <- function(curve_set, scaling = 'qdir', ...) {
     scaled_set
 }
 
-#' Turns a divisor into a coeff.
-#'
-#' Takes the inverse of the input and replaces non-finite values with 1.
-#'
-#' @param x A number.
+# Turns a divisor into a coeff.
+#
+# Takes the inverse of the input and replaces non-finite values with 1.
+#
+# @param x A number.
 divisor_to_coeff <- function(x) {
     y <- 1 / x
     y[!is.finite(y)] <- 0 # 0 so that these distances do not affect the test result.
     y
 }
 
-#' Multiply by a coefficient.
-#'
-#' @inheritParams st_scaling
-#' @param coeff The coefficient vector, often of the length of one curve.
+# Multiply by a coefficient.
+#
+# @inheritParams st_scaling
+# @param coeff The coefficient vector, often of the length of one curve.
 weigh_curves <- function(curve_set, coeff) {
     curve_set[['obs']] <- coeff * curve_set[['obs']]
     curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
