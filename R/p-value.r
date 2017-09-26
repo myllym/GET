@@ -1,4 +1,4 @@
-#' Estimate p-value.
+#' Internal GET function for estimating p-value.
 #'
 #' @param x The first argument.
 #' @param ... Additional arguments.
@@ -11,7 +11,8 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 # should be handled.
 # FIXME: How about both two-sided and one-sided?
 # FIXME: north_note_2002 uses the term anti-conservative for the incorrect p-value.
-#' Estimate p-value.
+#
+#' Internal GET function for estimating p-value.
 #'
 #' Estimates the p-value of the given observation for the given set of Monte
 #' Carlo samples. User can choose which method is used to treat possible
