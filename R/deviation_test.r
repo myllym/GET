@@ -69,7 +69,7 @@
 #' If 'savedevs=TRUE', then a list containing the p-value and calculated deviation measures
 #' u_i, i=1,...,nsim+1 (where u_1 corresponds to the data pattern) is returned.
 #' @references
-#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 #' @export
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
