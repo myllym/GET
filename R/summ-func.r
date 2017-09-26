@@ -59,7 +59,6 @@ call_summ_func <- function(pattern, do_besags_L,
 #' @return A list with either two or three components. 'obs' has the summary
 #'   function that was asked for. 'r' contains the radius values. 'unmarked'
 #'   contains the unmarked K function, if asked for.
-#' @export
 estimate_K_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                          r_vec = NULL, calc_unmarked = TRUE,
                          edge_correction = 'translate',
@@ -79,7 +78,6 @@ estimate_K_f <- function(pattern, mtf_name = 'm', r_max = NULL,
 #' @return A list with either two or three components. 'obs' has the summary
 #'   function that was asked for. 'r' contains the radius values. 'unmarked'
 #'   contains the unmarked L function, if asked for.
-#' @export
 estimate_L_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                          r_vec = NULL, calc_unmarked = TRUE,
                          edge_correction = 'translate',
@@ -168,7 +166,6 @@ call_random_labelling <- function(pattern, do_besags_L, mtf_name = 'm',
 #' @return A list with either two or three components. 'obs' has the summary
 #'   function that was asked for. 'r' contains the radius values. 'theo'
 #'   contains the unmarked K function, if asked for.
-#' @export
 random_labelling_K_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                                  r_vec = NULL, nsim = 999L,
                                  calc_theo = TRUE,
@@ -193,7 +190,6 @@ random_labelling_K_f <- function(pattern, mtf_name = 'm', r_max = NULL,
 #' @return A list with either two or three components. 'obs' has the summary
 #'   function that was asked for. 'r' contains the radius values. 'theo'
 #'   contains the unmarked L function, if asked for.
-#' @export
 random_labelling_L_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                                  r_vec = NULL, nsim = 999L,
                                  calc_theo = TRUE,
