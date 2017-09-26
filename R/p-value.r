@@ -75,22 +75,22 @@ estimate_p_value.default <- function(x, sim_vec, ties = 'midrank', ...) {
     p_estimate
 }
 
-#' The default ties method for the p-value
-#'
-#' The default ties method for the p-value calculated by estimate_p_value
+# The default ties method for the p-value
+#
+# The default ties method for the p-value calculated by estimate_p_value
 p_value_ties_default <- function() {
     'midrank'
 }
 
-#' Estimate p-value.
-#'
-#' Check \code{\link{estimate_p_value.default}} for details.
-#'
-#' @usage \method{estimate_p_value}{deviation_set}(deviation_set, ...)
-#'
-#' @param deviation_set A deviation_set object. Use deviation() to get one.
-#' @param ... Additional parameters to be passed to \code{\link{estimate_p_value.default}}.
-#' @return The p-value.
+# Estimate p-value.
+#
+# Check \code{\link{estimate_p_value.default}} for details.
+#
+# @usage \method{estimate_p_value}{deviation_set}(deviation_set, ...)
+#
+# @param deviation_set A deviation_set object. Use deviation() to get one.
+# @param ... Additional parameters to be passed to \code{\link{estimate_p_value.default}}.
+# @return The p-value.
 estimate_p_value.deviation_set <- function(deviation_set, ...) {
     check_deviation_set(deviation_set)
     p <- with(deviation_set,

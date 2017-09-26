@@ -31,12 +31,12 @@ pick_attributes <- function(curve_set, alternative="two.sided") {
     list(fname=fname, labl=labl, desc=desc, ylab=ylab)
 }
 
-#' Check r values of a curve_set object for plotting
-#'
-#' Check r values of a curve_set object to find out if there is
-#' one or several test functions. Find out breaking r values for plotting.
-#' @param x A curve_set or envelope_test object.
-#' @seealso \code{\link{create_curve_set}}
+# Check r values of a curve_set object for plotting
+#
+# Check r values of a curve_set object to find out if there is
+# one or several test functions. Find out breaking r values for plotting.
+# @param x A curve_set or envelope_test object.
+# @seealso \code{\link{create_curve_set}}
 curve_set_check_r <- function(x) {
     if(is.null(x[['r']])) stop("The argument \'x\' should contain the element 'r'.\n")
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
@@ -80,8 +80,8 @@ curve_set_check_r <- function(x) {
 }
 
 
-#' An internal GET function for setting the default main for a global envelope plot.
-#' @param x An 'envelope_test' object.
+# An internal GET function for setting the default main for a global envelope plot.
+# @param x An 'envelope_test' object.
 env_main_default <- function(x) {
     if(!is.null(attr(x, "p_interval"))) {
         if(attr(x, "alternative") == "two.sided")
@@ -101,10 +101,10 @@ env_main_default <- function(x) {
     }
 }
 
-#' An internal GET function for setting the default ylim for a global envelope plot.
-#' @param x An 'envelope_test' object.
-#' @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
-#' Otherwise the ylim are for \code{\link{env_basic_plot}}.
+# An internal GET function for setting the default ylim for a global envelope plot.
+# @param x An 'envelope_test' object.
+# @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
+# Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
     if(!use_ggplot2)
         switch(attr(x, "alternative"),
