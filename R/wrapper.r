@@ -71,8 +71,7 @@ random_labelling <- function(pattern,
 #' for the pattern and simulations and makes a deviation test.
 #'
 #' @inheritParams random_labelling
-#' @inheritParams scale_curves
-#' @inheritParams deviation
+#' @inheritParams deviation_test
 #' @inheritParams estimate_p_value.default
 #' @export
 #' @examples
