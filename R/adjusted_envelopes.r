@@ -50,9 +50,8 @@
 #' the theoretical function is taken as the mean of the simulations.
 #' @param lexo Logical, whether or not to use lexical ordering for calculation of the p-value.
 #' in the rank envelope test. See \code{\link{rank_envelope}}.
-#' @param ties Ties method to be passed to \code{\link{rank_envelope}} (and then to
-#' \code{\link{estimate_p_value}}. Used to obtain a point estimate for the p-value, if lexo=FALSE.
-#' The default point estimate is the mid-rank p-value.
+#' @param ties Ties method to be passed to \code{\link{rank_envelope}}. Used to obtain a point estimate
+#' for the p-value, if lexo=FALSE. The default point estimate is the mid-rank p-value.
 #' @param save.envelope Logical flag indicating whether to save all envelope test results.
 #' @param savefuns Logical flag indicating whether to save all the simulated function values.
 #' See \code{\link[spatstat]{envelope}}.
