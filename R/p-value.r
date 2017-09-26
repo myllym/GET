@@ -2,7 +2,6 @@
 #'
 #' @param x The first argument.
 #' @param ... Additional arguments.
-#' @export
 #' @seealso \code{\link{estimate_p_value.default}}
 estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 
@@ -36,7 +35,6 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #' @return The p-value estimate. A scalar real value between 0 and 1.
 #'
 #' @references Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
-#' @export
 estimate_p_value.default <- function(x, sim_vec, ties = 'midrank', ...) {
     obs <- x
     if (length(obs) != 1L || !is.finite(obs) || !is.numeric(obs)) {
