@@ -20,7 +20,7 @@ The pattern is a sample part of data collected over 10 ha plot as a part of a re
 program headed by project leader Prof. O.V. Smirnova.
 }
 \examples{
-# This is an example analysis of the saplings data set, see Myllymäki et al. (2015).
+# This is an example analysis of the saplings data set in Myllymäki et al. (2017).
 require(spatstat)
 data(saplings)
 
@@ -49,7 +49,7 @@ curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
 # Perform the rank envelope test
 res <- rank_envelope(curve_set)
 # Plot the result.
-plot(res, use_ggplot2=TRUE, ylab=expression(italic(hat(L)(r)-r)))
+plot(res, plot_style="ggplot2", ylab=expression(italic(hat(L)(r)-r)))
 
 # -> The CSR hypothesis is clearly rejected and the rank envelope indicates clear
 # clustering of saplings. Next we explore the Matern cluster process as a null model.
@@ -59,7 +59,7 @@ plot(res, use_ggplot2=TRUE, ylab=expression(italic(hat(L)(r)-r)))
 #----------------------------------------#
 # Fit the Matern cluster process to the pattern (using minimum contrast estimation with the pair
 # correction function)
-fitted_model <- kppm(saplings, clusters = "MatClust", statistic="pcf")
+fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="pcf")
 summary(fitted_model)
 
 nsim <- 499 # 19 for experimenting; 499 ok for test = 'qdir'
@@ -78,7 +78,7 @@ system.time( # timing; takes a lot of time,
 # Plot the test result
 # As save.cons.envelope was set above to TRUE, the unadjusted global envelope can be plotted
 # together with the adjusted envelope.
-plot(adjenvL, use_ggplot2=TRUE, ylab=expression(italic(L(r)-r)), plot_unadjusted=TRUE)
+plot(adjenvL, plot_style="ggplot2", ylab=expression(italic(L(r)-r)), plot_unadjusted=TRUE)
 # Setting plot_unadjusted=FALSE only the adjusted envelope is plotted.
 
 # From the test with the L(r)-r function, it appears that the Matern cluster model would be
@@ -105,9 +105,7 @@ van Lieshout, M.-C. (2010) Spatial point process theory. In Handbook of Spatial 
 Gelfand, P. J. Diggle, M. Fuentes and P. Guttorp), Handbooks of Modern Statistical Methods. Boca
 Raton: CRC Press.
 
-Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2015). Global envelope tests for
-spatial point patterns. arXiv:1307.0239v4 [stat.ME]
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
 }
 \keyword{datasets}
 \keyword{spatial}
-
