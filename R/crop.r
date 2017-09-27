@@ -3,7 +3,10 @@
 #' Crop the curves to a certain interval in preparation for a deviation
 #' test.
 #'
-#' @inheritParams convert_envelope
+#' @param curve_set A curve_set or an \code{\link[spatstat]{envelope}}
+#'   object. If an envelope object is given, it must contain the summary
+#'   functions from the simulated patterns which can be achieved by setting
+#'   savefuns = TRUE when calling envelope().
 #' @param r_min The minimum radius to include.
 #' @param r_max The maximum radius to include.
 #' @return A curve_set object containing the cropped summary functions and

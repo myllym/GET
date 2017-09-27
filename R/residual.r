@@ -1,5 +1,5 @@
 #' Subtract S_{H_0} from the summary functions.
-#' @inheritParams convert_envelope
+#' @inheritParams crop_curves
 #' @param use_theo Whether to use the theoretical summary function or the
 #'   mean of the simulations.
 #' @return A curve set object containing residual summary functions. theo is

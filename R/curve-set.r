@@ -60,12 +60,12 @@ envelope_to_curve_set <- function(env, ...) {
     res
 }
 
-#' Check the content validity of a potential curve_set object.
-#'
-#' @param curve_set A curve_set object to be checked.
-#' @param allow_Inf_values Logical, for internal use. Can be used to allow infinite or nonnumeric
-#' values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
-#' away (in \code{\link{crop_curves}}).
+# Check the content validity of a potential curve_set object.
+#
+# @param curve_set A curve_set object to be checked.
+# @param allow_Inf_values Logical, for internal use. Can be used to allow infinite or nonnumeric
+# values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
+# away (in \code{\link{crop_curves}}).
 check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     possible_names <- c('r', 'obs', 'sim_m', 'theo', 'is_residual')
 
@@ -157,21 +157,18 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     curve_set
 }
 
-#' Convert an envelope object to a curve_set object.
-#'
-#' If given an envelope object, convert it into a curve_set object. If given
-#' a curve_set object, check its correctness and give it back.
-#'
-#' @param curve_set A curve_set or an \code{\link[spatstat]{envelope}}
-#'   object. If an envelope object is given, it must contain the summary
-#'   functions from the simulated patterns which can be achieved by setting
-#'   savefuns = TRUE when calling envelope().
-#' @param ... Allows to pass arguments to \code{\link{check_curve_set_content}}
-#' and \code{\link{envelope_to_curve_set}} (to be passed further through
-#' \code{\link{create_curve_set}} to \code{\link{check_curve_set_content}}).
-#' @return If an \code{\link[spatstat]{envelope}} object was given, return a
-#'   corresponding curve_set object. If a curve_set object was given, return
-#'   it unharmed.
+# Convert an envelope object to a curve_set object.
+#
+# If given an envelope object, convert it into a curve_set object. If given
+# a curve_set object, check its correctness and give it back.
+#
+# @inheritParams crop_curves
+# @param ... Allows to pass arguments to \code{\link{check_curve_set_content}}
+# and \code{\link{envelope_to_curve_set}} (to be passed further through
+# \code{\link{create_curve_set}} to \code{\link{check_curve_set_content}}).
+# @return If an \code{\link[spatstat]{envelope}} object was given, return a
+#   corresponding curve_set object. If a curve_set object was given, return
+#   it unharmed.
 #' @importFrom methods is
 convert_envelope <- function(curve_set, ...) {
     if (inherits(curve_set, 'envelope')) {
@@ -184,8 +181,8 @@ convert_envelope <- function(curve_set, ...) {
     curve_set
 }
 
-#' Check that the curve_set object portrays residual curves.
-#' @param curve_set A 'curve_set' object
+# Check that the curve_set object portrays residual curves.
+# @param curve_set A 'curve_set' object
 check_residualness <- function(curve_set) {
     is_residual <- curve_set[['is_residual']]
     if (length(is_residual) < 1L || !is_residual) {
@@ -274,7 +271,7 @@ plot.curve_set <- function(x, ylim, ...) {
 #' Combine curve sets.
 #'
 #' Combine curve sets to a one curve set, e.g. for testing by means of several test functions.
-#' @inheritParams check_curve_set_dimensions
+#' @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
 #' @return A curve set that is a combination of the curve sets given in 'x'.
 #' @export
 combine_curve_sets <- function(x) {
@@ -304,8 +301,8 @@ combine_curve_sets <- function(x) {
     create_curve_set(curve_set)
 }
 
-#' Check curve set dimensions
-#' @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
+# Check curve set dimensions
+# @inheritParams combine_curve_sets
 check_curve_set_dimensions <- function(x) {
     # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
     # If the latter, then convert the objects to curve sets.
