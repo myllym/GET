@@ -1,13 +1,13 @@
-#' Helper function for both \code{\link{estimate_K_f}} and
-#' \code{\link{estimate_L_f}}.
-#'
-#' @inheritParams marksummary::summ_func_random_labelling
-#' @param calc_unmarked Whether to include the unmarked K or L
-#'   in the result.
-#' @param do_besags_L Whether to calculate the K_f or the L_f function.
-#' @return A list with either two or three components. 'obs' has the summary
-#'   function that was asked for. 'r' contains the radius values. 'unmarked'
-#'   contains the unmarked K or L function, if asked for.
+# Helper function for both \code{\link{estimate_K_f}} and
+# \code{\link{estimate_L_f}}.
+#
+# @inheritParams marksummary::summ_func_random_labelling
+# @param calc_unmarked Whether to include the unmarked K or L
+#   in the result.
+# @param do_besags_L Whether to calculate the K_f or the L_f function.
+# @return A list with either two or three components. 'obs' has the summary
+#   function that was asked for. 'r' contains the radius values. 'unmarked'
+#   contains the unmarked K or L function, if asked for.
 call_summ_func <- function(pattern, do_besags_L,
                            edge_correction = 'translate', mtf_name = 'm',
                            r_max = NULL, r_vec = NULL, calc_unmarked = TRUE,
@@ -52,13 +52,13 @@ call_summ_func <- function(pattern, do_besags_L,
     res
 }
 
-#' Estimate K_f.
-#'
-#' @inheritParams marksummary::summ_func_random_labelling
-#' @param calc_unmarked Whether to include the unmarked K in the result.
-#' @return A list with either two or three components. 'obs' has the summary
-#'   function that was asked for. 'r' contains the radius values. 'unmarked'
-#'   contains the unmarked K function, if asked for.
+# Estimate K_f.
+#
+# @inheritParams marksummary::summ_func_random_labelling
+# @param calc_unmarked Whether to include the unmarked K in the result.
+# @return A list with either two or three components. 'obs' has the summary
+#   function that was asked for. 'r' contains the radius values. 'unmarked'
+#   contains the unmarked K function, if asked for.
 estimate_K_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                          r_vec = NULL, calc_unmarked = TRUE,
                          edge_correction = 'translate',
@@ -71,13 +71,13 @@ estimate_K_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                           use_biased_lambda2 = use_biased_lambda2)
 }
 
-#' Estimate L_f.
-#'
-#' @inheritParams marksummary::summ_func_random_labelling
-#' @param calc_unmarked Whether to include the unmarked L in the result.
-#' @return A list with either two or three components. 'obs' has the summary
-#'   function that was asked for. 'r' contains the radius values. 'unmarked'
-#'   contains the unmarked L function, if asked for.
+# Estimate L_f.
+#
+# @inheritParams marksummary::summ_func_random_labelling
+# @param calc_unmarked Whether to include the unmarked L in the result.
+# @return A list with either two or three components. 'obs' has the summary
+#   function that was asked for. 'r' contains the radius values. 'unmarked'
+#   contains the unmarked L function, if asked for.
 estimate_L_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                          r_vec = NULL, calc_unmarked = TRUE,
                          edge_correction = 'translate',
@@ -91,16 +91,16 @@ estimate_L_f <- function(pattern, mtf_name = 'm', r_max = NULL,
 }
 
 
-#' Helper function for both \code{\link{random_labelling_K_f}} and
-#' \code{\link{random_labelling_L_f}}.
-#'
-#' @inheritParams marksummary::summ_func_random_labelling
-#' @param calc_theo Whether to calculate the theoretical summary function
-#'   as well.
-#' @param do_besags_L Whether to calculate the K_f or the L_f function.
-#' @return A list with either two or three components. 'obs' has the summary
-#'   function that was asked for. 'r' contains the radius values. 'unmarked'
-#'   contains the unmarked K or L function, if asked for.
+# Helper function for both \code{\link{random_labelling_K_f}} and
+# \code{\link{random_labelling_L_f}}.
+#
+# @inheritParams marksummary::summ_func_random_labelling
+# @param calc_theo Whether to calculate the theoretical summary function
+#   as well.
+# @param do_besags_L Whether to calculate the K_f or the L_f function.
+# @return A list with either two or three components. 'obs' has the summary
+#   function that was asked for. 'r' contains the radius values. 'unmarked'
+#   contains the unmarked K or L function, if asked for.
 call_random_labelling <- function(pattern, do_besags_L, mtf_name = 'm',
                                   r_max = NULL, r_vec = NULL, nsim = 999L,
                                   calc_theo = TRUE,
@@ -158,14 +158,14 @@ call_random_labelling <- function(pattern, do_besags_L, mtf_name = 'm',
     res
 }
 
-#' Generate K_f curves for a random labelling test.
-#'
-#' @inheritParams marksummary::summ_func_random_labelling
-#' @param calc_theo Whether to calculate the theoretical summary function
-#'   as well.
-#' @return A list with either two or three components. 'obs' has the summary
-#'   function that was asked for. 'r' contains the radius values. 'theo'
-#'   contains the unmarked K function, if asked for.
+# Generate K_f curves for a random labelling test.
+#
+# @inheritParams marksummary::summ_func_random_labelling
+# @param calc_theo Whether to calculate the theoretical summary function
+#   as well.
+# @return A list with either two or three components. 'obs' has the summary
+#   function that was asked for. 'r' contains the radius values. 'theo'
+#   contains the unmarked K function, if asked for.
 random_labelling_K_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                                  r_vec = NULL, nsim = 999L,
                                  calc_theo = TRUE,
@@ -182,14 +182,14 @@ random_labelling_K_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                                  use_biased_lambda2 = use_biased_lambda2)
 }
 
-#' Generate L_f curves for a random labelling test.
-#'
-#' @inheritParams marksummary::summ_func_random_labelling
-#' @param calc_theo Whether to calculate the theoretical summary function
-#'   as well.
-#' @return A list with either two or three components. 'obs' has the summary
-#'   function that was asked for. 'r' contains the radius values. 'theo'
-#'   contains the unmarked L function, if asked for.
+# Generate L_f curves for a random labelling test.
+#
+# @inheritParams marksummary::summ_func_random_labelling
+# @param calc_theo Whether to calculate the theoretical summary function
+#   as well.
+# @return A list with either two or three components. 'obs' has the summary
+#   function that was asked for. 'r' contains the radius values. 'theo'
+#   contains the unmarked L function, if asked for.
 random_labelling_L_f <- function(pattern, mtf_name = 'm', r_max = NULL,
                                  r_vec = NULL, nsim = 999L,
                                  calc_theo = TRUE,
