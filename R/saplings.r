@@ -28,7 +28,7 @@
 #' @name saplings
 #' @docType data
 #' @examples
-#' # This is an example analysis of the saplings data set, see Myllymäki et al. (2017).
+#' # This is an example analysis of the saplings data set in Myllymäki et al. (2017).
 #' require(spatstat)
 #' data(saplings)
 #'
