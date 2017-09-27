@@ -1,8 +1,4 @@
-#' Internal GET function for estimating p-value.
-#'
-#' @param x The first argument.
-#' @param ... Additional arguments.
-#' @seealso \code{\link{estimate_p_value.default}}
+#' Internal generic GET function for estimating p-value.
 estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 
 # FIXME: Do we need to consider NA values at some point in life? Our
@@ -13,14 +9,14 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #
 #' Internal GET function for estimating p-value.
 #'
-#' Estimates the p-value of the given observation for the given set of Monte
-#' Carlo samples. User can choose which method is used to treat possible
-#' tied values.
+#' The default method estimates the p-value of the given observation for
+#' the given set of Monte Carlo samples. User can choose which method is
+#' used to treat possible tied values.
 #'
+#' @rdname estimate_p_value
 #' @usage \method{estimate_p_value}{default}(x, sim_vec, ties = 'midrank', ...)
 #'
-#' @param x The data sample. A scalar real value. Must not be
-#'   NULL.
+#' @param x The first argument. The data sample, a scalar real value. Must not be NULL.
 #' @param sim_vec The Monte Carlo samples. A vector of real values.
 #'   Must not be NULL.
 #' @param ties The method to treat tied values with. If one or more of the
