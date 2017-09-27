@@ -29,7 +29,6 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #'   the mid-rank within the tied values is taken. 'midrank' is the default.
 #' @param ... Additional arguments.
 #' @return The p-value estimate. A scalar real value between 0 and 1.
-#'
 #' @references Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
 estimate_p_value.default <- function(x, sim_vec, ties = 'midrank', ...) {
     obs <- x
