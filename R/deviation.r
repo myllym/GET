@@ -7,7 +7,7 @@
 # @param ... Arguments to be passed to the measure function, if applicable.
 # @return A deviation_set object. The list has two elements: obs and sim.
 #   obs is scalar while sim is a vector with at least one element.
-# @importFrom methods is
+#' @importFrom methods is
 deviation <- function(curve_set, measure = 'max', ...) {
     possible_measures <- c('max', 'int', 'int2')
 

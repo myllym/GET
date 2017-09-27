@@ -6,7 +6,7 @@
 #
 # @param base_size base font size
 # @param base_family base font family
-# @import ggplot2
+#' @import ggplot2
 ThemePlain <- function(base_size=15, base_family='') {
     if (!requireNamespace("ggplot2", quietly=TRUE)) {
         stop('ggplot2 must be installed to use ThemePlain.')
