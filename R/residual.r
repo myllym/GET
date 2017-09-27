@@ -43,12 +43,11 @@ residual <- function(curve_set, use_theo = TRUE) {
     res
 }
 
-#' Define T_0 from a curve_set object
-#'
-#' Define T_0, the expectation of the test function under H_0, from a curve_set object.
-#'
-#' @inheritParams convert_envelope
-#' @export
+# Define T_0 from a curve_set object
+#
+# Define T_0, the expectation of the test function under H_0, from a curve_set object.
+#
+# @inheritParams crop_curves
 get_T_0 <- function(curve_set) {
     curve_set <- convert_envelope(curve_set)
 
