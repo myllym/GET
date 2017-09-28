@@ -71,8 +71,8 @@
 #' fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="pcf")
 #' summary(fitted_model)
 #'
-#' nsim <- 19 # 19 just for experimenting
-#' #nsim <- 499 # ok for test = 'qdir' (takes about 1,6 h)
+#' nsim <- 19 # 19 just for experimenting with the code!!
+#' #nsim <- 499 # 499 is ok for test = 'qdir' (takes about 1,6 h)
 #'
 #' # Make the adjusted directional quantile global envelope test using the L(r)-r function
 #' # (For the rank envelope test, choose test = "rank" instead and increase nsim.)
