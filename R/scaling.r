@@ -152,9 +152,9 @@ weigh_curves <- function(curve_set, coeff) {
     curve_set
 }
 
-#' Check for an increasing two-element vector of probabilities.
-#'
-#' @param probs A vector to be checked.
+# Check for an increasing two-element vector of probabilities.
+#
+# @param probs A vector to be checked.
 check_probs <- function(probs) {
     # Leave further validity checking of probs and type to quantile.
     if (length(probs) != 2L || !all(is.finite(probs)) ||
