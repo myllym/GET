@@ -91,7 +91,7 @@
 #'
 #' # From the test with the L(r)-r function, it appears that the Matern cluster model would be
 #' # a reasonable model for the saplings pattern.
-#' # To further explore the goodness-of-fit of the Matérn cluster process, test the
+#' # To further explore the goodness-of-fit of the Matern cluster process, test the
 #' # model with the J function:
 #' system.time( # timing; takes a lot of time if nsim is reasonably large
 #'   adjenvJ <- dg.global_envelope(X = fitted_model,
@@ -102,6 +102,6 @@
 #' )
 #' # Plot the test result
 #' plot(adjenvJ, ylab=expression(italic(J(r))), plot_unadjusted=FALSE)
-#' # -> the Matérn cluster process not adequate for the saplings data
+#' # -> the Matern cluster process not adequate for the saplings data
 #' }
 NULL
