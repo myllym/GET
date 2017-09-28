@@ -54,7 +54,7 @@ plot(res, plot_style="ggplot2", ylab=expression(italic(hat(L)(r)-r)))
 # -> The CSR hypothesis is clearly rejected and the rank envelope indicates clear
 # clustering of saplings. Next we explore the Matern cluster process as a null model.
 
-\dontrun{
+\donttest{
 #-- Testing the Matern cluster process --# (a composite hypothesis)
 #----------------------------------------#
 # Fit the Matern cluster process to the pattern (using minimum contrast estimation with the pair
@@ -62,7 +62,8 @@ plot(res, plot_style="ggplot2", ylab=expression(italic(hat(L)(r)-r)))
 fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="pcf")
 summary(fitted_model)
 
-nsim <- 499 # 19 for experimenting; 499 ok for test = 'qdir'
+nsim <- 19 # 19 just for experimenting with the code!!
+#nsim <- 499 # 499 is ok for test = 'qdir' (takes about 1,6 h)
 
 # Make the adjusted directional quantile global envelope test using the L(r)-r function
 # (For the rank envelope test, choose test = "rank" instead and increase nsim.)
@@ -83,7 +84,7 @@ plot(adjenvL, plot_style="ggplot2", ylab=expression(italic(L(r)-r)), plot_unadju
 
 # From the test with the L(r)-r function, it appears that the Matern cluster model would be
 # a reasonable model for the saplings pattern.
-# To further explore the goodness-of-fit of the Matérn cluster process, test the
+# To further explore the goodness-of-fit of the Matern cluster process, test the
 # model with the J function:
 system.time( # timing; takes a lot of time if nsim is reasonably large
   adjenvJ <- dg.global_envelope(X = fitted_model,
@@ -94,7 +95,7 @@ system.time( # timing; takes a lot of time if nsim is reasonably large
 )
 # Plot the test result
 plot(adjenvJ, ylab=expression(italic(J(r))), plot_unadjusted=FALSE)
-# -> the Matérn cluster process not adequate for the saplings data
+# -> the Matern cluster process not adequate for the saplings data
 }
 }
 \references{
