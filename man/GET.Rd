@@ -127,7 +127,7 @@ Envelope tests:
   \item \code{\link{rank_envelope}}, the completely non-parametric rank envelope test
   \item \code{\link{st_envelope}}, the studentised envelope test, protected against unequal variance of T(r) for different distances r
   \item \code{\link{qdir_envelope}}, the directional quantile envelope test, protected against unequal variance and asymmetry of T(r) for different distances r
-  \item \code{\link{normal_envelope}}, a parametric envelope test, which uses a normal approximation of T(r)
+  \item \code{\link{unscaled_envelope}}, the unscaled envelope (providing a baseline) that has a contant width and that corresponds to the classical maximum deviation test.
 }
 Deviation tests (no graphical interpretation):
 \itemize{
