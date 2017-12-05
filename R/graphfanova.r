@@ -84,7 +84,8 @@ studcontrasts <- function(x, groups, ...){
   gnam <- levels(groups)
   mea <- groupmeans(x, groups)
   err <- grouperror(x, groups)
-  if(!is.null(mavparam) > 0){
+  averargs <- list(...)
+  if(length(averargs) > 0){
     err <- t(apply(err, 1, maverage, ...))
   }
   nt <- dim(x)[2]
