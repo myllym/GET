@@ -147,7 +147,7 @@ studcontrasts <- function(x, groups, ...){
 # Note: Possibly add a some arguments to specify which contrasts should be used.
 # (Try to find our how this is usually done in R, in ordinary anova.)
 #' @param alpha The significance level of the test.
-#' @param n.iter If summaryfun is either "studmeans" or "studcontrasts", there is a possibility to
+#' @param n.aver If summaryfun is either "studmeans" or "studcontrasts", there is a possibility to
 #' use variances smoothed by appying moving average to the estimated variance. n.iter determines
 #' how many values on each side do contribute (incl. value itself).
 #' @param mirror The complement of the argument circular of \code{\link[stats]{filter}}.
