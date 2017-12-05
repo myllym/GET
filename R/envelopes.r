@@ -162,23 +162,24 @@
 #' #-------------------------------------------------
 #' # Let us generate some example data.
 #' X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
-#' Y <- mvtnorm::rmvnorm(200,c(0,0),matrix(c(1,0.5,0.5,1),2,2)) # simulations
-#' plot(Y, xlim=c(min(X[,1],Y[,1]), max(X[,1],Y[,1])), ylim=c(min(X[,2],Y[,2]), max(X[,2],Y[,2])))
-#' points(X, col=2)
+#' if(requireNamespace("mvtnorm", quietly = TRUE)) {
+#'   Y <- mvtnorm::rmvnorm(200,c(0,0),matrix(c(1,0.5,0.5,1),2,2)) # simulations
+#'   plot(Y, xlim=c(min(X[,1],Y[,1]), max(X[,1],Y[,1])), ylim=c(min(X[,2],Y[,2]), max(X[,2],Y[,2])))
+#'   points(X, col=2)
 #'
-#' # Test the null hypothesis is that X is from the distribution of Y's (or if it is an outlier).
+#'   # Test the null hypothesis is that X is from the distribution of Y's (or if it is an outlier).
 #'
-#' # Case 1. The test vector is (X_1, X_2)
-#' cset1 <- create_curve_set(list(r=1:2, obs=as.vector(X), sim_m=t(Y)))
-#' res1 <- rank_envelope(cset1)
-#' plot(res1)
+#'   # Case 1. The test vector is (X_1, X_2)
+#'   cset1 <- create_curve_set(list(r=1:2, obs=as.vector(X), sim_m=t(Y)))
+#'   res1 <- rank_envelope(cset1)
+#'   plot(res1)
 #'
-#' # Case 2. The test vector is (X_1, X_2, (X_1-mean(Y_1))*(X_2-mean(Y_2))).
-#' t3 <- function(x, y) { (x[,1]-mean(y[,1]))*(x[,2]-mean(y[,2])) }
-#' cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
-#' res2 <- rank_envelope(cset2)
-#' plot(res2)
-#'
+#'   # Case 2. The test vector is (X_1, X_2, (X_1-mean(Y_1))*(X_2-mean(Y_2))).
+#'   t3 <- function(x, y) { (x[,1]-mean(y[,1]))*(x[,2]-mean(y[,2])) }
+#'   cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
+#'   res2 <- rank_envelope(cset2)
+#'   plot(res2)
+#' }
 rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
                           lexo=FALSE, ties) {
