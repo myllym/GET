@@ -9,7 +9,8 @@ vmean <- function(x) if (is.matrix(x)) apply(x, 2, mean) else x
 
 vsum <- function(x) if (is.matrix(x)) apply(x, 2, sum) else x
 
-vvar <- function(x) if (is.matrix(x)) apply(x, 2, var) else 0*x
+#' @importFrom stats var
+vvar <- function(x) if (is.matrix(x)) apply(x, 2, stats::var) else 0*x
 
 groupmeans <- function(x, groups) t(sapply(levels(groups), function(g) vmean(x[groups==g,])))
 
