@@ -19,17 +19,16 @@ also \code{\link[fda.usc]{fdata}} objects allowed.}
 
 \item{alpha}{The significance level of the test.}
 
-\item{mirror}{The complement of the argument circular of \code{\link[stats]{filter}}.}
-
-\item{n.iter}{If summaryfun is either "studmeans" or "studcontrasts", there is a possibility to
+\item{n.aver}{If summaryfun is either "studmeans" or "studcontrasts", there is a possibility to
 use variances smoothed by appying moving average to the estimated variance. n.iter determines
 how many values on each side do contribute (incl. value itself).}
+
+\item{mirror}{The complement of the argument circular of \code{\link[stats]{filter}}.}
 }
 \description{
 One-way ANOVA tests for functional data with graphical interpretation
 }
 \examples{
-# Generate an array of 1999 plain means by permutation.
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 

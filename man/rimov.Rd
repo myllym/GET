@@ -17,9 +17,18 @@ The water temperature data sampled at the water level of Rimov
 reservoir in Czech republic every day for the 36 years between 1979 and 2014.
 }
 \examples{
+\donttest{
 # This is an example analysis of the water temperature data set in Mrkvicka et al. (2017).
 data(rimov)
+groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 
+nsim <- 50000 # try smaller for exploring
+
+res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means")
+plot(res)
+res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts")
+plot(res2)
+}
 }
 \references{
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
