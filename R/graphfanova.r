@@ -157,7 +157,6 @@ studcontrasts <- function(x, groups, ...){
 #' A one-way ANOVA test for functional data with graphical interpretation.
 #' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
 #' @examples
-#' # Generate an array of 1999 plain means by permutation.
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #'
