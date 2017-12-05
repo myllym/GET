@@ -56,6 +56,43 @@ Fvalues <- function(x, groups) {
   (total / within - 1) / (k - 1) * (n-k)
 }
 
+#- means as long vector
+
+# ... Ignored
+#' @importFrom fda.usc is.fdata
+means <- function(x, groups, ...){
+  if(fda.usc::is.fdata(x)) x <- x$data
+  jm <- as.vector(t(groupmeans(x, groups)))
+  names(jm) <- rep(levels(groups), each = dim(x)[2])
+  jm
+}
+
+#' @importFrom fda.usc is.fdata
+studmeans <- function(x, groups, ...){
+  if(fda.usc::is.fdata(x)) x <- x$data
+  # \bar{T}_i
+  jm <- as.vector(t(groupmeans(x, groups)))
+  names(jm) <- rep(levels(groups), each = dim(x)[2])
+  # Var(\bar{T}_i)
+  err <- grouperror(x, groups)
+  glevels <- levels(groups)
+  # Var(\bar{T}_{-i}(r))
+  err.minusi <- t(sapply(levels(groups), function(g) vvar(x[groups!=g,]) / sum(groups != g) ))
+  # Moving average
+  averargs <- list(...)
+  if(length(averargs) > 0){
+    err <- t(apply(err, 1, maverage, ...))
+    err.minusi <- t(apply(err.minusi, 1, maverage, ...))
+  }
+  # ( \bar{T}_i - \bar{T}_{-i}(r) ) / (Var(\bar{T}_i) + Var(\bar{T}_{-i}(r)))
+  for(i in 1:length(glevels)) {
+    T.minusi <- apply(x[groups != glevels[i],], MARGIN=2, FUN=mean) # mean \bar{T}_{-i}(r)
+    jm[names(jm) == glevels[i]] <- ( jm[names(jm) == glevels[i]] - T.minusi ) / sqrt(err[i,] + err.minusi[i,])
+  }
+  jm
+}
+
+
 #- contrasts as long vectors
 
 # ... Ignored
@@ -96,42 +133,6 @@ studcontrasts <- function(x, groups, ...){
     scont <- c(scont, sct)
   }
   scont
-}
-
-#- means as long vector
-
-# ... Ignored
-#' @importFrom fda.usc is.fdata
-means <- function(x, groups, ...){
-  if(fda.usc::is.fdata(x)) x <- x$data
-  jm <- as.vector(t(groupmeans(x, groups)))
-  names(jm) <- rep(levels(groups), each = dim(x)[2])
-  jm
-}
-
-#' @importFrom fda.usc is.fdata
-studmeans <- function(x, groups, ...){
-  if(fda.usc::is.fdata(x)) x <- x$data
-  # \bar{T}_i
-  jm <- as.vector(t(groupmeans(x, groups)))
-  names(jm) <- rep(levels(groups), each = dim(x)[2])
-  # Var(\bar{T}_i)
-  err <- grouperror(x, groups)
-  glevels <- levels(groups)
-  # Var(\bar{T}_{-i}(r))
-  err.minusi <- t(sapply(levels(groups), function(g) vvar(x[groups!=g,]) / sum(groups != g) ))
-  # Moving avarage
-  averargs <- list(...)
-  if(length(averargs) > 0){
-    err <- t(apply(err, 1, maverage, ...))
-    err.minusi <- t(apply(err.minusi, 1, maverage, ...))
-  }
-  # ( \bar{T}_i - \bar{T}_{-i}(r) ) / (Var(\bar{T}_i) + Var(\bar{T}_{-i}(r)))
-  for(i in 1:length(glevels)) {
-    T.minusi <- apply(x[groups != glevels[i],], MARGIN=2, FUN=mean) # mean \bar{T}_{-i}(r)
-    jm[names(jm) == glevels[i]] <- ( jm[names(jm) == glevels[i]] - T.minusi ) / sqrt(err[i,] + err.minusi[i,])
-  }
-  jm
 }
 
 
