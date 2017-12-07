@@ -136,7 +136,7 @@ studcontrasts <- function(x, groups, ...){
 }
 
 
-#' Graphical functional ANOVA
+#' One-way graphical functional ANOVA
 #'
 #' One-way ANOVA tests for functional data with graphical interpretation
 #' @param nsim The number of random permutations.
@@ -247,7 +247,7 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 }
 
 
-#' A functional ANOVA based on the rank envelope applied to F values
+#' A one-way functional ANOVA based on the rank envelope applied to F values
 #'
 #' @inheritParams graph.fanova
 #' @export
