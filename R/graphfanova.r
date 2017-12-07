@@ -260,11 +260,11 @@ frank.fanova <- function(nsim, x, groups, alpha=0.05) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
   if(nrow(x) != length(groups)) stop("The number of rows in x and the length of groups should be equal.\n")
-  
+
   obs <- Fvalues(x, groups)
   # simulations by permuting to which groups the functions belong to
   sim <- replicate(nsim, Fvalues(x, sample(groups, size=length(groups), replace=FALSE)))
-  
+
   cset <- create_curve_set(list(r = 1:length(obs), obs = obs, sim_m = sim))
   plot(cset)
   # Perform the rank envelope test and return just the p-value
