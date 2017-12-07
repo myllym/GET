@@ -25,11 +25,11 @@
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #'
-#' nsim <- 50000 # try smaller for exploring
+#' nsim <- 2500
 #'
 #' res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means")
 #' plot(res)
-#' res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts")
+#' system.time(res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts"))
 #' plot(res2)
 #' }
 NULL
