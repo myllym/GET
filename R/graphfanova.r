@@ -128,7 +128,7 @@ studcontrasts <- function(x, groups, ...){
   nt <- dim(x)[2]
   scont <- NULL
   for(i in 1:(k-1)) for (j in (i+1):k){
-    sct <- (mea[i, ] - mea[j, ])/ sqrt(err[i]+err[j]) # FIXME, is this correct?
+    sct <- (mea[i, ] - mea[j, ])/ sqrt(err[i]+err[j])
     names(sct) <- rep(paste(gnam[i], gnam[j], sep="-"), nt)
     scont <- c(scont, sct)
   }
