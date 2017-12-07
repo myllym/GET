@@ -142,7 +142,7 @@ studcontrasts <- function(x, groups, ...){
 #' @param nsim The number of random permutations.
 #' @param x The original data (an array of functions). Typically a matrix or a data frame,
 #' also \code{\link[fda.usc]{fdata}} objects allowed.
-#' @param groups The original froups (a factor vector representing the assignment to groups).
+#' @param groups The original groups (a factor vector representing the assignment to groups).
 #' @param summaryfun Possible values are "means", "studmeans", "contrasts", "studcontrasts".
 # Note: Possibly add a some arguments to specify which contrasts should be used.
 # (Try to find our how this is usually done in R, in ordinary anova.)
