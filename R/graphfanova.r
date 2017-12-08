@@ -311,6 +311,9 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 #' where \eqn{F(r_i)}{F(r_i)} stands for the F-statistic. The simulations are performed by
 #' permuting the test functions. Further details can be found in Mrkvička et al. (2016).
 #'
+#' Note: currently equal variances across groups are assumed. The correction for unequal variances
+#' can be done by using the corrected F-statistic (not implemented yet).
+#'
 #' Unfortunately this test is not able to detect which groups are different from each other.
 #'
 #' @inheritParams graph.fanova
