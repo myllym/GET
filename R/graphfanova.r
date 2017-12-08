@@ -160,6 +160,10 @@ studcontrasts <- function(x, groups, ...){
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
 #' A one-way ANOVA test for functional data with graphical interpretation.
 #' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+#'
+#' Mrkvička, T., Myllymäki, M., and Hahn, U. (2017).
+#' Multiple Monte Carlo testing, with applications in spatial point processes.
+#' Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
 #' @examples
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
