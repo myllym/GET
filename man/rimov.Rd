@@ -22,11 +22,11 @@ reservoir in Czech republic every day for the 36 years between 1979 and 2014.
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 
-nsim <- 50000 # try smaller for exploring
+nsim <- 2500 # for trying the code, use much more for a test
 
-res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means")
+system.time(res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means"))
 plot(res)
-res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts")
+system.time(res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts"))
 plot(res2)
 }
 }

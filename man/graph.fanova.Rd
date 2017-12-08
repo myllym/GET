@@ -2,20 +2,22 @@
 % Please edit documentation in R/graphfanova.r
 \name{graph.fanova}
 \alias{graph.fanova}
-\title{Graphical functional ANOVA}
+\title{One-way graphical functional ANOVA}
 \usage{
 graph.fanova(nsim, x, groups, summaryfun, alpha = 0.05, n.aver = 1L,
-  mirror = FALSE)
+  mirror = FALSE, saveperm = FALSE)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
 
 \item{x}{The original data (an array of functions). Typically a matrix or a data frame,
-also \code{\link[fda.usc]{fdata}} objects allowed.}
+also \code{\link[fda.usc]{fdata}} objects allowed. Number of rows in x should correspond
+to the number of groups, and each row should correspond to a function.}
 
-\item{groups}{The original froups (a factor vector representing the assignment to groups).}
+\item{groups}{The original groups (a factor vector representing the assignment to groups).}
 
-\item{summaryfun}{Possible values are "means", "studmeans", "contrasts", "studcontrasts".}
+\item{summaryfun}{Possible values are "means", "studmeans", "contrasts", "studcontrasts".
+See description for their meaning.}
 
 \item{alpha}{The significance level of the test.}
 
@@ -24,9 +26,49 @@ use variances smoothed by appying moving average to the estimated variance. n.it
 how many values on each side do contribute (incl. value itself).}
 
 \item{mirror}{The complement of the argument circular of \code{\link[stats]{filter}}.}
+
+\item{saveperm}{Logical. If TRUE, then the functions from permutations are saved to the attribute
+simfuns.}
 }
 \description{
 One-way ANOVA tests for functional data with graphical interpretation
+}
+\details{
+This functions can be used to perform one-way graphical functional ANOVA tests described
+in Mrkvička et al. (2016).
+
+The tests assume that there are \eqn{J}{J} groups which contain
+\eqn{n_1,\dosts,n_J}{n1, ..., nJ} functions
+\eqn{T_{ij}, i=\dots,J, j=1,\dots,n_j}{T_{ij}, i=1,...,J, j=1,...,nj}.
+The functions should be given in the argument x, and the groups in the argument groups.
+The tests assume that there exists non random functions \eqn{\mu(r)}{\mu(r)} and
+\eqn{\mu_i(r)}{\mu_i(r)} such that
+\deqn{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, \dots, J, j=1, \dots , n_j}{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, ..., J, j=1, ..., nj}
+where \eqn{e_{ij}(r)}{e_{ij}(r)} are random errors (either correlated or not).
+
+If you want to test the hypothesis
+\deqn{H_0 : \mu_i(r) \equiv 0, i=1, \dots , J,}{H0: \mu_i(r) = 0, i=1,...,J,}
+then you should use the test function
+\deqn{\mathbf{T} = (\overline{T}_1({\bf r}), \overline{T}_2({\bf r}), \dots , \overline{T}_J({\bf r}))}{T = (\bar{T}_1(r), \bar{T}_2(r), ..., \bar{T}_J(r))}
+where \eqn{\overline{T}_i({\bf r})}{\bar{T}_i(r)} is a vector of mean values of functions in the group i.
+This can be done by choosing the summaryfun \code{means}. This test assumes that the variances are
+equal across the groups of functions. If the variances are not equal, one should use the summaryfun
+\code{studmeans} instead. To account for unequal variances, a different test vector is considered.
+From each of the \eqn{\overline{T}_i({\bf r})}{\bar{T}_i(r)} the average of all the test functions
+without the test functions in the ith group is reduced and further this remainder is rescaled by
+variances, see details in Mrkvička et al. (2016).
+
+An alternative is to test the equivalent hypothesis
+\deqn{H_0 : \mu_i(r) - \mu_j(r) = 0, i=1,\dots,J-1, j=1,\dots,J.}{H0: \mu_i(r) - \mu_j(r) = 0, i=1,...,J-1, j=1,...,J.}
+This test corresponds to the post-hoc test done usually after an ANOVA test is significant, but
+it can be directed tested by mean of the combined rank test (Mrkvička et al., 2017), if the
+test vector is taken to consist of the differences of the group averages of test functions, namely
+\deqn{\mathbf{T'} = (\overline{T}_1({\bf r})-\overline{T}_2({\bf r}),
+\overline{T}_1({\bf r})-\overline{T}_3({\bf r}), \dots , \overline{T}_{J-1}({\bf r})-\overline{T}_J({\bf r})).}{T' = (\bar{T}_1(r)-\bar{T}_2(r), \bar{T}_1(r)-\bar{T}_3(r), ..., \bar{T}_{J-1}(r)-\bar{T}_J(r)).}
+The summaryfun option \code{contrasts} can be used to perform the test based on this test vector.
+This again assumes that the variances are equal across the groups of functions. To deal with
+unequal variances, the differences are rescaled, which corresponds to the summaryfun option
+\code{studcontrasts}. See Mrkvička et al. (2016) for further details.
 }
 \examples{
 data(rimov)
@@ -43,4 +85,8 @@ plot(res2)
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
 A one-way ANOVA test for functional data with graphical interpretation.
 arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+
+Mrkvička, T., Myllymäki, M., and Hahn, U. (2017).
+Multiple Monte Carlo testing, with applications in spatial point processes.
+Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
 }

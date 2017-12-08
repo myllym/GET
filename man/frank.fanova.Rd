@@ -2,7 +2,7 @@
 % Please edit documentation in R/graphfanova.r
 \name{frank.fanova}
 \alias{frank.fanova}
-\title{A functional ANOVA based on the rank envelope applied to F values}
+\title{Rank envelope F-test}
 \usage{
 frank.fanova(nsim, x, groups, alpha = 0.05)
 }
@@ -10,18 +10,45 @@ frank.fanova(nsim, x, groups, alpha = 0.05)
 \item{nsim}{The number of random permutations.}
 
 \item{x}{The original data (an array of functions). Typically a matrix or a data frame,
-also \code{\link[fda.usc]{fdata}} objects allowed.}
+also \code{\link[fda.usc]{fdata}} objects allowed. Number of rows in x should correspond
+to the number of groups, and each row should correspond to a function.}
 
-\item{groups}{The original froups (a factor vector representing the assignment to groups).}
+\item{groups}{The original groups (a factor vector representing the assignment to groups).}
 
 \item{alpha}{The significance level of the test.}
 }
 \description{
-A functional ANOVA based on the rank envelope applied to F values
+A one-way functional ANOVA based on the rank envelope applied to F values
+}
+\details{
+The test assumes that there are \eqn{J}{J} groups which contain
+\eqn{n_1,\dosts,n_J}{n1, ..., nJ} functions
+\eqn{T_{ij}, i=\dots,J, j=1,\dots,n_j}{T_{ij}, i=1,...,J, j=1,...,nj}.
+The functions should be given in the argument x, and the groups in the argument groups.
+The test assumes that there exists non random functions \eqn{\mu(r)}{\mu(r)} and
+\eqn{\mu_i(r)}{\mu_i(r)} such that
+\deqn{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, \dots, J, j=1, \dots , n_j}{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, ..., J, j=1, ..., nj}
+where \eqn{e_{ij}(r)}{e_{ij}(r)} are independent and normally distributed.
+The test vector is
+\deqn{\mathbf{T} = (F(r_1), F(r_2), \dots , F(r_K))}{T = (F(r_1), F(r_2), \dots , F(r_K))},
+where \eqn{F(r_i)}{F(r_i)} stands for the F-statistic. The simulations are performed by
+permuting the test functions. Further details can be found in Mrkvička et al. (2016).
+
+Note: currently equal variances across groups are assumed. The correction for unequal variances
+can be done by using the corrected F-statistic (not implemented yet).
+
+Unfortunately this test is not able to detect which groups are different from each other.
 }
 \examples{
+\donttest{
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-res <- frank.fanova(nsim=2499, x=rimov, groups=groups)
+res <- frank.fanova(nsim=9999, x=rimov, groups=groups)
 plot(res)
+}
+}
+\references{
+Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
+A one-way ANOVA test for functional data with graphical interpretation.
+arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
 }
