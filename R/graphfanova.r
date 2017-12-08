@@ -293,15 +293,39 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 }
 
 
+#' Rank envelope F-test
+#'
 #' A one-way functional ANOVA based on the rank envelope applied to F values
+#'
+#'
+#' The test assumes that there are \eqn{J}{J} groups which contain
+#' \eqn{n_1,\dosts,n_J}{n1, ..., nJ} functions
+#' \eqn{T_{ij}, i=\dots,J, j=1,\dots,n_j}{T_{ij}, i=1,...,J, j=1,...,nj}.
+#' The functions should be given in the argument x, and the groups in the argument groups.
+#' The test assumes that there exists non random functions \eqn{\mu(r)}{\mu(r)} and
+#' \eqn{\mu_i(r)}{\mu_i(r)} such that
+#' \deqn{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, \dots, J, j=1, \dots , n_j}{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, ..., J, j=1, ..., nj}
+#' where \eqn{e_{ij}(r)}{e_{ij}(r)} are independent and normally distributed.
+#' The test vector is
+#' \deqn{\mathbf{T} = (F(r_1), F(r_2), \dots , F(r_K))}{T = (F(r_1), F(r_2), \dots , F(r_K))},
+#' where \eqn{F(r_i)}{F(r_i)} stands for the F-statistic. The simulations are performed by
+#' permuting the test functions. Further details can be found in Mrkvička et al. (2016).
+#'
+#' Unfortunately this test is not able to detect which groups are different from each other.
 #'
 #' @inheritParams graph.fanova
 #' @export
+#' @references
+#' Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
+#' A one-way ANOVA test for functional data with graphical interpretation.
+#' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
 #' @examples
+#' \donttest{
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' res <- frank.fanova(nsim=2499, x=rimov, groups=groups)
+#' res <- frank.fanova(nsim=9999, x=rimov, groups=groups)
 #' plot(res)
+#' }
 frank.fanova <- function(nsim, x, groups, alpha=0.05) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
