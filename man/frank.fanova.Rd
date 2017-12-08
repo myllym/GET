@@ -4,7 +4,7 @@
 \alias{frank.fanova}
 \title{Rank envelope F-test}
 \usage{
-frank.fanova(nsim, x, groups, alpha = 0.05)
+frank.fanova(nsim, x, groups, alpha = 0.05, equalvar = TRUE)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -16,6 +16,10 @@ to the number of groups, and each row should correspond to a function.}
 \item{groups}{The original groups (a factor vector representing the assignment to groups).}
 
 \item{alpha}{The significance level of the test.}
+
+\item{equalvar}{Logical. Default TRUE means that the traditional F-values are used.
+In the case of FALSE, corrected F-values are used. The current implementation uses
+\code{\link[stats]{lm}} to get the corrected F-values.}
 }
 \description{
 A one-way functional ANOVA based on the rank envelope applied to F values
@@ -34,8 +38,9 @@ The test vector is
 where \eqn{F(r_i)}{F(r_i)} stands for the F-statistic. The simulations are performed by
 permuting the test functions. Further details can be found in Mrkvička et al. (2016).
 
-Note: currently equal variances across groups are assumed. The correction for unequal variances
-can be done by using the corrected F-statistic (not implemented yet).
+The argument \code{equalvar=TRUE} means that equal variances across groups are assumed.
+The correction for unequal variances can be done by using the corrected F-statistic
+(option \code{equalvar=FALSE}).
 
 Unfortunately this test is not able to detect which groups are different from each other.
 }
