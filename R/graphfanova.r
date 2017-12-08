@@ -145,6 +145,7 @@ studcontrasts <- function(x, groups, ...){
 #' to the number of groups, and each row should correspond to a function.
 #' @param groups The original groups (a factor vector representing the assignment to groups).
 #' @param summaryfun Possible values are "means", "studmeans", "contrasts", "studcontrasts".
+#' See description for their meaning.
 # Note: Possibly add a some arguments to specify which contrasts should be used.
 # (Try to find our how this is usually done in R, in ordinary anova.)
 #' @param alpha The significance level of the test.
