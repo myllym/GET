@@ -208,7 +208,6 @@ graph.fanova <- function(nsim, x, groups, summaryfun, alpha=0.05, n.aver = 1L, m
   cset <- combine_curve_sets(cset_list)
   res_rank <- rank_envelope(cset, alpha=alpha, lexo=TRUE, alternative="two.sided")
   labels <- unique(names(obs))
-  #plot(res_rank, plot_style="ggplot", labels=labels, separate_yaxes=TRUE)
 
   res <- structure(list(ranktest = res_rank,
                         summaryfun = summaryfun,
