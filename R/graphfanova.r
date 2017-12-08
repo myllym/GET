@@ -56,6 +56,23 @@ Fvalues <- function(x, groups) {
   (total / within - 1) / (k - 1) * (n-k)
 }
 
+#' @importFrom fda.usc is.fdata
+#' @importFrom stats lm
+corrFvalues <- function(x, groups) {
+  if (fda.usc::is.fdata(x)) x <- x$data
+  Fvalues <- vector(length=ncol(x))
+  for(i in 1:ncol(x)) {
+    df <- data.frame(value = x[,i], group = groups)
+    wl <- 1 / as.vector(by(df$value, df$group, function(x){ var(x, na.rm=T) }))
+    df$w <- with(df, ifelse(group==1, wl[1], ifelse(group==2, wl[2], wl[3])))
+    w.mod <- stats::lm(value~group, df, na.action=na.omit, weights=w)
+    temp <- anova(w.mod)
+    Fvalues[i] <- temp$F[1] # anova(aov(formula = Lvalues ~ group, data = df))$F[1]
+  }
+  Fvalues
+}
+
+
 #- means as long vector
 
 # ... Ignored
@@ -311,12 +328,16 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 #' where \eqn{F(r_i)}{F(r_i)} stands for the F-statistic. The simulations are performed by
 #' permuting the test functions. Further details can be found in Mrkvička et al. (2016).
 #'
-#' Note: currently equal variances across groups are assumed. The correction for unequal variances
-#' can be done by using the corrected F-statistic (not implemented yet).
+#' The argument \code{equalvar=TRUE} means that equal variances across groups are assumed.
+#' The correction for unequal variances can be done by using the corrected F-statistic
+#' (option \code{equalvar=FALSE}).
 #'
 #' Unfortunately this test is not able to detect which groups are different from each other.
 #'
 #' @inheritParams graph.fanova
+#' @param equalvar Logical. Default TRUE means that the traditional F-values are used.
+#' In the case of FALSE, corrected F-values are used. The current implementation uses
+#' \code{\link[stats]{lm}} to get the corrected F-values.
 #' @export
 #' @references
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
@@ -329,14 +350,16 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 #' res <- frank.fanova(nsim=9999, x=rimov, groups=groups)
 #' plot(res)
 #' }
-frank.fanova <- function(nsim, x, groups, alpha=0.05) {
+frank.fanova <- function(nsim, x, groups, alpha=0.05, equalvar=TRUE) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
   if(nrow(x) != length(groups)) stop("The number of rows in x and the length of groups should be equal.\n")
 
-  obs <- Fvalues(x, groups)
+  if(equalvar) fun <- Fvalues
+  else fun <- corrFvalues
+  obs <- fun(x, groups)
   # simulations by permuting to which groups the functions belong to
-  sim <- replicate(nsim, Fvalues(x, sample(groups, size=length(groups), replace=FALSE)))
+  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)))
 
   cset <- create_curve_set(list(r = 1:length(obs), obs = obs, sim_m = sim))
   plot(cset)
