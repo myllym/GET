@@ -141,7 +141,8 @@ studcontrasts <- function(x, groups, ...){
 #' One-way ANOVA tests for functional data with graphical interpretation
 #' @param nsim The number of random permutations.
 #' @param x The original data (an array of functions). Typically a matrix or a data frame,
-#' also \code{\link[fda.usc]{fdata}} objects allowed.
+#' also \code{\link[fda.usc]{fdata}} objects allowed. Number of rows in x should correspond
+#' to the number of groups, and each row should correspond to a function.
 #' @param groups The original groups (a factor vector representing the assignment to groups).
 #' @param summaryfun Possible values are "means", "studmeans", "contrasts", "studcontrasts".
 # Note: Possibly add a some arguments to specify which contrasts should be used.
