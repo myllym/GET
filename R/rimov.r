@@ -27,7 +27,7 @@
 #'
 #' nsim <- 2500
 #'
-#' res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means")
+#' system.time(res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means"))
 #' plot(res)
 #' system.time(res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts"))
 #' plot(res2)
