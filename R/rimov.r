@@ -25,7 +25,7 @@
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #'
-#' nsim <- 2500
+#' nsim <- 2500 # for trying the code, use much more for a test
 #'
 #' system.time(res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means"))
 #' plot(res)
