@@ -253,20 +253,17 @@ graph.fanova <- function(nsim, x, groups, summaryfun, alpha=0.05, n.aver = 1L, m
   obs <- fun(x, groups, n.aver, mirror)
   # simulations by permuting to which groups the functions belong to
   sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE), n.aver, mirror))
+  # labels for comparisons (rownames(sim) is the same as names(obs))
+  complabels <- unique(names(obs))
 
-  cset_list <- NULL
-  for(i in 1:length(levels(groups))) {
-    cset_list[[i]] <- create_curve_set(list(r = 1:ncol(x),
-                                            obs = obs[((i-1)*ncol(x)+1):(i*ncol(x))],
-                                            sim_m = sim[((i-1)*ncol(x)+1):(i*ncol(x)),]))
-  }
-  cset <- combine_curve_sets(cset_list)
+  cset <- create_curve_set(list(r = rep(1:ncol(x), times=length(complabels)),
+                                obs = obs,
+                                sim_m = sim))
   res_rank <- rank_envelope(cset, alpha=alpha, lexo=TRUE, alternative="two.sided")
-  labels <- unique(names(obs))
 
   res <- structure(list(ranktest = res_rank,
                         summaryfun = summaryfun,
-                        labels = labels,
+                        labels = complabels,
                         call = match.call()), class = "graph.fanova")
   if(saveperm) attr(res, "simfuns") <- sim
   res
