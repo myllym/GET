@@ -359,7 +359,6 @@ frank.fanova <- function(nsim, x, groups, alpha=0.05, equalvar=TRUE) {
   sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)))
 
   cset <- create_curve_set(list(r = 1:length(obs), obs = obs, sim_m = sim))
-  plot(cset)
   # Perform the rank envelope test and return just the p-value
   res <- rank_envelope(cset, alpha=alpha, lexo=TRUE, alternative="greater")
 
