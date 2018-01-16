@@ -229,7 +229,7 @@ studcontrasts <- function(x, groups, ...){
 #' plot(res)
 #' res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts")
 #' plot(res2)
-graph.fanova <- function(nsim, x, groups, summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE) {
+graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
   if(nrow(x) != length(groups)) stop("The number of rows in x and the length of groups should be equal.\n")
@@ -256,7 +256,7 @@ graph.fanova <- function(nsim, x, groups, summaryfun, alpha=0.05, n.aver = 1L, m
   # labels for comparisons (rownames(sim) is the same as names(obs))
   complabels <- unique(names(obs))
 
-  cset <- create_curve_set(list(r = rep(1:ncol(x), times=length(complabels)),
+  cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
                                 obs = obs,
                                 sim_m = sim))
   res_rank <- rank_envelope(cset, alpha=alpha, lexo=TRUE, alternative="two.sided")
