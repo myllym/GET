@@ -449,7 +449,7 @@ plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=leng
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- st_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
-st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
+st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE) {
 
     picked_attr <- pick_attributes(curve_set, alternative="two.sided")
     curve_set <- convert_envelope(curve_set)
@@ -479,7 +479,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     distance[2:(Nsim+1)] <- apply(abs(scaled_curve_set[['sim_m']]), 2, max)
 
     #-- calculate the p-value
-    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1], ...)
+    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
 
     #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance);
@@ -579,7 +579,7 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
-qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
+qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975)) {
 
     picked_attr <- pick_attributes(curve_set, alternative="two.sided")
     curve_set <- convert_envelope(curve_set)
@@ -614,7 +614,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
     distance[2:(Nsim+1)] <- apply(abs(sim_scaled_residuals), 2, max)
 
     #-- calculate the p-value
-    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1], ...)
+    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
 
     #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance)
@@ -714,7 +714,7 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- unscaled_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
-unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
+unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE) {
 
     picked_attr <- pick_attributes(curve_set, alternative="two.sided")
     curve_set <- convert_envelope(curve_set)
@@ -740,7 +740,7 @@ unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, ...) {
     distance[2:(Nsim+1)] <- apply(abs(curve_set[['sim_m']]), 2, max)
 
     #-- calculate the p-value
-    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1], ...)
+    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
 
     #-- calculate the 100(1-alpha)% global envelope
     distancesorted <- sort(distance);
