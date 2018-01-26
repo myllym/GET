@@ -254,7 +254,7 @@ studcontrasts <- function(x, groups, ...){
 #' plot(res)
 #' res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts")
 #' plot(res2)
-graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE) {
+graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
   if(nrow(x) != length(groups)) stop("The number of rows in x and the length of groups should be equal.\n")
