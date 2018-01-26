@@ -284,7 +284,7 @@ graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summar
   cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
                                 obs = obs,
                                 sim_m = sim))
-  res_rank <- rank_envelope(cset, alpha=alpha, lexo=TRUE, alternative="two.sided")
+  res_rank <- rank_envelope(cset, alpha=alpha, alternative="two.sided", ...)
 
   res <- structure(list(ranktest = res_rank,
                         summaryfun = summaryfun,
