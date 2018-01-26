@@ -58,6 +58,8 @@ Fvalues <- function(x, groups) {
 
 #' @importFrom fda.usc is.fdata
 #' @importFrom stats lm
+#' @importFrom stats na.omit
+#' @importFrom stats anova
 corrFvalues <- function(x, groups) {
   if (fda.usc::is.fdata(x)) x <- x$data
   Fvalues <- vector(length=ncol(x))
@@ -65,8 +67,8 @@ corrFvalues <- function(x, groups) {
     df <- data.frame(value = x[,i], group = groups)
     wl <- 1 / as.vector(by(df$value, df$group, function(x){ var(x, na.rm=T) }))
     df$w <- with(df, ifelse(group==1, wl[1], ifelse(group==2, wl[2], wl[3])))
-    w.mod <- stats::lm(value~group, df, na.action=na.omit, weights=w)
-    temp <- anova(w.mod)
+    w.mod <- stats::lm(value~group, data=df, na.action=stats::na.omit, weights=df$w)
+    temp <- stats::anova(w.mod)
     Fvalues[i] <- temp$F[1] # anova(aov(formula = Lvalues ~ group, data = df))$F[1]
   }
   Fvalues
