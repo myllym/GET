@@ -258,6 +258,14 @@ graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summar
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
   if(nrow(x) != length(groups)) stop("The number of rows in x and the length of groups should be equal.\n")
+  if(!is.factor(groups)) {
+    warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
+    groups <- as.factor(groups)
+  }
+  if(length(r) != ncol(x)) stop("Unreasonable argument r!\n")
+
+  if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
+  if(variances == "unequal") x <- corrUnequalVar(x, groups, n.aver, mirror)
 
   summaryfun <- spatstat::pickoption("sumf", summaryfun, c(means = "means",
                                                            mean = "means",
