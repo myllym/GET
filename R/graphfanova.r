@@ -40,6 +40,29 @@ maverage <- function(x, n.aver = 1L, mirror = FALSE) {
   mav
 }
 
+# Transformation to equalize variances in groups
+corrUnequalVar <- function(x, groups, ...) {
+  if(fda.usc::is.fdata(x)) x <- x$data
+  glevels <- levels(groups)
+  # Overall mean \bar{T}(r)
+  barT <- apply(x, 2, mean)
+  # Sample variance over all functions, Var(T(r))
+  varT <- vvar(x)
+  # Variances in the groups, Var(T_j(r))
+  v <- groupvar(x, groups)
+  # Moving average
+  averargs <- list(...)
+  if(length(averargs) > 0){
+    v <- t(apply(v, 1, maverage, ...))
+    varT <- maverage(varT, ...)
+  }
+  # Take S_ij(r) = (T_ij(r) - \bar{T}(r)) / \sqrt( Var(T_j(r)) ) * Var(T(r)) + \bar{T}(r)
+  for(i in 1:nrow(x)) {
+    x[i,] <- (x[i,] - barT) / sqrt(v[which(rownames(v) == groups[i]),]) * sqrt(varT) + barT
+  }
+  x
+}
+
 # group statistics
 #-----------------
 # x = An array with the original functions
