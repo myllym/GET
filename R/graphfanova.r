@@ -273,18 +273,12 @@ graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summar
 
   summaryfun <- spatstat::pickoption("sumf", summaryfun, c(means = "means",
                                                            mean = "means",
-                                                           studmeans = "studmeans",
-                                                           studmean = "studmeans",
                                                            contrasts = "contrasts",
-                                                           cont = "contrasts",
-                                                           studcontrasts = "studcontrasts",
-                                                           studcont = "studcontrasts"))
+                                                           cont = "contrasts"))
   # setting that 'summaryfun' is a function
   switch(summaryfun, 
          means = {fun = means},
-         studmeans = {fun = studmeans},
          contrasts = {fun = contrasts},
-         studcontrasts = {fun = studcontrasts}
          )
 
   obs <- fun(x, groups, n.aver, mirror)
