@@ -222,17 +222,23 @@ studcontrasts <- function(x, groups, ...){
 #' also \code{\link[fda.usc]{fdata}} objects allowed. Number of rows in x should correspond
 #' to the number of groups, and each row should correspond to a function.
 #' @param groups The original groups (a factor vector representing the assignment to groups).
-#' @param summaryfun Possible values are "means", "studmeans", "contrasts", "studcontrasts".
+#' @param r A vector giving the argument values for the functions. The length should equal the number
+#' of columns in x. The default is 1:nrow(x). The argument values do not affect the test, but they
+#' affect the x-axis output in the provided envelope figure.
+#' @param variances Either "equal" or "unequal". If "unequal", then correction for unequal variances
+#' as explained in details will be done.
+#' @param summaryfun Possible values are "means" and "contrasts".
 #' See description for their meaning.
 # Note: Possibly add a some arguments to specify which contrasts should be used.
 # (Try to find our how this is usually done in R, in ordinary anova.)
 #' @param alpha The significance level of the test.
-#' @param n.aver If summaryfun is either "studmeans" or "studcontrasts", there is a possibility to
-#' use variances smoothed by appying moving average to the estimated variance. n.iter determines
+#' @param n.aver If variances = "unequal", there is a possibility to use variances smoothed
+#' by appying moving average to the estimated sample variances. n.aver determines
 #' how many values on each side do contribute (incl. value itself).
 #' @param mirror The complement of the argument circular of \code{\link[stats]{filter}}.
 #' @param saveperm Logical. If TRUE, then the functions from permutations are saved to the attribute
 #' simfuns.
+#' @param ... Additional parameters to be passed to \code{\link{rank_envelope}}.
 #' @export
 #' @references
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
