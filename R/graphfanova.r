@@ -128,30 +128,6 @@ contrasts <- function(x, groups, ...){
   cont
 }
 
-# @param ... Additional parameters passed to maverage
-#' @importFrom fda.usc is.fdata
-#' @importFrom caTools runmean
-studcontrasts <- function(x, groups, ...){
-  if (fda.usc::is.fdata(x)) x <- x$data
-  k <- nlevels(groups)
-  gnam <- levels(groups)
-  mea <- groupmeans(x, groups)
-  err <- grouperror(x, groups)
-  averargs <- list(...)
-  if(length(averargs) > 0){
-    err <- t(apply(err, 1, maverage, ...))
-  }
-  nt <- dim(x)[2]
-  scont <- NULL
-  for(i in 1:(k-1)) for (j in (i+1):k){
-    sct <- (mea[i, ] - mea[j, ])/ sqrt(err[i]+err[j])
-    names(sct) <- rep(paste(gnam[i], gnam[j], sep="-"), nt)
-    scont <- c(scont, sct)
-  }
-  scont
-}
-
-
 #' One-way graphical functional ANOVA
 #'
 #' One-way ANOVA tests for functional data with graphical interpretation
