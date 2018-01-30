@@ -182,7 +182,7 @@
 #' }
 rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
-                          lexo=FALSE, ties) {
+                          erl=FALSE, lexo=NULL, ties) {
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
     alternative <- match.arg(alternative)
@@ -190,11 +190,11 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
     curve_set <- convert_envelope(curve_set)
 
+    if(is.logical(lexo)) erl <- lexo
     # The type of the p-value
-    if(missing(ties))
-        ties <- p_value_ties_default()
-    else if(lexo) cat("The argument ties ignored, because lexo = TRUE. \n")
-    if(lexo) ties <- "lexical"
+    if(missing(ties)) ties <- p_value_ties_default()
+    possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
+    if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
 
     # data_curve = the vector of test function values for data
     # sim_curves = matrix where each row contains test function values of a simulation under null hypothesis
@@ -221,55 +221,45 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
                allranks <- hiranks
            })
 
-    distance <- apply(allranks, MARGIN=1, FUN=min)
-    u <- -distance
-    #-- p-interval
-    p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
-    p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
-
-    #-- p-value
-    if(!lexo) {
-        p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties)
-    }
-    else { # rank the curves by lexical ordering
+    #-- the ERL p-value
+    if(erl | ties == "erl") { # rank the curves by lexical ordering
         # order ranks within each curve
         sortranks <- apply(allranks, 1, sort) # curves now represented as columns
-        lexo_values <- do.call("order", split(sortranks, row(sortranks)))
-
-        # find ties
-        sorted <- sortranks[ ,lexo_values]
-        dupp <- duplicated(split(sorted, col(sorted)))
-        tied <- dupp | c(dupp[-1], FALSE)
-
-        # replace ranks of tied values by mean ranks
-        # (maybe a little bit awkward, but isntitcool)
-        tie.rle <- rle(tied)
-        tie.end <- cumsum(tie.rle$lengths)
-        tie.start <- cumsum(c(1,tie.rle$lengths))
-        tie.start <- tie.start[-length(tie.start)]
-        rank.rle <- tie.rle
-        rank.rle$values <- (tie.start + tie.end)/2
-        tieranks <- inverse.rle(rank.rle)
+        lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
         newranks <- 1:(Nsim+1)
-        newranks[tied] <- tieranks[tied]
-
-        distance_lexo <- newranks[order(lexo_values)]
+        distance_lexo <- newranks[order(lexo_values)] # ordering of the functions by the extreme rank counts
         #-- calculate the p-value
         u_lexo <- -distance_lexo
-        p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1])
+        p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
+    }
+    #-- the p-interval (based on extreme ranks) and global envelopes
+    if(!erl) {
+        distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
+        u <- -distance
+        #-- p-interval
+        p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
+        p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
+        if(ties != "erl") p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties) # Note: case ties=="erl" calculated above
+        #-- the 100(1-alpha)% global rank envelope
+        distancesorted <- sort(distance, decreasing=TRUE)
+        kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
+        LB <- array(0, nr);
+        UB <- array(0, nr);
+        for(i in 1:nr){
+          Hod <- sort(data_and_sim_curves[,i])
+          LB[i]<- Hod[kalpha];
+          UB[i]<- Hod[Nsim+1-kalpha+1];
+        }
+    }
+    else {
+      #-- the 100(1-alpha)% global ERL envelope
+      distance_lexo_sorted <- sort(distance_lexo, decreasing=TRUE)
+      kalpha_lexo <- distance_lexo_sorted[floor((1-alpha)*(Nsim+1))]
+      curves_for_envelope <- data_and_sim_curves[which(distance_lexo >= kalpha_lexo),]
+      LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
+      UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
     }
 
-    #-- calculate the 100(1-alpha)% global envelope
-    distancesorted <- sort(distance, decreasing=TRUE)
-    kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
-    LB <- array(0, nr);
-    UB <- array(0, nr);
-
-    for(i in 1:nr){
-        Hod <- sort(data_and_sim_curves[,i])
-        LB[i]<- Hod[kalpha];
-        UB[i]<- Hod[Nsim+1-kalpha+1];
-    }
     switch(alternative,
             "two.sided" = {},
             "less" = { UB <- Inf },
@@ -280,10 +270,18 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     attr(res, "method") <- "Rank envelope test"
     attr(res, "alternative") <- alternative
     attr(res, "p") <- p
-    attr(res, "p_interval") <- c(p_low, p_upp)
-    attr(res, "ties") <- ties
-    attr(res, "k_alpha") <- kalpha
-    if(savedevs) attr(res, "k") <- distance
+    if(!erl) {
+      attr(res, "k_alpha") <- kalpha
+      attr(res, "k") <- distance
+      attr(res, "p_interval") <- c(p_low, p_upp)
+      attr(res, "ties") <- ties
+    }
+    else {
+      attr(res, "k_alpha") <- kalpha_lexo
+      attr(res, "k") <- distance_lexo
+      attr(res, "p_interval") <- NULL
+      attr(res, "ties") <- "extreme rank length"
+    }
     # for fv
     attr(res, "fname") <- picked_attr$fname
     attr(res, "argu") <- "r"
