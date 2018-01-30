@@ -137,7 +137,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     u_mat <- do.call(rbind, u_ls, quote=FALSE)
     curve_set_u <- create_curve_set(list(r=1:ntests, obs=u_mat[,1], sim_m=u_mat[,-1], is_residual=FALSE))
     # Perform the one-sided (greater is significant) rank test
-    res_rank <- rank_envelope(curve_set_u, alpha=alpha, savedevs=TRUE, alternative="greater", lexo=TRUE)
+    res_rank <- rank_envelope(curve_set_u, alpha=alpha, savedevs=TRUE, alternative="greater", erl=FALSE, ties="erl")
 
     central_curves_ls <- lapply(res_ls, function(x) x$central)
     bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$hi,
