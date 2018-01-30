@@ -31,7 +31,7 @@
 #' \itemize{
 #'   \item Global scaled maximum absolute difference (MAD) envelope tests \code{\link{combined_scaled_MAD_envelope}}
 #'   \item Combined rank envelope tests based on many functions can be done directly by
-#'   \code{\link{rank_envelope}} (\code{\link{combine_curve_set}} can be used to combine several functions)
+#'   \code{\link{rank_envelope}} (\code{\link{combine_curve_sets}} can be used to combine several functions)
 #'   \item \code{\link{dg.combined_global_envelope}} for adjusted tests
 #' }
 #' \item \emph{Functional ANOVA}
