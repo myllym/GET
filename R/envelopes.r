@@ -21,14 +21,13 @@
 #' by default plotted for the object returned by the rank_envelope function.
 #' Also a single p-value is calculated and returned in component 'p'. By default
 #' this p-value is the mid-rank p-value, but another option can be used by specifying
-#' \code{ties} argument which is passed to \code{\link{estimate_p_value}}. For
-#' options see \code{\link{estimate_p_value}}.
+#' \code{ties} argument.
 #'
 #' The 100(1-alpha)\% global envelope is given by the 'k_alpha'th lower and
 #' upper envelope. For details see Myllymäki et al. (2017).
 #'
-#' The above holds for p-value calculation if \code{lexo == FALSE} and then the test
-#' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{lexo == TRUE},
+#' The above holds for p-value calculation if \code{erl == FALSE} and then the test
+#' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{erl == TRUE},
 #' then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2017)
 #' and the single p-value in \code{p} is the p-value based on the rank count ordering.
 #'
@@ -50,10 +49,19 @@
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
 #'         "two.sided" (default), "less" or "greater".
-#' @param lexo Logical, whether or not to use rank count ordering for calculation of the p-value. See details.
-#' @param ties Ties method to be passed to \code{\link{estimate_p_value}}. Used to obtain
-#' a point estimate for the p-value. The default point estimate is the mid-rank p-value.
-#'
+#' @param erl Logical. If FALSE, the global rank envelope (Myllymäki et al., 2017) accompanied by the
+#' p-interval is given. If TRUE, the global ERL envelope (Mrkvicka et al., 2018) accompanied by the ERL
+#' p-value is given. See details.
+#' @param lexo Obsolete. Use erl instead.
+#' @param ties The method to obtain a unique p-value when erl = FALSE.
+#' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
+#' For 'conservative' the resulting p-value will be the highest possible.
+#' For 'liberal' the p-value will be the lowest possible.
+#' For 'random' the rank of the obs within the tied values is uniformly sampled so that the resulting
+#' p-value is at most the conservative option and at least the liberal option.
+#' For 'midrank' the mid-rank within the tied values is taken.
+#' For 'erl' the extreme rank length p-value is calculated.
+#' The default is 'midrank'.
 #' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
