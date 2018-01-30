@@ -1,4 +1,4 @@
-#' Internal generic GET function for estimating p-value.
+# Internal generic GET function for estimating p-value.
 estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 
 # FIXME: Do we need to consider NA values at some point in life? Our
@@ -7,29 +7,29 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 # FIXME: How about both two-sided and one-sided?
 # FIXME: north_note_2002 uses the term anti-conservative for the incorrect p-value.
 #
-#' Internal GET function for estimating p-value.
-#'
-#' The default method estimates the p-value of the given observation for
-#' the given set of Monte Carlo samples. User can choose which method is
-#' used to treat possible tied values.
-#'
-#' @rdname estimate_p_value
-#' @usage \method{estimate_p_value}{default}(x, sim_vec, ties = 'midrank', ...)
-#'
-#' @param x The first argument. The data sample, a scalar real value. Must not be NULL.
-#' @param sim_vec The Monte Carlo samples. A vector of real values.
-#'   Must not be NULL.
-#' @param ties The method to treat tied values with. If one or more of the
-#'   elements of sim_vec are equal to obs, how should the rank of obs be
-#'   determined? For 'conservative' the resulting p-value will be the
-#'   highest possible. For 'liberal' the p-value will be the lowest
-#'   possible. For 'random' the rank of the obs within the tied values is
-#'   uniformly sampled so that the resulting p-value is at most the
-#'   conservative option and at least the liberal option. For 'midrank'
-#'   the mid-rank within the tied values is taken. 'midrank' is the default.
-#' @param ... Additional arguments.
-#' @return The p-value estimate. A scalar real value between 0 and 1.
-#' @references Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
+# Internal GET function for estimating p-value.
+#
+# The default method estimates the p-value of the given observation for
+# the given set of Monte Carlo samples. User can choose which method is
+# used to treat possible tied values.
+#
+# @rdname estimate_p_value
+# @usage \method{estimate_p_value}{default}(x, sim_vec, ties = 'midrank', ...)
+#
+# @param x The first argument. The data sample, a scalar real value. Must not be NULL.
+# @param sim_vec The Monte Carlo samples. A vector of real values.
+#   Must not be NULL.
+# @param ties The method to treat tied values with. If one or more of the
+#   elements of sim_vec are equal to obs, how should the rank of obs be
+#   determined? For 'conservative' the resulting p-value will be the
+#   highest possible. For 'liberal' the p-value will be the lowest
+#   possible. For 'random' the rank of the obs within the tied values is
+#   uniformly sampled so that the resulting p-value is at most the
+#   conservative option and at least the liberal option. For 'midrank'
+#   the mid-rank within the tied values is taken. 'midrank' is the default.
+# @param ... Additional arguments.
+# @return The p-value estimate. A scalar real value between 0 and 1.
+# @references Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
 estimate_p_value.default <- function(x, sim_vec, ties = 'midrank', ...) {
     obs <- x
     if (length(obs) != 1L || !is.finite(obs) || !is.numeric(obs)) {
