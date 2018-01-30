@@ -396,9 +396,6 @@ plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=leng
 #'
 #' @inheritParams rank_envelope
 #' @param savedevs Logical. Should the deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
-#' @param ... Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate
-#' for the p-value. The default point estimate is the mid-rank p-value. The choice should not affect the
-#' result, since no ties are expected to occur.
 #' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
