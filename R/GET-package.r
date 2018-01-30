@@ -73,7 +73,7 @@
 #'                  under CSR and to calculate the functions you want.
 #'                  Important: use the option 'savefuns=TRUE' and
 #'                  specify the number of simulations \code{nsim}.
-#'                  See the help documentation in \code{\link[spatstat]{spatstat}}
+#'                  See the help documentation in \pkg{spatstat}
 #'                  for possible test functions (if \code{fun} not given, \code{Kest} is used,
 #'                  i.e. an estimator of the K function).
 #'
