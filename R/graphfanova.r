@@ -228,7 +228,7 @@ graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summar
   # setting that 'summaryfun' is a function
   switch(summaryfun, 
          means = {fun = means},
-         contrasts = {fun = contrasts},
+         contrasts = {fun = contrasts}
          )
 
   obs <- fun(x, groups, n.aver, mirror)
