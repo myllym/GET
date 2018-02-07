@@ -84,7 +84,8 @@
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item ties = As the argument \code{ties}.
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
-#'   \item k = Global rank values (k[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item k = Global rank values (erl=FALSE) or extreme rank lengths (erl=TRUE).
+#'   k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
 #'   \item call = The call of the function.
 #' }
 #' and a punch of attributes for the "fv" object type.
