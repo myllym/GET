@@ -231,9 +231,9 @@ graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summar
          contrasts = {fun = contrasts}
          )
 
-  obs <- fun(x, groups, n.aver, mirror)
+  obs <- fun(x, groups)
   # simulations by permuting to which groups the functions belong to
-  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE), n.aver, mirror))
+  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)))
   # labels for comparisons (rownames(sim) is the same as names(obs))
   complabels <- unique(names(obs))
 
