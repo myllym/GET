@@ -88,7 +88,7 @@
 #'   k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
 #'   \item call = The call of the function.
 #' }
-#' and a punch of attributes for the "fv" object type.
+#' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
 #' @export
 #' @seealso \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
 #' @examples
