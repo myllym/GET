@@ -328,7 +328,7 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 #' res <- frank.fanova(nsim=2499, x=rimov, groups=groups)
 #' plot(res, ylab="F-statistic")
 #' }
-frank.fanova <- function(nsim, x, groups, alpha=0.05, equalvar=TRUE) {
+frank.fanova <- function(nsim, x, groups, alpha=0.05, equalvar=TRUE, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
   if(nrow(x) != length(groups)) stop("The number of rows in x and the length of groups should be equal.\n")
@@ -341,7 +341,7 @@ frank.fanova <- function(nsim, x, groups, alpha=0.05, equalvar=TRUE) {
 
   cset <- create_curve_set(list(r = 1:length(obs), obs = obs, sim_m = sim))
   # Perform the rank envelope test and return just the p-value
-  res <- rank_envelope(cset, alpha=alpha, lexo=TRUE, alternative="greater")
+  res <- rank_envelope(cset, alpha=alpha, alternative="greater", ...)
 
   res
 }
