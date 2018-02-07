@@ -325,8 +325,8 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 #' \donttest{
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' res <- frank.fanova(nsim=9999, x=rimov, groups=groups)
-#' plot(res)
+#' res <- frank.fanova(nsim=2499, x=rimov, groups=groups)
+#' plot(res, ylab="F-statistic")
 #' }
 frank.fanova <- function(nsim, x, groups, alpha=0.05, equalvar=TRUE) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
