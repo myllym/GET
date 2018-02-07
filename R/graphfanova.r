@@ -202,7 +202,7 @@ contrasts <- function(x, groups, ...){
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #'
-#' nsim <- 2499 # for exploring
+#' nsim <- 2499
 #'
 #' res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means")
 #' plot(res)
