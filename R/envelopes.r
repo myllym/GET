@@ -287,7 +287,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     }
     else {
       attr(res, "k_alpha") <- kalpha_lexo
-      attr(res, "k") <- distance_lexo
+      attr(res, "k") <- distance_lexo / (Nsim+1)
       attr(res, "p_interval") <- NULL
       attr(res, "ties") <- "extreme rank length"
     }
