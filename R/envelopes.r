@@ -26,8 +26,8 @@
 #' The 100(1-alpha)\% global envelope is given by the 'k_alpha'th lower and
 #' upper envelope. For details see Myllymäki et al. (2017).
 #'
-#' The above holds for p-value calculation if \code{erl == FALSE} and then the test
-#' corresponds to the rank envelope test by Myllymaki et. al (2013). If \code{erl == TRUE},
+#' The above holds for p-value calculation if \code{type == "rank"} and then the test
+#' corresponds to the rank envelope test by Myllymaki et. al (2017). If \code{type == "erl"},
 #' then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2017)
 #' and the single p-value in \code{p} is the p-value based on the rank count ordering.
 #'
@@ -49,11 +49,12 @@
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
 #'         "two.sided" (default), "less" or "greater".
-#' @param erl Logical. If FALSE, the global rank envelope (Myllymäki et al., 2017) accompanied by the
-#' p-interval is given. If TRUE, the global ERL envelope (Mrkvicka et al., 2018) accompanied by the ERL
-#' p-value is given. See details.
-#' @param lexo Obsolete. Use erl instead.
-#' @param ties The method to obtain a unique p-value when erl = FALSE.
+#' @param type The type of the global envelope with current options for "rank" and "erl".
+#' If "rank", the global rank envelope (Myllymäki et al., 2017) accompanied by the p-interval is given.
+#' If "erl", the global rank envelope based on extreme rank lengths (Mrkvicka et al., 2018) accompanied
+#' by the extreme rank length p-value is given. See details.
+#' @param lexo Obsolete. Use type instead.
+#' @param ties The method to obtain a unique p-value when type = "rank".
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 #' For 'conservative' the resulting p-value will be the highest possible.
 #' For 'liberal' the p-value will be the lowest possible.
@@ -84,7 +85,7 @@
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item ties = As the argument \code{ties}.
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
-#'   \item k = Global rank values (erl=FALSE) or extreme rank lengths (erl=TRUE).
+#'   \item k = Global rank values (for type="rank") or extreme rank lengths (for type="erl").
 #'   k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
 #'   \item call = The call of the function.
 #' }
@@ -191,7 +192,7 @@
 #' }
 rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
-                          erl=FALSE, lexo=NULL, ties) {
+                          type="rank", lexo=NULL, ties) {
     if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
     if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
     alternative <- match.arg(alternative)
@@ -199,7 +200,8 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
     curve_set <- convert_envelope(curve_set)
 
-    if(is.logical(lexo)) erl <- lexo
+    if(!(type %in% c("rank", "erl"))) stop("No such a type for global envelope.\n")
+    if(is.logical(lexo) & lexo) type <- "erl"
     # The type of the p-value
     if(missing(ties)) ties <- p_value_ties_default()
     possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
@@ -231,7 +233,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
            })
 
     #-- the ERL p-value
-    if(erl | ties == "erl") { # rank the curves by lexical ordering
+    if(type == "erl" | ties == "erl") { # rank the curves by lexical ordering
         # order ranks within each curve
         sortranks <- apply(allranks, 1, sort) # curves now represented as columns
         lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
@@ -242,32 +244,33 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
         p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
     }
     #-- the p-interval (based on extreme ranks) and global envelopes
-    if(!erl) {
-        distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
-        u <- -distance
-        #-- p-interval
-        p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
-        p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
-        if(ties != "erl") p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties) # Note: case ties=="erl" calculated above
-        #-- the 100(1-alpha)% global rank envelope
-        distancesorted <- sort(distance, decreasing=TRUE)
-        kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
-        LB <- array(0, nr);
-        UB <- array(0, nr);
-        for(i in 1:nr){
-          Hod <- sort(data_and_sim_curves[,i])
-          LB[i]<- Hod[kalpha];
-          UB[i]<- Hod[Nsim+1-kalpha+1];
-        }
-    }
-    else {
-      #-- the 100(1-alpha)% global ERL envelope
-      distance_lexo_sorted <- sort(distance_lexo, decreasing=TRUE)
-      kalpha_lexo <- distance_lexo_sorted[floor((1-alpha)*(Nsim+1))]
-      curves_for_envelope <- data_and_sim_curves[which(distance_lexo >= kalpha_lexo),]
-      LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
-      UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
-    }
+    switch(type,
+           rank = {
+             distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
+             u <- -distance
+             #-- p-interval
+             p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
+             p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
+             if(ties != "erl") p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties) # Note: case ties=="erl" calculated above
+             #-- the 100(1-alpha)% global rank envelope
+             distancesorted <- sort(distance, decreasing=TRUE)
+             kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
+             LB <- array(0, nr);
+             UB <- array(0, nr);
+             for(i in 1:nr){
+               Hod <- sort(data_and_sim_curves[,i])
+               LB[i]<- Hod[kalpha];
+               UB[i]<- Hod[Nsim+1-kalpha+1];
+             }
+           },
+           erl = {
+             #-- the 100(1-alpha)% global ERL envelope
+             distance_lexo_sorted <- sort(distance_lexo, decreasing=TRUE)
+             kalpha_lexo <- distance_lexo_sorted[floor((1-alpha)*(Nsim+1))]
+             curves_for_envelope <- data_and_sim_curves[which(distance_lexo >= kalpha_lexo),]
+             LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
+             UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
+           })
 
     switch(alternative,
             "two.sided" = {},
@@ -279,18 +282,19 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     attr(res, "method") <- "Rank envelope test"
     attr(res, "alternative") <- alternative
     attr(res, "p") <- p
-    if(!erl) {
-      attr(res, "k_alpha") <- kalpha
-      attr(res, "k") <- distance
-      attr(res, "p_interval") <- c(p_low, p_upp)
-      attr(res, "ties") <- ties
-    }
-    else {
-      attr(res, "k_alpha") <- kalpha_lexo
-      attr(res, "k") <- distance_lexo / (Nsim+1)
-      attr(res, "p_interval") <- NULL
-      attr(res, "ties") <- "extreme rank length"
-    }
+    switch(type,
+           rank = {
+             attr(res, "k_alpha") <- kalpha
+             attr(res, "k") <- distance
+             attr(res, "p_interval") <- c(p_low, p_upp)
+             attr(res, "ties") <- ties
+           },
+           erl = {
+             attr(res, "k_alpha") <- kalpha_lexo
+             attr(res, "k") <- distance_lexo / (Nsim+1)
+             attr(res, "p_interval") <- NULL
+             attr(res, "ties") <- "extreme rank length"
+           })
     # for fv
     attr(res, "fname") <- picked_attr$fname
     attr(res, "argu") <- "r"

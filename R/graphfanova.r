@@ -202,11 +202,11 @@ contrasts <- function(x, groups, ...){
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #'
-#' # erl = TRUE is passed to rank_envelope to obtain the rank envelope based on
+#' # type = "erl" is passed to rank_envelope to obtain the rank envelope based on
 #' # the extreme rank length ordering of the functions
-#' res <- graph.fanova(nsim=2499, x=rimov, groups=groups, summaryfun="means", erl=TRUE)
+#' res <- graph.fanova(nsim=2499, x=rimov, groups=groups, summaryfun="means", type="erl")
 #' plot(res)
-#' res2 <- graph.fanova(nsim=2499, x=rimov, groups=groups, summaryfun="contrasts", erl=TRUE)
+#' res2 <- graph.fanova(nsim=2499, x=rimov, groups=groups, summaryfun="contrasts", type="erl")
 #' plot(res2)
 graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
