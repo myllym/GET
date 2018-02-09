@@ -233,7 +233,7 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
     curve_set <- convert_envelope(curve_set)
 
     if(!(type %in% c("rank", "erl"))) stop("No such a type for global envelope.\n")
-    if(is.logical(lexo) & lexo) type <- "erl"
+    if(is.logical(lexo) && lexo) type <- "erl"
     # The type of the p-value
     if(missing(ties)) ties <- p_value_ties_default()
     possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
