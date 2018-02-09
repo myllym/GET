@@ -81,10 +81,10 @@
 #' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
 #'         "two.sided" (default), "less" or "greater".
 #' @param type The type of the global envelope with current options for "rank" and "erl".
-#' If "rank", the global rank envelope (Myllymäki et al., 2017) accompanied by the p-interval is given.
-#' If "erl", the global rank envelope based on extreme rank lengths (Myllymäki et al., 2017,
-#' Mrkvicka et al., 2018) accompanied by the extreme rank length p-value is given. See details and
-#' additional sections thereafter.
+#' If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
+#' If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
+#' length p-value is given (Myllymäki et al., 2017, Mrkvicka et al., 2018). See details and additional
+#' sections thereafter.
 #' @param lexo Obsolete. Use type instead.
 #' @param ties The method to obtain a unique p-value when type = "rank".
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
