@@ -137,7 +137,7 @@ contrasts <- function(x, groups, ...){
 #' in Mrkvička et al. (2016).
 #'
 #' The tests assume that there are \eqn{J}{J} groups which contain
-#' \eqn{n_1,\dosts,n_J}{n1, ..., nJ} functions
+#' \eqn{n_1,\dots,n_J}{n1, ..., nJ} functions
 #' \eqn{T_{ij}, i=\dots,J, j=1,\dots,n_j}{T_{ij}, i=1,...,J, j=1,...,nj}.
 #' The functions should be given in the argument x, and the groups in the argument groups.
 #' The tests assume that \eqn{T_{ij}, i=1,...,n_j}{T_{ij}, i=1,...,n_j} is an iid sample from
