@@ -1,38 +1,69 @@
 #' The rank envelope test
 #'
-#' The rank envelope test, p-value and global envelope
+#' The rank envelope test, p-values and global envelopes
 #'
 #'
 #' The rank envelope test is a completely non-parametric test, which provides
 #' the 100(1-alpha)\% global envelope for the chosen test function T(r) on
-#' the chosen interval of distances and a p-value interval given by the most
-#' liberal and the most conservative p-value estimate.
+#' the chosen interval of distances and associated p-values.
 #'
-#' Given a \code{curve_set} (or an \code{\link[spatstat]{envelope}}) object,
-#' which contains both the data curve T_1(r) and the simulated curves T_2(r),...T_(s+1)(r),
-#' the test is carried out as follows.
+#' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
+#' or an \code{\link[spatstat]{envelope}} object,
+#' which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)} and
+#' the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)},
+#' the test is carried out as described in the following sections that describe
+#' ordering of the functions, p-values and global envelopes.
+#'
+#' @section Ranking of the curves:
+#' First the curves in the curve set are ranked from the most extreme one to the least extreme one
+#' either by using the extreme ranks R_i and/or the extreme rank lengths \eqn{R_i^{\text{erl}}}{Rerl_i}.
+#' The extreme rank is defined as the minimum of pointwise ranks of the curve \eqn{T_i(r)}{T_i(r)},
+#' where the pointwise rank is the rank of the value of the curve for a specific r-value among the
+#' corresponding values of the s other curves such that the lowest ranks correspond to the most extreme
+#' values of the curves. How the pointwise ranks are determined exactly depends on the whether a
+#' one-sided (\code{alternative} is "less" or "greater") or the two-sided test (\code{alternative="two.sided"}) is
+#' chosen, for details see Mrkvička et al. (2017, page 1241) or Mrkvička et al. (2018, page 6).
+#' The extreme ranks can contain many ties, for which reason Myllymäki et al. (2017) proposed the
+#' extreme rank length ordering. Considering the vector of pointwise ordered ranks
+#' \eqn{\mathbf{R}_i}{RP_i} of the ith curve, the extreme rank length measure is equal to
+#' \deqn{R_i^{\text{erl}} = \frac{1}{s+1}\sum_{j=1}^{s+1} \1(\mathbf{R}_j \prec \mathbf{R}_i)}{Rerl_i = \sum_{j=1}^{s} 1(RP_j "<" RP_i) / (s + 1)}
+#' where \eqn{\mathbf{R}_j \prec \mathbf{R}_i}{RP_j "<" RP_i} if and only if
+#' there exists \eqn{n\leq d}{n<=d} such that for the first k, \eqn{k<n}{k<n}, pointwise ordered
+#' ranks of \eqn{\mathbf{R}_j}{RP_j} and \eqn{\mathbf{R}_i}{RP_i} are equal and the n'th rank of
+#' \eqn{\mathbf{R}_j}{RP_j} is smaller than that of \eqn{\mathbf{R}_i}{RP_i}.
 #'
 #' For each curve in the curve_set, both the data curve and the simulations,
-#' the global rank measure R is determined. If savedevs = TRUE, then the
-#' global rank values R_1, R_2, ..., R_(s+1) are returned in the component 'k',
-#' where k[1] is the value for the data.
+#' an above mention measure k is determined. If savedevs = TRUE, then the
+#' measure values \eqn{k_1, k_2, ..., k_{s+1}}{k_1, k_2, ..., k_(s+1)} are
+#' returned in the component 'k', where k[1] is the value for the data.
 #'
-#' Based on R_i, i=1, ..., s+1, the p-interval is calculated. This interval is
-#' by default plotted for the object returned by the rank_envelope function.
-#' Also a single p-value is calculated and returned in component 'p'. By default
-#' this p-value is the mid-rank p-value, but another option can be used by specifying
-#' \code{ties} argument.
+#' @section P-values:
+#' In the case \code{type="rank"}, based on the extreme ranks k_i, i=1, ..., s+1,
+#' the p-interval is calculated. Because the extreme ranks contain ties, there is not just
+#' one p-value. The p-interval is given by the most liberal and the most conservative p-value
+#' estimate. This interval is by default plotted for the object returned by the rank_envelope function.
+#' Also a single p-value is calculated and returned in the attribute \code{p}.
+#' By default this single p-value is the mid-rank p-value, but another option can be used by
+#' specifying \code{ties} argument.
 #'
-#' The 100(1-alpha)\% global envelope is given by the 'k_alpha'th lower and
-#' upper envelope. For details see Myllymäki et al. (2017).
+#' If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
+#' of the functions is calculated and returned in the attribute \code{p}.
 #'
-#' The above holds for p-value calculation if \code{type == "rank"} and then the test
-#' corresponds to the rank envelope test by Myllymaki et. al (2017). If \code{type == "erl"},
-#' then all the pointwise ranks are used to rank the curves by rank count ordering (Myllymäki et al., 2017)
-#' and the single p-value in \code{p} is the p-value based on the rank count ordering.
+#' @section Global envelope:
+#' The 100(1-alpha)\% global envelope is provided in addition to the p-values. 
+#' If \code{type="rank"} then the envelope is the global rank envelope proposed by
+#' Myllymäki et al. (2017).
+#' If \code{type="erl"} then the envelope is the global rank envelope based on the
+#' extreme rank length ordering. This envelope is constructed as the convex hull of
+#' the functions which have extreme rank length measure \eqn{R_i^{\text{erl}}}{Rerl_i}
+#' that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
+#' length measure (Mrkvička et al., 2018).
 #'
-#' The rank count ordering test allows in principle a lower number of simulations to be used,
-#' but then the test may no longer be usable as a graphical test.
+#' @section Number of simulations:
+#' The extreme rank length ordering test (\code{type="erl"}) allows in principle a lower numbe
+#' of simulations to be used than the test based on extreme ranks (\code{type="rank"}).
+#' However, we recommend some thousands of simulations in any case to achieve a good power
+#' and repeatability of the test.
 #'
 #' @references
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
