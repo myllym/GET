@@ -4,7 +4,7 @@
 \alias{unscaled_envelope}
 \title{Unscaled envelope test}
 \usage{
-unscaled_envelope(curve_set, alpha = 0.05, savedevs = FALSE, ...)
+unscaled_envelope(curve_set, alpha = 0.05, savedevs = FALSE)
 }
 \arguments{
 \item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
@@ -15,10 +15,6 @@ savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
 \item{savedevs}{Logical. Should the deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.}
-
-\item{...}{Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate
-for the p-value. The default point estimate is the mid-rank p-value. The choice should not affect the
-result, since no ties are expected to occur.}
 }
 \value{
 An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),

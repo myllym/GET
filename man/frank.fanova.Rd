@@ -4,7 +4,7 @@
 \alias{frank.fanova}
 \title{Rank envelope F-test}
 \usage{
-frank.fanova(nsim, x, groups, alpha = 0.05, equalvar = TRUE)
+frank.fanova(nsim, x, groups, alpha = 0.05, equalvar = TRUE, ...)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -20,6 +20,8 @@ to the number of groups, and each row should correspond to a function.}
 \item{equalvar}{Logical. Default TRUE means that the traditional F-values are used.
 In the case of FALSE, corrected F-values are used. The current implementation uses
 \code{\link[stats]{lm}} to get the corrected F-values.}
+
+\item{...}{Additional parameters to be passed to \code{\link{rank_envelope}}.}
 }
 \description{
 A one-way functional ANOVA based on the rank envelope applied to F values
@@ -48,8 +50,8 @@ Unfortunately this test is not able to detect which groups are different from ea
 \donttest{
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-res <- frank.fanova(nsim=9999, x=rimov, groups=groups)
-plot(res)
+res <- frank.fanova(nsim=2499, x=rimov, groups=groups)
+plot(res, ylab="F-statistic")
 }
 }
 \references{

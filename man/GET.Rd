@@ -39,7 +39,7 @@ The library \pkg{GET} provides many different possibilities for tests based on f
 \itemize{
   \item Global scaled maximum absolute difference (MAD) envelope tests \code{\link{combined_scaled_MAD_envelope}}
   \item Combined rank envelope tests based on many functions can be done directly by
-  \code{\link{rank_envelope}} (\code{\link{combine_curve_set}} can be used to combine several functions)
+  \code{\link{rank_envelope}} (\code{\link{combine_curve_sets}} can be used to combine several functions)
   \item \code{\link{dg.combined_global_envelope}} for adjusted tests
 }
 \item \emph{Functional ANOVA}
@@ -83,7 +83,7 @@ E.g. Say we have a point pattern, for which we would like to test a hypothesis, 
                  under CSR and to calculate the functions you want.
                  Important: use the option 'savefuns=TRUE' and
                  specify the number of simulations \code{nsim}.
-                 See the help documentation in \code{\link[spatstat]{spatstat}}
+                 See the help documentation in \pkg{spatstat}
                  for possible test functions (if \code{fun} not given, \code{Kest} is used,
                  i.e. an estimator of the K function).
 

@@ -5,7 +5,7 @@
 \title{Directional quantile envelope test}
 \usage{
 qdir_envelope(curve_set, alpha = 0.05, savedevs = FALSE, probs = c(0.025,
-  0.975), ...)
+  0.975))
 }
 \arguments{
 \item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
@@ -20,10 +20,6 @@ savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the envelope, in that order and on the interval [0, 1].
 The default values are 0.025 and 0.975.}
-
-\item{...}{Additional parameters passed to \code{\link{estimate_p_value}} to obtain a point estimate
-for the p-value. The default point estimate is the mid-rank p-value. The choice should not affect the
-result, since no ties are expected to occur.}
 }
 \value{
 An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
@@ -88,7 +84,7 @@ res <- qdir_envelope(curve_set)
 plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 }
 \references{
-Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2013). Deviation test construction and power comparison for marked spatial point patterns. arXiv:1306.1028 [stat.ME]
+Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 
-Myllymäki, M., Mrkvička, T., Seijo, H. and Grabarnik, P. (2013). Global envelope tests for spatial point patterns. arXiv:1307.0239 [stat.ME]
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 }
