@@ -62,8 +62,8 @@ envelope_to_curve_set <- function(env, ...) {
 
 # Check the content validity of a potential curve_set object.
 #
-# @param curve_set A curve_set object to be checked.
-# @param allow_Inf_values Logical, for internal use. Can be used to allow infinite or nonnumeric
+# @param curve_set An object to be checked.
+# @param allow_Inf_values Logical. Can be used to allow infinite or nonnumeric
 # values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
 # away (in \code{\link{crop_curves}}).
 check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
