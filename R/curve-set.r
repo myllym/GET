@@ -111,19 +111,21 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     }
 
     sim_m <- curve_set[['sim_m']]
-    dim_sim_m <- dim(sim_m)
-    if (!is.matrix(sim_m)) {
+    if(length(sim_m) > 0L) {
+      dim_sim_m <- dim(sim_m)
+      if (!is.matrix(sim_m)) {
         stop('curve_set[["sim_m"]] must be a matrix.')
-    }
-    if (dim_sim_m[1] != n_r) {
+      }
+      if (dim_sim_m[1] != n_r) {
         stop('curve_set[["sim_m"]] must have as many rows as there are ',
              'elements in curve_set[["r"]].')
-    }
-    if (dim_sim_m[2] < 1L) {
+      }
+      if (dim_sim_m[2] < 1L) {
         stop('curve_set[["sim_m"]] must have at least one column.')
-    }
-    if (!(allow_Inf_values | ( all(is.numeric(sim_m)) && all(is.finite(sim_m)) ))) {
+      }
+      if (!(allow_Inf_values | ( all(is.numeric(sim_m)) && all(is.finite(sim_m)) ))) {
         stop('curve_set[["sim_m"]] must have only finite numeric values.')
+      }
     }
 
     theo <- curve_set[['theo']]
