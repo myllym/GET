@@ -40,7 +40,7 @@ residual <- function(curve_set, use_theo = TRUE) {
         if (use_theo) {
             mid <- theo
         } else {
-            mid <- apply(curve_set[['sim_m']], 1, mean)
+            mid <- curve_set_mean(curve_set)
         }
 
         res <- with(curve_set, list(r = r,
