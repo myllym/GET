@@ -1,3 +1,13 @@
+# A helper function to obtain the mean of functions.
+#
+# If obs is a matrix, then take the mean of the functions in obs. (ignore sim_m)
+# If obs is a vector, then take the mean of the functions in sim_m.
+curve_set_mean <- function(curve_set) {
+  if(with(curve_set, is.matrix(obs))) mid <- apply(curve_set[['obs']], 1, mean)
+  else mid <- apply(curve_set[['sim_m']], 1, mean)
+  mid
+}
+
 #' Subtract S_{H_0} from the summary functions.
 #' @inheritParams crop_curves
 #' @param use_theo Whether to use the theoretical summary function or the
