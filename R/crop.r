@@ -49,7 +49,8 @@ crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
     }
 
     r_cut <- r[cut_idx]
-    obs_cut <- curve_set[['obs']][cut_idx]
+    if(is.vector(curve_set[['obs']])) obs_cut <- curve_set[['obs']][cut_idx]
+    else obs_cut <- curve_set[['obs']][cut_idx, , drop = FALSE]
     sim_m_cut <- curve_set[['sim_m']][cut_idx, , drop = FALSE]
     theo <- curve_set[['theo']]
     n_theo <- length(theo)
@@ -57,7 +58,8 @@ crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
         theo_cut <- theo[cut_idx]
     }
 
-    res <- list(r=r_cut, obs=obs_cut, sim_m=sim_m_cut)
+    res <- list(r=r_cut, obs=obs_cut)
+    if(!is.null(sim_m_cut)) res[['sim_m']] <- sim_m_cut
     if (n_theo > 0L) {
         res[['theo']] <- theo_cut
     }
