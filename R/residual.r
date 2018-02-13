@@ -44,8 +44,8 @@ residual <- function(curve_set, use_theo = TRUE) {
         }
 
         res <- with(curve_set, list(r = r,
-                                    obs = obs - mid,
-                                    sim_m = sim_m - mid))
+                                    obs = obs - mid))
+        if(!is.null(curve_set[['sim_m']])) res[['sim_m']] <- curve_set[['sim_m']] - mid
         res[['is_residual']] <- TRUE
 
         res <- create_curve_set(res)
