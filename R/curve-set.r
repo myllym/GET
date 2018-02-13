@@ -238,8 +238,10 @@ print.curve_set <- function(x, ...) {
 #' Plot method for the class 'curve_set'
 #' @usage \method{plot}{curve_set}(x, ylim, ...)
 #'
-#' @param x an 'curve_set' object
+#' @param x An \code{curve_set} object
 #' @param ylim The y limits of the plot with the default being the minimum and maximum over all curves.
+#' @param col_obs Color for 'obs' in the argument \code{x}.
+#' @param col_sim Color for 'sim_m' in the argument \code{x}.
 #' @param ... Additional parameters to be passed to plot and lines.
 #'
 #' @method plot curve_set
