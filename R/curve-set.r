@@ -249,8 +249,14 @@ print.curve_set <- function(x, ...) {
 #' @importFrom grDevices grey
 #' @importFrom graphics axis
 #' @importFrom graphics abline
-plot.curve_set <- function(x, ylim, ...) {
-    if(missing('ylim')) ylim <- with(x, c(min(obs,sim_m), max(obs,sim_m)))
+plot.curve_set <- function(x, ylim, col_obs=1, col_sim=grDevices::grey(0.7), ...) {
+    if(with(x, is.matrix(obs))) {
+      funcs <- x[['obs']]
+      col_sim <- col_obs
+    }
+    else funcs <- cbind(x[['obs']], x[['sim_m']])
+
+    if(missing('ylim')) ylim <- with(x, c(min(funcs), max(funcs)))
     rdata <- curve_set_check_r(x)
     if(rdata$retick_xaxis) {
         rvalues <- rdata$new_r_values
@@ -259,11 +265,11 @@ plot.curve_set <- function(x, ylim, ...) {
     nr <- length(rvalues)
     # Plot
     if(!rdata$retick_xaxis)
-        graphics::plot(rvalues, x$obs, type="l", ylim=ylim, ...)
+        graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, col=col_obs, ...)
     else
-        graphics::plot(rvalues, x$obs, type="l", ylim=ylim, xaxt="n", ...)
-    for(i in 1:ncol(x$sim_m)) graphics::lines(rvalues, x$sim_m[,i], col=grDevices::grey(0.7))
-    graphics::lines(rvalues, x$obs, type="l", ...)
+        graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, xaxt="n", col=col_obs, ...)
+    for(i in 2:ncol(funcs)) graphics::lines(rvalues, funcs[,i], col=col_sim)
+    graphics::lines(rvalues, funcs[,1], type="l", col=col_obs, ...)
     if(rdata$retick_xaxis) {
         graphics::axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
         graphics::abline(v = (1:nr)[rdata$r_values_newstart_id], lty=3)
