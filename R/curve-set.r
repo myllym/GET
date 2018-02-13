@@ -99,12 +99,12 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     }
 
     obs <- curve_set[['obs']]
-    if (length(obs) != n_r) {
-        stop('curve_set[["obs"]] must have as many values as ',
-             'curve_set[["r"]].')
+    if (!is.vector(obs) & !is.matrix(obs)) {
+      stop('curve_set[["obs"]] must be a vector or a matrix.')
     }
-    if (!is.vector(obs)) {
-        stop('curve_set[["obs"]] must be a vector.')
+    if ((is.vector(obs) && length(obs) != n_r) | (is.matrix(obs) && nrow(obs) != n_r)) {
+        stop('curve_set[["obs"]] must have as many values or columns as ',
+             'curve_set[["r"]].')
     }
     if (!(allow_Inf_values | ( all(is.numeric(obs)) && all(is.finite(obs)) ))) {
         stop('curve_set[["obs"]] must have only finite numeric values.')
