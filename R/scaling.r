@@ -81,10 +81,10 @@ qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     upper_coeff <- abs_coeff[2, , drop = TRUE]
 
     res <- with(curve_set, list(r = r,
-                    obs = weigh_both_sides(obs, upper_coeff,
-                            lower_coeff),
-                    sim_m = weigh_both_sides(sim_m, upper_coeff,
-                            lower_coeff)))
+                                obs = weigh_both_sides(obs, upper_coeff,
+                                      lower_coeff)))
+    if(!is.null(curve_set[['sim_m']]))
+      res[['sim_m']] <- weigh_both_sides(curve_set[['sim_m']], upper_coeff, lower_coeff)
     res[['is_residual']] <- TRUE
 
     res <- create_curve_set(res)
@@ -145,7 +145,7 @@ divisor_to_coeff <- function(x) {
 # @param coeff The coefficient vector, often of the length of one curve.
 weigh_curves <- function(curve_set, coeff) {
     curve_set[['obs']] <- coeff * curve_set[['obs']]
-    curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
+    if(!is.null(curve_set[['sim_m']])) curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
     if (length(curve_set[['theo']]) > 0L) {
         curve_set[['theo']] <- coeff * curve_set[['theo']]
     }
