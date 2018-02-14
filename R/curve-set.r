@@ -334,3 +334,36 @@ check_curve_set_dimensions <- function(x) {
     }
     x
 }
+
+# A helper function to obtain the mean of functions in curve_set.
+#
+# If obs is a matrix, then take the mean of the functions in obs. (ignore sim_m)
+# If obs is a vector, then take the mean of the functions in sim_m.
+curve_set_mean <- function(curve_set) {
+  if(with(curve_set, is.matrix(obs))) mid <- apply(curve_set[['obs']], 1, mean)
+  else mid <- apply(curve_set[['sim_m']], 1, mean)
+  mid
+}
+
+# A helper function to obtain the sd of functions in curve_set.
+#
+# If obs is a matrix, then take the sd of the functions in obs. (ignore sim_m)
+# If obs is a vector, then take the sd of the functions in sim_m.
+#' @importFrom stats sd
+curve_set_sd <- function(curve_set) {
+  if(with(curve_set, is.matrix(obs))) sim_sd <- apply(curve_set[['obs']], 1, stats::sd)
+  else sim_sd <- apply(curve_set[['sim_m']], 1, stats::sd)
+  sim_sd
+}
+
+# A helper function to obtain the quantiles of functions in curve_set.
+#
+# If obs is a matrix, then take the quantiles of the functions in obs. (ignore sim_m)
+# If obs is a vector, then take the quantiles of the functions in sim_m.
+#' @importFrom stats quantile
+curve_set_quant <- function(curve_set, probs, ...) {
+  if(with(curve_set, is.matrix(obs))) quant_m <- apply(curve_set[['obs']], 1, stats::quantile, probs = probs, ...)
+  else quant_m <- apply(curve_set[['sim_m']], 1, stats::quantile, probs = probs, ...)
+  # Dimensions: 2, r_idx.
+  quant_m
+}
