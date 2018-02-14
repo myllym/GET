@@ -61,7 +61,7 @@ get_T_0 <- function(curve_set) {
             }
         }
         else {
-            T_0 <- rep(0, times=length(curve_set$r))
+            T_0 <- rep(0, times=length(curve_set[['r']]))
         }
     }
     else { # Assume curve_set does not contain residuals
