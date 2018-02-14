@@ -6,7 +6,7 @@
 # @return A scaled curve_set.
 #' @importFrom stats sd
 st_scaling <- function(curve_set) {
-    sim_sd <- apply(curve_set[['sim_m']], 1, stats::sd)
+    sim_sd <- curve_set_sd(curve_set)
     res <- weigh_curves(curve_set, divisor_to_coeff(sim_sd))
     res
 }
@@ -28,7 +28,7 @@ q_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_probs(probs)
 
     # Dimensions: 2, r_idx.
-    quant_m <- apply(curve_set[['sim_m']], 1, stats::quantile, probs = probs, ...)
+    quant_m <- curve_set_quant(curve_set, probs=probs, ...)
     # upper - lower
     div <- as.vector(diff(quant_m))
     res <- weigh_curves(curve_set, divisor_to_coeff(div))
@@ -75,7 +75,7 @@ qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     check_residualness(curve_set)
 
     # Dimensions: 2, r_idx.
-    quant_m <- apply(curve_set[['sim_m']], 1, stats::quantile, probs = probs, ...)
+    quant_m <- curve_set_quant(curve_set, probs=probs, ...)
     abs_coeff <- divisor_to_coeff(abs(quant_m))
     lower_coeff <- abs_coeff[1, , drop = TRUE]
     upper_coeff <- abs_coeff[2, , drop = TRUE]
