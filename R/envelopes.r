@@ -129,20 +129,19 @@
 central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
                            type="rank", probs = c(0.025, 0.975), ...) {
-  if(coverage < 0 | coverage > 1) stop("Unreasonable value of alpha.")
+  if(!is.numeric(coverate) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
   if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+  if(!(type %in% c("rank", "erl", "qdir", "st", "unscaled")))
+    stop("No such a type for global envelope.\n")
   alternative <- match.arg(alternative)
   if(type %in% c("qdir", "st", "unscaled") && alternative != "two.sided") {
     warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.\n")
     alternative <- "two.sided"
   }
-
+  check_probs(probs)
   picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
   curve_set <- convert_envelope(curve_set)
-
-  if(!(type %in% c("rank", "erl", "qdir", "st", "unscaled")))
-    stop("No such a type for global envelope.\n")
 
   # Measures for functional ordering
   measure <- type
