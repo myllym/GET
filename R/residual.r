@@ -1,7 +1,21 @@
-#' Subtract S_{H_0} from the summary functions.
+#' Residual form of the functions
+#'
+#' Subtract the theoretical function S_{H_0} or the mean of the functions
+#' in the curve set.
+#'
+#'
+#' The mean of the functions in the \code{curve_set} is
+#' \itemize{
+#' \item the mean of the functions provided in \code{obs}, if \code{obs} is a matrix
+#' (i.e. many functions in \code{obs}).
+#' \item the mean of the functions provided in \code{sim_m}, if \code{obs} is a vector
+#' (i.e. only one function in \code{obs}).
+#' }
+#' If \code{use_theo = TRUE}, but the component \code{theo} does not exist in the
+#' \code{curve_set}, the mean of the functions is used silently.
 #' @inheritParams crop_curves
 #' @param use_theo Whether to use the theoretical summary function or the
-#'   mean of the simulations.
+#' mean of the functions in the curve_set.
 #' @return A curve set object containing residual summary functions. theo is
 #'   no longer included.
 #' @export
