@@ -63,7 +63,7 @@
 #'
 #' For each curve in the curve_set, both the data curve and the simulations,
 #' an above mention measure k is determined. If savedevs = TRUE, then the
-#' measure values \eqn{k_1, k_2, ..., k_{s+1}}{k_1, k_2, ..., k_(s+1)} are
+#' measure values \eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s} are
 #' returned in the component 'k', where k[1] is the value for the data.
 #' Based on the chosen measure, the central region, i.e. the global envelope, is constructed
 #' on the chosen interval of argument values (the functions in the \code{curve_set} are assumed
