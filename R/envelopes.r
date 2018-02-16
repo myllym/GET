@@ -122,6 +122,8 @@
 #'   \item call = The call of the function.
 #' }
 #' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
+#' Attributes of an object \code{res} can be obtained using the function
+#' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #' @export
 central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
