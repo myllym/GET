@@ -499,7 +499,7 @@ global_envelope_test <- function(curve_set, alpha=0.05, savedevs=FALSE,
 #' @method print envelope_test
 #' @export
 print.envelope_test <- function(x, ...) {
-    cat(attr(x, "method"), "\n",
+    cat(attr(x, "method"), " (", attr(x, "type"), ")\n",
         " p-value of the test: ", attr(x, "p"), sep="")
     if(!is.null(attr(x, "ties"))) cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
     else cat("\n")
