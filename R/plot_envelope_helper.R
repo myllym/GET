@@ -21,11 +21,19 @@ pick_attributes <- function(curve_set, alternative="two.sided") {
     }
     else {
         fname <- "T"
-        labl <- c("r", "T[obs](r)", "T[0](r)", "T[lo](r)", "T[hi](r)")
-        desc <- c("distance argument r",
-                "observed value of %s for data pattern",
-                "central curve under the null hypothesis",
-                lo.name, hi.name)
+        if(is.vector(curve_set[['obs']])) {
+          labl <- c("r", "T[obs](r)", "T[0](r)", "T[lo](r)", "T[hi](r)")
+          desc <- c("distance argument r",
+                    "observed value of %s for data pattern",
+                    "central curve under the null hypothesis",
+                    lo.name, hi.name)
+        }
+        else {
+          labl <- c("r", "T[0](r)", "T[lo](r)", "T[hi](r)")
+          desc <- c("distance argument r",
+                    "central curve under the null hypothesis",
+                    lo.name, hi.name)
+        }
         ylab <- "T(r)"
     }
     list(fname=fname, labl=labl, desc=desc, ylab=ylab)
