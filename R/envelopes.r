@@ -125,6 +125,7 @@
 #' Attributes of an object \code{res} can be obtained using the function
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #' @export
+#' @aliases global_envelope
 central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
                            type="rank", probs = c(0.025, 0.975), ...) {
