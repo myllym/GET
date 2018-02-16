@@ -911,62 +911,18 @@ rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
 #' res <- st_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE) {
+  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
+  if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+  res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
+                        alternative="two.sided", type="st")
+  # deviation measures
+  distance <- attr(res, "k")
+  #-- calculate the p-value
+  p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
 
-    picked_attr <- pick_attributes(curve_set, alternative="two.sided")
-    curve_set <- convert_envelope(curve_set)
-
-    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
-    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-
-    data_curve <- curve_set[['obs']]
-    sim_curves <- t(curve_set[['sim_m']])
-
-    Nsim <- dim(sim_curves)[1];
-    nr <- dim(sim_curves)[2]
-
-    # Define T_0 and residual curve_set
-    T_0 <- get_T_0(curve_set)
-    curve_set <- residual(curve_set, use_theo = TRUE)
-
-    sdX <- as.vector(apply(curve_set[['sim_m']], MARGIN=1, FUN=stats::sd))
-
-    # Calculate deviation measures
-    distance <- array(0, Nsim+1);
-    scaled_curve_set <- weigh_curves(curve_set, divisor_to_coeff(sdX))
-    #devs <- deviation(scaled_curve_set, measure = 'max', scaling='qdir')
-    # u_1
-    distance[1] <- max(abs(scaled_curve_set$obs))
-    # u_2, ..., u_{s+1}
-    distance[2:(Nsim+1)] <- apply(abs(scaled_curve_set[['sim_m']]), 2, max)
-
-    #-- calculate the p-value
-    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-
-    #-- calculate the 100(1-alpha)% global envelope
-    distancesorted <- sort(distance);
-    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
-    LB <- T_0 - talpha*sdX;
-    UB <- T_0 + talpha*sdX;
-
-    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
-                     class = c("envelope_test", "envelope", "fv", "data.frame"))
-    attr(res, "method") <- "Studentised envelope test"
-    attr(res, "alternative") <- "two.sided"
-    attr(res, "p") <- p
-    attr(res, "u_alpha") <- talpha
-    if(savedevs) attr(res, "u") <- distance
-    # for fv
-    attr(res, "fname") <- picked_attr$fname
-    attr(res, "argu") <- "r"
-    attr(res, "valu") <- "obs"
-    attr(res, "ylab") <- picked_attr$ylab
-    attr(res, "fmla") <- ". ~ r"
-    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
-    attr(res, "labl") <- picked_attr$labl
-    attr(res, "desc") <- picked_attr$desc
-    attr(res, "shade") <- c("lo", "hi")
-    attr(res, "call") <- match.call()
-    res
+  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
+  attr(res, "p") <- p
+  res
 }
 
 #' Directional quantile envelope test
@@ -1040,68 +996,19 @@ st_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE) {
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
-qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975)) {
+qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
+  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
+  if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+  res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
+                        alternative="two.sided", type="qdir", probs=probs, ...)
+  # deviation measures
+  distance <- attr(res, "k")
+  #-- calculate the p-value
+  p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
 
-    picked_attr <- pick_attributes(curve_set, alternative="two.sided")
-    curve_set <- convert_envelope(curve_set)
-    check_probs(probs)
-
-    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
-    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-
-    data_curve <- curve_set[['obs']]
-    sim_curves <- t(curve_set[['sim_m']])
-
-    Nsim <- dim(sim_curves)[1];
-    nr <- dim(sim_curves)[2]
-
-    # Define T_0 and residual curve_set
-    T_0 <- get_T_0(curve_set)
-    curve_set <- residual(curve_set, use_theo = TRUE)
-
-    # calculate quantiles for residual curve_set (i.e. for sim_curves - T_0)
-    quant_m <- apply(curve_set[['sim_m']], 1, stats::quantile, probs = probs)
-    abs_coeff <- divisor_to_coeff(abs(quant_m))
-    lower_coeff <- abs_coeff[1, , drop = TRUE]
-    upper_coeff <- abs_coeff[2, , drop = TRUE]
-
-    # Calculate deviation measures
-    distance <- array(0, Nsim+1);
-    # u_1
-    scaled_residuals <- weigh_both_sides(curve_set[['obs']], upper_coeff, lower_coeff)
-    distance[1] <- max(abs(scaled_residuals))
-    # u_2, ..., u_{s+1}
-    sim_scaled_residuals <- weigh_both_sides(curve_set[['sim_m']], upper_coeff, lower_coeff)
-    distance[2:(Nsim+1)] <- apply(abs(sim_scaled_residuals), 2, max)
-
-    #-- calculate the p-value
-    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-
-    #-- calculate the 100(1-alpha)% global envelope
-    distancesorted <- sort(distance)
-    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
-    LB <- T_0 - talpha*abs(quant_m[1,])
-    UB <- T_0 + talpha*abs(quant_m[2,])
-
-    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
-                     class = c("envelope_test", "envelope", "fv", "data.frame"))
-    attr(res, "method") <- "Directional quantile envelope test"
-    attr(res, "alternative") <- "two.sided"
-    attr(res, "p") <- p
-    attr(res, "u_alpha") <- talpha
-    if(savedevs) attr(res, "u") <- distance
-    # for fv
-    attr(res, "fname") <- picked_attr$fname
-    attr(res, "argu") <- "r"
-    attr(res, "valu") <- "obs"
-    attr(res, "ylab") <- picked_attr$ylab
-    attr(res, "fmla") <- ". ~ r"
-    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
-    attr(res, "labl") <- picked_attr$labl
-    attr(res, "desc") <- picked_attr$desc
-    attr(res, "shade") <- c("lo", "hi")
-    attr(res, "call") <- match.call()
-    res
+  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
+  attr(res, "p") <- p
+  res
 }
 
 #' Unscaled envelope test
@@ -1176,56 +1083,16 @@ qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025
 #' res <- unscaled_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 unscaled_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE) {
+  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
+  if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+  res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
+                        alternative="two.sided", type="unscaled")
+  # deviation measures
+  distance <- attr(res, "k")
+  #-- calculate the p-value
+  p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
 
-    picked_attr <- pick_attributes(curve_set, alternative="two.sided")
-    curve_set <- convert_envelope(curve_set)
-
-    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
-    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-
-    data_curve <- curve_set[['obs']]
-    sim_curves <- t(curve_set[['sim_m']])
-
-    Nsim <- dim(sim_curves)[1];
-    nr <- dim(sim_curves)[2]
-
-    # Define T_0 and residual curve_set
-    T_0 <- get_T_0(curve_set)
-    curve_set <- residual(curve_set, use_theo = TRUE)
-
-    # Calculate deviation measures
-    distance <- array(0, Nsim+1);
-    # u_1
-    distance[1] <- max(abs(curve_set$obs))
-    # u_2, ..., u_{s+1}
-    distance[2:(Nsim+1)] <- apply(abs(curve_set[['sim_m']]), 2, max)
-
-    #-- calculate the p-value
-    p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-
-    #-- calculate the 100(1-alpha)% global envelope
-    distancesorted <- sort(distance);
-    talpha <- distancesorted[floor((1-alpha)*(Nsim+1))];
-    LB <- T_0 - talpha;
-    UB <- T_0 + talpha;
-
-    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
-                     class = c("envelope_test", "envelope", "fv", "data.frame"))
-    attr(res, "method") <- "Unscaled envelope test"
-    attr(res, "alternative") <- "two.sided"
-    attr(res, "p") <- p
-    attr(res, "u_alpha") <- talpha
-    if(savedevs) attr(res, "u") <- distance
-    # for fv
-    attr(res, "fname") <- picked_attr$fname
-    attr(res, "argu") <- "r"
-    attr(res, "valu") <- "obs"
-    attr(res, "ylab") <- picked_attr$ylab
-    attr(res, "fmla") <- ". ~ r"
-    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
-    attr(res, "labl") <- picked_attr$labl
-    attr(res, "desc") <- picked_attr$desc
-    attr(res, "shade") <- c("lo", "hi")
-    attr(res, "call") <- match.call()
-    res
+  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
+  attr(res, "p") <- p
+  res
 }
