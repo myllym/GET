@@ -245,44 +245,27 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
   res
 }
 
-#' The rank envelope test
+#' Global envelope test
 #'
-#' The rank envelope test, p-values and global envelopes
+#' Global envelope test, p-values and global envelopes
 #'
-#'
-#' The rank envelope test is a completely non-parametric test, which provides
-#' the 100(1-alpha)\% global envelope for the chosen test function T(r) on
-#' the chosen interval of distances and associated p-values.
 #'
 #' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
 #' or an \code{\link[spatstat]{envelope}} object,
-#' which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)} and
-#' the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)},
-#' the test is carried out as described in the following sections that describe
-#' ordering of the functions, p-values and global envelopes.
-#'
-#' @section Ranking of the curves:
-#' First the curves in the curve set are ranked from the most extreme one to the least extreme one
-#' either by using the extreme ranks R_i and/or the extreme rank lengths \eqn{R_i^{\text{erl}}}{Rerl_i}.
-#' The extreme rank is defined as the minimum of pointwise ranks of the curve \eqn{T_i(r)}{T_i(r)},
-#' where the pointwise rank is the rank of the value of the curve for a specific r-value among the
-#' corresponding values of the s other curves such that the lowest ranks correspond to the most extreme
-#' values of the curves. How the pointwise ranks are determined exactly depends on the whether a
-#' one-sided (\code{alternative} is "less" or "greater") or the two-sided test (\code{alternative="two.sided"}) is
-#' chosen, for details see Mrkvička et al. (2017, page 1241) or Mrkvička et al. (2018, page 6).
-#' The extreme ranks can contain many ties, for which reason Myllymäki et al. (2017) proposed the
-#' extreme rank length ordering. Considering the vector of pointwise ordered ranks
-#' \eqn{\mathbf{R}_i}{RP_i} of the ith curve, the extreme rank length measure is equal to
-#' \deqn{R_i^{\text{erl}} = \frac{1}{s+1}\sum_{j=1}^{s+1} \1(\mathbf{R}_j \prec \mathbf{R}_i)}{Rerl_i = \sum_{j=1}^{s} 1(RP_j "<" RP_i) / (s + 1)}
-#' where \eqn{\mathbf{R}_j \prec \mathbf{R}_i}{RP_j "<" RP_i} if and only if
-#' there exists \eqn{n\leq d}{n<=d} such that for the first k, \eqn{k<n}{k<n}, pointwise ordered
-#' ranks of \eqn{\mathbf{R}_j}{RP_j} and \eqn{\mathbf{R}_i}{RP_i} are equal and the n'th rank of
-#' \eqn{\mathbf{R}_j}{RP_j} is smaller than that of \eqn{\mathbf{R}_i}{RP_i}.
-#'
-#' For each curve in the curve_set, both the data curve and the simulations,
-#' an above mention measure k is determined. If savedevs = TRUE, then the
-#' measure values \eqn{k_1, k_2, ..., k_{s+1}}{k_1, k_2, ..., k_(s+1)} are
-#' returned in the component 'k', where k[1] is the value for the data.
+#' which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)}
+#' (in the component \code{obs}) and
+#' the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)}
+#' (in the component \code{sim_m}),
+#' the function \code{global_envelope_test} performs a global envelope test.
+#' The functionality of the function is rather similar to the function
+#' \code{\link{central_region}}, but in addition to ordering the functions from
+#' the most extreme one to the least extreme one using different measures
+#' (see for detailed description of the options the details in \code{\link{central_region}} and
+#' \code{\link{forder}}) and providing the global envelopes with intrinsic
+#' graphical interpretation, p-values are calculated for the test.
+#' Thus, while \code{\link{central_region}} can be used to construct global
+#' envelope in a general setting, the function \code{\link{global_envelope_test}}
+#' is devoted to testing as its name suggests.
 #'
 #' @section P-values:
 #' In the case \code{type="rank"}, based on the extreme ranks k_i, i=1, ..., s+1,
@@ -296,21 +279,13 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #' If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
 #' of the functions is calculated and returned in the attribute \code{p}.
 #'
-#' @section Global envelope:
-#' The 100(1-alpha)\% global envelope is provided in addition to the p-values. 
-#' If \code{type="rank"} then the envelope is the global rank envelope proposed by
-#' Myllymäki et al. (2017).
-#' If \code{type="erl"} then the envelope is the global rank envelope based on the
-#' extreme rank length ordering. This envelope is constructed as the convex hull of
-#' the functions which have extreme rank length measure \eqn{R_i^{\text{erl}}}{Rerl_i}
-#' that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
-#' length measure (Mrkvička et al., 2018).
-#'
 #' @section Number of simulations:
-#' The extreme rank length ordering test (\code{type="erl"}) allows in principle a lower numbe
-#' of simulations to be used than the test based on extreme ranks (\code{type="rank"}).
-#' However, we recommend some thousands of simulations in any case to achieve a good power
-#' and repeatability of the test.
+#' The extreme rank length ordering test (\code{type='erl'}) similarly as
+#' the MAD deviation/envelope tests \code{'qdir'}, \code{'st'} and \code{'unscaled'})
+#' allow in principle a lower number of simulations to be used than the test based on
+#' extreme ranks (\code{type='rank'}).
+#' However, if affordable, we recommend some thousands of simulations in any case
+#' to achieve a good power and repeatability of the test.
 #'
 #' @references
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
@@ -319,20 +294,13 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #'
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 #'
-#' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
-#'  object. If an envelope object is given, it must contain the summary
-#'  functions from the simulated patterns which can be achieved by setting
-#'  savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+#' @inheritParams central_region
+#' @param curve_set A curve_set (see \code{\link{create_curve_set}})
+#' or an \code{\link[spatstat]{envelope}} object containing a data function and simulated functions.
+#' If an envelope object is given, it must contain the summary
+#' functions from the simulated patterns which can be achieved by setting
+#' savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
-#' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
-#' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
-#'         "two.sided" (default), "less" or "greater".
-#' @param type The type of the global envelope with current options for "rank" and "erl".
-#' If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
-#' If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
-#' length p-value is given (Myllymäki et al., 2017, Mrkvicka et al., 2018). See details and additional
-#' sections thereafter.
-#' @param lexo Obsolete. Use type instead.
 #' @param ties The method to obtain a unique p-value when type = "rank".
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 #' For 'conservative' the resulting p-value will be the highest possible.
@@ -342,13 +310,13 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #' For 'midrank' the mid-rank within the tied values is taken.
 #' For 'erl' the extreme rank length p-value is calculated.
 #' The default is 'midrank'.
-#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-#' which can be printed and plotted directly.
+#' @return An object of class "envelope_test", "envelope" and "fv"
+#' (see \code{\link[spatstat]{fv.object}}), which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
 #' \itemize{
 #' \item r = the vector of values of the argument r at which the test was made
-#' \item obs = values of the test function for the data point pattern
+#' \item obs = values of the data function
 #' \item lo = the lower envelope based on the simulated functions
 #' \item hi = the upper envelope based on the simulated functions
 #' \item central = If the curve_set (or envelope object) contains a component 'theo',
@@ -356,21 +324,18 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #'       Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
 #'       Used for visualization only.
 #' }
-#' Additionally, the return value has attributes
+#' Moreover, the return value has the same attributes as the object returned by
+#' \code{\link{central_region}} and in addition
 #' \itemize{
-#'   \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
-#'   \item alternative = The alternative specified in the function call.
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
+#' }
+#' and in the case that \code{type = 'rank'} also
+#' \itemize{
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item ties = As the argument \code{ties}.
-#'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
-#'   \item k = Global rank values (for type="rank") or extreme rank lengths (for type="erl").
-#'   k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
-#'   \item call = The call of the function.
 #' }
-#' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
 #' @export
-#' @seealso \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
+#' @seealso \code{\link{plot.envelope_test}}
 #' @examples
 #'
 #' ## Testing complete spatial randomness (CSR)
@@ -380,7 +345,7 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #' env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate")
 #' # The rank envelope test
-#' res <- rank_envelope(env)
+#' res <- global_envelope_test(env, type="rank", savedevs=TRUE)
 #' # Plot the result.
 #' # - The central curve is now obtained from env[['theo']], which is the
 #' # value of the L-function under the null hypothesis (L(r) = r).
@@ -394,7 +359,7 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # Do the rank envelope test
-#' res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
+#' res <- global_envelope_test(curve_set, type="rank"); plot(res, plot_style="ggplot2")
 #'
 #' ## Random labeling test
 #' #----------------------
@@ -409,7 +374,7 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #' # where T_0(r) = \hat{L}(r) is the unmarked L function.
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' # 2) Do the rank envelope test
-#' res <- rank_envelope(curve_set)
+#' res <- global_envelope_test(curve_set, type="rank")
 #' # 3) Plot the test result
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 #'
@@ -417,7 +382,7 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #' # which is an estimator of the mark-weighted L function, L_mm(r),
 #' # with translational edge correction (default).
 #' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
-#' res <- rank_envelope(curve_set)
+#' res <- global_envelope_test(curve_set, type="rank")
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 #'
 #' ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
@@ -435,16 +400,16 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #'
 #' # Using direct algorihm can be faster, because the perfect simulation is used here.
 #' simulations <- NULL
-#' for(j in 1:2499) {
+#' for(j in 1:999) {
 #'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
 #'                                  R = fittedmodel$interaction$par$hc,
-#'                                  W = pp$window);
+#'                                  W = pp$window)
 #'    if(j%%10==0) cat(j, "...", sep="")
 #' }
 #' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
 #'                 savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
-#' res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
+#' res <- global_envelope_test(curve_set, type="erl"); plot(res, plot_style="ggplot2")
 #' }
 #'
 #' ## A test based on a low dimensional random vector
@@ -460,133 +425,69 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #'
 #'   # Case 1. The test vector is (X_1, X_2)
 #'   cset1 <- create_curve_set(list(r=1:2, obs=as.vector(X), sim_m=t(Y)))
-#'   res1 <- rank_envelope(cset1)
+#'   res1 <- global_envelope_test(cset1, type="rank")
 #'   plot(res1)
 #'
 #'   # Case 2. The test vector is (X_1, X_2, (X_1-mean(Y_1))*(X_2-mean(Y_2))).
 #'   t3 <- function(x, y) { (x[,1]-mean(y[,1]))*(x[,2]-mean(y[,2])) }
 #'   cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
-#'   res2 <- rank_envelope(cset2)
+#'   res2 <- global_envelope_test(cset2, type="rank")
 #'   plot(res2)
 #' }
-rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
+global_envelope_test <- function(curve_set, alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
-                          type="rank", lexo=NULL, ties) {
-    if(alpha < 0 | alpha > 1) stop("Unreasonable value of alpha.")
-    if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-    alternative <- match.arg(alternative)
+                          type="rank", lexo=NULL, ties, probs = c(0.025, 0.975), ...) {
+  alternative <- match.arg(alternative)
+  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
+  res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
+                        alternative=alternative, type=type)
+  if(is.logical(lexo) && lexo) ties <- "erl"
+  # The type of the p-value
+  if(missing(ties)) ties <- p_value_ties_default()
+  possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
+  if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
 
-    picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
-    curve_set <- convert_envelope(curve_set)
+  # Measures for functional ordering
+  distance <- attr(res, "k")
 
-    if(!(type %in% c("rank", "erl"))) stop("No such a type for global envelope.\n")
-    if(is.logical(lexo) && lexo) type <- "erl"
-    # The type of the p-value
-    if(missing(ties)) ties <- p_value_ties_default()
-    possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
-    if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
+  #-- Calculate the p-values
+  switch(type,
+         rank = {
+           u <- -distance
+           #-- p-interval
+           p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
+           p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
+           #-- unique p-value
+           if(ties == "erl") {
+             distance_lexo <- forder(curve_set, measure = "erl", alternative = alternative)
+             u_lexo <- -distance_lexo
+             p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
+           }
+           else p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties)
+         },
+         erl = {
+           u_lexo <- -distance
+           p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
+         },
+         qdir = {
+           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+         },
+         st = {
+           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+         },
+         unscaled = {
+           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+         })
 
-    # data_curve = the vector of test function values for data
-    # sim_curves = matrix where each row contains test function values of a simulation under null hypothesis
-    data_curve <- curve_set[['obs']]
-    sim_curves <- t(curve_set[['sim_m']])
-
-    Nsim <- dim(sim_curves)[1];
-    nr <- length(curve_set$r)
-    # Define the central curve T_0
-    T_0 <- get_T_0(curve_set)
-
-    data_and_sim_curves <- rbind(data_curve, sim_curves)
-    loranks <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
-    hiranks <- Nsim+2-loranks
-    # k:
-    switch(alternative,
-           "two.sided" = {
-               allranks <- pmin(loranks, hiranks)
-           },
-           "less" = {
-               allranks <- loranks
-           },
-           "greater" = {
-               allranks <- hiranks
-           })
-
-    #-- the ERL p-value
-    if(type == "erl" | ties == "erl") { # rank the curves by lexical ordering
-        # order ranks within each curve
-        sortranks <- apply(allranks, 1, sort) # curves now represented as columns
-        lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
-        newranks <- 1:(Nsim+1)
-        distance_lexo <- newranks[order(lexo_values)] # ordering of the functions by the extreme rank counts
-        #-- calculate the p-value
-        u_lexo <- -distance_lexo
-        p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
-    }
-    #-- the p-interval (based on extreme ranks) and global envelopes
-    switch(type,
-           rank = {
-             distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
-             u <- -distance
-             #-- p-interval
-             p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
-             p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
-             if(ties != "erl") p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties) # Note: case ties=="erl" calculated above
-             #-- the 100(1-alpha)% global rank envelope
-             distancesorted <- sort(distance, decreasing=TRUE)
-             kalpha <- distancesorted[floor((1-alpha)*(Nsim+1))]
-             LB <- array(0, nr);
-             UB <- array(0, nr);
-             for(i in 1:nr){
-               Hod <- sort(data_and_sim_curves[,i])
-               LB[i]<- Hod[kalpha];
-               UB[i]<- Hod[Nsim+1-kalpha+1];
-             }
-           },
-           erl = {
-             #-- the 100(1-alpha)% global ERL envelope
-             distance_lexo_sorted <- sort(distance_lexo, decreasing=TRUE)
-             kalpha_lexo <- distance_lexo_sorted[floor((1-alpha)*(Nsim+1))]
-             curves_for_envelope <- data_and_sim_curves[which(distance_lexo >= kalpha_lexo),]
-             LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
-             UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
-           })
-
-    switch(alternative,
-            "two.sided" = {},
-            "less" = { UB <- Inf },
-            "greater" = { LB <- -Inf })
-
-    res <- structure(data.frame(r=curve_set[['r']], obs=data_curve, central=T_0, lo=LB, hi=UB),
-                     class = c("envelope_test", "envelope", "fv", "data.frame"))
-    attr(res, "method") <- "Rank envelope test"
-    attr(res, "alternative") <- alternative
-    attr(res, "p") <- p
-    switch(type,
-           rank = {
-             attr(res, "k_alpha") <- kalpha
-             attr(res, "k") <- distance
-             attr(res, "p_interval") <- c(p_low, p_upp)
-             attr(res, "ties") <- ties
-           },
-           erl = {
-             attr(res, "k_alpha") <- kalpha_lexo
-             attr(res, "k") <- distance_lexo / (Nsim+1)
-             attr(res, "p_interval") <- NULL
-             attr(res, "ties") <- "extreme rank length"
-           })
-    # for fv
-    attr(res, "fname") <- picked_attr$fname
-    attr(res, "argu") <- "r"
-    attr(res, "valu") <- "obs"
-    attr(res, "ylab") <- picked_attr$ylab
-    attr(res, "fmla") <- ". ~ r"
-    attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
-    attr(res, "labl") <- picked_attr$labl
-    attr(res, "desc") <- picked_attr$desc
-    #attr(res, "unitname") <- "unit / units"
-    attr(res, "shade") <- c("lo", "hi")
-    attr(res, "call") <- match.call()
-    res
+  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
+  attr(res, "method") <- paste(attr(res, "method"), " test", sep="")
+  attr(res, "p") <- p
+  if(type == "rank") {
+    attr(res, "p_interval") <- c(p_low, p_upp)
+    attr(res, "ties") <- ties
+  }
+  attr(res, "call") <- match.call()
+  res
 }
 
 #' Print method for the class 'envelope_test'
