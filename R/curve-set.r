@@ -342,7 +342,7 @@ data_and_sim_curves <- function(curve_set) {
   if(with(curve_set, is.matrix(obs))) funcs <- t(curve_set[['obs']]) # all columns data (sim_m ignored)
   else {
     funcs <- rbind(curve_set[['obs']], t(curve_set[['sim_m']])) # first column data, rest simulations
-    rownames(funcs)[1] <- 'obs'
+    rownames(funcs) <- c('obs', paste("sim", 1:(nrow(funcs)-1), sep=""))
   }
   funcs
 }
