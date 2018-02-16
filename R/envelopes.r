@@ -228,8 +228,8 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
   attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
   attr(res, "alternative") <- alternative
-  attr(res, "critical_alpha") <- kalpha
-  if(savedevs) attr(res, "measure") <- distance
+  attr(res, "k_alpha") <- kalpha
+  if(savedevs) attr(res, "k") <- distance
   # for fv
   attr(res, "fname") <- picked_attr$fname
   attr(res, "argu") <- "r"
