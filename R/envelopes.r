@@ -116,7 +116,8 @@
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item ties = As the argument \code{ties}.
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
-#'   \item k = Global rank values (for type='rank') or extreme rank lengths (for type='erl').
+#'   \item k = The values of the chosen measure for all the functions. If there is only one
+#'   data function, then k[1] will give the value of the measure for this.
 #'   k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
 #'   \item call = The call of the function.
 #' }
