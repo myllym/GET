@@ -60,6 +60,34 @@ envelope_to_curve_set <- function(env, ...) {
     res
 }
 
+# Turn an \code{\link[spatstat]{fdata}} object into a curve_set object.
+#
+# @param env An \code{\link[spatstat]{fdata}} object.
+# @return A corresponding curve_set object.
+# @param ... Ignored.
+# @export
+fdata_to_curve_set <- function(env, ...) {
+  if(!inherits(env, 'fdata')) {
+    stop('env is not a fdata object.')
+  }
+
+  r <- env[['argvals']]
+  n_r <- length(r)
+  if(n_r < 1L) {
+    stop('env[["argvals"]] must exist.')
+  }
+
+  obs <- t(env[['data']])
+  if(nrow(obs) != n_r) {
+    stop('Number of functions in env[["data"]] and the length of env[["argvals"]] must be equal.')
+  }
+
+  res <- list(r = r, obs = obs)
+
+  res <- create_curve_set(res, ...)
+  res
+}
+
 # Check the content validity of a potential curve_set object.
 #
 # @param curve_set An object to be checked.
