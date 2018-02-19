@@ -255,7 +255,7 @@ print.curve_set <- function(x, ...) {
 #' @importFrom grDevices grey
 #' @importFrom graphics axis
 #' @importFrom graphics abline
-plot.curve_set <- function(x, ylim, col_obs=1, col_sim=grDevices::grey(0.7), ...) {
+plot.curve_set <- function(x, ylim, xlab="r", ylab="obs", col_obs=1, col_sim=grDevices::grey(0.7), ...) {
     if(with(x, is.matrix(obs))) {
       funcs <- x[['obs']]
       col_sim <- col_obs
@@ -271,9 +271,9 @@ plot.curve_set <- function(x, ylim, col_obs=1, col_sim=grDevices::grey(0.7), ...
     nr <- length(rvalues)
     # Plot
     if(!rdata$retick_xaxis)
-        graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, col=col_obs, ...)
+        graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, col=col_obs, xlab=xlab, ylab=ylab, ...)
     else
-        graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, xaxt="n", col=col_obs, ...)
+        graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, xaxt="n", col=col_obs, xlab=xlab, ylab=ylab,...)
     for(i in 2:ncol(funcs)) graphics::lines(rvalues, funcs[,i], col=col_sim)
     graphics::lines(rvalues, funcs[,1], type="l", col=col_obs, ...)
     if(rdata$retick_xaxis) {
