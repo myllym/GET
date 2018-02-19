@@ -70,39 +70,39 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     possible_names <- c('r', 'obs', 'sim_m', 'theo', 'is_residual')
 
     n <- length(curve_set)
-    if (n < 1L) {
+    if(n < 1L) {
         stop('curve_set must have some elements.')
     }
-    if (!is.list(curve_set)) {
+    if(!is.list(curve_set)) {
         stop('curve_set must be a list.')
     }
 
     name_vec <- names(curve_set)
-    if (length(name_vec) != n) {
+    if(length(name_vec) != n) {
         stop('Every element of curve_set must be named.')
     }
-    if (!all(name_vec %in% possible_names)) {
+    if(!all(name_vec %in% possible_names)) {
         stop('curve_set should contain only elements with some of these ',
              ' names: ', paste(possible_names, collapse = ', '))
     }
 
     r <- curve_set[['r']]
     n_r <- length(r)
-    if (n_r < 1L) {
+    if(n_r < 1L) {
         stop('curve_set[["r"]] must have at least one element.')
     }
-    if (!is.vector(r)) {
+    if(!is.vector(r)) {
         stop('curve_set[["r"]] must be a vector.')
     }
-    if (!all(is.numeric(r)) || !all(is.finite(r))) {
+    if(!all(is.numeric(r)) || !all(is.finite(r))) {
         stop('curve_set[["r"]] must have only finite numeric values.')
     }
 
     obs <- curve_set[['obs']]
-    if (!is.vector(obs) & !is.matrix(obs)) {
+    if(!is.vector(obs) & !is.matrix(obs)) {
       stop('curve_set[["obs"]] must be a vector or a matrix.')
     }
-    if ((is.vector(obs) && length(obs) != n_r) | (is.matrix(obs) && nrow(obs) != n_r)) {
+    if((is.vector(obs) && length(obs) != n_r) | (is.matrix(obs) && nrow(obs) != n_r)) {
         stop('curve_set[["obs"]] must have as many values or columns as ',
              'curve_set[["r"]].')
     }
@@ -113,32 +113,32 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     sim_m <- curve_set[['sim_m']]
     if(length(sim_m) > 0L) {
       dim_sim_m <- dim(sim_m)
-      if (!is.matrix(sim_m)) {
+      if(!is.matrix(sim_m)) {
         stop('curve_set[["sim_m"]] must be a matrix.')
       }
-      if (dim_sim_m[1] != n_r) {
+      if(dim_sim_m[1] != n_r) {
         stop('curve_set[["sim_m"]] must have as many rows as there are ',
              'elements in curve_set[["r"]].')
       }
-      if (dim_sim_m[2] < 1L) {
+      if(dim_sim_m[2] < 1L) {
         stop('curve_set[["sim_m"]] must have at least one column.')
       }
-      if (!(allow_Inf_values | ( all(is.numeric(sim_m)) && all(is.finite(sim_m)) ))) {
+      if(!(allow_Inf_values | ( all(is.numeric(sim_m)) && all(is.finite(sim_m)) ))) {
         stop('curve_set[["sim_m"]] must have only finite numeric values.')
       }
     }
 
     theo <- curve_set[['theo']]
     n_theo <- length(theo)
-    if (n_theo > 0L) {
-        if (n_theo != n_r) {
+    if(n_theo > 0L) {
+        if(n_theo != n_r) {
             stop('curve_set[["theo"]] must have as many values as ',
                  'curve_set[["r"]].')
         }
-        if (!is.vector(theo)) {
+        if(!is.vector(theo)) {
             stop('curve_set[["theo"]] must be a vector.')
         }
-        if (!(allow_Inf_values | ( all(is.numeric(theo)) && all(is.finite(theo)) ))) {
+        if(!(allow_Inf_values | ( all(is.numeric(theo)) && all(is.finite(theo)) ))) {
             stop('curve_set[["theo"]] must have only finite numeric ',
                  'values.')
         }
@@ -146,13 +146,13 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
 
     is_residual <- curve_set[['is_residual']]
     n_is_residual <- length(is_residual)
-    if (n_is_residual > 0L && (n_is_residual != 1L ||
+    if(n_is_residual > 0L && (n_is_residual != 1L ||
                                !is.logical(is_residual) ||
                                !is.finite(is_residual))) {
         stop('curve_set[["is_residual"]] must be either TRUE or FALSE.')
     }
 
-    if (n_is_residual > 0L && is_residual && n_theo > 0L) {
+    if(n_is_residual > 0L && is_residual && n_theo > 0L) {
         stop('A residual curve set must not contain a theoretical curve.')
     }
 
@@ -187,7 +187,7 @@ convert_envelope <- function(curve_set, ...) {
 # @param curve_set A 'curve_set' object
 check_residualness <- function(curve_set) {
     is_residual <- curve_set[['is_residual']]
-    if (length(is_residual) < 1L || !is_residual) {
+    if(length(is_residual) < 1L || !is_residual) {
         stop('curve_set must consist of residual curves. Run function ',
              'residual first.')
     }
