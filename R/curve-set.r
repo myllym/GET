@@ -211,6 +211,30 @@ convert_envelope <- function(curve_set, ...) {
     curve_set
 }
 
+# Convert a fdata object to a curve_set object.
+#
+# If given a fdata object, convert it into a curve_set object. If given
+# a curve_set object, check its correctness and give it back.
+#
+# @inheritParams crop_curves
+# @param ... Allows to pass arguments to \code{\link{check_curve_set_content}}
+# and \code{\link{envelope_to_curve_set}} (to be passed further through
+# \code{\link{create_curve_set}} to \code{\link{check_curve_set_content}}).
+# @return If an \code{\link[fda.usc]{fdata}} object was given, return a
+#   corresponding curve_set object. If a curve_set object was given, return
+#   it unharmed.
+#' @importFrom methods is
+convert_fdata <- function(curve_set, ...) {
+  if(inherits(curve_set, 'fdata')) {
+    curve_set <- fdata_to_curve_set(curve_set, ...)
+  } else if(!methods::is(curve_set, 'curve_set')) {
+    stop('curve_set must either have class "fdata" (from fda.usc) ',
+         'or class "curve_set".')
+  }
+  check_curve_set_content(curve_set, ...)
+  curve_set
+}
+
 # Check that the curve_set object portrays residual curves.
 # @param curve_set A 'curve_set' object
 check_residualness <- function(curve_set) {
