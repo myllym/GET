@@ -168,13 +168,11 @@ contrasts <- function(x, groups, ...){
 #' This scaling of the test functions can be obtained by giving the argument \code{variances = "unequal"}.
 #'
 #' @param nsim The number of random permutations.
-#' @param x The original data (an array of functions). Typically a matrix or a data frame,
-#' also \code{\link[fda.usc]{fdata}} objects allowed. Number of rows in x should correspond
-#' to the number of groups, and each row should correspond to a function.
+#' @param curve_set The original data (an array of functions) provided as a \code{curve_set} object
+#' (see \code{\link{create_curve_set}}) or a fdata object (see \code{\link[fda.usc]{fdata}}).
+#' The curve set should include the argument values for the functions in the component \code{r}, and
+#' the observed functions in the component \code{obs}.
 #' @param groups The original groups (a factor vector representing the assignment to groups).
-#' @param r A vector giving the argument values for the functions. The length should equal the number
-#' of columns in x. The default is 1:nrow(x). The argument values do not affect the test, but they
-#' affect the x-axis output in the provided envelope figure.
 #' @param variances Either "equal" or "unequal". If "unequal", then correction for unequal variances
 #' as explained in details will be done.
 #' @param summaryfun Possible values are "means" and "contrasts".
@@ -210,14 +208,15 @@ contrasts <- function(x, groups, ...){
 #' plot(res2)
 graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
-  if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
-  if(nrow(x) != length(groups)) stop("The number of rows in x and the length of groups should be equal.\n")
+  if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
+  curve_set <- convert_fdata(curve_set)
+  if(!is.matrix(curve_set[['obs']])) stop("The curve_set must include data functions (sim_m ignored).\n")
+  x <- t(curve_set[['obs']])
+  if(nrow(x) != length(groups)) stop("The length of groups should be equal with the number of functions.\n")
   if(!is.factor(groups)) {
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
     groups <- as.factor(groups)
   }
-  if(length(r) != ncol(x)) stop("Unreasonable argument r!\n")
-
   if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
   if(variances == "unequal") x <- corrUnequalVar(x, groups, n.aver, mirror)
 
@@ -237,7 +236,7 @@ graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summar
   # labels for comparisons (rownames(sim) is the same as names(obs))
   complabels <- unique(names(obs))
 
-  cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
+  cset <- create_curve_set(list(r = rep(curve_set[['r']], times=length(complabels)),
                                 obs = obs,
                                 sim_m = sim))
   res_rank <- rank_envelope(cset, alpha=alpha, alternative="two.sided", ...)
