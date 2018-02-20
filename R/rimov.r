@@ -27,11 +27,9 @@
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #'
-#' nsim <- 2500 # for trying the code, use much more for a test
-#'
-#' system.time(res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means"))
+#' system.time(res <- graph.fanova(nsim=2499, curve_set=rimov, groups=groups, summaryfun="means", type="erl"))
 #' plot(res)
-#' system.time(res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts"))
+#' system.time(res2 <- graph.fanova(nsim=2499, curve_set=rimov, groups=groups, summaryfun="contrasts", type="erl"))
 #' plot(res2)
 #' }
 NULL
