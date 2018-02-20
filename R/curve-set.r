@@ -62,24 +62,24 @@ envelope_to_curve_set <- function(env, ...) {
 
 # Turn an \code{\link[spatstat]{fdata}} object into a curve_set object.
 #
-# @param env An \code{\link[spatstat]{fdata}} object.
+# @param fdata An \code{\link[fda.usc]{fdata}} object.
 # @return A corresponding curve_set object.
 # @param ... Ignored.
 # @export
-fdata_to_curve_set <- function(env, ...) {
-  if(!inherits(env, 'fdata')) {
-    stop('env is not a fdata object.')
+fdata_to_curve_set <- function(fdata, ...) {
+  if(!inherits(fdata, 'fdata')) {
+    stop('fdata is not a fdata object.')
   }
 
-  r <- env[['argvals']]
+  r <- fdata[['argvals']]
   n_r <- length(r)
   if(n_r < 1L) {
-    stop('env[["argvals"]] must exist.')
+    stop('fdata[["argvals"]] must exist.')
   }
 
-  obs <- t(env[['data']])
+  obs <- t(fdata[['data']])
   if(nrow(obs) != n_r) {
-    stop('Number of functions in env[["data"]] and the length of env[["argvals"]] must be equal.')
+    stop('Number of functions in fdata[["data"]] and the length of fdata[["argvals"]] must be equal.')
   }
 
   res <- list(r = r, obs = obs)
