@@ -203,11 +203,11 @@ contrasts <- function(x, groups, ...){
 #'
 #' # type = "erl" is passed to rank_envelope to obtain the rank envelope based on
 #' # the extreme rank length ordering of the functions
-#' res <- graph.fanova(nsim=2499, x=rimov, groups=groups, summaryfun="means", type="erl")
-#' plot(res)
-#' res2 <- graph.fanova(nsim=2499, x=rimov, groups=groups, summaryfun="contrasts", type="erl")
-#' plot(res2)
-graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE, ...) {
+#' res <- graph.fanova(nsim=999, curve_set=cset, groups=groups, summaryfun="means", type="erl")
+#' plot(res, separate_yaxes=FALSE)
+#' res2 <- graph.fanova(nsim=999, curve_set=cset, groups=groups, summaryfun="contrasts", type="erl")
+#' plot(res2, separate_yaxes=TRUE)
+graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
   curve_set <- convert_fdata(curve_set)
