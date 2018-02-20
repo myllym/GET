@@ -139,7 +139,8 @@ contrasts <- function(x, groups, ...){
 #' The tests assume that there are \eqn{J}{J} groups which contain
 #' \eqn{n_1,\dots,n_J}{n1, ..., nJ} functions
 #' \eqn{T_{ij}, i=\dots,J, j=1,\dots,n_j}{T_{ij}, i=1,...,J, j=1,...,nj}.
-#' The functions should be given in the argument x, and the groups in the argument groups.
+#' The functions should be given in the argument \code{curve_set},
+#' and the groups in the argument \code{groups}.
 #' The tests assume that \eqn{T_{ij}, i=1,...,n_j}{T_{ij}, i=1,...,n_j} is an iid sample from
 #' a stochastic process with mean function \eqn{\mu_j}{\mu_j} and
 #' covariance function \eqn{\gamma_j(s,t)}{\gamma_j(s,t)} for s,t in R and j = 1,..., J.
@@ -149,7 +150,7 @@ contrasts <- function(x, groups, ...){
 #' then you should use the test function
 #' \deqn{\mathbf{T} = (\overline{T}_1({\bf r}), \overline{T}_2({\bf r}), \dots , \overline{T}_J({\bf r}))}{T = (\bar{T}_1(r), \bar{T}_2(r), ..., \bar{T}_J(r))}
 #' where \eqn{\overline{T}_i({\bf r})}{\bar{T}_i(r)} is a vector of mean values of functions in the group j.
-#' This can be done by choosing the summaryfun \code{means}.
+#' This can be done by choosing the summaryfun \code{"means"}.
 #'
 #' An alternative is to test the equivalent hypothesis
 #' \deqn{H_0 : \mu_i(r) - \mu_j(r) = 0, i=1,\dots,J-1, j=1,\dots,J.}{H0: \mu_i(r) - \mu_j(r) = 0, i=1,...,J-1, j=i,...,J.}
@@ -158,7 +159,7 @@ contrasts <- function(x, groups, ...){
 #' test vector is taken to consist of the differences of the group averages of test functions, namely
 #' \deqn{\mathbf{T'} = (\overline{T}_1({\bf r})-\overline{T}_2({\bf r}),
 #' \overline{T}_1({\bf r})-\overline{T}_3({\bf r}), \dots , \overline{T}_{J-1}({\bf r})-\overline{T}_J({\bf r})).}{T' = (\bar{T}_1(r)-\bar{T}_2(r), \bar{T}_1(r)-\bar{T}_3(r), ..., \bar{T}_{J-1}(r)-\bar{T}_J(r)).}
-#' The summaryfun option \code{contrasts} can be used to perform the test based on this test vector.
+#' The summaryfun option \code{"contrasts"} can be used to perform the test based on this test vector.
 #'
 #' The test as such assumes that the variances are equal across the groups of functions. To deal with
 #' unequal variances, the differences are rescaled as the first step as follows
