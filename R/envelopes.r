@@ -129,7 +129,7 @@
 central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
                            type="rank", probs = c(0.025, 0.975), ...) {
-  if(!is.numeric(coverate) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
+  if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
   if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
   if(!(type %in% c("rank", "erl", "qdir", "st", "unscaled")))
