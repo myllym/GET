@@ -219,6 +219,7 @@ graph.fanova <- function(nsim, x, groups, r=1:ncol(x), variances="equal", summar
   }
   if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
   if(variances == "unequal") x <- corrUnequalVar(x, groups, n.aver, mirror)
+  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
 
   summaryfun <- spatstat::pickoption("sumf", summaryfun, c(means = "means",
                                                            mean = "means",
