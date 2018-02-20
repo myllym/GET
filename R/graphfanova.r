@@ -192,7 +192,7 @@ contrasts <- function(x, groups, ...){
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #'
-#' # type = "erl" is passed to rank_envelope to obtain the rank envelope based on
+#' # type = "erl" is passed to global_envelope_test to obtain the rank envelope based on
 #' # the extreme rank length ordering of the functions
 #' res <- graph.fanova(nsim=999, curve_set=cset, groups=groups, summaryfun="means", type="erl")
 #' plot(res, separate_yaxes=FALSE)
@@ -232,7 +232,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun,
   cset <- create_curve_set(list(r = rep(curve_set[['r']], times=length(complabels)),
                                 obs = obs,
                                 sim_m = sim))
-  res_rank <- rank_envelope(cset, alpha=alpha, alternative="two.sided", ...)
+  res_rank <- global_envelope_test(cset, alpha=alpha, alternative="two.sided", ...)
 
   res <- structure(list(ranktest = res_rank,
                         summaryfun = summaryfun,
