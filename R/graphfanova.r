@@ -42,7 +42,6 @@ maverage <- function(x, n.aver = 1L, mirror = FALSE) {
 
 # Transformation to equalize variances in groups
 corrUnequalVar <- function(x, groups, ...) {
-  if(fda.usc::is.fdata(x)) x <- x$data
   glevels <- levels(groups)
   # Overall mean \bar{T}(r)
   barT <- apply(x, 2, mean)
@@ -68,9 +67,7 @@ corrUnequalVar <- function(x, groups, ...) {
 # x = An array with the original functions
 # groups = a factor vector representing the assignment to groups
 
-#' @importFrom fda.usc is.fdata
 Fvalues <- function(x, groups) {
-  if (fda.usc::is.fdata(x)) x <- x$data
   ni <- groupn(groups)
   n <- sum(ni)
   k <- nlevels(groups)
@@ -79,12 +76,10 @@ Fvalues <- function(x, groups) {
   (total / within - 1) / (k - 1) * (n-k)
 }
 
-#' @importFrom fda.usc is.fdata
 #' @importFrom stats lm
 #' @importFrom stats na.omit
 #' @importFrom stats anova
 corrFvalues <- function(x, groups) {
-  if (fda.usc::is.fdata(x)) x <- x$data
   Fvalues <- vector(length=ncol(x))
   for(i in 1:ncol(x)) {
     df <- data.frame(value = x[,i], group = groups)
@@ -101,9 +96,7 @@ corrFvalues <- function(x, groups) {
 #- means as long vector
 
 # ... Ignored
-#' @importFrom fda.usc is.fdata
 means <- function(x, groups, ...){
-  if(fda.usc::is.fdata(x)) x <- x$data
   jm <- as.vector(t(groupmeans(x, groups)))
   names(jm) <- rep(levels(groups), each = dim(x)[2])
   jm
@@ -112,9 +105,7 @@ means <- function(x, groups, ...){
 #- contrasts as long vectors
 
 # ... Ignored
-#' @importFrom fda.usc is.fdata
 contrasts <- function(x, groups, ...){
-  if (fda.usc::is.fdata(x)) x <- x$data
   k <- nlevels(groups)
   gnam <- levels(groups)
   mea <- groupmeans(x, groups)
