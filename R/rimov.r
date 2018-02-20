@@ -26,6 +26,9 @@
 #' # This is an example analysis of the water temperature data set in Mrkvicka et al. (2017).
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
+#' # Plot data in groups
+#' subs <- function(group, ...) { cset <- rimov; cset$obs <- rimov$obs[, groups == group]; plot(cset1, ...) }
+#' for(i in 1:3) subs(i, main=paste("group ", i, sep=""), ylab="Temperature")
 #'
 #' system.time(res <- graph.fanova(nsim=2499, curve_set=rimov, groups=groups, summaryfun="means", type="erl"))
 #' plot(res)
