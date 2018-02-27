@@ -301,7 +301,7 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #' functions from the simulated patterns which can be achieved by setting
 #' savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
-#' @param ties The method to obtain a unique p-value when type = "rank".
+#' @param ties The method to obtain a unique p-value when  \code{type = 'rank'}.
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 #' For 'conservative' the resulting p-value will be the highest possible.
 #' For 'liberal' the p-value will be the lowest possible.
