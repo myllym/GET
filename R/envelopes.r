@@ -133,7 +133,7 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
   alpha <- 1 - coverage
   if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
   if(!(type %in% c("rank", "erl", "qdir", "st", "unscaled")))
-    stop("No such a type for global envelope.\n")
+    stop("No such type for global envelope.\n")
   alternative <- match.arg(alternative)
   if(type %in% c("qdir", "st", "unscaled") && alternative != "two.sided") {
     warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.\n")
