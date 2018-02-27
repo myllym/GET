@@ -642,26 +642,12 @@ plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=leng
 #'  object. If an envelope object is given, it must contain the summary
 #'  functions from the simulated patterns which can be achieved by setting
 #'  savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
-#' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
-#' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
-#' @param alternative A character string specifying the alternative hypothesis. Must be one of the following:
-#'         "two.sided" (default), "less" or "greater".
 #' @param type The type of the global envelope with current options for "rank" and "erl".
 #' If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
 #' If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
 #' length p-value is given (Myllymäki et al., 2017, Mrkvicka et al., 2018). See details and additional
 #' sections thereafter.
-#' @param lexo Obsolete. If TRUE, then ties is set to "erl". Relevant only for type = "rank",
-#' otherwise ignored.
-#' @param ties The method to obtain a unique p-value when type = "rank".
-#' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
-#' For 'conservative' the resulting p-value will be the highest possible.
-#' For 'liberal' the p-value will be the lowest possible.
-#' For 'random' the rank of the obs within the tied values is uniformly sampled so that the resulting
-#' p-value is at most the conservative option and at least the liberal option.
-#' For 'midrank' the mid-rank within the tied values is taken.
-#' For 'erl' the extreme rank length p-value is calculated.
-#' The default is 'midrank'.
+#' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
@@ -790,7 +776,7 @@ plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=leng
 #'   plot(res2)
 #' }
 rank_envelope <- function(curve_set, type = "rank", ...) {
-  if(!(etype %in% c("rank", "erl"))) stop("No such etype for the global rank envelope.\n")
+  if(!(type %in% c("rank", "erl"))) stop("No such type for the global rank envelope.\n")
   global_envelope_test(curve_set, type=type, ...)
 }
 
