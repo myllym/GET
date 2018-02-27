@@ -789,56 +789,9 @@ plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=leng
 #'   res2 <- rank_envelope(cset2)
 #'   plot(res2)
 #' }
-rank_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE,
-                          alternative=c("two.sided", "less", "greater"),
-                          type="rank", lexo=NULL, ties) {
-  if(!(type %in% c("rank", "erl"))) stop("No such a type for the global rank envelope.\n")
-  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
-  alternative <- match.arg(alternative)
-  res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
-                        alternative=alternative, type=type)
-  if(is.logical(lexo) && lexo) ties <- "erl"
-  # The type of the p-value
-  if(missing(ties)) ties <- p_value_ties_default()
-  possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
-  if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
-
-  # Measures for functional ordering
-  distance <- attr(res, "k")
-
-  #-- Calculate the p-values
-  switch(type,
-         rank = {
-           u <- -distance
-           #-- p-interval
-           p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
-           p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
-           #-- unique p-value
-           if(ties == "erl") {
-             distance_lexo <- forder(curve_set, measure = "erl", alternative = alternative)
-             u_lexo <- -distance_lexo
-             p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
-           }
-           else p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties)
-         },
-         erl = {
-           u_lexo <- -distance
-           p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
-         })
-
-  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
-  attr(res, "p") <- p
-  switch(type,
-         rank = {
-           attr(res, "p_interval") <- c(p_low, p_upp)
-           attr(res, "ties") <- ties
-         },
-         erl = {
-           attr(res, "p_interval") <- NULL
-           attr(res, "ties") <- "extreme rank length"
-         })
-  attr(res, "call") <- match.call()
-  res
+rank_envelope <- function(curve_set, type = "rank", ...) {
+  if(!(etype %in% c("rank", "erl"))) stop("No such etype for the global rank envelope.\n")
+  global_envelope_test(curve_set, type=type, ...)
 }
 
 #' Studentised envelope test
