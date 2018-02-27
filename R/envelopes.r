@@ -806,7 +806,6 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
 #' @inheritParams rank_envelope
-#' @param savedevs Logical. Should the deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
@@ -881,9 +880,6 @@ st_envelope <- function(curve_set, ...) {
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
 #' @inheritParams st_envelope
-#' @param probs A two-element vector containing the lower and upper
-#'   quantiles for the envelope, in that order and on the interval [0, 1].
-#'   The default values are 0.025 and 0.975.
 #' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
