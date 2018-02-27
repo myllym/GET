@@ -940,19 +940,10 @@ st_envelope <- function(curve_set, ...) {
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
-qdir_envelope <- function(curve_set, alpha=0.05, savedevs=FALSE, probs = c(0.025, 0.975), ...) {
-  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
-  if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-  res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
-                        alternative="two.sided", type="qdir", probs=probs, ...)
-  # deviation measures
-  distance <- attr(res, "k")
-  #-- calculate the p-value
-  p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-
-  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
-  attr(res, "p") <- p
-  res
+qdir_envelope <- function(curve_set, ...) {
+  args <- list(...)
+  if("type" %in% names(args)) warning("type is hardcoded to be qdir here. No other options.\n")
+  global_envelope_test(curve_set, type="qdir", ...)
 }
 
 #' Unscaled envelope test
