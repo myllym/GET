@@ -133,7 +133,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, test=test, probs=probs)
 
     # Create a curve_set for the rank test
-    u_ls <- lapply(res_ls, FUN = function(x) attr(x, "u"))
+    u_ls <- lapply(res_ls, FUN = function(x) attr(x, "k"))
     u_mat <- do.call(rbind, u_ls, quote=FALSE)
     curve_set_u <- create_curve_set(list(r=1:ntests, obs=u_mat[,1], sim_m=u_mat[,-1], is_residual=FALSE))
     # Perform the one-sided (greater is significant) rank test
