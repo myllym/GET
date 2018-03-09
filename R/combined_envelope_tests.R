@@ -11,12 +11,12 @@ combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, test = c("qdir
 
     switch(test,
             qdir = {
-                quant_m_ls <- lapply(curve_sets_res, FUN = function(x) apply(x[['sim_m']], MARGIN=1, FUN=stats::quantile, probs = probs))
+                quant_m_ls <- lapply(curve_sets_res, FUN = curve_set_quant, probs = probs)
                 lower_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[1,])))
                 upper_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[2,])))
             },
             st = {
-                lower_f <- upper_f <- lapply(curve_sets_res, FUN = function(x) { as.vector(apply(x[['sim_m']], MARGIN=1, FUN=stats::sd)) })
+                lower_f <- upper_f <- lapply(curve_sets_res, FUN = function(x) { as.vector(curve_set_sd(x)) })
             })
 
     list(lower_f = lower_f, upper_f = upper_f)
