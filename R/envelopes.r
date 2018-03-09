@@ -89,8 +89,7 @@
 #' @param alternative A character string specifying the alternative hypothesis.
 #' Must be one of the following: "two.sided" (default), "less" or "greater".
 #' The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.
-#' @param ... Additional parameters to be passed to \code{\link[stats]{quantile}}
-#' (through \code{\link{forder}}) in the case \code{type = 'qdir'}.
+#' @param ... Additional parameters to be passed to \code{\link{forder}}.
 #' @param probs A two-element vector containing the lower and upper
 #'   quantiles for the 'qdir' envelope, in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).
