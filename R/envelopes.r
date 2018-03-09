@@ -82,13 +82,13 @@
 #' an \code{\link[spatstat]{envelope}} object. If an envelope object is given,
 #' it must contain the summary functions from the simulated patterns which can be
 #' achieved by setting savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+#' @param type The type of the global envelope with current options for 'rank', 'erl',
+#' 'qdir', 'st' and 'unscaled'. See details.
 #' @param coverage A number between 0 and 1. The 100*coverage\% central region will be calculated.
 #' @param savedevs Logical. Should the measure values k_i, i=1,...,s, be returned? Default: FALSE.
 #' @param alternative A character string specifying the alternative hypothesis.
 #' Must be one of the following: "two.sided" (default), "less" or "greater".
 #' The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.
-#' @param type The type of the global envelope with current options for 'rank', 'erl',
-#' 'qdir', 'st' and 'unscaled'. See details.
 #' @param ... Additional parameters to be passed to \code{\link[stats]{quantile}}
 #' (through \code{\link{forder}}) in the case \code{type = 'qdir'}.
 #' @param probs A two-element vector containing the lower and upper
@@ -126,9 +126,10 @@
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #' @export
 #' @aliases global_envelope
-central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
+central_region <- function(curve_set, type = "rank",
+                           coverage=0.95, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
-                           type="rank", probs = c(0.025, 0.975), ...) {
+                           probs = c(0.025, 0.975), ...) {
   if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
   if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
@@ -434,9 +435,9 @@ central_region <- function(curve_set, coverage=0.95, savedevs=FALSE,
 #'   res2 <- global_envelope_test(cset2, type="rank")
 #'   plot(res2)
 #' }
-global_envelope_test <- function(curve_set, alpha=0.05, savedevs=FALSE,
+global_envelope_test <- function(curve_set, type="rank", alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
-                          type="rank", lexo=NULL, ties, probs = c(0.025, 0.975), ...) {
+                          lexo=NULL, ties, probs = c(0.025, 0.975), ...) {
   alternative <- match.arg(alternative)
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
   res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
