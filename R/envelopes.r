@@ -192,7 +192,7 @@ central_region <- function(curve_set, type = "rank",
          },
          qdir = {
            curve_set <- residual(curve_set, use_theo = TRUE)
-           quant_m <- curve_set_quant(curve_set, probs = probs, ...)
+           quant_m <- curve_set_quant(curve_set, probs = probs)
            #-- the 100(1-alpha)% global directional quantile envelope
            distancesorted <- sort(distance)
            kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
@@ -437,7 +437,7 @@ central_region <- function(curve_set, type = "rank",
 #' }
 global_envelope_test <- function(curve_set, type="rank", alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
-                          lexo=NULL, ties, probs = c(0.025, 0.975), ...) {
+                          lexo=NULL, ties, probs = c(0.025, 0.975)) {
   alternative <- match.arg(alternative)
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
   res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
