@@ -4,8 +4,10 @@
 \name{rimov}
 \alias{rimov}
 \title{Year temperature curves}
-\format{A data frame of water temperatures in 365 days of the 36 years (rows).
-I.e. each row consist of year temperatures in a year.}
+\format{A \code{curve_set} object with water temperatures in 365 days of the 36 years.
+The component \code{curve_set[['r']]} is a vector of days (from 1 to 365),
+whereas \code{curve_set[['obs']]} contains the water temperatures such that
+each column gives year temperatures in a year.}
 \usage{
 data(rimov)
 }
@@ -21,12 +23,13 @@ reservoir in Czech republic every day for the 36 years between 1979 and 2014.
 # This is an example analysis of the water temperature data set in Mrkvicka et al. (2017).
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
+# Plot data in groups
+subs <- function(group, ...) { cset <- rimov; cset$obs <- rimov$obs[, groups == group]; plot(cset1, ...) }
+for(i in 1:3) subs(i, main=paste("group ", i, sep=""), ylab="Temperature")
 
-nsim <- 2500 # for trying the code, use much more for a test
-
-system.time(res <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="means"))
+system.time(res <- graph.fanova(nsim=2499, curve_set=rimov, groups=groups, summaryfun="means", type="erl"))
 plot(res)
-system.time(res2 <- graph.fanova(nsim=nsim, x=rimov, groups=groups, summaryfun="contrasts"))
+system.time(res2 <- graph.fanova(nsim=2499, curve_set=rimov, groups=groups, summaryfun="contrasts", type="erl"))
 plot(res2)
 }
 }

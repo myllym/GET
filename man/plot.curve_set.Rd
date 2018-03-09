@@ -7,9 +7,13 @@
 \method{plot}{curve_set}(x, ylim, ...)
 }
 \arguments{
-\item{x}{an 'curve_set' object}
+\item{x}{An \code{curve_set} object}
 
 \item{ylim}{The y limits of the plot with the default being the minimum and maximum over all curves.}
+
+\item{col_obs}{Color for 'obs' in the argument \code{x}.}
+
+\item{col_sim}{Color for 'sim_m' in the argument \code{x}.}
 
 \item{...}{Additional parameters to be passed to plot and lines.}
 }

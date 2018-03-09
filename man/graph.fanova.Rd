@@ -4,22 +4,18 @@
 \alias{graph.fanova}
 \title{One-way graphical functional ANOVA}
 \usage{
-graph.fanova(nsim, x, groups, r = 1:ncol(x), variances = "equal",
-  summaryfun, alpha = 0.05, n.aver = 1L, mirror = FALSE,
-  saveperm = FALSE, ...)
+graph.fanova(nsim, curve_set, groups, variances = "equal", summaryfun,
+  alpha = 0.05, n.aver = 1L, mirror = FALSE, saveperm = FALSE, ...)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
 
-\item{x}{The original data (an array of functions). Typically a matrix or a data frame,
-also \code{\link[fda.usc]{fdata}} objects allowed. Number of rows in x should correspond
-to the number of groups, and each row should correspond to a function.}
+\item{curve_set}{The original data (an array of functions) provided as a \code{curve_set} object
+(see \code{\link{create_curve_set}}) or a fdata object (see \code{\link[fda.usc]{fdata}}).
+The curve set should include the argument values for the functions in the component \code{r}, and
+the observed functions in the component \code{obs}.}
 
 \item{groups}{The original groups (a factor vector representing the assignment to groups).}
-
-\item{r}{A vector giving the argument values for the functions. The length should equal the number
-of columns in x. The default is 1:nrow(x). The argument values do not affect the test, but they
-affect the x-axis output in the provided envelope figure.}
 
 \item{variances}{Either "equal" or "unequal". If "unequal", then correction for unequal variances
 as explained in details will be done.}
@@ -50,7 +46,8 @@ in Mrkvička et al. (2016).
 The tests assume that there are \eqn{J}{J} groups which contain
 \eqn{n_1,\dots,n_J}{n1, ..., nJ} functions
 \eqn{T_{ij}, i=\dots,J, j=1,\dots,n_j}{T_{ij}, i=1,...,J, j=1,...,nj}.
-The functions should be given in the argument x, and the groups in the argument groups.
+The functions should be given in the argument \code{curve_set},
+and the groups in the argument \code{groups}.
 The tests assume that \eqn{T_{ij}, i=1,...,n_j}{T_{ij}, i=1,...,n_j} is an iid sample from
 a stochastic process with mean function \eqn{\mu_j}{\mu_j} and
 covariance function \eqn{\gamma_j(s,t)}{\gamma_j(s,t)} for s,t in R and j = 1,..., J.
@@ -60,7 +57,7 @@ If you want to test the hypothesis
 then you should use the test function
 \deqn{\mathbf{T} = (\overline{T}_1({\bf r}), \overline{T}_2({\bf r}), \dots , \overline{T}_J({\bf r}))}{T = (\bar{T}_1(r), \bar{T}_2(r), ..., \bar{T}_J(r))}
 where \eqn{\overline{T}_i({\bf r})}{\bar{T}_i(r)} is a vector of mean values of functions in the group j.
-This can be done by choosing the summaryfun \code{means}.
+This can be done by choosing the summaryfun \code{"means"}.
 
 An alternative is to test the equivalent hypothesis
 \deqn{H_0 : \mu_i(r) - \mu_j(r) = 0, i=1,\dots,J-1, j=1,\dots,J.}{H0: \mu_i(r) - \mu_j(r) = 0, i=1,...,J-1, j=i,...,J.}
@@ -69,7 +66,7 @@ it can be directed tested by mean of the combined rank test (Mrkvička et al., 2
 test vector is taken to consist of the differences of the group averages of test functions, namely
 \deqn{\mathbf{T'} = (\overline{T}_1({\bf r})-\overline{T}_2({\bf r}),
 \overline{T}_1({\bf r})-\overline{T}_3({\bf r}), \dots , \overline{T}_{J-1}({\bf r})-\overline{T}_J({\bf r})).}{T' = (\bar{T}_1(r)-\bar{T}_2(r), \bar{T}_1(r)-\bar{T}_3(r), ..., \bar{T}_{J-1}(r)-\bar{T}_J(r)).}
-The summaryfun option \code{contrasts} can be used to perform the test based on this test vector.
+The summaryfun option \code{"contrasts"} can be used to perform the test based on this test vector.
 
 The test as such assumes that the variances are equal across the groups of functions. To deal with
 unequal variances, the differences are rescaled as the first step as follows
@@ -82,12 +79,12 @@ This scaling of the test functions can be obtained by giving the argument \code{
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 
-# type = "erl" is passed to rank_envelope to obtain the rank envelope based on
+# type = "erl" is passed to global_envelope_test to obtain the rank envelope based on
 # the extreme rank length ordering of the functions
-res <- graph.fanova(nsim=2499, x=rimov, groups=groups, summaryfun="means", type="erl")
-plot(res)
-res2 <- graph.fanova(nsim=2499, x=rimov, groups=groups, summaryfun="contrasts", type="erl")
-plot(res2)
+res <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means", type="erl")
+plot(res, separate_yaxes=FALSE)
+res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts", type="erl")
+plot(res2, separate_yaxes=TRUE)
 }
 \references{
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)

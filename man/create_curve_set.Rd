@@ -7,15 +7,19 @@
 create_curve_set(curve_set, ...)
 }
 \arguments{
-\item{curve_set}{A list containing elements r, obs, sim_m and optionally
-the element theo. r must be a vector describing the radius vector. obs
-must be a vector containing the summary function values for the
-observed pattern. obs must have same length as r. sim_m must be a
-matrix containing summary function values for all the simulated
-patterns. Each column corresponds to a pattern. The number of rows must
-match the length of r. If included, theo corresponds to the theoretical
-summary function curve. If present, its length must match the length of
-r.}
+\item{curve_set}{A list containing elements r, obs, and optionally
+the elements sim_m and theo.
+\code{r} must be a vector describing the radius vector, the argument values where
+functions have been observed (or simulated).
+\code{obs} must be either 1) a vector containing the data function, in which case
+\code{obs} must have same length as \code{r}, or
+2) a matrix containing the s data functions, in which case it is assumed that
+each column corresponds to a data function, and the number of rows must match the length or r.
+If \code{obs} is a vector, \code{sim_m} must be a matrix containing the simulated functions.
+Each column is assumed to correspond to a function, and the number of rows must match the
+length of r. If \code{obs} is a matrix, \code{sim_m} is ignored.
+If included, \code{theo} corresponds to the theoretical function (e.g., under the null hypothesis).
+If present, its length must match the length of \code{r}.}
 
 \item{...}{Do not use. (For internal use only.)}
 }

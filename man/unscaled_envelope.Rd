@@ -4,7 +4,7 @@
 \alias{unscaled_envelope}
 \title{Unscaled envelope test}
 \usage{
-unscaled_envelope(curve_set, alpha = 0.05, savedevs = FALSE)
+unscaled_envelope(curve_set, ...)
 }
 \arguments{
 \item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
@@ -12,9 +12,7 @@ object. If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
-
-\item{savedevs}{Logical. Should the deviation values u_i, i=1,...,nsim+1 be returned? Default: FALSE.}
+\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \value{
 An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),

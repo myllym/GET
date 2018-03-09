@@ -2,7 +2,7 @@
 % Please edit documentation in R/residual.r
 \name{residual}
 \alias{residual}
-\title{Subtract S_{H_0} from the summary functions.}
+\title{Residual form of the functions}
 \usage{
 residual(curve_set, use_theo = TRUE)
 }
@@ -13,12 +13,24 @@ functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling envelope().}
 
 \item{use_theo}{Whether to use the theoretical summary function or the
-mean of the simulations.}
+mean of the functions in the curve_set.}
 }
 \value{
 A curve set object containing residual summary functions. theo is
   no longer included.
 }
 \description{
-Subtract S_{H_0} from the summary functions.
+Subtract the theoretical function S_{H_0} or the mean of the functions
+in the curve set.
+}
+\details{
+The mean of the functions in the \code{curve_set} is
+\itemize{
+\item the mean of the functions provided in \code{obs}, if \code{obs} is a matrix
+(i.e. many functions in \code{obs}).
+\item the mean of the functions provided in \code{sim_m}, if \code{obs} is a vector
+(i.e. only one function in \code{obs}).
+}
+If \code{use_theo = TRUE}, but the component \code{theo} does not exist in the
+\code{curve_set}, the mean of the functions is used silently.
 }

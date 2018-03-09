@@ -41,7 +41,7 @@ should be used instead of the K_f function.}
 are 'translate' and 'none'.}
 
 \item{use_theo}{Whether to use the theoretical summary function or the
-mean of the simulations.}
+mean of the functions in the curve_set.}
 
 \item{method}{The name of the method to create simulations under the null
 hypothesis. 'permute' results in permutations of the marks. Using

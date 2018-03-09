@@ -9,10 +9,6 @@ frank.fanova(nsim, x, groups, alpha = 0.05, equalvar = TRUE, ...)
 \arguments{
 \item{nsim}{The number of random permutations.}
 
-\item{x}{The original data (an array of functions). Typically a matrix or a data frame,
-also \code{\link[fda.usc]{fdata}} objects allowed. Number of rows in x should correspond
-to the number of groups, and each row should correspond to a function.}
-
 \item{groups}{The original groups (a factor vector representing the assignment to groups).}
 
 \item{alpha}{The significance level of the test.}

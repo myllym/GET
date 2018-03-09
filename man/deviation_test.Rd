@@ -16,7 +16,7 @@ residual().}
 \item{r_max}{The maximum radius to include.}
 
 \item{use_theo}{Whether to use the theoretical summary function or the
-mean of the simulations.}
+mean of the functions in the curve_set.}
 
 \item{scaling}{The name of the scaling to use. Options include 'none',
 'q', 'qdir' and 'st'. 'qdir' is default.}
