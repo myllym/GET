@@ -61,7 +61,6 @@
 #'   residual().
 #' @param measure The deviation measure to use. Default is 'max'. Must be
 #'   one of the following: 'max', 'int' or 'int2'.
-#' @param ... Arguments to be passed to the measure function, if applicable.
 #' @param scaling The name of the scaling to use. Options include 'none',
 #'   'q', 'qdir' and 'st'. 'qdir' is default.
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
@@ -93,12 +92,12 @@
 #' res
 deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
         use_theo = TRUE, scaling = 'qdir',
-        measure = 'max', savedevs=FALSE, ...) {
+        measure = 'max', savedevs=FALSE) {
     curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
     curve_set <- residual(curve_set, use_theo = use_theo)
     curve_set <- scale_curves(curve_set, scaling = scaling)
     devs <- deviation(curve_set, measure = measure)
-    p <- estimate_p_value(devs, ...)
+    p <- estimate_p_value(devs)
     if(savedevs) res <- list(p=p, devs=devs, call=match.call())
     else res <- list(p=p, call=match.call())
     class(res) <- 'deviation_test'

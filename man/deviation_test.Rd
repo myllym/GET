@@ -5,7 +5,7 @@
 \title{Deviation test}
 \usage{
 deviation_test(curve_set, r_min = NULL, r_max = NULL, use_theo = TRUE,
-  scaling = "qdir", measure = "max", savedevs = FALSE, ...)
+  scaling = "qdir", measure = "max", savedevs = FALSE)
 }
 \arguments{
 \item{curve_set}{A residual curve_set object. Can be obtained by using
@@ -25,8 +25,6 @@ mean of the functions in the curve_set.}
 one of the following: 'max', 'int' or 'int2'.}
 
 \item{savedevs}{Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.}
-
-\item{...}{Arguments to be passed to the measure function, if applicable.}
 }
 \value{
 If 'savedevs=FALSE' (default), the p-value is returned.

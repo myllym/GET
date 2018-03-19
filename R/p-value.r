@@ -14,7 +14,7 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 # used to treat possible tied values.
 #
 # @rdname estimate_p_value
-# @usage \method{estimate_p_value}{default}(x, sim_vec, ties = 'midrank', ...)
+# @usage \method{estimate_p_value}{default}(x, sim_vec, ties = 'conservative', ...)
 #
 # @param x The first argument. The data sample, a scalar real value. Must not be NULL.
 # @param sim_vec The Monte Carlo samples. A vector of real values.
@@ -26,11 +26,11 @@ estimate_p_value <- function (x, ...) UseMethod('estimate_p_value')
 #   possible. For 'random' the rank of the obs within the tied values is
 #   uniformly sampled so that the resulting p-value is at most the
 #   conservative option and at least the liberal option. For 'midrank'
-#   the mid-rank within the tied values is taken. 'midrank' is the default.
+#   the mid-rank within the tied values is taken. 'conservative' is the default.
 # @param ... Additional arguments.
 # @return The p-value estimate. A scalar real value between 0 and 1.
 # @references Hájek & Šidák & Sen. Theory of Rank Tests. 1999. ff. 130.
-estimate_p_value.default <- function(x, sim_vec, ties = 'midrank', ...) {
+estimate_p_value.default <- function(x, sim_vec, ties = 'conservative', ...) {
     obs <- x
     if (length(obs) != 1L || !is.finite(obs) || !is.numeric(obs)) {
         stop('obs must be a scalar finite real value.')
@@ -47,23 +47,25 @@ estimate_p_value.default <- function(x, sim_vec, ties = 'midrank', ...) {
              paste(possible_ties, collapse=', '))
     }
 
-    # FIXME: Ugly redundancy.
-    if (ties %in% 'conservative') {
-        n_less <- sum(sim_vec < obs)
-    } else if (ties %in% 'liberal') {
-        n_less <- sum(sim_vec <= obs)
-    } else if (ties %in% 'midrank') {
-        n_smaller <- sum(sim_vec < obs)
-        n_equal <- sum(sim_vec == obs)
-        n_less <- n_smaller + n_equal / 2L
-    } else if (ties %in% 'random') {
-        n_smaller <- sum(sim_vec < obs)
-        n_equal <- sum(sim_vec == obs)
-        n_rand_smaller <- sample(seq(0L, n_equal, by = 1L), size = 1L)
-        n_less <- n_smaller + n_rand_smaller
-    } else {
-        stop('ties argument not recognized: ', ties)
-    }
+    u <- c(obs, sim_vec)
+    switch(ties,
+           conservative = {
+             n_less <- sum(sim_vec < obs) # same as sum(u < obs)
+           },
+           liberal = {
+             n_less <- sum(u <= obs)
+           },
+           midrank = {
+             n_smaller <- sum(sim_vec < obs) # same as sum(u < obs)
+             n_equal <- sum(u == obs) # same as 1 + sum(sim_vec == obs)
+             n_less <- n_smaller + n_equal / 2L
+           },
+           random = {
+             n_smaller <- sum(sim_vec < obs) # same as sum(u < obs)
+             n_equal <- sum(u == obs) # same as 1 + sum(sim_vec == obs)
+             n_rand_smaller <- sample(seq(0L, n_equal, by = 1L), size = 1L)
+             n_less <- n_smaller + n_rand_smaller
+           })
     n_all <- n_sim + 1L
     p_estimate <- 1 - n_less / n_all
     p_estimate
@@ -73,7 +75,7 @@ estimate_p_value.default <- function(x, sim_vec, ties = 'midrank', ...) {
 #
 # The default ties method for the p-value calculated by estimate_p_value
 p_value_ties_default <- function() {
-    'midrank'
+    'conservative'
 }
 
 # Estimate p-value.
