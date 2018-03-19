@@ -47,23 +47,25 @@ estimate_p_value.default <- function(x, sim_vec, ties = 'conservative', ...) {
              paste(possible_ties, collapse=', '))
     }
 
-    # FIXME: Ugly redundancy.
-    if (ties %in% 'conservative') {
-        n_less <- sum(sim_vec < obs)
-    } else if (ties %in% 'liberal') {
-        n_less <- sum(sim_vec <= obs)
-    } else if (ties %in% 'midrank') {
-        n_smaller <- sum(sim_vec < obs)
-        n_equal <- sum(sim_vec == obs)
-        n_less <- n_smaller + n_equal / 2L
-    } else if (ties %in% 'random') {
-        n_smaller <- sum(sim_vec < obs)
-        n_equal <- sum(sim_vec == obs)
-        n_rand_smaller <- sample(seq(0L, n_equal, by = 1L), size = 1L)
-        n_less <- n_smaller + n_rand_smaller
-    } else {
-        stop('ties argument not recognized: ', ties)
-    }
+    u <- c(obs, sim_vec)
+    switch(ties,
+           conservative = {
+             n_less <- sum(sim_vec < obs) # same as sum(u < obs)
+           },
+           liberal = {
+             n_less <- sum(u <= obs)
+           },
+           midrank = {
+             n_smaller <- sum(sim_vec < obs) # same as sum(u < obs)
+             n_equal <- sum(u == obs) # same as 1 + sum(sim_vec == obs)
+             n_less <- n_smaller + n_equal / 2L
+           },
+           random = {
+             n_smaller <- sum(sim_vec < obs) # same as sum(u < obs)
+             n_equal <- sum(u == obs) # same as 1 + sum(sim_vec == obs)
+             n_rand_smaller <- sample(seq(0L, n_equal, by = 1L), size = 1L)
+             n_less <- n_smaller + n_rand_smaller
+           })
     n_all <- n_sim + 1L
     p_estimate <- 1 - n_less / n_all
     p_estimate
