@@ -40,8 +40,18 @@
 #' in the curve set. If the component \code{obs} in the curve set is a vector, then its measure
 #' will be the first component (named 'obs') in the returned vector.
 #'
-#' @inheritParams deviation_test
-#' @param curve_set A \code{curve_set} object.
+#' @inheritParams crop_curves
+#' @param measure The measure to use to order the functions from the most extreme to the least extreme
+#' one. Must be one of the following: 'rank', 'erl', 'max', 'int', 'int2'. Default is 'erl'.
+#' @param scaling The name of the scaling to use if measure is 'max', 'int' or 'int2'.
+#' Options include 'none', 'q', 'qdir' and 'st', where 'qdir' is the default.
+#' @param alternative A character string specifying the alternative hypothesis.
+#' Must be one of the following: "two.sided" (default), "less" or "greater".
+#' The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.
+#' @inheritParams residual
+#' @param probs A two-element vector containing the lower and upper
+#'   quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
+#'   The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).
 #' @export
 forder <- function(curve_set, r_min = NULL, r_max = NULL,
                     measure = 'erl', scaling = 'qdir',
