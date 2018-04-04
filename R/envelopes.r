@@ -309,7 +309,7 @@ central_region <- function(curve_set, type = "rank",
 #' p-value is at most the conservative option and at least the liberal option.
 #' For 'midrank' the mid-rank within the tied values is taken.
 #' For 'erl' the extreme rank length p-value is calculated.
-#' The default is 'midrank'.
+#' The default is 'erl'.
 #' @return An object of class "envelope_test", "envelope" and "fv"
 #' (see \code{\link[spatstat]{fv.object}}), which can be printed and plotted directly.
 #'
@@ -436,14 +436,12 @@ central_region <- function(curve_set, type = "rank",
 #' }
 global_envelope_test <- function(curve_set, type="rank", alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
-                          lexo=NULL, ties, probs = c(0.025, 0.975)) {
+                          ties = "erl", probs = c(0.025, 0.975)) {
   alternative <- match.arg(alternative)
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
   res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
                         alternative=alternative, type=type)
-  if(is.logical(lexo) && lexo) ties <- "erl"
   # The type of the p-value
-  if(missing(ties)) ties <- p_value_ties_default()
   possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
   if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
 
