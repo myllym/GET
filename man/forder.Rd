@@ -6,23 +6,34 @@
 \usage{
 forder(curve_set, r_min = NULL, r_max = NULL, measure = "erl",
   scaling = "qdir", alternative = c("two.sided", "less", "greater"),
-  use_theo = TRUE)
+  use_theo = TRUE, probs = c(0.025, 0.975))
 }
 \arguments{
-\item{curve_set}{A \code{curve_set} object.}
+\item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or
+an \code{\link[spatstat]{envelope}} object. If an envelope object is given,
+it must contain the summary functions from the simulated patterns which can be
+achieved by setting savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 
 \item{r_min}{The minimum radius to include.}
 
 \item{r_max}{The maximum radius to include.}
 
-\item{measure}{The deviation measure to use. Default is 'max'. Must be
-one of the following: 'max', 'int' or 'int2'.}
+\item{measure}{The measure to use to order the functions from the most extreme to the least extreme
+one. Must be one of the following: 'rank', 'erl', 'max', 'int', 'int2'. Default is 'erl'.}
 
-\item{scaling}{The name of the scaling to use. Options include 'none',
-'q', 'qdir' and 'st'. 'qdir' is default.}
+\item{scaling}{The name of the scaling to use if measure is 'max', 'int' or 'int2'.
+Options include 'none', 'q', 'qdir' and 'st', where 'qdir' is the default.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.
+Must be one of the following: "two.sided" (default), "less" or "greater".
+The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.}
 
 \item{use_theo}{Whether to use the theoretical summary function or the
 mean of the functions in the curve_set.}
+
+\item{probs}{A two-element vector containing the lower and upper
+quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
+The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).}
 }
 \value{
 A vector containing one of the above mentioned measures k for each of the functions
@@ -65,7 +76,4 @@ ranks of \eqn{\mathbf{R}_j}{RP_j} and \eqn{\mathbf{R}_i}{RP_i} are equal and the
 Further options for the \code{measure} argument are \code{max}, \code{int} and \code{int2}
 which can be used together with \code{scaling}. See the help in \code{\link{deviation_test}}
 for these options of measures (measure) and scalings.
-}
-\examples{
-forder(curve_set, measure = "rank")
 }

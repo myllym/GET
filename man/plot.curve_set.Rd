@@ -4,12 +4,16 @@
 \alias{plot.curve_set}
 \title{Plot method for the class 'curve_set'}
 \usage{
-\method{plot}{curve_set}(x, ylim, ...)
+\method{plot}{curve_set}(x, ylim, xlab="r", ylab="obs", col_obs=1, col_sim=grDevices::grey(0.7), ...)
 }
 \arguments{
 \item{x}{An \code{curve_set} object}
 
 \item{ylim}{The y limits of the plot with the default being the minimum and maximum over all curves.}
+
+\item{xlab}{The label for the x-axis. Default "r".}
+
+\item{ylab}{The label for the y-axis. Default "obs".}
 
 \item{col_obs}{Color for 'obs' in the argument \code{x}.}
 

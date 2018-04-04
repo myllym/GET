@@ -6,7 +6,7 @@
 \usage{
 global_envelope_test(curve_set, type = "rank", alpha = 0.05,
   savedevs = FALSE, alternative = c("two.sided", "less", "greater"),
-  lexo = NULL, ties, probs = c(0.025, 0.975))
+  ties = "erl", probs = c(0.025, 0.975))
 }
 \arguments{
 \item{curve_set}{A curve_set (see \code{\link{create_curve_set}})
@@ -34,10 +34,10 @@ For 'random' the rank of the obs within the tied values is uniformly sampled so 
 p-value is at most the conservative option and at least the liberal option.
 For 'midrank' the mid-rank within the tied values is taken.
 For 'erl' the extreme rank length p-value is calculated.
-The default is 'midrank'.}
+The default is 'erl'.}
 
 \item{probs}{A two-element vector containing the lower and upper
-quantiles for the 'qdir' envelope, in that order and on the interval [0, 1].
+quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).}
 }
 \value{

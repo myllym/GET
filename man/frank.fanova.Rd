@@ -4,17 +4,23 @@
 \alias{frank.fanova}
 \title{Rank envelope F-test}
 \usage{
-frank.fanova(nsim, x, groups, alpha = 0.05, equalvar = TRUE, ...)
+frank.fanova(nsim, curve_set, groups, alpha = 0.05, variances = "equal",
+  ...)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
+
+\item{curve_set}{The original data (an array of functions) provided as a \code{curve_set} object
+(see \code{\link{create_curve_set}}) or a fdata object (see \code{\link[fda.usc]{fdata}}).
+The curve set should include the argument values for the functions in the component \code{r}, and
+the observed functions in the component \code{obs}.}
 
 \item{groups}{The original groups (a factor vector representing the assignment to groups).}
 
 \item{alpha}{The significance level of the test.}
 
-\item{equalvar}{Logical. Default TRUE means that the traditional F-values are used.
-In the case of FALSE, corrected F-values are used. The current implementation uses
+\item{variances}{Either "equal" or "unequal". If "equal", then the traditional F-values are used.
+If "unequal", then the corrected F-values are used. The current implementation uses
 \code{\link[stats]{lm}} to get the corrected F-values.}
 
 \item{...}{Additional parameters to be passed to \code{\link{rank_envelope}}.}
@@ -46,7 +52,7 @@ Unfortunately this test is not able to detect which groups are different from ea
 \donttest{
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-res <- frank.fanova(nsim=2499, x=rimov, groups=groups)
+res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)
 plot(res, ylab="F-statistic")
 }
 }
