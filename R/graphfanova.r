@@ -305,8 +305,8 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 #' Unfortunately this test is not able to detect which groups are different from each other.
 #'
 #' @inheritParams graph.fanova
-#' @param equalvar Logical. Default TRUE means that the traditional F-values are used.
-#' In the case of FALSE, corrected F-values are used. The current implementation uses
+#' @param variances Either "equal" or "unequal". If "equal", then the traditional F-values are used.
+#' If "unequal", then the corrected F-values are used. The current implementation uses
 #' \code{\link[stats]{lm}} to get the corrected F-values.
 #' @export
 #' @references
@@ -320,13 +320,22 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 #' res <- frank.fanova(nsim=2499, x=rimov, groups=groups)
 #' plot(res, ylab="F-statistic")
 #' }
-frank.fanova <- function(nsim, x, groups, alpha=0.05, equalvar=TRUE, ...) {
+frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal", ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
-  if(!(class(x) %in% c("matrix", "data.frame", "array", "fdata"))) stop("x is not a valid object.\n")
-  if(nrow(x) != length(groups)) stop("The number of rows in x and the length of groups should be equal.\n")
-
-  if(equalvar) fun <- Fvalues
+  if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
+  curve_set <- convert_fdata(curve_set)
+  if(!is.matrix(curve_set[['obs']])) stop("The curve_set must include data functions (sim_m ignored).\n")
+  x <- t(curve_set[['obs']])
+  if(nrow(x) != length(groups)) stop("The length of groups should be equal with the number of functions.\n")
+  if(!is.factor(groups)) {
+    warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
+    groups <- as.factor(groups)
+  }
+  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
+  if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
+  if(variances == "equal") fun <- Fvalues
   else fun <- corrFvalues
+
   obs <- fun(x, groups)
   # simulations by permuting to which groups the functions belong to
   sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)))
