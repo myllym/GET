@@ -43,9 +43,6 @@
 #' @inheritParams deviation_test
 #' @param curve_set A \code{curve_set} object.
 #' @export
-#'
-#' @examples
-#' forder(curve_set, measure = "rank")
 forder <- function(curve_set, r_min = NULL, r_max = NULL,
                     measure = 'erl', scaling = 'qdir',
                     alternative=c("two.sided", "less", "greater"),
