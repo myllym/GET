@@ -78,21 +78,12 @@
 #'
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'
-#' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or
-#' an \code{\link[spatstat]{envelope}} object. If an envelope object is given,
-#' it must contain the summary functions from the simulated patterns which can be
-#' achieved by setting savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+#' @inheritParams forder
 #' @param type The type of the global envelope with current options for 'rank', 'erl',
 #' 'qdir', 'st' and 'unscaled'. See details.
 #' @param coverage A number between 0 and 1. The 100*coverage\% central region will be calculated.
 #' @param savedevs Logical. Should the measure values k_i, i=1,...,s, be returned? Default: FALSE.
-#' @param alternative A character string specifying the alternative hypothesis.
-#' Must be one of the following: "two.sided" (default), "less" or "greater".
-#' The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.
 #' @param ... Additional parameters to be passed to \code{\link{forder}}.
-#' @param probs A two-element vector containing the lower and upper
-#'   quantiles for the 'qdir' envelope, in that order and on the interval [0, 1].
-#'   The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).
 #' @return An object of class "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
