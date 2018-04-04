@@ -159,7 +159,8 @@ central_region <- function(curve_set, type = "rank",
            measure <- "max"
            scaling = "none"
          })
-  distance <- forder(curve_set, measure = measure, scaling = scaling, alternative = alternative, ...)
+  distance <- forder(curve_set, measure = measure, scaling = scaling,
+                     alternative = alternative, probs = probs, ...)
 
   data_and_sim_curves <- data_and_sim_curves(curve_set) # all the functions
   Nfunc <- length(distance) # Number of functions
