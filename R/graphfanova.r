@@ -317,7 +317,7 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
 #' \donttest{
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' res <- frank.fanova(nsim=2499, x=rimov, groups=groups)
+#' res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)
 #' plot(res, ylab="F-statistic")
 #' }
 frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal", ...) {
