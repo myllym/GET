@@ -46,7 +46,7 @@
 forder <- function(curve_set, r_min = NULL, r_max = NULL,
                     measure = 'erl', scaling = 'qdir',
                     alternative=c("two.sided", "less", "greater"),
-                    use_theo = TRUE) {
+                    use_theo = TRUE, probs = c(0.025, 0.975)) {
   possible_measures <- c('rank', 'erl', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!\n")
 
@@ -54,7 +54,8 @@ forder <- function(curve_set, r_min = NULL, r_max = NULL,
 
   if(measure %in% c('max', 'int', 'int2')) {
     curve_set <- residual(curve_set, use_theo = use_theo)
-    curve_set <- scale_curves(curve_set, scaling = scaling)
+    if(scaling %in% c('q', 'qdir')) curve_set <- scale_curves(curve_set, scaling = scaling, probs = probs)
+    else curve_set <- scale_curves(curve_set, scaling = scaling)
     data_and_sim_curves <- data_and_sim_curves(curve_set)
     curve_set_tmp <- create_curve_set(list(r=curve_set[['r']],
                                            obs=data_and_sim_curves[1,],
