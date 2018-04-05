@@ -33,7 +33,8 @@ Imports:
 Suggests:
     marksummary,
     testthat,
-    mvtnorm
+    mvtnorm,
+    fda
 Description: The library provides Global Envelope Tests (GET) for testing
     with functional test statistics.
 License: GPL-3
