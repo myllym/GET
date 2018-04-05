@@ -77,3 +77,13 @@ Further options for the \code{measure} argument are \code{max}, \code{int} and \
 which can be used together with \code{scaling}. See the help in \code{\link{deviation_test}}
 for these options of measures (measure) and scalings.
 }
+\examples{
+if(requireNamespace("fda", quietly = TRUE)) {
+  curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
+                                     obs = fda::growth$hgtf))
+  plot(curve_set, ylab="height")
+  forder(curve_set, measure = "max", scaling="qdir")
+  forder(curve_set, measure = "rank")
+  forder(curve_set, measure = "erl")
+}
+}

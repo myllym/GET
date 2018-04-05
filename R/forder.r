@@ -53,6 +53,15 @@
 #'   quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).
 #' @export
+#' @examples
+#' if(requireNamespace("fda", quietly = TRUE)) {
+#'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
+#'                                      obs = fda::growth$hgtf))
+#'   plot(curve_set, ylab="height")
+#'   forder(curve_set, measure = "max", scaling="qdir")
+#'   forder(curve_set, measure = "rank")
+#'   forder(curve_set, measure = "erl")
+#' }
 forder <- function(curve_set, r_min = NULL, r_max = NULL,
                     measure = 'erl', scaling = 'qdir',
                     alternative=c("two.sided", "less", "greater"),
