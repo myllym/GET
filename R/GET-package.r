@@ -1,27 +1,40 @@
 #' Global Envelope Tests (GET)
 #'
-#' The \pkg{GET} library provides global envelope and deviation tests. Both type of tests are
-#' Monte Carlo tests, which demand simulations from the tested null model. Examples are
-#' mainly for spatial point processes, but the methods are applicable for any functional (or
-#' multivariate vector) data. (In the case of point processes, the functions are typically
-#' estimators of summary functions.) The main motivation for this package are the global
-#' envelope tests.
+#' Global envelopes alias central regions and global envelope tests, including
+#' global envelope (tests) for single and many functions and multivariate vectors,
+#' adjusted global envelope tests, graphical functional one-way ANOVA
 #'
+#'
+#' The \pkg{GET} library provides central regions (alias global envelopes) and global envelope tests
+#' and also deviation tests (for comparison). The central regions can be constructed
+#' from the data and Monte Carlo simulations, or purely from (functional) data.
+#' Both type of tests are Monte Carlo tests, which demand simulations from the tested null model.
+#' The methods are applicable for any functional (or multivariate vector) data.
+#'
+#' In the special case of point processes, the functions are typically estimators of summary functions.
 #' The package supports the use of the R library \pkg{spatstat} for generating
 #' simulations and calculating estimators of the chosen summary function, but alternatively these
 #' can be done by any other methods, thus allowing for any models/functions.
 #'
 #'
-#' @section Functions for different tests:
+#' @section Key functions in \pkg{GET}:
 #'
-#' The library \pkg{GET} provides many different possibilities for tests based on functions:
 #' \itemize{
-#' \item \emph{Global envelope tests} using single functions (for simple hypotheses)
+#'  \item \emph{Functional ordering}: different measures for ordering the functions (or vectors) from
+#'  the most extreme to the least extreme ones can be obtained for the functions by \code{\link{forder}}.
+#'  Such orderings are the basis of central regions and different tests.
+#'  \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
+#'  \code{\link{central_region}}
+#'  \item \emph{Global envelope tests}:
+#'  \itemize{
+#' \item For global envelope tests using single functions (for simple hypotheses)
+#' the main function is \code{\link{global_envelope_test}} with different \code{type}:
 #' \itemize{
-#'   \item \code{\link{rank_envelope}}, the completely non-parametric rank envelope test
-#'   \item \code{\link{qdir_envelope}}, the directional quantile envelope test, protected against unequal variance and asymmetry of T(r) for different distances r
-#'   \item \code{\link{st_envelope}}, the studentised envelope test, protected against unequal variance of T(r) for different distances r
-#'   \item \code{\link{unscaled_envelope}}, the unscaled envelope (providing a baseline) that has a contant width and that corresponds to the classical maximum deviation test.
+#'   \item "rank", the completely non-parametric rank envelope test (also the outdated function \code{\link{rank_envelope}} can be used)
+#'   \item "erl", the completely non-parametric rank envelope test based on extreme rank lengths
+#'   \item "qdir", the directional quantile envelope test, protected against unequal variance and asymmetry of T(r) for different distances r (\code{\link{qdir_envelope}})
+#'   \item "st", the studentised envelope test, protected against unequal variance of T(r) for different distances r (\code{\link{st_envelope}})
+#'   \item "unscaled", the unscaled envelope (providing a baseline) that has a contant width and that corresponds to the classical maximum deviation test (\code{\link{unscaled_envelope}}).
 #' }
 #' \item \emph{Adjusted} global envelope tests for composite hypotheses
 #' \itemize{
@@ -34,15 +47,13 @@
 #'   \code{\link{rank_envelope}} (\code{\link{combine_curve_sets}} can be used to combine several functions)
 #'   \item \code{\link{dg.combined_global_envelope}} for adjusted tests
 #' }
-#' \item \emph{Functional ANOVA}
-#' \itemize{
-#'   \item \emph{Graphical} functional ANOVA tests \code{\link{graph.fanova}}
-#'   \item Rank envelope based on F-values: \code{\link{frank.fanova}}
 #' }
-#' \item Deviation tests (for simple hypothesis)
-#' \itemize{
-#'   \item \code{\link{deviation_test}}
-#' }
+#'  \item \emph{One-way functional ANOVA}:
+#'  \itemize{
+#'   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
+#'   \item rank envelope based on F-values: \code{\link{frank.fanova}}
+#'  }
+#'  \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}}
 #' }
 #' See the help files of the functions for examples.
 #'
@@ -86,7 +97,7 @@
 #'            \item Perform the test
 #'
 #'                  \code{
-#'                    res <- rank_envelope(env)
+#'                    res <- global_envelope_test(env)
 #'                  }
 #'            \item Plot the result
 #'
@@ -163,7 +174,7 @@
 #'
 #' Note that the recommended minimum number of simulations for the rank
 #' envelope test based on a single function is nsim=2499, while for the
-#' studentised and directional quantile envelope tests and deviation tests,
+#' "erl", "qdir" and "st" global envelope tests and deviation tests,
 #' a lower number of simulations can be used.
 #'
 #' Mrkvička et al. (2017) discusses the number of simulations for tests based on many functions.
