@@ -182,8 +182,8 @@ central_region <- function(curve_set, type = "rank",
            UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
          },
          qdir = {
-           curve_set <- residual(curve_set, use_theo = TRUE)
-           quant_m <- curve_set_quant(curve_set, probs = probs)
+           curve_set_res <- residual(curve_set, use_theo = TRUE)
+           quant_m <- curve_set_quant(curve_set_res, probs = probs)
            #-- the 100(1-alpha)% global directional quantile envelope
            distancesorted <- sort(distance)
            kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
