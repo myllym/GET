@@ -116,6 +116,14 @@
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #' @export
 #' @aliases global_envelope
+#' @examples
+#' if(requireNamespace("fda", quietly = TRUE)) {
+#'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
+#'                                      obs = fda::growth$hgtf))
+#'   plot(curve_set, ylab="height")
+#'   cr <- central_region(curve_set, coverage=0.50, savedevs=TRUE, type="erl")
+#'   plot(cr, main="50% central region")
+#' }
 central_region <- function(curve_set, type = "rank",
                            coverage=0.95, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
