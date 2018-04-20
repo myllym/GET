@@ -102,8 +102,6 @@
 #' \itemize{
 #'   \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
 #'   \item alternative = The alternative specified in the function call.
-#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item ties = As the argument \code{ties}.
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
 #'   \item k = The values of the chosen measure for all the functions. If there is only one
