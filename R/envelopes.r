@@ -258,6 +258,7 @@ central_region <- function(curve_set, type = "rank",
 #' The functionality of the function is rather similar to the function
 #' \code{\link{central_region}}, but in addition to ordering the functions from
 #' the most extreme one to the least extreme one using different measures
+#' specified by the argument \code{type}
 #' (see for detailed description of the options the details in \code{\link{central_region}} and
 #' \code{\link{forder}}) and providing the global envelopes with intrinsic
 #' graphical interpretation, p-values are calculated for the test.
