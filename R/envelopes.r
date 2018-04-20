@@ -271,10 +271,9 @@ central_region <- function(curve_set, type = "rank",
 #' In the case \code{type="rank"}, based on the extreme ranks k_i, i=1, ..., s+1,
 #' the p-interval is calculated. Because the extreme ranks contain ties, there is not just
 #' one p-value. The p-interval is given by the most liberal and the most conservative p-value
-#' estimate. This interval is by default plotted for the object returned by the rank_envelope function.
-#' Also a single p-value is calculated and returned in the attribute \code{p}.
-#' By default this single p-value is the mid-rank p-value, but another option can be used by
-#' specifying \code{ties} argument.
+#' estimate. Also a single p-value is calculated.
+#' By default this single p-value is the extreme rank length p-value ("erl"),
+#' but another option can be used by specifying \code{ties} argument.
 #'
 #' If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
 #' of the functions is calculated and returned in the attribute \code{p}.
