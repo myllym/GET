@@ -529,7 +529,7 @@ print.envelope_test <- function(x, ...) {
 #'
 #' @method plot envelope_test
 #' @export
-#' @seealso \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
+#' @seealso \code{\link{global_envelope_test}}
 plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
         main, ylim, xlab, ylab, use_ggplot2, ...) {
     if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
