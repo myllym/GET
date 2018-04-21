@@ -240,6 +240,9 @@ central_region <- function(curve_set, type = "rank",
   attr(res, "desc") <- picked_attr$desc
   #attr(res, "unitname") <- "unit / units"
   attr(res, "shade") <- c("lo", "hi")
+  picked_attr$einfo$nsim <- Nfunc
+  picked_attr$einfo$nrank <- (1-coverage)*Nfunc
+  attr(res, "einfo") <- picked_attr$einfo
   attr(res, "call") <- match.call()
   res
 }

@@ -18,6 +18,7 @@ pick_attributes <- function(curve_set, alternative="two.sided") {
         desc[4] <- lo.name
         desc[5] <- hi.name
         ylab <- attr(curve_set, "ylab")
+        einfo <- attr(curve_set, "einfo")
     }
     else {
         fname <- "T"
@@ -35,8 +36,13 @@ pick_attributes <- function(curve_set, alternative="two.sided") {
                     lo.name, hi.name)
         }
         ylab <- "T(r)"
+        einfo <- list(Yname="curve_set[['obs']]", valname="", csr=FALSE, crs.theo=FALSE,
+                      use.theory=with(curve_set, exists("theo")), pois=FALSE,
+                      simtype="other",
+                      global=TRUE, ginterval=range(curve_set[['r']]),
+                      VARIANCE=FALSE, alternative=alternative)
     }
-    list(fname=fname, labl=labl, desc=desc, ylab=ylab)
+    list(fname=fname, labl=labl, desc=desc, ylab=ylab, einfo=einfo)
 }
 
 # Check r values of a curve_set object for plotting
