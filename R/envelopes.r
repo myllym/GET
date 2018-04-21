@@ -247,6 +247,20 @@ central_region <- function(curve_set, type = "rank",
   res
 }
 
+#' Print method for the class 'centralRegion'
+#' @usage \method{print}{centralRegion}(x, ...)
+#'
+#' @param x an 'centralRegion' object
+#' @param ... Ignored.
+#'
+#' @method print centralRegion
+#' @export
+print.centralRegion <- function(x, ...) {
+  cat(100*(1-attr(x, "alpha")), "% ", attr(x, "method"), " (", attr(x, "type"), "). \n",
+      " Plot the object instead.\n", sep="")
+}
+
+
 #' Global envelope test
 #'
 #' Global envelope test, p-values and global envelopes
