@@ -227,6 +227,7 @@ central_region <- function(curve_set, type = "rank",
   attr(res, "type") <- type
   attr(res, "alternative") <- alternative
   attr(res, "k_alpha") <- kalpha
+  attr(res, "alpha") <- 1 - coverage
   if(savedevs) attr(res, "k") <- distance
   # for fv
   attr(res, "fname") <- picked_attr$fname
