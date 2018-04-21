@@ -219,11 +219,11 @@ central_region <- function(curve_set, type = "rank",
 
   if(is.vector(curve_set[['obs']]))
     res <- structure(data.frame(r=curve_set[['r']], obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB),
-                     class = c("envelope", "fv", "data.frame"))
+                     class = c("centralRegion", "envelope", "fv", "data.frame"))
   else
     res <- structure(data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB),
-                     class = c("envelope", "fv", "data.frame"))
-  attr(res, "method") <- "Global envelope"
+                     class = c("centralRegion", "envelope", "fv", "data.frame"))
+  attr(res, "method") <- "central region"
   attr(res, "type") <- type
   attr(res, "alternative") <- alternative
   attr(res, "k_alpha") <- kalpha
