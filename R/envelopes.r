@@ -263,8 +263,25 @@ central_region <- function(curve_set, type = "rank",
 #' \code{\link{forder}}) and providing the global envelopes with intrinsic
 #' graphical interpretation, p-values are calculated for the test.
 #' Thus, while \code{\link{central_region}} can be used to construct global
-#' envelope in a general setting, the function \code{\link{global_envelope_test}}
+#' envelopes in a general setting, the function \code{\link{global_envelope_test}}
 #' is devoted to testing as its name suggests.
+#'
+#' @section Ranking of the curves:
+#' The options for measures to order the functions from the most extreme one to the least extreme one
+#' are given by the argument \code{type}: 'rank', 'erl', 'qdir', 'st', 'unscaled'.
+#' The options are
+#' \itemize{
+#' \item 'rank': extreme ranks (Myllymäki et al., 2017)
+#' \item 'erl': extreme rank lengths (Myllymäki et al., 2017; Mrkvička et al., 2018)
+#' \item 'qdir': the directional quantile maximum absolute deviation (MAD) measure (Myllymäki et al., 2015, 2017)
+#' \item 'st': the studentized MAD measure (Myllymäki et al., 2015, 2017)
+#' \item 'unscaled': the unscaled MAD measure (Ripley, 1981)
+#' }
+#' See more detailed description of the measures in \code{\link{central_region}} and \code{\link{forder}}.
+#'
+#' @section Global envelope:
+#' Based on the measures used to rank the functions, the 100(1-alpha)\% global envelope is provided.
+#' It corresponds to the 100*coverage\% central region.
 #'
 #' @section P-values:
 #' In the case \code{type="rank"}, based on the extreme ranks k_i, i=1, ..., s+1,
