@@ -141,6 +141,7 @@ forder <- function(curve_set, r_min = NULL, r_max = NULL,
              allranks <- hiranks
            })
 
+    # calculate measures from the pointwise ranks
     switch(measure,
            rank = {
              distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
