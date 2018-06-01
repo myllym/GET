@@ -1,3 +1,32 @@
+# Calculate continuous pointwise ranks
+cont_pointwise_hiranks <- function(data_and_sim_curves) {
+  Nfunc <- dim(data_and_sim_curves)[1]
+  nr <- dim(data_and_sim_curves)[2]
+  RRR <- array(0, c(Nfunc, nr))
+  for(i in 1:nr) {
+    y = data_and_sim_curves[,i]
+    ordery = order(y, decreasing = TRUE) # index of function values at "i" from largest to smallest
+    for(j in 2:(Nfunc-1)) {
+      if(y[ordery[j-1]] == y[ordery[j+1]])
+        RRR[ordery[j],i] = j-1
+      else
+        RRR[ordery[j],i] = j-1+(y[ordery[j-1]]-y[ordery[j]])/(y[ordery[j-1]]-y[ordery[j+1]])
+    }
+    RRR[ordery[1],i] = exp(-(y[ordery[1]]-y[ordery[2]])/(y[ordery[2]]-y[ordery[Nfunc]]))
+    RRR[ordery[Nfunc],i] = Nfunc
+    while(j <= Nfunc-2) {
+      k = 1
+      if(y[ordery[j]] == y[ordery[j+2]]) {
+        k = 3; S = 3*j+3
+        while(j+k <= Nfunc && y[ordery[j]] == y[ordery[j+k]]) { k = k+1; S = S+j+k }
+        for(t in j:(j+k-1)) { RRR[ordery[t],i] = S/k }
+      }
+      j = j+k
+    }
+  }
+  RRR
+}
+
 #' Functional ordering
 #'
 #' Calculates different measures for ordering the functions (or vectors)
