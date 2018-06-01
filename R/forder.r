@@ -1,4 +1,7 @@
-# Calculate continuous pointwise ranks
+# Continuous pointwise ranks
+#
+# Calculate continuous pointwise ranks of the curves from the largest (smallest rank)
+# to the smallest (largest rank).
 cont_pointwise_hiranks <- function(data_and_sim_curves) {
   Nfunc <- dim(data_and_sim_curves)[1]
   nr <- dim(data_and_sim_curves)[2]
