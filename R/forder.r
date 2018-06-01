@@ -82,7 +82,9 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
 #' @param alternative A character string specifying the alternative hypothesis.
 #' Must be one of the following: "two.sided" (default), "less" or "greater".
 #' The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.
-#' @inheritParams residual
+#' @param use_theo Logical. When calculating the measures 'max', 'int', 'int2',
+#'  should the theoretical function from \code{curve_set} be used (if 'theo' provided),
+#'  see \code{\link{deviation_test}}.
 #' @param probs A two-element vector containing the lower and upper
 #'   quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).
