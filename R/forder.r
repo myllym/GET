@@ -74,7 +74,7 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
 #'
 #' @inheritParams crop_curves
 #' @param measure The measure to use to order the functions from the most extreme to the least extreme
-#' one. Must be one of the following: 'rank', 'erl', 'max', 'int', 'int2'. Default is 'erl'.
+#' one. Must be one of the following: 'rank', 'erl', 'cont', 'area', 'max', 'int', 'int2'. Default is 'erl'.
 #' @param scaling The name of the scaling to use if measure is 'max', 'int' or 'int2'.
 #' Options include 'none', 'q', 'qdir' and 'st', where 'qdir' is the default.
 #' @param alternative A character string specifying the alternative hypothesis.
@@ -98,7 +98,7 @@ forder <- function(curve_set, r_min = NULL, r_max = NULL,
                     measure = 'erl', scaling = 'qdir',
                     alternative=c("two.sided", "less", "greater"),
                     use_theo = TRUE, probs = c(0.025, 0.975)) {
-  possible_measures <- c('rank', 'erl', 'max', 'int', 'int2')
+  possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!\n")
 
   curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
@@ -121,9 +121,15 @@ forder <- function(curve_set, r_min = NULL, r_max = NULL,
     Nfunc <- dim(data_and_sim_curves)[1]
     nr <- length(curve_set[['r']])
 
-    loranks <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
-    hiranks <- Nfunc+1-loranks
-
+    # calculate pointwise ranks
+    if(measure %in% c('rank', 'erl')) {
+      loranks <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
+      hiranks <- Nfunc+1-loranks
+    }
+    else { # 'cont', 'area'
+      hiranks <- cont_pointwise_hiranks(data_and_sim_curves)
+      loranks <- cont_pointwise_hiranks(-data_and_sim_curves)
+    }
     switch(alternative,
            "two.sided" = {
              allranks <- pmin(loranks, hiranks)
@@ -144,6 +150,16 @@ forder <- function(curve_set, r_min = NULL, r_max = NULL,
              lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
              newranks <- 1:Nfunc
              distance <- newranks[order(lexo_values)] / Nfunc # ordering of the functions by the extreme rank lengths
+           },
+           cont = {
+             distance <- apply(allranks, MARGIN=1, FUN=min)
+           },
+           area = {
+             RRRm <- apply(allranks, MARGIN=1, FUN=min)
+             RRRm <- ceiling(RRRm)
+             distance <- array(0, Nfunc)
+             #for(j in 1:Nfunc) distance[j] <- sum(RRRm[j]-allranks[j, allranks[j,] <= RRRm[j]]) + (max(RRRm)-RRRm[j])*nr
+             for(j in 1:Nfunc) distanceA[j] <- sum(allranks[j, allranks[j,] <= RRRm[j]]) + (RRRm[j]-1)*nr
            })
   }
   names(distance) <- rownames(data_and_sim_curves)
