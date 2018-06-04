@@ -303,11 +303,13 @@ print.centralRegion <- function(x, ...) {
 #'
 #' @section Ranking of the curves:
 #' The options for measures to order the functions from the most extreme one to the least extreme one
-#' are given by the argument \code{type}: 'rank', 'erl', 'qdir', 'st', 'unscaled'.
+#' are given by the argument \code{type}: 'rank', 'erl', 'cont', 'area', 'qdir', 'st', 'unscaled'.
 #' The options are
 #' \itemize{
 #' \item 'rank': extreme ranks (Myllymäki et al., 2017)
 #' \item 'erl': extreme rank lengths (Myllymäki et al., 2017; Mrkvička et al., 2018)
+#' \item 'cont':
+#' \item 'area':
 #' \item 'qdir': the directional quantile maximum absolute deviation (MAD) measure (Myllymäki et al., 2015, 2017)
 #' \item 'st': the studentized MAD measure (Myllymäki et al., 2015, 2017)
 #' \item 'unscaled': the unscaled MAD measure (Ripley, 1981)
@@ -328,12 +330,13 @@ print.centralRegion <- function(x, ...) {
 #'
 #' If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
 #' of the functions is calculated and returned in the attribute \code{p}.
+#' The same is done for other measures, the p-value always being correspondent to the chosen measure.
 #'
 #' @section Number of simulations:
-#' The extreme rank length ordering test (\code{type='erl'}) similarly as
-#' the MAD deviation/envelope tests \code{'qdir'}, \code{'st'} and \code{'unscaled'})
+#' The tests \code{'erl'}, \code{'cont'} and \code{'area'}, similarly as
+#' the MAD deviation/envelope tests \code{'qdir'}, \code{'st'} and \code{'unscaled'},
 #' allow in principle a lower number of simulations to be used than the test based on
-#' extreme ranks (\code{type='rank'}).
+#' extreme ranks (\code{'rank'}), because no ties occur for these measures.
 #' However, if affordable, we recommend some thousands of simulations in any case
 #' to achieve a good power and repeatability of the test.
 #'
@@ -516,6 +519,14 @@ global_envelope_test <- function(curve_set, type="rank", alpha=0.05, savedevs=FA
          erl = {
            u_lexo <- -distance
            p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
+         },
+         cont = {
+           u_cont <- -distance
+           p <- estimate_p_value(x=u_cont[1], sim_vec=u_cont[-1], ties="conservative")
+         },
+         area = {
+           u_area <- -distance
+           p <- estimate_p_value(x=u_area[1], sim_vec=u_area[-1], ties="conservative")
          },
          qdir = {
            p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
