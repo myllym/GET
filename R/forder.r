@@ -161,7 +161,7 @@ forder <- function(curve_set, r_min = NULL, r_max = NULL,
            },
            area = {
              RRRm <- apply(allranks, MARGIN=1, FUN=min)
-             RRRm <- ceiling(RRRm)
+             RRRm <- ceiling(RRRm) # = R_i + 1
              distance <- array(0, Nfunc)
              for(j in 1:Nfunc) distanceA[j] <- sum(allranks[j, allranks[j,] <= RRRm[j]]) + (RRRm[j]-1)*nr
            })
