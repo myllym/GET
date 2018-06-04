@@ -273,7 +273,7 @@ central_region <- function(curve_set, type = "rank",
 #' @method print centralRegion
 #' @export
 print.centralRegion <- function(x, ...) {
-  cat(100*(1-attr(x, "alpha")), "% ", attr(x, "method"), " (", attr(x, "type"), "). \n",
+  cat(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), "). \n",
       " Plot the object instead.\n", sep="")
 }
 
