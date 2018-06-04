@@ -5,9 +5,9 @@
 \alias{global_envelope}
 \title{Central region / Global envelope}
 \usage{
-central_region(curve_set, type = "rank", coverage = 0.95,
-  savedevs = FALSE, alternative = c("two.sided", "less", "greater"),
-  probs = c(0.025, 0.975), ...)
+central_region(curve_set, type = "erl", coverage = 0.95, savedevs = FALSE,
+  alternative = c("two.sided", "less", "greater"), probs = c(0.025, 0.975),
+  ...)
 }
 \arguments{
 \item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or

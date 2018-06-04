@@ -123,7 +123,7 @@
 #'   cr <- central_region(curve_set, coverage=0.50, savedevs=TRUE, type="erl")
 #'   plot(cr, main="50% central region")
 #' }
-central_region <- function(curve_set, type = "rank",
+central_region <- function(curve_set, type = "erl",
                            coverage=0.95, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
                            probs = c(0.025, 0.975), ...) {
@@ -396,7 +396,10 @@ print.centralRegion <- function(x, ...) {
 #' require(spatstat)
 #' pp <- unmark(spruces)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate")
+#' env <- envelope(pp, fun="Lest", nsim=2499,
+#'                 savefuns=TRUE, # save the functions
+#'                 correction="translate", # edge correction for L
+#'                 simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
 #' # The rank envelope test
 #' res <- global_envelope_test(env, type="rank", savedevs=TRUE)
 #' # Plot the result.
@@ -487,7 +490,7 @@ print.centralRegion <- function(x, ...) {
 #'   res2 <- global_envelope_test(cset2, type="rank")
 #'   plot(res2)
 #' }
-global_envelope_test <- function(curve_set, type="rank", alpha=0.05, savedevs=FALSE,
+global_envelope_test <- function(curve_set, type="erl", alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
                           ties = "erl", probs = c(0.025, 0.975)) {
   alternative <- match.arg(alternative)
@@ -709,7 +712,8 @@ plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=leng
 #' require(spatstat)
 #' pp <- unmark(spruces)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate")
+#' env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
+#'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
 #' # The rank envelope test
 #' res <- rank_envelope(env,savedevs=TRUE)
 #' # Plot the result.
@@ -850,7 +854,8 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' pp <- spruces
 #' ## Test for complete spatial randomness (CSR)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
+#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
+#'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
 #' # The studentised envelope test
 #' res <- st_envelope(env)
 #' plot(res)
@@ -924,7 +929,8 @@ st_envelope <- function(curve_set, ...) {
 #' pp <- spruces
 #' ## Test for complete spatial randomness (CSR)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
+#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
+#'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
 #' # The directional quantile envelope test
 #' res <- qdir_envelope(env)
 #' plot(res)
@@ -1001,7 +1007,8 @@ qdir_envelope <- function(curve_set, ...) {
 #' pp <- spruces
 #' ## Test for complete spatial randomness (CSR)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
+#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
+#'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
 #' # The studentised envelope test
 #' res <- unscaled_envelope(env)
 #' plot(res)

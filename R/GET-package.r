@@ -88,11 +88,14 @@
 #'                  for possible test functions (if \code{fun} not given, \code{Kest} is used,
 #'                  i.e. an estimator of the K function).
 #'
-#'                  Making 2499 simulations of CSR (note the number of points is not fixed here)
-#'                  and estimating K-function for each of them and data:
+#'                  Making 999 simulations of CSR
+#'                  and estimating K-function for each of them and data
+#'                  (the argument \code{simulate} specifies for \code{envelope} how to perform
+#'                  simulations under CSR):
 #'
 #'                  \code{
-#'                    env <- envelope(X, nsim=2499, savefuns=TRUE)
+#'                    env <- envelope(X, nsim=999, savefuns=TRUE,
+#'                                    simulate=expression(runifpoint(X$n, win=X$window)))
 #'                  }
 #'            \item Perform the test
 #'
@@ -131,12 +134,12 @@
 #'       \code{https://github.com/myllym/}).
 #'
 #'       \code{
-#'       curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#'       curve_set <- random_labelling(X, mtf_name = 'm', nsim=999, r_min=1.5, r_max=9.5)
 #'       }
 #' \item Then do the test and plot the result
 #'
 #'       \code{
-#'       res <- rank_envelope(curve_set); plot(res)
+#'       res <- global_envelope_test(curve_set); plot(res)
 #'       }
 #'}
 #'
@@ -149,7 +152,7 @@
 #'       from the functions T_i(r), i=1,...,s+1.
 #' \item Perform the test and plot the result
 #'
-#'       \code{res <- rank_envelope(curve_set) # curve_set is the 'curve_set'-object you created}
+#'       \code{res <- global_envelope_test(curve_set) # curve_set is the 'curve_set'-object you created}
 #'
 #'       \code{plot(res)}
 #' }
