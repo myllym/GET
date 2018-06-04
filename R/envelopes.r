@@ -240,7 +240,7 @@ central_region <- function(curve_set, type = "rank",
   else
     res <- structure(data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB),
                      class = c("centralRegion", "envelope", "fv", "data.frame"))
-  attr(res, "method") <- "central region"
+  attr(res, "method") <- "global envelope"
   attr(res, "type") <- type
   attr(res, "alternative") <- alternative
   attr(res, "k_alpha") <- kalpha
