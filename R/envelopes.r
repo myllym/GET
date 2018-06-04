@@ -116,7 +116,7 @@
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #' @export
 #' @aliases global_envelope
-central_region <- function(curve_set, type = "rank",
+central_region <- function(curve_set, type = "erl",
                            coverage=0.95, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
                            probs = c(0.025, 0.975), ...) {
@@ -429,7 +429,7 @@ central_region <- function(curve_set, type = "rank",
 #'   res2 <- global_envelope_test(cset2, type="rank")
 #'   plot(res2)
 #' }
-global_envelope_test <- function(curve_set, type="rank", alpha=0.05, savedevs=FALSE,
+global_envelope_test <- function(curve_set, type="erl", alpha=0.05, savedevs=FALSE,
                           alternative=c("two.sided", "less", "greater"),
                           ties = "erl", probs = c(0.025, 0.975)) {
   alternative <- match.arg(alternative)
