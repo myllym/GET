@@ -38,9 +38,10 @@
 #'  \item \code{'erl'}: extreme rank length (Myllymäki et al.,2017).
 #' Then the envelope is the global rank envelope based on the extreme rank length ordering.
 #' This envelope is constructed as the convex hull of the functions which have extreme rank
-#' length measure \eqn{R_i^{\text{erl}}}{Rerl_i}
-#' that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
-#' length measure (Mrkvička et al., 2018).
+#' length measure that is larger or equal to the critical \eqn{\alpha}{alpha} level of the
+#' extreme rank length measure (Mrkvička et al., 2018).
+#'  \item \code{'cont'}:
+#'  \item \code{'area'}:
 #'  \item \code{'qdir'}: the directional quantile maximum absolute deviation (MAD) measure
 #' (Myllymäki et al., 2015).
 #' The directional quantile envelope test (Myllymäki et al., 2017),
@@ -56,7 +57,7 @@
 #' We recommend to use the other alternatives instead. This unscaled global envelope is
 #' provided for reference.
 #' }
-#' We note that the global envelopes \code{'rank'} and \code{'erl'}
+#' We note that the global envelopes \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'}
 #' are completely non-parametric tests and thus protected against the unequal variances and asymmetry
 #' mentioned above.
 #' See detailed description of all the measures in \code{\link{forder}}.
