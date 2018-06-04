@@ -134,7 +134,7 @@
 #'       \code{https://github.com/myllym/}).
 #'
 #'       \code{
-#'       curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#'       curve_set <- random_labelling(X, mtf_name = 'm', nsim=999, r_min=1.5, r_max=9.5)
 #'       }
 #' \item Then do the test and plot the result
 #'
