@@ -139,7 +139,7 @@
 #' \item Then do the test and plot the result
 #'
 #'       \code{
-#'       res <- rank_envelope(curve_set); plot(res)
+#'       res <- global_envelope_test(curve_set); plot(res)
 #'       }
 #'}
 #'
@@ -152,7 +152,7 @@
 #'       from the functions T_i(r), i=1,...,s+1.
 #' \item Perform the test and plot the result
 #'
-#'       \code{res <- rank_envelope(curve_set) # curve_set is the 'curve_set'-object you created}
+#'       \code{res <- global_envelope_test(curve_set) # curve_set is the 'curve_set'-object you created}
 #'
 #'       \code{plot(res)}
 #' }
