@@ -129,7 +129,7 @@ central_region <- function(curve_set, type = "rank",
   if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
   if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
-  if(!(type %in% c("rank", "erl", "qdir", "st", "unscaled")))
+  if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
     stop("No such type for global envelope.\n")
   alternative <- match.arg(alternative)
   if(type %in% c("qdir", "st", "unscaled") && alternative != "two.sided") {
@@ -183,6 +183,22 @@ central_region <- function(curve_set, type = "rank",
            #-- the 100(1-alpha)% global ERL envelope
            distance_lexo_sorted <- sort(distance, decreasing=TRUE)
            kalpha <- distance_lexo_sorted[floor((1-alpha)*Nfunc)]
+           curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
+           LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
+           UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
+         },
+         cont = {
+           #-- the 100(1-alpha)% global 'area' envelope (determined similarly as ERL from 'distance')
+           distance_cont_sorted <- sort(distance, decreasing=TRUE)
+           kalpha <- distance_cont_sorted[floor((1-alpha)*Nfunc)]
+           curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
+           LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
+           UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
+         },
+         area = {
+           #-- the 100(1-alpha)% global 'area' envelope (determined similarly as ERL from 'distance')
+           distance_area_sorted <- sort(distance, decreasing=TRUE)
+           kalpha <- distance_area_sorted[floor((1-alpha)*Nfunc)]
            curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
            LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
            UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
