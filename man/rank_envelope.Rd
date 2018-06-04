@@ -125,7 +125,8 @@ and repeatability of the test.
 require(spatstat)
 pp <- unmark(spruces)
 # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate")
+env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
+                simulate=expression(runifpoint(pp$n, win=pp$window)))
 # The rank envelope test
 res <- rank_envelope(env,savedevs=TRUE)
 # Plot the result.

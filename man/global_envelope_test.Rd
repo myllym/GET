@@ -4,7 +4,7 @@
 \alias{global_envelope_test}
 \title{Global envelope test}
 \usage{
-global_envelope_test(curve_set, type = "rank", alpha = 0.05,
+global_envelope_test(curve_set, type = "erl", alpha = 0.05,
   savedevs = FALSE, alternative = c("two.sided", "less", "greater"),
   ties = "erl", probs = c(0.025, 0.975))
 }
@@ -94,7 +94,7 @@ the p-interval is calculated. Because the extreme ranks contain ties, there is n
 one p-value. The p-interval is given by the most liberal and the most conservative p-value
 estimate. This interval is by default plotted for the object returned by the rank_envelope function.
 Also a single p-value is calculated and returned in the attribute \code{p}.
-By default this single p-value is the mid-rank p-value, but another option can be used by
+By default this single p-value is the extreme rank length p-value, but another option can be used by
 specifying \code{ties} argument.
 
 If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
@@ -118,7 +118,10 @@ to achieve a good power and repeatability of the test.
 require(spatstat)
 pp <- unmark(spruces)
 # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate")
+env <- envelope(pp, fun="Lest", nsim=2499,
+                savefuns=TRUE, # save the functions
+                correction="translate", # edge correction for L
+                simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
 # The rank envelope test
 res <- global_envelope_test(env, type="rank", savedevs=TRUE)
 # Plot the result.
