@@ -163,7 +163,7 @@ forder <- function(curve_set, r_min = NULL, r_max = NULL,
              RRRm <- apply(allranks, MARGIN=1, FUN=min)
              RRRm <- ceiling(RRRm) # = R_i + 1
              distance <- array(0, Nfunc)
-             for(j in 1:Nfunc) distanceA[j] <- sum(allranks[j, allranks[j,] <= RRRm[j]]) + (RRRm[j]-1)*nr
+             for(j in 1:Nfunc) distance[j] <- sum(allranks[j, allranks[j,] <= RRRm[j]]) + (RRRm[j]-1)*nr
            })
   }
   names(distance) <- rownames(data_and_sim_curves)
