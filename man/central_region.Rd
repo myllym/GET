@@ -51,8 +51,6 @@ Additionally, the return value has attributes
 \itemize{
   \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
   \item alternative = The alternative specified in the function call.
-  \item p = A point estimate for the p-value (default is the mid-rank p-value).
-  \item p_interval = The p-value interval [p_liberal, p_conservative].
   \item ties = As the argument \code{ties}.
   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
   \item k = The values of the chosen measure for all the functions. If there is only one
@@ -103,9 +101,10 @@ proposed by Myllymäki et al. (2017).
  \item \code{'erl'}: extreme rank length (Myllymäki et al.,2017).
 Then the envelope is the global rank envelope based on the extreme rank length ordering.
 This envelope is constructed as the convex hull of the functions which have extreme rank
-length measure \eqn{R_i^{\text{erl}}}{Rerl_i}
-that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
-length measure (Mrkvička et al., 2018).
+length measure that is larger or equal to the critical \eqn{\alpha}{alpha} level of the
+extreme rank length measure (Mrkvička et al., 2018).
+ \item \code{'cont'}:
+ \item \code{'area'}:
  \item \code{'qdir'}: the directional quantile maximum absolute deviation (MAD) measure
 (Myllymäki et al., 2015).
 The directional quantile envelope test (Myllymäki et al., 2017),
@@ -121,7 +120,7 @@ of T(r) over the distances r and from the asymmetry of distribution of T(r).
 We recommend to use the other alternatives instead. This unscaled global envelope is
 provided for reference.
 }
-We note that the global envelopes \code{'rank'} and \code{'erl'}
+We note that the global envelopes \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'}
 are completely non-parametric tests and thus protected against the unequal variances and asymmetry
 mentioned above.
 See detailed description of all the measures in \code{\link{forder}}.
@@ -133,6 +132,15 @@ returned in the component 'k', where k[1] is the value for the data.
 Based on the chosen measure, the central region, i.e. the global envelope, is constructed
 on the chosen interval of argument values (the functions in the \code{curve_set} are assumed
 to be given on this interval only).
+}
+\examples{
+if(requireNamespace("fda", quietly = TRUE)) {
+  curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
+                                     obs = fda::growth$hgtf))
+  plot(curve_set, ylab="height")
+  cr <- central_region(curve_set, coverage=0.50, savedevs=TRUE, type="erl")
+  plot(cr, main="50\% central region")
+}
 }
 \references{
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172

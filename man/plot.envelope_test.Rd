@@ -40,5 +40,5 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 Plot method for the class 'envelope_test'
 }
 \seealso{
-\code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}
+\code{\link{global_envelope_test}}
 }

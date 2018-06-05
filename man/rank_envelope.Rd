@@ -57,47 +57,9 @@ The rank envelope test is a completely non-parametric test, which provides
 the 100(1-alpha)\% global envelope for the chosen test function T(r) on
 the chosen interval of distances and associated p-values.
 
-Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
-or an \code{\link[spatstat]{envelope}} object,
-which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)} and
-the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)},
-the test is carried out as described in the following sections that describe
-ordering of the functions, p-values and global envelopes.
+The test corresponds to the global envelope test that can be carriet out by
+\code{\link{global_envelope_test}} by specifying \code{type="rank"}.
 }
-\section{Ranking of the curves}{
-
-The options for measures to order the functions from the most extreme one to the least extreme one
-are given by the argument \code{type}: 'rank', 'erl', 'qdir', 'st', 'unscaled'.
-The options are
-\itemize{
-\item 'rank': extreme ranks
-\item 'erl': extreme rank lengths
-\item 'qdir': the directional quantile maximum absolute deviation (MAD) measure
-\item 'st': the studentized MAD measure
-\item 'unscaled': the unscaled MAD measure
-}
-See detailed description of the measures in \code{\link{forder}}.
-
-For each curve in the curve_set, both the data curve and the simulations,
-an above mention measure k is determined. If savedevs = TRUE, then the
-measure values \eqn{k_1, k_2, ..., k_{s+1}}{k_1, k_2, ..., k_(s+1)} are
-returned in the component 'k', where k[1] is the value for the data.
-}
-
-\section{P-values}{
-
-In the case \code{type="rank"}, based on the extreme ranks k_i, i=1, ..., s+1,
-the p-interval is calculated. Because the extreme ranks contain ties, there is not just
-one p-value. The p-interval is given by the most liberal and the most conservative p-value
-estimate. This interval is by default plotted for the object returned by the rank_envelope function.
-Also a single p-value is calculated and returned in the attribute \code{p}.
-By default this single p-value is the mid-rank p-value, but another option can be used by
-specifying \code{ties} argument.
-
-If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
-of the functions is calculated and returned in the attribute \code{p}.
-}
-
 \section{Global envelope}{
 
 The 100(1-alpha)\% global envelope is provided in addition to the p-values. 

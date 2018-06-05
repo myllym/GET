@@ -99,29 +99,52 @@ the most extreme one to the least extreme one using different measures
 and providing the global envelopes with intrinsic
 graphical interpretation, p-values are calculated for the test.
 Thus, while \code{\link{central_region}} can be used to construct global
-envelope in a general setting, the function \code{\link{global_envelope_test}}
+envelopes in a general setting, the function \code{\link{global_envelope_test}}
 is devoted to testing as its name suggests.
 }
+\section{Ranking of the curves}{
+
+The options for measures to order the functions from the most extreme one to the least extreme one
+are given by the argument \code{type}: 'rank', 'erl', 'cont', 'area', 'qdir', 'st', 'unscaled'.
+The options are
+\itemize{
+\item 'rank': extreme ranks (Myllymäki et al., 2017)
+\item 'erl': extreme rank lengths (Myllymäki et al., 2017; Mrkvička et al., 2018)
+\item 'cont':
+\item 'area':
+\item 'qdir': the directional quantile maximum absolute deviation (MAD) measure (Myllymäki et al., 2015, 2017)
+\item 'st': the studentized MAD measure (Myllymäki et al., 2015, 2017)
+\item 'unscaled': the unscaled MAD measure (Ripley, 1981)
+}
+See more detailed description of the measures in \code{\link{central_region}} and \code{\link{forder}}.
+}
+
+\section{Global envelope}{
+
+Based on the measures used to rank the functions, the 100(1-alpha)\% global envelope is provided.
+It corresponds to the 100*coverage\% central region.
+}
+
 \section{P-values}{
 
 In the case \code{type="rank"}, based on the extreme ranks k_i, i=1, ..., s+1,
 the p-interval is calculated. Because the extreme ranks contain ties, there is not just
 one p-value. The p-interval is given by the most liberal and the most conservative p-value
-estimate. This interval is by default plotted for the object returned by the rank_envelope function.
-Also a single p-value is calculated and returned in the attribute \code{p}.
-By default this single p-value is the extreme rank length p-value, but another option can be used by
-specifying \code{ties} argument.
+estimate. Also a single p-value is calculated.
+By default this single p-value is the extreme rank length p-value ("erl"),
+but another option can be used by specifying \code{ties} argument.
 
 If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
 of the functions is calculated and returned in the attribute \code{p}.
+The same is done for other measures, the p-value always being correspondent to the chosen measure.
 }
 
 \section{Number of simulations}{
 
-The extreme rank length ordering test (\code{type='erl'}) similarly as
-the MAD deviation/envelope tests \code{'qdir'}, \code{'st'} and \code{'unscaled'})
+The tests \code{'erl'}, \code{'cont'} and \code{'area'}, similarly as
+the MAD deviation/envelope tests \code{'qdir'}, \code{'st'} and \code{'unscaled'},
 allow in principle a lower number of simulations to be used than the test based on
-extreme ranks (\code{type='rank'}).
+extreme ranks (\code{'rank'}), because no ties occur for these measures.
 However, if affordable, we recommend some thousands of simulations in any case
 to achieve a good power and repeatability of the test.
 }
