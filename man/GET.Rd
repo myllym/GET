@@ -12,16 +12,16 @@ global envelope (tests) for single and many functions and multivariate vectors,
 adjusted global envelope tests, graphical functional one-way ANOVA
 }
 \details{
-The \pkg{GET} library provides central regions (alias global envelopes) and global envelope tests
-and also deviation tests (for comparison). The central regions can be constructed
-from the data and Monte Carlo simulations, or purely from (functional) data.
-Both type of tests are Monte Carlo tests, which demand simulations from the tested null model.
+The \pkg{GET} library provides central regions (alias global envelopes) and global envelope tests.
+The central regions can be constructed from the data and simulations,
+or purely from (functional) data.
+The tests are Monte Carlo tests, which demand simulations from the tested null model.
 The methods are applicable for any functional (or multivariate vector) data.
 
 In the special case of point processes, the functions are typically estimators of summary functions.
 The package supports the use of the R library \pkg{spatstat} for generating
 simulations and calculating estimators of the chosen summary function, but alternatively these
-can be done by any other methods, thus allowing for any models/functions.
+can be done by any other way, thus allowing for any models/functions.
 }
 \section{Key functions in \pkg{GET}}{
 
@@ -29,19 +29,15 @@ can be done by any other methods, thus allowing for any models/functions.
 \itemize{
  \item \emph{Functional ordering}: different measures for ordering the functions (or vectors) from
  the most extreme to the least extreme ones can be obtained for the functions by \code{\link{forder}}.
- Such orderings are the basis of central regions and different tests.
- \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
+ The orderings are the basis of central regions and different tests.
+ \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands} (without testing):
  \code{\link{central_region}}
- \item \emph{Global envelope tests}:
+ \item \emph{Global envelope tests}: \code{\link{global_envelope_test}} is the main function.
+ A full list of functions for global envelope tests:
  \itemize{
-\item For global envelope tests using single functions (for simple hypotheses)
-the main function is \code{\link{global_envelope_test}} with different \code{type}:
+\item Global envelope tests using \emph{single functions} (for simple hypotheses)
 \itemize{
-  \item "rank", the completely non-parametric rank envelope test (also the outdated function \code{\link{rank_envelope}} can be used)
-  \item "erl", the completely non-parametric rank envelope test based on extreme rank lengths
-  \item "qdir", the directional quantile envelope test, protected against unequal variance and asymmetry of T(r) for different distances r (\code{\link{qdir_envelope}})
-  \item "st", the studentised envelope test, protected against unequal variance of T(r) for different distances r (\code{\link{st_envelope}})
-  \item "unscaled", the unscaled envelope (providing a baseline) that has a contant width and that corresponds to the classical maximum deviation test (\code{\link{unscaled_envelope}}).
+  \item \code{\link{global_envelope_test}}
 }
 \item \emph{Adjusted} global envelope tests for composite hypotheses
 \itemize{
@@ -51,7 +47,7 @@ the main function is \code{\link{global_envelope_test}} with different \code{typ
 \itemize{
   \item Global scaled maximum absolute difference (MAD) envelope tests \code{\link{combined_scaled_MAD_envelope}}
   \item Combined rank envelope tests based on many functions can be done directly by
-  \code{\link{rank_envelope}} (\code{\link{combine_curve_sets}} can be used to combine several functions)
+  \code{\link{global_envelope_test}} (\code{\link{combine_curve_sets}} can be used to combine several functions)
   \item \code{\link{dg.combined_global_envelope}} for adjusted tests
 }
 }
@@ -71,14 +67,7 @@ See the help files of the functions for examples.
 To perform a test you always first need to obtain the test function T(r)
 for your data (T_1(r)) and for each simulation (T_2(r), ..., T_{nsim+1}(r)) in one way or another.
 Given the set of the functions T_i(r), i=1,...,nsim+1, you can perform a test
-by one of the following global envelope tests provided in \pkg{GET}:\code{\link{rank_envelope}},
-\code{\link{qdir_envelope}}, \code{\link{st_envelope}} or \code{\link{unscaled_envelope}}.
-
-In the following, the use of the \pkg{GET} library is demonstrated by its main function \code{\link{rank_envelope}},
-but alternatively this step can be replaced by a call of another function for envelope or
-deviation test (the main options are \code{\link{st_envelope}}, \code{\link{qdir_envelope}},
-\code{\link{deviation_test}}).
-
+by \code{\link{global_envelope_test}}.
 
 1) The workflow utilizing \pkg{spatstat}:
 
@@ -124,8 +113,7 @@ E.g. Say we have a point pattern, for which we would like to test a hypothesis, 
                  See the help documentation for possible models.
            \item Use \code{\link{dg.global_envelope}} to create nsim simulations
                  from the fitted model, to calculate the functions you want,
-                 and to make an adjusted global envelope test (either rank,
-                 directional quantile or studentized global envelope test).
+                 and to make an adjusted global envelope test.
                  See the detailed example in \code{\link{saplings}}.
            \item Plot the result
 
@@ -167,7 +155,7 @@ E.g. Say we have a point pattern, for which we would like to test a hypothesis, 
 }
 }
 
-\section{Further options and functions for modifying sets of functions}{
+\section{Functions for modifying sets of functions}{
 
 It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for the test.
 
@@ -177,7 +165,7 @@ It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for th
 Here T_0(r) is the expectation of T(r) under the null hypothesis.
 \item You can use \code{\link{combine_curve_sets}} to create a \code{curve_set} object from
 several \code{curve_set} or \code{\link[spatstat]{envelope}} objects. The object containing
-many curves can be passed to \code{\link{rank_envelope}}.
+many curves can be passed to \code{\link{global_envelope_test}}.
 }
 
 The function \code{\link{envelope_to_curve_set}} can be used to create a curve_set object

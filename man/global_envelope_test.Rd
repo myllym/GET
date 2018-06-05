@@ -70,18 +70,33 @@ and in the case that \code{type = 'rank'} also
 Global envelope test, p-values and global envelopes
 }
 \details{
+This is the main function for global envelope tests using single functions (for simple hypotheses).
+Different \code{type} of global envelope tests can be performed:
+\itemize{
+  \item "rank", the completely non-parametric rank envelope test (Myllymäki et al., 2017)
+  \item "erl", the completely non-parametric rank envelope test based on extreme rank lengths
+  (Myllymäki et al., 2017; Mrkvička et al., 2018)
+  \item "qdir", the directional quantile envelope test, protected against unequal variance and
+  asymmetry of T(r) for different distances r (Myllymäki et al., 2015, 2017)
+  \item "st", the studentised envelope test, protected against unequal variance of T(r) for
+  different distances r (Myllymäki et al., 2015, 2017)
+  \item "unscaled", the unscaled envelope (providing a baseline) that has a contant width and
+  that corresponds to the classical maximum deviation test (Ripley, 1981).
+}
+See for more detailed description of the options the details in \code{\link{central_region}} and
+\code{\link{forder}}.
+
 Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
 or an \code{\link[spatstat]{envelope}} object,
 which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)}
 (in the component \code{obs}) and
 the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)}
 (in the component \code{sim_m}),
-the function \code{global_envelope_test} performs a global envelope test.
+the function \code{global_envelope_test} performs one of the above global envelope tests.
 The functionality of the function is rather similar to the function
 \code{\link{central_region}}, but in addition to ordering the functions from
 the most extreme one to the least extreme one using different measures
-(see for detailed description of the options the details in \code{\link{central_region}} and
-\code{\link{forder}}) and providing the global envelopes with intrinsic
+and providing the global envelopes with intrinsic
 graphical interpretation, p-values are calculated for the test.
 Thus, while \code{\link{central_region}} can be used to construct global
 envelope in a general setting, the function \code{\link{global_envelope_test}}
@@ -219,6 +234,10 @@ Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Glo
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
+
+Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
+
+Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
 \seealso{
 \code{\link{plot.envelope_test}}
