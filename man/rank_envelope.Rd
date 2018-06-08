@@ -12,7 +12,7 @@ object. If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 
-\item{type}{The type of the global envelope with current options for "rank" and "erl".
+\item{type}{The type of the global envelope with current options for "rank", "erl", "cont" and "area".
 If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
 If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
 length p-value is given (Myllymäki et al., 2017, Mrkvicka et al., 2018). See details and additional
