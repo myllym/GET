@@ -41,8 +41,13 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
 #' which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)} and
 #' the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)},
 #' the functions are ordered from the most extreme one to the least extreme one
-#' by one of the following measures (specified by the argument \code{measure}):
-#'
+#' by one of the following measures (specified by the argument \code{measure}).
+#' Note that \code{'erl'}, \code{'cont'} and \code{'area'} were proposed as a refinement to
+#' the extreme ranks \code{'rank'}, because the extreme ranks can contain many ties.
+#' All of these completely non-parametric measures are smallest for the most extreme functions
+#' and largest for the least extreme ones,
+#' whereas the deviation measures (\code{'max'}, \code{'int'} and \code{'int2'}) obtain largest values
+#' for the most extreme functions.
 #' \itemize{
 #'  \item \code{'rank'}: extreme rank (Myllymäki et al., 2017).
 #' The extreme rank \eqn{R_i}{R_i} is defined as the minimum of pointwise ranks of the curve
@@ -52,8 +57,7 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
 #' exactly depends on the whether a one-sided (\code{alternative} is "less" or "greater") or the
 #' two-sided test (\code{alternative="two.sided"}) is chosen, for details see
 #' Mrkvička et al. (2017, page 1241) or Mrkvička et al. (2018, page 6).
-#'  \item \code{'erl'}: extreme rank length extreme rank lengths were proposed by Myllymäki et al. (2017)
-#'  as a refinement to extreme ranks, because the extreme ranks can contain many ties.
+#'  \item \code{'erl'}: extreme rank length (Myllymäki et al., 2017).
 #'  Considering the vector of pointwise ordered ranks \eqn{\mathbf{R}_i}{RP_i} of the ith curve,
 #'  the extreme rank length measure \eqn{R_i^{\text{erl}}}{Rerl_i} is equal to
 #' \deqn{R_i^{\text{erl}} = \frac{1}{s+1}\sum_{j=1}^{s+1} \1(\mathbf{R}_j \prec \mathbf{R}_i)}{Rerl_i = \sum_{j=1}^{s} 1(RP_j "<" RP_i) / (s + 1)}
@@ -61,8 +65,11 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
 #' there exists \eqn{n\leq d}{n<=d} such that for the first k, \eqn{k<n}{k<n}, pointwise ordered
 #' ranks of \eqn{\mathbf{R}_j}{RP_j} and \eqn{\mathbf{R}_i}{RP_i} are equal and the n'th rank of
 #' \eqn{\mathbf{R}_j}{RP_j} is smaller than that of \eqn{\mathbf{R}_i}{RP_i}.
-#'  \item \code{'cont'}:
-#'  \item \code{'area'}:
+#'  \item \code{'cont'}: continuous rank (Hahn, 2015; Mrkvička and Narisetty, 2018)
+#' based on minimum of continuous pointwise ranks
+#'  \item \code{'area'}: area rank (Mrkvička and Narisetty, 2018) based on area between continuous
+#'  pointwise ranks and minimum pointwise ranks for those argument (r) values for which pointwise
+#'  ranks achieve the minimum (it is a combination of erl and cont)
 #'  \item \code{'max'} and \code{'int'} and \code{'int2'}:
 #' Further options for the \code{measure} argument that can be used together with \code{scaling}.
 #' See the help in \code{\link{deviation_test}} for these options of \code{measure} and \code{scaling}.
