@@ -125,6 +125,7 @@
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #' @export
 #' @aliases global_envelope
+#' @seealso \code{\link{global_envelope_test}}
 #' @examples
 #' if(requireNamespace("fda", quietly = TRUE)) {
 #'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
