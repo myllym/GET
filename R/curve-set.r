@@ -385,10 +385,17 @@ check_curve_set_dimensions <- function(x) {
         if(!all(sapply(x, FUN=function(curve_set) { curve_set$is_residual == x[[1]]$is_residual })))
             stop("The element \'is_residual\' should be the same for each curve set.\n")
     }
-    # Check that the number of simulations in curve sets are equal.
+    # Check that the number of functions in 'obs' in curve sets are equal.
+    if('obs' %in% name_vec[[1]]) {
+      if(all(sapply(x, FUN=is.matrix))) {
+        if(!all(sapply(x, FUN=function(curve_set) { dim(curve_set$obs)[2] == dim(x[[1]]$obs)[2] })))
+          stop("The numbers of functions in 'obs' in curve sets differ.\n")
+      }
+    }
+    # Check that the number of functions in 'sim_m' in curve sets are equal.
     if('sim_m' %in% name_vec[[1]]) {
         if(!all(sapply(x, FUN=function(curve_set) { dim(curve_set$sim_m)[2] == dim(x[[1]]$sim_m)[2] })))
-            stop("The numbers of simulations in curve sets differ.\n")
+            stop("The numbers of functions in 'sim_m' in curve sets differ.\n")
     }
     x
 }
