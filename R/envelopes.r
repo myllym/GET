@@ -14,7 +14,7 @@
 #' is ignored and the central region constructed from the functions given in \code{obs}.
 #'  \item If the component \code{obs} is a vector, then \code{sim_m} should be provided as well
 #' and it is assumed to contain simulated functions (obtained, e.g., from some model or by permutation).
-#' Then the central region is constructed from the functions given in \code{sim_m}.
+#' The central region is calculated from all the functions.
 #' }
 #' Thus the \code{curve_set} contains functions (or vectors)
 #' \eqn{T_1(r),\dots,T_s(r)}{T_1(r),...,T_s(r)}.
