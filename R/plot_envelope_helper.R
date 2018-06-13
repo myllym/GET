@@ -85,7 +85,7 @@ curve_set_check_r <- function(x) {
         loc_break_values <- NULL
         r_values_newstart_id <- NULL
     }
-    
+
     list(r_values = r_values,
          retick_xaxis = retick_xaxis,
          new_r_values = new_r_values,
