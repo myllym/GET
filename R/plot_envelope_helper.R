@@ -162,23 +162,25 @@ env_ylim_default <- function(x, use_ggplot2) {
 #' @param color_outside Logical. Whether to color the places where the data function goes
 #' outside the envelope. Currently red color is used.
 #' @param labels Labels for the tests at x-axis.
+#' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
+#' @param arrows.col Color for the doplot arrows. Default 1 (black).
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics plot
 #' @importFrom graphics arrows
 #' @importFrom graphics points
 #' @importFrom graphics axis
-env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, ...) {
+env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, add=FALSE, arrows.col=1, ...) {
     nr <- length(x[['r']])
     if(missing(labels)) labels <- paste(round(x[['r']], digits=2))
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
-
-    graphics::plot(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
+    if(!add) graphics::plot(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
+    else graphics::points(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
     if(attr(x, "alternative")!="greater")
-        graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1)
+        graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=arrows.col)
     else
         graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
     if(attr(x, "alternative")!="less")
-        graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1)
+        graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=arrows.col)
     else
         graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
     graphics::axis(1, 1:nr, labels=labels)
