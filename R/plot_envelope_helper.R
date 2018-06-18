@@ -209,6 +209,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, a
 #' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
+#' @param env.col The color for the envelope lines. Default 1 (black).
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics par
 #' @importFrom graphics plot
@@ -217,7 +218,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, a
 #' @importFrom graphics axis
 #' @importFrom graphics abline
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
-                           separate_yaxes=FALSE, max_ncols_of_plots=2, ...) {
+                           separate_yaxes=FALSE, max_ncols_of_plots=2, add=FALSE, env.col=1, ...) {
     # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
     rdata <- curve_set_check_r(x)
     # Plot
@@ -229,8 +230,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         else
             graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                     type="l", lty=3, lwd=2, xaxt="n", ...)
-        if(attr(x, "alternative")!="greater") lines(x[['r']], x[['lo']], lty=2) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
-        if(attr(x, "alternative")!="less") lines(x[['r']], x[['hi']], lty=2) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
+        if(attr(x, "alternative")!="greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
+        if(attr(x, "alternative")!="less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
         if(!is.null(x[['obs']])) {
           lines(x[['r']], x[['obs']], lty=1)
           if(color_outside) {
