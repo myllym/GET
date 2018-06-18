@@ -135,7 +135,7 @@
 #'   plot(cr, main="50% central region")
 #' }
 central_region <- function(curve_set, type = "erl",
-                           coverage=0.95, savedevs=FALSE,
+                           coverage=0.50, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
                            probs = c(0.025, 0.975), ...) {
   if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
