@@ -127,6 +127,8 @@
 #' @aliases global_envelope
 #' @seealso \code{\link{global_envelope_test}}
 #' @examples
+#' ## A central region of a set of functions
+#' #----------------------------------------
 #' if(requireNamespace("fda", quietly = TRUE)) {
 #'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
 #'                                      obs = fda::growth$hgtf))
