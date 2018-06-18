@@ -430,7 +430,7 @@ two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, yla
     size.values <- c(0.2, 0.2)
     if(missing(xlab)) xlab <- expression(italic(r))
     if(missing(ylab)) ylab <- expression(italic(T(r)))
-    if(missing(main)) main <- paste(attr(x, "method"), " (", attr(x, "type"), ")", sep="")
+    if(missing(main)) main <- paste(attr(env1, "method"), " (", attr(env1, "type"), ")", sep="")
     if(missing(ylim)) ylim <- c(min(env1[['obs']],env1[['lo']],env1[['hi']],env1[['central']],
                                     env2[['obs']],env2[['lo']],env2[['hi']],env2[['central']]),
                                 max(env1[['obs']],env1[['lo']],env1[['hi']],env1[['central']],
