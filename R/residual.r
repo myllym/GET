@@ -58,9 +58,9 @@ residual <- function(curve_set, use_theo = TRUE) {
     res
 }
 
-# Define T_0 from a curve_set object
+# The central function T_0
 #
-# Define T_0, the expectation of the test function under H_0, from a curve_set object.
+# Calculate the central function T_0 from a curve_set object.
 #
 # @inheritParams crop_curves
 get_T_0 <- function(curve_set) {
