@@ -217,19 +217,19 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
 #' @importFrom stats quantile
 #' @importFrom stats sd
 combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, test = c("qdir", "st"), probs = c(0.025, 0.975)) {
-    curve_sets_res <- lapply(curve_sets, FUN = function(x) residual(x, use_theo = TRUE))
+  curve_sets_res <- lapply(curve_sets, FUN = function(x) residual(x, use_theo = TRUE))
 
-    switch(test,
-            qdir = {
-                quant_m_ls <- lapply(curve_sets_res, FUN = curve_set_quant, probs = probs)
-                lower_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[1,])))
-                upper_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[2,])))
-            },
-            st = {
-                lower_f <- upper_f <- lapply(curve_sets_res, FUN = function(x) { as.vector(curve_set_sd(x)) })
-            })
+  switch(test,
+         qdir = {
+           quant_m_ls <- lapply(curve_sets_res, FUN = curve_set_quant, probs = probs)
+           lower_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[1,])))
+           upper_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[2,])))
+         },
+         st = {
+           lower_f <- upper_f <- lapply(curve_sets_res, FUN = function(x) { as.vector(curve_set_sd(x)) })
+         })
 
-    list(lower_f = lower_f, upper_f = upper_f)
+  list(lower_f = lower_f, upper_f = upper_f)
 }
 
 # Calculate the lower and upper bounding curves of a combined global scaled MAD envelope test
@@ -239,18 +239,17 @@ combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, test = c("qdir
 # @param lower_f The first component in the object returned by \code{\link{combined_scaled_MAD_bounding_curves_chars}}.
 # @param upper_f The second component in the object returned by \code{\link{combined_scaled_MAD_bounding_curves_chars}}.
 combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_f, upper_f) {
-    ntests <- length(central_curves_ls)
-    if(length(max_u) != ntests | length(lower_f) != ntests | length(upper_f) != ntests)
-        stop("The lengths of different arguments do not match.\n")
-    # The global 100(1-alpha)% envelope
-    # Find the k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test
-    # Typically max_u <- res_rank$hi, where res_rank is the combined rank envelope test done.
-    # Lower and upper envelope
-    lo <- function(i) { as.vector(central_curves_ls[[i]] - max_u[i]*lower_f[[i]]) }
-    up <- function(i) { as.vector(central_curves_ls[[i]] + max_u[i]*upper_f[[i]]) }
-    list(lower_ls = lapply(1:ntests, FUN = lo), upper_ls = lapply(1:ntests, FUN = up))
+  ntests <- length(central_curves_ls)
+  if(length(max_u) != ntests | length(lower_f) != ntests | length(upper_f) != ntests)
+    stop("The lengths of different arguments do not match.\n")
+  # The global 100(1-alpha)% envelope
+  # Find the k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test
+  # Typically max_u <- res_rank$hi, where res_rank is the combined rank envelope test done.
+  # Lower and upper envelope
+  lo <- function(i) { as.vector(central_curves_ls[[i]] - max_u[i]*lower_f[[i]]) }
+  up <- function(i) { as.vector(central_curves_ls[[i]] + max_u[i]*upper_f[[i]]) }
+  list(lower_ls = lapply(1:ntests, FUN = lo), upper_ls = lapply(1:ntests, FUN = up))
 }
-
 
 #' Combined global scaled maximum absolute difference (MAD) envelope tests
 #'
