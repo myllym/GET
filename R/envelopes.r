@@ -764,7 +764,15 @@ plot.envelope_test <- function(x, ...) {
 #' the chosen interval of distances and associated p-values.
 #'
 #' The test corresponds to the global envelope test that can be carriet out by
-#' \code{\link{global_envelope_test}} by specifying \code{type="rank"}.
+#' \code{\link{global_envelope_test}} by specifying the \code{type} for which the options
+#' \code{"rank"}, \code{"erl"}, \code{"cont"} and \code{"area"} are available. The last
+#' three are modifications of the first one to treat the ties in the extreme rank ordering
+#' used in \code{"rank"}.
+#'
+#' Note: Earlier it was possible to specify to the extreme rank lengths breaking of ties for the rank
+#' envelope with specifying the argument \code{lexo = TRUE}. This is obsolete now. The same can be done
+#' by choosing \code{type = "rank"} and \code{ties = "erl"}, which is in fact the default of this
+#' \code{rank_envelope} function.
 #'
 #' @section Global envelope:
 #' The 100(1-alpha)\% global envelope is provided in addition to the p-values. 
