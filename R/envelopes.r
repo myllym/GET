@@ -288,6 +288,137 @@ print.global_envelope <- function(x, ...) {
       " Plot the object instead.\n", sep="")
 }
 
+#' Plot method for the class 'global_envelope'
+#' @usage \method{plot}{global_envelope}(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
+#'                                      main, ylim, xlab, ylab, use_ggplot2, ...)
+#'
+#' @param x an 'global_envelope' object
+#' @param plot_style One of the following "basic", "fv" or "ggplot2".
+#' The option "basic" (default) offers a very basic global envelope plot.
+#' The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
+#' For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
+#' The option "fv" is currently only available for tests with one test function, whereas the other true allow
+#' also tests with several tests functions.
+#' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
+#' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
+#' Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
+#' Default: TRUE if the dimension is less than 10, FALSE otherwise.
+#' @param main See \code{\link{plot.default}}. A sensible default exists.
+#' @param ylim See \code{\link{plot.default}}. A sensible default exists.
+#' @param xlab See \code{\link{plot.default}}. A sensible default exists.
+#' @param ylab See \code{\link{plot.default}}. A sensible default exists.
+#' @param use_ggplot2 Logical, whether plot_style is "ggplot2" or not. Outdated, use the argument plot_style instead.
+#' @param ... Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
+#' (if dotplot=TRUE) or \code{\link{env_ggplot}} (if plot_style="ggplot2").
+#'
+#' @method plot global_envelope
+#' @export
+#' @seealso \code{\link{central_region}}
+#' @importFrom spatstat pickoption
+plot.global_envelope <- function(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
+                                main, ylim, xlab, ylab, use_ggplot2, ...) {
+  if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
+  else use_ggplot2 <- FALSE
+  if(missing('main')) main <- env_main_default(x)
+  if(missing('ylim')) ylim <- env_ylim_default(x, use_ggplot2)
+  if(missing('xlab')) xlab <- expression(italic(r))
+  if(missing('ylab')) ylab <- expression(italic(T(r)))
+
+  plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
+                                                            b = "basic",
+                                                            fv = "fv",
+                                                            f = "fv",
+                                                            ggplot2 = "ggplot2",
+                                                            ggplot = "ggplot2",
+                                                            g = "ggplot2"))
+
+  switch(plot_style,
+         basic = {
+           if(dotplot) {
+             env_dotplot(x, main, ylim, xlab, ylab, ...)
+           }
+           else {
+             env_basic_plot(x, main, ylim, xlab, ylab, ...)
+           }
+         },
+         fv = {
+           spatstat::plot.fv(x, main=main, ylim=ylim, ...)
+         },
+         ggplot2 = {
+           env_ggplot(x, base_size, main, ylim, xlab, ylab, ...)
+         })
+}
+
+
+#' Functional boxplot
+#'
+#' Functional boxplot based on central region computed by a specified measure.
+#' The options of the measures can be found in \code{\link{central_region}}.
+#' @inheritParams central_region
+#' @param extension Extension of the central region to produce a functional boxplot. Default to 1.5.
+#' @param ... Additional parameters to be passed to \code{\link{central_region}},
+#' which is responsible for calculating the central region (global envelope) on which
+#' the functional boxplot is based.
+#' @export
+#' @examples
+#' if(requireNamespace("fda", quietly = TRUE)) {
+#'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
+#'                                      obs = fda::growth$hgtf))
+#'   plot(curve_set, ylab="height")
+#'   bp <- fBoxplot(curve_set, coverage=0.50, savedevs=TRUE, type="erl")
+#'   plot(bp)
+#' }
+fBoxplot <- function(curve_set, extension = 1.5, ...) {
+  res <- central_region(curve_set, ...)
+  res$lo <- res$central - extension * (res$central - res$lo)
+  res$hi <- res$central + extension * (res$hi - res$central)
+  attr(res, "method") <- "functional boxplot"
+  class(res) <- c("fboxplot", class(res))
+  res
+}
+
+#' Print method for the class 'fboxplot'
+#' @usage \method{print}{fboxplot}(x, ...)
+#'
+#' @param x an 'fboxplot' object
+#' @param ... Ignored.
+#'
+#' @method print fboxplot
+#' @export
+print.fboxplot <- function(x, ...) {
+  cat("Functional boxplot (", attr(x, "type"), "). \n",
+      " Plot the object instead.\n", sep="")
+}
+
+#' Plot method for the class 'fboxplot'
+#' @usage \method{plot}{fboxplot}(x, plot_style="basic", curve_set = NULL, ...)
+#'
+#' @param x an 'fboxplot' object
+#' @inheritParams plot.global_envelope
+#' @param curve_set A curve_set of functions, most likely the one from which the functional boxplot
+#' has been created. If given, then the functions outside the functional boxplot are drawn.
+#' @param ... Additional arguments to be passed to \code{\link{plot.global_envelope}}.
+#'
+#' @method plot fboxplot
+#' @export
+#' @importFrom spatstat pickoption
+plot.fboxplot <- function(x, plot_style="basic", curve_set=NULL, ...) {
+  plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
+                                                            b = "basic",
+                                                            fv = "fv",
+                                                            f = "fv",
+                                                            ggplot2 = "ggplot2",
+                                                            ggplot = "ggplot2",
+                                                            g = "ggplot2"))
+  plot.global_envelope(x, ...)
+  if(!is.null(curve_set) & plot_style=="basic") {
+    for(i in 1:ncol(curve_set$obs)) {
+      if(any(curve_set$obs[,i] < x$lo | curve_set$obs[,i] > x$hi))
+        lines(curve_set$r, curve_set$obs[,i], col=grey(0.7))
+    }
+  }
+}
+
 
 #' Global envelope test
 #'
