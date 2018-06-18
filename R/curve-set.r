@@ -375,7 +375,7 @@ check_curve_set_dimensions <- function(x) {
     # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
     # If the latter, then convert the objects to curve sets.
     x <- lapply(x, FUN=convert_envelope)
-    name_vec <- lapply(x, FUN=names)
+    name_vec <- lapply(x, FUN=function(x) { n <- names(x); n[n!="theo"] })
     # Possible_names in curve_sets are 'r', 'obs', 'sim_m', 'theo' and 'is_residual'.
     # Check that all curve sets contain the same elements
     if(!all(sapply(name_vec, FUN=identical, y=name_vec[[1]])))
