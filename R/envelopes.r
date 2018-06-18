@@ -134,6 +134,53 @@
 #'   cr <- central_region(curve_set, coverage=0.50, savedevs=TRUE, type="erl")
 #'   plot(cr, main="50% central region")
 #' }
+#'
+#' ## Confidence bands for linear or polynomial regression
+#' #------------------------------------------------------
+#' # Simulate regression data according to the cubic model f(x) = 0.8x - 1.8x^2 + 1.05x^3 for x in [0,1]
+#' par <- c(0,0.8,-1.8,1.05) # Parameters of the true polynomial model
+#' res <- 100 # Resolution
+#' x <- seq(0, 1, by = 1/res); x2=x^2; x3=x^3;
+#' f <- par[1] + par[2]*x + par[3]*x^2 + par[4]*x^3 # The true function
+#' d <- f + rnorm(length(x), 0, 0.04) # Data
+#' # Plot the true function and data
+#' plot(f, type="l", ylim=range(d))
+#' points(d)
+#'
+#' # Estimate polynomial regression model
+#' reg <- lm(d ~ x + x2 + x3)
+#' ftheta <- reg$fitted.values
+#' resid0 <- reg$residuals
+#' s0 <- sd(resid0)
+#'
+#' # Bootstrap regression
+#' B <- 2000 # Number of bootstrap samples
+#' ftheta1 <- array(0, c(B,length(x)))
+#' s1 <- array(0,B)
+#' for(i in 1:B) {
+#'   u <- sample(resid0, size=length(resid0), replace = TRUE)
+#'   reg1 <- lm((ftheta+u) ~ x + x2 + x3)
+#'   ftheta1[i,] <- reg1$fitted.values
+#'   s1[i] <- sd(reg1$residuals)
+#' }
+#'
+#' # Centering and scaling
+#' meanftheta <- apply(ftheta1, 2, mean)
+#' m <- array(0, c(B,length(x)))
+#' for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
+#'
+#' # Central region computation
+#' boot.cset <- create_curve_set(list(r = 1:length(x), obs = t(m)))
+#' cr <- central_region(boot.cset, coverage=0.95, type="erl")
+#' CB.lo <- ftheta+s0*cr$lo
+#' CB.hi <- ftheta+s0*cr$hi
+#'
+#' # Plotting the result
+#' plot(d, ylab="f(x)", xaxt = "n", xlab="x", main = "95% central region")
+#' axis(1, at=(0:5)*20, labels=(0:5)/5)
+#' lines(ftheta)
+#' lines(CB.lo, lty=2)
+#' lines(CB.hi, lty=2)
 central_region <- function(curve_set, type = "erl",
                            coverage=0.50, savedevs=FALSE,
                            alternative=c("two.sided", "less", "greater"),
