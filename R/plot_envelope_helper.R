@@ -97,22 +97,34 @@ curve_set_check_r <- function(x) {
 # An internal GET function for setting the default main for a global envelope plot.
 # @param x An 'envelope_test' object.
 env_main_default <- function(x) {
-    if(!is.null(attr(x, "p_interval"))) {
-        if(attr(x, "alternative") == "two.sided")
-            paste(attr(x, "method"), ": p-interval = (",
-                  round(attr(x, "p_interval")[1],3),", ", round(attr(x, "p_interval")[2],3), ")", sep="")
-        else
-            paste(attr(x, "method"), ": p-interval = (",
-                  round(attr(x, "p_interval")[1],3),", ", round(attr(x, "p_interval")[2],3), ") \n",
-                  "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
+  if(!is.null(attr(x, "p_interval"))) {
+    if(attr(x, "alternative") == "two.sided")
+      main <- paste(attr(x, "method"), ": p-interval = (",
+                    round(attr(x, "p_interval")[1],3),", ",
+                    round(attr(x, "p_interval")[2],3), ")", sep="")
+    else
+      main <- paste(attr(x, "method"), ": p-interval = (",
+                    round(attr(x, "p_interval")[1],3),", ",
+                    round(attr(x, "p_interval")[2],3), ") \n",
+                    "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
+  }
+  else {
+    if(!is.null(attr(x, "p"))) {
+      if(attr(x, "alternative") == "two.sided")
+        main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"),3), sep="")
+      else
+        main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"),3), "\n",
+                      "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
     }
     else {
-        if(attr(x, "alternative") == "two.sided")
-            paste(attr(x, "method"), ": p = ", round(attr(x, "p"),3), sep="")
-        else
-            paste(attr(x, "method"), ": p = ", round(attr(x, "p"),3), "\n",
-                  "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
+      if(class(x)[1] == "global_envelope")
+        main <- paste(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
+      if(class(x)[2] == "fboxplot")
+        cat("am I here?\n")
+        main <- paste("Functional boxplot based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
     }
+  }
+  main
 }
 
 # An internal GET function for setting the default ylim for a global envelope plot.
