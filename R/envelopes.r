@@ -741,64 +741,16 @@ print.envelope_test <- function(x, ...) {
 }
 
 #' Plot method for the class 'envelope_test'
-#' @usage \method{plot}{envelope_test}(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
-#'                                      main, ylim, xlab, ylab, use_ggplot2, ...)
+#' @usage \method{plot}{envelope_test}(x, ...)
 #'
-#' @param x an 'envelope_test' object
-#' @param plot_style One of the following "basic", "fv" or "ggplot2".
-#' The option "basic" (default) offers a very basic global envelope plot.
-#' The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
-#' For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
-#' The option "fv" is currently only available for tests with one test function, whereas the other true allow
-#' also tests with several tests functions.
-#' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
-#' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
-#' Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
-#' Default: TRUE if the dimension is less than 10, FALSE otherwise.
-#' @param main See \code{\link{plot.default}}. A sensible default exists.
-#' @param ylim See \code{\link{plot.default}}. A sensible default exists.
-#' @param xlab See \code{\link{plot.default}}. A sensible default exists.
-#' @param ylab See \code{\link{plot.default}}. A sensible default exists.
-#' @param use_ggplot2 Logical, whether plot_style is "ggplot2" or not. Outdated, use the argument plot_style instead.
-#' @param ... Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
-#' (if dotplot=TRUE) or \code{\link{env_ggplot}} (if plot_style="ggplot2").
+#' @param x an 'envelope_test' object'
+#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
 #'
 #' @method plot envelope_test
 #' @export
 #' @seealso \code{\link{global_envelope_test}}
-plot.envelope_test <- function(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
-        main, ylim, xlab, ylab, use_ggplot2, ...) {
-    if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
-    else use_ggplot2 <- FALSE
-
-    if(missing('main')) main <- env_main_default(x)
-    if(missing('ylim')) ylim <- env_ylim_default(x, use_ggplot2)
-    if(missing('xlab')) xlab <- expression(italic(r))
-    if(missing('ylab')) ylab <- expression(italic(T(r)))
-
-    plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
-                                                            b = "basic",
-                                                            fv = "fv",
-                                                            f = "fv",
-                                                            ggplot2 = "ggplot2",
-                                                            ggplot = "ggplot2",
-                                                            g = "ggplot2"))
-
-    switch(plot_style,
-           basic = {
-             if(dotplot) {
-               env_dotplot(x, main, ylim, xlab, ylab, ...)
-             }
-             else {
-               env_basic_plot(x, main, ylim, xlab, ylab, ...)
-             }
-           },
-           fv = {
-             spatstat::plot.fv(x, main=main, ylim=ylim, ...)
-           },
-           ggplot2 = {
-             env_ggplot(x, base_size, main, ylim, xlab, ylab, ...)
-           })
+plot.envelope_test <- function(x, ...) {
+  plot.global_envelope(x, ...)
 }
 
 
