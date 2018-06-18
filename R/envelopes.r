@@ -247,10 +247,10 @@ central_region <- function(curve_set, type = "erl",
 
   if(is.vector(curve_set[['obs']]))
     res <- structure(data.frame(r=curve_set[['r']], obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB),
-                     class = c("centralRegion", "envelope", "fv", "data.frame"))
+                     class = c("global_envelope", "envelope", "fv", "data.frame"))
   else
     res <- structure(data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB),
-                     class = c("centralRegion", "envelope", "fv", "data.frame"))
+                     class = c("global_envelope", "envelope", "fv", "data.frame"))
   attr(res, "method") <- "global envelope"
   attr(res, "type") <- type
   attr(res, "alternative") <- alternative
@@ -275,15 +275,15 @@ central_region <- function(curve_set, type = "erl",
   res
 }
 
-#' Print method for the class 'centralRegion'
-#' @usage \method{print}{centralRegion}(x, ...)
+#' Print method for the class 'global_envelope'
+#' @usage \method{print}{global_envelope}(x, ...)
 #'
-#' @param x an 'centralRegion' object
+#' @param x an 'global_envelope' object
 #' @param ... Ignored.
 #'
-#' @method print centralRegion
+#' @method print global_envelope
 #' @export
-print.centralRegion <- function(x, ...) {
+print.global_envelope <- function(x, ...) {
   cat(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), "). \n",
       " Plot the object instead.\n", sep="")
 }
