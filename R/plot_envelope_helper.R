@@ -163,15 +163,16 @@ env_ylim_default <- function(x, use_ggplot2) {
 #' outside the envelope. Currently red color is used.
 #' @param labels Labels for the tests at x-axis.
 #' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
-#' @param arrows.col Color for the doplot arrows. Default 1 (black).
+#' @param arrows.col Color for the doplot arrows. If not given, 1 (black) is used.
 #' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics plot
 #' @importFrom graphics arrows
 #' @importFrom graphics points
 #' @importFrom graphics axis
-env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, add=FALSE, arrows.col=1, ...) {
+env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, add=FALSE, arrows.col, ...) {
     nr <- length(x[['r']])
     if(missing(labels)) labels <- paste(round(x[['r']], digits=2))
+    if(missing(arrows.col)) arrows.col <- 1
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
     if(!add) graphics::plot(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
     else graphics::points(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
