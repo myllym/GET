@@ -199,13 +199,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, a
 #'
 #' An internal GET function for making a basic "global envelope plot".
 #'
-#' @param x An 'envelope_test' object.
-#' @param main See \code{\link{plot.default}}.
-#' @param ylim See \code{\link{plot.default}}.
-#' @param xlab See \code{\link{plot.default}}.
-#' @param ylab See \code{\link{plot.default}}.
-#' @param color_outside Logical. Whether to color the places where the data function goes
-#' outside the envelope. Currently red color is used.
+#' @inheritParams env_dotplot
 #' @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
 #' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
