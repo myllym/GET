@@ -219,12 +219,18 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     # Plot
     if(!separate_yaxes) {
         if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
-        if(!rdata$retick_xaxis)
-            graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                    type="l", lty=3, lwd=2, ...)
-        else
-            graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                    type="l", lty=3, lwd=2, xaxt="n", ...)
+        if(!rdata$retick_xaxis) {
+            if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                                    type="l", lty=3, lwd=2, ...)
+            else graphics::lines(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                                 lty=3, lwd=2, ...)
+        }
+        else {
+          if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                                  type="l", lty=3, lwd=2, xaxt="n", ...)
+          else graphics::lines(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                               lty=3, lwd=2, xaxt="n", ...)
+        }
         if(attr(x, "alternative")!="greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
         if(attr(x, "alternative")!="less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
         if(!is.null(x[['obs']])) {
@@ -261,10 +267,16 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                       max(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                           x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                           x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
-            graphics::plot(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                           x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                           main="", xlab=xlab[i], ylab=ylab[i],
-                           type="l", lty=3, lwd=2, ylim=ylim, ...)
+            if(!add)
+              graphics::plot(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                             x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                             main="", xlab=xlab[i], ylab=ylab[i],
+                             type="l", lty=3, lwd=2, ylim=ylim, ...)
+            else
+              graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                             x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                             main="", xlab=xlab[i], ylab=ylab[i],
+                             lty=3, lwd=2, ylim=ylim, ...)
             if(attr(x, "alternative")!="greater")
                 graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
             else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
