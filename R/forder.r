@@ -204,70 +204,22 @@ forder <- function(curve_sets, r_min = NULL, r_max = NULL,
                     measure = 'erl', scaling = 'qdir',
                     alternative=c("two.sided", "less", "greater"),
                     use_theo = TRUE, probs = c(0.025, 0.975)) {
-  possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
-  if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!\n")
-
-  curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
-
-  if(measure %in% c('max', 'int', 'int2')) {
-    curve_set <- residual(curve_set, use_theo = use_theo)
-    if(scaling %in% c('q', 'qdir')) curve_set <- scale_curves(curve_set, scaling = scaling, probs = probs)
-    else curve_set <- scale_curves(curve_set, scaling = scaling)
-    data_and_sim_curves <- data_and_sim_curves(curve_set)
-    curve_set_tmp <- create_curve_set(list(r=curve_set[['r']],
-                                           obs=data_and_sim_curves[1,],
-                                           sim_m=t(data_and_sim_curves[-1,]),
-                                           is_residual=curve_set[['is_residual']]))
-    devs <- deviation(curve_set_tmp, measure = measure)
-    distance <- c(devs$obs, devs$sim)
+  if(class(curve_sets) == "list") {
+    curve_sets <- check_curve_set_dimensions(curve_sets)
+    res <- combined_forder(curve_sets, r_min = r_min, r_max = r_max,
+                           measure = measure, scaling = scaling,
+                           alternative = alternative,
+                           use_theo = use_theo, probs = probs)
+    distance <- res$distance
+    names(distance) <- rownames(data_and_sim_curves(curve_sets[[1]]))
   }
   else {
-    alternative <- match.arg(alternative)
-    data_and_sim_curves <- data_and_sim_curves(curve_set)
-    Nfunc <- dim(data_and_sim_curves)[1]
-    nr <- length(curve_set[['r']])
-
-    # calculate pointwise ranks
-    if(measure %in% c('rank', 'erl')) {
-      loranks <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
-      hiranks <- Nfunc+1-loranks
-    }
-    else { # 'cont', 'area'
-      hiranks <- cont_pointwise_hiranks(data_and_sim_curves)
-      loranks <- cont_pointwise_hiranks(-data_and_sim_curves)
-    }
-    switch(alternative,
-           "two.sided" = {
-             allranks <- pmin(loranks, hiranks)
-           },
-           "less" = {
-             allranks <- loranks
-           },
-           "greater" = {
-             allranks <- hiranks
-           })
-
-    # calculate measures from the pointwise ranks
-    switch(measure,
-           rank = {
-             distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
-           },
-           erl = {
-             sortranks <- apply(allranks, 1, sort) # curves now represented as columns
-             lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
-             newranks <- 1:Nfunc
-             distance <- newranks[order(lexo_values)] / Nfunc # ordering of the functions by the extreme rank lengths
-           },
-           cont = {
-             distance <- apply(allranks, MARGIN=1, FUN=min)
-           },
-           area = {
-             RRRm <- apply(allranks, MARGIN=1, FUN=min)
-             RRRm <- ceiling(RRRm) # = R_i
-             distance <- array(0, Nfunc)
-             for(j in 1:Nfunc) distance[j] <- -(sum(RRRm[j] - allranks[j, allranks[j,] <= RRRm[j]]) + (max(RRRm)-RRRm[j])*nr)
-           })
+    res <- individual_forder(curve_sets, r_min = r_min, r_max = r_max,
+                             measure = measure, scaling = scaling,
+                             alternative = alternative,
+                             use_theo = use_theo, probs = probs)
+    distance <- res$distance
+    names(distance) <- rownames(data_and_sim_curves(curve_sets))
   }
-  names(distance) <- rownames(data_and_sim_curves)
   distance
 }
