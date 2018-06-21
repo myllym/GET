@@ -183,12 +183,19 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
   if(level == 1) {
     if(plot_style %in% c("basic", "ggplot2")) {
       # Create a combined envelope object for plotting
-      res_tmp <- structure(data.frame(r = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$r), quote=FALSE),
-                                      obs = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$obs), quote=FALSE),
-                                      central = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$central), quote=FALSE),
-                                      lo = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$lo), quote=FALSE),
-                                      hi = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$hi), quote=FALSE)),
-                           class = class(x$global_envelope_ls[[1]]))
+      if(!is.null(x$global_envelope_ls[[1]]$obs))
+        res_tmp <- structure(data.frame(r = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$r), quote=FALSE),
+                                        obs = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$obs), quote=FALSE),
+                                        central = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$central), quote=FALSE),
+                                        lo = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$lo), quote=FALSE),
+                                        hi = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$hi), quote=FALSE)),
+                             class = class(x$global_envelope_ls[[1]]))
+      else
+        res_tmp <- structure(data.frame(r = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$r), quote=FALSE),
+                                        central = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$central), quote=FALSE),
+                                        lo = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$lo), quote=FALSE),
+                                        hi = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$hi), quote=FALSE)),
+                             class = class(x$global_envelope_ls[[1]]))
       attr(res_tmp, "method") <- attr(x$global_envelope_ls[[1]], "method")
       attr(res_tmp, "alternative") <- attr(x$global_envelope_ls[[1]], "alternative")
       if(!is.null(attr(x$step2_erl, "p"))) attr(res_tmp, "p") <- attr(x$step2_erl, "p")
