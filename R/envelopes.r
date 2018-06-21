@@ -139,7 +139,8 @@
 #'
 #' ## Confidence bands for linear or polynomial regression
 #' #------------------------------------------------------
-#' # Simulate regression data according to the cubic model f(x) = 0.8x - 1.8x^2 + 1.05x^3 for x in [0,1]
+#' # Simulate regression data according to the cubic model
+#' # f(x) = 0.8x - 1.8x^2 + 1.05x^3 for x in [0,1]
 #' par <- c(0,0.8,-1.8,1.05) # Parameters of the true polynomial model
 #' res <- 100 # Resolution
 #' x <- seq(0, 1, by = 1/res); x2=x^2; x3=x^3;
