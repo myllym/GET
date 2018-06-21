@@ -30,6 +30,99 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
   RRR
 }
 
+# Functionality for functional ordering based on a curve set
+individual_forder <- function(curve_set, r_min = NULL, r_max = NULL,
+                              measure = 'erl', scaling = 'qdir',
+                              alternative=c("two.sided", "less", "greater"),
+                              use_theo = TRUE, probs = c(0.025, 0.975)) {
+  possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
+  if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!\n")
+
+  curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max) # Checks also curve_set content
+
+  if(measure %in% c('max', 'int', 'int2')) {
+    curve_set <- residual(curve_set, use_theo = use_theo)
+    if(scaling %in% c('q', 'qdir')) curve_set <- scale_curves(curve_set, scaling = scaling, probs = probs)
+    else curve_set <- scale_curves(curve_set, scaling = scaling)
+    data_and_sim_curves <- data_and_sim_curves(curve_set)
+    curve_set_tmp <- create_curve_set(list(r=curve_set[['r']],
+                                           obs=data_and_sim_curves[1,],
+                                           sim_m=t(data_and_sim_curves[-1,]),
+                                           is_residual=curve_set[['is_residual']]))
+    devs <- deviation(curve_set_tmp, measure = measure)
+    distance <- c(devs$obs, devs$sim)
+  }
+  else {
+    alternative <- match.arg(alternative)
+    data_and_sim_curves <- data_and_sim_curves(curve_set)
+    Nfunc <- dim(data_and_sim_curves)[1]
+    nr <- length(curve_set[['r']])
+    scaling <- NULL
+
+    # calculate pointwise ranks
+    if(measure %in% c('rank', 'erl')) {
+      loranks <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
+      hiranks <- Nfunc+1-loranks
+    }
+    else { # 'cont', 'area'
+      hiranks <- cont_pointwise_hiranks(data_and_sim_curves)
+      loranks <- cont_pointwise_hiranks(-data_and_sim_curves)
+    }
+    switch(alternative,
+           "two.sided" = {
+             allranks <- pmin(loranks, hiranks)
+           },
+           "less" = {
+             allranks <- loranks
+           },
+           "greater" = {
+             allranks <- hiranks
+           })
+
+    # calculate measures from the pointwise ranks
+    switch(measure,
+           rank = {
+             distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
+           },
+           erl = {
+             sortranks <- apply(allranks, 1, sort) # curves now represented as columns
+             lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
+             newranks <- 1:Nfunc
+             distance <- newranks[order(lexo_values)] / Nfunc # ordering of the functions by the extreme rank lengths
+           },
+           cont = {
+             distance <- apply(allranks, MARGIN=1, FUN=min)
+           },
+           area = {
+             RRRm <- apply(allranks, MARGIN=1, FUN=min)
+             RRRm <- ceiling(RRRm) # = R_i
+             distance <- array(0, Nfunc)
+             for(j in 1:Nfunc) distance[j] <- -(sum(RRRm[j] - allranks[j, allranks[j,] <= RRRm[j]]) + (max(RRRm)-RRRm[j])*nr)
+           })
+  }
+  names(distance) <- rownames(data_and_sim_curves)
+  list(distance = distance, measure = measure)
+}
+
+# Functionality for functional ordering based on several curve sets
+combined_forder <- function(curve_sets, ...) {
+  ntests <- length(curve_sets)
+  curve_sets <- check_curve_set_dimensions(curve_sets)
+
+  # 1) First stage: Calculate the functional orderings individually for each curve_set
+  res_ls <- lapply(curve_sets, FUN = function(x) { individual_forder(x, ...) })
+
+  # 2) Second stage: ERL ordering
+  # Create a curve_set for the ERL test
+  k_ls <- lapply(res_ls, FUN = function(x) x$distance)
+  k_mat <- do.call(rbind, k_ls, quote=FALSE)
+  curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat, is_residual=FALSE))
+  # Construct the one-sided ERL central region
+  if(res_ls[[1]]$measure %in% c('max', 'int', 'int2')) alt2 <- "greater"
+  else alt2 <- "less"
+  individual_forder(curve_set_u, measure="erl", alternative=alt2)
+}
+
 #' Functional ordering
 #'
 #' Calculates different measures for ordering the functions (or vectors)
