@@ -174,6 +174,7 @@ combined_forder <- function(curve_sets, ...) {
 #' in the curve set. If the component \code{obs} in the curve set is a vector, then its measure
 #' will be the first component (named 'obs') in the returned vector.
 #'
+#' @param curve_sets A \code{curve_set} object or a list of \code{curve_set} objects.
 #' @inheritParams crop_curves
 #' @param measure The measure to use to order the functions from the most extreme to the least extreme
 #' one. Must be one of the following: 'rank', 'erl', 'cont', 'area', 'max', 'int', 'int2'. Default is 'erl'.
@@ -198,7 +199,7 @@ combined_forder <- function(curve_sets, ...) {
 #'   forder(curve_set, measure = "rank")
 #'   forder(curve_set, measure = "erl")
 #' }
-forder <- function(curve_set, r_min = NULL, r_max = NULL,
+forder <- function(curve_sets, r_min = NULL, r_max = NULL,
                     measure = 'erl', scaling = 'qdir',
                     alternative=c("two.sided", "less", "greater"),
                     use_theo = TRUE, probs = c(0.025, 0.975)) {
