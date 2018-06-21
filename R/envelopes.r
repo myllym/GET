@@ -1,3 +1,150 @@
+# Functionality for functional ordering based on a curve set
+individual_central_region <- function(curve_set, type = "erl",
+                           coverage=0.50, savedevs=FALSE,
+                           alternative=c("two.sided", "less", "greater"),
+                           probs = c((1-coverage)/2, 1-(1-coverage)/2),
+                           central = "median", ...) {
+  if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
+  alpha <- 1 - coverage
+  if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
+  if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
+    stop("No such type for global envelope.\n")
+  alternative <- match.arg(alternative)
+  if(type %in% c("qdir", "st", "unscaled") && alternative != "two.sided") {
+    warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.\n")
+    alternative <- "two.sided"
+  }
+  check_probs(probs)
+  if(!(central %in% c("mean", "median"))) {
+    central <- "median"
+    warning("Invalid option fiven for central. Using central = median.\n")
+  }
+  picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
+  curve_set <- convert_envelope(curve_set)
+
+  # Measures for functional ordering
+  measure <- type
+  scaling <- ""
+  switch(type,
+         qdir = {
+           measure <- "max"
+           scaling <- "qdir"
+         },
+         st = {
+           measure <- "max"
+           scaling = "st"
+         },
+         unscaled = {
+           measure <- "max"
+           scaling = "none"
+         })
+  distance <- forder(curve_set, measure = measure, scaling = scaling,
+                     alternative = alternative, probs = probs, ...)
+
+  data_and_sim_curves <- data_and_sim_curves(curve_set) # all the functions
+  Nfunc <- length(distance) # Number of functions
+  nr <- length(curve_set[['r']])
+  # Define the central curve T_0
+  T_0 <- get_T_0(curve_set)
+
+  #-- Global envelopes
+  switch(type,
+         rank = {
+           #-- the 100(1-alpha)% global rank envelope
+           distancesorted <- sort(distance, decreasing=TRUE)
+           kalpha <- distancesorted[floor((1-alpha)*(Nfunc))]
+           LB <- array(0, nr)
+           UB <- array(0, nr)
+           for(i in 1:nr){
+             Hod <- sort(data_and_sim_curves[,i])
+             LB[i]<- Hod[kalpha]
+             UB[i]<- Hod[Nfunc-kalpha+1]
+           }
+         },
+         erl = {
+           #-- the 100(1-alpha)% global ERL envelope
+           distance_lexo_sorted <- sort(distance, decreasing=TRUE)
+           kalpha <- distance_lexo_sorted[floor((1-alpha)*Nfunc)]
+           curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
+           LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
+           UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
+         },
+         cont = {
+           #-- the 100(1-alpha)% global 'area' envelope (determined similarly as ERL from 'distance')
+           distance_cont_sorted <- sort(distance, decreasing=TRUE)
+           kalpha <- distance_cont_sorted[floor((1-alpha)*Nfunc)]
+           curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
+           LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
+           UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
+         },
+         area = {
+           #-- the 100(1-alpha)% global 'area' envelope (determined similarly as ERL from 'distance')
+           distance_area_sorted <- sort(distance, decreasing=TRUE)
+           kalpha <- distance_area_sorted[floor((1-alpha)*Nfunc)]
+           curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
+           LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
+           UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
+         },
+         qdir = {
+           curve_set_res <- residual(curve_set, use_theo = TRUE)
+           quant_m <- curve_set_quant(curve_set_res, probs = probs)
+           #-- the 100(1-alpha)% global directional quantile envelope
+           distancesorted <- sort(distance)
+           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
+           LB <- T_0 - kalpha*abs(quant_m[1,])
+           UB <- T_0 + kalpha*abs(quant_m[2,])
+         },
+         st = {
+           sdX <- curve_set_sd(curve_set)
+           #-- calculate the 100(1-alpha)% global studentized envelope
+           distancesorted <- sort(distance)
+           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
+           LB <- T_0 - kalpha*sdX
+           UB <- T_0 + kalpha*sdX
+         },
+         unscaled = {
+           #-- calculate the 100(1-alpha)% global unscaled envelope
+           distancesorted <- sort(distance)
+           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
+           LB <- T_0 - kalpha
+           UB <- T_0 + kalpha
+         })
+
+  switch(alternative,
+         "two.sided" = {},
+         "less" = { UB <- Inf },
+         "greater" = { LB <- -Inf })
+
+  if(is.vector(curve_set[['obs']]))
+    res <- structure(data.frame(r=curve_set[['r']], obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB),
+                     class = c("global_envelope", "envelope", "fv", "data.frame"))
+  else
+    res <- structure(data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB),
+                     class = c("global_envelope", "envelope", "fv", "data.frame"))
+  attr(res, "method") <- "global envelope"
+  attr(res, "type") <- type
+  attr(res, "alternative") <- alternative
+  attr(res, "k_alpha") <- kalpha
+  attr(res, "alpha") <- 1 - coverage
+  if(savedevs) attr(res, "k") <- distance
+  # for fv
+  attr(res, "fname") <- picked_attr$fname
+  attr(res, "argu") <- "r"
+  attr(res, "valu") <- "central"
+  attr(res, "ylab") <- picked_attr$ylab
+  attr(res, "fmla") <- ". ~ r"
+  attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
+  attr(res, "labl") <- picked_attr$labl
+  attr(res, "desc") <- picked_attr$desc
+  #attr(res, "unitname") <- "unit / units"
+  attr(res, "shade") <- c("lo", "hi")
+  picked_attr$einfo$nsim <- Nfunc
+  picked_attr$einfo$nrank <- (1-coverage)*Nfunc
+  attr(res, "einfo") <- picked_attr$einfo
+  attr(res, "call") <- match.call()
+  res
+}
+
 #' Central region / Global envelope
 #'
 #' Provides central regions or global envelopes or confidence bands
