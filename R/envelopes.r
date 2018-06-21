@@ -241,6 +241,9 @@ individual_central_region <- function(curve_set, type = "erl",
 #' 'qdir', 'st' and 'unscaled'. See details.
 #' @param coverage A number between 0 and 1. The 100*coverage\% central region will be calculated.
 #' @param savedevs Logical. Should the measure values k_i, i=1,...,s, be returned? Default: FALSE.
+#' @param central Either "mean" or "median". If the curve sets do not contain the component
+#' \code{theo} for the theoretical central function, then the central function (used for plotting only)
+#' is calculated either as the mean or median of functions provided in the curve sets.
 #' @param ... Additional parameters to be passed to \code{\link{forder}}.
 #' @return An object of class "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
