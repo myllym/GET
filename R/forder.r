@@ -182,7 +182,8 @@ combined_forder <- function(curve_sets, ...) {
 #' Options include 'none', 'q', 'qdir' and 'st', where 'qdir' is the default.
 #' @param alternative A character string specifying the alternative hypothesis.
 #' Must be one of the following: "two.sided" (default), "less" or "greater".
-#' The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.
+#' The last two options only available for types \code{'rank'}, \code{'erl'},
+#' \code{'cont'} and \code{'area'}.
 #' @param use_theo Logical. When calculating the measures 'max', 'int', 'int2',
 #'  should the theoretical function from \code{curve_set} be used (if 'theo' provided),
 #'  see \code{\link{deviation_test}}.
