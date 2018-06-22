@@ -1,12 +1,10 @@
-# Functionality for functional ordering based on a curve set
-individual_central_region <- function(curve_set, type = "erl",
-                           coverage=0.50, savedevs=FALSE,
-                           alternative=c("two.sided", "less", "greater"),
-                           probs = c((1-coverage)/2, 1-(1-coverage)/2),
-                           central = "median", ...) {
+# Functionality for central regions based on a curve set
+individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
+                                      alternative=c("two.sided", "less", "greater"),
+                                      probs = c((1-coverage)/2, 1-(1-coverage)/2),
+                                      central = "median", ...) {
   if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
-  if(!is.logical(savedevs)) cat("savedevs should be logical. Using the default FALSE.")
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
     stop("No such type for global envelope.\n")
   alternative <- match.arg(alternative)
@@ -126,7 +124,7 @@ individual_central_region <- function(curve_set, type = "erl",
   attr(res, "alternative") <- alternative
   attr(res, "k_alpha") <- kalpha
   attr(res, "alpha") <- 1 - coverage
-  if(savedevs) attr(res, "k") <- distance
+  attr(res, "k") <- distance
   # for fv
   attr(res, "fname") <- picked_attr$fname
   attr(res, "argu") <- "r"
@@ -220,9 +218,9 @@ individual_central_region <- function(curve_set, type = "erl",
 #' of T(r).
 #'
 #' For each curve in the curve_set, both the data curve and the simulations,
-#' an above mention measure k is determined. If savedevs = TRUE, then the
-#' measure values \eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s} are
-#' returned in the component 'k', where k[1] is the value for the data.
+#' an above mention measure k is determined. The measure values
+#' \eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s}
+#' are returned in the attribute 'k' (in a case of one observed curve only, k[1] is its value).
 #' Based on the chosen measure, the central region, i.e. the global envelope, is constructed
 #' on the chosen interval of argument values (the functions in the \code{curve_set} are assumed
 #' to be given on this interval only).
@@ -240,7 +238,6 @@ individual_central_region <- function(curve_set, type = "erl",
 #' @param type The type of the global envelope with current options for 'rank', 'erl',
 #' 'qdir', 'st' and 'unscaled'. See details.
 #' @param coverage A number between 0 and 1. The 100*coverage\% central region will be calculated.
-#' @param savedevs Logical. Should the measure values k_i, i=1,...,s, be returned? Default: FALSE.
 #' @param central Either "mean" or "median". If the curve sets do not contain the component
 #' \code{theo} for the theoretical central function, then the central function (used for plotting only)
 #' is calculated either as the mean or median of functions provided in the curve sets.
@@ -266,8 +263,7 @@ individual_central_region <- function(curve_set, type = "erl",
 #'   \item ties = As the argument \code{ties}.
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
 #'   \item k = The values of the chosen measure for all the functions. If there is only one
-#'   data function, then k[1] will give the value of the measure for this.
-#'   k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
+#'   observed function, then k[1] will give the value of the measure for this.
 #'   \item call = The call of the function.
 #' }
 #' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
@@ -283,7 +279,7 @@ individual_central_region <- function(curve_set, type = "erl",
 #'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
 #'                                      obs = fda::growth$hgtf))
 #'   plot(curve_set, ylab="height")
-#'   cr <- central_region(curve_set, coverage=0.50, savedevs=TRUE, type="erl")
+#'   cr <- central_region(curve_set, coverage=0.50, type="erl")
 #'   plot(cr, main="50% central region")
 #' }
 #'
@@ -334,9 +330,8 @@ individual_central_region <- function(curve_set, type = "erl",
 #' lines(ftheta)
 #' lines(CB.lo, lty=2)
 #' lines(CB.hi, lty=2)
-central_region <- function(curve_set, type = "erl",
-                           coverage=0.50, savedevs=FALSE,
-                           alternative=c("two.sided", "less", "greater"),
+central_region <- function(curve_sets, type = "erl", coverage = 0.50,
+                           alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),
                            central = "median", ...) {
   individual_central_region(curve_set, type = type,
@@ -643,7 +638,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set=NULL, ...) {
 #'                 correction="translate", # edge correction for L
 #'                 simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
 #' # The rank envelope test
-#' res <- global_envelope_test(env, type="rank", savedevs=TRUE)
+#' res <- global_envelope_test(env)
 #' # Plot the result.
 #' # - The central curve is now obtained from env[['theo']], which is the
 #' # value of the L-function under the null hypothesis (L(r) = r).
@@ -901,7 +896,7 @@ plot.envelope_test <- function(x, ...) {
 #'   \item ties = As the argument \code{ties}.
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
 #'   \item k = Global rank values (for type="rank") or extreme rank lengths (for type="erl").
-#'   k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
+#'   k[1] is the value for the data pattern.
 #'   \item call = The call of the function.
 #' }
 #' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
@@ -917,7 +912,7 @@ plot.envelope_test <- function(x, ...) {
 #' env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
 #'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
 #' # The rank envelope test
-#' res <- rank_envelope(env,savedevs=TRUE)
+#' res <- rank_envelope(env)
 #' # Plot the result.
 #' # - The central curve is now obtained from env[['theo']], which is the
 #' # value of the L-function under the null hypothesis (L(r) = r).
@@ -1043,7 +1038,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #'   \item alternative = "two-sided
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
-#'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item u = Deviation values (u[1] is the value for the data pattern).
 #'   \item call = The call of the function.
 #' }
 #' and a punch of attributes for the "fv" object type.
@@ -1118,7 +1113,7 @@ st_envelope <- function(curve_set, ...) {
 #'   \item alternative = "two-sided
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
-#'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item u = Deviation values (u[1] is the value for the data pattern).
 #'   \item call = The call of the function.
 #' }
 #' and a punch of attributes for the "fv" object type.
@@ -1197,7 +1192,7 @@ qdir_envelope <- function(curve_set, ...) {
 #'   \item alternative = "two-sided
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
-#'   \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+#'   \item u = Deviation values (u[1] is the value for the data pattern).
 #'   \item call = The call of the function.
 #' }
 #' and a punch of attributes for the "fv" object type.
