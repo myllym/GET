@@ -261,6 +261,75 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   res
 }
 
+#' Print method for the class 'combined_global_envelope'
+#' @usage \method{print}{combined_global_envelope}(x, ...)
+#'
+#' @param x an 'combined_global_envelope' object
+#' @param ... Ignored.
+#'
+#' @method print combined_global_envelope
+#' @export
+print.combined_global_envelope <- function(x, ...) {
+  print(x$step2_erl)
+}
+
+#' Plot method for the class 'combined_global_envelope'
+#' @usage \method{plot}{combined_global_envelope}(x, plot_style="basic", level = 1, max_ncols_of_plots=2, ...)
+#'
+#' @param x an 'combined_global_envelope' object
+#' @inheritParams plot.global_envelope
+#' @inheritParams env_basic_plot
+#' @param level 1 for plotting the combined global envelopes or
+#' 2 for plotting the second level ERL test result.
+#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
+#'
+#' @method plot combined_global_envelope
+#' @export
+plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
+                                          max_ncols_of_plots=2, ...) {
+  plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
+                                                            b = "basic",
+                                                            fv = "fv",
+                                                            f = "fv",
+                                                            ggplot2 = "ggplot2",
+                                                            ggplot = "ggplot2",
+                                                            g = "ggplot2"))
+  if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
+  if(level == 1) {
+    if(plot_style %in% c("basic", "ggplot2")) {
+      # Create a combined envelope object for plotting
+      if(!is.null(x$global_envelope_ls[[1]]$obs))
+        res_tmp <- structure(data.frame(r = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$r), quote=FALSE),
+                                        obs = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$obs), quote=FALSE),
+                                        central = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$central), quote=FALSE),
+                                        lo = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$lo), quote=FALSE),
+                                        hi = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$hi), quote=FALSE)),
+                             class = class(x$global_envelope_ls[[1]]))
+      else
+        res_tmp <- structure(data.frame(r = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$r), quote=FALSE),
+                                        central = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$central), quote=FALSE),
+                                        lo = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$lo), quote=FALSE),
+                                        hi = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$hi), quote=FALSE)),
+                             class = class(x$global_envelope_ls[[1]]))
+      attr(res_tmp, "method") <- attr(x$global_envelope_ls[[1]], "method")
+      attr(res_tmp, "alternative") <- attr(x$global_envelope_ls[[1]], "alternative")
+      if(!is.null(attr(x$step2_erl, "p"))) attr(res_tmp, "p") <- attr(x$step2_erl, "p")
+      plot(res_tmp, plot_style=plot_style, ...)
+    }
+    else {
+      n_of_plots <- length(x$global_envelope_ls)
+      ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
+      nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
+      par(mfrow=c(nrows_of_plots, ncols_of_plots))
+      for(i in 1:length(x$global_envelope_ls))
+        plot(x$global_envelope_ls[[i]], plot_style=plot_style, ...)
+    }
+  }
+  else {
+    plot(x$step2_erl, ...)
+  }
+}
+
 #' Central region / Global envelope
 #'
 #' Provides central regions or global envelopes or confidence bands
