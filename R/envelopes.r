@@ -143,6 +143,124 @@ individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
   res
 }
 
+# Functionality for global envelope tests based on a curve set
+individual_global_envelope_test <- function(curve_set, type="erl", alpha=0.05,
+                                            alternative=c("two.sided", "less", "greater"),
+                                            ties = "erl", probs = c(0.025, 0.975),
+                                            central = "mean") {
+  alternative <- match.arg(alternative)
+  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
+  res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
+                                   alternative=alternative, probs=probs,
+                                   central=central)
+  # The type of the p-value
+  possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
+  if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
+
+  # Measures for functional ordering
+  distance <- attr(res, "k")
+
+  #-- Calculate the p-values
+  switch(type,
+         rank = {
+           u <- -distance
+           #-- p-interval
+           p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
+           p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
+           #-- unique p-value
+           if(ties == "erl") {
+             distance_lexo <- forder(curve_set, measure = "erl", alternative = alternative)
+             u_lexo <- -distance_lexo
+             p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
+           }
+           else p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties)
+         },
+         erl = {
+           u_lexo <- -distance
+           p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
+         },
+         cont = {
+           u_cont <- -distance
+           p <- estimate_p_value(x=u_cont[1], sim_vec=u_cont[-1], ties="conservative")
+         },
+         area = {
+           u_area <- -distance
+           p <- estimate_p_value(x=u_area[1], sim_vec=u_area[-1], ties="conservative")
+         },
+         qdir = {
+           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+         },
+         st = {
+           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+         },
+         unscaled = {
+           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+         })
+
+  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
+  attr(res, "method") <- paste(attr(res, "method"), " test", sep="")
+  attr(res, "p") <- p
+  if(type == "rank") {
+    attr(res, "p_interval") <- c(p_low, p_upp)
+    attr(res, "ties") <- ties
+  }
+  attr(res, "call") <- match.call()
+  res
+}
+
+# Functionality for combined_central_region and combined_global_envelope_test
+combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
+  ntests <- length(curve_sets)
+  curve_sets <- check_curve_set_dimensions(curve_sets)
+
+  # 1) First stage: Calculate the functional orderings individually for each curve_set
+  res_ls <- lapply(curve_sets, FUN = function(x) { individual_central_region(x, ...) })
+  type <- attr(res_ls[[1]], "type")
+
+  # 2) Second stage: ERL central region
+  # Create a curve_set for the ERL test
+  k_ls <- lapply(res_ls, FUN = function(x) attr(x, "k"))
+  k_mat <- do.call(rbind, k_ls, quote=FALSE)
+  curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat, is_residual=FALSE))
+  # Construct the one-sided ERL central region
+  if(type %in% c("qdir", "st", "unscaled")) alt2 <- "greater"
+  else alt2 <- "less"
+  switch(CR_or_GET,
+         CR = {
+           res_erl <- individual_central_region(curve_set_u, type="erl", coverage=coverage, alternative=alt2)
+         },
+         GET = {
+           res_erl <- individual_global_envelope_test(curve_set_u, type="erl", alpha=1-coverage, alternative=alt2)
+         }
+  )
+
+  # 3) The 100(1-alpha)% global combined ERL envelope
+  distance_lexo_sorted <- sort(attr(res_erl, "k"), decreasing=TRUE)
+  Nfunc <- ncol(curve_set_u$obs)
+  kalpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
+  # Indices of the curves from which to calculate the convex hull
+  curves_for_envelope_ind <- which(attr(res_erl, "k") >= kalpha)
+  # Curves
+  data_and_sim_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
+  # Curves from which to calculate the convex hull
+  curves_for_envelope_l <- lapply(data_and_sim_curves_l, function(x) { x[curves_for_envelope_ind,] })
+  # Bounding curves
+  LB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=min) })
+  UB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
+  # Update the bounding curves (lo, hi) and kalpha to the first level central regions
+  for(i in 1:length(curve_sets)) {
+    res_ls[[i]]$lo <- LB[[i]]
+    res_ls[[i]]$hi <- UB[[i]]
+    attr(res_ls[[i]], "k_alpha") <- NULL
+  }
+
+  # Return
+  res <- list(global_envelope_ls = res_ls,
+              step2_erl = res_erl, step2_erl_curve_set = curve_set_u)
+  class(res) <- "combined_global_envelope"
+  res
+}
+
 #' Central region / Global envelope
 #'
 #' Provides central regions or global envelopes or confidence bands
