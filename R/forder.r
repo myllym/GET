@@ -205,7 +205,6 @@ forder <- function(curve_sets, r_min = NULL, r_max = NULL,
                     alternative=c("two.sided", "less", "greater"),
                     use_theo = TRUE, probs = c(0.025, 0.975)) {
   if(class(curve_sets) == "list") {
-    curve_sets <- check_curve_set_dimensions(curve_sets)
     res <- combined_forder(curve_sets, r_min = r_min, r_max = r_max,
                            measure = measure, scaling = scaling,
                            alternative = alternative,
