@@ -279,11 +279,11 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     # Make the individual tests saving the deviations
     switch(test, 
             qdir = {
-                res_ls <- lapply(curve_sets, FUN = function(x) { qdir_envelope(x, alpha=alpha, savedevs=TRUE, probs = probs, ...) })
+                res_ls <- lapply(curve_sets, FUN = function(x) { qdir_envelope(x, alpha=alpha, probs = probs, ...) })
                 method <- "Combined studentised envelope test"
             },
             st = {
-                res_ls <- lapply(curve_sets, FUN = function(x) { st_envelope(x, alpha=alpha, savedevs=TRUE, ...) })
+                res_ls <- lapply(curve_sets, FUN = function(x) { st_envelope(x, alpha=alpha, ...) })
                 method <- "Combined directional quantile envelope test"
             })
     # Calculate quantiles (qdir) or sds (st)
@@ -294,7 +294,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     u_mat <- do.call(rbind, u_ls, quote=FALSE)
     curve_set_u <- create_curve_set(list(r=1:ntests, obs=u_mat[,1], sim_m=u_mat[,-1], is_residual=FALSE))
     # Perform the one-sided (greater is significant) rank test
-    res_rank <- rank_envelope(curve_set_u, alpha=alpha, savedevs=TRUE, alternative="greater", type="rank", ties="erl")
+    res_rank <- rank_envelope(curve_set_u, alpha=alpha, alternative="greater", type="rank", ties="erl")
 
     central_curves_ls <- lapply(res_ls, function(x) x$central)
     bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$hi,
