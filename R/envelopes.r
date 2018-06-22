@@ -771,11 +771,12 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'
 #' @inheritParams central_region
-#' @param curve_set A curve_set (see \code{\link{create_curve_set}})
+#' @param curve_sets A \code{curve_set} (see \code{\link{create_curve_set}})
 #' or an \code{\link[spatstat]{envelope}} object containing a data function and simulated functions.
 #' If an envelope object is given, it must contain the summary
 #' functions from the simulated patterns which can be achieved by setting
 #' savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+#' Alternatively, a list of \code{curve_set} or \code{\link[spatstat]{envelope}} objects can be given.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
 #' @param ties The method to obtain a unique p-value when  \code{type = 'rank'}.
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
