@@ -555,15 +555,32 @@ plot.global_envelope <- function(x, plot_style="basic", base_size=15, dotplot=le
 #'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
 #'                                      obs = fda::growth$hgtf))
 #'   plot(curve_set, ylab="height")
-#'   bp <- fBoxplot(curve_set, coverage=0.50, savedevs=TRUE, type="erl")
-#'   plot(bp)
+#'   bp <- fBoxplot(curve_set, coverage=0.50, type="area")
+#'   plot(bp, curve_set=curve_set)
 #' }
-fBoxplot <- function(curve_set, extension = 1.5, ...) {
-  res <- central_region(curve_set, ...)
-  res$lo <- res$central - extension * (res$central - res$lo)
-  res$hi <- res$central + extension * (res$hi - res$central)
-  attr(res, "method") <- "functional boxplot"
-  class(res) <- c("fboxplot", class(res))
+fBoxplot <- function(curve_sets, factor = 1.5, ...) {
+  res <- central_region(curve_sets, ...)
+  if(class(res)[1] == "global_envelope") {
+    attr(res, "cr.lo") <- res$lo
+    attr(res, "cr.hi") <- res$hi
+    dist <- factor * (res$hi - res$lo)
+    res$lo <- res$lo - dist
+    res$hi <- res$hi + dist
+    attr(res, "method") <- "functional boxplot"
+    class(res) <- c("fboxplot", class(res)[-1])
+  }
+  else {
+    for(i in 1:length(res$global_envelope_ls)) {
+      attr(res$global_envelope_ls[[i]], "cr.lo") <- res$lo
+      attr(res$global_envelope_ls[[i]], "cr.hi") <- res$hi
+      dist <- factor * (res$global_envelope_ls[[i]]$hi - res$global_envelope_ls[[i]]$lo)
+      res$global_envelope_ls[[i]]$lo <- res$global_envelope_ls[[i]]$lo - dist
+      res$global_envelope_ls[[i]]$hi <- res$global_envelope_ls[[i]]$hi + dist
+      attr(res$global_envelope_ls[[i]], "method") <- "functional boxplot"
+      class(res$global_envelope_ls[[i]]) <- c("fboxplot", class(res$global_envelope_ls[[i]])[-1])
+      class(res) <- "combined_fboxplot"
+    }
+  }
   res
 }
 
