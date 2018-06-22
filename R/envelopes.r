@@ -904,74 +904,30 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
 #'
 #'   # Case 1. The test vector is (X_1, X_2)
 #'   cset1 <- create_curve_set(list(r=1:2, obs=as.vector(X), sim_m=t(Y)))
-#'   res1 <- global_envelope_test(cset1, type="rank")
+#'   res1 <- global_envelope_test(cset1)
 #'   plot(res1)
 #'
 #'   # Case 2. The test vector is (X_1, X_2, (X_1-mean(Y_1))*(X_2-mean(Y_2))).
 #'   t3 <- function(x, y) { (x[,1]-mean(y[,1]))*(x[,2]-mean(y[,2])) }
 #'   cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
-#'   res2 <- global_envelope_test(cset2, type="rank")
+#'   res2 <- global_envelope_test(cset2)
 #'   plot(res2)
 #' }
-global_envelope_test <- function(curve_set, type="erl", alpha=0.05, savedevs=FALSE,
+global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
                           alternative=c("two.sided", "less", "greater"),
-                          ties = "erl", probs = c(0.025, 0.975)) {
-  alternative <- match.arg(alternative)
-  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
-  res <- central_region(curve_set, coverage=1-alpha, savedevs=TRUE,
-                        alternative=alternative, type=type)
-  # The type of the p-value
-  possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
-  if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
-
-  # Measures for functional ordering
-  distance <- attr(res, "k")
-
-  #-- Calculate the p-values
-  switch(type,
-         rank = {
-           u <- -distance
-           #-- p-interval
-           p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
-           p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
-           #-- unique p-value
-           if(ties == "erl") {
-             distance_lexo <- forder(curve_set, measure = "erl", alternative = alternative)
-             u_lexo <- -distance_lexo
-             p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
-           }
-           else p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties)
-         },
-         erl = {
-           u_lexo <- -distance
-           p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
-         },
-         cont = {
-           u_cont <- -distance
-           p <- estimate_p_value(x=u_cont[1], sim_vec=u_cont[-1], ties="conservative")
-         },
-         area = {
-           u_area <- -distance
-           p <- estimate_p_value(x=u_area[1], sim_vec=u_area[-1], ties="conservative")
-         },
-         qdir = {
-           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-         },
-         st = {
-           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-         },
-         unscaled = {
-           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-         })
-
-  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
-  attr(res, "method") <- paste(attr(res, "method"), " test", sep="")
-  attr(res, "p") <- p
-  if(type == "rank") {
-    attr(res, "p_interval") <- c(p_low, p_upp)
-    attr(res, "ties") <- ties
+                          ties = "erl", probs = c(0.025, 0.975),
+                          central = "mean") {
+  if(class(curve_sets)[1] == "list") {
+    res <- combined_CR_or_GET(curve_sets, CR_or_GET = "GET", type = type, coverage = 1-alpha,
+                              alternative = alternative, probs = probs,
+                              central = central, ties = ties)
   }
-  attr(res, "call") <- match.call()
+  else {
+    res <- individual_global_envelope_test(curve_sets, type = type, alpha = alpha,
+                                           alternative = alternative,
+                                           ties = ties, probs = probs,
+                                           central = central)
+  }
   res
 }
 
