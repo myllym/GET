@@ -1043,7 +1043,7 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
   if(class(curve_sets)[1] == "list") {
     res <- combined_CR_or_GET(curve_sets, CR_or_GET = "GET", type = type, coverage = 1-alpha,
                               alternative = alternative, probs = probs,
-                              central = central, ties = ties)
+                              central = central)
   }
   else {
     res <- individual_global_envelope_test(curve_sets, type = type, alpha = alpha,
