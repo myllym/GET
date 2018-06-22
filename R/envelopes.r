@@ -775,7 +775,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set=NULL, ...) {
 #' require(spatstat)
 #' pp <- unmark(spruces)
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=2499,
+#' env <- envelope(pp, fun="Lest", nsim=1999,
 #'                 savefuns=TRUE, # save the functions
 #'                 correction="translate", # edge correction for L
 #'                 simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
@@ -794,7 +794,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set=NULL, ...) {
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
 #' # Do the rank envelope test
-#' res <- global_envelope_test(curve_set, type="rank"); plot(res, plot_style="ggplot2")
+#' res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
 #'
 #' ## Random labeling test
 #' #----------------------
@@ -809,7 +809,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set=NULL, ...) {
 #' # where T_0(r) = \hat{L}(r) is the unmarked L function.
 #' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 #' # 2) Do the rank envelope test
-#' res <- global_envelope_test(curve_set, type="rank")
+#' res <- global_envelope_test(curve_set)
 #' # 3) Plot the test result
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 #'
@@ -817,7 +817,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set=NULL, ...) {
 #' # which is an estimator of the mark-weighted L function, L_mm(r),
 #' # with translational edge correction (default).
 #' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
-#' res <- global_envelope_test(curve_set, type="rank")
+#' res <- global_envelope_test(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 #'
 #' ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
