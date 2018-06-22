@@ -599,7 +599,7 @@ print.fboxplot <- function(x, ...) {
 }
 
 #' Plot method for the class 'fboxplot'
-#' @usage \method{plot}{fboxplot}(x, plot_style="basic", curve_set = NULL, ...)
+#' @usage \method{plot}{fboxplot}(x, plot_style="basic", curve_set, dotplot=length(x$r)<10, ylim, ...)
 #'
 #' @param x an 'fboxplot' object
 #' @inheritParams plot.global_envelope
@@ -610,7 +610,7 @@ print.fboxplot <- function(x, ...) {
 #' @method plot fboxplot
 #' @export
 #' @importFrom spatstat pickoption
-plot.fboxplot <- function(x, plot_style="basic", curve_set=NULL, ...) {
+plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<10, ylim, ...) {
   plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
                                                             b = "basic",
                                                             fv = "fv",
@@ -618,13 +618,57 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set=NULL, ...) {
                                                             ggplot2 = "ggplot2",
                                                             ggplot = "ggplot2",
                                                             g = "ggplot2"))
-  plot.global_envelope(x, ...)
-  if(!is.null(curve_set) & plot_style=="basic") {
-    for(i in 1:ncol(curve_set$obs)) {
-      if(any(curve_set$obs[,i] < x$lo | curve_set$obs[,i] > x$hi))
-        lines(curve_set$r, curve_set$obs[,i], col=grey(0.7))
-    }
+  if(missing(curve_set)) curve_set <- NULL
+  if(missing(ylim)) {
+    if(plot_style == "ggplot2") use_ggplot2 <- TRUE else use_ggplot2 <- FALSE
+    ylim <- env_ylim_default(x, use_ggplot2)
+    if(!is.null(curve_set)) ylim <- c(min(ylim[1], min(curve_set$obs)), max(ylim[2], max(curve_set$obs)))
   }
+  tmp <- x; tmp$lo <- attr(x, "cr.lo"); tmp$hi <- attr(x, "cr.hi")
+  switch(plot_style,
+         basic = {
+           if(dotplot) {
+             plot.global_envelope(x, ylim=ylim, dotplot=TRUE, arrows.col=2, ...) # Functional boxplot
+             if(!is.null(curve_set)) {
+               for(i in 1:ncol(curve_set$obs)) {
+                 if(any(curve_set$obs[,i] < x$lo | curve_set$obs[,i] > x$hi)) {
+                   graphics::points(1:length(x$r), curve_set$obs[,i], pch='x', col=grey(0.7), type="b")
+                 }
+               }
+               plot.global_envelope(x, ylim=ylim, dotplot=TRUE, arrows.col=2, add=TRUE, ...) # Functional boxplot
+             }
+             plot.global_envelope(tmp, dotplot=TRUE, arrows.col=1, add=TRUE, ...) # Central region
+           }
+           else {
+             plot.global_envelope(x, env.col=2, ylim=ylim, ...) # Functional boxplot
+             if(!is.null(curve_set)) {
+               for(i in 1:ncol(curve_set$obs)) {
+                 if(any(curve_set$obs[,i] < x$lo | curve_set$obs[,i] > x$hi))
+                   lines(curve_set$r, curve_set$obs[,i], col=grey(0.7))
+               }
+               plot.global_envelope(x, env.col=2, add=TRUE, ...) # Functional boxplot
+             }
+             # Central region
+             lines(x$r, attr(x, "cr.lo"), lty=2, col=1)
+             lines(x$r, attr(x, "cr.hi"), lty=2, col=1)
+           }
+         },
+         fv = {
+           plot.global_envelope(tmp, plot_style="fv", ylim=ylim, ...) # Central region
+           if(!is.null(curve_set)) {
+             for(i in 1:ncol(curve_set$obs)) {
+               if(any(curve_set$obs[,i] < x$lo | curve_set$obs[,i] > x$hi))
+                 lines(curve_set$r, curve_set$obs[,i], col=grey(0.6))
+             }
+           }
+           # Functional boxplot
+           lines(x$r, x$lo, lty=2, col=2)
+           lines(x$r, x$hi, lty=2, col=2)
+         },
+         ggplot2 = {
+           if(!is.null(curve_set)) cat("For ggplot style, plotting curves of a curve_set not implemented yet.\n")
+           two_envelopes_ggplot(tmp, x, ylim=ylim, ...)
+         })
 }
 
 
