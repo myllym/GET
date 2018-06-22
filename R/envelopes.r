@@ -983,6 +983,60 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
 #'   res2 <- global_envelope_test(cset2)
 #'   plot(res2)
 #' }
+#'
+#'
+#' # A combined global envelope test
+#' #--------------------------------
+#' # As an example test CSR of the saplings point pattern from spatstat by means of
+#' # L, F, G and J functions.
+#' require(spatstat)
+#' data(saplings)
+#' X <- saplings
+#'
+#' nsim <- 499 # the number of simulations for the tests
+#' # Specify distances for different test functions
+#' n <- 500 # the number of r-values
+#' rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
+#' rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
+#' r <- seq(0, rmax, by=rstep)    # r-distances for Lest
+#' rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
+#'
+#' # Perform simulations of CSR and calculate the L-functions
+#' system.time( env_L <- envelope(X, nsim=nsim,
+#'  simulate=expression(runifpoint(X$n, win=X$window)),
+#'  fun="Lest", correction="translate",
+#'  transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+#'  r=r,                         # Specify the distance vector
+#'  savefuns=TRUE,               # Save the estimated functions
+#'  savepatterns=TRUE) )         # Save the simulated patterns
+#' # Take the simulations from the returned object
+#' simulations <- attr(env_L, "simpatterns")
+#' # Then calculate the other test functions F, G, J for each simulated pattern
+#' system.time( env_F <- envelope(X, nsim=nsim,
+#'                                simulate=simulations,
+#'                                fun="Fest", correction="Kaplan", r=rJ,
+#'                                savefuns=TRUE) )
+#' system.time( env_G <- envelope(X, nsim=nsim,
+#'                                simulate=simulations,
+#'                                fun="Gest", correction="km", r=rJ,
+#'                                savefuns=TRUE) )
+#' system.time( env_J <- envelope(X, nsim=nsim,
+#'                                simulate=simulations,
+#'                                fun="Jest", correction="none", r=rJ,
+#'                                savefuns=TRUE) )
+#'
+#' # Crop the curves to the desired r-interval I
+#' curve_set_L <- crop_curves(env_L, r_min=rmin, r_max=rmax)
+#' curve_set_F <- crop_curves(env_F, r_min=rminJ, r_max=rmaxJ)
+#' curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
+#' curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
+#'
+#' res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
+#'                                             curve_set_G, curve_set_J))
+#' plot(res, plot_style="ggplot2",
+#'      labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
+#'      separate_yaxes=TRUE, base_size=12)
+#'
 global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
                           alternative=c("two.sided", "less", "greater"),
                           ties = "erl", probs = c(0.025, 0.975),
