@@ -452,11 +452,17 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),
                            central = "median", ...) {
-  individual_central_region(curve_set, type = type,
-                            coverage=coverage, savedevs=savedevs,
-                            alternative=alternative,
-                            probs = probs,
-                            central = central, ...)
+  if(class(curve_sets) == "list") {
+    res <- combined_CR_or_GET(curve_sets, CR_or_GET = "CR", type = type, coverage = coverage,
+                              alternative = alternative, probs = probs,
+                              central = central, ...)
+  }
+  else {
+    res <- individual_central_region(curve_sets, type = type, coverage = coverage,
+                                     alternative = alternative, probs = probs,
+                                     central = central, ...)
+  }
+  res
 }
 
 #' Print method for the class 'global_envelope'
