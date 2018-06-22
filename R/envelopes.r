@@ -457,7 +457,6 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
 #' Attributes of an object \code{res} can be obtained using the function
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #' @export
-#' @aliases global_envelope
 #' @seealso \code{\link{global_envelope_test}}
 #' @examples
 #' ## A central region of a set of functions
