@@ -545,7 +545,8 @@ plot.global_envelope <- function(x, plot_style="basic", base_size=15, dotplot=le
 #' Functional boxplot based on central region computed by a specified measure.
 #' The options of the measures can be found in \code{\link{central_region}}.
 #' @inheritParams central_region
-#' @param extension Extension of the central region to produce a functional boxplot. Default to 1.5.
+#' @param factor The constant factor to inflate the central region to produce a functional boxplot and
+#' determine fences for outliers. Default is 1.5 as in a classical boxplot.
 #' @param ... Additional parameters to be passed to \code{\link{central_region}},
 #' which is responsible for calculating the central region (global envelope) on which
 #' the functional boxplot is based.
