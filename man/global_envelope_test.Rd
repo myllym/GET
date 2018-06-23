@@ -4,27 +4,27 @@
 \alias{global_envelope_test}
 \title{Global envelope test}
 \usage{
-global_envelope_test(curve_set, type = "erl", alpha = 0.05,
-  savedevs = FALSE, alternative = c("two.sided", "less", "greater"),
-  ties = "erl", probs = c(0.025, 0.975))
+global_envelope_test(curve_sets, type = "erl", alpha = 0.05,
+  alternative = c("two.sided", "less", "greater"), ties = "erl",
+  probs = c(0.025, 0.975), central = "mean")
 }
 \arguments{
-\item{curve_set}{A curve_set (see \code{\link{create_curve_set}})
+\item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}})
 or an \code{\link[spatstat]{envelope}} object containing a data function and simulated functions.
 If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
-savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
+savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+Alternatively, a list of \code{curve_set} or \code{\link[spatstat]{envelope}} objects can be given.}
 
 \item{type}{The type of the global envelope with current options for 'rank', 'erl',
 'qdir', 'st' and 'unscaled'. See details.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
-\item{savedevs}{Logical. Should the measure values k_i, i=1,...,s, be returned? Default: FALSE.}
-
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".
-The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.}
+The last two options only available for types \code{'rank'}, \code{'erl'},
+\code{'cont'} and \code{'area'}.}
 
 \item{ties}{The method to obtain a unique p-value when  \code{type = 'rank'}.
 Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
@@ -39,6 +39,10 @@ The default is 'erl'.}
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).}
+
+\item{central}{Either "mean" or "median". If the curve sets do not contain the component
+\code{theo} for the theoretical central function, then the central function (used for plotting only)
+is calculated either as the mean or median of functions provided in the curve sets.}
 }
 \value{
 An object of class "envelope_test", "envelope" and "fv"
@@ -167,12 +171,12 @@ to achieve a good power and repeatability of the test.
 require(spatstat)
 pp <- unmark(spruces)
 # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-env <- envelope(pp, fun="Lest", nsim=2499,
+env <- envelope(pp, fun="Lest", nsim=1999,
                 savefuns=TRUE, # save the functions
                 correction="translate", # edge correction for L
                 simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
 # The rank envelope test
-res <- global_envelope_test(env, type="rank", savedevs=TRUE)
+res <- global_envelope_test(env)
 # Plot the result.
 # - The central curve is now obtained from env[['theo']], which is the
 # value of the L-function under the null hypothesis (L(r) = r).
@@ -186,7 +190,7 @@ curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 # For better visualisation, take the L(r)-r function
 curve_set <- residual(curve_set, use_theo = TRUE)
 # Do the rank envelope test
-res <- global_envelope_test(curve_set, type="rank"); plot(res, plot_style="ggplot2")
+res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
 
 ## Random labeling test
 #----------------------
@@ -201,7 +205,7 @@ mpp <- spruces
 # where T_0(r) = \\hat{L}(r) is the unmarked L function.
 curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
 # 2) Do the rank envelope test
-res <- global_envelope_test(curve_set, type="rank")
+res <- global_envelope_test(curve_set)
 # 3) Plot the test result
 plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 
@@ -209,7 +213,7 @@ plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 # which is an estimator of the mark-weighted L function, L_mm(r),
 # with translational edge correction (default).
 curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
-res <- global_envelope_test(curve_set, type="rank")
+res <- global_envelope_test(curve_set)
 plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 
 ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
@@ -252,15 +256,69 @@ if(requireNamespace("mvtnorm", quietly = TRUE)) {
 
   # Case 1. The test vector is (X_1, X_2)
   cset1 <- create_curve_set(list(r=1:2, obs=as.vector(X), sim_m=t(Y)))
-  res1 <- global_envelope_test(cset1, type="rank")
+  res1 <- global_envelope_test(cset1)
   plot(res1)
 
   # Case 2. The test vector is (X_1, X_2, (X_1-mean(Y_1))*(X_2-mean(Y_2))).
   t3 <- function(x, y) { (x[,1]-mean(y[,1]))*(x[,2]-mean(y[,2])) }
   cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
-  res2 <- global_envelope_test(cset2, type="rank")
+  res2 <- global_envelope_test(cset2)
   plot(res2)
 }
+
+
+# A combined global envelope test
+#--------------------------------
+# As an example test CSR of the saplings point pattern from spatstat by means of
+# L, F, G and J functions.
+require(spatstat)
+data(saplings)
+X <- saplings
+
+nsim <- 499 # the number of simulations for the tests
+# Specify distances for different test functions
+n <- 500 # the number of r-values
+rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
+rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
+r <- seq(0, rmax, by=rstep)    # r-distances for Lest
+rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
+
+# Perform simulations of CSR and calculate the L-functions
+system.time( env_L <- envelope(X, nsim=nsim,
+ simulate=expression(runifpoint(X$n, win=X$window)),
+ fun="Lest", correction="translate",
+ transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+ r=r,                         # Specify the distance vector
+ savefuns=TRUE,               # Save the estimated functions
+ savepatterns=TRUE) )         # Save the simulated patterns
+# Take the simulations from the returned object
+simulations <- attr(env_L, "simpatterns")
+# Then calculate the other test functions F, G, J for each simulated pattern
+system.time( env_F <- envelope(X, nsim=nsim,
+                               simulate=simulations,
+                               fun="Fest", correction="Kaplan", r=rJ,
+                               savefuns=TRUE) )
+system.time( env_G <- envelope(X, nsim=nsim,
+                               simulate=simulations,
+                               fun="Gest", correction="km", r=rJ,
+                               savefuns=TRUE) )
+system.time( env_J <- envelope(X, nsim=nsim,
+                               simulate=simulations,
+                               fun="Jest", correction="none", r=rJ,
+                               savefuns=TRUE) )
+
+# Crop the curves to the desired r-interval I
+curve_set_L <- crop_curves(env_L, r_min=rmin, r_max=rmax)
+curve_set_F <- crop_curves(env_F, r_min=rminJ, r_max=rmaxJ)
+curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
+curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
+
+res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
+                                            curve_set_G, curve_set_J))
+plot(res, plot_style="ggplot2",
+     labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
+     separate_yaxes=TRUE, base_size=12)
+
 }
 \references{
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172

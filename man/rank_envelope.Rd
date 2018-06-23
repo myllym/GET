@@ -44,7 +44,7 @@ Additionally, the return value has attributes
   \item ties = As the argument \code{ties}.
   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
   \item k = Global rank values (for type="rank") or extreme rank lengths (for type="erl").
-  k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
+  k[1] is the value for the data pattern.
   \item call = The call of the function.
 }
 and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
@@ -58,7 +58,15 @@ the 100(1-alpha)\% global envelope for the chosen test function T(r) on
 the chosen interval of distances and associated p-values.
 
 The test corresponds to the global envelope test that can be carriet out by
-\code{\link{global_envelope_test}} by specifying \code{type="rank"}.
+\code{\link{global_envelope_test}} by specifying the \code{type} for which the options
+\code{"rank"}, \code{"erl"}, \code{"cont"} and \code{"area"} are available. The last
+three are modifications of the first one to treat the ties in the extreme rank ordering
+used in \code{"rank"}.
+
+Note: Earlier it was possible to specify to the extreme rank lengths breaking of ties for the rank
+envelope with specifying the argument \code{lexo = TRUE}. This is obsolete now. The same can be done
+by choosing \code{type = "rank"} and \code{ties = "erl"}, which is in fact the default of this
+\code{rank_envelope} function.
 }
 \section{Global envelope}{
 
@@ -90,7 +98,7 @@ pp <- unmark(spruces)
 env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
                 simulate=expression(runifpoint(pp$n, win=pp$window)))
 # The rank envelope test
-res <- rank_envelope(env,savedevs=TRUE)
+res <- rank_envelope(env)
 # Plot the result.
 # - The central curve is now obtained from env[['theo']], which is the
 # value of the L-function under the null hypothesis (L(r) = r).

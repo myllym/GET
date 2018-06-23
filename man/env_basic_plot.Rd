@@ -5,7 +5,8 @@
 \title{An internal GET function for making a basic "global envelope plot".}
 \usage{
 env_basic_plot(x, main, ylim, xlab, ylab, color_outside = TRUE,
-  separate_yaxes = FALSE, max_ncols_of_plots = 2, ...)
+  separate_yaxes = FALSE, max_ncols_of_plots = 2, add = FALSE,
+  env.col = 1, ...)
 }
 \arguments{
 \item{x}{An 'envelope_test' object.}
@@ -26,6 +27,10 @@ a common y-axis. If TRUE, then separate y-axes are used for different parts of a
 
 \item{max_ncols_of_plots}{If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 number of columns for figures. Default 2.}
+
+\item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).}
+
+\item{env.col}{The color for the envelope lines. Default 1 (black).}
 
 \item{...}{Additional parameters to be passed to the function \code{\link{plot}}.}
 }

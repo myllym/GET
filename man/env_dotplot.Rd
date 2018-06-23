@@ -4,7 +4,8 @@
 \alias{env_dotplot}
 \title{An internal GET function for making a dotplot style "global envelope plot".}
 \usage{
-env_dotplot(x, main, ylim, xlab, ylab, color_outside = TRUE, labels, ...)
+env_dotplot(x, main, ylim, xlab, ylab, color_outside = TRUE, labels,
+  add = FALSE, arrows.col, ...)
 }
 \arguments{
 \item{x}{An 'envelope_test' object.}
@@ -21,6 +22,10 @@ env_dotplot(x, main, ylim, xlab, ylab, color_outside = TRUE, labels, ...)
 outside the envelope. Currently red color is used.}
 
 \item{labels}{Labels for the tests at x-axis.}
+
+\item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).}
+
+\item{arrows.col}{Color for the doplot arrows. If not given, 1 (black) is used.}
 
 \item{...}{Additional parameters to be passed to the function \code{\link{plot}}.}
 }

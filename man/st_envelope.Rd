@@ -35,7 +35,7 @@ Additionally, the return value has attributes
   \item alternative = "two-sided
   \item p = A point estimate for the p-value (default is the mid-rank p-value).
   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
-  \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+  \item u = Deviation values (u[1] is the value for the data pattern).
   \item call = The call of the function.
 }
 and a punch of attributes for the "fv" object type.
