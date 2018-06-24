@@ -5,11 +5,10 @@
 #' adjusted global envelope tests, graphical functional one-way ANOVA
 #'
 #'
-#' The \pkg{GET} library provides central regions (alias global envelopes) and global envelope tests.
-#' The central regions can be constructed from the data and simulations,
-#' or purely from (functional) data.
+#' The \pkg{GET} library provides central regions (i.e. global envelopes) and global envelope tests.
+#' The central regions can be constructed from (functional) data.
 #' The tests are Monte Carlo tests, which demand simulations from the tested null model.
-#' The methods are applicable for any functional (or multivariate vector) data.
+#' The methods are applicable for any multivariate vector data and functional data (after discretization).
 #'
 #' In the special case of point processes, the functions are typically estimators of summary functions.
 #' The package supports the use of the R library \pkg{spatstat} for generating
@@ -18,38 +17,80 @@
 #'
 #'
 #' @section Key functions in \pkg{GET}:
+#' \itemize{
+#' \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
+#' \code{\link{central_region}}.
+#' E.g. growth curves of girls \code{\link[fda]{growth}}.
+##' \itemize{
+#'            \item First create a curve_set of the data.
+#'
+#'                  \code{
+#'                    \code{cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
+#'                                                             obs = growth$hgtf))}
+#'                  }
+#'            \item Then calculate 50\% central region
+#'
+#'                  \code{
+#'                    cr <- central_region(cset, coverage = 0.5)
+#'                  }
+#'            \item Plot the result
+#'
+#'                  \code{
+#'                    plot(cr)
+#'                  }
+#' }
+#' It is also possible to do combined central regions for several sets of curves provided in a list
+#' for the function, see examples in \code{\link{central_region}}.
+#'
+#' \item \emph{Global envelope tests}: \code{\link{global_envelope_test}} is the main function.
+#' E.g.
+#'
+#' \code{X <- spruces # an example pattern from spatstat}
+#'
+#' Test complete spatial randomness (CSR):
+#' \itemize{
+#'            \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
+#'                  under CSR and to calculate the functions you want (below K-functions by Kest).
+#'                  Important: use the option 'savefuns=TRUE' and
+#'                  specify the number of simulations \code{nsim}.
+#'
+#'                  \code{
+#'                    env <- envelope(X, nsim=999, savefuns=TRUE, fun=Kest,
+#'                                    simulate=expression(runifpoint(X$n, win=X$window)))
+#'                  }
+#'            \item Perform the test
+#'
+#'                  \code{
+#'                    res <- global_envelope_test(env)
+#'                  }
+#'            \item Plot the result
+#'
+#'                  \code{
+#'                    plot(res)
+#'                  }
+#' }
+#' It is also possible to do combined global envelope tests for several sets of curves provided in a list
+#' for the function, see examples in \code{\link{global_envelope_test}}.
+#' }
 #'
 #' \itemize{
-#'  \item \emph{Functional ordering}: different measures for ordering the functions (or vectors) from
-#'  the most extreme to the least extreme ones can be obtained for the functions by \code{\link{forder}}.
-#'  The orderings are the basis of central regions and different tests.
-#'  \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands} (without testing):
-#'  \code{\link{central_region}}
-#'  \item \emph{Global envelope tests}: \code{\link{global_envelope_test}} is the main function.
-#'  A full list of functions for global envelope tests:
-#'  \itemize{
-#' \item Global envelope tests using \emph{single functions} (for simple hypotheses)
-#' \itemize{
-#'   \item \code{\link{global_envelope_test}}
-#' }
+#'  \item \emph{Functional ordering}: \code{\link{central_region}} and \code{\link{global_envelope_test}}
+#'  are based on different measures for ordering the functions (or vectors) from
+#'  the most extreme to the least extreme ones. The core functionality of calculating the measures
+#'  is in the function \code{\link{forder}}, which can be used to obtain different measures for sets of
+#'  curves. Usually there is no need to call \code{\link{forder}} directly.
 #' \item \emph{Adjusted} global envelope tests for composite hypotheses
 #' \itemize{
 #'   \item \code{\link{dg.global_envelope}}, see a detailed example in \code{\link{saplings}}
-#' }
-#' \item Tests based on \emph{many functions}
-#' \itemize{
-#'   \item Global scaled maximum absolute difference (MAD) envelope tests \code{\link{combined_scaled_MAD_envelope}}
-#'   \item Combined rank envelope tests based on many functions can be done directly by
-#'   \code{\link{global_envelope_test}} (\code{\link{combine_curve_sets}} can be used to combine several functions)
 #'   \item \code{\link{dg.combined_global_envelope}} for adjusted tests
 #' }
-#' }
-#'  \item \emph{One-way functional ANOVA}:
+#' \item \emph{One-way functional ANOVA}:
 #'  \itemize{
 #'   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
 #'   \item rank envelope based on F-values: \code{\link{frank.fanova}}
 #'  }
-#'  \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}}
+#' \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no gpaphical
+#' interpretation)
 #' }
 #' See the help files of the functions for examples.
 #'
