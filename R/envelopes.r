@@ -313,7 +313,9 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
                                         hi = do.call(c, lapply(x$global_envelope_ls, FUN = function(x) x$hi), quote=FALSE)),
                              class = class(x$global_envelope_ls[[1]]))
       attr(res_tmp, "method") <- attr(x$global_envelope_ls[[1]], "method")
+      attr(res_tmp, "type") <- attr(x$global_envelope_ls[[1]], "type")
       attr(res_tmp, "alternative") <- attr(x$global_envelope_ls[[1]], "alternative")
+      attr(res_tmp, "alpha") <- attr(x$global_envelope_ls[[1]], "alpha")
       if(!is.null(attr(x$step2_erl, "p"))) attr(res_tmp, "p") <- attr(x$step2_erl, "p")
       plot(res_tmp, plot_style=plot_style, ...)
     }
