@@ -212,6 +212,7 @@ individual_global_envelope_test <- function(curve_set, type="erl", alpha=0.05,
 combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
   ntests <- length(curve_sets)
   curve_sets <- check_curve_set_dimensions(curve_sets)
+  CR_or_GET <- match.arg(CR_or_GET)
 
   # 1) First stage: Calculate the functional orderings individually for each curve_set
   res_ls <- lapply(curve_sets, FUN = function(x) { individual_central_region(x, ...) })
