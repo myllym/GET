@@ -21,7 +21,7 @@
 #' \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
 #' \code{\link{central_region}}.
 #' E.g. growth curves of girls \code{\link[fda]{growth}}.
-##' \itemize{
+#' \itemize{
 #'            \item First create a curve_set of the data.
 #'
 #'                  \code{
