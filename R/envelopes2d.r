@@ -150,7 +150,8 @@ central_region_2d <- function(obs, sim=NULL, rx, ry, ...) {
 #'   # Generate simulations from the hard-core null model
 #'   nsim <- 1999
 #'   simulations <- NULL
-#'   ext.factor <- max(X$window$xrange[2]-X$window$xrange[1], X$window$yrange[2]-X$window$yrange[1]) / 10
+#'   ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
+#'                     X$window$yrange[2]-X$window$yrange[1]) / 10
 #'   win.extend <- owin(c(X$window$xrange[1]-ext.factor, X$window$xrange[2]+ext.factor),
 #'                      c(X$window$yrange[1]-ext.factor, X$window$yrange[2]+ext.factor))
 #'   mod02 <- list(cif="hardcore", par=list(beta=exp(model$fitin$coefs[1]),hc=HD), w=win.extend)
