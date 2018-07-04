@@ -357,7 +357,7 @@ plot.global_envelope <- function(x, plot_style="basic", base_size=15, dotplot=le
 #' @method print combined_global_envelope
 #' @export
 print.combined_global_envelope <- function(x, ...) {
-  print(x$step2_erl)
+  print(x$step2_test)
 }
 
 #' Plot method for the class 'combined_global_envelope'
