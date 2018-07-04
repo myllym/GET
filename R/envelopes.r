@@ -259,7 +259,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
 
   # Return
   res <- list(global_envelope_ls = res_ls,
-              step2_erl = res_erl, step2_erl_curve_set = curve_set_u)
+              step2_test = res_erl, step2_test_curve_set = curve_set_u)
   class(res) <- "combined_global_envelope"
   res
 }
@@ -415,7 +415,8 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
     }
   }
   else {
-    plot(x$step2_erl, ...)
+    plot.global_envelope(x$step2_test, plot_style=plot_style,
+                         base_size, main, ylim, xlab, ylab, use_ggplot2, ...)
   }
 }
 
