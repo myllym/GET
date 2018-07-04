@@ -547,8 +547,18 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' @method print global_envelope
 #' @export
 print.global_envelope <- function(x, ...) {
-  cat(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), "). \n",
-      " Plot the object instead.\n", sep="")
+  if(is.null(attr(x, "p"))) { # The case of a central region
+    cat(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), "). \n",
+        " Plot the object instead.\n", sep="")
+  }
+  else { # The case of a global envelope test
+    cat(attr(x, "method"), " (", attr(x, "type"), ")\n",
+        " p-value of the test: ", attr(x, "p"), sep="")
+    if(!is.null(attr(x, "ties"))) cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
+    else cat("\n")
+    if(!is.null(attr(x, "p_interval")))
+      cat(" p-interval         : (", attr(x, "p_interval")[1], ", ", attr(x, "p_interval")[2],")\n", sep="")
+  }
 }
 
 #' Plot method for the class 'global_envelope'
