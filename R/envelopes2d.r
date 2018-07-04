@@ -194,7 +194,7 @@ print.global_envelope_2d <- function(x, ...) {
 }
 
 #' Plot method for the class 'global_envelope_2d'
-#' @usage \method{plot}{global_envelope_2d}(x, ...)
+#' @usage \method{plot}{global_envelope_2d}(x, col, col.sign = c(255, 0, 0), transparency = 85, main, ...)
 #'
 #' @param x an 'global_envelope_2d' object
 #' @param col 
