@@ -434,7 +434,7 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
 #' \code{theo} for the theoretical central function, then the central function (used for plotting only)
 #' is calculated either as the mean or median of functions provided in the curve sets.
 #' @param ... Additional parameters to be passed to \code{\link{forder}}.
-#' @return An object of class "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
