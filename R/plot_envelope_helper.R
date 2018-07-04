@@ -130,26 +130,27 @@ env_main_default <- function(x) {
 }
 
 # An internal GET function for setting the default ylim for a global envelope plot.
-# @param x An 'envelope_test' object.
+# @param x An 'global_envelope' object or a list of them.
 # @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
 # Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
-    if(!use_ggplot2)
-        switch(attr(x, "alternative"),
-                two.sided = {
-                    ylim <- c(min(x[['obs']],x[['lo']],x[['hi']],x[['central']]),
-                              max(x[['obs']],x[['lo']],x[['hi']],x[['central']]))
-                },
-                less = {
-                    ylim <- c(min(x[['obs']],x[['lo']],x[['central']]),
-                              max(x[['obs']],x[['lo']],x[['central']]))
-                },
-                greater = {
-                    ylim <- c(min(x[['obs']],x[['hi']],x[['central']]),
-                              max(x[['obs']],x[['hi']],x[['central']]))
-                })
-    else ylim <- NULL
-    ylim
+  if(class(x)[1] != "list") x <- list(x)
+  if(!use_ggplot2)
+    switch(attr(x[[1]], "alternative"),
+            two.sided = {
+              ylim <- c(do.call(min, lapply(x, function(x) min(x[['obs']],x[['lo']],x[['hi']],x[['central']])), quote=FALSE),
+                        do.call(max, lapply(x, function(x) max(x[['obs']],x[['lo']],x[['hi']],x[['central']])), quote=FALSE))
+            },
+            less = {
+              ylim <- c(do.call(min, lapply(x, function(x) min(x[['obs']],x[['lo']],x[['central']])), quote=FALSE),
+                        do.call(max, lapply(x, function(x) max(x[['obs']],x[['lo']],x[['central']])), quote=FALSE))
+            },
+            greater = {
+              ylim <- c(do.call(min, lapply(x, function(x) min(x[['obs']],x[['hi']],x[['central']])), quote=FALSE),
+                        do.call(max, lapply(x, function(x) max(x[['obs']],x[['hi']],x[['central']])), quote=FALSE))
+            })
+  else ylim <- NULL
+  ylim
 }
 
 #' An internal GET function for making a dotplot style "global envelope plot".
