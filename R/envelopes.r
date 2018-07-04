@@ -197,7 +197,7 @@ individual_global_envelope_test <- function(curve_set, type="erl", alpha=0.05,
            p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
          })
 
-  class(res) <- c("envelope_test", "envelope", "fv", "data.frame")
+  # Change the "method" attribute
   attr(res, "method") <- paste(attr(res, "method"), " test", sep="")
   attr(res, "p") <- p
   if(type == "rank") {
@@ -858,7 +858,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
 #' For 'midrank' the mid-rank within the tied values is taken.
 #' For 'erl' the extreme rank length p-value is calculated.
 #' The default is 'erl'.
-#' @return An object of class "envelope_test", "envelope" and "fv"
+#' @return An object of class "global_envelope", "envelope" and "fv"
 #' (see \code{\link[spatstat]{fv.object}}), which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -883,7 +883,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
 #'   \item ties = As the argument \code{ties}.
 #' }
 #' @export
-#' @seealso \code{\link{plot.envelope_test}}
+#' @seealso \code{\link{plot.global_envelope}}
 #' @examples
 #'
 #' ## Testing complete spatial randomness (CSR)
@@ -1141,7 +1141,7 @@ plot.envelope_test <- function(x, ...) {
 #' length p-value is given (Myllymäki et al., 2017, Mrkvicka et al., 2018). See details and additional
 #' sections thereafter.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
-#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -1169,7 +1169,7 @@ plot.envelope_test <- function(x, ...) {
 #' }
 #' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
 #' @export
-#' @seealso \code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
+#' @seealso \code{\link{random_labelling}}, \code{\link{plot.global_envelope}}
 #' @examples
 #'
 #' ## Testing complete spatial randomness (CSR)
@@ -1286,7 +1286,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
 #' @inheritParams rank_envelope
-#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -1361,7 +1361,7 @@ st_envelope <- function(curve_set, ...) {
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
 #' @inheritParams st_envelope
-#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -1440,7 +1440,7 @@ qdir_envelope <- function(curve_set, ...) {
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'
 #' @inheritParams st_envelope
-#' @return An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
