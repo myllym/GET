@@ -182,7 +182,7 @@ print.combined_scaled_MAD_test <- function(x, ...) {
 #'
 #' @param x An 'combined_scaled_MAD_test' object
 #' @param plot_type "rank" or "qdir_envelopes".
-#' @param ... Arguments passed to \code{\link{plot.envelope_test}}.
+#' @param ... Arguments passed to \code{\link{plot.global_envelope}}.
 #'
 #' @method plot combined_scaled_MAD_test
 #' @export
@@ -190,9 +190,9 @@ plot.combined_scaled_MAD_test <- function(x, plot_type = c("envelope", "rank"), 
     plot_type <- match.arg(plot_type)
     switch(plot_type,
            rank = {
-               plot.envelope_test(x[['rank_test']], ...)
+               plot.global_envelope(x[['rank_test']], ...)
            },
            envelope = {
-               plot.envelope_test(x[['envelope']], ...)
+               plot.global_envelope(x[['envelope']], ...)
            })
 }

@@ -417,15 +417,15 @@ print.adjusted_envelope_test <- function (x, ...) {
 #' @param main See \code{\link{plot.default}}. Default is x$method.
 #' @param plot_unadjusted Logical whether or not to plot also the unadjusted envelope.
 #' Only available if these have been saved in 'x'.
-#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}}, if plot_unadjusted
+#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}, if plot_unadjusted
 #' is FALSE, or to \code{\link{two_envelopes_ggplot}}, if plot_unadjusted is TRUE.
 #'
 #' @method plot adjusted_envelope_test
 #' @export
-#' @seealso \code{\link{plot.envelope_test}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
+#' @seealso \code{\link{plot.global_envelope}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
 plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
     if(missing(main)) main <- x$method
-    if(!plot_unadjusted) p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
+    if(!plot_unadjusted) p <- plot.global_envelope(x$adj_envelope_test, main=main, ...)
     else {
         p <- two_envelopes_ggplot(env1 = x$adj_envelope_test, env2 = attr(x, "unadjusted_envelope_test"))
     }
@@ -632,20 +632,20 @@ print.adjusted_combined_envelope_test <- function (x, ...) {
 #' @param main See \code{\link{plot.default}}. Default is x$method.
 #' @param plot_type "rank" for the result of the rank envelope test; "MAD" for the
 #' adjusted combined scaled MAD envelope. The latter only available if saved in 'x'.
-#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}},
+#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}},
 #' if plot_type is "rank" or to \code{\link{plot.combined_scaled_MAD_test}}, if
 #' plot_type is "MAD".
 #'
 #' @method plot adjusted_combined_envelope_test
 #' @export
-#' @seealso \code{\link{plot.envelope_test}}, \code{\link{plot.combined_scaled_MAD_test}}.
+#' @seealso \code{\link{plot.global_envelope}}, \code{\link{plot.combined_scaled_MAD_test}}.
 plot.adjusted_combined_envelope_test <- function (x, main, plot_type = c("rank", "MAD"), ...) {
     plot_type <- match.arg(plot_type)
     if(plot_type=="MAD" & is.null(attr(x, "adjusted_scaled_MAD_envelope"))) stop("The adjusted combined scaled MAD envelope not found in 'x'.\n")
     switch(plot_type,
            rank = {
                if(missing(main)) main <- x$method
-               p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
+               p <- plot.global_envelope(x$adj_envelope_test, main=main, ...)
            },
            MAD = {
                adjtest <- attr(x, "adjusted_scaled_MAD_envelope")
