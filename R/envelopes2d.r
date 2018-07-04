@@ -134,7 +134,7 @@ central_region_2d <- function(obs, sim=NULL, rx, ry, ...) {
 #' @examples
 #' # Example of spatial point pattern residuals
 #' #-------------------------------------------
-#' if(require(spatstat)) {
+#' if(require(spatstat, quietly=TRUE)) {
 #'   data(cells)
 #'   X <- cells
 #'   # Fit the hard-core process
