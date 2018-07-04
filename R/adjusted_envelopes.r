@@ -633,12 +633,12 @@ print.adjusted_combined_envelope_test <- function (x, ...) {
 #' @param plot_type "rank" for the result of the rank envelope test; "MAD" for the
 #' adjusted combined scaled MAD envelope. The latter only available if saved in 'x'.
 #' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}},
-#' if plot_type is "rank" or to \code{\link{plot.combined_scaled_MAD_test}}, if
+#' if plot_type is "rank" or to \code{\link{plot.combined_global_envelope}}, if
 #' plot_type is "MAD".
 #'
 #' @method plot adjusted_combined_envelope_test
 #' @export
-#' @seealso \code{\link{plot.global_envelope}}, \code{\link{plot.combined_scaled_MAD_test}}.
+#' @seealso \code{\link{plot.global_envelope}}, \code{\link{plot.combined_global_envelope}}.
 plot.adjusted_combined_envelope_test <- function (x, main, plot_type = c("rank", "MAD"), ...) {
     plot_type <- match.arg(plot_type)
     if(plot_type=="MAD" & is.null(attr(x, "adjusted_scaled_MAD_envelope"))) stop("The adjusted combined scaled MAD envelope not found in 'x'.\n")
