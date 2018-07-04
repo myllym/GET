@@ -421,12 +421,12 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALS
     }
 }
 
-#' A helper function for plotting two global envelopes into a same plot.
+#' A helper function for plotting two global envelopes into a same (gg)plot.
 #'
-#' @param env1 An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
-#' must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.
-#' @param env2 An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
-#' must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.
+#' @param env1 A 'fboxplot', 'global_envelope', envelope_test' or 'adjusted_envelope_test' object.
+#' In essence this object must contain arguments '$r', '$lo', '$hi' and '$central$, and possibly $obs.
+#' @param env2 A 'fboxplot', 'global_envelope', envelope_test' or 'adjusted_envelope_test' object.
+#' In essence this object must contain arguments '$r', '$lo', '$hi' and '$central$, and possibly $obs.
 #' @param base_size Base font size, to be passed to theme style.
 #' @param main See \code{\link{plot.default}}.
 #' @param ylim See \code{\link{plot.default}}.
