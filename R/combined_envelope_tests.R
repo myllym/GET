@@ -142,22 +142,17 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     central_curves_ls <- lapply(res_ls, function(x) x$central)
     bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$hi,
                                                            lower_f=envchars$lower_f, upper_f=envchars$upper_f)
+    # Update the bounding curves (lo, hi) and kalpha to the first level central regions
+    for(i in 1:length(curve_sets)) {
+      res_ls[[i]]$lo <- bounding_curves$lower_ls[[i]]
+      res_ls[[i]]$hi <- bounding_curves$upper_ls[[i]]
+      attr(res_ls[[i]], "k_alpha") <- NULL
+    }
 
-    # Create a combined envelope object for plotting
-    res_env <- structure(data.frame(r = do.call(c, lapply(res_ls, FUN = function(x) x$r), quote=FALSE),
-                              obs = do.call(c, lapply(res_ls, FUN = function(x) x$obs), quote=FALSE),
-                              central = do.call(c, lapply(res_ls, FUN = function(x) x$central), quote=FALSE),
-                              lo = do.call(c, bounding_curves$lower_ls, quote=FALSE),
-                              hi = do.call(c, bounding_curves$upper_ls, quote=FALSE)),
-                         class = c("combined_scaled_MAD_envelope", "envelope_test"))
-    attr(res_env, "method") <- method
-    attr(res_env, "alternative") <- attr(res_ls[[1]], "alternative")
-    attr(res_env, "p") <- attr(res_rank, "p")
-    attr(res_env, "p_interval") <- attr(res_rank, "p_interval")
-    # return
-    res <- structure(list(rank_test = res_rank, envelope = res_env),
-                     class = "combined_scaled_MAD_test")
-    attr(res, "rank_test_curve_set") <- curve_set_u
+    # Return
+    res <- list(global_envelope_ls = res_ls,
+                step2_test = res_rank, step2_test_curve_set = curve_set_u)
+    class(res) <- "combined_global_envelope"
     res
 }
 
