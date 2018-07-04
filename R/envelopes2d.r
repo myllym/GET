@@ -219,14 +219,9 @@ print.global_envelope_2d <- function(x, ...) {
 #' @importFrom spatstat as.im
 #' @importFrom spatstat contour.im
 plot.global_envelope_2d <- function(x, col, col.sign = c(255, 0, 0), transparency = 85, main, ...) {
-  if(missing(col)) {
-    if(!is.null(x[['obs']]))
-      col <- spatstat::colourmap(grDevices::gray(0:255/255),
+  if(missing(col))
+    col <- spatstat::colourmap(grDevices::gray(0:255/255),
                                  range=c(min(x$obs, x$lo), max(x$obs, x$hi)))
-    else
-      col <- spatstat::colourmap(grDevices::gray(0:255/255),
-                                 range=c(min(x$lo), max(x$hi)))
-  }
   if(length(col.sign)!=3) stop("Unreasonable length of col.sign.\n")
   if(missing(main)) main <- c("observed", "lo envelope", "hi envelope",
                               "Significance: below (red)",
