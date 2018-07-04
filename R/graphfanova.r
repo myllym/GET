@@ -261,7 +261,7 @@ print.graph.fanova <- function(x, ...) {
 #' @param x An 'graph.fanova' object
 #' @param plot_style Either "basic" or "ggplot2".
 #' @inheritParams env_ggplot
-#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}}.
+#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
 #' @method plot graph.fanova
 #' @export
 plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, labels=x[['labels']], ...) {
@@ -272,10 +272,10 @@ plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, la
                                                             g = "ggplot2"))
   switch(plot_style,
          basic = {
-           plot.envelope_test(x[['ranktest']], separate_yaxes=separate_yaxes, labels = NULL, ...) # ignoring labels
+           plot.global_envelope(x[['ranktest']], separate_yaxes=separate_yaxes, labels = NULL, ...) # ignoring labels
          },
          ggplot2 = {
-           plot.envelope_test(x[['ranktest']], plot_style="ggplot2", separate_yaxes=separate_yaxes, labels = labels, ...)
+           plot.global_envelope(x[['ranktest']], plot_style="ggplot2", separate_yaxes=separate_yaxes, labels = labels, ...)
          })
 }
 
