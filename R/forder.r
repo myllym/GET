@@ -213,6 +213,7 @@ forder <- function(curve_sets, r_min = NULL, r_max = NULL,
     names(distance) <- rownames(data_and_sim_curves(curve_sets[[1]]))
   }
   else {
+    curve_sets <- convert_envelope(curve_sets)
     res <- individual_forder(curve_sets, r_min = r_min, r_max = r_max,
                              measure = measure, scaling = scaling,
                              alternative = alternative,
