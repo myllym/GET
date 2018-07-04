@@ -119,7 +119,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
   else
     res <- structure(data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB),
                      class = c("global_envelope", "envelope", "fv", "data.frame"))
-  attr(res, "method") <- "global envelope"
+  attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
   attr(res, "alternative") <- alternative
   attr(res, "k_alpha") <- kalpha
