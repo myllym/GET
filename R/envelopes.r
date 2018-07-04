@@ -199,11 +199,13 @@ individual_global_envelope_test <- function(curve_set, type="erl", alpha=0.05,
 
   # Change the "method" attribute
   attr(res, "method") <- paste(attr(res, "method"), " test", sep="")
+  # Add attributes related to p-values
   attr(res, "p") <- p
   if(type == "rank") {
     attr(res, "p_interval") <- c(p_low, p_upp)
     attr(res, "ties") <- ties
   }
+  # Update "call" attribute
   attr(res, "call") <- match.call()
   res
 }
