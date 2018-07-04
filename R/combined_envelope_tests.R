@@ -54,6 +54,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' @param probs A two-element vector containing the lower and upper
 #' quantiles for the envelope, in that order and on the interval [0, 1].
 #' The default values are 0.025 and 0.975.
+#' @inheritParams central_region
 #' @param ... Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
 #' or \code{\link{st_envelope}} (if test = "st").
 #' @references
@@ -113,8 +114,8 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'      labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
 #'      separate_yaxes=TRUE, base_size=12)
 #'
-combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05, probs = c(0.025, 0.975), ...) {
-
+combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05,
+                                         probs = c(0.025, 0.975), central = "mean", ...) {
     ntests <- length(curve_sets)
     test <- match.arg(test)
     curve_sets <- check_curve_set_dimensions(curve_sets)
