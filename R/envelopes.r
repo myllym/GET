@@ -1069,36 +1069,6 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
   res
 }
 
-#' Print method for the class 'envelope_test'
-#' @usage \method{print}{envelope_test}(x, ...)
-#'
-#' @param x an 'envelope_test' object
-#' @param ... Ignored.
-#'
-#' @method print envelope_test
-#' @export
-print.envelope_test <- function(x, ...) {
-    cat(attr(x, "method"), " (", attr(x, "type"), ")\n",
-        " p-value of the test: ", attr(x, "p"), sep="")
-    if(!is.null(attr(x, "ties"))) cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
-    else cat("\n")
-    if(!is.null(attr(x, "p_interval")))
-        cat(" p-interval         : (", attr(x, "p_interval")[1], ", ", attr(x, "p_interval")[2],")\n", sep="")
-}
-
-#' Plot method for the class 'envelope_test'
-#' @usage \method{plot}{envelope_test}(x, ...)
-#'
-#' @param x an 'envelope_test' object'
-#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
-#'
-#' @method plot envelope_test
-#' @export
-#' @seealso \code{\link{global_envelope_test}}
-plot.envelope_test <- function(x, ...) {
-  plot.global_envelope(x, ...)
-}
-
 
 #' The rank envelope test
 #'
