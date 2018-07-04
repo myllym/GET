@@ -225,14 +225,12 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         if(!rdata$retick_xaxis) {
             if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                     type="l", lty=3, lwd=2, ...)
-            else graphics::lines(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                                 lty=3, lwd=2, ...)
+            else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, ...)
         }
         else {
           if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                   type="l", lty=3, lwd=2, xaxt="n", ...)
-          else graphics::lines(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                               lty=3, lwd=2, xaxt="n", ...)
+          else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, xaxt="n", ...)
         }
         if(attr(x, "alternative")!="greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
         if(attr(x, "alternative")!="less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
