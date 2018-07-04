@@ -907,7 +907,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
 #'                 savefuns=TRUE, # save the functions
 #'                 correction="translate", # edge correction for L
 #'                 simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
-#' # The rank envelope test
+#' # The rank envelope test (extreme rank length (ERL) breaking of ties)
 #' res <- global_envelope_test(env)
 #' # Plot the result.
 #' # - The central curve is now obtained from env[['theo']], which is the
@@ -921,7 +921,7 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
 #' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo = TRUE)
-#' # Do the rank envelope test
+#' # Do the rank envelope test (erl)
 #' res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
 #'
 #' ## Random labeling test
