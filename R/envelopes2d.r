@@ -197,7 +197,10 @@ print.global_envelope_2d <- function(x, ...) {
 #' @usage \method{plot}{global_envelope_2d}(x, col, col.sign = c(255, 0, 0), transparency = 85, main, ...)
 #'
 #' @param x an 'global_envelope_2d' object
-#' @param col 
+#' @param col As \code{col} in \code{\link[spatstat]{plot.im}}.
+#' If not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the minimum and maximum
+#' of the observed function (if present) and lower and upper boundary of the global envelope is used.
+#' The same \code{col} is used for each produced plot to make comparisons easier.
 #' @param col.sign A vector of length 3 giving the color for the significant regions.
 #' The elements should correspond to red, green, blue of \code{\link[grDevices]{rgb}}.
 #' Default to 
