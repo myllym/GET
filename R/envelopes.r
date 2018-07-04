@@ -655,8 +655,8 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
   }
   else {
     for(i in 1:length(res$global_envelope_ls)) {
-      attr(res$global_envelope_ls[[i]], "cr.lo") <- res$lo
-      attr(res$global_envelope_ls[[i]], "cr.hi") <- res$hi
+      attr(res$global_envelope_ls[[i]], "cr.lo") <- res$global_envelope_ls[[i]]$lo
+      attr(res$global_envelope_ls[[i]], "cr.hi") <- res$global_envelope_ls[[i]]$hi
       dist <- factor * (res$global_envelope_ls[[i]]$hi - res$global_envelope_ls[[i]]$lo)
       res$global_envelope_ls[[i]]$lo <- res$global_envelope_ls[[i]]$lo - dist
       res$global_envelope_ls[[i]]$hi <- res$global_envelope_ls[[i]]$hi + dist
