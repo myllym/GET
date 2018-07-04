@@ -120,13 +120,13 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     test <- match.arg(test)
     curve_sets <- check_curve_set_dimensions(curve_sets)
     # Make the individual tests saving the deviations
-    switch(test, 
+    switch(test,
             qdir = {
-                res_ls <- lapply(curve_sets, FUN = function(x) { qdir_envelope(x, alpha=alpha, probs = probs, ...) })
+                res_ls <- lapply(curve_sets, FUN = function(x) { central_region(x, type="qdir", coverage=1-alpha, probs = probs, central=central, ...) })
                 method <- "Combined studentised envelope test"
             },
             st = {
-                res_ls <- lapply(curve_sets, FUN = function(x) { st_envelope(x, alpha=alpha, ...) })
+                res_ls <- lapply(curve_sets, FUN = function(x) { central_region(x, type="st", coverage=1-alpha, central=central, ...) })
                 method <- "Combined directional quantile envelope test"
             })
     # Calculate quantiles (qdir) or sds (st)
