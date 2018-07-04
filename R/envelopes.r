@@ -289,7 +289,7 @@ print.global_envelope <- function(x, ...) {
 
 #' Plot method for the class 'global_envelope'
 #' @usage \method{plot}{global_envelope}(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
-#'                                      main, ylim, xlab, ylab, use_ggplot2, ...)
+#'                                       main, ylim, xlab, ylab, use_ggplot2, ...)
 #'
 #' @param x an 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
