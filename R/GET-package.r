@@ -25,8 +25,8 @@
 #'            \item First create a curve_set of the data.
 #'
 #'                  \code{
-#'                    \code{cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
-#'                                                             obs = growth$hgtf))}
+#'                    cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
+#'                                                  obs = growth$hgtf))
 #'                  }
 #'            \item Then calculate 50\% central region
 #'
