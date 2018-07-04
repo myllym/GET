@@ -123,11 +123,9 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
     switch(test,
             qdir = {
                 res_ls <- lapply(curve_sets, FUN = function(x) { central_region(x, type="qdir", coverage=1-alpha, probs = probs, central=central, ...) })
-                method <- "Combined studentised envelope test"
             },
             st = {
                 res_ls <- lapply(curve_sets, FUN = function(x) { central_region(x, type="st", coverage=1-alpha, central=central, ...) })
-                method <- "Combined directional quantile envelope test"
             })
     # Calculate quantiles (qdir) or sds (st)
     envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, test=test, probs=probs)
