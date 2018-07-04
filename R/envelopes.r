@@ -609,7 +609,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),
                            central = "median", ...) {
-  if(class(curve_sets) == "list") {
+  if(class(curve_sets)[1] == "list") {
     res <- combined_CR_or_GET(curve_sets, CR_or_GET = "CR", type = type, coverage = coverage,
                               alternative = alternative, probs = probs,
                               central = central, ...)
