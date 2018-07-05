@@ -21,7 +21,7 @@ sections thereafter.}
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \value{
-An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 which can be printed and plotted directly.
 
 Essentially a data frame containing columns
@@ -196,5 +196,5 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing,
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 }
 \seealso{
-\code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
+\code{\link{random_labelling}}, \code{\link{plot.global_envelope}}
 }

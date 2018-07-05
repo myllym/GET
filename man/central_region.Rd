@@ -32,7 +32,7 @@ is calculated either as the mean or median of functions provided in the curve se
 \item{...}{Additional parameters to be passed to \code{\link{forder}}.}
 }
 \value{
-An object of class "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 which can be printed and plotted directly.
 
 Essentially a data frame containing columns

@@ -4,8 +4,10 @@
 \alias{plot.global_envelope}
 \title{Plot method for the class 'global_envelope'}
 \usage{
-\method{plot}{global_envelope}(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
-                                     main, ylim, xlab, ylab, use_ggplot2, ...)
+\method{plot}{global_envelope}(x, plot_style="basic", dotplot = length(x$r)<10,
+   main, ylim, xlab, ylab, use_ggplot2,
+   color_outside = TRUE, env.col = 1, base_size = 15,
+   labels = NULL, add = FALSE, ...)
 }
 \arguments{
 \item{x}{an 'global_envelope' object}
@@ -16,8 +18,6 @@ The option "fv" utilizes the plot routines of the function value table \code{\li
 For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
 The option "fv" is currently only available for tests with one test function, whereas the other true allow
 also tests with several tests functions.}
-
-\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
 \item{dotplot}{Logical. If TRUE, then instead of envelopes a dot plot is done.
 Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
@@ -33,8 +33,18 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
 \item{use_ggplot2}{Logical, whether plot_style is "ggplot2" or not. Outdated, use the argument plot_style instead.}
 
-\item{...}{Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
-(if dotplot=TRUE) or \code{\link{env_ggplot}} (if plot_style="ggplot2").}
+\item{color_outside}{Logical. Whether to color the places where the data function goes
+outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.}
+
+\item{env.col}{The color for the envelope lines (or dotplot arrows). Default 1 (black).}
+
+\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
+
+\item{labels}{Labels for \code{dotplot=TRUE}; labels for the tests at x-axis.}
+
+\item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).}
+
+\item{...}{Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.}
 }
 \description{
 Plot method for the class 'global_envelope'

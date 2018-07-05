@@ -42,7 +42,7 @@ Provides global envelope tests based on 2D functions
 \examples{
 # Example of spatial point pattern residuals
 #-------------------------------------------
-if(require(spatstat)) {
+if(require(spatstat, quietly=TRUE)) {
   data(cells)
   X <- cells
   # Fit the hard-core process
@@ -58,7 +58,8 @@ if(require(spatstat)) {
   # Generate simulations from the hard-core null model
   nsim <- 1999
   simulations <- NULL
-  ext.factor <- max(X$window$xrange[2]-X$window$xrange[1], X$window$yrange[2]-X$window$yrange[1]) / 10
+  ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
+                    X$window$yrange[2]-X$window$yrange[1]) / 10
   win.extend <- owin(c(X$window$xrange[1]-ext.factor, X$window$xrange[2]+ext.factor),
                      c(X$window$yrange[1]-ext.factor, X$window$yrange[2]+ext.factor))
   mod02 <- list(cif="hardcore", par=list(beta=exp(model$fitin$coefs[1]),hc=HD), w=win.extend)

@@ -14,13 +14,13 @@
 \item{plot_type}{"rank" for the result of the rank envelope test; "MAD" for the
 adjusted combined scaled MAD envelope. The latter only available if saved in 'x'.}
 
-\item{...}{Additional parameters to be passed to \code{\link{plot.envelope_test}},
-if plot_type is "rank" or to \code{\link{plot.combined_scaled_MAD_test}}, if
+\item{...}{Additional parameters to be passed to \code{\link{plot.global_envelope}},
+if plot_type is "rank" or to \code{\link{plot.combined_global_envelope}}, if
 plot_type is "MAD".}
 }
 \description{
 Plot method for the class 'adjusted_combined_envelope_test'
 }
 \seealso{
-\code{\link{plot.envelope_test}}, \code{\link{plot.combined_scaled_MAD_test}}.
+\code{\link{plot.global_envelope}}, \code{\link{plot.combined_global_envelope}}.
 }

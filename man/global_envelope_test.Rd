@@ -45,7 +45,7 @@ The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 20
 is calculated either as the mean or median of functions provided in the curve sets.}
 }
 \value{
-An object of class "envelope_test", "envelope" and "fv"
+An object of class "global_envelope", "envelope" and "fv"
 (see \code{\link[spatstat]{fv.object}}), which can be printed and plotted directly.
 
 Essentially a data frame containing columns
@@ -175,7 +175,7 @@ env <- envelope(pp, fun="Lest", nsim=1999,
                 savefuns=TRUE, # save the functions
                 correction="translate", # edge correction for L
                 simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
-# The rank envelope test
+# The rank envelope test (extreme rank length (ERL) breaking of ties)
 res <- global_envelope_test(env)
 # Plot the result.
 # - The central curve is now obtained from env[['theo']], which is the
@@ -189,7 +189,7 @@ plot(res, plot_style="ggplot2")
 curve_set <- crop_curves(env, r_min = 1, r_max = 7)
 # For better visualisation, take the L(r)-r function
 curve_set <- residual(curve_set, use_theo = TRUE)
-# Do the rank envelope test
+# Do the rank envelope test (erl)
 res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
 
 ## Random labeling test
@@ -332,5 +332,5 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test c
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
 \seealso{
-\code{\link{plot.envelope_test}}
+\code{\link{plot.global_envelope}}
 }

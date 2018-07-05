@@ -2,16 +2,16 @@
 % Please edit documentation in R/plot_envelope_helper.r
 \name{two_envelopes_ggplot}
 \alias{two_envelopes_ggplot}
-\title{A helper function for plotting two global envelopes into a same plot.}
+\title{A helper function for plotting two global envelopes into a same (gg)plot.}
 \usage{
 two_envelopes_ggplot(env1, env2, base_size = 15, main, ylim, xlab, ylab)
 }
 \arguments{
-\item{env1}{An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
-must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.}
+\item{env1}{A 'fboxplot', 'global_envelope' or 'adjusted_envelope_test' object.
+In essence this object must contain arguments '$r', '$lo', '$hi' and '$central$, and possibly $obs.}
 
-\item{env2}{An 'envelope_test' or 'adjusted_envelope_test' object. In essence this object
-must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.}
+\item{env2}{A 'fboxplot', 'global_envelope' or 'adjusted_envelope_test' object.
+In essence this object must contain arguments '$r', '$lo', '$hi' and '$central$, and possibly $obs.}
 
 \item{base_size}{Base font size, to be passed to theme style.}
 
@@ -24,5 +24,5 @@ must contain arguments '$r', '$obs', '$lo', '$hi' and '$central$.}
 \item{ylab}{See \code{\link{plot.default}}.}
 }
 \description{
-A helper function for plotting two global envelopes into a same plot.
+A helper function for plotting two global envelopes into a same (gg)plot.
 }
