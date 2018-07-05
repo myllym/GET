@@ -375,7 +375,7 @@ check_curve_set_dimensions <- function(x) {
     # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
     # If the latter, then convert the objects to curve sets.
     x <- lapply(x, FUN=convert_envelope)
-    name_vec <- lapply(x, FUN=names)
+    name_vec <- lapply(x, FUN=function(x) { n <- names(x); n[n!="theo"] })
     # Possible_names in curve_sets are 'r', 'obs', 'sim_m', 'theo' and 'is_residual'.
     # Check that all curve sets contain the same elements
     if(!all(sapply(name_vec, FUN=identical, y=name_vec[[1]])))
@@ -385,10 +385,17 @@ check_curve_set_dimensions <- function(x) {
         if(!all(sapply(x, FUN=function(curve_set) { curve_set$is_residual == x[[1]]$is_residual })))
             stop("The element \'is_residual\' should be the same for each curve set.\n")
     }
-    # Check that the number of simulations in curve sets are equal.
+    # Check that the number of functions in 'obs' in curve sets are equal.
+    if('obs' %in% name_vec[[1]]) {
+      if(all(sapply(x, FUN=is.matrix))) {
+        if(!all(sapply(x, FUN=function(curve_set) { dim(curve_set$obs)[2] == dim(x[[1]]$obs)[2] })))
+          stop("The numbers of functions in 'obs' in curve sets differ.\n")
+      }
+    }
+    # Check that the number of functions in 'sim_m' in curve sets are equal.
     if('sim_m' %in% name_vec[[1]]) {
         if(!all(sapply(x, FUN=function(curve_set) { dim(curve_set$sim_m)[2] == dim(x[[1]]$sim_m)[2] })))
-            stop("The numbers of simulations in curve sets differ.\n")
+            stop("The numbers of functions in 'sim_m' in curve sets differ.\n")
     }
     x
 }
@@ -412,6 +419,17 @@ data_and_sim_curves <- function(curve_set) {
 curve_set_mean <- function(curve_set) {
   if(with(curve_set, is.matrix(obs))) mid <- apply(curve_set[['obs']], 1, mean)
   else mid <- apply(curve_set[['sim_m']], 1, mean)
+  mid
+}
+
+# A helper function to obtain the median of functions in curve_set.
+#
+# If obs is a matrix, then take the median of the functions in obs. (ignore sim_m)
+# If obs is a vector, then take the median of the functions in sim_m.
+#' @importFrom stats median
+curve_set_median <- function(curve_set) {
+  if(with(curve_set, is.matrix(obs))) mid <- apply(curve_set[['obs']], 1, median)
+  else mid <- apply(curve_set[['sim_m']], 1, stats::median)
   mid
 }
 

@@ -7,9 +7,9 @@
 combined_global_envelope_with_sims(X, nsim, simfun = NULL,
   simfun.arg = NULL, ..., testfuns = NULL, test = c("rank", "qdir", "st"),
   alpha = 0.05, alternative = c("two.sided", "greater", "less"),
-  r_min = NULL, r_max = NULL, take_residual = FALSE, lexo = TRUE,
-  ties = NULL, save.envelope = TRUE, savefuns = FALSE,
-  savepatterns = FALSE, verbose = FALSE)
+  r_min = NULL, r_max = NULL, take_residual = FALSE, ties = "erl",
+  save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
+  verbose = FALSE)
 }
 \arguments{
 \item{X}{An object containing point pattern data. A point pattern (object of class "ppp")
@@ -55,11 +55,9 @@ test function is reduced from the test functions. If TRUE, then: If \code{\link[
 provides the theoretical value 'theo' for the simulated model, then this value is used. Otherwise,
 the theoretical function is taken as the mean of the simulations.}
 
-\item{lexo}{Logical, whether or not to use lexical ordering for calculation of the p-value.
-in the rank envelope test. See \code{\link{rank_envelope}}.}
-
-\item{ties}{Ties method to be passed to \code{\link{rank_envelope}}. Used to obtain a point estimate
-for the p-value, if lexo=FALSE. The default point estimate is the mid-rank p-value.}
+\item{ties}{Ties method to be passed to \code{\link{global_envelope_test}}.
+Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
+length p-value.}
 
 \item{save.envelope}{Logical flag indicating whether to save all envelope test results.}
 

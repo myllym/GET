@@ -15,7 +15,7 @@ savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \value{
-An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 which can be printed and plotted directly.
 
 Essentially a data frame containing columns
@@ -35,7 +35,7 @@ Additionally, the return value has attributes
   \item alternative = "two-sided
   \item p = A point estimate for the p-value (default is the mid-rank p-value).
   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
-  \item u = Deviation values (u[1] is the value for the data pattern). Returned only if savedevs = TRUE.
+  \item u = Deviation values (u[1] is the value for the data pattern).
   \item call = The call of the function.
 }
 and a punch of attributes for the "fv" object type.

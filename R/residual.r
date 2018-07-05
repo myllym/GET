@@ -58,21 +58,25 @@ residual <- function(curve_set, use_theo = TRUE) {
     res
 }
 
-# Define T_0 from a curve_set object
+# The central function T_0
 #
-# Define T_0, the expectation of the test function under H_0, from a curve_set object.
+# Calculate the central function T_0 from a curve_set object.
 #
 # @inheritParams crop_curves
-get_T_0 <- function(curve_set) {
+# @param central Whether to take the mean or median of functions as the central function.
+get_T_0 <- function(curve_set, central = c("mean", "median")) {
     curve_set <- convert_envelope(curve_set)
-
+    central <- match.arg(central)
+    switch(central,
+           mean = { centralf <- curve_set_mean },
+           median = { centralf <- curve_set_median })
     if(with(curve_set, exists('is_residual'))) {
         if(!curve_set[['is_residual']]) {
             if(with(curve_set, exists('theo'))) {
                 T_0 <- curve_set[['theo']]
             }
             else {
-                T_0 <- curve_set_mean(curve_set)
+                T_0 <- centralf(curve_set)
             }
         }
         else {
@@ -84,7 +88,7 @@ get_T_0 <- function(curve_set) {
             T_0 <- curve_set[['theo']]
         }
         else {
-            T_0 <- curve_set_mean(curve_set)
+            T_0 <- centralf(curve_set)
         }
     }
     T_0

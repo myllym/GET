@@ -4,32 +4,31 @@
 \alias{forder}
 \title{Functional ordering}
 \usage{
-forder(curve_set, r_min = NULL, r_max = NULL, measure = "erl",
+forder(curve_sets, r_min = NULL, r_max = NULL, measure = "erl",
   scaling = "qdir", alternative = c("two.sided", "less", "greater"),
   use_theo = TRUE, probs = c(0.025, 0.975))
 }
 \arguments{
-\item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or
-an \code{\link[spatstat]{envelope}} object. If an envelope object is given,
-it must contain the summary functions from the simulated patterns which can be
-achieved by setting savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
+\item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
 
 \item{r_min}{The minimum radius to include.}
 
 \item{r_max}{The maximum radius to include.}
 
 \item{measure}{The measure to use to order the functions from the most extreme to the least extreme
-one. Must be one of the following: 'rank', 'erl', 'max', 'int', 'int2'. Default is 'erl'.}
+one. Must be one of the following: 'rank', 'erl', 'cont', 'area', 'max', 'int', 'int2'. Default is 'erl'.}
 
 \item{scaling}{The name of the scaling to use if measure is 'max', 'int' or 'int2'.
 Options include 'none', 'q', 'qdir' and 'st', where 'qdir' is the default.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".
-The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.}
+The last two options only available for types \code{'rank'}, \code{'erl'},
+\code{'cont'} and \code{'area'}.}
 
-\item{use_theo}{Whether to use the theoretical summary function or the
-mean of the functions in the curve_set.}
+\item{use_theo}{Logical. When calculating the measures 'max', 'int', 'int2',
+should the theoretical function from \code{curve_set} be used (if 'theo' provided),
+see \code{\link{deviation_test}}.}
 
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
@@ -49,33 +48,42 @@ Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create s
 or an \code{\link[spatstat]{envelope}} object,
 which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)} and
 the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)},
-the functions are ordered by one of the following measures.
-
-First the curves in the curve set are ranked from the most extreme one to the least extreme one
-either by using the extreme ranks R_i and/or the extreme rank lengths \eqn{R_i^{\text{erl}}}{Rerl_i}.
-The option \code{measure = "rank"}, the ordering is based on the extreme ranks R_i.
-The extreme rank is defined as the minimum of pointwise ranks of the curve \eqn{T_i(r)}{T_i(r)},
-where the pointwise rank is the rank of the value of the curve for a specific r-value among the
-corresponding values of the s other curves such that the lowest ranks correspond to the most extreme
-values of the curves. How the pointwise ranks are determined exactly depends on the whether a
-one-sided (\code{alternative} is "less" or "greater") or the two-sided test (\code{alternative="two.sided"}) is
-chosen, for details see Mrkvička et al. (2017, page 1241) or Mrkvička et al. (2018, page 6).
-
-The extreme ranks can contain many ties, for which reason Myllymäki et al. (2017) proposed the
-extreme rank length ordering. This ordering can be obtained by specifying \code{measure = "erl"}.
-Considering the vector of pointwise ordered ranks
-\eqn{\mathbf{R}_i}{RP_i} of the ith curve, the extreme rank length measure
-\eqn{R_i^{\text{erl}}}{Rerl_i}
-is equal to
+the functions are ordered from the most extreme one to the least extreme one
+by one of the following measures (specified by the argument \code{measure}).
+Note that \code{'erl'}, \code{'cont'} and \code{'area'} were proposed as a refinement to
+the extreme ranks \code{'rank'}, because the extreme ranks can contain many ties.
+All of these completely non-parametric measures are smallest for the most extreme functions
+and largest for the least extreme ones,
+whereas the deviation measures (\code{'max'}, \code{'int'} and \code{'int2'}) obtain largest values
+for the most extreme functions.
+\itemize{
+ \item \code{'rank'}: extreme rank (Myllymäki et al., 2017).
+The extreme rank \eqn{R_i}{R_i} is defined as the minimum of pointwise ranks of the curve
+\eqn{T_i(r)}{T_i(r)}, where the pointwise rank is the rank of the value of the curve for a
+specific r-value among the corresponding values of the s other curves such that the lowest
+ranks correspond to the most extreme values of the curves. How the pointwise ranks are determined
+exactly depends on the whether a one-sided (\code{alternative} is "less" or "greater") or the
+two-sided test (\code{alternative="two.sided"}) is chosen, for details see
+Mrkvička et al. (2017, page 1241) or Mrkvička et al. (2018, page 6).
+ \item \code{'erl'}: extreme rank length (Myllymäki et al., 2017).
+ Considering the vector of pointwise ordered ranks \eqn{\mathbf{R}_i}{RP_i} of the ith curve,
+ the extreme rank length measure \eqn{R_i^{\text{erl}}}{Rerl_i} is equal to
 \deqn{R_i^{\text{erl}} = \frac{1}{s+1}\sum_{j=1}^{s+1} \1(\mathbf{R}_j \prec \mathbf{R}_i)}{Rerl_i = \sum_{j=1}^{s} 1(RP_j "<" RP_i) / (s + 1)}
 where \eqn{\mathbf{R}_j \prec \mathbf{R}_i}{RP_j "<" RP_i} if and only if
 there exists \eqn{n\leq d}{n<=d} such that for the first k, \eqn{k<n}{k<n}, pointwise ordered
 ranks of \eqn{\mathbf{R}_j}{RP_j} and \eqn{\mathbf{R}_i}{RP_i} are equal and the n'th rank of
 \eqn{\mathbf{R}_j}{RP_j} is smaller than that of \eqn{\mathbf{R}_i}{RP_i}.
-
-Further options for the \code{measure} argument are \code{max}, \code{int} and \code{int2}
-which can be used together with \code{scaling}. See the help in \code{\link{deviation_test}}
-for these options of measures (measure) and scalings.
+ \item \code{'cont'}: continuous rank (Hahn, 2015; Mrkvička and Narisetty, 2018)
+based on minimum of continuous pointwise ranks
+ \item \code{'area'}: area rank (Mrkvička and Narisetty, 2018) based on area between continuous
+ pointwise ranks and minimum pointwise ranks for those argument (r) values for which pointwise
+ ranks achieve the minimum (it is a combination of erl and cont)
+ \item \code{'max'} and \code{'int'} and \code{'int2'}:
+Further options for the \code{measure} argument that can be used together with \code{scaling}.
+See the help in \code{\link{deviation_test}} for these options of \code{measure} and \code{scaling}.
+These measures are largest for the most extreme functions and smallest for the least extreme ones.
+The arguments \code{use_theo} and \code{probs} are relevant for these measures only (otherwise ignored).
+}
 }
 \examples{
 if(requireNamespace("fda", quietly = TRUE)) {

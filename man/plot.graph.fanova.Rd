@@ -11,12 +11,14 @@
 
 \item{plot_style}{Either "basic" or "ggplot2".}
 
-\item{separate_yaxes}{Logical (default FALSE). By default also the combined envelope plots have
-a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.}
+\item{separate_yaxes}{Logical (default FALSE). If TRUE, then separate y-axes are used for
+different parts of a combined test. If FALSE, then the components are displayed one next to each other
+with a joint y-axis.}
 
-\item{labels}{Labels for the separate plots. Ignored if separate_yaxes is FALSE.}
+\item{labels}{Labels for the separate plots (for \code{plot_style = "ggplot2"}).
+Ignored if separate_yaxes is FALSE. Or, for \code{dotplot=TRUE}, labels for the tests at x-axis.}
 
-\item{...}{Additional parameters to be passed to \code{\link{plot.envelope_test}}.}
+\item{...}{Additional parameters to be passed to \code{\link{plot.global_envelope}}.}
 }
 \description{
 Plot method for the class 'graph.fanova'

@@ -2,38 +2,37 @@
 % Please edit documentation in R/envelopes.r
 \name{central_region}
 \alias{central_region}
-\alias{global_envelope}
 \title{Central region / Global envelope}
 \usage{
-central_region(curve_set, type = "erl", coverage = 0.95, savedevs = FALSE,
-  alternative = c("two.sided", "less", "greater"), probs = c(0.025, 0.975),
-  ...)
+central_region(curve_sets, type = "erl", coverage = 0.5,
+  alternative = c("two.sided", "less", "greater"), probs = c((1 -
+  coverage)/2, 1 - (1 - coverage)/2), central = "median", ...)
 }
 \arguments{
-\item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or
-an \code{\link[spatstat]{envelope}} object. If an envelope object is given,
-it must contain the summary functions from the simulated patterns which can be
-achieved by setting savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
+\item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
 
 \item{type}{The type of the global envelope with current options for 'rank', 'erl',
 'qdir', 'st' and 'unscaled'. See details.}
 
 \item{coverage}{A number between 0 and 1. The 100*coverage\% central region will be calculated.}
 
-\item{savedevs}{Logical. Should the measure values k_i, i=1,...,s, be returned? Default: FALSE.}
-
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".
-The last two options only available for \code{type = 'rank'} and \code{type = 'erl'}.}
+The last two options only available for types \code{'rank'}, \code{'erl'},
+\code{'cont'} and \code{'area'}.}
 
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).}
 
+\item{central}{Either "mean" or "median". If the curve sets do not contain the component
+\code{theo} for the theoretical central function, then the central function (used for plotting only)
+is calculated either as the mean or median of functions provided in the curve sets.}
+
 \item{...}{Additional parameters to be passed to \code{\link{forder}}.}
 }
 \value{
-An object of class "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 which can be printed and plotted directly.
 
 Essentially a data frame containing columns
@@ -51,13 +50,10 @@ Additionally, the return value has attributes
 \itemize{
   \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
   \item alternative = The alternative specified in the function call.
-  \item p = A point estimate for the p-value (default is the mid-rank p-value).
-  \item p_interval = The p-value interval [p_liberal, p_conservative].
   \item ties = As the argument \code{ties}.
   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
   \item k = The values of the chosen measure for all the functions. If there is only one
-  data function, then k[1] will give the value of the measure for this.
-  k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
+  observed function, then k[1] will give the value of the measure for this.
   \item call = The call of the function.
 }
 and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
@@ -79,7 +75,7 @@ the component \code{sim_m} of the \code{curve_set} (which can be then NULL)
 is ignored and the central region constructed from the functions given in \code{obs}.
  \item If the component \code{obs} is a vector, then \code{sim_m} should be provided as well
 and it is assumed to contain simulated functions (obtained, e.g., from some model or by permutation).
-Then the central region is constructed from the functions given in \code{sim_m}.
+The central region is calculated from all the functions.
 }
 Thus the \code{curve_set} contains functions (or vectors)
 \eqn{T_1(r),\dots,T_s(r)}{T_1(r),...,T_s(r)}.
@@ -92,47 +88,117 @@ A \eqn{100(1-\alpha)}{100(1-alpha)}\% or 100*coverage\% global envelope is a set
 \eqn{(T_{\text{low}}, T_{\text{hi}})}{(T_lo, T_hi)} of envelope vectors
 such that the probability that \eqn{T_i}{T_i} falls outside this envelope
 in any of the d points of the vector \eqn{T_i}{T_i} is less or equal to \eqn{\alpha}{alpha}.
-
-The central regions, i.e. global envelopes, can be constructed based on different measures
+The global envelopes can be constructed based on different measures
 that order the functions from the most extreme one to the least extreme one.
-The measure can be chosen with the argument \code{type} and the options are given
-in the following with further description of the global envelope related to the measure:
+We use such orderings of the functions for which we are able to construct global envelopes
+with intrinsic graphical interpretation.
+
+The type of the global envelope can be chosen with the argument \code{type} and
+the options are given in the following.
+Further information about the measures, on which the global envelopes are based,
+can be found in \code{\link{forder}}.
 \itemize{
- \item \code{'rank'}: extreme rank. Then the global envelope is the global rank envelope
-proposed by Myllymäki et al. (2017).
- \item \code{'erl'}: extreme rank length (Myllymäki et al.,2017).
-Then the envelope is the global rank envelope based on the extreme rank length ordering.
+ \item \code{'rank'}: The global rank envelope
+proposed by Myllymäki et al. (2017) based on the extreme rank defined as the minimum of pointwise
+ranks.
+ \item \code{'erl'}: The global rank envelope based on the extreme rank
+ length (Myllymäki et al.,2017, Mrkvička et al., 2018).
 This envelope is constructed as the convex hull of the functions which have extreme rank
-length measure \eqn{R_i^{\text{erl}}}{Rerl_i}
-that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
-length measure (Mrkvička et al., 2018).
- \item \code{'qdir'}: the directional quantile maximum absolute deviation (MAD) measure
-(Myllymäki et al., 2015).
-The directional quantile envelope test (Myllymäki et al., 2017),
+length measure that is larger or equal to the critical \eqn{\alpha}{alpha} level of the
+extreme rank length measure.
+ \item \code{'cont'}: The global rank envelope based on the continuous rank
+ (Hahn, 2015; Mrkvička and Narisetty, 2018) based on minimum of continuous pointwise ranks.
+ It is contructed as the convex hull in a similar way as the \code{'erl'} envelope.
+ \item \code{'area'}: The global rank envelope based on the area rank (Mrkvička and Narisetty, 2018)
+ which is based on area between continuous pointwise ranks and minimum pointwise ranks
+ for those argument (r) values for which pointwise ranks achieve the minimum
+ (it is a combination of erl and cont).
+ It is contructed as the convex hull in a similar way as the \code{'erl'} and \code{'area'} envelopes.
+ \item \code{'qdir'}: The directional quantile envelope based on
+ the directional quantile maximum absolute deviation (MAD) test (Myllymäki et al., 2017, 2015),
 which takes into account the unequal variances of the test function T(r) for
-different distances r and is also protected against asymmetry of T(r).
- \item \code{'st'}: the studentized MAD measure (Myllymäki et al., 2015).
-The studentised envelope test (Myllymäki et al., 2017), which takes into account the unequal
-variances of the test function T(r) for different distances r.
- \item \code{'unscaled'}: the unscaled MAD measure. The unscaled envelope test (Ripley, 1981),
+different distances r and is also protected against asymmetry of distribution of T(r).
+ \item \code{'st'}: The studentised envelope based on the studentised MAD
+ measure (Myllymäki et al., 2017, 2015),
+ which takes into account the unequal variances of the test function T(r) for different distances r.
+ \item \code{'unscaled'}: The unscaled envelope (Ripley, 1981),
 which leads to envelopes with constant width. It corresponds to the classical
 maximum deviation test without scaling. This test suffers from unequal variance
 of T(r) over the distances r and from the asymmetry of distribution of T(r).
 We recommend to use the other alternatives instead. This unscaled global envelope is
 provided for reference.
 }
-We note that the global envelopes \code{'rank'} and \code{'erl'}
-are completely non-parametric tests and thus protected against the unequal variances and asymmetry
-mentioned above.
-See detailed description of all the measures in \code{\link{forder}}.
+We note that the global envelopes \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'}
+are completely non-parametric tests and thus protected against the unequal variances
+of the test function T(r) for different distances r and also against asymmetry of the distribution
+of T(r).
 
 For each curve in the curve_set, both the data curve and the simulations,
-an above mention measure k is determined. If savedevs = TRUE, then the
-measure values \eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s} are
-returned in the component 'k', where k[1] is the value for the data.
+an above mention measure k is determined. The measure values
+\eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s}
+are returned in the attribute 'k' (in a case of one observed curve only, k[1] is its value).
 Based on the chosen measure, the central region, i.e. the global envelope, is constructed
 on the chosen interval of argument values (the functions in the \code{curve_set} are assumed
 to be given on this interval only).
+}
+\examples{
+## A central region of a set of functions
+#----------------------------------------
+if(requireNamespace("fda", quietly = TRUE)) {
+  curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
+                                     obs = fda::growth$hgtf))
+  plot(curve_set, ylab="height")
+  cr <- central_region(curve_set, coverage=0.50, type="erl")
+  plot(cr, main="50\% central region")
+}
+
+## Confidence bands for linear or polynomial regression
+#------------------------------------------------------
+# Simulate regression data according to the cubic model
+# f(x) = 0.8x - 1.8x^2 + 1.05x^3 for x in [0,1]
+par <- c(0,0.8,-1.8,1.05) # Parameters of the true polynomial model
+res <- 100 # Resolution
+x <- seq(0, 1, by = 1/res); x2=x^2; x3=x^3;
+f <- par[1] + par[2]*x + par[3]*x^2 + par[4]*x^3 # The true function
+d <- f + rnorm(length(x), 0, 0.04) # Data
+# Plot the true function and data
+plot(f, type="l", ylim=range(d))
+points(d)
+
+# Estimate polynomial regression model
+reg <- lm(d ~ x + x2 + x3)
+ftheta <- reg$fitted.values
+resid0 <- reg$residuals
+s0 <- sd(resid0)
+
+# Bootstrap regression
+B <- 2000 # Number of bootstrap samples
+ftheta1 <- array(0, c(B,length(x)))
+s1 <- array(0,B)
+for(i in 1:B) {
+  u <- sample(resid0, size=length(resid0), replace = TRUE)
+  reg1 <- lm((ftheta+u) ~ x + x2 + x3)
+  ftheta1[i,] <- reg1$fitted.values
+  s1[i] <- sd(reg1$residuals)
+}
+
+# Centering and scaling
+meanftheta <- apply(ftheta1, 2, mean)
+m <- array(0, c(B,length(x)))
+for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
+
+# Central region computation
+boot.cset <- create_curve_set(list(r = 1:length(x), obs = t(m)))
+cr <- central_region(boot.cset, coverage=0.95, type="erl")
+CB.lo <- ftheta+s0*cr$lo
+CB.hi <- ftheta+s0*cr$hi
+
+# Plotting the result
+plot(d, ylab="f(x)", xaxt = "n", xlab="x", main = "95\% central region")
+axis(1, at=(0:5)*20, labels=(0:5)/5)
+lines(ftheta)
+lines(CB.lo, lty=2)
+lines(CB.hi, lty=2)
 }
 \references{
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
@@ -142,4 +208,7 @@ Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for func
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
+}
+\seealso{
+\code{\link{global_envelope_test}}
 }

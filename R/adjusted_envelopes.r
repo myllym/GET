@@ -48,10 +48,9 @@
 #' test function is reduced from the test functions. If TRUE, then: If \code{\link[spatstat]{envelope}}
 #' provides the theoretical value 'theo' for the simulated model, then this value is used. Otherwise,
 #' the theoretical function is taken as the mean of the simulations.
-#' @param lexo Logical, whether or not to use lexical ordering for calculation of the p-value.
-#' in the rank envelope test. See \code{\link{rank_envelope}}.
-#' @param ties Ties method to be passed to \code{\link{rank_envelope}}. Used to obtain a point estimate
-#' for the p-value, if lexo=FALSE. The default point estimate is the mid-rank p-value.
+#' @param ties Ties method to be passed to \code{\link{global_envelope_test}}.
+#' Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
+#' length p-value.
 #' @param save.envelope Logical flag indicating whether to save all envelope test results.
 #' @param savefuns Logical flag indicating whether to save all the simulated function values.
 #' See \code{\link[spatstat]{envelope}}.
@@ -65,7 +64,7 @@
 global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided", "less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        lexo = TRUE, ties=NULL,
+        ties="erl",
         save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
         verbose = FALSE) {
     test <- match.arg(test)
@@ -83,20 +82,9 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
     # Crop curves (if r_min or r_max given)
     curve_set <- crop_curves(X, r_min = r_min, r_max = r_max)
     # Make the test
-    switch(test,
-           rank = {
-               global_envtest <- rank_envelope(curve_set, alpha=alpha, savedevs=TRUE,
-                       alternative=alt, lexo=lexo, ties=ties)
-               stat <- attr(global_envtest, "k")[1]
-           },
-           qdir = {
-               global_envtest <- qdir_envelope(curve_set, alpha=alpha, savedevs=TRUE)
-               stat <- attr(global_envtest, "u")[1]
-           },
-           st = {
-               global_envtest <- st_envelope(curve_set, alpha=alpha, savedevs=TRUE)
-               stat <- attr(global_envtest, "u")[1]
-           })
+    global_envtest <- global_envelope_test(curve_set, type=test, alpha=alpha,
+                                           alternative=alt, ties=ties)
+    stat <- attr(global_envtest, "k")[1]
 
     res <- structure(list(statistic = as.numeric(stat), p.value = attr(global_envtest, "p"),
                           method = test, curve_set = curve_set), class = "global_envelope_with_sims")
@@ -143,7 +131,7 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
         test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided", "greater", "less"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        lexo = TRUE, ties=NULL,
+        ties="erl",
         save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
         verbose = FALSE) {
     test <- match.arg(test)
@@ -193,8 +181,8 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
             rank = {
                 # Create a combined curve_set
                 curve_set_combined <- combine_curve_sets(curve_sets_ls)
-                global_envtest <- rank_envelope(curve_set_combined, alpha=alpha, savedevs=TRUE,
-                        alternative=alt, lexo=lexo, ties=ties)
+                global_envtest <- global_envelope_test(curve_set_combined, type="rank", alpha=alpha,
+                                                       alternative=alt, ties=ties)
                 stat <- attr(global_envtest, "k")[1]
                 pval <- attr(global_envtest, "p")
             },
@@ -284,7 +272,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         simfun=NULL, fitfun=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided","less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
+        #rank_count_test_p_values = FALSE, ties="erl",
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
         verbose=TRUE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
@@ -302,7 +290,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     tX <- global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
             test = test, alpha = alpha, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
-            lexo = FALSE, ties='midrank',
+            ties='midrank',
             save.envelope = save.cons.envelope, savefuns = savefuns, savepatterns = TRUE,
             verbose = verbose)
     if(verbose) cat("Done.\n")
@@ -331,7 +319,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
                 test = test, alpha = alpha, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
-                lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
+                ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
                 verbose = verbose)
         list(stat = tXsim$statistic, pval = tXsim$p.value)
@@ -417,15 +405,15 @@ print.adjusted_envelope_test <- function (x, ...) {
 #' @param main See \code{\link{plot.default}}. Default is x$method.
 #' @param plot_unadjusted Logical whether or not to plot also the unadjusted envelope.
 #' Only available if these have been saved in 'x'.
-#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}}, if plot_unadjusted
+#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}, if plot_unadjusted
 #' is FALSE, or to \code{\link{two_envelopes_ggplot}}, if plot_unadjusted is TRUE.
 #'
 #' @method plot adjusted_envelope_test
 #' @export
-#' @seealso \code{\link{plot.envelope_test}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
+#' @seealso \code{\link{plot.global_envelope}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
 plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
     if(missing(main)) main <- x$method
-    if(!plot_unadjusted) p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
+    if(!plot_unadjusted) p <- plot.global_envelope(x$adj_envelope_test, main=main, ...)
     else {
         p <- two_envelopes_ggplot(env1 = x$adj_envelope_test, env2 = attr(x, "unadjusted_envelope_test"))
     }
@@ -494,7 +482,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         testfuns = NULL, test = c("qdir", "st", "rank"),
         alpha = 0.05, alternative = c("two.sided", "less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
+        #rank_count_test_p_values = FALSE, ties="erl",
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
         verbose=TRUE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
@@ -513,7 +501,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     tX <- combined_global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
             testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
-            lexo = FALSE, ties='midrank',
+            ties='midrank',
             save.envelope = save.cons.envelope, savefuns = TRUE, savepatterns = TRUE,
             verbose = verbose)
     if(verbose) cat("Done.\n")
@@ -542,7 +530,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         tXsim <- combined_global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
                 testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
-                lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
+                ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
                 verbose = verbose)
         list(stat = tXsim$statistic, pval = tXsim$p.value)
@@ -632,20 +620,20 @@ print.adjusted_combined_envelope_test <- function (x, ...) {
 #' @param main See \code{\link{plot.default}}. Default is x$method.
 #' @param plot_type "rank" for the result of the rank envelope test; "MAD" for the
 #' adjusted combined scaled MAD envelope. The latter only available if saved in 'x'.
-#' @param ... Additional parameters to be passed to \code{\link{plot.envelope_test}},
-#' if plot_type is "rank" or to \code{\link{plot.combined_scaled_MAD_test}}, if
+#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}},
+#' if plot_type is "rank" or to \code{\link{plot.combined_global_envelope}}, if
 #' plot_type is "MAD".
 #'
 #' @method plot adjusted_combined_envelope_test
 #' @export
-#' @seealso \code{\link{plot.envelope_test}}, \code{\link{plot.combined_scaled_MAD_test}}.
+#' @seealso \code{\link{plot.global_envelope}}, \code{\link{plot.combined_global_envelope}}.
 plot.adjusted_combined_envelope_test <- function (x, main, plot_type = c("rank", "MAD"), ...) {
     plot_type <- match.arg(plot_type)
     if(plot_type=="MAD" & is.null(attr(x, "adjusted_scaled_MAD_envelope"))) stop("The adjusted combined scaled MAD envelope not found in 'x'.\n")
     switch(plot_type,
            rank = {
                if(missing(main)) main <- x$method
-               p <- plot.envelope_test(x$adj_envelope_test, main=main, ...)
+               p <- plot.global_envelope(x$adj_envelope_test, main=main, ...)
            },
            MAD = {
                adjtest <- attr(x, "adjusted_scaled_MAD_envelope")

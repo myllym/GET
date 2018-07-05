@@ -12,7 +12,7 @@ object. If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 
-\item{type}{The type of the global envelope with current options for "rank" and "erl".
+\item{type}{The type of the global envelope with current options for "rank", "erl", "cont" and "area".
 If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
 If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
 length p-value is given (Myllymäki et al., 2017, Mrkvicka et al., 2018). See details and additional
@@ -21,7 +21,7 @@ sections thereafter.}
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \value{
-An object of class "envelope_test", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 which can be printed and plotted directly.
 
 Essentially a data frame containing columns
@@ -44,7 +44,7 @@ Additionally, the return value has attributes
   \item ties = As the argument \code{ties}.
   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
   \item k = Global rank values (for type="rank") or extreme rank lengths (for type="erl").
-  k[1] is the value for the data pattern. Returned only if savedevs = TRUE.
+  k[1] is the value for the data pattern.
   \item call = The call of the function.
 }
 and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
@@ -57,47 +57,17 @@ The rank envelope test is a completely non-parametric test, which provides
 the 100(1-alpha)\% global envelope for the chosen test function T(r) on
 the chosen interval of distances and associated p-values.
 
-Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
-or an \code{\link[spatstat]{envelope}} object,
-which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)} and
-the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)},
-the test is carried out as described in the following sections that describe
-ordering of the functions, p-values and global envelopes.
+The test corresponds to the global envelope test that can be carriet out by
+\code{\link{global_envelope_test}} by specifying the \code{type} for which the options
+\code{"rank"}, \code{"erl"}, \code{"cont"} and \code{"area"} are available. The last
+three are modifications of the first one to treat the ties in the extreme rank ordering
+used in \code{"rank"}.
+
+Note: Earlier it was possible to specify to the extreme rank lengths breaking of ties for the rank
+envelope with specifying the argument \code{lexo = TRUE}. This is obsolete now. The same can be done
+by choosing \code{type = "rank"} and \code{ties = "erl"}, which is in fact the default of this
+\code{rank_envelope} function.
 }
-\section{Ranking of the curves}{
-
-The options for measures to order the functions from the most extreme one to the least extreme one
-are given by the argument \code{type}: 'rank', 'erl', 'qdir', 'st', 'unscaled'.
-The options are
-\itemize{
-\item 'rank': extreme ranks
-\item 'erl': extreme rank lengths
-\item 'qdir': the directional quantile maximum absolute deviation (MAD) measure
-\item 'st': the studentized MAD measure
-\item 'unscaled': the unscaled MAD measure
-}
-See detailed description of the measures in \code{\link{forder}}.
-
-For each curve in the curve_set, both the data curve and the simulations,
-an above mention measure k is determined. If savedevs = TRUE, then the
-measure values \eqn{k_1, k_2, ..., k_{s+1}}{k_1, k_2, ..., k_(s+1)} are
-returned in the component 'k', where k[1] is the value for the data.
-}
-
-\section{P-values}{
-
-In the case \code{type="rank"}, based on the extreme ranks k_i, i=1, ..., s+1,
-the p-interval is calculated. Because the extreme ranks contain ties, there is not just
-one p-value. The p-interval is given by the most liberal and the most conservative p-value
-estimate. This interval is by default plotted for the object returned by the rank_envelope function.
-Also a single p-value is calculated and returned in the attribute \code{p}.
-By default this single p-value is the mid-rank p-value, but another option can be used by
-specifying \code{ties} argument.
-
-If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
-of the functions is calculated and returned in the attribute \code{p}.
-}
-
 \section{Global envelope}{
 
 The 100(1-alpha)\% global envelope is provided in addition to the p-values. 
@@ -128,7 +98,7 @@ pp <- unmark(spruces)
 env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
                 simulate=expression(runifpoint(pp$n, win=pp$window)))
 # The rank envelope test
-res <- rank_envelope(env,savedevs=TRUE)
+res <- rank_envelope(env)
 # Plot the result.
 # - The central curve is now obtained from env[['theo']], which is the
 # value of the L-function under the null hypothesis (L(r) = r).
@@ -226,5 +196,5 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing,
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 }
 \seealso{
-\code{\link{random_labelling}}, \code{\link{plot.envelope_test}}
+\code{\link{random_labelling}}, \code{\link{plot.global_envelope}}
 }

@@ -5,7 +5,7 @@
 \title{Combined global scaled maximum absolute difference (MAD) envelope tests}
 \usage{
 combined_scaled_MAD_envelope(curve_sets, test = c("qdir", "st"),
-  alpha = 0.05, probs = c(0.025, 0.975), ...)
+  alpha = 0.05, probs = c(0.025, 0.975), central = "mean", ...)
 }
 \arguments{
 \item{curve_sets}{A list of objects of type 'curve_set' or \code{\link[spatstat]{envelope}}.}
@@ -18,6 +18,10 @@ combined_scaled_MAD_envelope(curve_sets, test = c("qdir", "st"),
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the envelope, in that order and on the interval [0, 1].
 The default values are 0.025 and 0.975.}
+
+\item{central}{Either "mean" or "median". If the curve sets do not contain the component
+\code{theo} for the theoretical central function, then the central function (used for plotting only)
+is calculated either as the mean or median of functions provided in the curve sets.}
 
 \item{...}{Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
 or \code{\link{st_envelope}} (if test = "st").}

@@ -14,12 +14,12 @@
 \item{plot_unadjusted}{Logical whether or not to plot also the unadjusted envelope.
 Only available if these have been saved in 'x'.}
 
-\item{...}{Additional parameters to be passed to \code{\link{plot.envelope_test}}, if plot_unadjusted
+\item{...}{Additional parameters to be passed to \code{\link{plot.global_envelope}}, if plot_unadjusted
 is FALSE, or to \code{\link{two_envelopes_ggplot}}, if plot_unadjusted is TRUE.}
 }
 \description{
 Plot method for the class 'adjusted_envelope_test'
 }
 \seealso{
-\code{\link{plot.envelope_test}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
+\code{\link{plot.global_envelope}}, \code{\link{rank_envelope}}, \code{\link{st_envelope}}, \code{\link{qdir_envelope}}.
 }
