@@ -342,7 +342,9 @@ plot.global_envelope <- function(x, plot_style="basic", dotplot = length(x$r)<10
   switch(plot_style,
          basic = {
            if(dotplot) {
-             env_dotplot(x, main, ylim, xlab, ylab, color_outside, labels, add, env.col, ...)
+             env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                         color_outside=color_outside, labels=labels,
+                         add=add, arrows.col=env.col, ...)
            }
            else {
              env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
