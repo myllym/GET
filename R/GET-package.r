@@ -2,7 +2,7 @@
 #'
 #' Global envelopes alias central regions and global envelope tests, including
 #' global envelope (tests) for single and many functions and multivariate vectors,
-#' adjusted global envelope tests, graphical functional one-way ANOVA
+#' adjusted global envelope tests, graphical functional ANOVA.
 #'
 #'
 #' The \pkg{GET} library provides central regions (i.e. global envelopes) and global envelope tests.
@@ -22,7 +22,7 @@
 #' \code{\link{central_region}}.
 #' E.g. growth curves of girls \code{\link[fda]{growth}}.
 #' \itemize{
-#'            \item First create a curve_set of the data.
+#'            \item First create a curve_set of the growth curves
 #'
 #'                  \code{
 #'                    cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
