@@ -216,21 +216,21 @@ env_ylim_default <- function(x, use_ggplot2) {
   ylim
 }
 
-#' An internal GET function for making a dotplot style "global envelope plot".
-#'
-#' An internal GET function for making a dotplot style "global envelope plot".
-#'
-#' @param x An 'envelope_test' object.
-#' @param main See \code{\link{plot.default}}.
-#' @param ylim See \code{\link{plot.default}}.
-#' @param xlab See \code{\link{plot.default}}.
-#' @param ylab See \code{\link{plot.default}}.
-#' @param color_outside Logical. Whether to color the places where the data function goes
-#' outside the envelope. Currently red color is used.
-#' @param labels Labels for the tests at x-axis.
-#' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
-#' @param arrows.col Color for the doplot arrows. If not given, 1 (black) is used.
-#' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
+# An internal GET function for making a dotplot style "global envelope plot".
+#
+# An internal GET function for making a dotplot style "global envelope plot".
+#
+# @param x An 'envelope_test' object.
+# @param main See \code{\link{plot.default}}.
+# @param ylim See \code{\link{plot.default}}.
+# @param xlab See \code{\link{plot.default}}.
+# @param ylab See \code{\link{plot.default}}.
+# @param color_outside Logical. Whether to color the places where the data function goes
+# outside the envelope. Currently red color is used.
+# @param labels Labels for the tests at x-axis.
+# @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
+# @param arrows.col Color for the doplot arrows. If not given, 1 (black) is used.
+# @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics plot
 #' @importFrom graphics arrows
 #' @importFrom graphics points
