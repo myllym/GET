@@ -539,7 +539,7 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'
 #' @inheritParams forder
-#' @param type The type of the global envelope with current options for 'rank', 'erl',
+#' @param type The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 #' 'qdir', 'st' and 'unscaled'. See details.
 #' @param coverage A number between 0 and 1. The 100*coverage\% central region will be calculated.
 #' @param central Either "mean" or "median". If the curve sets do not contain the component
