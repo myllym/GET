@@ -280,8 +280,17 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, a
 #' @importFrom graphics abline
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                            separate_yaxes=FALSE, max_ncols_of_plots=2, add=FALSE, env.col=1, ...) {
-    # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-    rdata <- curve_set_check_r(x)
+    if(class(x)[1] != "list") {
+      alt <- attr(x, "alternative")
+      # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
+      rdata <- curve_set_check_r(x)
+    }
+    else {
+      alt <- attr(x[[1]], "alternative")
+      # Handle combined tests; correct labels on x-axis if x is a list of global_envelope objects
+      rdata <- combined_global_envelope_rhelper(x)
+      x <- rdata$x_vec
+    }
     # Plot
     if(!separate_yaxes) {
         if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
@@ -295,8 +304,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                                   type="l", lty=3, lwd=2, xaxt="n", ...)
           else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, xaxt="n", ...)
         }
-        if(attr(x, "alternative")!="greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
-        if(attr(x, "alternative")!="less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
+        if(alt != "greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
+        if(alt != "less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
         if(!is.null(x[['obs']])) {
           lines(x[['r']], x[['obs']], lty=1)
           if(color_outside) {
@@ -339,14 +348,15 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
             else
               graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                             main="", xlab=xlab[i], ylab=ylab[i],
-                             lty=3, lwd=2, ylim=ylim, ...)
-            if(attr(x, "alternative")!="greater")
+                             lty=3, lwd=2, ...)
+            if(alt != "greater")
                 graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
-            else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
-            if(attr(x, "alternative")!="less")
+            else
+                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+            if(alt != "less")
                 graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
-            else graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+            else
+                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
             if(!is.null(x[['obs']])) {
               graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=1)
               if(color_outside) {
@@ -375,10 +385,19 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
 #' @import ggplot2
-env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=FALSE, max_ncols_of_plots=2,
+env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=TRUE, max_ncols_of_plots=2,
                        labels=NULL) {
-    # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-    rdata <- curve_set_check_r(x)
+    if(class(x)[1] != "list") {
+      alt <- attr(x, "alternative")
+      # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
+      rdata <- curve_set_check_r(x)
+    }
+    else {
+      alt <- attr(x[[1]], "alternative")
+      # Handle combined tests; correct labels on x-axis if x is a list of global_envelope objects
+      rdata <- combined_global_envelope_rhelper(x)
+      x <- rdata$x_vec
+    }
 
     linetype.values <- c('dashed', 'solid')
     size.values <- c(0.2, 0.2)
