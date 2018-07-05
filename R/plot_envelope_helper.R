@@ -261,17 +261,17 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels=NU
 }
 
 
-#' An internal GET function for making a basic "global envelope plot".
-#'
-#' An internal GET function for making a basic "global envelope plot".
-#'
-#' @inheritParams env_dotplot
-#' @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
-#' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
-#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
-#' number of columns for figures. Default 2.
-#' @param env.col The color for the envelope lines. Default 1 (black).
-#' @param ... Additional parameters to be passed to the function \code{\link{plot}}.
+# An internal GET function for making a basic "global envelope plot".
+#
+# An internal GET function for making a basic "global envelope plot".
+#
+# @inheritParams env_dotplot
+# @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
+# a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
+# @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
+# number of columns for figures. Default 2.
+# @param env.col The color for the envelope lines. Default 1 (black).
+# @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics par
 #' @importFrom graphics plot
 #' @importFrom graphics points
@@ -369,21 +369,21 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 }
 
 
-#' An internal GET function for making a ggplot2 style "global envelope plot".
-#'
-#' An internal GET function for making a ggplot2 style "global envelope plot".
-#'
-#' @param x An 'envelope_test' object.
-#' @param base_size Base font size, to be passed to theme style when \code{plot_type="ggplot2"}.
-#' @param main See \code{\link{plot.default}}.
-#' @param ylim See \code{\link{plot.default}}.
-#' @param xlab See \code{\link{plot.default}}.
-#' @param ylab See \code{\link{plot.default}}.
-#' @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
-#' a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
-#' @param labels Labels for the separate plots. Ignored if separate_yaxes is FALSE.
-#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
-#' number of columns for figures. Default 2.
+# An internal GET function for making a ggplot2 style "global envelope plot".
+#
+# An internal GET function for making a ggplot2 style "global envelope plot".
+#
+# @param x An 'envelope_test' object.
+# @param base_size Base font size, to be passed to theme style when \code{plot_type="ggplot2"}.
+# @param main See \code{\link{plot.default}}.
+# @param ylim See \code{\link{plot.default}}.
+# @param xlab See \code{\link{plot.default}}.
+# @param ylab See \code{\link{plot.default}}.
+# @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
+# a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
+# @param labels Labels for the separate plots. Ignored if separate_yaxes is FALSE.
+# @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
+# number of columns for figures. Default 2.
 #' @import ggplot2
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=TRUE, max_ncols_of_plots=2,
                        labels=NULL) {
