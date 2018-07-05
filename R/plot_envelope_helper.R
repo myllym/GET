@@ -293,13 +293,13 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     }
     # Plot
     if(!separate_yaxes) {
-        if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
         if(!rdata$retick_xaxis) {
             if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                     type="l", lty=3, lwd=2, ...)
             else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, ...)
         }
         else {
+          x[['r']] <- 1:length(x[['r']])
           if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                   type="l", lty=3, lwd=2, xaxt="n", ...)
           else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, xaxt="n", ...)
