@@ -260,7 +260,7 @@ print.graph.fanova <- function(x, ...) {
 #'
 #' @param x An 'graph.fanova' object
 #' @param plot_style Either "basic" or "ggplot2".
-#' @inheritParams env_ggplot
+#' @inheritParams plot.combined_global_envelope
 #' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
 #' @method plot graph.fanova
 #' @export
