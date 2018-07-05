@@ -37,8 +37,8 @@
 #' rmin <- 0.3; rminJ <- 0.3
 #' rmax <- 10; rmaxJ <- 6;
 #' rstep <- (rmax-rmin)/nr; rstepJ <- (rmaxJ-rminJ)/nr;
-#' r <- c(0, seq(rmin, rmax, by=rstep))
-#' rJ <- c(0, seq(rminJ, rmaxJ, by=rstepJ))
+#' r <- seq(0, rmax, by=rstep)
+#' rJ <- seq(0, rmaxJ, by=rstepJ)
 #'
 #' #-- CSR test --# (a simple hypothesis)
 #' #--------------#
