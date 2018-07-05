@@ -11,7 +11,7 @@ central_region(curve_sets, type = "erl", coverage = 0.5,
 \arguments{
 \item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
 
-\item{type}{The type of the global envelope with current options for 'rank', 'erl',
+\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 'qdir', 'st' and 'unscaled'. See details.}
 
 \item{coverage}{A number between 0 and 1. The 100*coverage\% central region will be calculated.}

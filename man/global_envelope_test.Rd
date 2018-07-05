@@ -16,7 +16,7 @@ functions from the simulated patterns which can be achieved by setting
 savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
 Alternatively, a list of \code{curve_set} or \code{\link[spatstat]{envelope}} objects can be given.}
 
-\item{type}{The type of the global envelope with current options for 'rank', 'erl',
+\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 'qdir', 'st' and 'unscaled'. See details.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
