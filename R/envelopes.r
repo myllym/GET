@@ -289,10 +289,9 @@ print.global_envelope <- function(x, ...) {
 
 #' Plot method for the class 'global_envelope'
 #' @usage \method{plot}{global_envelope}(x, plot_style="basic", dotplot = length(x$r)<10,
-#'                                       main, ylim, xlab, ylab, use_ggplot2,
-#'                                       separate_yaxes = FALSE, max_ncols_of_plots = 2, labels = NULL,
-#'                                       color_outside = TRUE, env.col = 1, base_size = 15,
-#'                                       add = FALSE, ...)
+#'    main, ylim, xlab, ylab, use_ggplot2,
+#'    color_outside = TRUE, env.col = 1, base_size = 15,
+#'    labels = NULL, add = FALSE, ...)
 #'
 #' @param x an 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
@@ -371,11 +370,11 @@ print.combined_global_envelope <- function(x, ...) {
 
 #' Plot method for the class 'combined_global_envelope'
 #' @usage \method{plot}{combined_global_envelope}(x, plot_style="basic", level = 1,
-#'                                                main, ylim, xlab, ylab, use_ggplot2,
-#'                                                separate_yaxes = FALSE, max_ncols_of_plots = 2,
-#'                                                labels = NULL,
-#'                                                color_outside = TRUE, env.col = 1, base_size = 15,
-#'                                                add = FALSE, ...)
+#'   main, ylim, xlab, ylab, use_ggplot2,
+#'   separate_yaxes = FALSE, max_ncols_of_plots = 2,
+#'   labels = NULL,
+#'   color_outside = TRUE, env.col = 1, base_size = 15,
+#'   add = FALSE, ...)
 #'
 #' @param x an 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
