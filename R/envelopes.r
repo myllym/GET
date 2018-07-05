@@ -301,7 +301,6 @@ print.global_envelope <- function(x, ...) {
 #' For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
 #' The option "fv" is currently only available for tests with one test function, whereas the other true allow
 #' also tests with several tests functions.
-#' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
@@ -310,8 +309,12 @@ print.global_envelope <- function(x, ...) {
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylab See \code{\link{plot.default}}. A sensible default exists.
 #' @param use_ggplot2 Logical, whether plot_style is "ggplot2" or not. Outdated, use the argument plot_style instead.
-#' @param ... Additional parameters to be passed to \code{\link{env_basic_plot}}, \code{\link{dotplot}}
-#' (if dotplot=TRUE) or \code{\link{env_ggplot}} (if plot_style="ggplot2").
+#' @param color_outside Logical. Whether to color the places where the data function goes
+#' outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.
+#' @param env.col The color for the envelope lines (or dotplot arrows). Default 1 (black).
+#' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
+#' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
+#' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
 #' @method plot global_envelope
 #' @export
