@@ -342,17 +342,18 @@ plot.global_envelope <- function(x, plot_style="basic", dotplot = length(x$r)<10
   switch(plot_style,
          basic = {
            if(dotplot) {
-             env_dotplot(x, main, ylim, xlab, ylab, ...)
+             env_dotplot(x, main, ylim, xlab, ylab, color_outside, labels, add, env.col, ...)
            }
            else {
-             env_basic_plot(x, main, ylim, xlab, ylab, ...)
+             env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                            color_outside=color_outside, add=add, env.col=env.col, ...)
            }
          },
          fv = {
-           spatstat::plot.fv(x, main=main, ylim=ylim, ...)
+           spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
          },
          ggplot2 = {
-           env_ggplot(x, base_size, main, ylim, xlab, ylab, ...)
+           env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab, ...)
          })
 }
 
