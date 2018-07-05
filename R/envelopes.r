@@ -731,8 +731,11 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
   if(missing(curve_set)) curve_set <- NULL
   if(missing(ylim)) {
     if(plot_style == "ggplot2") use_ggplot2 <- TRUE else use_ggplot2 <- FALSE
-    ylim <- env_ylim_default(x, use_ggplot2)
-    if(!is.null(curve_set)) ylim <- c(min(ylim[1], min(curve_set$obs)), max(ylim[2], max(curve_set$obs)))
+    if(!use_ggplot2) {
+      ylim <- env_ylim_default(x, use_ggplot2)
+      if(!is.null(curve_set)) ylim <- c(min(ylim[1], min(curve_set$obs)), max(ylim[2], max(curve_set$obs)))
+    }
+    else ylim <- NULL
   }
   tmp <- x; tmp$lo <- attr(x, "cr.lo"); tmp$hi <- attr(x, "cr.hi")
   switch(plot_style,
