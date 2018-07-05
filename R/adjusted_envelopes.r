@@ -82,20 +82,9 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
     # Crop curves (if r_min or r_max given)
     curve_set <- crop_curves(X, r_min = r_min, r_max = r_max)
     # Make the test
-    switch(test,
-           rank = {
-               global_envtest <- rank_envelope(curve_set, alpha=alpha,
-                       alternative=alt, lexo=lexo, ties=ties)
-               stat <- attr(global_envtest, "k")[1]
-           },
-           qdir = {
-               global_envtest <- qdir_envelope(curve_set, alpha=alpha)
-               stat <- attr(global_envtest, "u")[1]
-           },
-           st = {
-               global_envtest <- st_envelope(curve_set, alpha=alpha)
-               stat <- attr(global_envtest, "u")[1]
-           })
+    global_envtest <- global_envelope_test(curve_set, type=test, alpha=alpha,
+                                           alternative=alt, ties=ties)
+    stat <- attr(global_envtest, "k")[1]
 
     res <- structure(list(statistic = as.numeric(stat), p.value = attr(global_envtest, "p"),
                           method = test, curve_set = curve_set), class = "global_envelope_with_sims")
@@ -192,8 +181,8 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
             rank = {
                 # Create a combined curve_set
                 curve_set_combined <- combine_curve_sets(curve_sets_ls)
-                global_envtest <- rank_envelope(curve_set_combined, alpha=alpha,
-                        alternative=alt, lexo=lexo, ties=ties)
+                global_envtest <- global_envelope_test(curve_set_combined, type="rank", alpha=alpha,
+                                                       alternative=alt, ties=ties)
                 stat <- attr(global_envtest, "k")[1]
                 pval <- attr(global_envtest, "p")
             },
