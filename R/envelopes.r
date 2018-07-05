@@ -288,8 +288,11 @@ print.global_envelope <- function(x, ...) {
 }
 
 #' Plot method for the class 'global_envelope'
-#' @usage \method{plot}{global_envelope}(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
-#'                                       main, ylim, xlab, ylab, use_ggplot2, ...)
+#' @usage \method{plot}{global_envelope}(x, plot_style="basic", dotplot = length(x$r)<10,
+#'                                       main, ylim, xlab, ylab, use_ggplot2,
+#'                                       separate_yaxes = FALSE, max_ncols_of_plots = 2, labels = NULL,
+#'                                       color_outside = TRUE, env.col = 1, base_size = 15,
+#'                                       add = FALSE, ...)
 #'
 #' @param x an 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
