@@ -784,6 +784,56 @@ plot.fboxplot <- function(x, plot_style="basic", curve_set, dotplot=length(x$r)<
          })
 }
 
+#' Print method for the class 'combined_fboxplot'
+#' @usage \method{print}{combined_fboxplot}(x, ...)
+#'
+#' @param x an 'combined_fboxplot' object
+#' @param ... Ignored.
+#'
+#' @method print combined_fboxplot
+#' @export
+print.combined_fboxplot <- function(x, ...) {
+  cat("Combined functional boxplot (", attr(x, "type"), "). \n",
+      " Plot the object instead.\n", sep="")
+}
+
+#' Plot method for the class 'combined_fboxplot'.
+#'
+#' Current method is just to plot the components of the combined functional boxplot
+#' one after each other.
+#' @usage \method{plot}{combined_fboxplot}(x, max_ncols_of_plots = 2, main, curve_sets, ...)
+#'
+#' @param x an 'combined_fboxplot' object
+#' @inheritParams plot.combined_global_envelope
+#' @param main A list of titles for the separate plots. The length should be the length of x.
+#' @param curve_sets A list of curve_sets, most typically those from which the combined functional
+#' boxplot has been contructed.
+#' @param ... Additional parameters to be passed to \code{\link{plot.fboxplot}}.
+#'
+#' @method plot combined_fboxplot
+#' @export
+#' @importFrom spatstat pickoption
+plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets = NULL, ...) {
+  n_of_plots <- length(x$global_envelope_ls)
+  ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
+  nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
+  if(missing(main)) main <- paste(1:n_of_plots)
+  if(length(main)!=n_of_plots) {
+    if(length(main)==1) {
+      main <- paste(main, " - ", 1:n_of_plots, sep="")
+      warning(paste("Consider giving main as a vector of length ", n_of_plots,
+                    " containing the main for each test function/vector used.\n", sep=""))
+    }
+    else {
+      warning("The length of the vector main is unreasonable. Setting main to empty.\n")
+      main <- rep("", times=n_of_plots)
+    }
+  }
+  par(mfrow=c(nrows_of_plots, ncols_of_plots))
+  for(i in 1:length(x$global_envelope_ls))
+    plot.fboxplot(x$global_envelope_ls[[i]], curve_set = curve_sets[[i]], main=main[i], ...)
+}
+
 
 #' Global envelope test
 #'
