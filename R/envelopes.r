@@ -379,9 +379,15 @@ print.combined_global_envelope <- function(x, ...) {
 #'
 #' @param x an 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
-#' @inheritParams env_basic_plot
 #' @param level 1 for plotting the combined global envelopes or
 #' 2 for plotting the second level ERL test result.
+#' @param separate_yaxes Logical (default FALSE). If TRUE, then separate y-axes are used for
+#' different parts of a combined test. If FALSE, then the components are displayed one next to each other
+#' with a joint y-axis.
+#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
+#' number of columns for figures. Default 2.
+#' @param labels Labels for the separate plots (for \code{plot_style = "ggplot2"}).
+#' Ignored if separate_yaxes is FALSE. Or, for \code{dotplot=TRUE}, labels for the tests at x-axis.
 #' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
 #'
 #' @method plot combined_global_envelope
