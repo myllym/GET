@@ -320,8 +320,10 @@ print.global_envelope <- function(x, ...) {
 #' @export
 #' @seealso \code{\link{central_region}}
 #' @importFrom spatstat pickoption
-plot.global_envelope <- function(x, plot_style="basic", base_size=15, dotplot=length(x$r)<10,
-                                 main, ylim, xlab, ylab, use_ggplot2, ...) {
+plot.global_envelope <- function(x, plot_style="basic", dotplot = length(x$r)<10,
+                                 main, ylim, xlab, ylab, use_ggplot2,
+                                 color_outside = TRUE, env.col = 1, base_size = 15,
+                                 add = FALSE, ...) {
   if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
   else use_ggplot2 <- FALSE
   if(missing('main')) main <- env_main_default(x)
