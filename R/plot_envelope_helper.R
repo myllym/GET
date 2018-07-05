@@ -235,9 +235,9 @@ env_ylim_default <- function(x, use_ggplot2) {
 #' @importFrom graphics arrows
 #' @importFrom graphics points
 #' @importFrom graphics axis
-env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels, add=FALSE, arrows.col, ...) {
+env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels=NULL, add=FALSE, arrows.col, ...) {
     nr <- length(x[['r']])
-    if(missing(labels)) labels <- paste(round(x[['r']], digits=2))
+    if(is.null(labels)) labels <- paste(round(x[['r']], digits=2))
     if(missing(arrows.col)) arrows.col <- 1
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
     if(!add) graphics::plot(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
