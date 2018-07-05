@@ -30,7 +30,7 @@
 #' subs <- function(group, ...) {
 #'   cset <- rimov
 #'   cset$obs <- rimov$obs[, groups == group]
-#'   plot(cset1, ...)
+#'   plot(cset, ...)
 #' }
 #' for(i in 1:3) subs(i, main=paste("group ", i, sep=""), ylab="Temperature")
 #'
