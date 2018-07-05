@@ -370,7 +370,12 @@ print.combined_global_envelope <- function(x, ...) {
 }
 
 #' Plot method for the class 'combined_global_envelope'
-#' @usage \method{plot}{combined_global_envelope}(x, plot_style="basic", level = 1, max_ncols_of_plots=2, ...)
+#' @usage \method{plot}{combined_global_envelope}(x, plot_style="basic", level = 1,
+#'                                                main, ylim, xlab, ylab, use_ggplot2,
+#'                                                separate_yaxes = FALSE, max_ncols_of_plots = 2,
+#'                                                labels = NULL,
+#'                                                color_outside = TRUE, env.col = 1, base_size = 15,
+#'                                                add = FALSE, ...)
 #'
 #' @param x an 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
@@ -382,7 +387,20 @@ print.combined_global_envelope <- function(x, ...) {
 #' @method plot combined_global_envelope
 #' @export
 plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
-                                          max_ncols_of_plots=2, ...) {
+                                          main, ylim, xlab, ylab, use_ggplot2,
+                                          separate_yaxes = FALSE, max_ncols_of_plots = 2, labels = NULL,
+                                          color_outside = TRUE, env.col = 1, base_size = 15,
+                                          add = FALSE, ...) {
+  if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
+  else use_ggplot2 <- FALSE
+  if(missing('main')) {
+    attr(x$step2_test, "alternative") <- attr(x$global_envelope_ls[[1]], "alternative")
+    main <- env_main_default(x$step2_test)
+  }
+  if(missing('ylim')) ylim <- env_ylim_default(x$global_envelope_ls, use_ggplot2)
+  if(missing('xlab')) xlab <- expression(italic(r))
+  if(missing('ylab')) ylab <- expression(italic(T(r)))
+
   plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
                                                             b = "basic",
                                                             fv = "fv",
