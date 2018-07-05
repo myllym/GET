@@ -48,10 +48,9 @@
 #' test function is reduced from the test functions. If TRUE, then: If \code{\link[spatstat]{envelope}}
 #' provides the theoretical value 'theo' for the simulated model, then this value is used. Otherwise,
 #' the theoretical function is taken as the mean of the simulations.
-#' @param lexo Logical, whether or not to use lexical ordering for calculation of the p-value.
-#' in the rank envelope test. See \code{\link{rank_envelope}}.
-#' @param ties Ties method to be passed to \code{\link{rank_envelope}}. Used to obtain a point estimate
-#' for the p-value, if lexo=FALSE. The default point estimate is the mid-rank p-value.
+#' @param ties Ties method to be passed to \code{\link{global_envelope_test}}.
+#' Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
+#' length p-value.
 #' @param save.envelope Logical flag indicating whether to save all envelope test results.
 #' @param savefuns Logical flag indicating whether to save all the simulated function values.
 #' See \code{\link[spatstat]{envelope}}.
@@ -65,7 +64,7 @@
 global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided", "less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        lexo = TRUE, ties=NULL,
+        ties="erl",
         save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
         verbose = FALSE) {
     test <- match.arg(test)
@@ -143,7 +142,7 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=
         test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided", "greater", "less"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        lexo = TRUE, ties=NULL,
+        ties="erl",
         save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
         verbose = FALSE) {
     test <- match.arg(test)
@@ -284,7 +283,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         simfun=NULL, fitfun=NULL, ..., test = c("rank", "qdir", "st"),
         alpha = 0.05, alternative = c("two.sided","less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
+        #rank_count_test_p_values = FALSE, ties="erl",
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
         verbose=TRUE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
@@ -302,7 +301,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     tX <- global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
             test = test, alpha = alpha, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
-            lexo = FALSE, ties='midrank',
+            ties='midrank',
             save.envelope = save.cons.envelope, savefuns = savefuns, savepatterns = TRUE,
             verbose = verbose)
     if(verbose) cat("Done.\n")
@@ -331,7 +330,7 @@ dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
                 test = test, alpha = alpha, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
-                lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
+                ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
                 verbose = verbose)
         list(stat = tXsim$statistic, pval = tXsim$p.value)
@@ -494,7 +493,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         testfuns = NULL, test = c("qdir", "st", "rank"),
         alpha = 0.05, alternative = c("two.sided", "less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        #rank_count_test_p_values = FALSE, lexo = TRUE, ties=NULL,
+        #rank_count_test_p_values = FALSE, ties="erl",
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
         verbose=TRUE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
@@ -513,7 +512,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
     tX <- combined_global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, ...,
             testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
             r_min=r_min, r_max=r_max, take_residual=take_residual,
-            lexo = FALSE, ties='midrank',
+            ties='midrank',
             save.envelope = save.cons.envelope, savefuns = TRUE, savepatterns = TRUE,
             verbose = verbose)
     if(verbose) cat("Done.\n")
@@ -542,7 +541,7 @@ dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
         tXsim <- combined_global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg, ...,
                 testfuns = testfuns, test = test, alpha = alpha, alternative = alt,
                 r_min=r_min, r_max=r_max, take_residual=take_residual,
-                lexo = FALSE, ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
+                ties='midrank', # Note: the ties method does not matter here; p-values not used for the rank test.
                 save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
                 verbose = verbose)
         list(stat = tXsim$statistic, pval = tXsim$p.value)
