@@ -20,7 +20,7 @@
 #' \itemize{
 #' \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
 #' \code{\link{central_region}}.
-#' E.g. growth curves of girls \code{\link[fda]{growth}}.
+#' E.g. 50\% central region of growth curves of girls \code{\link[fda]{growth}}.
 #' \itemize{
 #'            \item First create a curve_set of the growth curves
 #'
@@ -28,7 +28,7 @@
 #'                    cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
 #'                                                  obs = growth$hgtf))
 #'                  }
-#'            \item Then calculate 50\% central region
+#'            \item Then calculate 50\% central region (see \code{\link{central_region}} for further arguments)
 #'
 #'                  \code{
 #'                    cr <- central_region(cset, coverage = 0.5)
@@ -43,11 +43,10 @@
 #' for the function, see examples in \code{\link{central_region}}.
 #'
 #' \item \emph{Global envelope tests}: \code{\link{global_envelope_test}} is the main function.
-#' E.g.
+#' E.g. A test of complete spatial randomness (CSR) for a point pattern \code{X}:
 #'
 #' \code{X <- spruces # an example pattern from spatstat}
 #'
-#' Test complete spatial randomness (CSR):
 #' \itemize{
 #'            \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
 #'                  under CSR and to calculate the functions you want (below K-functions by Kest).
@@ -58,7 +57,7 @@
 #'                    env <- envelope(X, nsim=999, savefuns=TRUE, fun=Kest,
 #'                                    simulate=expression(runifpoint(X$n, win=X$window)))
 #'                  }
-#'            \item Perform the test
+#'            \item Perform the test (see \code{\link{global_envelope_test}} for further arguments)
 #'
 #'                  \code{
 #'                    res <- global_envelope_test(env)
