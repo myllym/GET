@@ -192,9 +192,6 @@
 #' \item You can choose the interval of distances [r_min, r_max] by \code{\link{crop_curves}}.
 #' \item For better visualisation, you can take T(r)-T_0(r) by \code{\link{residual}}.
 #' Here T_0(r) is the expectation of T(r) under the null hypothesis.
-#' \item You can use \code{\link{combine_curve_sets}} to create a \code{curve_set} object from
-#' several \code{curve_set} or \code{\link[spatstat]{envelope}} objects. The object containing
-#' many curves can be passed to \code{\link{global_envelope_test}}.
 #' }
 #'
 #' The function \code{\link{envelope_to_curve_set}} can be used to create a curve_set object
