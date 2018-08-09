@@ -63,16 +63,16 @@ fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="pcf")
 summary(fitted_model)
 
 nsim <- 19 # 19 just for experimenting with the code!!
-#nsim <- 499 # 499 is ok for test = 'qdir' (takes about 1,6 h)
+#nsim <- 499 # 499 is ok for type = 'qdir' (takes about 1,6 h)
 
 # Make the adjusted directional quantile global envelope test using the L(r)-r function
-# (For the rank envelope test, choose test = "rank" instead and increase nsim.)
+# (For the rank envelope test, choose type = "rank" instead and increase nsim.)
 system.time( # timing; takes a lot of time,
              # if nsim is reasonably large (for 'qdir' & nsim=499, about 1,6 h)
   adjenvL <- dg.global_envelope(X = fitted_model,
                                fun="Lest", correction="translate",
                                transform = expression(.-r), r=r,
-                               test = "qdir", nsim = nsim, nsimsub = nsim,
+                               type = "qdir", nsim = nsim, nsimsub = nsim,
                                r_min=rmin, r_max=rmax,
                                save.cons.envelope=TRUE)
 )
@@ -89,7 +89,7 @@ plot(adjenvL, plot_style="ggplot2", ylab=expression(italic(L(r)-r)), plot_unadju
 system.time( # timing; takes a lot of time if nsim is reasonably large
   adjenvJ <- dg.global_envelope(X = fitted_model,
                                 fun="Jest", correction="none", r=rJ,
-                                test = "qdir", nsim = nsim, nsimsub = nsim,
+                                type = "qdir", nsim = nsim, nsimsub = nsim,
                                 r_min=rminJ, r_max=rmaxJ,
                                 save.cons.envelope=TRUE)
 )

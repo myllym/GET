@@ -5,7 +5,7 @@
 \title{A combined global envelope test}
 \usage{
 combined_global_envelope_with_sims(X, nsim, simfun = NULL,
-  simfun.arg = NULL, ..., testfuns = NULL, test = c("rank", "qdir", "st"),
+  simfun.arg = NULL, ..., testfuns = NULL, type = c("rank", "qdir", "st"),
   alpha = 0.05, alternative = c("two.sided", "greater", "less"),
   r_min = NULL, r_max = NULL, take_residual = FALSE, ties = "erl",
   save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
@@ -36,7 +36,7 @@ If \code{\link[spatstat]{envelope}} is also used to generate simulations under t
 \item{testfuns}{A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
 A list of parameters should be provided for each test function that is to be used in the combined test.}
 
-\item{test}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
+\item{type}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
 \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}

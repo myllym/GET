@@ -27,7 +27,7 @@ can be done by any other way, thus allowing for any models/functions.
 \itemize{
 \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
 \code{\link{central_region}}.
-E.g. growth curves of girls \code{\link[fda]{growth}}.
+E.g. 50\% central region of growth curves of girls \code{\link[fda]{growth}}.
 \itemize{
            \item First create a curve_set of the growth curves
 
@@ -35,12 +35,12 @@ E.g. growth curves of girls \code{\link[fda]{growth}}.
                    cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
                                                  obs = growth$hgtf))
                  }
-           \item Then calculate 50\% central region
+           \item Then calculate 50\% central region (see \code{\link{central_region}} for further arguments)
 
                  \code{
                    cr <- central_region(cset, coverage = 0.5)
                  }
-           \item Plot the result
+           \item Plot the result (see \code{\link{plot.global_envelope}} for plotting options)
 
                  \code{
                    plot(cr)
@@ -50,11 +50,10 @@ It is also possible to do combined central regions for several sets of curves pr
 for the function, see examples in \code{\link{central_region}}.
 
 \item \emph{Global envelope tests}: \code{\link{global_envelope_test}} is the main function.
-E.g.
+E.g. A test of complete spatial randomness (CSR) for a point pattern \code{X}:
 
 \code{X <- spruces # an example pattern from spatstat}
 
-Test complete spatial randomness (CSR):
 \itemize{
            \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
                  under CSR and to calculate the functions you want (below K-functions by Kest).
@@ -65,12 +64,12 @@ Test complete spatial randomness (CSR):
                    env <- envelope(X, nsim=999, savefuns=TRUE, fun=Kest,
                                    simulate=expression(runifpoint(X$n, win=X$window)))
                  }
-           \item Perform the test
+           \item Perform the test (see \code{\link{global_envelope_test}} for further arguments)
 
                  \code{
                    res <- global_envelope_test(env)
                  }
-           \item Plot the result
+           \item Plot the result (see \code{\link{plot.global_envelope}} for plotting options)
 
                  \code{
                    plot(res)
@@ -89,7 +88,7 @@ for the function, see examples in \code{\link{global_envelope_test}}.
 \item \emph{Adjusted} global envelope tests for composite hypotheses
 \itemize{
   \item \code{\link{dg.global_envelope}}, see a detailed example in \code{\link{saplings}}
-  \item \code{\link{dg.combined_global_envelope}} for adjusted tests
+  \item \code{\link{dg.combined_global_envelope}} for combined adjusted tests
 }
 \item \emph{One-way functional ANOVA}:
  \itemize{
@@ -204,9 +203,6 @@ It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for th
 \item You can choose the interval of distances [r_min, r_max] by \code{\link{crop_curves}}.
 \item For better visualisation, you can take T(r)-T_0(r) by \code{\link{residual}}.
 Here T_0(r) is the expectation of T(r) under the null hypothesis.
-\item You can use \code{\link{combine_curve_sets}} to create a \code{curve_set} object from
-several \code{curve_set} or \code{\link[spatstat]{envelope}} objects. The object containing
-many curves can be passed to \code{\link{global_envelope_test}}.
 }
 
 The function \code{\link{envelope_to_curve_set}} can be used to create a curve_set object

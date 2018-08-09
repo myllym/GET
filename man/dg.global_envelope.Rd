@@ -5,7 +5,7 @@
 \title{Adjusted global envelope tests}
 \usage{
 dg.global_envelope(X, nsim = 499, nsimsub = nsim, simfun = NULL,
-  fitfun = NULL, ..., test = c("rank", "qdir", "st"), alpha = 0.05,
+  fitfun = NULL, ..., type = c("rank", "qdir", "st"), alpha = 0.05,
   alternative = c("two.sided", "less", "greater"), r_min = NULL,
   r_max = NULL, take_residual = FALSE, save.cons.envelope = savefuns ||
   savepatterns, savefuns = FALSE, savepatterns = FALSE, verbose = TRUE,
@@ -39,7 +39,7 @@ For example, the test function in the argument 'fun' and further specifications 
 If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
 (if simfun not provided), then also recall to specify how to generate the simulations.}
 
-\item{test}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
+\item{type}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
 \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}

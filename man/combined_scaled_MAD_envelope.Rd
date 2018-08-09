@@ -4,13 +4,13 @@
 \alias{combined_scaled_MAD_envelope}
 \title{Combined global scaled maximum absolute difference (MAD) envelope tests}
 \usage{
-combined_scaled_MAD_envelope(curve_sets, test = c("qdir", "st"),
+combined_scaled_MAD_envelope(curve_sets, type = c("qdir", "st"),
   alpha = 0.05, probs = c(0.025, 0.975), central = "mean", ...)
 }
 \arguments{
 \item{curve_sets}{A list of objects of type 'curve_set' or \code{\link[spatstat]{envelope}}.}
 
-\item{test}{Either "qdir" for the \code{\link{qdir_envelope}} test or
+\item{type}{Either "qdir" for the \code{\link{qdir_envelope}} test or
 "st" for the \code{\link{st_envelope}} test.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
@@ -23,8 +23,8 @@ The default values are 0.025 and 0.975.}
 \code{theo} for the theoretical central function, then the central function (used for plotting only)
 is calculated either as the mean or median of functions provided in the curve sets.}
 
-\item{...}{Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
-or \code{\link{st_envelope}} (if test = "st").}
+\item{...}{Additional parameters to be passed to \code{\link{qdir_envelope}} (if type = "qdir")
+or \code{\link{st_envelope}} (if type = "st").}
 }
 \description{
 Given a list of 'curve_set' objects (see \code{\link{create_curve_set}}), a combined global scaled (directional quantile
@@ -79,7 +79,7 @@ curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
 # The combined directional quantile envelope test
 res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
                                                     curve_set_G, curve_set_J),
-                                    test = "qdir")
+                                    type = "qdir")
 plot(res, plot_style="ggplot2",
      labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
      separate_yaxes=TRUE, base_size=12)

@@ -5,7 +5,7 @@
 \title{Adjusted combined global envelope tests}
 \usage{
 dg.combined_global_envelope(X, nsim = 499, nsimsub = nsim, simfun = NULL,
-  fitfun = NULL, ..., testfuns = NULL, test = c("qdir", "st", "rank"),
+  fitfun = NULL, ..., testfuns = NULL, type = c("qdir", "st", "rank"),
   alpha = 0.05, alternative = c("two.sided", "less", "greater"),
   r_min = NULL, r_max = NULL, take_residual = FALSE,
   save.cons.envelope = savefuns || savepatterns, savefuns = FALSE,
@@ -42,7 +42,7 @@ If \code{\link[spatstat]{envelope}} is also used to generate simulations under t
 \item{testfuns}{A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
 A list of parameters should be provided for each test function that is to be used in the combined test.}
 
-\item{test}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
+\item{type}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
 \code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
@@ -102,9 +102,9 @@ Several test functions are allowed and these are to be estimated for the data an
 point patterns using the function \code{\link[spatstat]{envelope}}. The test functions are
 specified through the argument testfuns, which is passed to \code{\link{combined_global_envelope_with_sims}}.
 
-If test = 'rank', then the test is the combined global rank envelope test.
-If test = 'qdir', then the test is the combined global directional quantile maximum absolute difference (MAD)
-envelope test, and if test = 'st', the test is the combined global studentized MAD envelope test,
+If type = 'rank', then the test is the combined global rank envelope test.
+If type = 'qdir', then the test is the combined global directional quantile maximum absolute difference (MAD)
+envelope test, and if type = 'st', the test is the combined global studentized MAD envelope test,
 see Mrkvicka et al. (2017).
 }
 \references{
