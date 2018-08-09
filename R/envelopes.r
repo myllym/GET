@@ -978,81 +978,133 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #' @seealso \code{\link{plot.global_envelope}}
 #' @examples
 #'
-#' ## Testing complete spatial randomness (CSR)
-#' #-------------------------------------------
-#' require(spatstat)
-#' pp <- unmark(spruces)
-#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=1999,
-#'                 savefuns=TRUE, # save the functions
-#'                 correction="translate", # edge correction for L
-#'                 simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
-#' # The rank envelope test (extreme rank length (ERL) breaking of ties)
-#' res <- global_envelope_test(env)
-#' # Plot the result.
-#' # - The central curve is now obtained from env[['theo']], which is the
-#' # value of the L-function under the null hypothesis (L(r) = r).
-#' plot(res)
-#' # or (requires R library ggplot2)
-#' plot(res, plot_style="ggplot2")
+#' if(require(spatstat, quietly=TRUE)) {
+#'   ## Testing complete spatial randomness (CSR)
+#'   #-------------------------------------------
+#'   pp <- unmark(spruces)
+#'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
+#'   env <- envelope(pp, fun="Lest", nsim=1999,
+#'                   savefuns=TRUE, # save the functions
+#'                   correction="translate", # edge correction for L
+#'                   simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
+#'   # The rank envelope test (extreme rank length (ERL) breaking of ties)
+#'   res <- global_envelope_test(env)
+#'   # Plot the result.
+#'   # - The central curve is now obtained from env[['theo']], which is the
+#'   # value of the L-function under the null hypothesis (L(r) = r).
+#'   plot(res)
+#'   # or (requires R library ggplot2)
+#'   plot(res, plot_style="ggplot2")
 #'
-#' ## Advanced use:
-#' # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
-#' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
-#' # For better visualisation, take the L(r)-r function
-#' curve_set <- residual(curve_set, use_theo = TRUE)
-#' # Do the rank envelope test (erl)
-#' res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
+#'   ## Advanced use:
+#'   # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
+#'   curve_set <- crop_curves(env, r_min = 1, r_max = 7)
+#'   # For better visualisation, take the L(r)-r function
+#'   curve_set <- residual(curve_set, use_theo = TRUE)
+#'   # Do the rank envelope test (erl)
+#'   res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
 #'
-#' ## Random labeling test
-#' #----------------------
-#' # requires library 'marksummary'
-#' mpp <- spruces
-#' # 1) Perform simulations under the random labelling hypothesis and calculate
-#' # the test function T(r) for the data pattern (mpp) and each simulation.
-#' # The command below specifies that the test function is T(r) = \hat{L}_m(r),
-#' # which is an estimator of the mark-weighted L function, L_m(r),
-#' # with translational edge correction (default).
-#' # The random_labelling function returns the centred functions \hat{L}_m(r)-T_0(r),
-#' # where T_0(r) = \hat{L}(r) is the unmarked L function.
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
-#' # 2) Do the rank envelope test
-#' res <- global_envelope_test(curve_set)
-#' # 3) Plot the test result
-#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
+#'   ## Random labeling test
+#'   #----------------------
+#'   # requires library 'marksummary'
+#'   mpp <- spruces
+#'   # 1) Perform simulations under the random labelling hypothesis and calculate
+#'   # the test function T(r) for the data pattern (mpp) and each simulation.
+#'   # The command below specifies that the test function is T(r) = \hat{L}_m(r),
+#'   # which is an estimator of the mark-weighted L function, L_m(r),
+#'   # with translational edge correction (default).
+#'   # The random_labelling function returns the centred functions \hat{L}_m(r)-T_0(r),
+#'   # where T_0(r) = \hat{L}(r) is the unmarked L function.
+#'   curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#'   # 2) Do the rank envelope test
+#'   res <- global_envelope_test(curve_set)
+#'   # 3) Plot the test result
+#'   plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 #'
-#' # Make the test using instead the test function T(r) = \hat{L}_mm(r);
-#' # which is an estimator of the mark-weighted L function, L_mm(r),
-#' # with translational edge correction (default).
-#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
-#' res <- global_envelope_test(curve_set)
-#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
+#'   # Make the test using instead the test function T(r) = \hat{L}_mm(r);
+#'   # which is an estimator of the mark-weighted L function, L_mm(r),
+#'   # with translational edge correction (default).
+#'   curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
+#'   res <- global_envelope_test(curve_set)
+#'   plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 #'
-#' ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
-#' #-----------------------------------------------
-#' pp <- unmark(spruces)
-#' # Minimum distance between points in the pattern
-#' min(nndist(pp))
-#' # Fit a model
-#' fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
+#'   \dontrun{
+#'   ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
+#'   #-----------------------------------------------
+#'   pp <- unmark(spruces)
+#'   # Minimum distance between points in the pattern
+#'   min(nndist(pp))
+#'   # Fit a model
+#'   fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
 #'
-#' \dontrun{
-#' # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
-#' #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
-#'                  correction="none", r=seq(0, 4, length=500))
+#'   # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
+#'   #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
+#'                    correction="none", r=seq(0, 4, length=500))
 #'
-#' # Using direct algorihm can be faster, because the perfect simulation is used here.
-#' simulations <- NULL
-#' for(j in 1:999) {
-#'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-#'                                  R = fittedmodel$interaction$par$hc,
-#'                                  W = pp$window)
-#'    if(j%%10==0) cat(j, "...", sep="")
-#' }
-#' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
-#'                 savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
-#' curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
-#' res <- global_envelope_test(curve_set, type="erl"); plot(res, plot_style="ggplot2")
+#'   # Using direct algorihm can be faster, because the perfect simulation is used here.
+#'   simulations <- NULL
+#'   for(j in 1:999) {
+#'      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
+#'                                    R = fittedmodel$interaction$par$hc,
+#'                                    W = pp$window)
+#'      if(j%%10==0) cat(j, "...", sep="")
+#'   }
+#'   env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
+#'                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
+#'   curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
+#'   res <- global_envelope_test(curve_set, type="erl"); plot(res, plot_style="ggplot2")
+#'   }
+#'
+#'   # A combined global envelope test
+#'   #--------------------------------
+#'   # As an example test CSR of the saplings point pattern by means of
+#'   # L, F, G and J functions.
+#'   data(saplings)
+#'   X <- saplings
+#'
+#'   nsim <- 499 # the number of simulations for the tests
+#'   # Specify distances for different test functions
+#'   n <- 500 # the number of r-values
+#'   rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
+#'   rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
+#'   r <- seq(0, rmax, by=rstep)    # r-distances for Lest
+#'   rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
+#'
+#'   # Perform simulations of CSR and calculate the L-functions
+#'   system.time( env_L <- envelope(X, nsim=nsim,
+#'    simulate=expression(runifpoint(X$n, win=X$window)),
+#'    fun="Lest", correction="translate",
+#'    transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+#'    r=r,                         # Specify the distance vector
+#'    savefuns=TRUE,               # Save the estimated functions
+#'    savepatterns=TRUE) )         # Save the simulated patterns
+#'   # Take the simulations from the returned object
+#'   simulations <- attr(env_L, "simpatterns")
+#'   # Then calculate the other test functions F, G, J for each simulated pattern
+#'   system.time( env_F <- envelope(X, nsim=nsim,
+#'                                  simulate=simulations,
+#'                                  fun="Fest", correction="Kaplan", r=rJ,
+#'                                  savefuns=TRUE) )
+#'   system.time( env_G <- envelope(X, nsim=nsim,
+#'                                  simulate=simulations,
+#'                                  fun="Gest", correction="km", r=rJ,
+#'                                  savefuns=TRUE) )
+#'   system.time( env_J <- envelope(X, nsim=nsim,
+#'                                  simulate=simulations,
+#'                                  fun="Jest", correction="none", r=rJ,
+#'                                  savefuns=TRUE) )
+#'
+#'   # Crop the curves to the desired r-interval I
+#'   curve_set_L <- crop_curves(env_L, r_min=rmin, r_max=rmax)
+#'   curve_set_F <- crop_curves(env_F, r_min=rminJ, r_max=rmaxJ)
+#'   curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
+#'   curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
+#'
+#'   res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
+#'                                               curve_set_G, curve_set_J))
+#'   plot(res, plot_style="ggplot2",
+#'        labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
+#'        separate_yaxes=TRUE, base_size=12)
 #' }
 #'
 #' ## A test based on a low dimensional random vector
@@ -1077,59 +1129,6 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'   res2 <- global_envelope_test(cset2)
 #'   plot(res2)
 #' }
-#'
-#'
-#' # A combined global envelope test
-#' #--------------------------------
-#' # As an example test CSR of the saplings point pattern from spatstat by means of
-#' # L, F, G and J functions.
-#' require(spatstat)
-#' data(saplings)
-#' X <- saplings
-#'
-#' nsim <- 499 # the number of simulations for the tests
-#' # Specify distances for different test functions
-#' n <- 500 # the number of r-values
-#' rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
-#' rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
-#' r <- seq(0, rmax, by=rstep)    # r-distances for Lest
-#' rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
-#'
-#' # Perform simulations of CSR and calculate the L-functions
-#' system.time( env_L <- envelope(X, nsim=nsim,
-#'  simulate=expression(runifpoint(X$n, win=X$window)),
-#'  fun="Lest", correction="translate",
-#'  transform = expression(.-r), # Take the L(r)-r function instead of L(r)
-#'  r=r,                         # Specify the distance vector
-#'  savefuns=TRUE,               # Save the estimated functions
-#'  savepatterns=TRUE) )         # Save the simulated patterns
-#' # Take the simulations from the returned object
-#' simulations <- attr(env_L, "simpatterns")
-#' # Then calculate the other test functions F, G, J for each simulated pattern
-#' system.time( env_F <- envelope(X, nsim=nsim,
-#'                                simulate=simulations,
-#'                                fun="Fest", correction="Kaplan", r=rJ,
-#'                                savefuns=TRUE) )
-#' system.time( env_G <- envelope(X, nsim=nsim,
-#'                                simulate=simulations,
-#'                                fun="Gest", correction="km", r=rJ,
-#'                                savefuns=TRUE) )
-#' system.time( env_J <- envelope(X, nsim=nsim,
-#'                                simulate=simulations,
-#'                                fun="Jest", correction="none", r=rJ,
-#'                                savefuns=TRUE) )
-#'
-#' # Crop the curves to the desired r-interval I
-#' curve_set_L <- crop_curves(env_L, r_min=rmin, r_max=rmax)
-#' curve_set_F <- crop_curves(env_F, r_min=rminJ, r_max=rmaxJ)
-#' curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
-#' curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
-#'
-#' res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
-#'                                             curve_set_G, curve_set_J))
-#' plot(res, plot_style="ggplot2",
-#'      labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
-#'      separate_yaxes=TRUE, base_size=12)
 #'
 global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
                           alternative=c("two.sided", "less", "greater"),
