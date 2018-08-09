@@ -33,7 +33,7 @@
 #'                  \code{
 #'                    cr <- central_region(cset, coverage = 0.5)
 #'                  }
-#'            \item Plot the result
+#'            \item Plot the result (see \code{\link{plot.global_envelope}} for plotting options)
 #'
 #'                  \code{
 #'                    plot(cr)
@@ -63,7 +63,7 @@
 #'                  \code{
 #'                    res <- global_envelope_test(env)
 #'                  }
-#'            \item Plot the result
+#'            \item Plot the result (see \code{\link{plot.global_envelope}} for plotting options)
 #'
 #'                  \code{
 #'                    plot(res)
