@@ -6,10 +6,10 @@
 # @inheritParams combined_scaled_MAD_envelope
 #' @importFrom stats quantile
 #' @importFrom stats sd
-combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, test = c("qdir", "st"), probs = c(0.025, 0.975)) {
+combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, type = c("qdir", "st"), probs = c(0.025, 0.975)) {
   curve_sets_res <- lapply(curve_sets, FUN = function(x) residual(x, use_theo = TRUE))
 
-  switch(test,
+  switch(type,
          qdir = {
            quant_m_ls <- lapply(curve_sets_res, FUN = curve_set_quant, probs = probs)
            lower_f <- lapply(quant_m_ls, FUN = function(x) as.vector(abs(x[1,])))
@@ -48,15 +48,15 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' Details of the combined test can be found in Mrkvicka et al. (2017)
 #'
 #' @param curve_sets A list of objects of type 'curve_set' or \code{\link[spatstat]{envelope}}.
-#' @param test Either "qdir" for the \code{\link{qdir_envelope}} test or
+#' @param type Either "qdir" for the \code{\link{qdir_envelope}} test or
 #' "st" for the \code{\link{st_envelope}} test.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
 #' @param probs A two-element vector containing the lower and upper
 #' quantiles for the envelope, in that order and on the interval [0, 1].
 #' The default values are 0.025 and 0.975.
 #' @inheritParams central_region
-#' @param ... Additional parameters to be passed to \code{\link{qdir_envelope}} (if test = "qdir")
-#' or \code{\link{st_envelope}} (if test = "st").
+#' @param ... Additional parameters to be passed to \code{\link{qdir_envelope}} (if type = "qdir")
+#' or \code{\link{st_envelope}} (if type = "st").
 #' @references
 #' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
 #' Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
@@ -109,18 +109,18 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' # The combined directional quantile envelope test
 #' res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
 #'                                                     curve_set_G, curve_set_J),
-#'                                     test = "qdir")
+#'                                     type = "qdir")
 #' plot(res, plot_style="ggplot2",
 #'      labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
 #'      separate_yaxes=TRUE, base_size=12)
 #'
-combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alpha = 0.05,
+combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alpha = 0.05,
                                          probs = c(0.025, 0.975), central = "mean", ...) {
     ntests <- length(curve_sets)
-    test <- match.arg(test)
+    type <- match.arg(type)
     curve_sets <- check_curve_set_dimensions(curve_sets)
     # Make the individual tests saving the deviations
-    switch(test,
+    switch(type,
             qdir = {
                 res_ls <- lapply(curve_sets, FUN = function(x) { central_region(x, type="qdir", coverage=1-alpha, probs = probs, central=central, ...) })
             },
@@ -128,7 +128,7 @@ combined_scaled_MAD_envelope <- function(curve_sets, test = c("qdir", "st"), alp
                 res_ls <- lapply(curve_sets, FUN = function(x) { central_region(x, type="st", coverage=1-alpha, central=central, ...) })
             })
     # Calculate quantiles (qdir) or sds (st)
-    envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, test=test, probs=probs)
+    envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, type=type, probs=probs)
 
     # Create a curve_set for the rank test
     u_ls <- lapply(res_ls, FUN = function(x) attr(x, "k"))
