@@ -82,7 +82,7 @@
 #' \item \emph{Adjusted} global envelope tests for composite hypotheses
 #' \itemize{
 #'   \item \code{\link{dg.global_envelope}}, see a detailed example in \code{\link{saplings}}
-#'   \item \code{\link{dg.combined_global_envelope}} for adjusted tests
+#'   \item \code{\link{dg.combined_global_envelope}} for combined adjusted tests
 #' }
 #' \item \emph{One-way functional ANOVA}:
 #'  \itemize{
