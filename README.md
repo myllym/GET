@@ -45,6 +45,12 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
 Statistics and Computing 27 (5): 1239-1255. https://doi.org/10.1007/s11222-016-9683-9
 
+###If you use functional ANOVA, please also cite:
+
+Mrkvička, T., Hahn, U. and Myllymäki, M. (2016).
+A one-way ANOVA test for functional data with graphical interpretation.
+arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+
 ###If you use deviation tests, please also cite:
 
 Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
@@ -57,9 +63,3 @@ patterns. Spatial Statistics 11: 19-34. https://doi.org/10.1016/j.spasta.2014.11
 Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016).
 Monte Carlo testing in spatial statistics, with applications to spatial residuals.
 Spatial Statistics 18, Part A: 40--53. https://doi.org/10.1016/j.spasta.2016.04.005
-
-###If you use functional ANOVA, please also cite:
-
-Mrkvička, T., Hahn, U. and Myllymäki, M. (2016).
-A one-way ANOVA test for functional data with graphical interpretation.
-arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
