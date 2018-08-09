@@ -61,13 +61,14 @@
 #' @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
 #' \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
 #' @importFrom spatstat envelope
-global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ..., test = c("rank", "qdir", "st"),
-        alpha = 0.05, alternative = c("two.sided", "less", "greater"),
-        r_min=NULL, r_max=NULL, take_residual=FALSE,
-        ties="erl",
-        save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
-        verbose = FALSE) {
-    test <- match.arg(test)
+global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...,
+                                      type = c("rank", "qdir", "st"),
+                                      alpha = 0.05, alternative = c("two.sided", "less", "greater"),
+                                      r_min=NULL, r_max=NULL, take_residual=FALSE,
+                                      ties="erl",
+                                      save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
+                                      verbose = FALSE) {
+  type <- match.arg(type)
     alt <- match.arg(alternative)
     if(!is.null(simfun)) {
         # Create simulations by the given function
@@ -82,7 +83,7 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
     # Crop curves (if r_min or r_max given)
     curve_set <- crop_curves(X, r_min = r_min, r_max = r_max)
     # Make the test
-    global_envtest <- global_envelope_test(curve_set, type=test, alpha=alpha,
+    global_envtest <- global_envelope_test(curve_set, type=type, alpha=alpha,
                                            alternative=alt, ties=ties)
     stat <- attr(global_envtest, "k")[1]
 
