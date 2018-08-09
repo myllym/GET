@@ -1006,7 +1006,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'
 #'   ## Random labeling test
 #'   #----------------------
-#'   # requires library 'marksummary'
+#'   if(require(marksummary, quietly=TRUE)) {
 #'   mpp <- spruces
 #'   # 1) Perform simulations under the random labelling hypothesis and calculate
 #'   # the test function T(r) for the data pattern (mpp) and each simulation.
@@ -1027,6 +1027,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'   curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
 #'   res <- global_envelope_test(curve_set)
 #'   plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
+#'   }
 #'
 #'   \dontrun{
 #'   ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
