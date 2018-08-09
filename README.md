@@ -4,16 +4,16 @@ An R library for Global Envelope Tests
 
 ## Installation
 
-If you do not have the R library `devtools` installed, install it first by
+You can install the `GET` library from github through `remotes` package with the following two R commands:
 
 ```R
-install.packages("devtools")
-```
-Then install the `GET` library with the following two R commands:
-
-```R
-library(devtools)
+library(remotes)
 install_github('myllym/GET')
+```
+If you do not have the R library `remotes` installed, install it first by
+
+```R
+install.packages("remotes")
 ```
 
 After installation, in order to start using `GET`, load it to R and see
