@@ -1,8 +1,8 @@
 # Functionality for central regions based on a curve set
-individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
+individual_central_region <- function(curve_set, type="erl", coverage=0.50,
                                       alternative=c("two.sided", "less", "greater"),
-                                      probs = c((1-coverage)/2, 1-(1-coverage)/2),
-                                      central = "median", ...) {
+                                      probs=c((1-coverage)/2, 1-(1-coverage)/2),
+                                      central="median", ...) {
   if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
@@ -15,7 +15,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
   check_probs(probs)
   if(!(central %in% c("mean", "median"))) {
     central <- "median"
-    warning("Invalid option fiven for central. Using central = median.\n")
+    warning("Invalid option fiven for central. Using central=median.\n")
   }
   picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
   curve_set <- convert_envelope(curve_set)
@@ -36,8 +36,8 @@ individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
            measure <- "max"
            scaling = "none"
          })
-  distance <- forder(curve_set, measure = measure, scaling = scaling,
-                     alternative = alternative, probs = probs, ...)
+  distance <- forder(curve_set, measure=measure, scaling=scaling,
+                     alternative=alternative, probs=probs, ...)
 
   data_and_sim_curves <- data_and_sim_curves(curve_set) # all the functions
   Nfunc <- length(distance) # Number of functions
@@ -84,8 +84,8 @@ individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
            UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
          },
          qdir = {
-           curve_set_res <- residual(curve_set, use_theo = TRUE)
-           quant_m <- curve_set_quant(curve_set_res, probs = probs)
+           curve_set_res <- residual(curve_set, use_theo=TRUE)
+           quant_m <- curve_set_quant(curve_set_res, probs=probs)
            #-- the 100(1-alpha)% global directional quantile envelope
            distancesorted <- sort(distance)
            kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
@@ -115,10 +115,10 @@ individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
 
   if(is.vector(curve_set[['obs']]))
     res <- structure(data.frame(r=curve_set[['r']], obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB),
-                     class = c("global_envelope", "envelope", "fv", "data.frame"))
+                     class=c("global_envelope", "envelope", "fv", "data.frame"))
   else
     res <- structure(data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB),
-                     class = c("global_envelope", "envelope", "fv", "data.frame"))
+                     class=c("global_envelope", "envelope", "fv", "data.frame"))
   attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
   attr(res, "alternative") <- alternative
@@ -146,8 +146,8 @@ individual_central_region <- function(curve_set, type = "erl", coverage=0.50,
 # Functionality for global envelope tests based on a curve set
 individual_global_envelope_test <- function(curve_set, type="erl", alpha=0.05,
                                             alternative=c("two.sided", "less", "greater"),
-                                            ties = "erl", probs = c(0.025, 0.975),
-                                            central = "mean") {
+                                            ties="erl", probs=c(0.025, 0.975),
+                                            central="mean") {
   alternative <- match.arg(alternative)
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
@@ -169,7 +169,7 @@ individual_global_envelope_test <- function(curve_set, type="erl", alpha=0.05,
            p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
            #-- unique p-value
            if(ties == "erl") {
-             distance_lexo <- forder(curve_set, measure = "erl", alternative = alternative)
+             distance_lexo <- forder(curve_set, measure="erl", alternative=alternative)
              u_lexo <- -distance_lexo
              p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
            }
@@ -211,7 +211,7 @@ individual_global_envelope_test <- function(curve_set, type="erl", alpha=0.05,
 }
 
 # Functionality for combined_central_region and combined_global_envelope_test
-combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
+combined_CR_or_GET <- function(curve_sets, CR_or_GET=c("CR", "GET"), coverage, ...) {
   ntests <- length(curve_sets)
   curve_sets <- check_curve_set_dimensions(curve_sets)
   CR_or_GET <- match.arg(CR_or_GET)
@@ -258,8 +258,8 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   }
 
   # Return
-  res <- list(global_envelope_ls = res_ls,
-              step2_test = res_erl, step2_test_curve_set = curve_set_u)
+  res <- list(global_envelope_ls=res_ls,
+              step2_test=res_erl, step2_test_curve_set=curve_set_u)
   class(res) <- "combined_global_envelope"
   res
 }
@@ -288,10 +288,10 @@ print.global_envelope <- function(x, ...) {
 }
 
 #' Plot method for the class 'global_envelope'
-#' @usage \method{plot}{global_envelope}(x, plot_style="basic", dotplot = length(x$r)<10,
+#' @usage \method{plot}{global_envelope}(x, plot_style="basic", dotplot=length(x$r)<10,
 #'    main, ylim, xlab, ylab, use_ggplot2,
-#'    color_outside = TRUE, env.col = 1, base_size = 15,
-#'    labels = NULL, add = FALSE, ...)
+#'    color_outside=TRUE, env.col=1, base_size=15,
+#'    labels=NULL, add=FALSE, ...)
 #'
 #' @param x an 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
@@ -309,9 +309,9 @@ print.global_envelope <- function(x, ...) {
 #' @param ylab See \code{\link{plot.default}}. A sensible default exists.
 #' @param use_ggplot2 Logical, whether plot_style is "ggplot2" or not. Outdated, use the argument plot_style instead.
 #' @param color_outside Logical. Whether to color the places where the data function goes
-#' outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.
+#' outside the envelope. Currently red color is used. Relevant only for \code{plot_style="basic"}.
 #' @param env.col The color for the envelope lines (or dotplot arrows). Default 1 (black).
-#' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
+#' @param base_size Base font size, to be passed to theme style when \code{plot_style="ggplot2"}.
 #' @param labels Labels for \code{dotplot=TRUE}; labels for the tests at x-axis.
 #' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
@@ -320,10 +320,10 @@ print.global_envelope <- function(x, ...) {
 #' @export
 #' @seealso \code{\link{central_region}}
 #' @importFrom spatstat pickoption
-plot.global_envelope <- function(x, plot_style="basic", dotplot = length(x$r)<10,
+plot.global_envelope <- function(x, plot_style="basic", dotplot=length(x$r)<10,
                                  main, ylim, xlab, ylab, use_ggplot2,
-                                 color_outside = TRUE, env.col = 1, base_size = 15,
-                                 labels = NULL, add = FALSE, ...) {
+                                 color_outside=TRUE, env.col=1, base_size=15,
+                                 labels=NULL, add=FALSE, ...) {
   if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
   else use_ggplot2 <- FALSE
   if(missing('main')) main <- env_main_default(x)
@@ -372,12 +372,12 @@ print.combined_global_envelope <- function(x, ...) {
 }
 
 #' Plot method for the class 'combined_global_envelope'
-#' @usage \method{plot}{combined_global_envelope}(x, plot_style="basic", level = 1,
+#' @usage \method{plot}{combined_global_envelope}(x, plot_style="basic", level=1,
 #'   main, ylim, xlab, ylab, use_ggplot2,
-#'   separate_yaxes = FALSE, max_ncols_of_plots = 2,
-#'   labels = NULL,
-#'   color_outside = TRUE, env.col = 1, base_size = 15,
-#'   add = FALSE, ...)
+#'   separate_yaxes=FALSE, max_ncols_of_plots=2,
+#'   labels=NULL,
+#'   color_outside=TRUE, env.col=1, base_size=15,
+#'   add=FALSE, ...)
 #'
 #' @param x an 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
@@ -388,17 +388,17 @@ print.combined_global_envelope <- function(x, ...) {
 #' with a joint y-axis.
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 #' number of columns for figures. Default 2.
-#' @param labels Labels for the separate plots (for \code{plot_style = "ggplot2"}).
+#' @param labels Labels for the separate plots (for \code{plot_style="ggplot2"}).
 #' Ignored if separate_yaxes is FALSE. Or, for \code{dotplot=TRUE}, labels for the tests at x-axis.
 #' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
 #'
 #' @method plot combined_global_envelope
 #' @export
-plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
+plot.combined_global_envelope <- function(x, plot_style="basic", level=1,
                                           main, ylim, xlab, ylab, use_ggplot2,
-                                          separate_yaxes = FALSE, max_ncols_of_plots = 2, labels = NULL,
-                                          color_outside = TRUE, env.col = 1, base_size = 15,
-                                          add = FALSE, ...) {
+                                          separate_yaxes=FALSE, max_ncols_of_plots=2, labels=NULL,
+                                          color_outside=TRUE, env.col=1, base_size=15,
+                                          add=FALSE, ...) {
   if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
   else use_ggplot2 <- FALSE
   if(missing('main')) {
@@ -579,8 +579,8 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
 #' ## A central region of a set of functions
 #' #----------------------------------------
 #' if(requireNamespace("fda", quietly = TRUE)) {
-#'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
-#'                                      obs = fda::growth$hgtf))
+#'   curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
+#'                                      obs=fda::growth$hgtf))
 #'   plot(curve_set, ylab="height")
 #'   cr <- central_region(curve_set, coverage=0.50, type="erl")
 #'   plot(cr, main="50% central region")
@@ -592,7 +592,7 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
 #' # f(x) = 0.8x - 1.8x^2 + 1.05x^3 for x in [0,1]
 #' par <- c(0,0.8,-1.8,1.05) # Parameters of the true polynomial model
 #' res <- 100 # Resolution
-#' x <- seq(0, 1, by = 1/res); x2=x^2; x3=x^3;
+#' x <- seq(0, 1, by=1/res); x2=x^2; x3=x^3;
 #' f <- par[1] + par[2]*x + par[3]*x^2 + par[4]*x^3 # The true function
 #' d <- f + rnorm(length(x), 0, 0.04) # Data
 #' # Plot the true function and data
@@ -610,7 +610,7 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
 #' ftheta1 <- array(0, c(B,length(x)))
 #' s1 <- array(0,B)
 #' for(i in 1:B) {
-#'   u <- sample(resid0, size=length(resid0), replace = TRUE)
+#'   u <- sample(resid0, size=length(resid0), replace=TRUE)
 #'   reg1 <- lm((ftheta+u) ~ x + x2 + x3)
 #'   ftheta1[i,] <- reg1$fitted.values
 #'   s1[i] <- sd(reg1$residuals)
@@ -622,30 +622,30 @@ plot.combined_global_envelope <- function(x, plot_style="basic", level = 1,
 #' for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
 #'
 #' # Central region computation
-#' boot.cset <- create_curve_set(list(r = 1:length(x), obs = t(m)))
+#' boot.cset <- create_curve_set(list(r=1:length(x), obs=t(m)))
 #' cr <- central_region(boot.cset, coverage=0.95, type="erl")
 #' CB.lo <- ftheta+s0*cr$lo
 #' CB.hi <- ftheta+s0*cr$hi
 #'
 #' # Plotting the result
-#' plot(d, ylab="f(x)", xaxt = "n", xlab="x", main = "95% central region")
+#' plot(d, ylab="f(x)", xaxt="n", xlab="x", main="95% central region")
 #' axis(1, at=(0:5)*20, labels=(0:5)/5)
 #' lines(ftheta)
 #' lines(CB.lo, lty=2)
 #' lines(CB.hi, lty=2)
-central_region <- function(curve_sets, type = "erl", coverage = 0.50,
-                           alternative = c("two.sided", "less", "greater"),
-                           probs = c((1-coverage)/2, 1-(1-coverage)/2),
-                           central = "median", ...) {
+central_region <- function(curve_sets, type="erl", coverage=0.50,
+                           alternative=c("two.sided", "less", "greater"),
+                           probs=c((1-coverage)/2, 1-(1-coverage)/2),
+                           central="median", ...) {
   if(class(curve_sets)[1] == "list") {
-    res <- combined_CR_or_GET(curve_sets, CR_or_GET = "CR", type = type, coverage = coverage,
-                              alternative = alternative, probs = probs,
-                              central = central, ...)
+    res <- combined_CR_or_GET(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
+                              alternative=alternative, probs=probs,
+                              central=central, ...)
   }
   else {
-    res <- individual_central_region(curve_sets, type = type, coverage = coverage,
-                                     alternative = alternative, probs = probs,
-                                     central = central, ...)
+    res <- individual_central_region(curve_sets, type=type, coverage=coverage,
+                                     alternative=alternative, probs=probs,
+                                     central=central, ...)
   }
   res
 }
@@ -662,14 +662,14 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' the functional boxplot is based.
 #' @export
 #' @examples
-#' if(requireNamespace("fda", quietly = TRUE)) {
-#'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
-#'                                      obs = fda::growth$hgtf))
+#' if(requireNamespace("fda", quietly=TRUE)) {
+#'   curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
+#'                                      obs=fda::growth$hgtf))
 #'   plot(curve_set, ylab="height")
 #'   bp <- fBoxplot(curve_set, coverage=0.50, type="area")
 #'   plot(bp, curve_set=curve_set)
 #' }
-fBoxplot <- function(curve_sets, factor = 1.5, ...) {
+fBoxplot <- function(curve_sets, factor=1.5, ...) {
   res <- central_region(curve_sets, ...)
   if(class(res)[1] == "global_envelope") {
     attr(res, "cr.lo") <- res$lo
@@ -801,7 +801,7 @@ print.combined_fboxplot <- function(x, ...) {
 #'
 #' Current method is just to plot the components of the combined functional boxplot
 #' one after each other.
-#' @usage \method{plot}{combined_fboxplot}(x, max_ncols_of_plots = 2, main, curve_sets, ...)
+#' @usage \method{plot}{combined_fboxplot}(x, max_ncols_of_plots=2, main, curve_sets=NULL, ...)
 #'
 #' @param x an 'combined_fboxplot' object
 #' @inheritParams plot.combined_global_envelope
@@ -813,7 +813,7 @@ print.combined_fboxplot <- function(x, ...) {
 #' @method plot combined_fboxplot
 #' @export
 #' @importFrom spatstat pickoption
-plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets = NULL, ...) {
+plot.combined_fboxplot <- function(x, max_ncols_of_plots=2, main, curve_sets=NULL, ...) {
   n_of_plots <- length(x$global_envelope_ls)
   ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
   nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
@@ -831,7 +831,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
   }
   par(mfrow=c(nrows_of_plots, ncols_of_plots))
   for(i in 1:length(x$global_envelope_ls))
-    plot.fboxplot(x$global_envelope_ls[[i]], curve_set = curve_sets[[i]], main=main[i], ...)
+    plot.fboxplot(x$global_envelope_ls[[i]], curve_set=curve_sets[[i]], main=main[i], ...)
 }
 
 
@@ -938,10 +938,10 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #' or an \code{\link[spatstat]{envelope}} object containing a data function and simulated functions.
 #' If an envelope object is given, it must contain the summary
 #' functions from the simulated patterns which can be achieved by setting
-#' savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+#' \code{savefuns=TRUE} when calling \code{\link[spatstat]{envelope}}.
 #' Alternatively, a list of \code{curve_set} or \code{\link[spatstat]{envelope}} objects can be given.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
-#' @param ties The method to obtain a unique p-value when  \code{type = 'rank'}.
+#' @param ties The method to obtain a unique p-value when  \code{type='rank'}.
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 #' For 'conservative' the resulting p-value will be the highest possible.
 #' For 'liberal' the p-value will be the lowest possible.
@@ -969,7 +969,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #' \itemize{
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #' }
-#' and in the case that \code{type = 'rank'} also
+#' and in the case that \code{type='rank'} also
 #' \itemize{
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item ties = As the argument \code{ties}.
@@ -998,9 +998,9 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'
 #'   ## Advanced use:
 #'   # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
-#'   curve_set <- crop_curves(env, r_min = 1, r_max = 7)
+#'   curve_set <- crop_curves(env, r_min=1, r_max=7)
 #'   # For better visualisation, take the L(r)-r function
-#'   curve_set <- residual(curve_set, use_theo = TRUE)
+#'   curve_set <- residual(curve_set, use_theo=TRUE)
 #'   # Do the rank envelope test (erl)
 #'   res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
 #'
@@ -1015,7 +1015,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'   # with translational edge correction (default).
 #'   # The random_labelling function returns the centred functions \hat{L}_m(r)-T_0(r),
 #'   # where T_0(r) = \hat{L}(r) is the unmarked L function.
-#'   curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#'   curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
 #'   # 2) Do the rank envelope test
 #'   res <- global_envelope_test(curve_set)
 #'   # 3) Plot the test result
@@ -1024,7 +1024,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'   # Make the test using instead the test function T(r) = \hat{L}_mm(r);
 #'   # which is an estimator of the mark-weighted L function, L_mm(r),
 #'   # with translational edge correction (default).
-#'   curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
+#'   curve_set <- random_labelling(mpp, mtf_name='mm', nsim=2499, r_min=1.5, r_max=9.5)
 #'   res <- global_envelope_test(curve_set)
 #'   plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 #'   }
@@ -1046,13 +1046,13 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'   simulations <- NULL
 #'   for(j in 1:999) {
 #'      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-#'                                    R = fittedmodel$interaction$par$hc,
-#'                                    W = pp$window)
+#'                                    R=fittedmodel$interaction$par$hc,
+#'                                    W=pp$window)
 #'      if(j%%10==0) cat(j, "...", sep="")
 #'   }
 #'   env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
 #'                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
-#'   curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
+#'   curve_set <- crop_curves(env, r_min=1, r_max=3.5)
 #'   res <- global_envelope_test(curve_set, type="erl"); plot(res, plot_style="ggplot2")
 #'   }
 #'
@@ -1075,7 +1075,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'   system.time( env_L <- envelope(X, nsim=nsim,
 #'    simulate=expression(runifpoint(X$n, win=X$window)),
 #'    fun="Lest", correction="translate",
-#'    transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+#'    transform=expression(.-r), # Take the L(r)-r function instead of L(r)
 #'    r=r,                         # Specify the distance vector
 #'    savefuns=TRUE,               # Save the estimated functions
 #'    savepatterns=TRUE) )         # Save the simulated patterns
@@ -1112,7 +1112,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #' #-------------------------------------------------
 #' # Let us generate some example data.
 #' X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
-#' if(requireNamespace("mvtnorm", quietly = TRUE)) {
+#' if(requireNamespace("mvtnorm", quietly=TRUE)) {
 #'   Y <- mvtnorm::rmvnorm(200,c(0,0),matrix(c(1,0.5,0.5,1),2,2)) # simulations
 #'   plot(Y, xlim=c(min(X[,1],Y[,1]), max(X[,1],Y[,1])), ylim=c(min(X[,2],Y[,2]), max(X[,2],Y[,2])))
 #'   points(X, col=2)
@@ -1133,18 +1133,18 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'
 global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
                           alternative=c("two.sided", "less", "greater"),
-                          ties = "erl", probs = c(0.025, 0.975),
-                          central = "mean") {
+                          ties="erl", probs=c(0.025, 0.975),
+                          central="mean") {
   if(class(curve_sets)[1] == "list") {
-    res <- combined_CR_or_GET(curve_sets, CR_or_GET = "GET", type = type, coverage = 1-alpha,
-                              alternative = alternative, probs = probs,
-                              central = central)
+    res <- combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
+                              alternative=alternative, probs=probs,
+                              central=central)
   }
   else {
-    res <- individual_global_envelope_test(curve_sets, type = type, alpha = alpha,
-                                           alternative = alternative,
-                                           ties = ties, probs = probs,
-                                           central = central)
+    res <- individual_global_envelope_test(curve_sets, type=type, alpha=alpha,
+                                           alternative=alternative,
+                                           ties=ties, probs=probs,
+                                           central=central)
   }
   res
 }
@@ -1166,8 +1166,8 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
 #' used in \code{"rank"}.
 #'
 #' Note: Earlier it was possible to specify to the extreme rank lengths breaking of ties for the rank
-#' envelope with specifying the argument \code{lexo = TRUE}. This is obsolete now. The same can be done
-#' by choosing \code{type = "rank"} and \code{ties = "erl"}, which is in fact the default of this
+#' envelope with specifying the argument \code{lexo=TRUE}. This is obsolete now. The same can be done
+#' by choosing \code{type="rank"} and \code{ties="erl"}, which is in fact the default of this
 #' \code{rank_envelope} function.
 #'
 #' @section Global envelope:
@@ -1196,11 +1196,11 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
 #'  functions from the simulated patterns which can be achieved by setting
-#'  savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+#'  savefuns=TRUE when calling \code{\link[spatstat]{envelope}}.
 #' @param type The type of the global envelope with current options for "rank", "erl", "cont" and "area".
 #' If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
 #' If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
-#' length p-value is given (Myllymäki et al., 2017, Mrkvicka et al., 2018). See details and additional
+#' length p-value is given (Myllymäki et al., 2017, Mrkvička et al., 2018). See details and additional
 #' sections thereafter.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
@@ -1252,9 +1252,9 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
 #'
 #' ## Advanced use:
 #' # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
-#' curve_set <- crop_curves(env, r_min = 1, r_max = 7)
+#' curve_set <- crop_curves(env, r_min=1, r_max=7)
 #' # For better visualisation, take the L(r)-r function
-#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' curve_set <- residual(curve_set, use_theo=TRUE)
 #' # Do the rank envelope test
 #' res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 #'
@@ -1269,7 +1269,7 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
 #' # with translational edge correction (default).
 #' # The random_labelling function returns the centred functions \hat{L}_m(r)-T_0(r),
 #' # where T_0(r) = \hat{L}(r) is the unmarked L function.
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
 #' # 2) Do the rank envelope test
 #' res <- rank_envelope(curve_set)
 #' # 3) Plot the test result
@@ -1278,7 +1278,7 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
 #' # Make the test using instead the test function T(r) = \hat{L}_mm(r);
 #' # which is an estimator of the mark-weighted L function, L_mm(r),
 #' # with translational edge correction (default).
-#' curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name='mm', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- rank_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 #'
@@ -1299,13 +1299,13 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
 #' simulations <- NULL
 #' for(j in 1:2499) {
 #'    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-#'                                  R = fittedmodel$interaction$par$hc,
-#'                                  W = pp$window);
+#'                                  R=fittedmodel$interaction$par$hc,
+#'                                  W=pp$window);
 #'    if(j%%10==0) cat(j, "...", sep="")
 #' }
 #' env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
 #'                 savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
-#' curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
+#' curve_set <- crop_curves(env, r_min=1, r_max=3.5)
 #' res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 #' }
 #'
@@ -1313,7 +1313,7 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
 #' #-------------------------------------------------
 #' # Let us generate some example data.
 #' X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
-#' if(requireNamespace("mvtnorm", quietly = TRUE)) {
+#' if(requireNamespace("mvtnorm", quietly=TRUE)) {
 #'   Y <- mvtnorm::rmvnorm(200,c(0,0),matrix(c(1,0.5,0.5,1),2,2)) # simulations
 #'   plot(Y, xlim=c(min(X[,1],Y[,1]), max(X[,1],Y[,1])), ylim=c(min(X[,2],Y[,2]), max(X[,2],Y[,2])))
 #'   points(X, col=2)
@@ -1331,7 +1331,7 @@ global_envelope_test <- function(curve_sets, type="erl", alpha=0.05,
 #'   res2 <- rank_envelope(cset2)
 #'   plot(res2)
 #' }
-rank_envelope <- function(curve_set, type = "rank", ...) {
+rank_envelope <- function(curve_set, type="rank", ...) {
   if(!(type %in% c("rank", "erl", "cont", "area"))) stop("No such type for the global rank envelope.\n")
   global_envelope_test(curve_set, type=type, ...)
 }
@@ -1391,9 +1391,9 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
-#' curve_set <- crop_curves(env, r_min = 1, r_max = 8)
+#' curve_set <- crop_curves(env, r_min=1, r_max=8)
 #' # For better visualisation, take the L(r)-r function
-#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' curve_set <- residual(curve_set, use_theo=TRUE)
 #' # The studentised envelope test
 #' res <- st_envelope(curve_set); plot(res, plot_style="ggplot2")
 #'
@@ -1402,7 +1402,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- st_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 st_envelope <- function(curve_set, ...) {
@@ -1466,9 +1466,9 @@ st_envelope <- function(curve_set, ...) {
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
-#' curve_set <- crop_curves(env, r_min = 1, r_max = 8)
+#' curve_set <- crop_curves(env, r_min=1, r_max=8)
 #' # For better visualisation, take the L(r)-r function
-#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' curve_set <- residual(curve_set, use_theo=TRUE)
 #' # The directional quantile envelope test
 #' res <- qdir_envelope(curve_set); plot(res, plot_style="ggplot2")
 #'
@@ -1477,7 +1477,7 @@ st_envelope <- function(curve_set, ...) {
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- qdir_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, ...) {
@@ -1544,9 +1544,9 @@ qdir_envelope <- function(curve_set, ...) {
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
-#' curve_set <- crop_curves(env, r_min = 1, r_max = 8)
+#' curve_set <- crop_curves(env, r_min=1, r_max=8)
 #' # For better visualisation, take the L(r)-r function
-#' curve_set <- residual(curve_set, use_theo = TRUE)
+#' curve_set <- residual(curve_set, use_theo=TRUE)
 #' # The studentised envelope test
 #' res <- unscaled_envelope(curve_set); plot(res, plot_style="ggplot2")
 #'
@@ -1555,7 +1555,7 @@ qdir_envelope <- function(curve_set, ...) {
 #' # requires library 'marksummary'
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+#' curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
 #' res <- unscaled_envelope(curve_set)
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 unscaled_envelope <- function(curve_set, ...) {
