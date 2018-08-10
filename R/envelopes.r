@@ -30,11 +30,11 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          },
          st = {
            measure <- "max"
-           scaling = "st"
+           scaling <- "st"
          },
          unscaled = {
            measure <- "max"
-           scaling = "none"
+           scaling <- "none"
          })
   distance <- forder(curve_set, measure=measure, scaling=scaling,
                      alternative=alternative, probs=probs, ...)
