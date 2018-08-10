@@ -15,7 +15,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   check_probs(probs)
   if(!(central %in% c("mean", "median"))) {
     central <- "median"
-    warning("Invalid option fiven for central. Using central=median.\n")
+    warning("Invalid option fiven for central. Using central = median.\n")
   }
   picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
   curve_set <- convert_envelope(curve_set)
