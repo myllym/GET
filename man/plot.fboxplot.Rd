@@ -4,7 +4,7 @@
 \alias{plot.fboxplot}
 \title{Plot method for the class 'fboxplot'}
 \usage{
-\method{plot}{fboxplot}(x, plot_style="basic", curve_set, dotplot=length(x$r)<10, ylim, ...)
+\method{plot}{fboxplot}(x, plot_style = "basic", curve_set, dotplot = length(x$r)<10, ylim, ...)
 }
 \arguments{
 \item{x}{an 'fboxplot' object}

@@ -16,7 +16,7 @@ dg.combined_global_envelope(X, nsim = 499, nsimsub = nsim, simfun = NULL,
 or a fitted point process model (object of class "ppm" or "kppm"). See
 \code{\link[spatstat]{envelope}}.}
 
-\item{nsim}{The number of simulations.}
+\item{nsim}{The number of simulations to be generated in the primary test.}
 
 \item{nsimsub}{Number of simulations in each basic test. There will be nsim repetitions of the
 basic test, each involving nsimsub simulated realisations, so there will be a total of
@@ -42,14 +42,15 @@ If \code{\link[spatstat]{envelope}} is also used to generate simulations under t
 \item{testfuns}{A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
 A list of parameters should be provided for each test function that is to be used in the combined test.}
 
-\item{type}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
-\code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
+\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
+'qdir', 'st' and 'unscaled'. See details.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
-\item{alternative}{A character string specifying the alternative hypothesis. Must be one of
-the following: "two.sided" (default), "less" or "greater" for "rank". Relevant only for the
-rank test (otherwise ignored).}
+\item{alternative}{A character string specifying the alternative hypothesis.
+Must be one of the following: "two.sided" (default), "less" or "greater".
+The last two options only available for types \code{'rank'}, \code{'erl'},
+\code{'cont'} and \code{'area'}.}
 
 \item{r_min}{The minimum radius to include in the test.}
 
@@ -100,7 +101,7 @@ the argument an \code{\link[spatstat]{ppp}} object (X and further simulated poin
 
 Several test functions are allowed and these are to be estimated for the data and generated
 point patterns using the function \code{\link[spatstat]{envelope}}. The test functions are
-specified through the argument testfuns, which is passed to \code{\link{combined_global_envelope_with_sims}}.
+specified through the argument testfuns.
 
 If type = 'rank', then the test is the combined global rank envelope test.
 If type = 'qdir', then the test is the combined global directional quantile maximum absolute difference (MAD)

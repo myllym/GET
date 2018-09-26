@@ -4,7 +4,7 @@
 \alias{plot.global_envelope}
 \title{Plot method for the class 'global_envelope'}
 \usage{
-\method{plot}{global_envelope}(x, plot_style="basic", dotplot = length(x$r)<10,
+\method{plot}{global_envelope}(x, plot_style = "basic", dotplot = length(x$r)<10,
    main, ylim, xlab, ylab, use_ggplot2,
    color_outside = TRUE, env.col = 1, base_size = 15,
    labels = NULL, add = FALSE, ...)
@@ -40,7 +40,7 @@ outside the envelope. Currently red color is used. Relevant only for \code{plot_
 
 \item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
-\item{labels}{Labels for \code{dotplot=TRUE}; labels for the tests at x-axis.}
+\item{labels}{Labels for \code{dotplot = TRUE}; labels for the tests at x-axis.}
 
 \item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).}
 

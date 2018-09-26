@@ -16,7 +16,7 @@ different parts of a combined test. If FALSE, then the components are displayed 
 with a joint y-axis.}
 
 \item{labels}{Labels for the separate plots (for \code{plot_style = "ggplot2"}).
-Ignored if separate_yaxes is FALSE. Or, for \code{dotplot=TRUE}, labels for the tests at x-axis.}
+Ignored if separate_yaxes is FALSE. Or, for \code{dotplot = TRUE}, labels for the tests at x-axis.}
 
 \item{...}{Additional parameters to be passed to \code{\link{plot.global_envelope}}.}
 }

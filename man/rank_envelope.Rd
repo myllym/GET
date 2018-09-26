@@ -15,7 +15,7 @@ savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
 \item{type}{The type of the global envelope with current options for "rank", "erl", "cont" and "area".
 If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
 If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
-length p-value is given (Myllymäki et al., 2017, Mrkvicka et al., 2018). See details and additional
+length p-value is given (Myllymäki et al., 2017, Mrkvička et al., 2018). See details and additional
 sections thereafter.}
 
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
@@ -71,9 +71,9 @@ by choosing \code{type = "rank"} and \code{ties = "erl"}, which is in fact the d
 \section{Global envelope}{
 
 The 100(1-alpha)\% global envelope is provided in addition to the p-values. 
-If \code{type="rank"} then the envelope is the global rank envelope proposed by
+If \code{type = "rank"} then the envelope is the global rank envelope proposed by
 Myllymäki et al. (2017).
-If \code{type="erl"} then the envelope is the global rank envelope based on the
+If \code{type = "erl"} then the envelope is the global rank envelope based on the
 extreme rank length ordering. This envelope is constructed as the convex hull of
 the functions which have extreme rank length measure \eqn{R_i^{\text{erl}}}{Rerl_i}
 that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
@@ -82,8 +82,8 @@ length measure (Mrkvička et al., 2018).
 
 \section{Number of simulations}{
 
-The extreme rank length ordering test (\code{type="erl"}) allows in principle a lower numbe
-of simulations to be used than the test based on extreme ranks (\code{type="rank"}).
+The extreme rank length ordering test (\code{type = "erl"}) allows in principle a lower numbe
+of simulations to be used than the test based on extreme ranks (\code{type = "rank"}).
 However, we recommend some thousands of simulations in any case to achieve a good power
 and repeatability of the test.
 }
@@ -108,9 +108,9 @@ plot(res, plot_style="ggplot2")
 
 ## Advanced use:
 # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
-curve_set <- crop_curves(env, r_min = 1, r_max = 7)
+curve_set <- crop_curves(env, r_min=1, r_max=7)
 # For better visualisation, take the L(r)-r function
-curve_set <- residual(curve_set, use_theo = TRUE)
+curve_set <- residual(curve_set, use_theo=TRUE)
 # Do the rank envelope test
 res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 
@@ -125,7 +125,7 @@ mpp <- spruces
 # with translational edge correction (default).
 # The random_labelling function returns the centred functions \\hat{L}_m(r)-T_0(r),
 # where T_0(r) = \\hat{L}(r) is the unmarked L function.
-curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
 # 2) Do the rank envelope test
 res <- rank_envelope(curve_set)
 # 3) Plot the test result
@@ -134,7 +134,7 @@ plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 # Make the test using instead the test function T(r) = \\hat{L}_mm(r);
 # which is an estimator of the mark-weighted L function, L_mm(r),
 # with translational edge correction (default).
-curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
+curve_set <- random_labelling(mpp, mtf_name='mm', nsim=2499, r_min=1.5, r_max=9.5)
 res <- rank_envelope(curve_set)
 plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
 
@@ -155,13 +155,13 @@ fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
 simulations <- NULL
 for(j in 1:2499) {
    simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-                                 R = fittedmodel$interaction$par$hc,
-                                 W = pp$window);
+                                 R=fittedmodel$interaction$par$hc,
+                                 W=pp$window);
    if(j\%\%10==0) cat(j, "...", sep="")
 }
 env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
                 savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
-curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
+curve_set <- crop_curves(env, r_min=1, r_max=3.5)
 res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 }
 
@@ -169,7 +169,7 @@ res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 #-------------------------------------------------
 # Let us generate some example data.
 X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
-if(requireNamespace("mvtnorm", quietly = TRUE)) {
+if(requireNamespace("mvtnorm", quietly=TRUE)) {
   Y <- mvtnorm::rmvnorm(200,c(0,0),matrix(c(1,0.5,0.5,1),2,2)) # simulations
   plot(Y, xlim=c(min(X[,1],Y[,1]), max(X[,1],Y[,1])), ylim=c(min(X[,2],Y[,2]), max(X[,2],Y[,2])))
   points(X, col=2)

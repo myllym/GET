@@ -61,9 +61,9 @@ plot(res, plot_style="ggplot2")
 
 ## Advanced use:
 # Create a curve set, choosing the interval of distances [r_min, r_max]
-curve_set <- crop_curves(env, r_min = 1, r_max = 8)
+curve_set <- crop_curves(env, r_min=1, r_max=8)
 # For better visualisation, take the L(r)-r function
-curve_set <- residual(curve_set, use_theo = TRUE)
+curve_set <- residual(curve_set, use_theo=TRUE)
 # The studentised envelope test
 res <- st_envelope(curve_set); plot(res, plot_style="ggplot2")
 
@@ -72,7 +72,7 @@ res <- st_envelope(curve_set); plot(res, plot_style="ggplot2")
 # requires library 'marksummary'
 mpp <- spruces
 # Use the test function T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
-curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
 res <- st_envelope(curve_set)
 plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 }

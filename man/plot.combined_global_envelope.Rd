@@ -4,7 +4,7 @@
 \alias{plot.combined_global_envelope}
 \title{Plot method for the class 'combined_global_envelope'}
 \usage{
-\method{plot}{combined_global_envelope}(x, plot_style="basic", level = 1,
+\method{plot}{combined_global_envelope}(x, plot_style = "basic", level = 1,
   main, ylim, xlab, ylab, use_ggplot2,
   separate_yaxes = FALSE, max_ncols_of_plots = 2,
   labels = NULL,
@@ -42,7 +42,7 @@ with a joint y-axis.}
 number of columns for figures. Default 2.}
 
 \item{labels}{Labels for the separate plots (for \code{plot_style = "ggplot2"}).
-Ignored if separate_yaxes is FALSE. Or, for \code{dotplot=TRUE}, labels for the tests at x-axis.}
+Ignored if separate_yaxes is FALSE. Or, for \code{dotplot = TRUE}, labels for the tests at x-axis.}
 
 \item{color_outside}{Logical. Whether to color the places where the data function goes
 outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.}

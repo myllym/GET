@@ -13,7 +13,7 @@ global_envelope_test(curve_sets, type = "erl", alpha = 0.05,
 or an \code{\link[spatstat]{envelope}} object containing a data function and simulated functions.
 If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
-savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+\code{savefuns = TRUE} when calling \code{\link[spatstat]{envelope}}.
 Alternatively, a list of \code{curve_set} or \code{\link[spatstat]{envelope}} objects can be given.}
 
 \item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
@@ -149,7 +149,7 @@ estimate. Also a single p-value is calculated.
 By default this single p-value is the extreme rank length p-value ("erl"),
 but another option can be used by specifying \code{ties} argument.
 
-If the case \code{type="erl"}, the (single) p-value based on the extreme rank length ordering
+If the case \code{type = "erl"}, the (single) p-value based on the extreme rank length ordering
 of the functions is calculated and returned in the attribute \code{p}.
 The same is done for other measures, the p-value always being correspondent to the chosen measure.
 }
@@ -186,9 +186,9 @@ if(require(spatstat, quietly=TRUE)) {
 
   ## Advanced use:
   # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
-  curve_set <- crop_curves(env, r_min = 1, r_max = 7)
+  curve_set <- crop_curves(env, r_min=1, r_max=7)
   # For better visualisation, take the L(r)-r function
-  curve_set <- residual(curve_set, use_theo = TRUE)
+  curve_set <- residual(curve_set, use_theo=TRUE)
   # Do the rank envelope test (erl)
   res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
 
@@ -203,7 +203,7 @@ if(require(spatstat, quietly=TRUE)) {
   # with translational edge correction (default).
   # The random_labelling function returns the centred functions \\hat{L}_m(r)-T_0(r),
   # where T_0(r) = \\hat{L}(r) is the unmarked L function.
-  curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=2499, r_min=1.5, r_max=9.5)
+  curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
   # 2) Do the rank envelope test
   res <- global_envelope_test(curve_set)
   # 3) Plot the test result
@@ -212,7 +212,7 @@ if(require(spatstat, quietly=TRUE)) {
   # Make the test using instead the test function T(r) = \\hat{L}_mm(r);
   # which is an estimator of the mark-weighted L function, L_mm(r),
   # with translational edge correction (default).
-  curve_set <- random_labelling(mpp, mtf_name = 'mm', nsim=2499, r_min=1.5, r_max=9.5)
+  curve_set <- random_labelling(mpp, mtf_name='mm', nsim=2499, r_min=1.5, r_max=9.5)
   res <- global_envelope_test(curve_set)
   plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
   }
@@ -234,13 +234,13 @@ if(require(spatstat, quietly=TRUE)) {
   simulations <- NULL
   for(j in 1:999) {
      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-                                   R = fittedmodel$interaction$par$hc,
-                                   W = pp$window)
+                                   R=fittedmodel$interaction$par$hc,
+                                   W=pp$window)
      if(j\%\%10==0) cat(j, "...", sep="")
   }
   env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
-  curve_set <- crop_curves(env, r_min = 1, r_max = 3.5)
+  curve_set <- crop_curves(env, r_min=1, r_max=3.5)
   res <- global_envelope_test(curve_set, type="erl"); plot(res, plot_style="ggplot2")
   }
 
@@ -263,7 +263,7 @@ if(require(spatstat, quietly=TRUE)) {
   system.time( env_L <- envelope(X, nsim=nsim,
    simulate=expression(runifpoint(X$n, win=X$window)),
    fun="Lest", correction="translate",
-   transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+   transform=expression(.-r), # Take the L(r)-r function instead of L(r)
    r=r,                         # Specify the distance vector
    savefuns=TRUE,               # Save the estimated functions
    savepatterns=TRUE) )         # Save the simulated patterns
@@ -300,7 +300,7 @@ if(require(spatstat, quietly=TRUE)) {
 #-------------------------------------------------
 # Let us generate some example data.
 X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
-if(requireNamespace("mvtnorm", quietly = TRUE)) {
+if(requireNamespace("mvtnorm", quietly=TRUE)) {
   Y <- mvtnorm::rmvnorm(200,c(0,0),matrix(c(1,0.5,0.5,1),2,2)) # simulations
   plot(Y, xlim=c(min(X[,1],Y[,1]), max(X[,1],Y[,1])), ylim=c(min(X[,2],Y[,2]), max(X[,2],Y[,2])))
   points(X, col=2)

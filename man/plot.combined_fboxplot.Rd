@@ -4,7 +4,7 @@
 \alias{plot.combined_fboxplot}
 \title{Plot method for the class 'combined_fboxplot'.}
 \usage{
-\method{plot}{combined_fboxplot}(x, max_ncols_of_plots = 2, main, curve_sets, ...)
+\method{plot}{combined_fboxplot}(x, max_ncols_of_plots = 2, main, curve_sets = NULL, ...)
 }
 \arguments{
 \item{x}{an 'combined_fboxplot' object}

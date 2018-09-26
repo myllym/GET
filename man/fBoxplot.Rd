@@ -21,9 +21,9 @@ Functional boxplot based on central region computed by a specified measure.
 The options of the measures can be found in \code{\link{central_region}}.
 }
 \examples{
-if(requireNamespace("fda", quietly = TRUE)) {
-  curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
-                                     obs = fda::growth$hgtf))
+if(requireNamespace("fda", quietly=TRUE)) {
+  curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
+                                     obs=fda::growth$hgtf))
   plot(curve_set, ylab="height")
   bp <- fBoxplot(curve_set, coverage=0.50, type="area")
   plot(bp, curve_set=curve_set)

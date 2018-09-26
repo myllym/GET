@@ -39,14 +39,15 @@ For example, the test function in the argument 'fun' and further specifications 
 If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
 (if simfun not provided), then also recall to specify how to generate the simulations.}
 
-\item{type}{Either "rank" for the \code{\link{rank_envelope}} test, "qdir" for the
-\code{\link{qdir_envelope}} test or "st" for the \code{\link{st_envelope}} test.}
+\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
+'qdir', 'st' and 'unscaled'. See details.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
-\item{alternative}{A character string specifying the alternative hypothesis. Must be one of
-the following: "two.sided" (default), "less" or "greater" for "rank". Relevant only for the
-rank test (otherwise ignored).}
+\item{alternative}{A character string specifying the alternative hypothesis.
+Must be one of the following: "two.sided" (default), "less" or "greater".
+The last two options only available for types \code{'rank'}, \code{'erl'},
+\code{'cont'} and \code{'area'}.}
 
 \item{r_min}{The minimum radius to include in the test.}
 
@@ -72,12 +73,19 @@ See \code{\link[spatstat]{envelope}}.}
 \item{mc.cores}{The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
 (no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.}
+
+\item{simfun.arg}{The parameter to be passed to simfun. The function simfun should handle
+with the structure of simfun.param. FIXME should be here or not?}
+
+\item{ties}{Ties method to be passed to \code{\link{global_envelope_test}}.
+Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
+length p-value.}
 }
 \value{
 An object of class adjusted_envelope_test.
 }
 \description{
-Adjusted global rank envelope test, studentized envelope test and directional quantile envelope test.
+Adjusted global envelope tests.
 }
 \details{
 The specification of X is important here:
@@ -95,10 +103,10 @@ that the object returned by 'fitfun' is directly accepted as the (single) argume
 Further X should then be an \code{\link[spatstat]{ppp}} object and 'fitfun' should accept as
 the argument an \code{\link[spatstat]{ppp}} object (X and further simulated point patterns).
 
-A note: The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though the
-function \code{\link{global_envelope_with_sims}}, mimics the structure in the function
-\code{\link[spatstat]{dg.envelope}} in the use of \code{\link[spatstat]{envelope}}.
-However, this function allows for more general use as described above.
+A note: The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though an
+inner function, mimics the structure in the function \code{\link[spatstat]{dg.envelope}}
+in the use of \code{\link[spatstat]{envelope}}. However, this function allows for more general
+use as described above and for the different global envelope tests.
 }
 \references{
 Dao, N.A. and Genton, M. (2014). A Monte Carlo adjusted goodness-of-fit test for parametric models describing spatial point patterns. Journal of Graphical and Computational Statistics 23, 497-517.

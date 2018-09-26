@@ -145,8 +145,8 @@ to be given on this interval only).
 ## A central region of a set of functions
 #----------------------------------------
 if(requireNamespace("fda", quietly = TRUE)) {
-  curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
-                                     obs = fda::growth$hgtf))
+  curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
+                                     obs=fda::growth$hgtf))
   plot(curve_set, ylab="height")
   cr <- central_region(curve_set, coverage=0.50, type="erl")
   plot(cr, main="50\% central region")
@@ -158,7 +158,7 @@ if(requireNamespace("fda", quietly = TRUE)) {
 # f(x) = 0.8x - 1.8x^2 + 1.05x^3 for x in [0,1]
 par <- c(0,0.8,-1.8,1.05) # Parameters of the true polynomial model
 res <- 100 # Resolution
-x <- seq(0, 1, by = 1/res); x2=x^2; x3=x^3;
+x <- seq(0, 1, by=1/res); x2=x^2; x3=x^3;
 f <- par[1] + par[2]*x + par[3]*x^2 + par[4]*x^3 # The true function
 d <- f + rnorm(length(x), 0, 0.04) # Data
 # Plot the true function and data
@@ -176,7 +176,7 @@ B <- 2000 # Number of bootstrap samples
 ftheta1 <- array(0, c(B,length(x)))
 s1 <- array(0,B)
 for(i in 1:B) {
-  u <- sample(resid0, size=length(resid0), replace = TRUE)
+  u <- sample(resid0, size=length(resid0), replace=TRUE)
   reg1 <- lm((ftheta+u) ~ x + x2 + x3)
   ftheta1[i,] <- reg1$fitted.values
   s1[i] <- sd(reg1$residuals)
@@ -188,13 +188,13 @@ m <- array(0, c(B,length(x)))
 for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
 
 # Central region computation
-boot.cset <- create_curve_set(list(r = 1:length(x), obs = t(m)))
+boot.cset <- create_curve_set(list(r=1:length(x), obs=t(m)))
 cr <- central_region(boot.cset, coverage=0.95, type="erl")
 CB.lo <- ftheta+s0*cr$lo
 CB.hi <- ftheta+s0*cr$hi
 
 # Plotting the result
-plot(d, ylab="f(x)", xaxt = "n", xlab="x", main = "95\% central region")
+plot(d, ylab="f(x)", xaxt="n", xlab="x", main="95\% central region")
 axis(1, at=(0:5)*20, labels=(0:5)/5)
 lines(ftheta)
 lines(CB.lo, lty=2)
