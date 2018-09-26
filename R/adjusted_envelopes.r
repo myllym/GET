@@ -466,7 +466,7 @@ plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
 #'
 #' Several test functions are allowed and these are to be estimated for the data and generated
 #' point patterns using the function \code{\link[spatstat]{envelope}}. The test functions are
-#' specified through the argument testfuns, which is passed to \code{\link{combined_global_envelope_with_sims}}.
+#' specified through the argument testfuns.
 #'
 #' If type = 'rank', then the test is the combined global rank envelope test.
 #' If type = 'qdir', then the test is the combined global directional quantile maximum absolute difference (MAD)
