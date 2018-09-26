@@ -95,33 +95,37 @@ global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...
 }
 
 
-#' A combined global envelope test
-#'
-#' A combined global envelope test including simulations from a point process model.
-#'
-#'
-#' Details of the tests are given in \code{\link{rank_envelope}} (rank envelope test),
-#' \code{\link{combined_scaled_MAD_envelope}} (directional quantile and studentized envelope tests).
-#'
-#' The specification of X is important here:
-#' if simfun is not provided, the function \code{\link[spatstat]{envelope}} is used to generate
-#' simulations under the null hypothesis and to calculate the test functions (specified in the
-#' arguments ...) and then
-#' \itemize{
-#' \item If X is a point pattern, the null hypothesis is CSR.
-#' \item If X is a fitted model, the null hypothesis is that model.
-#' }
-#' If simfun is provided, then the null model is the one simulated by this given function,
-#' and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
-#' pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
-#'
-#' If savefuns is TRUE, all the simulated functions are saved in an attribute "simfuns" as a list
-#' of curve sets for each test function.
-#' @inheritParams global_envelope_with_sims
-#' @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
-#' A list of parameters should be provided for each test function that is to be used in the combined test.
-#' @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
-#' \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
+# A combined global envelope test
+#
+# A combined global envelope test including simulations from a point process model.
+#
+#
+# Details of the tests are given in \code{\link{global_envelope_test}}.
+# For the combined directional quantile and studentized envelope tests of Mrkvička et al. (2017)
+# see \code{\link{combined_scaled_MAD_envelope}}.
+#
+# The specification of X is important here:
+# if simfun is not provided, the function \code{\link[spatstat]{envelope}} is used to generate
+# simulations under the null hypothesis and to calculate the test functions (specified in the
+# arguments ...) and then
+# \itemize{
+# \item If X is a point pattern, the null hypothesis is CSR.
+# \item If X is a fitted model, the null hypothesis is that model.
+# }
+# If simfun is provided, then the null model is the one simulated by this given function,
+# and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
+# pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
+#
+# If savefuns is TRUE, all the simulated functions are saved in an attribute "simfuns" as a list
+# of curve sets for each test function.
+# @inheritParams global_envelope_with_sims
+# @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
+# A list of parameters should be provided for each test function that is to be used in the combined test.
+# @param MrkvickaEtal2017 Logical. If TRUE and type is "st" or "qdir", then the combined scaled MAD
+# envelope presented in Mrkvička et al. (2017) is calculated. Otherwise, the two-step procedure
+# described in \code{\link{global_envelope_test}} is used for combining the tests.
+# @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
+# \code{\link{global_envelope_test}}
 #' @importFrom spatstat envelope
 combined_global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...,
         testfuns = NULL,
