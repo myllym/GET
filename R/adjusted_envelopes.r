@@ -202,7 +202,7 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.ar
 
 #' Adjusted global envelope tests
 #'
-#' Adjusted global rank envelope test, studentized envelope test and directional quantile envelope test.
+#' Adjusted global envelope tests.
 #'
 #'
 #' The specification of X is important here:
