@@ -474,8 +474,9 @@ plot.adjusted_envelope_test <- function (x, main, plot_unadjusted=FALSE, ...) {
 #' see Mrkvicka et al. (2017).
 #'
 #'
-#' @inheritParams combined_global_envelope_with_sims
 #' @inheritParams dg.global_envelope
+#' @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
+#' A list of parameters should be provided for each test function that is to be used in the combined test.
 #'
 #' @return An object of class adjusted_envelope_test.
 #' @references
