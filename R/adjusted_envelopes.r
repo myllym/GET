@@ -221,21 +221,52 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.ar
 #' the argument an \code{\link[spatstat]{ppp}} object (X and further simulated point patterns).
 #'
 #'
-#' A note: The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though the
-#' function \code{\link{global_envelope_with_sims}}, mimics the structure in the function
-#' \code{\link[spatstat]{dg.envelope}} in the use of \code{\link[spatstat]{envelope}}.
-#' However, this function allows for more general use as described above.
+#' A note: The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though an
+#' inner function, mimics the structure in the function \code{\link[spatstat]{dg.envelope}}
+#' in the use of \code{\link[spatstat]{envelope}}. However, this function allows for more general
+#' use as described above and for the different global envelope tests.
 #'
-#' @inheritParams global_envelope_with_sims
+#' @param X An object containing point pattern data. A point pattern (object of class "ppp")
+#' or a fitted point process model (object of class "ppm" or "kppm"). See
+#' \code{\link[spatstat]{envelope}}.
 #' @param nsim The number of simulations to be generated in the primary test.
 #' @param nsimsub Number of simulations in each basic test. There will be nsim repetitions of the
 #' basic test, each involving nsimsub simulated realisations, so there will be a total of
 #' nsim * (1 + nsimsub) simulations.
+#' @param simfun A function for generating simulations from the null model. If given, this function
+#' is called by replicate(n=nsim, simfun(simfun.param), simplify=FALSE) to make nsim simulations.
+#' The function should return an \code{\link[spatstat]{ppp}} object as those are further passed to
+#' \code{\link[spatstat]{envelope}}.
+#' If the function is not provided, then \code{\link[spatstat]{envelope}} is used also for generating
+#' the point patterns from the null hypothesis.
 #' @param fitfun A function for estimating the parameters of the null model. If not given, then
 #' \code{\link[spatstat]{envelope}} takes care of the parameter estimation as well (and X should be a fitted
 #' model object). The function 'fitfun' should return the fitted model in the form that it can be directly
 #' passed to 'simfun' as the argument 'simfun.arg'.
+#' @param simfun.arg The parameter to be passed to simfun. The function simfun should handle
+#' with the structure of simfun.param. FIXME should be here or not?
+#' @param ... Additional parameters passed to \code{\link[spatstat]{envelope}}.
+#' For example, the test function in the argument 'fun' and further specifications regarding that.
+#' If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
+#' (if simfun not provided), then also recall to specify how to generate the simulations.
+#' @inheritParams global_envelope_test
+#' @param r_min The minimum radius to include in the test.
+#' @param r_max The maximum radius to include in the test. Note: cannot be larger than r-values used
+#' in calculating functions by \code{\link[spatstat]{envelope}}.
+#' @param take_residual If (needed for visual reasons only) the theoretical or mean behaviour of the
+#' test function is reduced from the test functions. If TRUE, then: If \code{\link[spatstat]{envelope}}
+#' provides the theoretical value 'theo' for the simulated model, then this value is used. Otherwise,
+#' the theoretical function is taken as the mean of the simulations.
+#' @param ties Ties method to be passed to \code{\link{global_envelope_test}}.
+#' Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
+#' length p-value.
 #' @param save.cons.envelope Logical flag indicating whether to save the unadjusted envelope test results.
+#' @param savefuns Logical flag indicating whether to save all the simulated function values.
+#' See \code{\link[spatstat]{envelope}}.
+#' @param savepatterns Logical flag indicating whether to save all the simulated point patterns.
+#' See \code{\link[spatstat]{envelope}}.
+#' @param verbose Logical flag indicating whether to print progress reports during the simulations.
+#' See \code{\link[spatstat]{envelope}}.
 #' @param mc.cores The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 #' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
 #' (no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
