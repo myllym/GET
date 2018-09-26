@@ -134,9 +134,9 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.ar
         r_min = NULL, r_max = NULL, take_residual = FALSE,
         ties = "erl", probs = c(0.025, 0.975),
         save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
-        verbose = FALSE) {
-    type <- match.arg(type)
-    alt <- match.arg(alternative)
+        verbose = FALSE, MrkvickaEtal2017 = FALSE) {
+  type <- match.arg(type)
+  alt <- match.arg(alternative)
 
   nfuns <- length(testfuns)
   if(length(r_min) != nfuns) stop("r_min should give the minimum distances for each of the test functions.\n")
@@ -177,28 +177,19 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.ar
   tmpfunc <- function(i) crop_curves(curve_sets_ls[[i]], r_min=r_min[i], r_max=r_max[i])
   curve_sets_ls <- lapply(1:nfuns, FUN=tmpfunc)
 
-    # Make the test
-    switch(type,
-            rank = {
-                # Create a combined curve_set
-                curve_set_combined <- combine_curve_sets(curve_sets_ls)
-                global_envtest <- global_envelope_test(curve_set_combined, type="rank", alpha=alpha,
-                                                       alternative=alt, ties=ties)
-                stat <- attr(global_envtest, "k")[1]
-                pval <- attr(global_envtest, "p")
-            },
-            qdir = {
-                global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, type="qdir", alpha=alpha)
-                stat <- attr(global_envtest$rank_test, "k")[1]
-                pval <- attr(global_envtest$rank_test, "p")
-                curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
-            },
-            st = {
-                global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, type="st", alpha=alpha)
-                stat <- attr(global_envtest$rank_test, "k")[1]
-                pval <- attr(global_envtest$rank_test, "p")
-                curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
-            })
+  # Make the test
+  if(MrkvickaEtal2017 & type %in% c("st", "qdir")) {
+    global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, type=type, alpha=alpha, probs=probs)
+    stat <- attr(global_envtest$rank_test, "k")[1]
+    pval <- attr(global_envtest$rank_test, "p")
+    curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
+  }
+  else {
+    global_envtest <- global_envelope_test(curve_sets_ls, type=type, alpha=alpha,
+                                           alternative=alt, ties=ties, probs=probs)
+    stat <- attr(global_envtest, "k")[1]
+    pval <- attr(global_envtest, "p")
+  }
 
   res <- structure(list(statistic = as.numeric(stat), p.value = pval,
                   method = type, curve_sets = curve_sets_ls), class = "global_envelope_with_sims")
