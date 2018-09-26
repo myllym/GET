@@ -59,13 +59,12 @@
 # \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}}
 #' @importFrom spatstat envelope
 global_envelope_with_sims <- function(X, nsim, simfun=NULL, simfun.arg=NULL, ...,
-                                      type = c("rank", "qdir", "st"),
+                                      type = "erl",
                                       alpha = 0.05, alternative = c("two.sided", "less", "greater"),
                                       r_min=NULL, r_max=NULL, take_residual=FALSE,
                                       ties="erl",
                                       save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
                                       verbose = FALSE) {
-  type <- match.arg(type)
     alt <- match.arg(alternative)
     if(!is.null(simfun)) {
         # Create simulations by the given function
