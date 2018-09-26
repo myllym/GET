@@ -17,6 +17,8 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
     }
     RRR[ordery[1],i] = exp(-(y[ordery[1]]-y[ordery[2]])/(y[ordery[2]]-y[ordery[Nfunc]]))
     RRR[ordery[Nfunc],i] = Nfunc
+    # Check ties
+    j <- 1
     while(j <= Nfunc-2) {
       k = 1
       if(y[ordery[j]] == y[ordery[j+2]]) {
