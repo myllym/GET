@@ -357,7 +357,8 @@ plot.global_envelope <- function(x, plot_style = "basic", dotplot = length(x$r)<
            spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
          },
          ggplot2 = {
-           env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab, ...)
+           env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                      labels=labels, ...)
          })
 }
 
