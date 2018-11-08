@@ -291,7 +291,7 @@ print.global_envelope <- function(x, ...) {
 #' @usage \method{plot}{global_envelope}(x, plot_style = "basic", dotplot = length(x$r)<10,
 #'    main, ylim, xlab, ylab, use_ggplot2,
 #'    color_outside = TRUE, env.col = 1, base_size = 15,
-#'    labels = NULL, add = FALSE, ...)
+#'    labels = NULL, add = FALSE, digits=3, ...)
 #'
 #' @param x an 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
@@ -314,6 +314,8 @@ print.global_envelope <- function(x, ...) {
 #' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
 #' @param labels Labels for \code{dotplot = TRUE}; labels for the tests at x-axis.
 #' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
+#' @param digits The number of digits used for printing the p-value or p-interval in the main,
+#' if using the default main.
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
 #' @method plot global_envelope
@@ -323,10 +325,10 @@ print.global_envelope <- function(x, ...) {
 plot.global_envelope <- function(x, plot_style = "basic", dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab, use_ggplot2,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
-                                 labels = NULL, add = FALSE, ...) {
+                                 labels = NULL, add = FALSE, digits=3, ...) {
   if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
   else use_ggplot2 <- FALSE
-  if(missing('main')) main <- env_main_default(x)
+  if(missing('main')) main <- env_main_default(x, digits=digits)
   if(missing('ylim')) ylim <- env_ylim_default(x, use_ggplot2)
   if(missing('xlab')) xlab <- expression(italic(r))
   if(missing('ylab')) ylab <- expression(italic(T(r)))
