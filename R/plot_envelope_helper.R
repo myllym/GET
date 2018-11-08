@@ -159,24 +159,24 @@ combined_global_envelope_rhelper <- function(x, nticks = 5) {
 
 # An internal GET function for setting the default main for a global envelope plot.
 # @param x An 'global_envelope' object.
-env_main_default <- function(x) {
+env_main_default <- function(x, digits=3) {
   if(!is.null(attr(x, "p_interval"))) {
     if(attr(x, "alternative") == "two.sided")
       main <- paste(attr(x, "method"), ": p-interval = (",
-                    round(attr(x, "p_interval")[1],3),", ",
-                    round(attr(x, "p_interval")[2],3), ")", sep="")
+                    round(attr(x, "p_interval")[1], digits=digits),", ",
+                    round(attr(x, "p_interval")[2], digits=digits), ")", sep="")
     else
       main <- paste(attr(x, "method"), ": p-interval = (",
-                    round(attr(x, "p_interval")[1],3),", ",
-                    round(attr(x, "p_interval")[2],3), ") \n",
+                    round(attr(x, "p_interval")[1], digits=digits),", ",
+                    round(attr(x, "p_interval")[2], digits=digits), ") \n",
                     "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
   }
   else {
     if(!is.null(attr(x, "p"))) {
       if(attr(x, "alternative") == "two.sided")
-        main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"),3), sep="")
+        main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"), digits=digits), sep="")
       else
-        main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"),3), "\n",
+        main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"), digits=digits), "\n",
                       "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
     }
     else {
