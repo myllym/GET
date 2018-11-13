@@ -399,7 +399,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=TRUE
       x <- rdata$x_vec
     }
 
-    linetype.values <- c('dashed', 'solid')
+    linetype.values <- c('solid', 'dashed')
     size.values <- c(0.2, 0.2)
 
     if(!separate_yaxes | is.null(rdata$r_values_newstart_id)) {
@@ -520,7 +520,7 @@ two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, yla
        !any(class(env2) %in% c("fboxplot", "global_envelope", "adjusted_envelope_test"))) stop("env1 and/or env2 is not desired object type.\n")
     if(!all(env1[['r']] == env2[['r']])) stop("The two envelopes are for different r-values.\n")
     if(!all(env1[['central']] == env2[['central']])) warning("The two envelopes have different central functions!\n")
-    linetype.values <- c('dashed', 'solid')
+    linetype.values <- c('solid', 'dashed')
     size.values <- c(0.2, 0.2)
     if(missing(xlab)) xlab <- expression(italic(r))
     if(missing(ylab)) ylab <- expression(italic(T(r)))
