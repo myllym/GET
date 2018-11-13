@@ -473,7 +473,7 @@ plot.combined_global_envelope <- function(x, plot_style = "basic", level = 1,
 #' In the case of one observed function only,
 #' the data function is considered to be \eqn{T_1(r)}{T_1(r)}.
 #'
-#' Generally an envelope is a band bounded by the vectors (or functions) 
+#' Generally an envelope is a band bounded by the vectors (or functions)
 #' \eqn{T_{\text{low}}}{T_lo} and \eqn{T_{\text{hi}}}{T_hi}.
 #' A \eqn{100(1-\alpha)}{100(1-alpha)}\% or 100*coverage\% global envelope is a set
 #' \eqn{(T_{\text{low}}, T_{\text{hi}})}{(T_lo, T_hi)} of envelope vectors
@@ -1174,7 +1174,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #' \code{rank_envelope} function.
 #'
 #' @section Global envelope:
-#' The 100(1-alpha)\% global envelope is provided in addition to the p-values. 
+#' The 100(1-alpha)\% global envelope is provided in addition to the p-values.
 #' If \code{type = "rank"} then the envelope is the global rank envelope proposed by
 #' Myllymäki et al. (2017).
 #' If \code{type = "erl"} then the envelope is the global rank envelope based on the
@@ -1416,8 +1416,8 @@ st_envelope <- function(curve_set, ...) {
 
 #' Directional quantile envelope test
 #'
-#' The directional quantile envelope test, which takes into account the unequal 
-#' variances of the test function T(r) for different distances r and is also 
+#' The directional quantile envelope test, which takes into account the unequal
+#' variances of the test function T(r) for different distances r and is also
 #' protected against asymmetry of T(r).
 #'
 #' @references
