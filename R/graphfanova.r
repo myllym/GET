@@ -43,8 +43,8 @@ maverage <- function(x, n.aver = 1L, mirror = FALSE) {
 # Transformation to equalize variances in groups
 corrUnequalVar <- function(x, groups, ...) {
   glevels <- levels(groups)
-  # Overall mean \bar{T}(r)
-  barT <- apply(x, 2, mean)
+  # Group means
+  m <- groupmeans(x, groups)
   # Sample variance over all functions, Var(T(r))
   varT <- vvar(x)
   # Variances in the groups, Var(T_j(r))
@@ -55,9 +55,9 @@ corrUnequalVar <- function(x, groups, ...) {
     v <- t(apply(v, 1, maverage, ...))
     varT <- maverage(varT, ...)
   }
-  # Take S_ij(r) = (T_ij(r) - \bar{T}(r)) / \sqrt( Var(T_j(r)) ) * Var(T(r)) + \bar{T}(r)
+  # Take S_ij(r) = (T_ij(r) - \bar{T}_j(r)) / \sqrt( Var(T_j(r)) ) * Var(T(r)) + \bar{T}_j(r)
   for(i in 1:nrow(x)) {
-    x[i,] <- (x[i,] - barT) / sqrt(v[which(rownames(v) == groups[i]),]) * sqrt(varT) + barT
+    x[i,] <- (x[i,] - m[which(rownames(m) == groups[i]),]) / sqrt(v[which(rownames(v) == groups[i]),]) * sqrt(varT) + m[which(rownames(m) == groups[i]),]
   }
   x
 }
