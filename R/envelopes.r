@@ -565,7 +565,7 @@ plot.combined_global_envelope <- function(x, plot_style = "basic", level = 1,
 #' }
 #' Additionally, the return value has attributes
 #' \itemize{
-#'   \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
+#'   \item method = The name of the envelope test used for plotting purposes ("Global envelope")
 #'   \item alternative = The alternative specified in the function call.
 #'   \item ties = As the argument \code{ties}.
 #'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
