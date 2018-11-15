@@ -640,6 +640,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),
                            central = "median", ...) {
+  if(class(curve_sets)[1] == "list" & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
   if(class(curve_sets)[1] == "list") {
     res <- combined_CR_or_GET(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
                               alternative=alternative, probs=probs,
@@ -1138,6 +1139,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
                           alternative = c("two.sided", "less", "greater"),
                           ties = "erl", probs = c(0.025, 0.975),
                           central = "mean") {
+  if(class(curve_sets)[1] == "list" & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
   if(class(curve_sets)[1] == "list") {
     res <- combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
                               alternative=alternative, probs=probs,
