@@ -61,6 +61,17 @@ corrUnequalVar <- function(x, groups, ...) {
   x
 }
 
+# Take Z_ij(r) = |T_ij(r) - \bar{T}_j(r))| to test equality of variances in groups
+testUnequalVarTrans <- function(x, groups, ...) {
+  # Group means
+  m <- groupmeans(x, groups)
+  # Take Z_ij(r) = |T_ij(r) - \bar{T}_j(r))|
+  for(i in 1:nrow(x)) {
+    x[i,] <- abs(x[i,] - m[which(rownames(m) == groups[i]),])
+  }
+  x
+}
+
 # group statistics
 #-----------------
 # x = An array with the original functions
