@@ -42,7 +42,6 @@ maverage <- function(x, n.aver = 1L, mirror = FALSE) {
 
 # Transformation to equalize variances in groups
 corrUnequalVar <- function(x, groups, ...) {
-  glevels <- levels(groups)
   # Group means
   m <- groupmeans(x, groups)
   # Sample variance over all functions, Var(T(r))
