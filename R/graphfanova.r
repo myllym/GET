@@ -73,6 +73,21 @@ testUnequalVarTrans <- function(x, groups) {
   x
 }
 
+# Tranformation for testing equality of lag s covariances in groups
+testUnequalCovTrans <- function(x, groups, lag=1) {
+  n.obs <- ncol(x)
+  # Group means
+  m <- groupmeans(x, groups)
+  # Take Z_ij(r) = sqrt{(T_ij(r) - \bar{T}_j(r)))(T_ij(r+lag) - \bar{T}_j(r+lag)))} * sign
+  xnew <- matrix(nrow=nrow(x), ncol=ncol(x)-lag)
+  for(i in 1:nrow(xnew)) {
+    xj <- m[which(rownames(m) == groups[i]),] # Group mean
+    cov <- (x[i,1:(n.obs-lag)] - xj[1:(n.obs-lag)])*(x[i,(1+lag):n.obs]-xj[(1+lag):n.obs])
+    xnew[i,] <- sqrt(abs(cov)) * sign(cov)
+  }
+  xnew
+}
+
 # group statistics
 #-----------------
 # x = An array with the original functions
