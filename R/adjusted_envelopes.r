@@ -256,10 +256,12 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.ar
 #' passed to 'simfun' as the argument 'simfun.arg'.
 #' @param simfun.arg The parameter to be passed to simfun. The function simfun should handle
 #' with the structure of simfun.param. FIXME should be here or not?
-#' @param ... Additional parameters passed to \code{\link[spatstat]{envelope}}.
-#' For example, the test function in the argument 'fun' and further specifications regarding that.
-#' If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
-#' (if simfun not provided), then also recall to specify how to generate the simulations.
+#' @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
+#' A list of parameters should be provided for each test function that is to be used in the combined test.
+#' @param ... Additional parameters to \code{\link[spatstat]{envelope}} in the case where only one test
+#' function is used. In that case, this is an alternative to providing the parameter in the argument
+#' testfuns. If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null
+#' hypothesis (if simfun not provided), then also recall to specify how to generate the simulations.
 #' @inheritParams global_envelope_test
 #' @param r_min The minimum radius to include in the test.
 #' @param r_max The maximum radius to include in the test. Note: cannot be larger than r-values used
@@ -268,9 +270,9 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.ar
 #' test function is reduced from the test functions. If TRUE, then: If \code{\link[spatstat]{envelope}}
 #' provides the theoretical value 'theo' for the simulated model, then this value is used. Otherwise,
 #' the theoretical function is taken as the mean of the simulations.
-#' @param ties Ties method to be passed to \code{\link{global_envelope_test}}.
-#' Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
-#' length p-value.
+# @param ties Ties method to be passed to \code{\link{global_envelope_test}}.
+# Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
+# length p-value.
 #' @param save.cons.envelope Logical flag indicating whether to save the unadjusted envelope test results.
 #' @param savefuns Logical flag indicating whether to save all the simulated function values.
 #' See \code{\link[spatstat]{envelope}}.
