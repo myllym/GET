@@ -208,6 +208,11 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' in the use of \code{\link[spatstat]{envelope}}. However, this function allows for more general
 #' use as described above and for the different global envelope tests.
 #'
+#' For the rank envelope test, the test is the test described in Myllymäki et al. (2017) with the
+#' adjustment of Baddeley et al. (2017).
+#' For other test types, the test (also) uses the two-stage procedure of Dao and Genton (2014) with
+#' the adjustment of Baddeley et al. (2017).
+#'
 #' @param X An object containing point pattern data. A point pattern (object of class "ppp")
 #' or a fitted point process model (object of class "ppm" or "kppm"). See
 #' \code{\link[spatstat]{envelope}}.
