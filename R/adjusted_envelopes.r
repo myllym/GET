@@ -266,7 +266,7 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' Dao, N.A. and Genton, M. (2014). A Monte Carlo adjusted goodness-of-fit test for parametric models describing spatial point patterns. Journal of Graphical and Computational Statistics 23, 497-517.
 #'
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
-#' \code{\link{plot.adjusted_combined_envelope_test}}
+#' \code{\link{plot.global_envelope}}, \code{\link{saplings}}
 #' @export
 #' @importFrom spatstat is.ppm
 #' @importFrom spatstat is.kppm
