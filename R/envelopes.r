@@ -372,7 +372,7 @@ plot.global_envelope <- function(x, plot_style = "basic", dotplot = length(x$r)<
 #' @export
 print.combined_global_envelope <- function(x, ...) {
   print(x$step2_test)
-  cat(paste("with first level measure \"", attr(res$global_envelope_ls[[1]], "type"), "\".\n", sep=""))
+  cat(paste("with first level measure \"", attr(x$global_envelope_ls[[1]], "type"), "\".\n", sep=""))
 }
 
 #' Plot method for the class 'combined_global_envelope'
