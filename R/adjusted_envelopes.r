@@ -279,14 +279,12 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' @importFrom spatstat update.slrm
 #' @importFrom parallel mclapply
 #' @importFrom stats quantile
-dg.combined_global_envelope <- function(X, nsim = 499, nsimsub = nsim,
-        simfun=NULL, fitfun=NULL, ...,
-        testfuns = NULL, type = c("qdir", "st", "rank"),
-        alpha = 0.05, alternative = c("two.sided", "less", "greater"),
+dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
+        simfun=NULL, fitfun=NULL, simfun.arg=NULL, testfuns=NULL, ..., type = "erl",
+        alpha = 0.05, alternative = c("two.sided","less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,
-        #rank_count_test_p_values = FALSE, ties="erl",
         save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
-        verbose=TRUE, mc.cores=1L) {
+        verbose=TRUE, MrkvickaEtal2017 = FALSE, mc.cores=1L) {
     Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
     if(is.null(simfun) != is.null(fitfun)) stop("Either both \'simfun\' and \'fitfun\' should be provided or neither of them.\n")
     if((is.null(simfun) | is.null(fitfun)) & !Xismodel)
