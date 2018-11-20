@@ -224,7 +224,9 @@ contrasts <- function(x, groups, ...){
 #' plot(res, separate_yaxes=FALSE)
 #' res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts", type="erl")
 #' plot(res2, separate_yaxes=TRUE)
-graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun, alpha=0.05, n.aver = 1L, mirror = FALSE, saveperm=FALSE, ...) {
+graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun, alpha = 0.05,
+                         n.aver = 1L, mirror = FALSE, saveperm=FALSE,
+                         test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
   curve_set <- convert_fdata(curve_set)
@@ -235,8 +237,20 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun,
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
     groups <- as.factor(groups)
   }
-  if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
-  if(variances == "unequal") x <- corrUnequalVar(x, groups, n.aver, mirror)
+  r <- curve_set[['r']]
+  test.equality <- match.arg(test.equality)
+  switch(test.equality,
+         "mean" = {
+           if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
+           if(variances == "unequal") x <- corrUnequalVar(x, groups, n.aver, mirror)
+         },
+         "var" = {
+           x <- testUnequalVarTrans(x, groups)
+         },
+         "cov" = {
+           x <- testUnequalCovTrans(x, groups, lag=cov.lag)
+           r <- r[1:(length(r)-cov.lag)]
+         })
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
 
   summaryfun <- spatstat::pickoption("sumf", summaryfun, c(means = "means",
@@ -255,7 +269,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun,
   # labels for comparisons (rownames(sim) is the same as names(obs))
   complabels <- unique(names(obs))
 
-  cset <- create_curve_set(list(r = rep(curve_set[['r']], times=length(complabels)),
+  cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
                                 obs = obs,
                                 sim_m = sim))
   res_rank <- global_envelope_test(cset, alpha=alpha, alternative="two.sided", ...)
