@@ -373,8 +373,6 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
       res$step2_test$lo <- LB
       res$step2_test$hi <- UB
       attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
-      attr(res$step2_test, "p") <- NULL
-      attr(res$step2_test, "p_interval") <- NULL
       # Re-calculate the new qdir/st envelopes
       envchars <- combined_scaled_MAD_bounding_curves_chars(attr(tX, "simfuns"), type = type)
       central_curves_ls <- lapply(attr(tX, "simfuns"), function(x) get_T_0(x))
