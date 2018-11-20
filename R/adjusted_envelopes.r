@@ -138,61 +138,32 @@ simpatterns_and_funcs_from_X <- function(X, nsim, simfun=NULL, simfun.arg=NULL, 
 # @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
 # \code{\link{global_envelope_test}}
 #' @importFrom spatstat envelope
-combined_global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL, ...,
-        testfuns = NULL,
-        type = c("rank", "qdir", "st"),
-        alpha = 0.05, alternative = c("two.sided", "greater", "less"),
+global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
+        testfuns = NULL, ...,
+        type = "erl", alpha = 0.05, alternative = c("two.sided", "greater", "less"),
         r_min = NULL, r_max = NULL, take_residual = FALSE,
         ties = "erl", probs = c(0.025, 0.975),
         save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
         verbose = FALSE, MrkvickaEtal2017 = FALSE) {
-  type <- match.arg(type)
   alt <- match.arg(alternative)
-
   nfuns <- length(testfuns)
-  if(length(r_min) != nfuns) stop("r_min should give the minimum distances for each of the test functions.\n")
-  if(length(r_max) != nfuns) stop("r_max should give the maximum distances for each of the test functions.\n")
-  testfuns_argnames_ls <- lapply(testfuns, function(x) names(x))
-  if(!is.null(simfun)) {
-      # Create simulations by the given function
-      simpatterns <- replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)
-      # Calculate the test functions
-      for(i in 1:nfuns) {
-          tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
-          for(j in 1:length(testfuns_argnames_ls[[i]]))
-              tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], "=testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-          tmpstring <- paste(tmpstring, "savefuns=TRUE, savepatterns=FALSE, verbose=verbose, ...)", sep="")
-          eval(parse(text = tmpstring))
-      }
-  }
-  else {
-      # Create simulations from the given model and calculate the test functions
-      i = 1
-      tmpstring <- paste("spatstat::envelope(X, nsim=nsim, ", sep="")
-      for(j in 1:length(testfuns_argnames_ls[[i]]))
-          tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-      tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = TRUE, verbose=verbose, ...)", sep="")
-      X.testfunc1 <- eval(parse(text = tmpstring))
-      simpatterns <- attr(X.testfunc1, "simpatterns")
-      for(i in 2:nfuns) {
-          tmpstring <- paste("X.testfunc", i, " <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
-          for(j in 1:length(testfuns_argnames_ls[[i]]))
-              tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], "=testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-          tmpstring <- paste(tmpstring, "savefuns=TRUE, savepatterns=FALSE, verbose=verbose, ...)", sep="")
-          eval(parse(text = tmpstring))
-      }
-  }
-  curve_sets_ls <- NULL
-  for(i in 1:nfuns) curve_sets_ls[[i]] <- get(paste("X.testfunc", i, sep=""))
+  if(nfuns < 1) nfuns <- 1
+  if(!is.null(r_min) & length(r_min) != nfuns) stop("r_min should give the minimum distances for each of the test functions.\n")
+  if(!is.null(r_max) & length(r_max) != nfuns) stop("r_max should give the maximum distances for each of the test functions.\n")
+
+  # Create simulations from the given model and calculate the test functions
+  curve_sets_ls <- simpatterns_and_funcs_from_X(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg,
+                                                testfuns=testfuns, ...,
+                                                savepatterns=savepatterns, verbose=verbose, calc_funcs=TRUE)
   # Crop curves (if r_min or r_max given)
   tmpfunc <- function(i) crop_curves(curve_sets_ls[[i]], r_min=r_min[i], r_max=r_max[i])
   curve_sets_ls <- lapply(1:nfuns, FUN=tmpfunc)
 
   # Make the test
-  if(MrkvickaEtal2017 & type %in% c("st", "qdir")) {
+  if(length(curve_sets_ls) > 1 & MrkvickaEtal2017 & type %in% c("st", "qdir")) {
     global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, type=type, alpha=alpha, probs=probs)
-    stat <- attr(global_envtest$rank_test, "k")[1]
-    pval <- attr(global_envtest$rank_test, "p")
+    stat <- attr(global_envtest$step2_test, "k")[1]
+    pval <- attr(global_envtest$step2_test, "p")
     curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
   }
   else {
@@ -203,10 +174,10 @@ combined_global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.ar
   }
 
   res <- structure(list(statistic = as.numeric(stat), p.value = pval,
-                  method = type, curve_sets = curve_sets_ls), class = "global_envelope_with_sims")
+                  method = type, curve_set = curve_sets_ls), class = "global_envelope_with_sims")
   if(save.envelope) attr(res, "envelope_test") <- global_envtest
-  if(savefuns) attr(res, "simfuns") <- curve_sets_ls
-  if(savepatterns) attr(res, "simpatterns") <- simpatterns
+  if(savefuns) attr(res, "simfuns") <- curve_sets_ls # FIXME two times curve_set_ls saved
+  if(savepatterns) attr(res, "simpatterns") <- attr(curve_sets_ls[[1]], "simpatterns")
 
   res
 }
