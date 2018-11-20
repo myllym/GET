@@ -251,6 +251,10 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' See \code{\link[spatstat]{envelope}}.
 #' @param verbose Logical flag indicating whether to print progress reports during the simulations.
 #' See \code{\link[spatstat]{envelope}}.
+#' @param MrkvickaEtal2017 Logical. If TRUE, type is "st" or "qdir" and several test functions are used,
+#' then the combined scaled MAD envelope presented in Mrkvička et al. (2017) is calculated. Otherwise,
+#' the two-step procedure described in \code{\link{global_envelope_test}} is used for combining the tests.
+#' Default to FALSE.
 #' @param mc.cores The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 #' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
 #' (no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
