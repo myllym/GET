@@ -102,7 +102,11 @@ simpatterns_and_funcs_from_X <- function(X, nsim, simfun=NULL, simfun.arg=NULL, 
 # the point patterns from the null hypothesis.
 # @param simfun.arg The parameter to be passed to simfun. The function simfun should handle
 # with the structure of simfun.param.
-# @param ... Additional parameters passed to \code{\link[spatstat]{envelope}}.
+# @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
+# A list of parameters should be provided for each test function that is to be used in the combined test.
+# @param ... Additional parameters to \code{\link[spatstat]{envelope}} in the case where only one test
+# function is used. In that case, this is an alternative to providing the parameter in the argument
+# testfuns.
 # For example, the test function in the argument 'fun' and further specifications regarding that.
 # If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
 # (if simfun not provided), then also recall to specify how to generate the simulations.
