@@ -230,7 +230,7 @@ contrasts <- function(x, groups, ...){
 #' # Test the equality of means in the groups (fANOVA)
 #' res <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means")
 #' plot(res, separate_yaxes=FALSE)
-#' res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts", type="erl")
+#' res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts")
 #' plot(res2, separate_yaxes=TRUE)
 graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun, alpha = 0.05,
                          n.aver = 1L, mirror = FALSE, saveperm=FALSE,
