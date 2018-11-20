@@ -1,3 +1,71 @@
+# A helper function to generate simulations from "X" and calculate test functions for them.
+#
+# If X is a point pattern (object of class "ppp"), then CSR is simulated.
+# If X is a fitted point process model (object of class "ppm" or "kppm"),
+# the simulated model is that model.
+# simfun and simfun.arg can alternatively be used to specify how to generate the simulations,
+# see global_envelope_with_sims below.
+# If testfuns is given, then also several different test functions can be calculated.
+simpatterns_and_funcs_from_X <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfuns=NULL, ...,
+                                         savepatterns=FALSE, verbose=FALSE, calc_funcs=TRUE) {
+  nfuns <- length(testfuns)
+  testfuns_argnames_ls <- lapply(testfuns, function(x) names(x))
+  X.ls <- NULL
+  if(!is.null(simfun)) {
+    # Create simulations by the given function
+    simpatterns <- replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)
+    # Calculate the test functions
+    if(is.null(testfuns)) {
+      X.ls[[1]] <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    }
+    else {
+      # More than one test function, calculate only the first one unless if calc_funcs==TRUE
+      i <- 1
+      tmpstring <- paste("X.ls[[1]] <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
+      for(j in 1:length(testfuns_argnames_ls[[i]]))
+        tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], "=testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
+      tmpstring <- paste(tmpstring, "savefuns=TRUE, savepatterns=savepatterns, verbose=verbose, ...)", sep="")
+      eval(parse(text = tmpstring))
+      if(calc_funcs & nfuns > 1) {
+        for(i in 2:nfuns) {
+          tmpstring <- paste("X.ls[[i]] <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
+          for(j in 1:length(testfuns_argnames_ls[[i]]))
+            tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], "=testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
+          tmpstring <- paste(tmpstring, "savefuns=TRUE, savepatterns=FALSE, verbose=verbose, ...)", sep="")
+          eval(parse(text = tmpstring))
+        }
+      }
+    }
+  }
+  else {
+    # Create simulations from the given model and calculate the test functions
+    if(is.null(testfuns)) {
+      X.ls[[1]] <- spatstat::envelope(X, nsim=nsim, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
+    }
+    else {
+      i <- 1
+      tmpstring <- paste("X.ls[[1]] <- spatstat::envelope(X, nsim=nsim, ", sep="")
+      for(j in 1:length(testfuns_argnames_ls[[i]]))
+        tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
+      tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = TRUE, verbose=verbose, ...)", sep="")
+      eval(parse(text = tmpstring))
+      if(calc_funcs) {
+        simpatterns <- attr(X.ls[[1]], "simpatterns")
+        if(calc_funcs & nfuns > 1) {
+          for(i in 2:nfuns) {
+            tmpstring <- paste("X.ls[[i]] <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
+            for(j in 1:length(testfuns_argnames_ls[[i]]))
+              tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], "=testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
+            tmpstring <- paste(tmpstring, "savefuns=TRUE, savepatterns=FALSE, verbose=verbose, ...)", sep="")
+            eval(parse(text = tmpstring))
+          }
+        }
+      }
+    }
+  }
+  X.ls
+}
+
 # A global envelope test
 #
 # A global envelope test including simulations from a point process model.
