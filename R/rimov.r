@@ -34,6 +34,13 @@
 #' }
 #' for(i in 1:3) subs(i, main=paste("group ", i, sep=""), ylab="Temperature")
 #'
+#' # Test for equality of variances among groups
+#' system.time(res.homosce <- graph.fanova(nsim=2499, curve_set=rimov, groups=groups,
+#'                                     summaryfun="means", type="erl",
+#'                                     test.equality = "var"))
+#' plot(res.homosce)
+#'
+#' # fANOVA assuming equality of variances
 #' system.time(res <- graph.fanova(nsim=2499, curve_set=rimov, groups=groups,
 #'                                 summaryfun="means", type="erl"))
 #' plot(res)
