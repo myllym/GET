@@ -204,7 +204,18 @@ contrasts <- function(x, groups, ...){
 #' @param mirror The complement of the argument circular of \code{\link[stats]{filter}}.
 #' @param saveperm Logical. If TRUE, then the functions from permutations are saved to the attribute
 #' simfuns.
-#' @param ... Additional parameters to be passed to \code{\link{rank_envelope}}.
+#' @param test.equality A character with possible values \code{mean} (default), \code{var} and
+#' \code{cov}. If \code{mean}, the functional ANOVA is performed to compare the means in the groups.
+#' If \code{var}, then the equality of variances of the curves in the groups is tested by performing
+#' the graphical functional ANOVA test on the functions
+#' \deqn{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}
+#' If \code{cov}, then the equality of lag \code{cov.lag} covariance is tested by performing the fANOVA with
+#' \deqn{W_{ij}(r) = \sqrt{|V_{ij}(r)|\cdot sign(V_{ij}(r))},}{|V_{ij}(r)| sign(V_{ij}(r)),}
+#' where \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
+#' See Mrkvicka et al. (2018) for more details.
+#' @param cov.lag The lag of the covariance for testing the equality of covariances,
+#' see \code{test.equality}.
+#' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @export
 #' @references
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
