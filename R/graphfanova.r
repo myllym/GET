@@ -218,9 +218,17 @@ contrasts <- function(x, groups, ...){
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #'
-#' # type = "erl" is passed to global_envelope_test to obtain the rank envelope based on
-#' # the extreme rank length ordering of the functions
-#' res <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means", type="erl")
+#' # Test for equality of variances in the groups
+#' resV <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means",
+#'                      test.equality="var")
+#' plot(resV, separate_yaxes=FALSE)
+#' # Test for equality of lag 1 covariances in the groups
+#' resC <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means",
+#'                      test.equality="cov", cov.lag=1)
+#' plot(resC, separate_yaxes=FALSE)
+#'
+#' # Test the equality of means in the groups (fANOVA)
+#' res <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means")
 #' plot(res, separate_yaxes=FALSE)
 #' res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts", type="erl")
 #' plot(res2, separate_yaxes=TRUE)
