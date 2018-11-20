@@ -72,6 +72,8 @@ simpatterns_and_funcs_from_X <- function(X, nsim, simfun=NULL, simfun.arg=NULL, 
 #
 #
 # Details of the tests are given in \code{\link{global_envelope_test}}.
+# For the combined directional quantile and studentized envelope tests of Mrkvička et al. (2017)
+# see \code{\link{combined_scaled_MAD_envelope}}.
 #
 # The specification of X is important here:
 # if simfun is not provided, the function \code{\link[spatstat]{envelope}} is used to generate
@@ -84,6 +86,9 @@ simpatterns_and_funcs_from_X <- function(X, nsim, simfun=NULL, simfun.arg=NULL, 
 # If simfun is provided, then the null model is the one simulated by this given function,
 # and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
 # pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
+#
+# If savefuns is TRUE, all the simulated functions are saved in an attribute "simfuns" as a list
+# of curve sets for each test function.
 #
 # @param X An object containing point pattern data. A point pattern (object of class "ppp")
 # or a fitted point process model (object of class "ppm" or "kppm"). See
