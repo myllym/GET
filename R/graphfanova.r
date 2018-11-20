@@ -61,8 +61,9 @@ corrUnequalVar <- function(x, groups, ...) {
   x
 }
 
-# Take Z_ij(r) = |T_ij(r) - \bar{T}_j(r))| to test equality of variances in groups
-testUnequalVarTrans <- function(x, groups, ...) {
+# Transformation for testing equality of variances in groups
+# Take Z_ij(r) = |T_ij(r) - \bar{T}_j(r))|
+testUnequalVarTrans <- function(x, groups) {
   # Group means
   m <- groupmeans(x, groups)
   # Take Z_ij(r) = |T_ij(r) - \bar{T}_j(r))|
