@@ -287,7 +287,7 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' @importFrom spatstat update.slrm
 #' @importFrom parallel mclapply
 #' @importFrom stats quantile
-dg.global_envelope <- function(X, nsim = 499, nsimsub = nsim,
+dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
         simfun=NULL, fitfun=NULL, simfun.arg=NULL, testfuns=NULL, ..., type = "erl",
         alpha = 0.05, alternative = c("two.sided","less", "greater"),
         r_min=NULL, r_max=NULL, take_residual=FALSE,

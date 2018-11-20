@@ -80,7 +80,7 @@
 #'  curves. Usually there is no need to call \code{\link{forder}} directly.
 #' \item \emph{Adjusted} global envelope tests for composite hypotheses
 #' \itemize{
-#'   \item \code{\link{dg.global_envelope}}, see a detailed example in \code{\link{saplings}}
+#'   \item \code{\link{dg.global_envelope_test}}, see a detailed example in \code{\link{saplings}}
 #' }
 #' \item \emph{One-way functional ANOVA}:
 #'  \itemize{
@@ -141,7 +141,7 @@
 #'            \item Fit the model to your data by means of the function
 #'                  \code{\link[spatstat]{ppm}} or \code{\link[spatstat]{kppm}}.
 #'                  See the help documentation for possible models.
-#'            \item Use \code{\link{dg.global_envelope}} to create nsim simulations
+#'            \item Use \code{\link{dg.global_envelope_test}} to create nsim simulations
 #'                  from the fitted model, to calculate the functions you want,
 #'                  and to make an adjusted global envelope test.
 #'                  See the detailed example in \code{\link{saplings}}.

@@ -78,7 +78,7 @@
 #' # (For the rank envelope test, choose type = "rank" instead and increase nsim.)
 #' system.time( # timing; takes a lot of time,
 #'              # if nsim is reasonably large (for 'qdir' & nsim=499, about 1,6 h)
-#'   adjenvL <- dg.global_envelope(X = fitted_model,
+#'   adjenvL <- dg.global_envelope_test(X = fitted_model,
 #'                                fun="Lest", correction="translate",
 #'                                transform = expression(.-r), r=r,
 #'                                type = "qdir", nsim = nsim, nsimsub = nsim,
@@ -96,7 +96,7 @@
 #' # To further explore the goodness-of-fit of the Matern cluster process, test the
 #' # model with the J function:
 #' system.time( # timing; takes a lot of time if nsim is reasonably large
-#'   adjenvJ <- dg.global_envelope(X = fitted_model,
+#'   adjenvJ <- dg.global_envelope_test(X = fitted_model,
 #'                                 fun="Jest", correction="none", r=rJ,
 #'                                 type = "qdir", nsim = nsim, nsimsub = nsim,
 #'                                 r_min=rminJ, r_max=rmaxJ,
