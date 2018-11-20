@@ -117,6 +117,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alpha = 0.05,
                                          probs = c(0.025, 0.975), central = "mean", ...) {
     ntests <- length(curve_sets)
+    if(ntests <= 1) stop("Number of functions should be at least two.\n")
     type <- match.arg(type)
     curve_sets <- check_curve_set_dimensions(curve_sets)
     # Make the individual tests saving the deviations
