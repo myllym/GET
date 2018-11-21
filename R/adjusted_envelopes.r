@@ -273,7 +273,7 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
 #' (no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
 #'
-#' @return An object of class adjusted_envelope_test.
+#' @return An object of class \code{global_envelope} or \code{combined_global_envelope}.
 #' @references
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
 #'
