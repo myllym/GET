@@ -169,8 +169,15 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
   else {
     global_envtest <- global_envelope_test(curve_sets_ls, type=type, alpha=alpha,
                                            alternative=alt, ties=ties, probs=probs)
-    stat <- attr(global_envtest, "k")[1]
-    pval <- attr(global_envtest, "p")
+    switch(class(global_envtest)[1],
+           global_envelope = {
+             stat <- attr(global_envtest, "k")[1]
+             pval <- attr(global_envtest, "p")
+           },
+           combined_global_envelope = {
+             stat <- attr(global_envtest$step2_test, "k")[1]
+             pval <- attr(global_envtest$step2_test, "p")
+           })
   }
 
   res <- structure(list(statistic = as.numeric(stat), p.value = pval,
@@ -372,7 +379,8 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
       # Update res object with adjusted values
       res$step2_test$lo <- LB
       res$step2_test$hi <- UB
-      attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
+      attr(res$step2_test, "method") <- "Adjusted global envelope test" # Change method name
+      attr(res$step2_test, "k_alpha_star") <- kalpha_star # Add kalpha_star
       # Re-calculate the new qdir/st envelopes
       envchars <- combined_scaled_MAD_bounding_curves_chars(attr(tX, "simfuns"), type = type)
       central_curves_ls <- lapply(attr(tX, "simfuns"), function(x) get_T_0(x))
@@ -403,19 +411,28 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
         # Update res object with adjusted values
         res$lo <- LB
         res$hi <- UB
+        attr(res, "method") <- "Adjusted global envelope test" # Change method name
         attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
       }
       else {
         alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
         res <- global_envelope_test(tX$curve_set, type=type, alpha=alpha_star, alternative=alt)
         # Save additional arguments
-        attr(res, "alpha") <- alpha
-        attr(res, "alpha_star") <- alpha_star
+        switch(class(res)[1],
+               global_envelope = {
+                 attr(res, "method") <- "Adjusted global envelope test" # Change method name
+                 attr(res, "alpha") <- alpha
+                 attr(res, "alpha_star") <- alpha_star
+               },
+               combined_global_envelope = {
+                 attr(res$step2_test, "method") <- "Adjusted global envelope test"
+                 attr(res$step2_test, "alpha") <- alpha
+                 attr(res$step2_test, "alpha_star") <- alpha_star
+               })
       }
     }
 
     # Changes
-    attr(res, "method") <- "Adjusted global envelope test" # Change method name
     attr(res, "call") <- match.call() # Update "call" attribute
     # Additions
     if(savepatterns) attr(res, "simpatterns") <- simpatterns
