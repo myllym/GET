@@ -220,6 +220,8 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' For other test types, the test (also) uses the two-stage procedure of Dao and Genton (2014) with
 #' the adjustment of Baddeley et al. (2017).
 #'
+#' See examples in \code{\link{saplings}}.
+#'
 #' @param X An object containing point pattern data. A point pattern (object of class "ppp")
 #' or a fitted point process model (object of class "ppm" or "kppm"). See
 #' \code{\link[spatstat]{envelope}}.
