@@ -289,12 +289,12 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
                                 obs = obs,
                                 sim_m = sim))
-  res_rank <- global_envelope_test(cset, alpha=alpha, alternative="two.sided", ...)
+  res <- global_envelope_test(cset, alpha=alpha, alternative="two.sided", ...)
 
-  res <- structure(list(ranktest = res_rank,
-                        summaryfun = summaryfun,
-                        labels = complabels,
-                        call = match.call()), class = "graph.fanova")
+  attr(res, "method") <- "Graphical functional ANOVA" # Change method name
+  attr(res, "summaryfun") <- summaryfun
+  attr(res, "labels") <- complabels
+  attr(res, "call") <- match.call()
   if(saveperm) attr(res, "simfuns") <- sim
   res
 }
