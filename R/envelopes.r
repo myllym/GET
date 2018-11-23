@@ -289,7 +289,8 @@ print.global_envelope <- function(x, ...) {
 }
 
 #' Plot method for the class 'global_envelope'
-#' @usage \method{plot}{global_envelope}(x, plot_style = "basic", dotplot = length(x$r)<10,
+#' @usage \method{plot}{global_envelope}(x, plot_style = c("basic", "fv", "ggplot2"),
+#'    dotplot = length(x$r)<10,
 #'    main, ylim, xlab, ylab, use_ggplot2,
 #'    color_outside = TRUE, env.col = 1, base_size = 15,
 #'    labels = NULL, add = FALSE, digits=3,
@@ -334,7 +335,8 @@ print.global_envelope <- function(x, ...) {
 #' @export
 #' @seealso \code{\link{central_region}}
 #' @importFrom spatstat pickoption
-plot.global_envelope <- function(x, plot_style = "basic", dotplot = length(x$r)<10,
+plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
+                                 dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab, use_ggplot2,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
                                  labels = NULL, add = FALSE, digits = 3,
@@ -361,13 +363,7 @@ plot.global_envelope <- function(x, plot_style = "basic", dotplot = length(x$r)<
   if(missing('xlab')) xlab <- expression(italic(r))
   if(missing('ylab')) ylab <- expression(italic(T(r)))
 
-  plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
-                                                            b = "basic",
-                                                            fv = "fv",
-                                                            f = "fv",
-                                                            ggplot2 = "ggplot2",
-                                                            ggplot = "ggplot2",
-                                                            g = "ggplot2"))
+  plot_style <- match.arg(plot_style)
 
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   if(("global_envelope_ls" %in% names(attributes(x))) & level == 1) { # Combined test, level 1 plots
