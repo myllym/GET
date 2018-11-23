@@ -356,7 +356,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
   }
   if(missing('ylim')) {
     if(!separate_yaxes | plot_style != "ggplot2") {
-      if("global_envelope_ls" %in% names(attributes(x))) { # Combined test
+      if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test (level 1)
         ylim <- env_ylim_default(attr(x, "global_envelope_ls"), use_ggplot2)
       }
       else {
