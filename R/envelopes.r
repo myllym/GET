@@ -295,7 +295,7 @@ print.global_envelope <- function(x, ...) {
 #'    color_outside = TRUE, env.col = 1, base_size = 15,
 #'    labels = NULL, add = FALSE, digits=3,
 #'    level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2, ...)
-#' @param x an 'global_envelope' object
+#' @param x An 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
 #' The option "basic" (default) offers a very basic global envelope plot.
 #' The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
