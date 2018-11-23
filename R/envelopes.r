@@ -353,15 +353,19 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
     }
   }
   if(missing('ylim')) {
-    if("global_envelope_ls" %in% names(attributes(x))) { # Combined test
-      ylim <- env_ylim_default(attr(x, "global_envelope_ls"), use_ggplot2)
+    if(!separate_yaxes) {
+      if("global_envelope_ls" %in% names(attributes(x))) { # Combined test
+        ylim <- env_ylim_default(attr(x, "global_envelope_ls"), use_ggplot2)
+      }
+      else {
+        ylim <- env_ylim_default(x, use_ggplot2)
+      }
     }
-    else {
-      ylim <- env_ylim_default(x, use_ggplot2)
-    }
+    else ylim <- NULL
   }
   if(missing('xlab')) xlab <- expression(italic(r))
   if(missing('ylab')) ylab <- expression(italic(T(r)))
+  if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
 
   plot_style <- match.arg(plot_style)
 
