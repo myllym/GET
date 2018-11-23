@@ -235,7 +235,8 @@ env_ylim_default <- function(x, use_ggplot2) {
 #' @importFrom graphics arrows
 #' @importFrom graphics points
 #' @importFrom graphics axis
-env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE, labels=NULL, add=FALSE, arrows.col, ...) {
+env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
+                        labels=NULL, add=FALSE, arrows.col, ...) {
     nr <- length(x[['r']])
     if(is.null(labels)) labels <- paste(round(x[['r']], digits=2))
     if(missing(arrows.col)) arrows.col <- 1
