@@ -149,8 +149,8 @@ combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alp
     }
 
     # Return
-    res <- list(global_envelope_ls = res_ls,
-                step2_test = res_rank, step2_test_curve_set = curve_set_u)
-    class(res) <- "combined_global_envelope"
+    res <- res_rank
+    attr(res, "global_envelope_ls") <- res_ls
+    attr(res, "level2_curve_set") <- curve_set_u
     res
 }
