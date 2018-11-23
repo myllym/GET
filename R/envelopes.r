@@ -258,9 +258,9 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   }
 
   # Return
-  res <- list(global_envelope_ls=res_ls,
-              step2_test=res_erl, step2_test_curve_set=curve_set_u)
-  class(res) <- "combined_global_envelope"
+  res <- res_erl
+  attr(res, "global_envelope_ls") <- res_ls
+  attr(res, "level2_curve_set") <- curve_set_u
   res
 }
 
