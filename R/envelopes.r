@@ -292,8 +292,8 @@ print.global_envelope <- function(x, ...) {
 #' @usage \method{plot}{global_envelope}(x, plot_style = "basic", dotplot = length(x$r)<10,
 #'    main, ylim, xlab, ylab, use_ggplot2,
 #'    color_outside = TRUE, env.col = 1, base_size = 15,
-#'    labels = NULL, add = FALSE, digits=3, ...)
-#'
+#'    labels = NULL, add = FALSE, digits=3,
+#'    level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2, ...)
 #' @param x an 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
 #' The option "basic" (default) offers a very basic global envelope plot.
@@ -326,91 +326,27 @@ print.global_envelope <- function(x, ...) {
 plot.global_envelope <- function(x, plot_style = "basic", dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab, use_ggplot2,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
-                                 labels = NULL, add = FALSE, digits=3, ...) {
-  if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
-  else use_ggplot2 <- FALSE
-  if(missing('main')) main <- env_main_default(x, digits=digits)
-  if(missing('ylim')) ylim <- env_ylim_default(x, use_ggplot2)
-  if(missing('xlab')) xlab <- expression(italic(r))
-  if(missing('ylab')) ylab <- expression(italic(T(r)))
-
-  plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
-                                                            b = "basic",
-                                                            fv = "fv",
-                                                            f = "fv",
-                                                            ggplot2 = "ggplot2",
-                                                            ggplot = "ggplot2",
-                                                            g = "ggplot2"))
-
-  switch(plot_style,
-         basic = {
-           if(dotplot) {
-             env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                         color_outside=color_outside, labels=labels,
-                         add=add, arrows.col=env.col, ...)
-           }
-           else {
-             env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                            color_outside=color_outside, add=add, env.col=env.col, ...)
-           }
-         },
-         fv = {
-           spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
-         },
-         ggplot2 = {
-           env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                      labels=labels, ...)
-         })
-}
-
-#' Print method for the class 'combined_global_envelope'
-#' @usage \method{print}{combined_global_envelope}(x, ...)
-#'
-#' @param x an 'combined_global_envelope' object
-#' @param ... Ignored.
-#'
-#' @method print combined_global_envelope
-#' @export
-print.combined_global_envelope <- function(x, ...) {
-  print(x$step2_test)
-  cat(paste("with first level measure \"", attr(x$global_envelope_ls[[1]], "type"), "\".\n", sep=""))
-}
-
-#' Plot method for the class 'combined_global_envelope'
-#' @usage \method{plot}{combined_global_envelope}(x, plot_style = "basic", level = 1,
-#'   main, ylim, xlab, ylab, use_ggplot2,
-#'   separate_yaxes = FALSE, max_ncols_of_plots = 2,
-#'   labels = NULL,
-#'   color_outside = TRUE, env.col = 1, base_size = 15,
-#'   add = FALSE, ...)
-#'
-#' @param x an 'combined_global_envelope' object
-#' @inheritParams plot.global_envelope
-#' @param level 1 for plotting the combined global envelopes or
-#' 2 for plotting the second level ERL test result.
-#' @param separate_yaxes Logical (default FALSE). If TRUE, then separate y-axes are used for
-#' different parts of a combined test. If FALSE, then the components are displayed one next to each other
-#' with a joint y-axis.
-#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
-#' number of columns for figures. Default 2.
-#' @param labels Labels for the separate plots (for \code{plot_style = "ggplot2"}).
-#' Ignored if separate_yaxes is FALSE. Or, for \code{dotplot = TRUE}, labels for the tests at x-axis.
-#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
-#'
-#' @method plot combined_global_envelope
-#' @export
-plot.combined_global_envelope <- function(x, plot_style = "basic", level = 1,
-                                          main, ylim, xlab, ylab, use_ggplot2,
-                                          separate_yaxes = FALSE, max_ncols_of_plots = 2, labels = NULL,
-                                          color_outside = TRUE, env.col = 1, base_size = 15,
-                                          add = FALSE, ...) {
+                                 labels = NULL, add = FALSE, digits = 3,
+                                 level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2, ...) {
   if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
   else use_ggplot2 <- FALSE
   if(missing('main')) {
-    attr(x$step2_test, "alternative") <- attr(x$global_envelope_ls[[1]], "alternative")
-    main <- env_main_default(x$step2_test)
+    if("global_envelope_ls" %in% names(attributes(x))) { # Combined test
+      attr(x, "alternative") <- attr(attr(x, "global_envelope_ls")[[1]], "alternative")
+      main <- env_main_default(x, digits=digits)
+    }
+    else {
+      main <- env_main_default(x, digits=digits)
+    }
   }
-  if(missing('ylim')) ylim <- env_ylim_default(x$global_envelope_ls, use_ggplot2)
+  if(missing('ylim')) {
+    if("global_envelope_ls" %in% names(attributes(x))) { # Combined test
+      ylim <- env_ylim_default(attr(x, "global_envelope_ls"), use_ggplot2)
+    }
+    else {
+      ylim <- env_ylim_default(x, use_ggplot2)
+    }
+  }
   if(missing('xlab')) xlab <- expression(italic(r))
   if(missing('ylab')) ylab <- expression(italic(T(r)))
 
@@ -421,35 +357,57 @@ plot.combined_global_envelope <- function(x, plot_style = "basic", level = 1,
                                                             ggplot2 = "ggplot2",
                                                             ggplot = "ggplot2",
                                                             g = "ggplot2"))
+
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
-  if(level == 1) {
+  if(("global_envelope_ls" %in% names(attributes(x))) & level == 1) { # Combined test, level 1 plots
     switch(plot_style,
            basic = {
-             env_basic_plot(x$global_envelope_ls, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                            color_outside=color_outside, separate_yaxes=separate_yaxes,
-                            max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col, ...)
+             p <- env_basic_plot(attr(x, "global_envelope_ls"), main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                                color_outside=color_outside, separate_yaxes=separate_yaxes,
+                                max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col, ...)
            },
            fv = {
-             n_of_plots <- length(x$global_envelope_ls)
+             n_of_plots <- length(attr(x, "global_envelope_ls"))
              ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
              nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
              par(mfrow=c(nrows_of_plots, ncols_of_plots))
-             for(i in 1:length(x$global_envelope_ls))
-               plot.global_envelope(x$global_envelope_ls[[i]], plot_style="fv", dotplot=FALSE,
-                                    main=main, ylim=ylim, xlab=xlab, ylab=ylab, use_ggplot2=use_ggplot2,
-                                    add=FALSE, ...)
+             for(i in 1:length(attr(x, "global_envelope_ls")))
+               p <- spatstat::plot.fv(attr(x, "global_envelope_ls")[[i]],
+                                      main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=FALSE, ...)
            },
            ggplot2 = {
-             env_ggplot(x$global_envelope_ls, base_size=base_size,
-                        main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                        separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
-                        labels=labels, ...)
+             p <- env_ggplot(attr(x, "global_envelope_ls"), base_size=base_size,
+                             main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                             separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
+                             labels=labels)
            })
   }
   else {
-    plot.global_envelope(x$step2_test, plot_style=plot_style,
-                         base_size, main, ylim, xlab, ylab, use_ggplot2, ...)
+    switch(plot_style,
+           basic = {
+             if(dotplot) {
+               p <- env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                                color_outside=color_outside, labels=labels,
+                                add=add, arrows.col=env.col, ...)
+             }
+             else {
+               p <- env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                                   color_outside=color_outside,
+                                   separate_yaxes=separate_yaxes,
+                                   max_ncols_of_plots=max_ncols_of_plots,
+                                   add=add, env.col=env.col, ...)
+             }
+           },
+           fv = {
+             p <- spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
+           },
+           ggplot2 = {
+             p <- env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                             separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
+                             labels=labels)
+           })
   }
+  invisible(p)
 }
 
 #' Central region / Global envelope
