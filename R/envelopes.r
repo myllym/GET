@@ -313,10 +313,21 @@ print.global_envelope <- function(x, ...) {
 #' outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.
 #' @param env.col The color for the envelope lines (or dotplot arrows). Default 1 (black).
 #' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
-#' @param labels Labels for \code{dotplot = TRUE}; labels for the tests at x-axis.
 #' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
+#' Not available for \code{plot_style = "ggplot2"}.
 #' @param digits The number of digits used for printing the p-value or p-interval in the main,
 #' if using the default main.
+#' @param level 1 or 2. In the case of combined tests (with several test functions), two different plots are available:
+#' 1 for plotting the combined global envelopes (default and most often wanted) or
+#' 2 for plotting the second level test result.
+#' @param separate_yaxes Logical (default FALSE). If TRUE, then separate y-axes are used for
+#' different parts of a combined test. If FALSE, then the components are displayed one next to each other
+#' with a joint y-axis.
+#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
+#' number of columns for figures. Default 2. Relevant only for combined tests with several test functions.
+#' @param labels A character vector of suitable length.
+#' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
+#' Labels for the separate plots for \code{plot_style = "ggplot2"}, ignored if separate_yaxes is FALSE.
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
 #' @method plot global_envelope
