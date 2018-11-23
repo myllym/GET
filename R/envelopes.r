@@ -342,6 +342,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
                                  labels = NULL, add = FALSE, digits = 3,
                                  level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2, ...) {
   plot_style <- match.arg(plot_style)
+  if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
   else use_ggplot2 <- FALSE
   if(missing('main')) {
@@ -368,7 +369,6 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
   if(missing('ylab')) ylab <- expression(italic(T(r)))
   if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
 
-  if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   if(("global_envelope_ls" %in% names(attributes(x))) & level == 1) { # Combined test, level 1 plots
     switch(plot_style,
            basic = {
