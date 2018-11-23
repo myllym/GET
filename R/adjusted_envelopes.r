@@ -367,8 +367,8 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
       #-- The rank test at the second level
       # Calculate the critical rank / alpha
       kalpha_star <- stats::quantile(stats, probs=alpha, type=1)
-      data_and_sim_curves <- data_and_sim_curves(res$step2_test_curve_set) # the second step "curves"
-      nr <- length(res$step2_test_curve_set$r)
+      data_and_sim_curves <- data_and_sim_curves(attr(res, "level2_curve_set")) # the second step "curves"
+      nr <- ncol(data_and_sim_curves)
       Nfunc <- nrow(data_and_sim_curves)
       LB <- array(0, nr)
       UB <- array(0, nr)
@@ -379,19 +379,19 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
       }
       # -> kalpha_star, LB, UB of the (second level) rank test
       # Update res object with adjusted values
-      res$step2_test$lo <- LB
-      res$step2_test$hi <- UB
-      attr(res$step2_test, "method") <- "Adjusted global envelope test" # Change method name
-      attr(res$step2_test, "k_alpha_star") <- kalpha_star # Add kalpha_star
+      res$lo <- LB
+      res$hi <- UB
+      attr(res, "method") <- "Adjusted global envelope test" # Change method name
+      attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
       # Re-calculate the new qdir/st envelopes
       envchars <- combined_scaled_MAD_bounding_curves_chars(attr(tX, "simfuns"), type = type)
       central_curves_ls <- lapply(attr(tX, "simfuns"), function(x) get_T_0(x))
       bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=UB,
                                                              lower_f=envchars$lower_f, upper_f=envchars$upper_f)
-      # Create a combined envelope object for plotting
-      for(i in 1:length(res$global_envelope_ls)) {
-        res$global_envelope_ls[[i]]$lo <- bounding_curves$lower_ls[[i]]
-        res$global_envelope_ls[[i]]$hi <- bounding_curves$upper_ls[[i]]
+      # Update the first level envelopes for plotting
+      for(i in 1:length(attr(res, "global_envelope_ls"))) {
+        attr(res, "global_envelope_ls")[[i]]$lo <- bounding_curves$lower_ls[[i]]
+        attr(res, "global_envelope_ls")[[i]]$hi <- bounding_curves$upper_ls[[i]]
       }
     }
     else { # Otherwise, the ERL test is used at the second level of a combined test
@@ -420,17 +420,9 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
         alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
         res <- global_envelope_test(tX$curve_set, type=type, alpha=alpha_star, alternative=alt)
         # Save additional arguments
-        switch(class(res)[1],
-               global_envelope = {
-                 attr(res, "method") <- "Adjusted global envelope test" # Change method name
-                 attr(res, "alpha") <- alpha
-                 attr(res, "alpha_star") <- alpha_star
-               },
-               combined_global_envelope = {
-                 attr(res$step2_test, "method") <- "Adjusted global envelope test"
-                 attr(res$step2_test, "alpha") <- alpha
-                 attr(res$step2_test, "alpha_star") <- alpha_star
-               })
+        attr(res, "method") <- "Adjusted global envelope test" # Change method name
+        attr(res, "alpha") <- alpha
+        attr(res, "alpha_star") <- alpha_star
       }
     }
 
