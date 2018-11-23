@@ -445,7 +445,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=TRUE
         return(invisible(p))
     }
     else {
-        cat("Note: \"ylim\" ignored as separate plots are produced.\n")
+        if(!is.null(ylim)) cat("Note: \"ylim\" ignored as separate yaxes are used.\n")
         n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
         ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
         nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
