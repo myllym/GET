@@ -381,7 +381,6 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
       # Update res object with adjusted values
       res$lo <- LB
       res$hi <- UB
-      attr(res, "method") <- "Adjusted global envelope test" # Change method name
       attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
       # Re-calculate the new qdir/st envelopes
       envchars <- combined_scaled_MAD_bounding_curves_chars(attr(tX, "simfuns"), type = type)
@@ -413,20 +412,19 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
         # Update res object with adjusted values
         res$lo <- LB
         res$hi <- UB
-        attr(res, "method") <- "Adjusted global envelope test" # Change method name
         attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
       }
       else {
         alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
         res <- global_envelope_test(tX$curve_set, type=type, alpha=alpha_star, alternative=alt)
         # Save additional arguments
-        attr(res, "method") <- "Adjusted global envelope test" # Change method name
         attr(res, "alpha") <- alpha
         attr(res, "alpha_star") <- alpha_star
       }
     }
 
     # Changes
+    attr(res, "method") <- "Adjusted global envelope test" # Change method name
     attr(res, "call") <- match.call() # Update "call" attribute
     # Additions
     if(savepatterns) attr(res, "simpatterns") <- simpatterns
