@@ -82,6 +82,7 @@
 #' \itemize{
 #'   \item \code{\link{dg.global_envelope_test}}, see a detailed example in \code{\link{saplings}}
 #' }
+#' Also the adjusted tests can be based on several test functions.
 #' \item \emph{One-way functional ANOVA}:
 #'  \itemize{
 #'   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
