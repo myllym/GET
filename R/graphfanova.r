@@ -243,7 +243,8 @@ contrasts <- function(x, groups, ...){
 #' plot(res, separate_yaxes=FALSE)
 #' res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts")
 #' plot(res2, separate_yaxes=TRUE)
-graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun, alpha = 0.05,
+graph.fanova <- function(nsim, curve_set, groups, variances="equal",
+                         summaryfun = c("means", "contrasts"), alpha = 0.05,
                          n.aver = 1L, mirror = FALSE, saveperm=FALSE,
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
@@ -272,10 +273,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal", summaryfun,
          })
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
 
-  summaryfun <- spatstat::pickoption("sumf", summaryfun, c(means = "means",
-                                                           mean = "means",
-                                                           contrasts = "contrasts",
-                                                           cont = "contrasts"))
+  summaryfun <- match.arg(summaryfun)
   # setting that 'summaryfun' is a function
   switch(summaryfun, 
          means = {fun = means},
