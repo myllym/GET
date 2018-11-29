@@ -1313,10 +1313,18 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
   global_envelope_test(curve_set, type=type, ...)
 }
 
-#' Studentised envelope test
+#' Global scaled maximum absolute difference (MAD) envelope tests
 #'
-#' The studentised envelope test, which takes into account the unequal
-#' variances of the test function T(r) for different distances r.
+#' Performs the global scaled MAD envelope tests, either studentized or directional quantile,
+#' or the unscaled MAD envelope test. These tests correspond to calling the
+#' function \code{\link{global_envelope_test}} with \code{type = "st"}, \code{"qdir"} and
+#' \code{"unscaled"}, respectively. The functions \code{st_envelope}, \code{qdir_envelope} and
+#' \code{unscaled_envelope} have been kept for historical reasons;
+#' preferably use \code{\link{global_envelope_test}} with the suitable \code{type} argument.
+#'
+#' The studentised envelope test (Myllymäki et al., 2015, 2017)
+#' takes into account the unequal variances of the test function T(r)
+#' for different distances r.
 #'
 #'
 #' @references
@@ -1341,7 +1349,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' }
 #' Additionally, the return value has attributes
 #' \itemize{
-#'   \item method = The name of the envelope test ("Studentised envelope test" for the studentised envelope test)
+#'   \item method = The name of the method ("Global envelope test")
 #'   \item alternative = "two-sided
 #'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
 #'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
@@ -1351,6 +1359,9 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' and a punch of attributes for the "fv" object type.
 #' @export
 #' @importFrom stats sd
+#' @name sMAD_envelope
+#' @seealso \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}},
+#' \code{\link{global_envelope_test_2d}}, \code{\link{dg.global_envelope_test}}
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
@@ -1360,11 +1371,10 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
 #'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
-#' # The studentised envelope test
-#' res <- st_envelope(env)
-#' plot(res)
+#' res_st <- st_envelope(env) # The studentised envelope test
+#' plot(res_st)
 #' # or (requires R library ggplot2)
-#' plot(res, plot_style="ggplot2")
+#' plot(res_st, plot_style="ggplot2")
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -1372,7 +1382,11 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo=TRUE)
 #' # The studentised envelope test
-#' res <- st_envelope(curve_set); plot(res, plot_style="ggplot2")
+#' res_st <- st_envelope(curve_set); plot(res_st, plot_style="ggplot2")
+#' # The directional quantile envelope test
+#' res_qdir <- qdir_envelope(curve_set); plot(res_qdir, plot_style="ggplot2")
+#' # The unscaled envelope test
+#' res_unscaled <- unscaled_envelope(curve_set); plot(res_unscaled, plot_style="ggplot2")
 #'
 #' ## Random labeling test
 #' #----------------------
@@ -1390,73 +1404,13 @@ st_envelope <- function(curve_set, ...) {
 
 #' Directional quantile envelope test
 #'
-#' The directional quantile envelope test, which takes into account the unequal
-#' variances of the test function T(r) for different distances r and is also
-#' protected against asymmetry of T(r).
+#' @details The directional quantile envelope test (Myllymäki et al., 2015, 2017)
+#' takes into account the unequal variances of the test function T(r)
+#' for different distances r and is also protected against asymmetry of T(r).
 #'
-#' @references
-#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
-#'
-#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
-#'
-#' @inheritParams st_envelope
-#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-#' which can be printed and plotted directly.
-#'
-#' Essentially a data frame containing columns
-#' \itemize{
-#' \item r = the vector of values of the argument r at which the test was made
-#' \item obs = values of the test function for the data point pattern
-#' \item lo = the lower envelope based on the simulated functions
-#' \item hi = the upper envelope based on the simulated functions
-#' \item central = If the curve_set (or envelope object) contains a component 'theo',
-#'       then this function is used as the central curve and returned in this component.
-#'       Otherwise, the central curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-#'       Used for visualization only.
-#' }
-#' Additionally, the return value has attributes
-#' \itemize{
-#'   \item method = The name of the envelope test ("Directional quantile envelope test" for the directional quantile envelope test)
-#'   \item alternative = "two-sided
-#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
-#'   \item u = Deviation values (u[1] is the value for the data pattern).
-#'   \item call = The call of the function.
-#' }
-#' and a punch of attributes for the "fv" object type.
 #' @export
+#' @rdname sMAD_envelope
 #' @importFrom stats quantile
-#' @examples
-#' ## Testing complete spatial randomness (CSR)
-#' #-------------------------------------------
-#' require(spatstat)
-#' pp <- spruces
-#' ## Test for complete spatial randomness (CSR)
-#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
-#'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
-#' # The directional quantile envelope test
-#' res <- qdir_envelope(env)
-#' plot(res)
-#' # or (requires R library ggplot2)
-#' plot(res, plot_style="ggplot2")
-#'
-#' ## Advanced use:
-#' # Create a curve set, choosing the interval of distances [r_min, r_max]
-#' curve_set <- crop_curves(env, r_min=1, r_max=8)
-#' # For better visualisation, take the L(r)-r function
-#' curve_set <- residual(curve_set, use_theo=TRUE)
-#' # The directional quantile envelope test
-#' res <- qdir_envelope(curve_set); plot(res, plot_style="ggplot2")
-#'
-#' ## Random labeling test
-#' #----------------------
-#' # requires library 'marksummary'
-#' mpp <- spruces
-#' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
-#' res <- qdir_envelope(curve_set)
-#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, ...) {
   args <- list(...)
   if("type" %in% names(args)) warning("type is hardcoded to be qdir here. No other options.\n")
@@ -1465,76 +1419,16 @@ qdir_envelope <- function(curve_set, ...) {
 
 #' Unscaled envelope test
 #'
-#' The unscaled envelope test, which leads to envelopes with constant width
-#' over the distances r. It corresponds to the classical maximum deviation test
-#' without scaling.
-#'
-#'
-#' This test suffers from unequal variance of T(r) over the distances r and from
-#' the asymmetry of distribution of T(r). We recommend to use the rank_envelope
-#' (if number of simulations close to 5000 can be afforded) or st_envelope/qdir_envelope
-#' (if large number of simulations cannot be afforded) instead.
+#' @details The unscaled envelope test (Ripley, 1981) corresponds to the classical maximum
+#' deviation test without scaling, and leads to envelopes with constant width over the distances r.
+#' Thus, it suffers from unequal variance of T(r) over the distances r and from the asymmetry of
+#' distribution of T(r). We recommend to use the other global envelope tests available,
+#' see \code{\link{global_envelope_test}}.
 #'
 #' @references
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
-#'
-#' @inheritParams st_envelope
-#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-#' which can be printed and plotted directly.
-#'
-#' Essentially a data frame containing columns
-#' \itemize{
-#' \item r = the vector of values of the argument r at which the test was made
-#' \item obs = values of the test function for the data point pattern
-#' \item lo = the lower envelope based on the simulated functions
-#' \item hi = the upper envelope based on the simulated functions
-#' \item central = If the curve_set (or envelope object) contains a component 'theo',
-#'       then this function is used as the central curve and returned in this component.
-#'       Otherwise, the central curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-#'       Used for visualization only.
-#' }
-#' Additionally, the return value has attributes
-#' \itemize{
-#'   \item method = The name of the envelope test ("Studentised envelope test" for the studentised envelope test)
-#'   \item alternative = "two-sided
-#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
-#'   \item u = Deviation values (u[1] is the value for the data pattern).
-#'   \item call = The call of the function.
-#' }
-#' and a punch of attributes for the "fv" object type.
 #' @export
-#' @examples
-#' ## Testing complete spatial randomness (CSR)
-#' #-------------------------------------------
-#' require(spatstat)
-#' pp <- spruces
-#' ## Test for complete spatial randomness (CSR)
-#' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
-#'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
-#' # The studentised envelope test
-#' res <- unscaled_envelope(env)
-#' plot(res)
-#' # or (requires R library ggplot2)
-#' plot(res, plot_style="ggplot2")
-#'
-#' ## Advanced use:
-#' # Create a curve set, choosing the interval of distances [r_min, r_max]
-#' curve_set <- crop_curves(env, r_min=1, r_max=8)
-#' # For better visualisation, take the L(r)-r function
-#' curve_set <- residual(curve_set, use_theo=TRUE)
-#' # The studentised envelope test
-#' res <- unscaled_envelope(curve_set); plot(res, plot_style="ggplot2")
-#'
-#' ## Random labeling test
-#' #----------------------
-#' # requires library 'marksummary'
-#' mpp <- spruces
-#' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
-#' curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
-#' res <- unscaled_envelope(curve_set)
-#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
+#' @rdname sMAD_envelope
 unscaled_envelope <- function(curve_set, ...) {
   args <- list(...)
   if("type" %in% names(args)) warning("type is hardcoded to be unscaled here. No other options.\n")
