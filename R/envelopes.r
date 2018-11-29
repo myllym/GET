@@ -778,7 +778,7 @@ print.combined_fboxplot <- function(x, ...) {
 #' @usage \method{plot}{combined_fboxplot}(x, max_ncols_of_plots = 2, main, curve_sets = NULL, ...)
 #'
 #' @param x an 'combined_fboxplot' object
-#' @inheritParams plot.combined_global_envelope
+#' @inheritParams plot.global_envelope
 #' @param main A list of titles for the separate plots. The length should be the length of x.
 #' @param curve_sets A list of curve_sets, most typically those from which the combined functional
 #' boxplot has been contructed.
