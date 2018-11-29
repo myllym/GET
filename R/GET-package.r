@@ -223,7 +223,7 @@
 #'
 #' Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016). Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A: 40-53. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
 #'
-#' @name GET
+#' @name GET-package
 #' @docType package
-#' @aliases GET-package GET
+#' @aliases GET-package
 NULL
