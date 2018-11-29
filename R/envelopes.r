@@ -950,6 +950,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #' }
 #' @export
 #' @seealso \code{\link{plot.global_envelope}}
+#' @aliases GET
 #' @examples
 #'
 #' if(require(spatstat, quietly=TRUE)) {
