@@ -949,7 +949,8 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'   \item ties = As the argument \code{ties}.
 #' }
 #' @export
-#' @seealso \code{\link{plot.global_envelope}}
+#' @seealso \code{\link{plot.global_envelope}}, \code{\link{central_region}},
+#' \code{\link{global_envelope_test_2d}}
 #' @aliases GET
 #' @examples
 #'
