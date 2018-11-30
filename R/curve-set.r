@@ -351,7 +351,7 @@ combine_curve_sets <- function(x) {
     if('r' %in% name_vec[[1]])
       cset$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
     if('obs' %in% name_vec[[1]]) {
-      if(is.matrix(x$obs)) {
+      if(is.matrix(x[[1]]$obs)) {
         cset$obs <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$obs)[1]})), ncol=dim(x[[1]]$obs)[2])
         for(i in 1:dim(x[[1]]$obs)[2]) {
           cset$obs[,i] <- c(sapply(x, FUN=function(curve_set) { curve_set$obs[,i] }), recursive=TRUE)
