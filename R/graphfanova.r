@@ -398,8 +398,6 @@ frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal",
   sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)))
 
   cset <- create_curve_set(list(r = curve_set$r, obs = obs, sim_m = sim))
-  # Perform the rank envelope test and return just the p-value
-  res <- global_envelope_test(cset, alpha=alpha, alternative="greater", ...)
-
-  res
+  # Perform the global envelope test
+  global_envelope_test(cset, alpha=alpha, alternative="greater", ...)
 }
