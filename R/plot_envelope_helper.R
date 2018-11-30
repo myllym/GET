@@ -45,52 +45,17 @@ pick_attributes <- function(curve_set, alternative="two.sided") {
     list(fname=fname, labl=labl, desc=desc, ylab=ylab, einfo=einfo)
 }
 
-# Check r values of a curve_set object for plotting
-#
-# Check r values of a curve_set object to find out if there is
-# one or several test functions. Find out breaking r values for plotting.
-# @param x A curve_set or envelope_test object.
-# @seealso \code{\link{create_curve_set}}
-curve_set_check_r <- function(x) {
-    if(is.null(x[['r']])) stop("The argument \'x\' should contain the element 'r'.\n")
-    # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-    r_values <- x[['r']]
-    nr <- length(r_values)
-    if( !all(r_values[-1] - r_values[-nr] > 0) ) {
-        retick_xaxis <- TRUE
-        new_r_values <- 1:nr # to be used in plotting
-        r_values_newstart_id <- which(!(r_values[1:(nr-1)] < r_values[2:nr])) + 1
-        # number of ticks per a sub test
-        nticks <- 5
-        # r-values for labeling ticks
-        r_starts <- r_values[c(1, r_values_newstart_id)]
-        r_ends <- r_values[c(r_values_newstart_id - 1, nr)]
-        r_break_values <- NULL
-        # indeces for ticks in the running numbering from 1 to nr
-        loc_starts <- (1:nr)[c(1, r_values_newstart_id)]
-        loc_ends <- (1:nr)[c(r_values_newstart_id - 1, nr)]
-        loc_break_values <- NULL
-        nslots <- length(r_starts) # number of combined tests/slots
-        for(i in 1:(nslots-1)) {
-            r_break_values <- c(r_break_values, seq(r_starts[i], r_ends[i], length=nticks)[1:(nticks-1)])
-            loc_break_values <- c(loc_break_values, seq(loc_starts[i], loc_ends[i], length=nticks)[1:(nticks-1)])
-        }
-        r_break_values <- c(r_break_values, seq(r_starts[nslots], r_ends[nslots], length=nticks))
-        loc_break_values <- c(loc_break_values, seq(loc_starts[nslots], loc_ends[nslots], length=nticks))
-    }
-    else {
-        retick_xaxis <- FALSE
-        new_r_values <- NULL
-        r_break_values <- NULL
-        loc_break_values <- NULL
-        r_values_newstart_id <- NULL
-    }
-
-    list(r_values = r_values,
-         retick_xaxis = retick_xaxis,
-         new_r_values = new_r_values,
-         r_break_values = r_break_values, loc_break_values = loc_break_values,
-         r_values_newstart_id = r_values_newstart_id)
+# A helper function to check whether the xaxis needs to be reticked with new values due to
+# combined tests. Called also from plot.global_envelope for checking if fv plot style is available.
+retick_xaxis <- function(x) {
+  if(class(x)[1] != "list") x <- list(x)
+  if(any(unlist(lapply(x, FUN=function(x) { !("global_envelope" %in% class(x) | "fboxplot" %in% class(x)) }))))
+    stop("x should consist of global_envelope objects.\n")
+  r_values_ls <- lapply(x, FUN=function(x) x$r)
+  r_values <- do.call(c, r_values_ls, quote=FALSE)
+  nr <- length(r_values)
+  list(retick_xaxis = !(length(x) == 1 & all(r_values[-1] - r_values[-nr] > 0)),
+       r_values_ls = r_values_ls, r_values = r_values)
 }
 
 # Define breaking r values and labels on x-axis for plotting several curve sets jointly.
