@@ -343,30 +343,39 @@ plot.curve_set <- function(x, ylim, xlab="r", ylab="obs", col_obs=1, col_sim=grD
 #' @return A curve set that is a combination of the curve sets given in 'x'.
 #' @export
 combine_curve_sets <- function(x) {
-    curve_set <- NULL
+    cset <- NULL
     # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
     # If the latter, then convert the objects to curve sets.
     x <- check_curve_set_dimensions(x)
     name_vec <- lapply(x, FUN=names)
     if('r' %in% name_vec[[1]])
-        curve_set$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
-    if('obs' %in% name_vec[[1]])
-        curve_set$obs <- c(sapply(x, FUN=function(curve_set) { curve_set['obs'] }), recursive=TRUE)
+      cset$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
+    if('obs' %in% name_vec[[1]]) {
+      if(is.matrix(x$obs)) {
+        cset$obs <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$obs)[1]})), ncol=dim(x[[1]]$obs)[2])
+        for(i in 1:dim(x[[1]]$obs)[2]) {
+          cset$obs[,i] <- c(sapply(x, FUN=function(curve_set) { curve_set$obs[,i] }), recursive=TRUE)
+        }
+      }
+      else {
+        cset$obs <- c(sapply(x, FUN=function(curve_set) { curve_set['obs'] }), recursive=TRUE)
+      }
+    }
     if('sim_m' %in% name_vec[[1]]) {
         # check_curve_set_dimensions was used above to check that dimensions match
         # Combine
-        curve_set$sim_m <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$sim_m)[1]})), ncol=dim(x[[1]]$sim_m)[2])
+        cset$sim_m <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$sim_m)[1]})), ncol=dim(x[[1]]$sim_m)[2])
         for(i in 1:dim(x[[1]]$sim_m)[2]) {
-            curve_set$sim_m[,i] <- c(sapply(x, FUN=function(curve_set) { curve_set$sim_m[,i] }), recursive=TRUE)
+          cset$sim_m[,i] <- c(sapply(x, FUN=function(curve_set) { curve_set$sim_m[,i] }), recursive=TRUE)
         }
     }
     if('theo' %in% name_vec[[1]])
-        curve_set$theo <- c(sapply(x, FUN=function(curve_set) { curve_set['theo'] }), recursive=TRUE)
+      cset$theo <- c(sapply(x, FUN=function(curve_set) { curve_set['theo'] }), recursive=TRUE)
     # check_curve_set_dimensions has checked that 'is_residual' is the same for all curve sets.
     if('is_residual' %in% name_vec[[1]])
-        curve_set$is_residual <- x[[1]]$is_residual
-
-    create_curve_set(curve_set)
+      cset$is_residual <- x[[1]]$is_residual
+    # Return the combined set of curves
+    create_curve_set(cset)
 }
 
 # Check curve set dimensions
