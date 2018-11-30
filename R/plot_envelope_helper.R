@@ -486,7 +486,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
 #' @param xlab See \code{\link{plot.default}}.
 #' @param ylab See \code{\link{plot.default}}.
 #' @import ggplot2
-two_envelopes_ggplot <- function(env1, env2, base_size=15, main, ylim, xlab, ylab) {
+two_envelopes_ggplot <- function(env1, env2, base_size = 15, main, ylim, xlab, ylab) {
     if(!any(class(env1) %in% c("fboxplot", "global_envelope", "adjusted_envelope_test")) |
        !any(class(env2) %in% c("fboxplot", "global_envelope", "adjusted_envelope_test"))) stop("env1 and/or env2 is not desired object type.\n")
     if(!all(env1[['r']] == env2[['r']])) stop("The two envelopes are for different r-values.\n")
