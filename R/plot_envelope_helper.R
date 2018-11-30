@@ -254,18 +254,15 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @importFrom graphics axis
 #' @importFrom graphics abline
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
-                           separate_yaxes=FALSE, max_ncols_of_plots=2, add=FALSE, env.col=1, ...) {
-    if(class(x)[1] != "list") {
-      alt <- attr(x, "alternative")
-      # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-      rdata <- curve_set_check_r(x)
-    }
-    else {
-      alt <- attr(x[[1]], "alternative")
-      # Handle combined tests; correct labels on x-axis if x is a list of global_envelope objects
-      rdata <- combined_global_envelope_rhelper(x)
-      x <- rdata$x_vec
-    }
+                           separate_yaxes = FALSE, max_ncols_of_plots = 2, add = FALSE, env.col = 1,
+                           nticks = 5, ...) {
+    if(class(x)[1] != "list") x <- list(x)
+    # Handle combined tests; correct labels on x-axis
+    # a) if x is a list of global_envelope objects
+    # b) if x[['r']] contains repeated values (when length(x) == 1)
+    rdata <- combined_global_envelope_rhelper(x, nticks=nticks)
+    alt <- attr(x[[1]], "alternative")
+    x <- rdata$x_vec
     # Plot
     if(!separate_yaxes) {
         if(!rdata$retick_xaxis) {
@@ -362,19 +359,16 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 # @param labels Labels for components of the combined tests.
 # @param nticks The number of ticks on the xaxis, if the xaxis is re-ticked for combined tests.
 #' @import ggplot2
-env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=TRUE, max_ncols_of_plots=2,
-                       labels=NULL) {
-    if(class(x)[1] != "list") {
-      alt <- attr(x, "alternative")
-      # Handle combined tests; correct labels on x-axis if x[['r']] contains repeated values
-      rdata <- curve_set_check_r(x)
-    }
-    else {
-      alt <- attr(x[[1]], "alternative")
-      # Handle combined tests; correct labels on x-axis if x is a list of global_envelope objects
-      rdata <- combined_global_envelope_rhelper(x)
-      x <- rdata$x_vec
-    }
+env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
+                       separate_yaxes = TRUE, max_ncols_of_plots = 2,
+                       labels = NULL, nticks = 5) {
+    if(class(x)[1] != "list") x <- list(x)
+    # Handle combined tests; correct labels on x-axis
+    # a) if x is a list of global_envelope objects
+    # b) if x[['r']] contains repeated values (when length(x) == 1)
+    rdata <- combined_global_envelope_rhelper(x, nticks=nticks)
+    alt <- attr(x[[1]], "alternative")
+    x <- rdata$x_vec
 
     linetype.values <- c('solid', 'dashed')
     size.values <- c(0.2, 0.2)
