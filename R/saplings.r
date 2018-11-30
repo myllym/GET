@@ -54,8 +54,8 @@
 #' # Crop the curves to the interval of distances [rmin, rmax]
 #' # (at the same time create a curve_set from 'env')
 #' curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
-#' # Perform the rank envelope test
-#' res <- rank_envelope(curve_set)
+#' # Perform a global envelope test
+#' res <- global_envelope_test(curve_set)
 #' # Plot the result.
 #' plot(res, plot_style="ggplot2", ylab=expression(italic(hat(L)(r)-r)))
 #'
