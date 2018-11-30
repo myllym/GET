@@ -1315,17 +1315,16 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 
 #' Global scaled maximum absolute difference (MAD) envelope tests
 #'
-#' Performs the global scaled MAD envelope tests, either studentized or directional quantile,
+#' Performs the global scaled MAD envelope tests, either directional quantile or studentised,
 #' or the unscaled MAD envelope test. These tests correspond to calling the
-#' function \code{\link{global_envelope_test}} with \code{type = "st"}, \code{"qdir"} and
-#' \code{"unscaled"}, respectively. The functions \code{st_envelope}, \code{qdir_envelope} and
+#' function \code{\link{global_envelope_test}} with \code{"qdir"}, \code{type = "st"} and
+#' \code{"unscaled"}, respectively. The functions \code{qdir_envelope}, \code{st_envelope} and
 #' \code{unscaled_envelope} have been kept for historical reasons;
 #' preferably use \code{\link{global_envelope_test}} with the suitable \code{type} argument.
 #'
-#' The studentised envelope test (Myllymäki et al., 2015, 2017)
+#' The directional quantile envelope test (Myllymäki et al., 2015, 2017)
 #' takes into account the unequal variances of the test function T(r)
-#' for different distances r.
-#'
+#' for different distances r and is also protected against asymmetry of T(r).
 #'
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
@@ -1358,8 +1357,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' }
 #' and a punch of attributes for the "fv" object type.
 #' @export
-#' @importFrom stats sd
-#' @name sMAD_envelope_test
+#' @name qdir_envelope
 #' @seealso \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}},
 #' \code{\link{global_envelope_test_2d}}, \code{\link{dg.global_envelope_test}}
 #' @examples
@@ -1371,8 +1369,8 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
 #'                 simulate=expression(runifpoint(pp$n, win=pp$window)))
-#' res_st <- st_envelope(env) # The studentised envelope test
-#' plot(res_st)
+#' res_qdir <- qdir_envelope(env) # The directional quantile envelope test
+#' plot(res_qdir)
 #' # or (requires R library ggplot2)
 #' plot(res_st, plot_style="ggplot2")
 #'
@@ -1381,10 +1379,10 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' curve_set <- crop_curves(env, r_min=1, r_max=8)
 #' # For better visualisation, take the L(r)-r function
 #' curve_set <- residual(curve_set, use_theo=TRUE)
-#' # The studentised envelope test
-#' res_st <- st_envelope(curve_set); plot(res_st, plot_style="ggplot2")
 #' # The directional quantile envelope test
 #' res_qdir <- qdir_envelope(curve_set); plot(res_qdir, plot_style="ggplot2")
+#' # The studentised envelope test
+#' res_st <- st_envelope(curve_set); plot(res_st, plot_style="ggplot2")
 #' # The unscaled envelope test
 #' res_unscaled <- unscaled_envelope(curve_set); plot(res_unscaled, plot_style="ggplot2")
 #'
@@ -1394,27 +1392,26 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' mpp <- spruces
 #' # Use the test function T(r) = \hat{L}_m(r), an estimator of the L_m(r) function
 #' curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
-#' res <- st_envelope(curve_set)
-#' plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
-st_envelope <- function(curve_set, ...) {
-  args <- list(...)
-  if("type" %in% names(args)) warning("type is hardcoded to be st here. No other options.\n")
-  global_envelope_test(curve_set, type="st", ...)
-}
-
-#' Directional quantile envelope test
-#'
-#' @details The directional quantile envelope test (Myllymäki et al., 2015, 2017)
-#' takes into account the unequal variances of the test function T(r)
-#' for different distances r and is also protected against asymmetry of T(r).
-#'
-#' @export
-#' @rdname sMAD_envelope_test
-#' @importFrom stats quantile
+#' res_qdir <- qdir_envelope(curve_set)
+#' plot(res_qdir, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 qdir_envelope <- function(curve_set, ...) {
   args <- list(...)
   if("type" %in% names(args)) warning("type is hardcoded to be qdir here. No other options.\n")
   global_envelope_test(curve_set, type="qdir", ...)
+}
+
+#' Studentised envelope test
+#'
+#' @details The studentised envelope test (Myllymäki et al., 2015, 2017)
+#' takes into account the unequal variances of the test function T(r)
+#' for different distances r.
+#'
+#' @export
+#' @rdname qdir_envelope
+st_envelope <- function(curve_set, ...) {
+  args <- list(...)
+  if("type" %in% names(args)) warning("type is hardcoded to be st here. No other options.\n")
+  global_envelope_test(curve_set, type="st", ...)
 }
 
 #' Unscaled envelope test
@@ -1423,12 +1420,12 @@ qdir_envelope <- function(curve_set, ...) {
 #' deviation test without scaling, and leads to envelopes with constant width over the distances r.
 #' Thus, it suffers from unequal variance of T(r) over the distances r and from the asymmetry of
 #' distribution of T(r). We recommend to use the other global envelope tests available,
-#' see \code{\link{global_envelope_test}}.
+#' see \code{\link{global_envelope_test}} for full list of alternatives.
 #'
 #' @references
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #' @export
-#' @rdname sMAD_envelope_test
+#' @rdname qdir_envelope
 unscaled_envelope <- function(curve_set, ...) {
   args <- list(...)
   if("type" %in% names(args)) warning("type is hardcoded to be unscaled here. No other options.\n")
