@@ -1372,7 +1372,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' res_qdir <- qdir_envelope(env) # The directional quantile envelope test
 #' plot(res_qdir)
 #' # or (requires R library ggplot2)
-#' plot(res_st, plot_style="ggplot2")
+#' plot(res_qdir, plot_style="ggplot2")
 #'
 #' ## Advanced use:
 #' # Create a curve set, choosing the interval of distances [r_min, r_max]
