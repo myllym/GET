@@ -49,7 +49,7 @@ pick_attributes <- function(curve_set, alternative="two.sided") {
 # combined tests. Called also from plot.global_envelope for checking if fv plot style is available.
 retick_xaxis <- function(x) {
   if(class(x)[1] != "list") x <- list(x)
-  if(any(unlist(lapply(x, FUN=function(x) { !("global_envelope" %in% class(x) | "fboxplot" %in% class(x)) }))))
+  if(any(unlist(lapply(x, FUN=function(x) { !("global_envelope" %in% class(x) | "fboxplot" %in% class(x) | "curve_set" %in% class(x)) }))))
     stop("x should consist of global_envelope objects.\n")
   r_values_ls <- lapply(x, FUN=function(x) x$r)
   r_values <- do.call(c, r_values_ls, quote=FALSE)
