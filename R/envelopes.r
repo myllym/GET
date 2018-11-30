@@ -1025,7 +1025,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'
 #'   # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
 #'   #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
-#'                    correction="none", r=seq(0, 4, length=500))
+#'   #                correction="none", r=seq(0, 4, length=500))
 #'
 #'   # Using direct algorihm can be faster, because the perfect simulation is used here.
 #'   simulations <- NULL
