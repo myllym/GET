@@ -298,44 +298,6 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   res
 }
 
-#' Print method for the class 'graph.fanova'
-#' @usage \method{print}{graph.fanova}(x, ...)
-#'
-#' @param x an 'graph.fanova' object
-#' @param ... Ignored.
-#'
-#' @method print graph.fanova
-#' @export
-print.graph.fanova <- function(x, ...) {
-  cat("Functional rank ANOVA with graphical interpretation (plot the object for it!).\n")
-  print(x[['ranktest']])
-}
-
-#' Plot method for the class 'graph.fanova'
-#' @usage \method{plot}{graph.fanova}(x, plot_style="ggplot2", separate_yaxes = TRUE, labels=x[['labels']], ...)
-#'
-#' @param x An 'graph.fanova' object
-#' @param plot_style Either "basic" or "ggplot2".
-#' @inheritParams plot.combined_global_envelope
-#' @param ... Additional parameters to be passed to \code{\link{plot.global_envelope}}.
-#' @method plot graph.fanova
-#' @export
-plot.graph.fanova <- function(x, plot_style="ggplot2", separate_yaxes = TRUE, labels=x[['labels']], ...) {
-  plot_style <- spatstat::pickoption("ptype", plot_style, c(basic = "basic",
-                                                            b = "basic",
-                                                            ggplot2 = "ggplot2",
-                                                            ggplot = "ggplot2",
-                                                            g = "ggplot2"))
-  switch(plot_style,
-         basic = {
-           plot.global_envelope(x[['ranktest']], separate_yaxes=separate_yaxes, labels = NULL, ...) # ignoring labels
-         },
-         ggplot2 = {
-           plot.global_envelope(x[['ranktest']], plot_style="ggplot2", separate_yaxes=separate_yaxes, labels = labels, ...)
-         })
-}
-
-
 #' Rank envelope F-test
 #'
 #' A one-way functional ANOVA based on the rank envelope applied to F values
