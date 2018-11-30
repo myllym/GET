@@ -294,7 +294,8 @@ print.global_envelope <- function(x, ...) {
 #'    main, ylim, xlab, ylab, use_ggplot2,
 #'    color_outside = TRUE, env.col = 1, base_size = 15,
 #'    labels = NULL, add = FALSE, digits=3,
-#'    level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2, ...)
+#'    level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2,
+#'    nticks = 5, ...)
 #' @param x An 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
 #' The option "basic" (default) offers a very basic global envelope plot.
@@ -329,6 +330,8 @@ print.global_envelope <- function(x, ...) {
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
 #' Labels for the separate plots for \code{plot_style = "ggplot2"}, ignored if separate_yaxes is FALSE.
+#' @param nticks The number of ticks on the xaxis. Relevant only for combined tests with
+#' \code{separate_yaxes = TRUE}.
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
 #' @method plot global_envelope
@@ -340,7 +343,8 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
                                  main, ylim, xlab, ylab, use_ggplot2,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
                                  labels = NULL, add = FALSE, digits = 3,
-                                 level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2, ...) {
+                                 level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2,
+                                 nticks = 5, ...) {
   plot_style <- match.arg(plot_style)
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
@@ -369,12 +373,13 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
   if(missing('ylab')) ylab <- expression(italic(T(r)))
   if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
 
-  if(("global_envelope_ls" %in% names(attributes(x))) & level == 1) { # Combined test, level 1 plots
+  if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test, level 1 plots
     switch(plot_style,
            basic = {
              p <- env_basic_plot(attr(x, "global_envelope_ls"), main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                 color_outside=color_outside, separate_yaxes=separate_yaxes,
-                                max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col, ...)
+                                max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col,
+                                nticks=nticks, ...)
            },
            fv = {
              n_of_plots <- length(attr(x, "global_envelope_ls"))
@@ -389,7 +394,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
              p <- env_ggplot(attr(x, "global_envelope_ls"), base_size=base_size,
                              main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                              separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
-                             labels=labels)
+                             labels=labels, nticks=nticks)
            })
   }
   else {
@@ -405,7 +410,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
                                    color_outside=color_outside,
                                    separate_yaxes=separate_yaxes,
                                    max_ncols_of_plots=max_ncols_of_plots,
-                                   add=add, env.col=env.col, ...)
+                                   add=add, env.col=env.col, nticks=nticks, ...)
              }
            },
            fv = {
@@ -414,7 +419,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
            ggplot2 = {
              p <- env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                              separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
-                             labels=labels)
+                             labels=labels, nticks=nticks)
            })
   }
   invisible(p)

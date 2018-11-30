@@ -245,6 +245,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 # @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 # number of columns for figures. Default 2.
 # @param env.col The color for the envelope lines. Default 1 (black).
+# @param nticks The number of ticks on the xaxis, if the xaxis is re-ticked for combined tests.
 # @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics par
 #' @importFrom graphics plot
@@ -358,6 +359,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 # @param labels Labels for the separate plots. Ignored if separate_yaxes is FALSE.
 # @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 # number of columns for figures. Default 2.
+# @param labels Labels for components of the combined tests.
+# @param nticks The number of ticks on the xaxis, if the xaxis is re-ticked for combined tests.
 #' @import ggplot2
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab, separate_yaxes=TRUE, max_ncols_of_plots=2,
                        labels=NULL) {
