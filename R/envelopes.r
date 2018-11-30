@@ -294,7 +294,7 @@ print.global_envelope <- function(x, ...) {
 #'    main, ylim, xlab, ylab, use_ggplot2,
 #'    color_outside = TRUE, env.col = 1, base_size = 15,
 #'    labels = NULL, add = FALSE, digits=3,
-#'    level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2,
+#'    level = 1, separate_yaxes = TRUE, max_ncols_of_plots = 2,
 #'    nticks = 5, ...)
 #' @param x An 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
@@ -343,7 +343,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
                                  main, ylim, xlab, ylab, use_ggplot2,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
                                  labels = NULL, add = FALSE, digits = 3,
-                                 level = 1, separate_yaxes = FALSE, max_ncols_of_plots = 2,
+                                 level = 1, separate_yaxes = TRUE, max_ncols_of_plots = 2,
                                  nticks = 5, ...) {
   plot_style <- match.arg(plot_style)
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
@@ -1089,8 +1089,7 @@ plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets =
 #'   res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
 #'                                               curve_set_G, curve_set_J))
 #'   plot(res, plot_style="ggplot2",
-#'        labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
-#'        separate_yaxes=TRUE, base_size=12)
+#'        labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 #' }
 #'
 #' ## A test based on a low dimensional random vector
