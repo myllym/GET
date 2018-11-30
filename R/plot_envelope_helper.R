@@ -95,7 +95,7 @@ curve_set_check_r <- function(x) {
 
 # Define breaking r values and labels on x-axis for plotting several curve sets jointly.
 # @param x A list of global_envelope objects.
-# @param nticks Number of ticks per a sub test
+# @param nticks Number of ticks per a sub test.
 combined_global_envelope_rhelper <- function(x, nticks = 5) {
   if(class(x)[1] != "list") stop("x is not list.\n")
   if(any(unlist(lapply(x, FUN=function(x) { !("global_envelope" %in% class(x) | "fboxplot" %in% class(x)) }))))
