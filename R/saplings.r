@@ -100,5 +100,15 @@
 #' # Plot the test result
 #' plot(adjenvJ, plot_style="ggplot2", ylab=expression(italic(J(r))))
 #' # -> the Matern cluster process not adequate for the saplings data
+#'
+#' # Test with the two test functions jointly
+#' adjenvLJ <- dg.global_envelope_test(X = fitted_model,
+#'                                testfuns = list(L = list(fun="Lest", correction="translate",
+#'                                                transform = expression(.-r), r=r),
+#'                                                J = list(fun="Jest", correction="none", r=rJ)),
+#'                                type = "erl", nsim = nsim, nsimsub = nsim,
+#'                                r_min=c(rmin, rminJ), r_max=c(rmax, rmaxJ),
+#'                                save.cons.envelope=TRUE)
+#' plot(adjenvLJ, plot_style="ggplot2")
 #' }
 NULL
