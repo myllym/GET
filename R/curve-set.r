@@ -317,7 +317,7 @@ plot.curve_set <- function(x, ylim, xlab="r", ylab="obs", col_obs=1, col_sim=grD
     else funcs <- cbind(x[['obs']], x[['sim_m']])
 
     if(missing('ylim')) ylim <- with(x, c(min(funcs), max(funcs)))
-    rdata <- curve_set_check_r(x)
+    rdata <- combined_global_envelope_rhelper(x)
     if(rdata$retick_xaxis) {
         rvalues <- rdata$new_r_values
     }
