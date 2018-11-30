@@ -58,45 +58,39 @@ retick_xaxis <- function(x) {
        r_values_ls = r_values_ls, r_values = r_values)
 }
 
-# Define breaking r values and labels on x-axis for plotting several curve sets jointly.
-# @param x A list of global_envelope objects.
+# Define breaking r values and labels on x-axis for plotting several
+# global envelopes or curve sets jointly.
+# @param x A global_envelope object of a list of global_envelope objects.
+# Also curve_set objects allowed with a restricted use.
 # @param nticks Number of ticks per a sub test.
 combined_global_envelope_rhelper <- function(x, nticks = 5) {
-  if(class(x)[1] != "list") stop("x is not list.\n")
-  if(any(unlist(lapply(x, FUN=function(x) { !("global_envelope" %in% class(x) | "fboxplot" %in% class(x)) }))))
-    stop("x should consist of global_envelope objects.\n")
-  r_values_ls <- lapply(x, FUN=function(x) x$r)
-  r_values <- do.call(c, r_values_ls, quote=FALSE)
+  if(class(x)[1] != "list") x <- list(x)
+  retick <- retick_xaxis(x)
+  r_values_ls <- retick$r_values_ls
+  r_values <- retick$r_values
   nr <- length(r_values)
-  if( any(unlist(lapply(r_values_ls, function(x) { !all(x[-1] - x[-length(x)] > 0) }))) ) {
-    warning("Something strange. The r values are not increasing in a global_envelope object.\n")
-  }
-  if(!is.null(x[[1]]$obs))
-    x_vec <- data.frame(r = r_values,
-                        obs = do.call(c, lapply(x, FUN = function(x) x$obs), quote=FALSE),
-                        central = do.call(c, lapply(x, FUN = function(x) x$central), quote=FALSE),
-                        lo = do.call(c, lapply(x, FUN = function(x) x$lo), quote=FALSE),
-                        hi = do.call(c, lapply(x, FUN = function(x) x$hi), quote=FALSE))
-  else
-    x_vec <- data.frame(r = r_values,
-                        central = do.call(c, lapply(x, FUN = function(x) x$central), quote=FALSE),
-                        lo = do.call(c, lapply(x, FUN = function(x) x$lo), quote=FALSE),
-                        hi = do.call(c, lapply(x, FUN = function(x) x$hi), quote=FALSE))
-  if(length(x) == 1) {
-      retick_xaxis <- FALSE
+  if(!retick$retick_xaxis) {
       new_r_values <- NULL
       r_break_values <- NULL
       loc_break_values <- NULL
       r_values_newstart_id <- NULL
   }
   else {
-    retick_xaxis <- TRUE
+    if(length(x) > 1 & any(unlist(lapply(r_values_ls, function(x) { !all(x[-1] - x[-length(x)] > 0) })))) {
+      warning(paste("Something strange. The r values are not increasing in a", class(x[[1]])[1], "object.\n", sep=""))
+    }
     new_r_values <- 1:nr # to be used in plotting
-    r_values_newstart_id <- NULL
-    r_values_newstart_id[1] <- length(r_values_ls[[1]]) + 1
-    if(length(r_values_ls) > 2) {
-      for(i in 2:(length(r_values_ls)-1))
-        r_values_newstart_id <- c(r_values_newstart_id, r_values_newstart_id[i-1] + length(r_values_ls[[1]]))
+    # Define where the functions start when they are put all together
+    if(length(x) == 1) { # Find from the r-values
+      r_values_newstart_id <- which(!(r_values[1:(nr-1)] < r_values[2:nr])) + 1
+    }
+    else { # Define directly from the r_values_ls
+      r_values_newstart_id <- NULL
+      r_values_newstart_id[1] <- length(r_values_ls[[1]]) + 1
+      if(length(r_values_ls) > 2) {
+        for(i in 2:(length(r_values_ls)-1))
+          r_values_newstart_id <- c(r_values_newstart_id, r_values_newstart_id[i-1] + length(r_values_ls[[1]]))
+      }
     }
     # r-values for labeling ticks
     r_starts <- r_values[c(1, r_values_newstart_id)]
@@ -114,9 +108,23 @@ combined_global_envelope_rhelper <- function(x, nticks = 5) {
     r_break_values <- c(r_break_values, seq(r_starts[nslots], r_ends[nslots], length=nticks))
     loc_break_values <- c(loc_break_values, seq(loc_starts[nslots], loc_ends[nslots], length=nticks))
   }
+  if(class(x[[1]])[1] %in% c("global_envelope", "fboxplot")) {
+    if(!is.null(x[[1]]$obs))
+      x_vec <- data.frame(r = r_values,
+                          obs = do.call(c, lapply(x, FUN = function(x) x$obs), quote=FALSE),
+                          central = do.call(c, lapply(x, FUN = function(x) x$central), quote=FALSE),
+                          lo = do.call(c, lapply(x, FUN = function(x) x$lo), quote=FALSE),
+                          hi = do.call(c, lapply(x, FUN = function(x) x$hi), quote=FALSE))
+    else
+      x_vec <- data.frame(r = r_values,
+                          central = do.call(c, lapply(x, FUN = function(x) x$central), quote=FALSE),
+                          lo = do.call(c, lapply(x, FUN = function(x) x$lo), quote=FALSE),
+                          hi = do.call(c, lapply(x, FUN = function(x) x$hi), quote=FALSE))
+  }
+  else x_vec <- NULL
 
   list(x_vec = x_vec,
-       retick_xaxis = retick_xaxis,
+       retick_xaxis = retick$retick_xaxis,
        new_r_values = new_r_values,
        r_break_values = r_break_values, loc_break_values = loc_break_values,
        r_values_newstart_id = r_values_newstart_id)
