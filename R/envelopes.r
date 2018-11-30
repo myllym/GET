@@ -398,6 +398,10 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
            })
   }
   else {
+    if(plot_style == "fv" & retick_xaxis(list(x))$retick_xaxis) {
+      warning("The plot style fv not available for the case where r distances are not increasing.\n Setting plot_style to basic.\n")
+      plot_style <- "basic"
+    }
     switch(plot_style,
            basic = {
              if(dotplot) {
