@@ -1359,7 +1359,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' and a punch of attributes for the "fv" object type.
 #' @export
 #' @importFrom stats sd
-#' @name sMAD_envelope
+#' @name sMAD_envelope_test
 #' @seealso \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}},
 #' \code{\link{global_envelope_test_2d}}, \code{\link{dg.global_envelope_test}}
 #' @examples
@@ -1409,7 +1409,7 @@ st_envelope <- function(curve_set, ...) {
 #' for different distances r and is also protected against asymmetry of T(r).
 #'
 #' @export
-#' @rdname sMAD_envelope
+#' @rdname sMAD_envelope_test
 #' @importFrom stats quantile
 qdir_envelope <- function(curve_set, ...) {
   args <- list(...)
@@ -1428,7 +1428,7 @@ qdir_envelope <- function(curve_set, ...) {
 #' @references
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #' @export
-#' @rdname sMAD_envelope
+#' @rdname sMAD_envelope_test
 unscaled_envelope <- function(curve_set, ...) {
   args <- list(...)
   if("type" %in% names(args)) warning("type is hardcoded to be unscaled here. No other options.\n")
