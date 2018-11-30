@@ -337,7 +337,6 @@ print.global_envelope <- function(x, ...) {
 #' @method plot global_envelope
 #' @export
 #' @seealso \code{\link{central_region}}
-#' @importFrom spatstat pickoption
 plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab, use_ggplot2,
@@ -800,7 +799,6 @@ print.combined_fboxplot <- function(x, ...) {
 #'
 #' @method plot combined_fboxplot
 #' @export
-#' @importFrom spatstat pickoption
 plot.combined_fboxplot <- function(x, max_ncols_of_plots = 2, main, curve_sets = NULL, ...) {
   n_of_plots <- length(x$global_envelope_ls)
   ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
