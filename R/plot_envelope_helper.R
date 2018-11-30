@@ -405,8 +405,8 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
         if(rdata$retick_xaxis) {
             p <- p + ggplot2::scale_x_continuous(name = xlab,
                                                  breaks = rdata$loc_break_values,
-                                                 labels = paste(round(rdata$r_break_values, digits=2),
-                                                 limits = range(rdata$new_r_values)))
+                                                 labels = paste(round(rdata$r_break_values, digits=2)),
+                                                 limits = range(rdata$new_r_values))
             p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id],
                                          linetype = "dotted")
         }
