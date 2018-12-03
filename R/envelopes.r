@@ -661,27 +661,21 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
   res <- central_region(curve_sets, ...)
-  if(class(res)[1] == "global_envelope") {
-    attr(res, "cr.lo") <- res$lo
-    attr(res, "cr.hi") <- res$hi
-    dist <- factor * (res$hi - res$lo)
-    res$lo <- res$lo - dist
-    res$hi <- res$hi + dist
-    attr(res, "method") <- "functional boxplot"
-    class(res) <- c("fboxplot", class(res)[-1])
-  }
-  else {
-    for(i in 1:length(res$global_envelope_ls)) {
-      attr(res$global_envelope_ls[[i]], "cr.lo") <- res$global_envelope_ls[[i]]$lo
-      attr(res$global_envelope_ls[[i]], "cr.hi") <- res$global_envelope_ls[[i]]$hi
-      dist <- factor * (res$global_envelope_ls[[i]]$hi - res$global_envelope_ls[[i]]$lo)
-      res$global_envelope_ls[[i]]$lo <- res$global_envelope_ls[[i]]$lo - dist
-      res$global_envelope_ls[[i]]$hi <- res$global_envelope_ls[[i]]$hi + dist
-      attr(res$global_envelope_ls[[i]], "method") <- "functional boxplot"
-      class(res$global_envelope_ls[[i]]) <- c("fboxplot", class(res$global_envelope_ls[[i]])[-1])
-      class(res) <- "combined_fboxplot"
+  dist <- factor * (res$hi - res$lo)
+  attr(res, "whisker.lo") <- res$lo - dist
+  attr(res, "whisker.hi") <- res$hi + dist
+  attr(res, "method") <- "Functional boxplot"
+  if(!is.null(attr(res, "global_envelope_ls"))) { # Combined case
+    for(i in 1:length(attr(res, "global_envelope_ls"))) {
+      dist <- factor * (attr(res, "global_envelope_ls")[[i]]$hi - attr(res, "global_envelope_ls")[[i]]$lo)
+      attr(attr(res, "global_envelope_ls")[[i]], "whisker.lo") <- attr(res, "global_envelope_ls")[[i]]$lo - dist
+      attr(attr(res, "global_envelope_ls")[[i]], "whisker.hi") <- attr(res, "global_envelope_ls")[[i]]$hi + dist
+      attr(attr(res, "global_envelope_ls")[[i]], "method") <- "Functional boxplot"
+      class(attr(res, "global_envelope_ls")[[i]]) <- c("fboxplot", class(attr(res, "global_envelope_ls")[[i]]))
     }
   }
+  attr(res, "curve_sets") <- curve_sets
+  class(res) <- c("fboxplot", class(res))
   res
 }
 
