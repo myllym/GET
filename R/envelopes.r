@@ -358,6 +358,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
       main <- env_main_default(x, digits=digits)
     }
   }
+  # ylim
   if(missing('ylim')) {
     if(!separate_yaxes | plot_style != "ggplot2") {
       if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test (level 1)
@@ -369,6 +370,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
     }
     else ylim <- NULL
   }
+  # ylab, ylab, labels
   if(missing('xlab')) xlab <- expression(italic(r))
   if(missing('ylab')) ylab <- expression(italic(T(r)))
   if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
