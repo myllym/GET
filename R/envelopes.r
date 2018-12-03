@@ -348,8 +348,9 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   if(!missing(use_ggplot2) && is.logical(use_ggplot2) && use_ggplot2) plot_style <- "ggplot2"
   else use_ggplot2 <- FALSE
+  # main
   if(missing('main')) {
-    if("global_envelope_ls" %in% names(attributes(x))) { # Combined test
+    if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test
       attr(x, "alternative") <- attr(attr(x, "global_envelope_ls")[[1]], "alternative")
       main <- env_main_default(x, digits=digits)
     }
