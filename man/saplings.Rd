@@ -46,8 +46,8 @@ env <- envelope(saplings, nsim=2499,
 # Crop the curves to the interval of distances [rmin, rmax]
 # (at the same time create a curve_set from 'env')
 curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
-# Perform the rank envelope test
-res <- rank_envelope(curve_set)
+# Perform a global envelope test
+res <- global_envelope_test(curve_set)
 # Plot the result.
 plot(res, plot_style="ggplot2", ylab=expression(italic(hat(L)(r)-r)))
 
@@ -69,33 +69,38 @@ nsim <- 19 # 19 just for experimenting with the code!!
 # (For the rank envelope test, choose type = "rank" instead and increase nsim.)
 system.time( # timing; takes a lot of time,
              # if nsim is reasonably large (for 'qdir' & nsim=499, about 1,6 h)
-  adjenvL <- dg.global_envelope(X = fitted_model,
+  adjenvL <- dg.global_envelope_test(X = fitted_model,
                                fun="Lest", correction="translate",
                                transform = expression(.-r), r=r,
                                type = "qdir", nsim = nsim, nsimsub = nsim,
-                               r_min=rmin, r_max=rmax,
-                               save.cons.envelope=TRUE)
+                               r_min=rmin, r_max=rmax)
 )
 # Plot the test result
-# As save.cons.envelope was set above to TRUE, the unadjusted global envelope can be plotted
-# together with the adjusted envelope.
-plot(adjenvL, plot_style="ggplot2", ylab=expression(italic(L(r)-r)), plot_unadjusted=TRUE)
-# Setting plot_unadjusted=FALSE only the adjusted envelope is plotted.
+plot(adjenvL, plot_style="ggplot2", ylab=expression(italic(L(r)-r)))
 
 # From the test with the L(r)-r function, it appears that the Matern cluster model would be
 # a reasonable model for the saplings pattern.
 # To further explore the goodness-of-fit of the Matern cluster process, test the
 # model with the J function:
 system.time( # timing; takes a lot of time if nsim is reasonably large
-  adjenvJ <- dg.global_envelope(X = fitted_model,
+  adjenvJ <- dg.global_envelope_test(X = fitted_model,
                                 fun="Jest", correction="none", r=rJ,
                                 type = "qdir", nsim = nsim, nsimsub = nsim,
-                                r_min=rminJ, r_max=rmaxJ,
-                                save.cons.envelope=TRUE)
+                                r_min=rminJ, r_max=rmaxJ)
 )
 # Plot the test result
-plot(adjenvJ, ylab=expression(italic(J(r))), plot_unadjusted=FALSE)
+plot(adjenvJ, plot_style="ggplot2", ylab=expression(italic(J(r))))
 # -> the Matern cluster process not adequate for the saplings data
+
+# Test with the two test functions jointly
+adjenvLJ <- dg.global_envelope_test(X = fitted_model,
+                               testfuns = list(L = list(fun="Lest", correction="translate",
+                                               transform = expression(.-r), r=r),
+                                               J = list(fun="Jest", correction="none", r=rJ)),
+                               type = "erl", nsim = nsim, nsimsub = nsim,
+                               r_min=c(rmin, rminJ), r_max=c(rmax, rmaxJ),
+                               save.cons.envelope=TRUE)
+plot(adjenvLJ, plot_style="ggplot2")
 }
 }
 \references{

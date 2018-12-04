@@ -70,7 +70,7 @@ by choosing \code{type = "rank"} and \code{ties = "erl"}, which is in fact the d
 }
 \section{Global envelope}{
 
-The 100(1-alpha)\% global envelope is provided in addition to the p-values. 
+The 100(1-alpha)\% global envelope is provided in addition to the p-values.
 If \code{type = "rank"} then the envelope is the global rank envelope proposed by
 Myllymäki et al. (2017).
 If \code{type = "erl"} then the envelope is the global rank envelope based on the

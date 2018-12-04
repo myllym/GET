@@ -4,13 +4,16 @@
 \alias{plot.global_envelope}
 \title{Plot method for the class 'global_envelope'}
 \usage{
-\method{plot}{global_envelope}(x, plot_style = "basic", dotplot = length(x$r)<10,
+\method{plot}{global_envelope}(x, plot_style = c("basic", "fv", "ggplot2"),
+   dotplot = length(x$r)<10,
    main, ylim, xlab, ylab, use_ggplot2,
    color_outside = TRUE, env.col = 1, base_size = 15,
-   labels = NULL, add = FALSE, ...)
+   labels = NULL, add = FALSE, digits=3,
+   level = 1, separate_yaxes = TRUE, max_ncols_of_plots = 2,
+   nticks = 5, ...)
 }
 \arguments{
-\item{x}{an 'global_envelope' object}
+\item{x}{An 'global_envelope' object}
 
 \item{plot_style}{One of the following "basic", "fv" or "ggplot2".
 The option "basic" (default) offers a very basic global envelope plot.
@@ -40,9 +43,29 @@ outside the envelope. Currently red color is used. Relevant only for \code{plot_
 
 \item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
-\item{labels}{Labels for \code{dotplot = TRUE}; labels for the tests at x-axis.}
+\item{labels}{A character vector of suitable length.
+If \code{dotplot = TRUE}, then labels for the tests at x-axis.
+Labels for the separate plots for \code{plot_style = "ggplot2"}, ignored if separate_yaxes is FALSE.}
 
-\item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).}
+\item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
+Not available for \code{plot_style = "ggplot2"}.}
+
+\item{digits}{The number of digits used for printing the p-value or p-interval in the main,
+if using the default main.}
+
+\item{level}{1 or 2. In the case of combined tests (with several test functions), two different plots are available:
+1 for plotting the combined global envelopes (default and most often wanted) or
+2 for plotting the second level test result.}
+
+\item{separate_yaxes}{Logical (default FALSE). If TRUE, then separate y-axes are used for
+different parts of a combined test. If FALSE, then the components are displayed one next to each other
+with a joint y-axis.}
+
+\item{max_ncols_of_plots}{If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
+number of columns for figures. Default 2. Relevant only for combined tests with several test functions.}
+
+\item{nticks}{The number of ticks on the xaxis. Relevant only for combined tests with
+\code{separate_yaxes = TRUE}.}
 
 \item{...}{Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.}
 }

@@ -2,9 +2,15 @@
 % Please edit documentation in R/envelopes.r
 \name{qdir_envelope}
 \alias{qdir_envelope}
-\title{Directional quantile envelope test}
+\alias{st_envelope}
+\alias{unscaled_envelope}
+\title{Global scaled maximum absolute difference (MAD) envelope tests}
 \usage{
 qdir_envelope(curve_set, ...)
+
+st_envelope(curve_set, ...)
+
+unscaled_envelope(curve_set, ...)
 }
 \arguments{
 \item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
@@ -31,7 +37,7 @@ Essentially a data frame containing columns
 }
 Additionally, the return value has attributes
 \itemize{
-  \item method = The name of the envelope test ("Directional quantile envelope test" for the directional quantile envelope test)
+  \item method = The name of the method ("Global envelope test")
   \item alternative = "two-sided
   \item p = A point estimate for the p-value (default is the mid-rank p-value).
   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
@@ -41,9 +47,27 @@ Additionally, the return value has attributes
 and a punch of attributes for the "fv" object type.
 }
 \description{
-The directional quantile envelope test, which takes into account the unequal 
-variances of the test function T(r) for different distances r and is also 
-protected against asymmetry of T(r).
+Performs the global scaled MAD envelope tests, either directional quantile or studentised,
+or the unscaled MAD envelope test. These tests correspond to calling the
+function \code{\link{global_envelope_test}} with \code{"qdir"}, \code{type = "st"} and
+\code{"unscaled"}, respectively. The functions \code{qdir_envelope}, \code{st_envelope} and
+\code{unscaled_envelope} have been kept for historical reasons;
+preferably use \code{\link{global_envelope_test}} with the suitable \code{type} argument.
+}
+\details{
+The directional quantile envelope test (Myllymäki et al., 2015, 2017)
+takes into account the unequal variances of the test function T(r)
+for different distances r and is also protected against asymmetry of T(r).
+
+The studentised envelope test (Myllymäki et al., 2015, 2017)
+takes into account the unequal variances of the test function T(r)
+for different distances r.
+
+The unscaled envelope test (Ripley, 1981) corresponds to the classical maximum
+deviation test without scaling, and leads to envelopes with constant width over the distances r.
+Thus, it suffers from unequal variance of T(r) over the distances r and from the asymmetry of
+distribution of T(r). We recommend to use the other global envelope tests available,
+see \code{\link{global_envelope_test}} for full list of alternatives.
 }
 \examples{
 ## Testing complete spatial randomness (CSR)
@@ -54,11 +78,10 @@ pp <- spruces
 # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
                 simulate=expression(runifpoint(pp$n, win=pp$window)))
-# The directional quantile envelope test
-res <- qdir_envelope(env)
-plot(res)
+res_qdir <- qdir_envelope(env) # The directional quantile envelope test
+plot(res_qdir)
 # or (requires R library ggplot2)
-plot(res, plot_style="ggplot2")
+plot(res_qdir, plot_style="ggplot2")
 
 ## Advanced use:
 # Create a curve set, choosing the interval of distances [r_min, r_max]
@@ -66,7 +89,11 @@ curve_set <- crop_curves(env, r_min=1, r_max=8)
 # For better visualisation, take the L(r)-r function
 curve_set <- residual(curve_set, use_theo=TRUE)
 # The directional quantile envelope test
-res <- qdir_envelope(curve_set); plot(res, plot_style="ggplot2")
+res_qdir <- qdir_envelope(curve_set); plot(res_qdir, plot_style="ggplot2")
+# The studentised envelope test
+res_st <- st_envelope(curve_set); plot(res_st, plot_style="ggplot2")
+# The unscaled envelope test
+res_unscaled <- unscaled_envelope(curve_set); plot(res_unscaled, plot_style="ggplot2")
 
 ## Random labeling test
 #----------------------
@@ -74,11 +101,17 @@ res <- qdir_envelope(curve_set); plot(res, plot_style="ggplot2")
 mpp <- spruces
 # Use the test function T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
 curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
-res <- qdir_envelope(curve_set)
-plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
+res_qdir <- qdir_envelope(curve_set)
+plot(res_qdir, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 }
 \references{
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+
+Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
+}
+\seealso{
+\code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}},
+\code{\link{global_envelope_test_2d}}, \code{\link{dg.global_envelope_test}}
 }

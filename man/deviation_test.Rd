@@ -4,8 +4,9 @@
 \alias{deviation_test}
 \title{Deviation test}
 \usage{
-deviation_test(curve_set, r_min = NULL, r_max = NULL, use_theo = TRUE,
-  scaling = "qdir", measure = "max", savedevs = FALSE)
+deviation_test(curve_set, r_min = NULL, r_max = NULL,
+  use_theo = TRUE, scaling = "qdir", measure = "max",
+  savedevs = FALSE)
 }
 \arguments{
 \item{curve_set}{A residual curve_set object. Can be obtained by using

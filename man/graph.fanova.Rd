@@ -4,8 +4,10 @@
 \alias{graph.fanova}
 \title{One-way graphical functional ANOVA}
 \usage{
-graph.fanova(nsim, curve_set, groups, variances = "equal", summaryfun,
-  alpha = 0.05, n.aver = 1L, mirror = FALSE, saveperm = FALSE, ...)
+graph.fanova(nsim, curve_set, groups, variances = "equal",
+  summaryfun = c("means", "contrasts"), alpha = 0.05, n.aver = 1L,
+  mirror = FALSE, saveperm = FALSE, test.equality = c("mean", "var",
+  "cov"), cov.lag = 1, ...)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -34,7 +36,20 @@ how many values on each side do contribute (incl. value itself).}
 \item{saveperm}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
 
-\item{...}{Additional parameters to be passed to \code{\link{rank_envelope}}.}
+\item{test.equality}{A character with possible values \code{mean} (default), \code{var} and
+\code{cov}. If \code{mean}, the functional ANOVA is performed to compare the means in the groups.
+If \code{var}, then the equality of variances of the curves in the groups is tested by performing
+the graphical functional ANOVA test on the functions
+\deqn{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}
+If \code{cov}, then the equality of lag \code{cov.lag} covariance is tested by performing the fANOVA with
+\deqn{W_{ij}(r) = \sqrt{|V_{ij}(r)|\cdot sign(V_{ij}(r))},}{|V_{ij}(r)| sign(V_{ij}(r)),}
+where \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
+See Mrkvicka et al. (2018) for more details.}
+
+\item{cov.lag}{The lag of the covariance for testing the equality of covariances,
+see \code{test.equality}.}
+
+\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \description{
 One-way ANOVA tests for functional data with graphical interpretation
@@ -79,12 +94,20 @@ This scaling of the test functions can be obtained by giving the argument \code{
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 
-# type = "erl" is passed to global_envelope_test to obtain the rank envelope based on
-# the extreme rank length ordering of the functions
-res <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means", type="erl")
-plot(res, separate_yaxes=FALSE)
-res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts", type="erl")
-plot(res2, separate_yaxes=TRUE)
+# Test for equality of variances in the groups
+resV <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means",
+                     test.equality="var")
+plot(resV, plot_style="ggplot2")
+# Test for equality of lag 1 covariances in the groups
+resC <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means",
+                     test.equality="cov", cov.lag=1)
+plot(resC, plot_style="ggplot2")
+
+# Test the equality of means in the groups (fANOVA)
+res <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means")
+plot(res, plot_style="ggplot2")
+res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts")
+plot(res2, plot_style="ggplot2")
 }
 \references{
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)

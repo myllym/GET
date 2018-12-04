@@ -4,8 +4,8 @@
 \alias{frank.fanova}
 \title{Rank envelope F-test}
 \usage{
-frank.fanova(nsim, curve_set, groups, alpha = 0.05, variances = "equal",
-  ...)
+frank.fanova(nsim, curve_set, groups, alpha = 0.05,
+  variances = "equal", ...)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -23,7 +23,7 @@ the observed functions in the component \code{obs}.}
 If "unequal", then the corrected F-values are used. The current implementation uses
 \code{\link[stats]{lm}} to get the corrected F-values.}
 
-\item{...}{Additional parameters to be passed to \code{\link{rank_envelope}}.}
+\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \description{
 A one-way functional ANOVA based on the rank envelope applied to F values

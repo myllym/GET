@@ -48,7 +48,7 @@ Essentially a data frame containing columns
 }
 Additionally, the return value has attributes
 \itemize{
-  \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
+  \item method = The name of the envelope test used for plotting purposes ("Global envelope")
   \item alternative = The alternative specified in the function call.
   \item ties = As the argument \code{ties}.
   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
@@ -82,7 +82,7 @@ Thus the \code{curve_set} contains functions (or vectors)
 In the case of one observed function only,
 the data function is considered to be \eqn{T_1(r)}{T_1(r)}.
 
-Generally an envelope is a band bounded by the vectors (or functions) 
+Generally an envelope is a band bounded by the vectors (or functions)
 \eqn{T_{\text{low}}}{T_lo} and \eqn{T_{\text{hi}}}{T_hi}.
 A \eqn{100(1-\alpha)}{100(1-alpha)}\% or 100*coverage\% global envelope is a set
 \eqn{(T_{\text{low}}, T_{\text{hi}})}{(T_lo, T_hi)} of envelope vectors

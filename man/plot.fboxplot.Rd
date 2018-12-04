@@ -4,7 +4,9 @@
 \alias{plot.fboxplot}
 \title{Plot method for the class 'fboxplot'}
 \usage{
-\method{plot}{fboxplot}(x, plot_style = "basic", curve_set, dotplot = length(x$r)<10, ylim, ...)
+\method{plot}{fboxplot}(x, plot_style = c("basic", "fv", "ggplot2"),
+   dotplot = length(x$r)<10, level = 1,
+   outliers = TRUE, bp.col = 2, cr.col = 1, ...)
 }
 \arguments{
 \item{x}{an 'fboxplot' object}
@@ -16,14 +18,19 @@ For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R li
 The option "fv" is currently only available for tests with one test function, whereas the other true allow
 also tests with several tests functions.}
 
-\item{curve_set}{A curve_set of functions, most likely the one from which the functional boxplot
-has been created. If given, then the functions outside the functional boxplot are drawn.}
-
 \item{dotplot}{Logical. If TRUE, then instead of envelopes a dot plot is done.
 Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
-\item{ylim}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{level}{1 or 2. In the case of combined tests (with several test functions), two different plots are available:
+1 for plotting the combined global envelopes (default and most often wanted) or
+2 for plotting the second level test result.}
+
+\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn.}
+
+\item{bp.col}{The color for the boxplot bounds. Default 2 (red).}
+
+\item{cr.col}{The color for the central region bounds.}
 
 \item{...}{Additional arguments to be passed to \code{\link{plot.global_envelope}}.}
 }

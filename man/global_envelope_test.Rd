@@ -2,6 +2,7 @@
 % Please edit documentation in R/envelopes.r
 \name{global_envelope_test}
 \alias{global_envelope_test}
+\alias{GET}
 \title{Global envelope test}
 \usage{
 global_envelope_test(curve_sets, type = "erl", alpha = 0.05,
@@ -228,7 +229,7 @@ if(require(spatstat, quietly=TRUE)) {
 
   # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
   #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
-                   correction="none", r=seq(0, 4, length=500))
+  #                correction="none", r=seq(0, 4, length=500))
 
   # Using direct algorihm can be faster, because the perfect simulation is used here.
   simulations <- NULL
@@ -292,8 +293,7 @@ if(require(spatstat, quietly=TRUE)) {
   res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
                                               curve_set_G, curve_set_J))
   plot(res, plot_style="ggplot2",
-       labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
-       separate_yaxes=TRUE, base_size=12)
+       labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 }
 
 ## A test based on a low dimensional random vector
@@ -332,5 +332,6 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test c
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
 \seealso{
-\code{\link{plot.global_envelope}}
+\code{\link{plot.global_envelope}}, \code{\link{central_region}},
+\code{\link{global_envelope_test_2d}}
 }

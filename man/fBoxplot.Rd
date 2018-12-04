@@ -26,6 +26,6 @@ if(requireNamespace("fda", quietly=TRUE)) {
                                      obs=fda::growth$hgtf))
   plot(curve_set, ylab="height")
   bp <- fBoxplot(curve_set, coverage=0.50, type="area")
-  plot(bp, curve_set=curve_set)
+  plot(bp)
 }
 }
