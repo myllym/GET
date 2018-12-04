@@ -372,7 +372,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #
 # An internal GET function for making a ggplot2 style "global envelope plot".
 #
-# @param x An 'envelope_test' object.
+# @param x An 'global_envelope' object.
 # @param base_size Base font size, to be passed to theme style when \code{plot_type="ggplot2"}.
 # @param main See \code{\link{plot.default}}.
 # @param ylim See \code{\link{plot.default}}.
