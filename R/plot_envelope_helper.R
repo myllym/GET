@@ -263,7 +263,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
 #' @importFrom graphics abline
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                            separate_yaxes = FALSE, max_ncols_of_plots = 2, add = FALSE, env.col = 1,
-                           nticks = 5, ...) {
+                           nticks = 5, curve_sets = NULL, ...) {
     if(class(x)[1] != "list") x <- list(x)
     # Handle combined tests; correct labels on x-axis
     # a) if x is a list of global_envelope objects
@@ -283,6 +283,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
           if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                   type="l", lty=3, lwd=2, xaxt="n", ...)
           else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, xaxt="n", ...)
+          if(!is.null(curve_sets) && class(curve_sets)[1] == "list") curve_sets <- combine_curve_sets(curve_sets)
         }
         if(alt != "greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
         if(alt != "less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
@@ -291,6 +292,13 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
           if(color_outside) {
               outside <- x[['obs']] < x[['lo']] | x[['obs']] > x[['hi']]
               graphics::points(x[['r']][outside], x[['obs']][outside], col="red")
+          }
+        }
+        # curves/outliers
+        if(!is.null(curve_sets)) {
+          for(i in 1:ncol(curve_sets$obs)) {
+            if(any(curve_sets$obs[,i] < x[['lo']] | curve_sets$obs[,i] > x[['hi']]))
+              lines(x[['r']], curve_sets$obs[,i], col=grey(0.7))
           }
         }
         if(rdata$retick_xaxis) {
@@ -313,6 +321,9 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         graphics::par(mfrow=c(nrows_of_plots, ncols_of_plots))
         cat("Note: \"main\" and \"ylim\" ignored as separate plots are produced.\n")
         tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
+        if(!is.null(curve_sets)) {
+          curve_sets <- combine_curve_sets(curve_sets)
+        }
         for(i in 1:n_of_plots) {
             ylim <- c(min(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                           x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
@@ -342,6 +353,14 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
               if(color_outside) {
                   outside <- x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] < x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] | x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] > x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]
                   graphics::points(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
+              }
+            }
+            # curves/outliers
+            if(!is.null(curve_sets)) {
+              for(j in 1:ncol(curve_sets$obs)) {
+                if(any(curve_sets$obs[,j] < x[['lo']] | curve_sets$obs[,j] > x[['hi']]))
+                  lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                        curve_sets$obs[tmp_indeces[i]:(tmp_indeces[i+1]-1),j], col=grey(0.7))
               }
             }
         }
