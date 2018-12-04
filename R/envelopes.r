@@ -657,7 +657,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'                                      obs=fda::growth$hgtf))
 #'   plot(curve_set, ylab="height")
 #'   bp <- fBoxplot(curve_set, coverage=0.50, type="area")
-#'   plot(bp, curve_set=curve_set)
+#'   plot(bp)
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
   res <- central_region(curve_sets, ...)
