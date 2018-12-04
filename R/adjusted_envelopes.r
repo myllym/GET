@@ -429,7 +429,7 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
     # Additions
     if(savepatterns) attr(res, "simpatterns") <- simpatterns
     if(savefuns) attr(res, "simfuns") <- attr(tX, "simfuns")
-    if(save.cons.envelope) attr(res, "unadjusted_envelope_test") <- attr(tX, "envelope_test")
+    if(save.cons.envelope) attr(res, "unadjusted_test") <- attr(tX, "envelope_test")
     attr(res, "simulated_p") <- pvals
     attr(res, "simulated_k") <- stats
     # Return
