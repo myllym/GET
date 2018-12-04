@@ -396,7 +396,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
              p <- env_ggplot(attr(x, "global_envelope_ls"), base_size=base_size,
                              main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                              separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
-                             labels=labels, nticks=nticks)
+                             labels=labels, nticks=nticks, ...)
            })
   }
   else {
@@ -430,7 +430,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
            ggplot2 = {
              p <- env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                              separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
-                             labels=labels, nticks=nticks)
+                             labels=labels, nticks=nticks, ...)
            })
   }
   invisible(p)
