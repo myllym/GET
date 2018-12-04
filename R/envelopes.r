@@ -675,6 +675,8 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
     }
   }
   attr(res, "curve_sets") <- curve_sets
+  attr(res, "factor") <- factor
+  attr(res, "call") <- match.call()
   class(res) <- c("fboxplot", class(res))
   res
 }
