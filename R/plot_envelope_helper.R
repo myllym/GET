@@ -203,13 +203,14 @@ env_ylim_default <- function(x, use_ggplot2) {
 # @param labels Labels for the tests at x-axis.
 # @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
 # @param arrows.col Color for the doplot arrows. If not given, 1 (black) is used.
+# @param curve_sets If provided, then curves going outside the envelope are plotted.
 # @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics plot
 #' @importFrom graphics arrows
 #' @importFrom graphics points
 #' @importFrom graphics axis
-env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
-                        labels=NULL, add=FALSE, arrows.col, ...) {
+env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
+                        labels = NULL, add = FALSE, arrows.col, curve_sets = NULL, ...) {
     nr <- length(x[['r']])
     if(is.null(labels)) labels <- paste(round(x[['r']], digits=2))
     if(missing(arrows.col)) arrows.col <- 1
@@ -230,6 +231,13 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
       if(color_outside) {
         outside <- x[['obs']] < x[['lo']] | x[['obs']] > x[['hi']]
         graphics::points((1:nr)[outside], x[['obs']][outside], pch='x', col="red")
+      }
+    }
+    if(!is.null(curve_sets)) {
+      for(i in 1:ncol(curve_sets$obs)) {
+        if(any(curve_sets$obs[,i] < x[['lo']] | curve_sets$obs[,i] > x[['hi']])) {
+          graphics::points(1:nr, curve_sets$obs[,i], pch='x', col=grey(0.7), type="b")
+        }
       }
     }
 }
