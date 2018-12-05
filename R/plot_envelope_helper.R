@@ -428,10 +428,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     linetype.values <- c('dashed', 'solid')
     size.values <- c(0.2, 0.2)
 
+    counter <- 0
+    outliers <- NULL
     if(!is.null(curve_sets)) {
       if(class(curve_sets)[1] == "list") curve_sets <- combine_curve_sets(curve_sets)
-      counter <- 0
-      outliers <- NULL
       for(j in 1:ncol(curve_sets$obs)) {
         if(any(curve_sets$obs[,j] < x[['lo']] | curve_sets$obs[,j] > x[['hi']])) {
           outliers <- c(outliers, curve_sets$obs[,j])
