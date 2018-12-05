@@ -70,39 +70,32 @@ distribution of T(r). We recommend to use the other global envelope tests availa
 see \code{\link{global_envelope_test}} for full list of alternatives.
 }
 \examples{
+# See more examples in ?global_envelope_test
 ## Testing complete spatial randomness (CSR)
 #-------------------------------------------
-require(spatstat)
-pp <- spruces
-## Test for complete spatial randomness (CSR)
-# Generate nsim simulations under CSR, calculate L-function for the data and simulations
-env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
-                simulate=expression(runifpoint(pp$n, win=pp$window)))
-res_qdir <- qdir_envelope(env) # The directional quantile envelope test
-plot(res_qdir)
-# or (requires R library ggplot2)
-plot(res_qdir, plot_style="ggplot2")
+if(require("spatstat", quietly=TRUE)) {
+  pp <- spruces
+  ## Test for complete spatial randomness (CSR)
+  # Generate nsim simulations under CSR, calculate L-function for the data and simulations
+  env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
+                  simulate=expression(runifpoint(pp$n, win=pp$window)))
+  res_qdir <- qdir_envelope(env) # The directional quantile envelope test
+  plot(res_qdir)
+  # or (requires R library ggplot2)
+  plot(res_qdir, plot_style="ggplot2")
 
-## Advanced use:
-# Create a curve set, choosing the interval of distances [r_min, r_max]
-curve_set <- crop_curves(env, r_min=1, r_max=8)
-# For better visualisation, take the L(r)-r function
-curve_set <- residual(curve_set, use_theo=TRUE)
-# The directional quantile envelope test
-res_qdir <- qdir_envelope(curve_set); plot(res_qdir, plot_style="ggplot2")
-# The studentised envelope test
-res_st <- st_envelope(curve_set); plot(res_st, plot_style="ggplot2")
-# The unscaled envelope test
-res_unscaled <- unscaled_envelope(curve_set); plot(res_unscaled, plot_style="ggplot2")
-
-## Random labeling test
-#----------------------
-# requires library 'marksummary'
-mpp <- spruces
-# Use the test function T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
-curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
-res_qdir <- qdir_envelope(curve_set)
-plot(res_qdir, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
+  ## Advanced use:
+  # Create a curve set, choosing the interval of distances [r_min, r_max]
+  curve_set <- crop_curves(env, r_min=1, r_max=8)
+  # For better visualisation, take the L(r)-r function
+  curve_set <- residual(curve_set, use_theo=TRUE)
+  # The directional quantile envelope test
+  res_qdir <- qdir_envelope(curve_set); plot(res_qdir, plot_style="ggplot2")
+  # The studentised envelope test
+  res_st <- st_envelope(curve_set); plot(res_st, plot_style="ggplot2")
+  # The unscaled envelope test
+  res_unscaled <- unscaled_envelope(curve_set); plot(res_unscaled, plot_style="ggplot2")
+}
 }
 \references{
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004

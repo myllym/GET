@@ -89,103 +89,31 @@ and repeatability of the test.
 }
 
 \examples{
+# See ?global_envelope_test for more examples
 
 ## Testing complete spatial randomness (CSR)
 #-------------------------------------------
-require(spatstat)
-pp <- unmark(spruces)
-# Generate nsim simulations under CSR, calculate L-function for the data and simulations
-env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
-                simulate=expression(runifpoint(pp$n, win=pp$window)))
-# The rank envelope test
-res <- rank_envelope(env)
-# Plot the result.
-# - The central curve is now obtained from env[['theo']], which is the
-# value of the L-function under the null hypothesis (L(r) = r).
-plot(res)
-# or (requires R library ggplot2)
-plot(res, plot_style="ggplot2")
+if(require(spatstat, quietly=TRUE)) {
+  pp <- unmark(spruces)
+  # Generate nsim simulations under CSR, calculate L-function for the data and simulations
+  env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
+                  simulate=expression(runifpoint(pp$n, win=pp$window)))
+  # The rank envelope test
+  res <- rank_envelope(env)
+  # Plot the result.
+  # - The central curve is now obtained from env[['theo']], which is the
+  # value of the L-function under the null hypothesis (L(r) = r).
+  plot(res)
+  # or (requires R library ggplot2)
+  plot(res, plot_style="ggplot2")
 
-## Advanced use:
-# Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
-curve_set <- crop_curves(env, r_min=1, r_max=7)
-# For better visualisation, take the L(r)-r function
-curve_set <- residual(curve_set, use_theo=TRUE)
-# Do the rank envelope test
-res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
-
-## Random labeling test
-#----------------------
-# requires library 'marksummary'
-mpp <- spruces
-# 1) Perform simulations under the random labelling hypothesis and calculate
-# the test function T(r) for the data pattern (mpp) and each simulation.
-# The command below specifies that the test function is T(r) = \\hat{L}_m(r),
-# which is an estimator of the mark-weighted L function, L_m(r),
-# with translational edge correction (default).
-# The random_labelling function returns the centred functions \\hat{L}_m(r)-T_0(r),
-# where T_0(r) = \\hat{L}(r) is the unmarked L function.
-curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
-# 2) Do the rank envelope test
-res <- rank_envelope(curve_set)
-# 3) Plot the test result
-plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
-
-# Make the test using instead the test function T(r) = \\hat{L}_mm(r);
-# which is an estimator of the mark-weighted L function, L_mm(r),
-# with translational edge correction (default).
-curve_set <- random_labelling(mpp, mtf_name='mm', nsim=2499, r_min=1.5, r_max=9.5)
-res <- rank_envelope(curve_set)
-plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
-
-## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
-#-----------------------------------------------
-pp <- unmark(spruces)
-# Minimum distance between points in the pattern
-min(nndist(pp))
-# Fit a model
-fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
-
-\dontrun{
-# Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
-#env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
-                 correction="none", r=seq(0, 4, length=500))
-
-# Using direct algorihm can be faster, because the perfect simulation is used here.
-simulations <- NULL
-for(j in 1:2499) {
-   simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-                                 R=fittedmodel$interaction$par$hc,
-                                 W=pp$window);
-   if(j\%\%10==0) cat(j, "...", sep="")
-}
-env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
-                savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
-curve_set <- crop_curves(env, r_min=1, r_max=3.5)
-res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
-}
-
-## A test based on a low dimensional random vector
-#-------------------------------------------------
-# Let us generate some example data.
-X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
-if(requireNamespace("mvtnorm", quietly=TRUE)) {
-  Y <- mvtnorm::rmvnorm(200,c(0,0),matrix(c(1,0.5,0.5,1),2,2)) # simulations
-  plot(Y, xlim=c(min(X[,1],Y[,1]), max(X[,1],Y[,1])), ylim=c(min(X[,2],Y[,2]), max(X[,2],Y[,2])))
-  points(X, col=2)
-
-  # Test the null hypothesis is that X is from the distribution of Y's (or if it is an outlier).
-
-  # Case 1. The test vector is (X_1, X_2)
-  cset1 <- create_curve_set(list(r=1:2, obs=as.vector(X), sim_m=t(Y)))
-  res1 <- rank_envelope(cset1)
-  plot(res1)
-
-  # Case 2. The test vector is (X_1, X_2, (X_1-mean(Y_1))*(X_2-mean(Y_2))).
-  t3 <- function(x, y) { (x[,1]-mean(y[,1]))*(x[,2]-mean(y[,2])) }
-  cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
-  res2 <- rank_envelope(cset2)
-  plot(res2)
+  ## Advanced use:
+  # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
+  curve_set <- crop_curves(env, r_min=1, r_max=7)
+  # For better visualisation, take the L(r)-r function
+  curve_set <- residual(curve_set, use_theo=TRUE)
+  # Do the rank envelope test
+  res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
 }
 }
 \references{
@@ -196,5 +124,5 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing,
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 }
 \seealso{
-\code{\link{random_labelling}}, \code{\link{plot.global_envelope}}
+\code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}}
 }

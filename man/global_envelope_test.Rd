@@ -181,8 +181,12 @@ if(require(spatstat, quietly=TRUE)) {
   # Plot the result.
   # - The central curve is now obtained from env[['theo']], which is the
   # value of the L-function under the null hypothesis (L(r) = r).
+  # - Three different plot styles are provided:
+  # a) a basic style
   plot(res)
-  # or (requires R library ggplot2)
+  # b) spatstat's style (requires spatstat)
+  plot(res, plot_style="fv")
+  # or ggplot2 style (requires ggplot2)
   plot(res, plot_style="ggplot2")
 
   ## Advanced use:
@@ -195,28 +199,27 @@ if(require(spatstat, quietly=TRUE)) {
 
   ## Random labeling test
   #----------------------
-  if(require(marksummary, quietly=TRUE)) {
   mpp <- spruces
   # 1) Perform simulations under the random labelling hypothesis and calculate
   # the test function T(r) for the data pattern (mpp) and each simulation.
-  # The command below specifies that the test function is T(r) = \\hat{L}_m(r),
-  # which is an estimator of the mark-weighted L function, L_m(r),
-  # with translational edge correction (default).
-  # The random_labelling function returns the centred functions \\hat{L}_m(r)-T_0(r),
-  # where T_0(r) = \\hat{L}(r) is the unmarked L function.
-  curve_set <- random_labelling(mpp, mtf_name='m', nsim=2499, r_min=1.5, r_max=9.5)
-  # 2) Do the rank envelope test
-  res <- global_envelope_test(curve_set)
-  # 3) Plot the test result
-  plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
-
-  # Make the test using instead the test function T(r) = \\hat{L}_mm(r);
+  # The command below specifies that the test function is T(r) = \\hat{L}_mm(r),
   # which is an estimator of the mark-weighted L function, L_mm(r),
-  # with translational edge correction (default).
-  curve_set <- random_labelling(mpp, mtf_name='mm', nsim=2499, r_min=1.5, r_max=9.5)
+  # with translational edge correction.
+  env <- envelope(mpp, fun=Kmark, nsim = 1999, f=function(m1, m2) { m1*m2 },
+                  correction="translate", returnL=TRUE,
+                  simulate=expression(rlabel(mpp, permute=TRUE)), # Permute the marks
+                  savefuns=TRUE) # Save the functions
+  # 2)
+  # Crop curves to desired r-interval
+  curve_set <- crop_curves(env, r_min=1.5, r_max=9.5)
+  # Center the functions, i.e. take \\hat{L}_mm(r)-T_0(r).
+  # Below T_0(r) = \\hat{L}(r) is the mean of simulated functions.
+  # (This is only for visualization, does not affect the test result.)
+  curve_set <- residual(curve_set)
+  # 3) Do the rank envelope test
   res <- global_envelope_test(curve_set)
-  plot(res, plot_style="ggplot2", ylab=expression(italic(L[mm](r)-L(r))))
-  }
+  # 4) Plot the test result
+  plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
 
   \dontrun{
   ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)

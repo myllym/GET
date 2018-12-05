@@ -162,23 +162,7 @@ E.g. Say we have a point pattern, for which we would like to test a hypothesis, 
 
 }
 
-2) The random labeling test with a mark-weighted K-function
-\itemize{
-\item Generate simulations (permuting marks) and estimate the chosen marked K_f-function for each pattern
-      using the function \code{\link{random_labelling}} (requires R library \code{marksummary} available from
-      \code{https://github.com/myllym/}).
-
-      \code{
-      curve_set <- random_labelling(X, mtf_name = 'm', nsim=999, r_min=1.5, r_max=9.5)
-      }
-\item Then do the test and plot the result
-
-      \code{
-      res <- global_envelope_test(curve_set); plot(res)
-      }
-}
-
-3) The workflow when using your own programs for simulations:
+2) The workflow when using your own programs for simulations:
 
 \itemize{
 \item (Fit the model and) Create nsim simulations from the (fitted) null model.

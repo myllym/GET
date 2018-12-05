@@ -100,13 +100,6 @@ res
 # or
 res <- deviation_test(env, r_min=0, r_max=7, measure='int2')
 
-## Random labeling test
-#----------------------
-mpp <- spruces
-# T(r) = \\hat{L}_m(r), an estimator of the L_m(r) function
-curve_set <- random_labelling(mpp, mtf_name = 'm', nsim=999, r_min=1.5, r_max=9.5)
-res <- deviation_test(curve_set, measure='int2')
-res
 }
 \references{
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
