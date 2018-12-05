@@ -378,10 +378,10 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
   if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test, level 1 plots
     switch(plot_style,
            basic = {
-             p <- env_basic_plot(attr(x, "global_envelope_ls"), main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                                color_outside=color_outside, separate_yaxes=separate_yaxes,
-                                max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col,
-                                nticks=nticks, ...)
+             env_basic_plot(attr(x, "global_envelope_ls"), main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                            color_outside=color_outside, separate_yaxes=separate_yaxes,
+                            max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col,
+                            nticks=nticks, ...)
            },
            fv = {
              n_of_plots <- length(attr(x, "global_envelope_ls"))
@@ -389,14 +389,14 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
              nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
              par(mfrow=c(nrows_of_plots, ncols_of_plots))
              for(i in 1:length(attr(x, "global_envelope_ls")))
-               p <- spatstat::plot.fv(attr(x, "global_envelope_ls")[[i]],
-                                      main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=FALSE, ...)
+               spatstat::plot.fv(attr(x, "global_envelope_ls")[[i]],
+                                 main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=FALSE, ...)
            },
            ggplot2 = {
-             p <- env_ggplot(attr(x, "global_envelope_ls"), base_size=base_size,
-                             main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                             separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
-                             labels=labels, nticks=nticks, ...)
+             env_ggplot(attr(x, "global_envelope_ls"), base_size=base_size,
+                        main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                        separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
+                        labels=labels, nticks=nticks, ...)
            })
   }
   else {
@@ -412,28 +412,27 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
     switch(plot_style,
            basic = {
              if(dotplot) {
-               p <- env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                                color_outside=color_outside, labels=labels,
-                                add=add, arrows.col=env.col, ...)
+               env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                           color_outside=color_outside, labels=labels,
+                           add=add, arrows.col=env.col, ...)
              }
              else {
-               p <- env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                                   color_outside=color_outside,
-                                   separate_yaxes=separate_yaxes,
-                                   max_ncols_of_plots=max_ncols_of_plots,
-                                   add=add, env.col=env.col, nticks=nticks, ...)
+               env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                              color_outside=color_outside,
+                              separate_yaxes=separate_yaxes,
+                              max_ncols_of_plots=max_ncols_of_plots,
+                              add=add, env.col=env.col, nticks=nticks, ...)
              }
            },
            fv = {
-             p <- spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
+             spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
            },
            ggplot2 = {
-             p <- env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+             env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                              separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
                              labels=labels, nticks=nticks, ...)
            })
   }
-  invisible(p)
 }
 
 #' Central region / Global envelope
@@ -724,15 +723,15 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
     }
     switch(plot_style,
            basic = {
-             p <- plot.global_envelope(x, plot_style=plot_style, dotplot=dotplot, env.col=bp.col, ..., curve_sets=curve_sets)
+             plot.global_envelope(x, plot_style=plot_style, dotplot=dotplot, env.col=bp.col, ..., curve_sets=curve_sets)
            },
            fv = {
-             p <- plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ...)
+             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ...)
              if(outliers) cat("For fv style & combined boxplots, plotting outliers is not implemented.\n")
            },
            ggplot2 = {
-             p <- plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ...,
-                                       curve_sets=curve_sets, x2=attr(cr, "global_envelope_ls"))
+             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ...,
+                                  curve_sets=curve_sets, x2=attr(cr, "global_envelope_ls"))
            })
   }
   else {
@@ -749,19 +748,19 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
            basic = {
              if(dotplot) {
                # Functional boxplot
-               p <- plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=TRUE, ..., curve_sets=curve_sets)
+               plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=TRUE, ..., curve_sets=curve_sets)
                # Central region
                plot.global_envelope(cr, plot_style=plot_style, env.col=cr.col, dotplot=TRUE, add=TRUE, ..., curve_sets=NULL)
              }
              else {
-               p <- plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=FALSE, ..., curve_sets=curve_sets)
+               plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=FALSE, ..., curve_sets=curve_sets)
                # Central region
                lines(cr$r, cr$lo, lty=2, col=cr.col)
                lines(cr$r, cr$hi, lty=2, col=cr.col)
              }
            },
            fv = {
-             p <- plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=NULL)
+             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=NULL)
              # Outliers
              for(i in 1:ncol(attr(x, "curve_set")$obs)) {
                if(any(curve_sets$obs[,i] < x$lo | curve_sets$obs[,i] > x$hi))
@@ -772,10 +771,9 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
              lines(cr$r, cr$hi, lty=2, col=cr.col)
            },
            ggplot2 = {
-             p <- plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
+             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
            })
   }
-  invisible(p)
 }
 
 
