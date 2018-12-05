@@ -12,16 +12,15 @@ pick_attributes <- function(curve_set, alternative="two.sided") {
                 lo.name <- "infinite lower boundary"
             })
     if(inherits(curve_set, 'envelope')) {
-        fname <- attr(curve_set, "fname")
-        labl <- attr(curve_set, "labl")
+        names <- c("argu", "fname", "labl", "ylab", "yexp", "einfo")
+        for(i in 1:length(names)) assign(names[i], attr(curve_set, names[i]))
         desc <- attr(curve_set, "desc")
         desc[4] <- lo.name
         desc[5] <- hi.name
-        ylab <- attr(curve_set, "ylab")
-        einfo <- attr(curve_set, "einfo")
     }
     else {
         fname <- "T"
+        argu <- "r"
         if(is.vector(curve_set[['obs']])) {
           labl <- c("r", "T[obs](r)", "T[0](r)", "T[lo](r)", "T[hi](r)")
           desc <- c("distance argument r",
@@ -36,13 +35,14 @@ pick_attributes <- function(curve_set, alternative="two.sided") {
                     lo.name, hi.name)
         }
         ylab <- "T(r)"
+        yexp <- expression(italic(T(r)))
         einfo <- list(Yname="curve_set[['obs']]", valname="", csr=FALSE, crs.theo=FALSE,
                       use.theory=with(curve_set, exists("theo")), pois=FALSE,
                       simtype="other",
                       global=TRUE, ginterval=range(curve_set[['r']]),
                       VARIANCE=FALSE, alternative=alternative)
     }
-    list(fname=fname, labl=labl, desc=desc, ylab=ylab, einfo=einfo)
+    list(argu=argu, fname=fname, labl=labl, desc=desc, ylab=ylab, yexp=yexp, einfo=einfo)
 }
 
 # A helper function to check whether the xaxis needs to be reticked with new values due to
