@@ -6,13 +6,20 @@
 #
 # @param base_size base font size
 # @param base_family base font family
-#' @import ggplot2
+#' @importFrom ggplot2 theme_grey
+#' @importFrom ggplot2 "%+replace%"
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_line
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 rel
+#' @importFrom grid unit
 ThemePlain <- function(base_size=15, base_family='') {
     if(!requireNamespace("ggplot2", quietly=TRUE)) {
         stop('ggplot2 must be installed to use ThemePlain.')
     }
     # Starts with theme_bw and then modify some parts
-    ggplot2::theme_grey(base_size=base_size, base_family=base_family) %+replace%
+    ggplot2::"%+replace%"(ggplot2::theme_grey(base_size=base_size, base_family=base_family),
             ggplot2::theme(
                     panel.background=ggplot2::element_blank(),
                     panel.grid.major=ggplot2::element_line(colour='grey90', size=ggplot2::rel(0.2)),
@@ -25,5 +32,5 @@ ThemePlain <- function(base_size=15, base_family='') {
                     legend.key.height=grid::unit(0, "inches"),
                     legend.spacing=grid::unit(0, "inches"),
                     plot.margin=grid::unit(c(0.01,0.01,0,0), "inches")
-            )
+            ))
 }
