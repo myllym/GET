@@ -938,8 +938,12 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
 #'   # Plot the result.
 #'   # - The central curve is now obtained from env[['theo']], which is the
 #'   # value of the L-function under the null hypothesis (L(r) = r).
+#'   # - Three different plot styles are provided:
+#'   # a) a basic style
 #'   plot(res)
-#'   # or (requires R library ggplot2)
+#'   # b) spatstat's style (requires spatstat)
+#'   plot(res, plot_style="fv")
+#'   # or ggplot2 style (requires ggplot2)
 #'   plot(res, plot_style="ggplot2")
 #'
 #'   ## Advanced use:
