@@ -126,19 +126,14 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   attr(res, "alpha") <- 1 - coverage
   attr(res, "k") <- distance
   # for fv
-  attr(res, "fname") <- picked_attr$fname
-  attr(res, "argu") <- "r"
+  for(name in names(picked_attr)) attr(res, name) <- picked_attr[[name]]
   attr(res, "valu") <- "central"
-  attr(res, "ylab") <- picked_attr$ylab
   attr(res, "fmla") <- ". ~ r"
   attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
-  attr(res, "labl") <- picked_attr$labl
-  attr(res, "desc") <- picked_attr$desc
   #attr(res, "unitname") <- "unit / units"
   attr(res, "shade") <- c("lo", "hi")
   picked_attr$einfo$nsim <- Nfunc
   picked_attr$einfo$nrank <- (1-coverage)*Nfunc
-  attr(res, "einfo") <- picked_attr$einfo
   attr(res, "call") <- match.call()
   res
 }
