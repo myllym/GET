@@ -366,8 +366,8 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
     else ylim <- NULL
   }
   # ylab, ylab, labels
-  if(missing('xlab')) xlab <- expression(italic(r))
-  if(missing('ylab')) ylab <- expression(italic(T(r)))
+  if(missing('xlab')) xlab <- attr(x, "argu")
+  if(missing('ylab')) ylab <- attr(x, "yexp")
   if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
 
   if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test, level 1 plots
