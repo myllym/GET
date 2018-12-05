@@ -735,7 +735,7 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
            })
   }
   else {
-    if(retick_xaxis(list(x))$retick_xaxis) {
+    if(retick_xaxis(x)$retick_xaxis) {
       if(plot_style == "fv") {
         warning("The plot style fv not available for the case where r distances are not increasing.\n Setting plot_style to basic.\n")
         plot_style <- "basic"
