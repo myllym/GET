@@ -490,7 +490,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                     + ggplot2::scale_size_manual(values = size.values, name = '')
                     + ThemePlain(base_size=base_size)
                     )
-        if(!is.null(curve_sets)) {
+        if(!is.null(outliers)) {
           outliers.df <- data.frame(r = rep(x[['r']], times=counter),
                                     curves = outliers,
                                     id = rep(1:counter, each=length(x[['r']])))
@@ -584,7 +584,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                 + ThemePlain(base_size=base_size)
                 + ggplot2::labs(title=main)
         )
-        if(!is.null(curve_sets)) {
+        if(!is.null(outliers)) {
           outliers.df <- data.frame(r = rep(x[['r']], times=counter),
                                     curves = outliers,
                                     id = rep(1:counter, each=length(x[['r']])),
