@@ -15,9 +15,6 @@
 #' @importFrom ggplot2 rel
 #' @importFrom grid unit
 ThemePlain <- function(base_size=15, base_family='') {
-    if(!requireNamespace("ggplot2", quietly=TRUE)) {
-        stop('ggplot2 must be installed to use ThemePlain.')
-    }
     # Starts with theme_bw and then modify some parts
     ggplot2::"%+replace%"(ggplot2::theme_grey(base_size=base_size, base_family=base_family),
             ggplot2::theme(
