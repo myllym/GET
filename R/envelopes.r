@@ -1180,7 +1180,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #' }
 #' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
 #' @export
-#' @seealso \code{\link{random_labelling}}, \code{\link{plot.global_envelope}}
+#' @seealso \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}}
 #' @examples
 #'
 #' ## Testing complete spatial randomness (CSR)
