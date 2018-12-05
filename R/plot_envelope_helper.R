@@ -388,7 +388,17 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 # @param curve_sets If provided, then curves going outside the envelope are plotted.
 # @param x2 Another 'global_envelope' object, which is plotted within x, i.e. x2 is assumed to be narrower
 # of the two envelopes.
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_ribbon
+#' @importFrom ggplot2 aes_
+#' @importFrom ggplot2 geom_line
+#' @importFrom ggplot2 facet_grid
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom ggplot2 scale_linetype_manual
+#' @importFrom ggplot2 scale_size_manual
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 geom_vline
+#' @importFrom ggplot2 labs
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                        separate_yaxes = TRUE, max_ncols_of_plots = 2,
                        labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL) {
@@ -484,7 +494,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
           outliers.df <- data.frame(r = rep(x[['r']], times=counter),
                                     curves = outliers,
                                     id = rep(1:counter, each=length(x[['r']])))
-          p <- p + geom_line(data = outliers.df, aes_(x = ~r, y = ~curves, group = ~id))
+          p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
         }
         if(rdata$retick_xaxis) {
             p <- p + ggplot2::scale_x_continuous(name = xlab,
@@ -572,14 +582,14 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                 + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
                 + ggplot2::scale_size_manual(values = size.values, name = '')
                 + ThemePlain(base_size=base_size)
-                + labs(title=main)
+                + ggplot2::labs(title=main)
         )
         if(!is.null(curve_sets)) {
           outliers.df <- data.frame(r = rep(x[['r']], times=counter),
                                     curves = outliers,
                                     id = rep(1:counter, each=length(x[['r']])),
                                     test_function = factor(func_labels, levels=labels))
-          p <- p + geom_line(data = outliers.df, aes_(x = ~r, y = ~curves, group = ~id))
+          p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
         }
         print(p)
         return(invisible(p))
