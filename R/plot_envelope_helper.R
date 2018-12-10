@@ -254,6 +254,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
 # number of columns for figures. Default 2.
 # @param env.col The color for the envelope lines. Default 1 (black).
 # @param nticks The number of ticks on the xaxis, if the xaxis is re-ticked for combined tests.
+# @param obs.type The line type of the observed function (if exists).
 # @param ... Additional parameters to be passed to the function \code{\link{plot}}.
 #' @importFrom graphics par
 #' @importFrom graphics plot
@@ -263,7 +264,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
 #' @importFrom graphics abline
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                            separate_yaxes = FALSE, max_ncols_of_plots = 2, add = FALSE, env.col = 1,
-                           nticks = 5, curve_sets = NULL, ...) {
+                           nticks = 5, curve_sets = NULL, obs.type = "l", ...) {
     if(class(x)[1] != "list") x <- list(x)
     # Handle combined tests; correct labels on x-axis
     # a) if x is a list of global_envelope objects
@@ -288,7 +289,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         if(alt != "greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
         if(alt != "less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
         if(!is.null(x[['obs']])) {
-          lines(x[['r']], x[['obs']], lty=1)
+          lines(x[['r']], x[['obs']], lty=1, type=obs.type)
           if(color_outside) {
               outside <- x[['obs']] < x[['lo']] | x[['obs']] > x[['hi']]
               graphics::points(x[['r']][outside], x[['obs']][outside], col="red")
@@ -350,7 +351,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
             else
                 graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
             if(!is.null(x[['obs']])) {
-              graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=1)
+              graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=1, type=obs.type)
               if(color_outside) {
                   outside <- x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] < x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] | x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] > x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]
                   graphics::points(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
