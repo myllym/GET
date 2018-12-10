@@ -423,6 +423,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
              }
            },
            fv = {
+             if(!separate_yaxes) cat("Note: separate_yaxes = FALSE not available for plot_style = \"fv\".\n")
              spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
            },
            ggplot2 = {
