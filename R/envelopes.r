@@ -324,7 +324,7 @@ print.global_envelope <- function(x, ...) {
 #' number of columns for figures. Default 2. Relevant only for combined tests with several test functions.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
-#' Labels for the separate plots for \code{plot_style = "ggplot2"}, ignored if separate_yaxes is FALSE.
+#' Labels for the separate plots, ignored if separate_yaxes is FALSE.
 #' @param nticks The number of ticks on the xaxis. Relevant only for combined tests with
 #' \code{separate_yaxes = TRUE}.
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
@@ -373,6 +373,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
   if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test, level 1 plots
     switch(plot_style,
            basic = {
+             if(separate_yaxes) main <- labels
              env_basic_plot(attr(x, "global_envelope_ls"), main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                             color_outside=color_outside, separate_yaxes=separate_yaxes,
                             max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col,
@@ -385,7 +386,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
              par(mfrow=c(nrows_of_plots, ncols_of_plots))
              for(i in 1:length(attr(x, "global_envelope_ls")))
                spatstat::plot.fv(attr(x, "global_envelope_ls")[[i]],
-                                 main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=FALSE, ...)
+                                 main=labels[i], ylim=ylim, xlab=xlab, ylab=ylab, add=FALSE, ...)
            },
            ggplot2 = {
              env_ggplot(attr(x, "global_envelope_ls"), base_size=base_size,
@@ -407,11 +408,13 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
     switch(plot_style,
            basic = {
              if(dotplot) {
+               if(length(labels) != length(x$r)) labels <- NULL
                env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                            color_outside=color_outside, labels=labels,
                            add=add, arrows.col=env.col, ...)
              }
              else {
+               if(separate_yaxes) main <- labels
                env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                               color_outside=color_outside,
                               separate_yaxes=separate_yaxes,
