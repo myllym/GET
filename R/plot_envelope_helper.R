@@ -591,6 +591,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                                     test_function = factor(func_labels, levels=labels))
           p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
         }
+        p <- p + ggplot2::scale_x_continuous(name = xlab)
     }
     # Return
     p
