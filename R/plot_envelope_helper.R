@@ -1,5 +1,5 @@
 # A helper function for avoiding repetition of code (in envelope tests).
-pick_attributes <- function(curve_set, alternative="two.sided") {
+pick_attributes <- function(curve_set, alternative, type) {
     # saving for attributes / plotting purposes
     lo.name <- "lower critical boundary for %s"
     hi.name <- "upper critical boundary for %s"
@@ -458,10 +458,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
         }
         else {
           df <- data.frame(r = rep(x[['r']], times=2),
-                           curves = c(x[['central']], x[['obs']]),
-                           type = factor(rep(c("Central function", "Data function"),
+                           curves = c(x[['obs']], x[['central']]),
+                           type = factor(rep(c("Data function", "Central function"),
                                              each=length(x[['r']])),
-                                         levels=c("Data function", "Central function")),
+                                         levels=c("Central function", "Data function")),
                            lower = rep(x[['lo']], times=2),
                            upper = rep(x[['hi']], times=2),
                            main = main)
@@ -547,10 +547,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
         }
         else {
           df <- data.frame(r = rep(x[['r']], times=2),
-                           curves = c(x[['central']], x[['obs']]),
-                           type = factor(rep(c("Central function", "Data function"),
+                           curves = c(x[['obs']], x[['central']]),
+                           type = factor(rep(c("Data function", "Central function"),
                                              each=length(x[['r']])),
-                                         levels=c("Data function", "Central function")),
+                                         levels=c("Central function", "Data function")),
                            lower = rep(x[['lo']], times=2),
                            upper = rep(x[['hi']], times=2),
                            main = main,
