@@ -338,7 +338,8 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)
 #' plot(res, ylab="F-statistic")
 #' }
-frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal", ...) {
+frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal",
+                         test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
   curve_set <- convert_fdata(curve_set)
@@ -349,16 +350,30 @@ frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal",
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
     groups <- as.factor(groups)
   }
+  r <- curve_set[['r']]
+  test.equality <- match.arg(test.equality)
+  switch(test.equality,
+         "mean" = {
+           if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
+           if(variances == "equal") fun <- Fvalues
+           else fun <- corrFvalues
+         },
+         "var" = {
+           x <- testUnequalVarTrans(x, groups)
+           fun <- Fvalues
+         },
+         "cov" = {
+           x <- testUnequalCovTrans(x, groups, lag=cov.lag)
+           r <- r[1:(length(r)-cov.lag)]
+           fun <- Fvalues
+         })
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
-  if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
-  if(variances == "equal") fun <- Fvalues
-  else fun <- corrFvalues
 
   obs <- fun(x, groups)
   # simulations by permuting to which groups the functions belong to
   sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)))
 
-  cset <- create_curve_set(list(r = curve_set$r, obs = obs, sim_m = sim))
+  cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
   # Perform the global envelope test
   global_envelope_test(cset, alpha=alpha, alternative="greater", ...)
 }
