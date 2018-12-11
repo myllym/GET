@@ -17,6 +17,13 @@ pick_attributes <- function(curve_set, alternative, type) {
         desc <- attr(curve_set, "desc")
         desc[4] <- lo.name
         desc[5] <- hi.name
+        einfo$global <- TRUE
+        einfo$alternative <- alternative
+        einfo$scale <- NULL
+        einfo$clamp <- NULL
+        einfo$nrank <- NULL
+        einfo$VARIANCE <- (type == "st")
+        einfo$nSD <- NULL
     }
     else {
         fname <- "T"
@@ -35,12 +42,29 @@ pick_attributes <- function(curve_set, alternative, type) {
                     lo.name, hi.name)
         }
         ylab <- "T(r)"
-        yexp <- expression(italic(T(r)))
-        einfo <- list(Yname="curve_set[['obs']]", valname="", csr=FALSE, crs.theo=FALSE,
-                      use.theory=with(curve_set, exists("theo")), pois=FALSE,
-                      simtype="other",
-                      global=TRUE, ginterval=range(curve_set[['r']]),
-                      VARIANCE=FALSE, alternative=alternative)
+        yexp <- quote(T(r))
+        # tack on envelope information
+        einfo <- list(global = TRUE,
+                      ginterval = range(curve_set[['r']]),
+                      alternative = alternative,
+                      scale = NULL,
+                      clamp = NULL,
+                      csr = FALSE,
+                      use.theory = with(curve_set, exists("theo")),
+                      csr.theo = FALSE,
+                      pois = FALSE,
+                      simtype = "other",
+                      constraints = NULL,
+                      nrank = NULL,
+                      VARIANCE = (type == "st"),
+                      nSD = NULL,
+                      valname = NULL,
+                      dual = NULL,
+                      nsim = NULL,
+                      nsim2 = NULL,
+                      Yname = "curve_set[['obs']]",
+                      do.pwrong=FALSE,
+                      use.weights=FALSE)
     }
     list(argu=argu, fname=fname, labl=labl, desc=desc, ylab=ylab, yexp=yexp, einfo=einfo)
 }
