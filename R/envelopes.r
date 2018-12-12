@@ -373,8 +373,14 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
     else ylim <- NULL
   }
   # ylab, ylab, labels
-  if(missing('xlab')) xlab <- attr(x, "argu")
-  if(missing('ylab')) ylab <- attr(x, "yexp")
+  if(missing('xlab')) {
+    if(attr(x, "xlab") == attr(x, "argu")) xlab <- substitute(italic(i), list(i=attr(x, "xexp")))
+    else xlab <- substitute(paste(i, " (", italic(j), ")", sep=""), list(i=attr(x, "xexp"), j=attr(x, "argu")))
+  }
+  if(missing('ylab')) {
+    if(inherits(attr(x, "yexp"), "character")) ylab <- attr(x, "yexp")
+    else ylab <- substitute(italic(i), list(i=attr(x, "yexp")))
+  }
   if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
 
   if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test, level 1 plots
