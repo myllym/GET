@@ -159,7 +159,7 @@ combined_global_envelope_rhelper <- function(x, nticks = 5) {
 # @param x An 'global_envelope' object.
 env_main_default <- function(x, digits=3) {
   if(!is.null(attr(x, "p_interval"))) {
-    if(attr(x, "alternative") == "two.sided")
+    if(attr(x, "einfo")$alternative == "two.sided")
       main <- paste(attr(x, "method"), ": p-interval = (",
                     round(attr(x, "p_interval")[1], digits=digits),", ",
                     round(attr(x, "p_interval")[2], digits=digits), ")", sep="")
@@ -167,15 +167,15 @@ env_main_default <- function(x, digits=3) {
       main <- paste(attr(x, "method"), ": p-interval = (",
                     round(attr(x, "p_interval")[1], digits=digits),", ",
                     round(attr(x, "p_interval")[2], digits=digits), ") \n",
-                    "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
+                    "Alternative = \"", attr(x, "einfo")$alternative, "\"\n", sep="")
   }
   else {
     if(!is.null(attr(x, "p"))) {
-      if(attr(x, "alternative") == "two.sided")
+      if(attr(x, "einfo")$alternative == "two.sided")
         main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"), digits=digits), sep="")
       else
         main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"), digits=digits), "\n",
-                      "Alternative = \"", attr(x, "alternative"), "\"\n", sep="")
+                      "Alternative = \"", attr(x, "einfo")$alternative, "\"\n", sep="")
     }
     else {
       switch(class(x)[1],
@@ -242,11 +242,11 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
     if(!add) graphics::plot(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
     else graphics::points(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
-    if(attr(x, "alternative")!="greater")
+    if(attr(x, "einfo")$alternative!="greater")
         graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=arrows.col)
     else
         graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
-    if(attr(x, "alternative")!="less")
+    if(attr(x, "einfo")$alternative!="less")
         graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=arrows.col)
     else
         graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))

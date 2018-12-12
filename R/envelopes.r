@@ -352,7 +352,7 @@ plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
   # main
   if(missing('main')) {
     if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test
-      attr(x, "alternative") <- attr(attr(x, "global_envelope_ls")[[1]], "alternative")
+      attr(x, "einfo")$alternative <- attr(attr(x, "global_envelope_ls")[[1]], "einfo")$alternative
       main <- env_main_default(x, digits=digits)
     }
     else {
