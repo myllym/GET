@@ -1,4 +1,5 @@
 # Functionality for central regions based on a curve set
+#' @importFrom spatstat fv
 individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       alternative = c("two.sided", "less", "greater"),
                                       probs = c((1-coverage)/2, 1-(1-coverage)/2),
@@ -17,7 +18,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
     central <- "median"
     warning("Invalid option fiven for central. Using central = median.\n")
   }
-  picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
+  picked_attr <- pick_attributes(curve_set, alternative=alternative, type=type) # saving for attributes / plotting purposes
   curve_set <- convert_envelope(curve_set)
 
   # Measures for functional ordering
@@ -113,27 +114,33 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          "less" = { UB <- Inf },
          "greater" = { LB <- -Inf })
 
-  if(is.vector(curve_set[['obs']]))
-    res <- structure(data.frame(r=curve_set[['r']], obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB),
-                     class=c("global_envelope", "envelope", "fv", "data.frame"))
-  else
-    res <- structure(data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB),
-                     class=c("global_envelope", "envelope", "fv", "data.frame"))
+  if(is.vector(curve_set[['obs']])) {
+    df <- data.frame(r=curve_set[['r']], obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB)
+    picked_attr$einfo$nsim <- Nfunc-1
+  }
+  else {
+    df <- data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB)
+    picked_attr$einfo$nsim <- Nfunc
+  }
+  res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
+            ylab = picked_attr[['ylab']], valu = "central", fmla = ". ~ r",
+            alim = c(min(curve_set[['r']]), max(curve_set[['r']])),
+            labl = picked_attr[['labl']], desc = picked_attr[['desc']],
+            unitname = NULL, fname = picked_attr[['fname']], yexp = picked_attr[['yexp']])
+  attr(res, "shade") <- c("lo", "hi")
+  if(type == "st") picked_attr$einfo$nSD <- kalpha
+  if(type == "rank") picked_attr$einfo$nrank <- kalpha
+  attr(res, "einfo") <- picked_attr[['einfo']]
+  attr(res, "xlab") <- picked_attr[['xlab']]
+  attr(res, "xexp") <- picked_attr[['xexp']]
+  # Extra for global envelopes
+  class(res) <- c("global_envelope", "envelope", class(res))
   attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
   attr(res, "alternative") <- alternative
   attr(res, "k_alpha") <- kalpha
   attr(res, "alpha") <- 1 - coverage
   attr(res, "k") <- distance
-  # for fv
-  for(name in names(picked_attr)) attr(res, name) <- picked_attr[[name]]
-  attr(res, "valu") <- "central"
-  attr(res, "fmla") <- ". ~ r"
-  attr(res, "alim") <- c(min(curve_set[['r']]), max(curve_set[['r']]))
-  #attr(res, "unitname") <- "unit / units"
-  attr(res, "shade") <- c("lo", "hi")
-  picked_attr$einfo$nsim <- Nfunc
-  picked_attr$einfo$nrank <- (1-coverage)*Nfunc
   attr(res, "call") <- match.call()
   res
 }
