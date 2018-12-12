@@ -197,7 +197,7 @@ env_main_default <- function(x, digits=3) {
 env_ylim_default <- function(x, use_ggplot2) {
   if(class(x)[1] != "list") x <- list(x)
   if(!use_ggplot2)
-    switch(attr(x[[1]], "alternative"),
+    switch(attr(x[[1]], "einfo")$alternative,
             two.sided = {
               ylim <- c(do.call(min, lapply(x, function(x) min(x[['obs']],x[['lo']],x[['hi']],x[['central']])), quote=FALSE),
                         do.call(max, lapply(x, function(x) max(x[['obs']],x[['lo']],x[['hi']],x[['central']])), quote=FALSE))
@@ -295,7 +295,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     # a) if x is a list of global_envelope objects
     # b) if x[['r']] contains repeated values (when length(x) == 1)
     rdata <- combined_global_envelope_rhelper(x, nticks=nticks)
-    alt <- attr(x[[1]], "alternative")
+    alt <- attr(x[[1]], "einfo")$alternative
     x <- rdata$x_vec
     # Plot
     if(!separate_yaxes) {
@@ -441,7 +441,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     # a) if x is a list of global_envelope objects
     # b) if x[['r']] contains repeated values (when length(x) == 1)
     rdata <- combined_global_envelope_rhelper(x, nticks=nticks)
-    alt <- attr(x[[1]], "alternative")
+    alt <- attr(x[[1]], "einfo")$alternative
     x <- rdata$x_vec
 
     linetype.values <- c('dashed', 'solid')
