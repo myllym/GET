@@ -197,7 +197,6 @@ contrasts <- function(x, groups, ...){
 #' See description for their meaning.
 # Note: Possibly add a some arguments to specify which contrasts should be used.
 # (Try to find our how this is usually done in R, in ordinary anova.)
-#' @param alpha The significance level of the test.
 #' @param n.aver If variances = "unequal", there is a possibility to use variances smoothed
 #' by appying moving average to the estimated sample variances. n.aver determines
 #' how many values on each side do contribute (incl. value itself).
@@ -244,7 +243,7 @@ contrasts <- function(x, groups, ...){
 #' res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts")
 #' plot(res2, plot_style="ggplot2")
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
-                         summaryfun = c("means", "contrasts"), alpha = 0.05,
+                         summaryfun = c("means", "contrasts"),
                          n.aver = 1L, mirror = FALSE, saveperm=FALSE,
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
@@ -271,7 +270,6 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
            x <- testUnequalCovTrans(x, groups, lag=cov.lag)
            r <- r[1:(length(r)-cov.lag)]
          })
-  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
 
   summaryfun <- match.arg(summaryfun)
   # setting that 'summaryfun' is a function
@@ -289,7 +287,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
                                 obs = obs,
                                 sim_m = sim))
-  res <- global_envelope_test(cset, alpha=alpha, alternative="two.sided", ...)
+  res <- global_envelope_test(cset, alternative="two.sided", ...)
   attr(res, "method") <- "Graphical functional ANOVA" # Change method name
   attr(res, "summaryfun") <- summaryfun
   attr(res, "labels") <- complabels
