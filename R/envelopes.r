@@ -137,7 +137,6 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   class(res) <- c("global_envelope", "envelope", class(res))
   attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
-  attr(res, "alternative") <- alternative
   attr(res, "k_alpha") <- kalpha
   attr(res, "alpha") <- 1 - coverage
   attr(res, "k") <- distance
