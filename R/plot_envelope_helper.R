@@ -66,7 +66,8 @@ pick_attributes <- function(curve_set, alternative, type) {
                       do.pwrong=FALSE,
                       use.weights=FALSE)
     }
-    list(argu=argu, fname=fname, labl=labl, desc=desc, ylab=ylab, yexp=yexp, einfo=einfo)
+    list(argu=argu, fname=fname, labl=labl, desc=desc, ylab=ylab, yexp=yexp,
+         xlab=argu, xexp=quote(r), einfo=einfo)
 }
 
 # A helper function to check whether the xaxis needs to be reticked with new values due to
