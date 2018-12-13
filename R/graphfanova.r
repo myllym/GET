@@ -336,7 +336,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)
 #' plot(res, ylab="F-statistic")
 #' }
-frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal",
+frank.fanova <- function(nsim, curve_set, groups, variances="equal",
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
@@ -365,7 +365,6 @@ frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal",
            r <- r[1:(length(r)-cov.lag)]
            fun <- Fvalues
          })
-  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
 
   obs <- fun(x, groups)
   # simulations by permuting to which groups the functions belong to
@@ -373,5 +372,5 @@ frank.fanova <- function(nsim, curve_set, groups, alpha=0.05, variances="equal",
 
   cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
   # Perform the global envelope test
-  global_envelope_test(cset, alpha=alpha, alternative="greater", ...)
+  global_envelope_test(cset, alternative="greater", ...)
 }
