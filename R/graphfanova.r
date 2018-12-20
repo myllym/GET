@@ -201,7 +201,7 @@ contrasts <- function(x, groups, ...){
 #' by appying moving average to the estimated sample variances. n.aver determines
 #' how many values on each side do contribute (incl. value itself).
 #' @param mirror The complement of the argument circular of \code{\link[stats]{filter}}.
-#' @param saveperm Logical. If TRUE, then the functions from permutations are saved to the attribute
+#' @param savefuns Logical. If TRUE, then the functions from permutations are saved to the attribute
 #' simfuns.
 #' @param test.equality A character with possible values \code{mean} (default), \code{var} and
 #' \code{cov}. If \code{mean}, the functional ANOVA is performed to compare the means in the groups.
@@ -244,7 +244,7 @@ contrasts <- function(x, groups, ...){
 #' plot(res2, plot_style="ggplot2")
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          summaryfun = c("means", "contrasts"),
-                         n.aver = 1L, mirror = FALSE, saveperm=FALSE,
+                         n.aver = 1L, mirror = FALSE, savefuns=FALSE,
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
@@ -292,7 +292,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   attr(res, "summaryfun") <- summaryfun
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
-  if(saveperm) attr(res, "simfuns") <- sim
+  if(savefuns) attr(res, "simfuns") <- sim
   res
 }
 
