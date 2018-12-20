@@ -309,7 +309,8 @@ print.curve_set <- function(x, ...) {
 #' @importFrom grDevices grey
 #' @importFrom graphics axis
 #' @importFrom graphics abline
-plot.curve_set <- function(x, ylim, xlab="r", ylab="obs", col_obs=1, col_sim=grDevices::grey(0.7), ...) {
+plot.curve_set <- function(x, ylim, xlab = "r", ylab = "obs",
+                           col_obs = 1, col_sim = grDevices::grey(0.7), ...) {
     if(with(x, is.matrix(obs))) {
       funcs <- x[['obs']]
       col_sim <- col_obs
