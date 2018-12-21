@@ -45,7 +45,7 @@ outside the envelope. Currently red color is used. Relevant only for \code{plot_
 
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE}, then labels for the tests at x-axis.
-Labels for the separate plots for \code{plot_style = "ggplot2"}, ignored if separate_yaxes is FALSE.}
+Labels for the separate plots, ignored if separate_yaxes is FALSE.}
 
 \item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
 Not available for \code{plot_style = "ggplot2"}.}

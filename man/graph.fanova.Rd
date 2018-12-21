@@ -5,9 +5,9 @@
 \title{One-way graphical functional ANOVA}
 \usage{
 graph.fanova(nsim, curve_set, groups, variances = "equal",
-  summaryfun = c("means", "contrasts"), alpha = 0.05, n.aver = 1L,
-  mirror = FALSE, saveperm = FALSE, test.equality = c("mean", "var",
-  "cov"), cov.lag = 1, ...)
+  summaryfun = c("means", "contrasts"), n.aver = 1L, mirror = FALSE,
+  savefuns = FALSE, test.equality = c("mean", "var", "cov"),
+  cov.lag = 1, ...)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -25,15 +25,13 @@ as explained in details will be done.}
 \item{summaryfun}{Possible values are "means" and "contrasts".
 See description for their meaning.}
 
-\item{alpha}{The significance level of the test.}
-
 \item{n.aver}{If variances = "unequal", there is a possibility to use variances smoothed
 by appying moving average to the estimated sample variances. n.aver determines
 how many values on each side do contribute (incl. value itself).}
 
 \item{mirror}{The complement of the argument circular of \code{\link[stats]{filter}}.}
 
-\item{saveperm}{Logical. If TRUE, then the functions from permutations are saved to the attribute
+\item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
 
 \item{test.equality}{A character with possible values \code{mean} (default), \code{var} and

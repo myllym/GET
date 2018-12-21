@@ -4,8 +4,8 @@
 \alias{frank.fanova}
 \title{Rank envelope F-test}
 \usage{
-frank.fanova(nsim, curve_set, groups, alpha = 0.05,
-  variances = "equal", ...)
+frank.fanova(nsim, curve_set, groups, variances = "equal",
+  test.equality = c("mean", "var", "cov"), cov.lag = 1, ...)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -17,11 +17,22 @@ the observed functions in the component \code{obs}.}
 
 \item{groups}{The original groups (a factor vector representing the assignment to groups).}
 
-\item{alpha}{The significance level of the test.}
-
 \item{variances}{Either "equal" or "unequal". If "equal", then the traditional F-values are used.
 If "unequal", then the corrected F-values are used. The current implementation uses
 \code{\link[stats]{lm}} to get the corrected F-values.}
+
+\item{test.equality}{A character with possible values \code{mean} (default), \code{var} and
+\code{cov}. If \code{mean}, the functional ANOVA is performed to compare the means in the groups.
+If \code{var}, then the equality of variances of the curves in the groups is tested by performing
+the graphical functional ANOVA test on the functions
+\deqn{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}
+If \code{cov}, then the equality of lag \code{cov.lag} covariance is tested by performing the fANOVA with
+\deqn{W_{ij}(r) = \sqrt{|V_{ij}(r)|\cdot sign(V_{ij}(r))},}{|V_{ij}(r)| sign(V_{ij}(r)),}
+where \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
+See Mrkvicka et al. (2018) for more details.}
+
+\item{cov.lag}{The lag of the covariance for testing the equality of covariances,
+see \code{test.equality}.}
 
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
