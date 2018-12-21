@@ -107,15 +107,13 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.param = NULL
   if(inherits(object, "formula")) {
     if(is.null(data)) stop("The argument \'data\' must be provided as \'object\' is a formula.\n")
     vars <- all.vars(object)
-    if(!all(vars %in% names(data))) stop("The variables found in the given gstat object do not exist in the first \"data\" component.\n")
   }
   if(inherits(object, "gstat")) {
+    if(length(object$data) > 1) stop("Only one dependent variable allowed.\n")
     if(is.null(data)) data <- object$data[[1]]$data
-    if(!all(sapply(object$data, FUN=function(x) { all(dim(x$data) == dim(data)) })))
-      stop("The components of the given gstat object are for different data than \"data\".\n")
-    vars <- as.vector(unlist(sapply(object$data, FUN=function(x) { all.vars(x$formula) })))
-    if(!all(vars %in% names(data))) stop("The variables found in the given gstat object do not exist in the first \"data\" component.\n")
+    vars <- all.vars(object$data[[1]]$formula)
   }
+  if(!all(vars %in% names(data))) stop("The variables found in the given gstat object do not exist in the first \"data\" component.\n")
   # The case of regression model(s):
   if(inherits(object, "formula") & object[[3]] != 1) { # there is a regression model:
     data$resid <- stats::residuals(stats::lm(formula=object, data=data, na.action = stats::na.exclude))
@@ -123,7 +121,6 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.param = NULL
     vars <- all.vars(object) # Update formula variables
   }
   if(inherits(object, "gstat")) {
-    if(length(object$data) > 1) stop("Only one dependent variable allowed.\n")
     if(object$data[[1]]$formula[[3]] != 1) { # there is a regression model:
       data$resid <- stats::residuals(stats::lm(formula=object$data[[1]]$formula,
                                                data=data,
@@ -131,7 +128,7 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.param = NULL
       object$data[[1]]$formula <- stats::formula(paste("resid ~ 1", sep=""))
     }
     # Update formula variables
-    vars <- as.vector(sapply(object$data, FUN=function(x) { all.vars(x$formula) }))
+    vars <- all.vars(object$data[[1]]$formula)
   }
   # Calculate variograms for data and permutations
   obs <- permvariogram(object=object, data=data, vars=vars, perm=FALSE, ...)
