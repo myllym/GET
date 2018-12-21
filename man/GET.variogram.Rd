@@ -9,8 +9,8 @@ GET.variogram(object, nsim = 999, data = NULL, ..., GET.param = NULL,
 }
 \arguments{
 \item{object}{An object of class \code{gstat} or a \code{variogram.formula}.
-In the first case, direct and cross (residual) variograms are calculated for all variables and
-variable pairs defined in object.
+In the first case, direct (residual) variograms are calculated for the variable
+defined in object. Only one variable allowed.
 In the second case, a formula defining the response vector and (possible) regressors,
 in case of absence of regressors, use e.g. z~1. See \code{\link[gstat]{variogram}}.}
 
@@ -28,7 +28,7 @@ the default global envelope test is used.}
 simfuns.}
 }
 \description{
-The function accomppanies the function \code{\link[gstat]{variogram}} with global envelopes
+The function accompanies the function \code{\link[gstat]{variogram}} with global envelopes
 that are based on permutations of the variable(s) or residuals for which the variogram is calculated.
 Therefore, one can inspect the hypothesis of "no spatial autocorrelation" of the variable or the residuals
 of the fitted model.
