@@ -79,6 +79,7 @@ plot(res, plot_style="ggplot2", max_ncols_of_plots=3,
      labels = paste("Group ", 1:3, sep=""),
      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
      ylab=expression(italic(bar(T)[i](r))))
+# b) using 'contrasts'
 res2 <- graph.fanova(nsim = 9999, curve_set = cgec,
                     groups = attr(cgec, "group"),
                     variances = "equal",
