@@ -123,13 +123,12 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.param = NULL
     vars <- all.vars(object) # Update formula variables
   }
   if(inherits(object, "gstat")) {
-    for(i in seq(along.with = object$data)) {
-      if(object$data[[i]]$formula[[3]] != 1) { # there is a regression model:
-        data[[paste("resid", i, sep="")]] <- stats::residuals(stats::lm(formula=object$data[[i]]$formula,
-                                                                        data=data,
-                                                                        na.action = stats::na.exclude))
-        object$data[[i]]$formula <- stats::formula(paste("resid", i, " ~ 1", sep=""))
-      }
+    if(length(object$data) > 1) stop("Only one dependent variable allowed.\n")
+    if(object$data[[1]]$formula[[3]] != 1) { # there is a regression model:
+      data$resid <- stats::residuals(stats::lm(formula=object$data[[1]]$formula,
+                                               data=data,
+                                               na.action = stats::na.exclude))
+      object$data[[1]]$formula <- stats::formula(paste("resid ~ 1", sep=""))
     }
     # Update formula variables
     vars <- as.vector(sapply(object$data, FUN=function(x) { all.vars(x$formula) }))
