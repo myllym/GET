@@ -41,6 +41,7 @@
 #' @keywords curves
 #' @name cgec
 #' @docType data
+#' @seealso \code{\link{graph.fanova}}
 #' @examples
 #' \donttest{
 #' # This is an example analysis of the centred GEC in Mrkvicka et al.
