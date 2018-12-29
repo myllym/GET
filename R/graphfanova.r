@@ -217,7 +217,7 @@ contrasts <- function(x, groups, ...){
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @export
 #' @references
-#' Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
+#' Mrkvička, T., Hahn, U. and Myllymäki, M.
 #' A one-way ANOVA test for functional data with graphical interpretation.
 #' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
 #'
