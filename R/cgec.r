@@ -43,8 +43,6 @@
 #' @docType data
 #' @seealso \code{\link{graph.fanova}}
 #' @examples
-#' \donttest{
-#' # This is an example analysis of the centred GEC in Mrkvicka et al.
 #' data(cgec)
 #' # Plot data in groups
 #' subs <- function(group, ...) {
@@ -55,40 +53,5 @@
 #' par(mfrow=c(1,3))
 #' for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
 #'
-#' # Test for unequal lag 1 covariances
-#' res.cov1 <- graph.fanova(nsim = 9999, curve_set = cgec,
-#'                          groups = attr(cgec, "group"),
-#'                          test.equality = "cov", cov.lag = 1)
-#' plot(res.cov1, plot_style="ggplot2", max_ncols_of_plots=3,
-#'      labels = paste("Group ", 1:3, sep=""),
-#'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
-#'      ylab=expression(italic(bar(W)[i](r))))
-#' # Test for equality of variances among groups
-#' res.var <- graph.fanova(nsim = 9999, curve_set = cgec,
-#'                         groups = attr(cgec, "group"),
-#'                         test.equality = "var")
-#' plot(res.var, plot_style="ggplot2", max_ncols_of_plots=3,
-#'      labels = paste("Group ", 1:3, sep=""),
-#'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
-#'      ylab=expression(italic(bar(Z)[i](r))))
-#'
-#' # Test for equality of means assuming equality of variances
-#' # a) using 'means'
-#' res <- graph.fanova(nsim = 9999, curve_set = cgec,
-#'                     groups = attr(cgec, "group"),
-#'                     variances = "equal",
-#'                     summaryfun = "means")
-#' plot(res, plot_style="ggplot2", max_ncols_of_plots=3,
-#'      labels = paste("Group ", 1:3, sep=""),
-#'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
-#'      ylab=expression(italic(bar(T)[i](r))))
-#' # b) using 'contrasts'
-#' res2 <- graph.fanova(nsim = 9999, curve_set = cgec,
-#'                     groups = attr(cgec, "group"),
-#'                     variances = "equal",
-#'                     summaryfun = "contrasts")
-#' plot(res2, plot_style="ggplot2", max_ncols_of_plots=3,
-#'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
-#'      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
-#' }
+#' # See example analysis in ?graph.fanova
 NULL
