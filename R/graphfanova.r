@@ -280,20 +280,21 @@ contrasts <- function(x, groups, ...){
 #' # This is an example analysis of the water temperature data set in Mrkvicka et al. (arXiv:1612.03608v2).
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
+#' nsim <- 999
 #'
 #' # Test for equality of variances in the groups
-#' resV <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means",
+#' resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
 #'                      test.equality="var")
 #' plot(resV, plot_style="ggplot2")
 #' # Test for equality of lag 1 covariances in the groups
-#' resC <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means",
+#' resC <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
 #'                      test.equality="cov", cov.lag=1)
 #' plot(resC, plot_style="ggplot2")
 #'
-#' # Test the equality of means in the groups (fANOVA)
-#' res <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="means")
+#' # Test the equality of means in the groups (fANOVA), assuming equality of variances
+#' res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means")
 #' plot(res, plot_style="ggplot2")
-#' res2 <- graph.fanova(nsim=999, curve_set=rimov, groups=groups, summaryfun="contrasts")
+#' res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="contrasts")
 #' plot(res2, plot_style="ggplot2")
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          summaryfun = c("means", "contrasts"),
