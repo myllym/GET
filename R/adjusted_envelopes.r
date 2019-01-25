@@ -199,15 +199,16 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' 1) If simfun = NULL and fitfun = NULL (default), then \code{\link[spatstat]{envelope}}
 #' is used for generating simulations under the null hypothesis and
 #' \itemize{
-#' \item If X is a point pattern, the null hypothesis is CSR.
-#' \item If X is a fitted model, the null hypothesis is that model.
+#' \item If \code{X} is a point pattern, the null hypothesis is CSR.
+#' \item If \code{X} is a fitted model, the null hypothesis is that model.
 #' }
+#' No other \code{X} are allowed then.
 #'
-#' 2) The user can provide the function for fitting the model (fitfun) and for simulating
-#' from the fitted model (simfun). These functions should be coupled with each other such
-#' that the object returned by 'fitfun' is directly accepted as the (single) argument in 'simfun'.
-#' Further X should then be an \code{\link[spatstat]{ppp}} object and 'fitfun' should accept as
-#' the argument an \code{\link[spatstat]{ppp}} object (X and further simulated point patterns).
+#' 2) The user can provide the function for fitting the model (\code{fitfun}) and for simulating
+#' from the fitted model (\code{simfun}). These functions should be coupled with each other such
+#' that the object returned by \code{fitfun} is directly accepted as the (single) argument in \code{simfun}.
+#' Further \code{X} should then be an \code{\link[spatstat]{ppp}} object and 'fitfun' should accept as
+#' the argument an \code{\link[spatstat]{ppp}} object (\code{X} and further simulated point patterns).
 #'
 #'
 #' A note: The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though an
