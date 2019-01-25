@@ -21,6 +21,7 @@
 #' @keywords curves
 #' @name rimov
 #' @docType data
+#' @seealso graph.fanova
 #' @examples
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
