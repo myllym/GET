@@ -1,10 +1,11 @@
 # A helper function to generate simulations from "X" and calculate test functions for them.
 #
-# If X is a point pattern (object of class "ppp"), then CSR is simulated.
-# If X is a fitted point process model (object of class "ppm" or "kppm"),
+# If simfun is NULL, then
+# 1) If X is a point pattern (object of class "ppp"), then CSR is simulated.
+# 2) If X is a fitted point process model (object of class "ppm" or "kppm"),
 # the simulated model is that model.
 # simfun and simfun.arg can alternatively be used to specify how to generate the simulations,
-# see global_envelope_with_sims below.
+# see global_envelope_with_sims below. Then X can be general.
 # If testfuns is given, then also several different test functions can be calculated.
 simpatterns_and_funcs_from_X <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfuns=NULL, ...,
                                          savepatterns=FALSE, verbose=FALSE, calc_funcs=TRUE) {
