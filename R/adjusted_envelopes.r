@@ -163,23 +163,13 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
   # Make the test
   if(length(curve_sets_ls) > 1 & MrkvickaEtal2017 & type %in% c("st", "qdir")) {
     global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, type=type, alpha=alpha, probs=probs)
-    stat <- attr(global_envtest$step2_test, "k")[1]
-    pval <- attr(global_envtest$step2_test, "p")
-    curve_set_combined <- attr(global_envtest, "rank_test_curve_set")
   }
   else {
     global_envtest <- global_envelope_test(curve_sets_ls, type=type, alpha=alpha,
                                            alternative=alt, ties=ties, probs=probs)
-    switch(class(global_envtest)[1],
-           global_envelope = {
-             stat <- attr(global_envtest, "k")[1]
-             pval <- attr(global_envtest, "p")
-           },
-           combined_global_envelope = {
-             stat <- attr(global_envtest$step2_test, "k")[1]
-             pval <- attr(global_envtest$step2_test, "p")
-           })
   }
+  stat <- attr(global_envtest, "k")[1]
+  pval <- attr(global_envtest, "p")
 
   res <- structure(list(statistic = as.numeric(stat), p.value = pval,
                   method = type, curve_set = curve_sets_ls), class = "global_envelope_with_sims")
