@@ -160,3 +160,131 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.param = NULL
   attr(res, "call") <- match.call()
   res
 }
+
+
+#-----------------------------------------------------------#
+# n sample test of correspondence of distribution functions #
+#-----------------------------------------------------------#
+
+# Ecdf means
+# y is a vector for which groups gives grouping
+#' @importFrom stats ecdf
+ecdfmeans <- function(x, groups, r) {
+  ecdf.ls <- by(x, INDICES=groups, FUN=stats::ecdf, simplify=FALSE)
+  jm <- unlist(lapply(ecdf.ls, FUN = function(x) { x(r) }))
+  names(jm) <- rep(levels(groups), each = length(r))
+  jm
+}
+
+# Ecdf contrasts
+# y is a vector for which groups gives grouping
+#' @importFrom stats ecdf
+ecdfcontrasts <- function(x, groups, r) {
+  gnames <- levels(groups)
+  ecdf.ls <- by(x, INDICES=groups, FUN=stats::ecdf, simplify=FALSE)
+  dffs <- NULL
+  for(i in 1:(length(ecdf.ls)-1)) {
+    for(j in (i+1):length(ecdf.ls)) {
+      dff <- ecdf.ls[[i]](r) - ecdf.ls[[j]](r)
+      names(dff) <- rep(paste(gnames[i], gnames[j], sep="-"), length(r))
+      dffs <- c(dffs, dff)
+    }
+  }
+  dffs
+}
+
+#' Graphical n sample test of correspondence of distribution functions
+#'
+#' Compare the distributions of two (or more) groups.
+#'
+#' @param x A list (of length n) of values in the n groups.
+#' @param r The sequence of argument values at which the distribution functions are compared.
+#' The default is 100 equally spaced values between the minimum and maximum over all groups.
+#' @inheritParams graph.fanova
+#' @export
+#' @examples
+#' if(require(fda, quietly=TRUE)) {
+#'   # Heights of boys and girls at age 10
+#'   f.a <- growth$hgtf["10",] # girls at age 10
+#'   m.a <- growth$hgtm["10",] # boys at age 10
+#'   # Empirical cumulative distribution functions
+#'   plot(ecdf(f.a))
+#'   plot(ecdf(m.a), col=grey(0.7), add=TRUE)
+#'   # Create a list of the data
+#'   fm.list <- list(Girls=f.a, Boys=m.a)
+#'   res_m <- GET.necdf(fm.list, summaryfun="means")
+#'   plot(res_m)
+#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts")
+#'   plot(res_c)
+#'
+#'   # Heights of boys and girls at age 14
+#'   f.a <- growth$hgtf["14",] # girls at age 14
+#'   m.a <- growth$hgtm["14",] # boys at age 14
+#'   # Empirical cumulative distribution functions
+#'   plot(ecdf(f.a))
+#'   plot(ecdf(m.a), col=grey(0.7), add=TRUE)
+#'   # Create a list of the data
+#'   fm.list <- list(Girls=f.a, Boys=m.a)
+#'   res_m <- GET.necdf(fm.list, summaryfun="means")
+#'   plot(res_m)
+#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts")
+#'   plot(res_c)
+#' }
+GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x, max)))), length=100),
+                      summaryfun = c("means", "contrasts"),
+                      nsim,
+                      savefuns=FALSE, ...) {
+  if(!is.list(x) && length(x)<2) stop("At least two groups should be provided.\n")
+  x.lengths <- as.numeric(lapply(x, FUN = length))
+  if(!is.null(names(x))) groups <- rep(names(x), times=x.lengths)
+  else groups <- rep(1:length(x), times=x.lengths)
+  groups <- factor(groups, levels=unique(groups))
+  gnames <- levels(groups)
+  summaryfun <- match.arg(summaryfun)
+  if(missing(nsim)) {
+    switch(summaryfun,
+           means = {
+             nsim <- length(x)*999
+           },
+           contrasts = {
+             J <- length(x)
+             nsim <- (J*(J-1)/2)*999
+           }
+    )
+  }
+  # setting that 'summaryfun' is a function
+  switch(summaryfun,
+         means = {fun <- ecdfmeans},
+         contrasts = {fun <- ecdfcontrasts}
+  )
+  x <- unlist(x)
+  # Observed difference between the ecdfs
+  obs <- fun(x, groups, r)
+  # Simulations by permuting to which groups each value belongs to
+  cat("Creating ", nsim, " permutations.\n", sep="")
+  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE), r))
+  complabels <- unique(names(obs))
+  # Create a curve_set
+  cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
+                                obs = obs,
+                                sim_m = sim))
+  # GET
+  res <- global_envelope_test(cset, alternative="two.sided", ...)
+  attr(res, "xlab") <- "x"
+  attr(res, "xexp") <- quote(x)
+  switch(summaryfun,
+         means = {
+           attr(res, "ylab") <- "F(x)"
+           attr(res, "yexp") <- quote(hat(F)(x))
+         },
+         contrasts = {
+           attr(res, "ylab") <- "diff. F(x)"
+           attr(res, "yexp") <- quote(hat(F)[i](x)-hat(F)[j](x))
+         }
+  )
+  attr(res, "summaryfun") <- summaryfun
+  attr(res, "labels") <- complabels
+  attr(res, "call") <- match.call()
+  if(savefuns) attr(res, "curve_set") <- cset
+  res
+}
