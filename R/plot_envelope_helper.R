@@ -418,6 +418,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @importFrom ggplot2 scale_x_continuous
 #' @importFrom ggplot2 geom_vline
 #' @importFrom ggplot2 labs
+#' @importFrom ggplot2 guides
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                        separate_yaxes = TRUE, max_ncols_of_plots = 2,
                        labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL) {
@@ -509,6 +510,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                     + ggplot2::scale_size_manual(values = size.values, name = '')
                     + ThemePlain(base_size=base_size)
                     )
+        if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
         if(!is.null(outliers)) {
           outliers.df <- data.frame(r = rep(x[['r']], times=counter),
                                     curves = outliers,
@@ -601,6 +603,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                 + ThemePlain(base_size=base_size)
                 + ggplot2::labs(title=main)
         )
+        if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
         if(!is.null(outliers)) {
           outliers.df <- data.frame(r = rep(x[['r']], times=counter),
                                     curves = outliers,
