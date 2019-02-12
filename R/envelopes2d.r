@@ -48,7 +48,7 @@ cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, CR_or_GET = c("CR", "GET"), ...)
                      class = c("global_envelope_2d", "list"))
   attr(res, "method") <- attr(res_v, "method")
   attr(res, "type") <- attr(res_v, "type")
-  attr(res, "alternative") <- attr(res_v, "alternative")
+  attr(res, "alternative") <- attr(res_v, "einfo")$alternative
   attr(res, "k_alpha") <- attr(res_v, "k_alpha")
   attr(res, "alpha") <- attr(res_v, "alpha")
   attr(res, "k") <- attr(res_v, "k")
