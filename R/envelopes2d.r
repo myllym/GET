@@ -214,8 +214,8 @@ print.global_envelope_2d <- function(x, ...) {
 #' Corresponds to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
 #' @param main A vector of length 5 giving titles for the 4 (if there is an observed function) or
 #' 5 plots. A default exists, but this argument allows modifying it.
-#' The default is \code{c("observed", "lo envelope", "hi envelope", "Significance: below (red)",
-#' "Significance: above (red)")}.
+#' The default is \code{c("Observed", "Lower envelope", "Upper envelope",
+#' "Significance: below (red)", "Significance: above (red)")}.
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot global_envelope_2d
