@@ -218,43 +218,74 @@ print.global_envelope_2d <- function(x, ...) {
 #' @importFrom grDevices gray
 #' @importFrom spatstat as.im
 #' @importFrom spatstat contour.im
-plot.global_envelope_2d <- function(x, col, col.sign = c(255, 0, 0), transparency = 85, main, ...) {
-  if(missing(col))
-    col <- spatstat::colourmap(grDevices::gray(0:255/255),
-                                 range=c(min(x$obs, x$lo), max(x$obs, x$hi)))
-  if(length(col.sign)!=3) stop("Unreasonable length of col.sign.\n")
-  if(missing(main)) main <- c("observed", "lo envelope", "hi envelope",
+plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, main, ...) {
+  extraargs <- list(...)
+  if(!("col" %in% names(extraargs))) {
+    range_min <- min(x$obs, x$lo)
+    range_max <- max(x$obs, x$hi)
+    if(attr(x, "alternative") == "greater") range_min <- min(x$obs, x$hi)
+    if(attr(x, "alternative") == "less") range_max <- max(x$obs, x$lo)
+    col <- spatstat::colourmap(grDevices::gray(0:255/255), range=c(range_min, range_max))
+  }
+  if(length(sign.col)!=3) stop("Unreasonable length of sign.col.\n")
+  if(missing(main)) main <- c("Observed", "Lower envelope", "Upper envelope",
                               "Significance: below (red)",
                               "Significance: above (red)")
-  if(length(main) != 5) {
+  if(length(main) < 5) {
     warning("Unreasonable main provided. Setting empty main(s).\n")
     main <- rep("", times=5)
   }
-  obs.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$obs))
-  lo.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$lo))
-  hi.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$hi))
   # First plot
   if(!is.null(x[['obs']])) {
-    spatstat::plot.im(obs.im, col=col, main=main[1], ...)
+    obs.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$obs))
+    if(!("col" %in% names(extraargs))) {
+      col <- spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(x$obs), max((x$obs))))
+      spatstat::plot.im(obs.im, col=col, main=main[1], ...)
+    }
+    else spatstat::plot.im(obs.im, main=main[1], ...)
     spatstat::contour.im(obs.im, add=TRUE)
   }
   # Lower envelope
-  spatstat::plot.im(lo.im, col=col, main=main[2], ...)
-  spatstat::contour.im(lo.im, add=TRUE)
+  if(attr(x, "alternative") != "greater") {
+    lo.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$lo))
+    if(!("col" %in% names(extraargs))) {
+      col <- spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(x$lo), max((x$lo))))
+      spatstat::plot.im(lo.im, col=col, main=main[2], ...)
+    }
+    else spatstat::plot.im(lo.im, main=main[2], ...)
+    spatstat::contour.im(lo.im, add=TRUE)
+  }
   # Upper envelope
-  spatstat::plot.im(hi.im, col=col, main=main[3], ...)
-  spatstat::contour.im(hi.im, add=TRUE)
+  if(attr(res, "alternative") != "less") {
+    hi.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$hi))
+    if(!("col" %in% names(extraargs))) {
+      col <- spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(x$hi), max((x$hi))))
+      spatstat::plot.im(hi.im, col=col, main=main[3], ...)
+    }
+    else spatstat::plot.im(hi.im, main=main[3], ...)
+    spatstat::contour.im(hi.im, add=TRUE)
+  }
   # Significance
-  above <- x$obs > x$lo
-  below <- x$obs < x$lo
   transparent <- grDevices::rgb(0, 0, 0, max = 255, alpha = 0, names = "transparent")
-  red <- grDevices::rgb(col.sign[1], col.sign[2], col.sign[3], max = 255, alpha = transparency, names = "red")
+  red <- grDevices::rgb(sign.col[1], sign.col[2], sign.col[3], max = 255, alpha = transparency, names = "red")
   # Below
-  spatstat::plot.im(obs.im, col=col, main=main[4], ...)
-  spatstat::plot.im(spatstat::im(x$obs < x$lo, xcol=x$rx, yrow=x$ry),
-                    col=c(transparent, red), add=TRUE)
+  if(attr(x, "alternative") != "greater") {
+    if(!("col" %in% names(extraargs))) {
+      col <- spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(x$obs), max((x$obs))))
+      spatstat::plot.im(obs.im, col=col, main=main[4], ...)
+    }
+    else spatstat::plot.im(obs.im, main=main[4], ...)
+    spatstat::plot.im(spatstat::im(x$obs < x$lo, xcol=x$rx, yrow=x$ry),
+                      col=c(transparent, red), add=TRUE)
+  }
   # Above
-  spatstat::plot.im(obs.im, col=col, main=main[5], ...)
-  spatstat::plot.im(spatstat::im(x$obs > x$hi, xcol=x$rx, yrow=x$ry),
-                    col=c(transparent, red), add=TRUE)
+  if(attr(res, "alternative") != "less") {
+    if(!("col" %in% names(extraargs))) {
+      col <- spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(x$obs), max((x$obs))))
+      spatstat::plot.im(obs.im, col=col, main=main[5], ...)
+    }
+    else spatstat::plot.im(obs.im, main=main[5], ...)
+    spatstat::plot.im(spatstat::im(x$obs > x$hi, xcol=x$rx, yrow=x$ry),
+                      col=c(transparent, red), add=TRUE)
+  }
 }
