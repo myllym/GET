@@ -194,6 +194,16 @@ print.global_envelope_2d <- function(x, ...) {
 }
 
 #' Plot method for the class 'global_envelope_2d'
+#'
+#' Plot method for the class 'global_envelope_2d'
+#'
+#'
+#' Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
+#' If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the
+#' minimum and maximum of the function values is used for each image separately.
+#' If \code{col} is provided, the same specification will be used for each produced plot,
+#' which may make it easier to compare the figures with each other.
+#'
 #' @usage \method{plot}{global_envelope_2d}(x, col, sign.col = c(255, 0, 0), transparency = 85, main, ...)
 #'
 #' @param x an 'global_envelope_2d' object
