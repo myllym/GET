@@ -237,7 +237,7 @@ plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 8
   if(missing(main)) main <- c("Observed", "Lower envelope", "Upper envelope",
                               "Significance: below (red)",
                               "Significance: above (red)")
-  if(length(main) < 5) {
+  if(length(main) != 5) {
     warning("Unreasonable main provided. Setting empty main(s).\n")
     main <- rep("", times=5)
   }
