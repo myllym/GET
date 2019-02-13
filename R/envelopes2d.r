@@ -96,7 +96,7 @@ cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, CR_or_GET = c("CR", "GET"), ...)
 #' \code{k_alpha}, \code{alpha}, \code{k}, and \code{call}, see more detailed description in
 #' \code{\link{central_region}}.
 #' @export
-central_region_2d <- function(obs, sim=NULL, rx, ry, ...) {
+central_region_2d <- function(obs, sim = NULL, rx, ry, ...) {
   cr_or_GET_2d(obs, sim, rx, ry, CR_or_GET = "CR", ...)
 }
 
