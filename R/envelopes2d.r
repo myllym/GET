@@ -176,6 +176,9 @@ central_region_2d <- function(obs, sim = NULL, rx, ry, ...) {
 #'   res <- global_envelope_test_2d(obs, sim)
 #'   par(mfrow=c(2,3))
 #'   plot(res)
+#'   # The same colors for all plots:
+#'   par(mfrow=c(2,3))
+#'   plot(res, col=spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
 #' }
 global_envelope_test_2d <- function(obs, sim, rx, ry, ...) {
   cr_or_GET_2d(obs, sim, rx, ry, CR_or_GET = "GET", ...)
