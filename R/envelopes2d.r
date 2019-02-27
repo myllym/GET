@@ -1,8 +1,14 @@
 # Functionality for central_region_2d and global_envelope_test_2d
-cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, CR_or_GET = c("CR", "GET"), ...) {
+cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, theo, CR_or_GET = c("CR", "GET"), ...) {
   CR_or_GET <- match.arg(CR_or_GET)
   obs_d <- dim(obs)
   sim_d <- dim(sim)
+  if(!missing(theo)) {
+    if(all(dim(theo)==obs_d) | (is.numeric(theo) & length(theo) == 1)) {
+      if(length(theo) == 1) theo <- array(theo, dim=obs_d)
+    }
+    else stop("Unsuitable theo\n")
+  } else theo <- NULL
   if(missing(rx)) rx <- 1:obs_d[length(obs_d)-1]
   if(missing(ry)) ry <- 1:obs_d[length(obs_d)]
   # Create curve_set transforming the 2d functions to vectors
@@ -10,17 +16,31 @@ cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, CR_or_GET = c("CR", "GET"), ...)
     cat("dim(obs) is three, sim ignored and all the data assumed to be in obs.\n")
     obs_v <- matrix(nrow=obs_d[2]*obs_d[3], ncol=obs_d[1])
     for(i in 1:obs_d[1]) obs_v[,i] <- as.vector(obs[i,,])
-    curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
-                                         obs=obs_v))
+    if(is.null(theo))
+      curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
+                                           obs=obs_v))
+    else {
+      theo_v <- matrix(nrow=obs_d[2]*obs_d[3], ncol=obs_d[1])
+      for(i in 1:obs_d[1]) theo_v[,i] <- as.vector(theo[i,,])
+      curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
+                                           obs=obs_v,
+                                           theo=theo_v))
+    }
     obs_d <- c(obs_d[2:3], obs_d[1]) # Change the order for back transform where obs_d[1:2] are used
   }
   else {
     if(!all(obs_d == sim_d[2:3])) stop("Something wrong with the dimensions of obs and sim.\n")
     sim_v <- matrix(nrow=sim_d[2]*sim_d[3], ncol=sim_d[1])
     for(i in 1:sim_d[1]) sim_v[,i] <- as.vector(sim[i,,])
-    curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
-                                         obs=as.vector(obs),
-                                         sim_m=sim_v))
+    if(is.null(theo))
+      curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
+                                           obs=as.vector(obs),
+                                           sim_m=sim_v))
+    else
+      curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
+                                           obs=as.vector(obs),
+                                           sim_m=sim_v,
+                                           theo=as.vector(theo)))
   }
 
   # Prepare global envelope or global envelope test
