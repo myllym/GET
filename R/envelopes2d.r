@@ -132,6 +132,9 @@ central_region_2d <- function(obs, sim = NULL, rx, ry, ...) {
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 #'
 #' @inheritParams central_region_2d
+#' @param theo An array of same dimention as \code{obs} or a constant giving the theoretical
+#' (central) function values under the null hypothesis from which the simulations have been
+#' generated. If not given, then the mean of the simulations is used as the central function.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @return An object of class "global_envelope_2d" (and "list"),
 #' which can be printed and plotted directly.
@@ -200,8 +203,8 @@ central_region_2d <- function(obs, sim = NULL, rx, ry, ...) {
 #'   par(mfrow=c(2,3))
 #'   plot(res, col=spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
 #' }
-global_envelope_test_2d <- function(obs, sim, rx, ry, ...) {
-  cr_or_GET_2d(obs, sim, rx, ry, CR_or_GET = "GET", ...)
+global_envelope_test_2d <- function(obs, sim, rx, ry, theo, ...) {
+  cr_or_GET_2d(obs, sim, rx, ry, theo, CR_or_GET = "GET", ...)
 }
 
 #' Print method for the class 'global_envelope_2d'
