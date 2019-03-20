@@ -101,7 +101,21 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 
 #' Graphical functional GLM
 #'
-#' Graphical functional general linear model
+#' Graphical functional general linear model (GLM)
+#'
+#'
+#' The function \code{graph.fglm} performs the graphical functional GLM of Mrkvička et al. (2019).
+#' This is a nonparametric graphical test of significance of a covariate in functional GLM.
+#' The test is able to find not only if the factor of interest is significant, but also which
+#' functional domain is responsible for the potential rejection.
+#' In the case of functional multi-way main effect ANOVA or functional main effect ANCOVA models,
+#' the test is able to find which groups differ (and where they differ).
+#' In the case of functional factorial ANOVA or functional factorial ANCOVA models,
+#' the test is able to find which combination of levels (which interactions) differ (and where they differ).
+#' The described tests are global envelope tests applied in the context of GLMs.
+#' The Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the functions
+#' (to obtain the simulations under the null hypothesis of "no effects");
+#' consequently, the test approximately achieves the desired significance level.
 #'
 #' @inheritParams graph.fanova
 #' @inheritParams dg.global_envelope_test
@@ -194,7 +208,20 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 
 #' F rank functional GLM
 #'
-#' F rank functional general linear model
+#' Multiple testing in permutation inference for the general linear model (GLM)
+#'
+#'
+#' The function \code{frank.fglm} performs
+#' a nonparametric test of significance of a covariate in the functional GLM.
+#' Similarly as in the graphical functional GLM (\code{\link{graph.fglm}}),
+#' the Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the functions
+#' (to obtain the simulations under the null hypothesis of "no effects");
+#' consequently, the test approximately achieves the desired significance level.
+#' In contrast to the graphical functional GLM, the F rank functional GLM is based on the F-statistics,
+#' that are calculated at each argument value of the functions.
+#' The global envelope test is applied to the observed and simulated F-statistics.
+#' The test is able to find if the factor of interest is significant and also which
+#' argument values of the functional domain are responsible for the potential rejection.
 #'
 #' @inheritParams graph.fglm
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
