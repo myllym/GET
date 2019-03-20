@@ -131,6 +131,8 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' to the number of curves. Each column should specify the values of a factor.
 #' @param ... Additional arguments to be passed to \code{\link[stats]{lm}}.
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
+#' @param mc.args A named list of additional arguments to be passed to \code{\link[parallel]{mclapply}}.
+#' Only relevant if \code{mc.cores} is more than 1.
 #' @return A \code{global_envelope} object.
 #' @export
 #' @references
@@ -143,7 +145,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' @importFrom parallel mclapply
 graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        summaryfun = c("means", "contrasts"),
-                       mc.cores = 1, savefuns = FALSE, ..., GET.args = NULL) {
+                       savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1, mc.args = NULL) {
   # Set up the contrasts
   options(contrasts = c("contr.sum", "contr.poly"))
   # Preliminary checks and formulation of the data to suitable form for further processing
@@ -191,7 +193,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
     # Regress the permuted data against the full model and get a new effect of interest
     genCoef(X$data.l, formula.full, nameinteresting, ...)
   }
-  sim <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores, ...)
+  sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun, mc.cores=mc.cores), mc.args))
   sim <- sapply(sim, function(x) x, simplify="array")
   complabels <- unique(names(obs))
 
@@ -226,7 +228,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' @inheritParams graph.fglm
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
-                       mc.cores = 1, ..., GET.args = NULL) {
+                       ..., GET.args = NULL, mc.cores = 1, mc.args = NULL) {
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- fglm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors)
@@ -251,7 +253,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
     # Regress the permuted data against the full model and get a new effect of interest
     genFvalues(X$data.l, formula.full, formula.reduced, ...)
   }
-  sim <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores, ...)
+  sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun, mc.cores=mc.cores), mc.args))
   sim <- sapply(sim, function(x) x, simplify="array")
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
