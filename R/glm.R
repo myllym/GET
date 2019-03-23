@@ -143,6 +143,16 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' @importFrom stats predict.lm
 #' @importFrom stats dummy.coef
 #' @importFrom parallel mclapply
+#' @examples
+#' data(GDPtax)
+#' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
+#' res.tax_within_group <- graph.fglm(nsim = 999,
+#'                                   formula.full = Y~Group+Tax+Group:Tax,
+#'                                   formula.reduced = Y~Group+Tax,
+#'                                   curve_sets = GDPtax$curve_set,
+#'                                   factors = factors.df)
+#' plot(res.tax_within_group, plot_style="ggplot2")
+#'
 graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        summaryfun = c("means", "contrasts"),
                        savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1, mc.args = NULL) {
