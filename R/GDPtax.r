@@ -9,14 +9,16 @@
 #' \url{https://datamarket.com/data/set/15c9/gdp-per-capita-current-us#!ds=15c9!hd1&display=line},
 #' distributed under the CC-BY 4.0 (\url{https://datacatalog.worldbank.org/public-licenses#cc-by}).
 #' From the same webpage the profit tax in 2010 was downloaded.
-#' Furthermore, different country groups were formed for based on country groups and
-#' the countries for which the GDP was available for 1980-2017 and profit tax for 2010.
-#' 
+#' Furthermore, different country groups were formed from
+#' countries for which the GDP was available for 1980-2017 and profit tax for 2010:
 #' \itemize{
-#' \item Group 1: 
-#' \item Group 2: 
-#' \item Group 3: 
-#' \item Group 4:
+#' \item Group 1 (Major Advanced Economies (G7)): "Canada", "France", "Germany", "Italy", Japan"
+#' \item Group 2 (Euro Area excluding G7): "Austria", "Belgium", "Cyprus", "Finland", "Greece", "Ireland",
+#' "Luxembourg", "Netherlands", "Portugal", "Spain"
+#' \item Group 3 (Other Advanced Economies (Advanced Economies excluding G7 and Euro Area)):
+#' "Australia", "Denmark", "Iceland", "Norway", "Sweden", "Switzerland"
+#' \item Group 4 (Emerging and Developing Asia): "Bangladesh", "Bhutan", "China", "Fiji", "India",
+#' "Indonesia", "Malaysia", "Nepal", "Philippines", "Thailand", "Vanuatu"
 #' }
 #'
 #' @format A list of a \code{curve_set} object with components \code{r} and \code{obs}
