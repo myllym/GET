@@ -65,7 +65,6 @@ envelope_to_curve_set <- function(env, ...) {
 # @param fdata An \code{\link[fda.usc]{fdata}} object.
 # @return A corresponding curve_set object.
 # @param ... Ignored.
-# @export
 fdata_to_curve_set <- function(fdata, ...) {
   if(!inherits(fdata, 'fdata')) {
     stop('fdata is not a fdata object.')
