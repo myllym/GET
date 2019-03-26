@@ -388,7 +388,7 @@ check_curve_set_dimensions <- function(x) {
     if(!all(sapply(name_vec, FUN=identical, y=name_vec[[1]])))
         stop("The curve sets in \'x\' contain different elements.\n")
     # Check equality of length of r
-    if('r' %in% names(x)) {
+    if('r' %in% name_vec[[1]]) {
       if(!all(sapply(x, FUN=function(curve_set) { length(curve_set$r) == length(x[[1]]$r) })))
         stop("The numbers of functions in 'obs' in curve sets differ.\n")
     }
