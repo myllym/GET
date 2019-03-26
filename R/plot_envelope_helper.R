@@ -632,9 +632,6 @@ env_2d_plot_helper <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign
            hi = { main <- "Upper envelope" },
            lo.sign = { main <- "Significance: below (red)" },
            hi.sign = { main <- "Significance: above (red)" })
-  if(!("col" %in% names(extraargs))) {
-    col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(z))
-  }
   switch(var,
          obs = {
            obs.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z=x$obs))
