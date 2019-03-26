@@ -32,7 +32,7 @@ image_set_to_curve_set <- function(image_set, ...) {
   # Create curve_set transforming the 2d functions to vectors
   if(length(obs_d) == 3) {
     obs_v <- matrix(nrow=obs_d[2]*obs_d[3], ncol=obs_d[1])
-    for(i in 1:obs_d[1]) obs_v[,i] <- as.vector(obs[i,,])
+    for(i in 1:obs_d[1]) obs_v[,i] <- as.vector(image_set$obs[i,,])
     curve_set_v <- create_curve_set(list(r=1:(obs_d[2]*obs_d[3]),
                                          obs=obs_v))
   }
@@ -47,9 +47,9 @@ image_set_to_curve_set <- function(image_set, ...) {
     } else theo_v <- NULL
     if(!all(obs_d == sim_d[2:3])) stop("Something wrong with the dimensions of obs and sim_m.\n")
     sim_v <- matrix(nrow=sim_d[2]*sim_d[3], ncol=sim_d[1])
-    for(i in 1:sim_d[1]) sim_v[,i] <- as.vector(sim[i,,])
+    for(i in 1:sim_d[1]) sim_v[,i] <- as.vector(image_set$sim_m[i,,])
     curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
-                                         obs=as.vector(obs),
+                                         obs=as.vector(image_set$obs),
                                          sim_m=sim_v))
     curve_set_v$theo <- theo_v
   }
