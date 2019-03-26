@@ -213,9 +213,9 @@ print.global_envelope_2d <- function(x, ...) {
 #' @importFrom spatstat as.im
 #' @importFrom spatstat contour.im
 plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, main, ...) {
-  env_2d_helper(x, var='obs', sign.col=sign.col,transparency=transparency, ...)
-  env_2d_helper(x, var='lo', sign.col=sign.col,transparency=transparency, ...)
-  env_2d_helper(x, var='hi', sign.col=sign.col,transparency=transparency, ...)
-  env_2d_helper(x, var='lo.sign', sign.col=sign.col,transparency=transparency, ...)
-  env_2d_helper(x, var='hi.sign', sign.col=sign.col,transparency=transparency, ...)
+  env_2d_plot_helper(x, var='obs', sign.col=sign.col,transparency=transparency, ...)
+  env_2d_plot_helper(x, var='lo', sign.col=sign.col,transparency=transparency, ...)
+  env_2d_plot_helper(x, var='hi', sign.col=sign.col,transparency=transparency, ...)
+  env_2d_plot_helper(x, var='lo.sign', sign.col=sign.col,transparency=transparency, ...)
+  env_2d_plot_helper(x, var='hi.sign', sign.col=sign.col,transparency=transparency, ...)
 }
