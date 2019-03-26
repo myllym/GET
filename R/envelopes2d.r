@@ -245,7 +245,7 @@ plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 8
     if(!is.character(col)) spatstat::contour.im(lo.im, add=TRUE)
   }
   # Upper envelope
-  if(attr(res, "alternative") != "less") {
+  if(attr(x, "alternative") != "less") {
     hi.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$hi))
     if(!("col" %in% names(extraargs))) {
       if(max(x$hi)>min(x$hi))
@@ -271,7 +271,7 @@ plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 8
                         col=c(transparent, red), add=TRUE)
   }
   # Above
-  if(attr(res, "alternative") != "less") {
+  if(attr(x, "alternative") != "less") {
     if(!("col" %in% names(extraargs))) {
       col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(x$obs))
       spatstat::plot.im(obs.im, col=col, main=main[5], ...)
