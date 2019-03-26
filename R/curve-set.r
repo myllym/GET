@@ -390,7 +390,7 @@ check_curve_set_dimensions <- function(x) {
     # Check equality of length of r
     if('r' %in% name_vec[[1]]) {
       if(!all(sapply(x, FUN=function(curve_set) { length(curve_set$r) == length(x[[1]]$r) })))
-        stop("The numbers of functions in 'obs' in curve sets differ.\n")
+        stop("The lengths of 'r' in curve sets differ.\n")
     }
     # Check that 'is_residual' is the same for all curve sets.
     if('is_residual' %in% name_vec[[1]]) {
