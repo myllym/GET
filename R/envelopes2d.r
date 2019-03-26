@@ -78,6 +78,7 @@ cr_or_GET_2d <- function(image_set, CR_or_GET = c("CR", "GET"), ...) {
 #' \code{\link{central_region}}.
 #' @export
 central_region_2d <- function(image_set, ...) {
+  if(class(image_set)[1] != "image_set") stop("image_set should be an object of class image_set.\n")
   cr_or_GET_2d(image_set, CR_or_GET = "CR", ...)
 }
 
@@ -166,6 +167,7 @@ central_region_2d <- function(image_set, ...) {
 #'   plot(res, col=spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
 #' }
 global_envelope_test_2d <- function(image_set, ...) {
+  if(class(image_set)[1] != "image_set") stop("image_set should be an object of class image_set.\n")
   cr_or_GET_2d(image_set, CR_or_GET = "GET", ...)
 }
 
