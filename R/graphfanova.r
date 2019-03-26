@@ -277,7 +277,8 @@ contrasts <- function(x, groups, ...){
 #'      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
 #'
 #' #-- Rimov water temperatures example
-#' # This is an example analysis of the water temperature data set in Mrkvicka et al. (arXiv:1612.03608v2).
+#' # This is an example analysis of the water temperature data set
+#' # in Mrkvicka et al. (arXiv:1612.03608v2).
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #' nsim <- 999
