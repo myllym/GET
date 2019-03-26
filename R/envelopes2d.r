@@ -16,7 +16,7 @@ cr_or_GET_2d <- function(image_set, CR_or_GET = c("CR", "GET"), ...) {
            res_v <- global_envelope_test(curve_set_v, ...)
          })
 
-  # Transform back to 2d
+  # Transform the results to 2d
   if(is.vector(curve_set_v[['obs']]))
     res <- structure(list(rx=image_set$r[[1]], ry=image_set$r[[2]],
                           obs=obs, #matrix(res_v$obs, nrow=obs_d[1], ncol=obs_d[2]),
