@@ -233,7 +233,7 @@ plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 8
     spatstat::contour.im(obs.im, add=TRUE)
   }
   # Lower envelope
-  if(attr(x, "alternative") != "greater") {
+  if(attr(x, "einfo")$alternative != "greater") {
     lo.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$lo))
     if(!("col" %in% names(extraargs))) {
       if(max(x$lo)>min(x$lo))
@@ -245,7 +245,7 @@ plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 8
     if(!is.character(col)) spatstat::contour.im(lo.im, add=TRUE)
   }
   # Upper envelope
-  if(attr(x, "alternative") != "less") {
+  if(attr(x, "einfo")$alternative != "less") {
     hi.im <- spatstat::as.im(list(x=x$rx, y=x$ry, z= x$hi))
     if(!("col" %in% names(extraargs))) {
       if(max(x$hi)>min(x$hi))
@@ -260,7 +260,7 @@ plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 8
   transparent <- grDevices::rgb(0, 0, 0, max = 255, alpha = 0, names = "transparent")
   red <- grDevices::rgb(sign.col[1], sign.col[2], sign.col[3], max = 255, alpha = transparency, names = "red")
   # Below
-  if(attr(x, "alternative") != "greater") {
+  if(attr(x, "einfo")$alternative != "greater") {
     if(!("col" %in% names(extraargs))) {
       col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(x$obs))
       spatstat::plot.im(obs.im, col=col, main=main[4], ...)
@@ -271,7 +271,7 @@ plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 8
                         col=c(transparent, red), add=TRUE)
   }
   # Above
-  if(attr(x, "alternative") != "less") {
+  if(attr(x, "einfo")$alternative != "less") {
     if(!("col" %in% names(extraargs))) {
       col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(x$obs))
       spatstat::plot.im(obs.im, col=col, main=main[5], ...)
