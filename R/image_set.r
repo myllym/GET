@@ -44,14 +44,14 @@ image_set_to_curve_set <- function(image_set, ...) {
         theo_v <- as.vector(theo)
       }
       else stop("Unsuitable theo\n")
-    } else theo <- NULL
+    } else theo_v <- NULL
     if(!all(obs_d == sim_d[2:3])) stop("Something wrong with the dimensions of obs and sim_m.\n")
     sim_v <- matrix(nrow=sim_d[2]*sim_d[3], ncol=sim_d[1])
     for(i in 1:sim_d[1]) sim_v[,i] <- as.vector(sim[i,,])
     curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
                                          obs=as.vector(obs),
                                          sim_m=sim_v))
-    curve_set_v$theo <- theo
+    curve_set_v$theo <- theo_v
   }
   # and check them
   check_curve_set_content(curve_set_v, ...)
