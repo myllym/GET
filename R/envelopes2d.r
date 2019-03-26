@@ -1,47 +1,11 @@
 # Functionality for central_region_2d and global_envelope_test_2d
-cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, theo, CR_or_GET = c("CR", "GET"), ...) {
+cr_or_GET_2d <- function(image_set, CR_or_GET = c("CR", "GET"), ...) {
   CR_or_GET <- match.arg(CR_or_GET)
   obs_d <- dim(obs)
   sim_d <- dim(sim)
-  if(!missing(theo)) {
-    if(all(dim(theo)==obs_d) | (is.numeric(theo) & length(theo) == 1)) {
-      if(length(theo) == 1) theo <- array(theo, dim=obs_d)
-    }
-    else stop("Unsuitable theo\n")
-  } else theo <- NULL
-  if(missing(rx)) rx <- 1:obs_d[length(obs_d)-1]
-  if(missing(ry)) ry <- 1:obs_d[length(obs_d)]
+  image_set <- check_image_set_dimensions(image_set)
   # Create curve_set transforming the 2d functions to vectors
-  if(length(obs_d) == 3) {
-    cat("dim(obs) is three, sim ignored and all the data assumed to be in obs.\n")
-    obs_v <- matrix(nrow=obs_d[2]*obs_d[3], ncol=obs_d[1])
-    for(i in 1:obs_d[1]) obs_v[,i] <- as.vector(obs[i,,])
-    if(is.null(theo))
-      curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
-                                           obs=obs_v))
-    else {
-      theo_v <- matrix(nrow=obs_d[2]*obs_d[3], ncol=obs_d[1])
-      for(i in 1:obs_d[1]) theo_v[,i] <- as.vector(theo[i,,])
-      curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
-                                           obs=obs_v,
-                                           theo=theo_v))
-    }
-    obs_d <- c(obs_d[2:3], obs_d[1]) # Change the order for back transform where obs_d[1:2] are used
-  }
-  else {
-    if(!all(obs_d == sim_d[2:3])) stop("Something wrong with the dimensions of obs and sim.\n")
-    sim_v <- matrix(nrow=sim_d[2]*sim_d[3], ncol=sim_d[1])
-    for(i in 1:sim_d[1]) sim_v[,i] <- as.vector(sim[i,,])
-    if(is.null(theo))
-      curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
-                                           obs=as.vector(obs),
-                                           sim_m=sim_v))
-    else
-      curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
-                                           obs=as.vector(obs),
-                                           sim_m=sim_v,
-                                           theo=as.vector(theo)))
-  }
+  curve_set_v <- image_set_to_curve_set(image_set)
 
   # Prepare global envelope or global envelope test
   switch(CR_or_GET,
@@ -54,17 +18,17 @@ cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, theo, CR_or_GET = c("CR", "GET")
 
   # Transform back to 2d
   if(is.vector(curve_set_v[['obs']]))
-    res <- structure(list(rx=rx, ry=ry,
+    res <- structure(list(rx=image_set$r[[1]], ry=image_set$r[[2]],
                           obs=obs, #matrix(res_v$obs, nrow=obs_d[1], ncol=obs_d[2]),
                           central=matrix(res_v$central, nrow=obs_d[1], ncol=obs_d[2]),
                           lo=matrix(res_v$lo, nrow=obs_d[1], ncol=obs_d[2]),
                           hi=matrix(res_v$hi, nrow=obs_d[1], ncol=obs_d[2])),
                      class = c("global_envelope_2d", "list"))
   else
-    res <- structure(list(rx=rx, ry=ry,
-                          central=matrix(res_v$central, nrow=obs_d[1], ncol=obs_d[2]),
-                          lo=matrix(res_v$lo, nrow=obs_d[1], ncol=obs_d[2]),
-                          hi=matrix(res_v$hi, nrow=obs_d[1], ncol=obs_d[2])),
+    res <- structure(list(rx=image_set$r[[1]], ry=image_set$r[[2]],
+                          central=matrix(res_v$central, nrow=obs_d[2], ncol=obs_d[3]),
+                          lo=matrix(res_v$lo, nrow=obs_d[2], ncol=obs_d[3]),
+                          hi=matrix(res_v$hi, nrow=obs_d[2], ncol=obs_d[3])),
                      class = c("global_envelope_2d", "list"))
   attr(res, "method") <- attr(res_v, "method")
   attr(res, "type") <- attr(res_v, "type")
@@ -94,10 +58,7 @@ cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, theo, CR_or_GET = c("CR", "GET")
 #'
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 #'
-#' @param obs A 2d matrix or 3d array containing the observed 2d functions.
-#' @param sim A 3d array containing the simulated 2d functions.
-#' @param rx Argument values for x-coordinate (first dimension of 2d functions).
-#' @param ry Argument values for y-coordinate (second dimension of 2d functions).
+#' @param image_set An image set, i.e. a set of 2d functions. See \code{\link{create_image_set}}.
 #' @param ... Additional parameters to be passed to \code{\link{central_region}}.
 #' @return An object of class "global_envelope_2d" (and "list"),
 #' which can be printed and plotted directly.
@@ -116,8 +77,8 @@ cr_or_GET_2d <- function(obs, sim=NULL, rx, ry, theo, CR_or_GET = c("CR", "GET")
 #' \code{k_alpha}, \code{alpha}, \code{k}, and \code{call}, see more detailed description in
 #' \code{\link{central_region}}.
 #' @export
-central_region_2d <- function(obs, sim = NULL, rx, ry, ...) {
-  cr_or_GET_2d(obs, sim, rx, ry, CR_or_GET = "CR", ...)
+central_region_2d <- function(image_set, ...) {
+  cr_or_GET_2d(image_set, CR_or_GET = "CR", ...)
 }
 
 #' 2D global envelope test
@@ -196,15 +157,16 @@ central_region_2d <- function(obs, sim = NULL, rx, ry, ...) {
 #'     if((i %% 100)==0) cat(i, ' ')
 #'   }
 #'   # Constract the global envelope test for the (2D) raw residuals
-#'   res <- global_envelope_test_2d(obs, sim)
+#'   iset <- create_image_set(list(obs=obs, sim_m=sim))
+#'   res <- global_envelope_test_2d(iset)
 #'   par(mfrow=c(2,3))
 #'   plot(res)
 #'   # The same colors for all plots:
 #'   par(mfrow=c(2,3))
 #'   plot(res, col=spatstat::colourmap(grDevices::gray(0:255/255), range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
 #' }
-global_envelope_test_2d <- function(obs, sim, rx, ry, theo, ...) {
-  cr_or_GET_2d(obs, sim, rx, ry, theo, CR_or_GET = "GET", ...)
+global_envelope_test_2d <- function(image_set, ...) {
+  cr_or_GET_2d(image_set, CR_or_GET = "GET", ...)
 }
 
 #' Print method for the class 'global_envelope_2d'
