@@ -92,6 +92,6 @@ check_image_set_content <- function(image_set) {
 #' @export
 create_image_set <- function(image_set, ...) {
   check_image_set_content(image_set)
-  class(image_set) <- 'curve_set_2d'
+  class(image_set) <- 'image_set'
   image_set
 }
