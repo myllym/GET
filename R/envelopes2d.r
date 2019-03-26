@@ -94,9 +94,6 @@ central_region_2d <- function(image_set, ...) {
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 #'
 #' @inheritParams central_region_2d
-#' @param theo An array of same dimention as \code{obs} or a constant giving the theoretical
-#' (central) function values under the null hypothesis from which the simulations have been
-#' generated. If not given, then the mean of the simulations is used as the central function.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @return An object of class "global_envelope_2d" (and "list"),
 #' which can be printed and plotted directly.
