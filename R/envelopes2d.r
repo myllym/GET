@@ -192,7 +192,7 @@ print.global_envelope_2d <- function(x, ...) {
 #' If \code{col} is provided, the same specification will be used for each produced plot,
 #' which may make it easier to compare the figures with each other.
 #'
-#' @usage \method{plot}{global_envelope_2d}(x, col, sign.col = c(255, 0, 0), transparency = 85, main, ...)
+#' @usage \method{plot}{global_envelope_2d}(x, sign.col = c(255, 0, 0), transparency = 85, main, ...)
 #'
 #' @param x an 'global_envelope_2d' object
 #' @param sign.col A vector of length 3 giving the color for the significant regions.
