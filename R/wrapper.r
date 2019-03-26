@@ -244,11 +244,11 @@ GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapp
   if(missing(nsim)) {
     switch(summaryfun,
            means = {
-             nsim <- length(x)*999
+             nsim <- length(x)*1000 - 1
            },
            contrasts = {
              J <- length(x)
-             nsim <- (J*(J-1)/2)*999
+             nsim <- (J*(J-1)/2)*1000 - 1
            }
     )
   }
