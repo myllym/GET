@@ -95,3 +95,17 @@ create_image_set <- function(image_set, ...) {
   class(image_set) <- 'image_set'
   image_set
 }
+
+#' Print method for the class 'image_set'
+#' @usage \method{print}{image_set}(x, ...)
+#'
+#' @param x an 'image_set' object
+#' @param ... Ignored.
+#'
+#' @method print image_set
+#' @export
+#' @importFrom utils str
+print.image_set <- function(x, ...) {
+  cat("image_set object containing:\n")
+  utils::str(x)
+}
