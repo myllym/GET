@@ -218,7 +218,7 @@ env_ylim_default <- function(x, use_ggplot2) {
 #
 # An internal GET function for making a dotplot style "global envelope plot".
 #
-# @param x An 'envelope_test' object.
+# @param x An 'global_envelope' object.
 # @param main See \code{\link{plot.default}}.
 # @param ylim See \code{\link{plot.default}}.
 # @param xlab See \code{\link{plot.default}}.
