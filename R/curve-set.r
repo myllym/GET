@@ -377,10 +377,12 @@ combine_curve_sets <- function(x) {
 }
 
 # Check curve set dimensions
+#
+# Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
+# If the latter, then convert the objects to curve sets.
+# Check that the curve sets have same elements and dimensions of them.
 # @inheritParams combine_curve_sets
 check_curve_set_dimensions <- function(x) {
-    # Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
-    # If the latter, then convert the objects to curve sets.
     x <- lapply(x, FUN=convert_envelope)
     name_vec <- lapply(x, FUN=function(x) { n <- names(x); n[n!="theo"] })
     # Possible_names in curve_sets are 'r', 'obs', 'sim_m', 'theo' and 'is_residual'.
