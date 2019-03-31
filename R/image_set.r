@@ -15,9 +15,11 @@ check_image_set_dimensions <- function(image_set) {
   }
   # If obs_d is 3, then set sim_m and theo to NULL
   if(length(obs_d) == 3) {
-    cat("dim(obs) is three, sim_m (and theo) ignored (set to NULL) and all the data assumed to be in obs.\n")
-    image_set$sim_m <- NULL
-    image_set$theo <- NULL
+    if(!is.null(image_set$sim_m) | !is.null(image_set$theo)) {
+      cat("dim(obs) is three, sim_m (and theo) ignored (set to NULL) and all the data assumed to be in obs.\n")
+      image_set$sim_m <- NULL
+      image_set$theo <- NULL
+    }
   }
   image_set
 }
