@@ -346,8 +346,12 @@ combine_curve_sets <- function(x) {
     cset <- NULL
     x <- check_curve_set_dimensions(x)
     name_vec <- lapply(x, FUN=names)
-    if('r' %in% name_vec[[1]])
+    if('r' %in% name_vec[[1]]) {
+      # Check equality of length of r
+      if(!all(sapply(x, FUN=function(curve_set) { length(curve_set$r) == length(x[[1]]$r) })))
+        warning("The lengths of 'r' in curve sets differ.\n")
       cset$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
+    }
     if('obs' %in% name_vec[[1]]) {
       if(is.matrix(x[[1]]$obs)) {
         cset$obs <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$obs)[1]})), ncol=dim(x[[1]]$obs)[2])
@@ -389,11 +393,6 @@ check_curve_set_dimensions <- function(x) {
     # Check that all curve sets contain the same elements
     if(!all(sapply(name_vec, FUN=identical, y=name_vec[[1]])))
         stop("The curve sets in \'x\' contain different elements.\n")
-    # Check equality of length of r
-    if('r' %in% name_vec[[1]]) {
-      if(!all(sapply(x, FUN=function(curve_set) { length(curve_set$r) == length(x[[1]]$r) })))
-        stop("The lengths of 'r' in curve sets differ.\n")
-    }
     # Check that 'is_residual' is the same for all curve sets.
     if('is_residual' %in% name_vec[[1]]) {
         if(!all(sapply(x, FUN=function(curve_set) { curve_set$is_residual == x[[1]]$is_residual })))
