@@ -221,7 +221,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   res_ls <- lapply(curve_sets, FUN = function(x) { individual_central_region(x, ...) })
   type <- attr(res_ls[[1]], "type")
 
-  # 2) Second stage: ERL central region
+  # 2) Second stage: ERL central region/test
   # Create a curve_set for the ERL test
   k_ls <- lapply(res_ls, FUN = function(x) attr(x, "k"))
   k_mat <- do.call(rbind, k_ls, quote=FALSE)
