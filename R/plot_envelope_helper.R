@@ -73,8 +73,8 @@ pick_attributes <- function(curve_set, alternative, type) {
 # A helper function to check whether the xaxis needs to be reticked with new values due to
 # combined tests. Called also from plot.global_envelope for checking if fv plot style is available.
 retick_xaxis <- function(x) {
-  if(class(x)[1] != "list") x <- list(x)
-  if(any(unlist(lapply(x, FUN=function(x) { !("global_envelope" %in% class(x) | "fboxplot" %in% class(x) | "curve_set" %in% class(x)) }))))
+  if(!inherits(x, "list")) x <- list(x)
+  if(any(unlist(lapply(x, FUN=function(x) { !(inherits(x, "global_envelope") | inherits(x, "fboxplot") | inherits(x, "curve_set")) }))))
     stop("x should consist of global_envelope objects.\n")
   r_values_ls <- lapply(x, FUN=function(x) x$r)
   r_values <- do.call(c, r_values_ls, quote=FALSE)
@@ -89,7 +89,7 @@ retick_xaxis <- function(x) {
 # Also curve_set objects allowed with a restricted use.
 # @param nticks Number of ticks per a sub test.
 combined_global_envelope_rhelper <- function(x, nticks = 5) {
-  if(class(x)[1] != "list") x <- list(x)
+  if(!inherits(x, "list")) x <- list(x)
   retick <- retick_xaxis(x)
   r_values_ls <- retick$r_values_ls
   r_values <- retick$r_values
@@ -195,7 +195,7 @@ env_main_default <- function(x, digits=3) {
 # @param use_ggplot2 TRUE/FALSE, If TRUE, then default ylim are for \code{\link{env_ggplot}}.
 # Otherwise the ylim are for \code{\link{env_basic_plot}}.
 env_ylim_default <- function(x, use_ggplot2) {
-  if(class(x)[1] != "list") x <- list(x)
+  if(!inherits(x, "list")) x <- list(x)
   if(!use_ggplot2)
     switch(attr(x[[1]], "einfo")$alternative,
             two.sided = {
@@ -291,7 +291,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                            separate_yaxes = FALSE, max_ncols_of_plots = 2, add = FALSE, env.col = 1,
                            nticks = 5, curve_sets = NULL, obs.type = "l", ...) {
-    if(class(x)[1] != "list") x <- list(x)
+    if(!inherits(x, "list")) x <- list(x)
     # Handle combined tests; correct labels on x-axis
     # a) if x is a list of global_envelope objects
     # b) if x[['r']] contains repeated values (when length(x) == 1)
@@ -423,9 +423,9 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                        separate_yaxes = TRUE, max_ncols_of_plots = 2,
                        labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL) {
-    if(class(x)[1] != "list") x <- list(x)
+    if(!inherits(x, "list")) x <- list(x)
     if(!is.null(x2)) {
-      if(class(x2)[1] != "list") x2 <- list(x2)
+      if(!inherits(x2, "list")) x2 <- list(x2)
       if(length(x) != length(x2)) {
         warning("Unsuitable x2. Setting it to NULL.\n")
         x2 <- NULL
@@ -452,7 +452,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     counter <- 0
     outliers <- NULL
     if(!is.null(curve_sets)) {
-      if(class(curve_sets)[1] == "list") curve_sets <- combine_curve_sets(curve_sets)
+      if(inherits(curve_sets, "list")) curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
       for(j in 1:ncol(curve_sets$obs)) {
         if(any(curve_sets$obs[,j] < x[['lo']] | curve_sets$obs[,j] > x[['hi']])) {
           outliers <- c(outliers, curve_sets$obs[,j])
