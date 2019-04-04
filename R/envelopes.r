@@ -211,7 +211,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
   res
 }
 
-# Functionality for combined_central_region and combined_global_envelope_test
+# Functionality for combined_central_region and combined_global_envelope_test (two-step procedure)
 combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
   ntests <- length(curve_sets)
   if(ntests < 1) stop("Only one curve_set, no combining to be done.\n")
