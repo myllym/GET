@@ -226,22 +226,23 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   # Create a curve_set for the ERL test
   k_ls <- lapply(res_ls, FUN = function(x) attr(x, "k"))
   k_mat <- do.call(rbind, k_ls, quote=FALSE)
-  curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat, is_residual=FALSE))
+  Nfunc <- ncol(k_mat)
   # Construct the one-sided ERL central region
   if(type %in% c("qdir", "st", "unscaled")) alt2 <- "greater"
   else alt2 <- "less"
   switch(CR_or_GET,
          CR = {
+           curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat, is_residual=FALSE))
            res_erl <- individual_central_region(curve_set_u, type="erl", coverage=coverage, alternative=alt2)
          },
          GET = {
+           curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat[,1], sim_m=k_mat[,-1], is_residual=FALSE))
            res_erl <- individual_global_envelope_test(curve_set_u, type="erl", alpha=1-coverage, alternative=alt2)
          }
   )
 
   # 3) The 100(1-alpha)% global combined ERL envelope
   distance_lexo_sorted <- sort(attr(res_erl, "k"), decreasing=TRUE)
-  Nfunc <- ncol(curve_set_u$obs)
   kalpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
   # Indices of the curves from which to calculate the convex hull
   curves_for_envelope_ind <- which(attr(res_erl, "k") >= kalpha)
