@@ -948,12 +948,12 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
 #'   # - The central curve is now obtained from env[['theo']], which is the
 #'   # value of the L-function under the null hypothesis (L(r) = r).
 #'   # - Three different plot styles are provided:
-#'   # a) a basic style
-#'   plot(res)
+#'   # a) ggplot2 style (requires ggplot2)
+#'   plot(res, plot_style="ggplot2")
 #'   # b) spatstat's style (requires spatstat)
 #'   plot(res, plot_style="fv")
-#'   # or ggplot2 style (requires ggplot2)
-#'   plot(res, plot_style="ggplot2")
+#'   # c) a basic style
+#'   plot(res, plot_style="basic")
 #'
 #'   ## Advanced use:
 #'   # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
@@ -961,7 +961,7 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
 #'   # For better visualisation, take the L(r)-r function
 #'   curve_set <- residual(curve_set, use_theo=TRUE)
 #'   # Do the rank envelope test (erl)
-#'   res <- global_envelope_test(curve_set); plot(res, plot_style="ggplot2")
+#'   res <- global_envelope_test(curve_set); plot(res, ylab=expression(italic(L(r)-r)))
 #'
 #'   ## Random labeling test
 #'   #----------------------
@@ -985,7 +985,7 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
 #'   # 3) Do the rank envelope test
 #'   res <- global_envelope_test(curve_set)
 #'   # 4) Plot the test result
-#'   plot(res, plot_style="ggplot2", ylab=expression(italic(L[m](r)-L(r))))
+#'   plot(res, ylab=expression(italic(L[m](r)-L(r))))
 #'
 #'   \dontrun{
 #'   ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
@@ -1011,7 +1011,7 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
 #'   env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
 #'                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #'   curve_set <- crop_curves(env, r_min=1, r_max=3.5)
-#'   res <- global_envelope_test(curve_set, type="erl"); plot(res, plot_style="ggplot2")
+#'   res <- global_envelope_test(curve_set, type="erl"); plot(res, ylab=expression(italic(J(r))))
 #'   }
 #'
 #'   # A combined global envelope test
@@ -1061,8 +1061,7 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
 #'
 #'   res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
 #'                                               curve_set_G, curve_set_J))
-#'   plot(res, plot_style="ggplot2",
-#'        labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
+#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 #' }
 #'
 #' ## A test based on a low dimensional random vector
