@@ -932,7 +932,6 @@ plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
 #' \code{\link{global_envelope_test_2d}}
 #' @aliases GET
 #' @examples
-#'
 #' if(require(spatstat, quietly=TRUE)) {
 #'   ## Testing complete spatial randomness (CSR)
 #'   #-------------------------------------------
