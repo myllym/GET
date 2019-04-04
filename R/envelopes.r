@@ -719,8 +719,8 @@ print.fboxplot <- function(x, ...) {
 #'
 #' @method plot fboxplot
 #' @export
-plot.fboxplot <- function(x, plot_style = c("basic", "fv", "ggplot2"),
-                          dotplot = length(x$r)<10, level = 1,
+plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
+                          dotplot = length(x$r)<10,
                           outliers = TRUE, bp.col = 2, cr.col = 1, ...) {
   plot_style <- match.arg(plot_style)
   if(outliers) curve_sets <- attr(x, "curve_sets") else curve_sets <- NULL
