@@ -339,7 +339,7 @@ print.global_envelope <- function(x, ...) {
 #' @method plot global_envelope
 #' @export
 #' @seealso \code{\link{central_region}}
-plot.global_envelope <- function(x, plot_style = c("basic", "fv", "ggplot2"),
+plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
