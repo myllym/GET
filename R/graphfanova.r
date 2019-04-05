@@ -122,7 +122,7 @@ corrFvalues <- function(x, groups) {
 #- means as long vector
 
 # ... Ignored
-means <- function(x, groups, ...){
+means <- function(x, groups, ...) {
   jm <- as.vector(t(groupmeans(x, groups)))
   names(jm) <- rep(levels(groups), each = dim(x)[2])
   jm
@@ -131,13 +131,13 @@ means <- function(x, groups, ...){
 #- contrasts as long vectors
 
 # ... Ignored
-contrasts <- function(x, groups, ...){
+contrasts <- function(x, groups, ...) {
   k <- nlevels(groups)
   gnam <- levels(groups)
   mea <- groupmeans(x, groups)
   cont <- NULL
   nt <- dim(x)[2]
-  for(i in 1:(k-1)) for(j in (i+1):k)  {
+  for(i in 1:(k-1)) for(j in (i+1):k) {
     ct <- mea[i, ] - mea[j, ]
     names(ct) <- rep(paste(gnam[i], gnam[j], sep="-"), nt)
     cont <- c(cont, ct)
