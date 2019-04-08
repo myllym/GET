@@ -82,7 +82,9 @@ check_image_set_content <- function(image_set) {
 #'   r[[2]] should give the argument values for y-coordinate (second dimension of the 2d functions).
 #'   If not given, r is set to be a list of values from 1 to the number of first/second dimension
 #'   of 2d functions in \code{obs}.
-#'   \code{obs} must be either a 2d matrix or 3d array containing the observed 2d functions.
+#'   \code{obs} must be either a 2d matrix (dimensions matching the lengths of r vectors)
+#'   or 3d array containing the observed 2d functions (dimensions matching the numbers of
+#'   functions and the lentghs of r vectors, in this order).
 #'   If \code{obs} is a 3d array, then \code{sim_m} is ignored.
 #'   If \code{obs} is a 2d array, then \code{sim_m} must be a 3d array containing the simulated
 #'   images (2d functions).
