@@ -215,7 +215,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
 combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
   ntests <- length(curve_sets)
   if(ntests < 1) stop("Only one curve_set, no combining to be done.\n")
-  curve_sets <- check_curve_set_dimensions(curve_sets)
+  check_curve_set_dimensions(curve_sets)
   CR_or_GET <- match.arg(CR_or_GET)
 
   # 1) First stage: Calculate the functional orderings individually for each curve_set
@@ -247,6 +247,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   # Indices of the curves from which to calculate the convex hull
   curves_for_envelope_ind <- which(attr(res_erl, "k") >= kalpha)
   # Curves
+  curve_sets <- lapply(curve_sets, FUN=convert_envelope)
   data_and_sim_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
   # Curves from which to calculate the convex hull
   curves_for_envelope_l <- lapply(data_and_sim_curves_l, function(x) { x[curves_for_envelope_ind,] })
