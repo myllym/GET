@@ -148,12 +148,12 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
 individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.05,
                                             alternative = c("two.sided", "less", "greater"),
                                             ties = "erl", probs = c(0.025, 0.975),
-                                            central = "mean") {
+                                            central = "mean", ...) {
   alternative <- match.arg(alternative)
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
                                    alternative=alternative, probs=probs,
-                                   central=central)
+                                   central=central, ...)
   # The type of the p-value
   possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
   if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
