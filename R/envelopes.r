@@ -268,15 +268,40 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   res
 }
 
-#' Print method for the class 'global_envelope'
-#' @usage \method{print}{global_envelope}(x, ...)
-#'
-#' @param x an 'global_envelope' object
-#' @param ... Ignored.
-#'
-#' @method print global_envelope
-#' @export
-print.global_envelope <- function(x, ...) {
+# Functionality for combined_central_region and combined_global_envelope_test (one-step procedure)
+combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
+  curve_set <- combine_curve_sets(curve_sets, equalr=TRUE)
+  switch(CR_or_GET,
+         CR = {
+           res <- individual_central_region(curve_set, coverage=coverage, ...)
+         },
+         GET = {
+           res <- individual_global_envelope_test(curve_set, alpha=1-coverage, ...)
+         })
+  # Transform the envelope to a combined envelope
+  nfuns <- length(curve_sets)
+  nr <- length(curve_sets[[1]]$r) # all curve sets have the same
+  idx <- lapply(1:nfuns, FUN = function(i) ((i-1)*nr+1):(i*nr))
+  # Split the envelopes to the original groups
+  res <- split(res, f = rep(1:nfuns, each=nr))
+  res <- lapply(res, FUN = function(x) { class(x) <- c("global_envelope", class(x)); x })
+  attr(res, "level2_ge") <- data.frame()
+  anames <- c("p", "p_interval", "ties", "k", "k_alpha", "method")
+  anames <- anames[anames %in% names(attributes(res[[1]]))]
+  for(name in anames) {
+    attr(attr(res, "level2_ge"), name) <- attr(res[[1]], name)
+    for(i in 1:length(res)) attr(res, name) <- NULL
+  }
+  for(name in c("einfo", "type", "argu", "xlab", "xexp", "ylab", "yexp"))
+    attr(attr(res, "level2_ge"), name) <- attr(res[[1]], name)
+  attr(res, "method") <- "Combined global envelope (one-step)"
+  class(res) <- c("combined_global_envelope", class(res))
+  res
+}
+
+# Helper function for plotting object with attributes "alpha", "type", "method"
+# and optionally "p", "p_interval", "ties", "alpha_star"
+GEprinthelper <- function(x) {
   if(is.null(attr(x, "p"))) { # The case of a central region
     cat(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), "). \n",
         " Plot the object instead.\n", sep="")
@@ -290,6 +315,18 @@ print.global_envelope <- function(x, ...) {
       cat(" p-interval         : (", attr(x, "p_interval")[1], ", ", attr(x, "p_interval")[2],")\n", sep="")
   }
   if(!is.null(attr(x, "alpha_star"))) cat(paste("The adjusted level of the test: ", attr(x, "alpha_star"), "\n", sep=""))
+}
+
+#' Print method for the class 'global_envelope'
+#' @usage \method{print}{global_envelope}(x, ...)
+#'
+#' @param x an 'global_envelope' object
+#' @param ... Ignored.
+#'
+#' @method print global_envelope
+#' @export
+print.global_envelope <- function(x, ...) {
+  GEprinthelper(x)
 }
 
 #' Plot method for the class 'global_envelope'
