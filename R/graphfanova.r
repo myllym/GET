@@ -244,7 +244,7 @@ contrasts <- function(x, groups, ...) {
 #' res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec,
 #'                          groups = attr(cgec, "group"),
 #'                          test.equality = "cov", cov.lag = 1)
-#' plot(res.cov1, plot_style="ggplot2", max_ncols_of_plots=3,
+#' plot(res.cov1, max_ncols_of_plots=3,
 #'      labels = paste("Group ", 1:3, sep=""),
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(W)[i](r))))
@@ -252,7 +252,7 @@ contrasts <- function(x, groups, ...) {
 #' res.var <- graph.fanova(nsim = nsim, curve_set = cgec,
 #'                         groups = attr(cgec, "group"),
 #'                         test.equality = "var")
-#' plot(res.var, plot_style="ggplot2", max_ncols_of_plots=3,
+#' plot(res.var, max_ncols_of_plots=3,
 #'      labels = paste("Group ", 1:3, sep=""),
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(Z)[i](r))))
@@ -263,7 +263,7 @@ contrasts <- function(x, groups, ...) {
 #'                     groups = attr(cgec, "group"),
 #'                     variances = "equal",
 #'                     summaryfun = "means")
-#' plot(res, plot_style="ggplot2", max_ncols_of_plots=3,
+#' plot(res, max_ncols_of_plots=3,
 #'      labels = paste("Group ", 1:3, sep=""),
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(T)[i](r))))
@@ -272,7 +272,7 @@ contrasts <- function(x, groups, ...) {
 #'                     groups = attr(cgec, "group"),
 #'                     variances = "equal",
 #'                     summaryfun = "contrasts")
-#' plot(res2, plot_style="ggplot2", max_ncols_of_plots=3,
+#' plot(res2, max_ncols_of_plots=3,
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
 #'
@@ -286,17 +286,17 @@ contrasts <- function(x, groups, ...) {
 #' # Test for equality of variances in the groups
 #' resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
 #'                      test.equality="var")
-#' plot(resV, plot_style="ggplot2")
+#' plot(resV)
 #' # Test for equality of lag 1 covariances in the groups
 #' resC <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
 #'                      test.equality="cov", cov.lag=1)
-#' plot(resC, plot_style="ggplot2")
+#' plot(resC)
 #'
 #' # Test the equality of means in the groups (fANOVA), assuming equality of variances
 #' res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means")
-#' plot(res, plot_style="ggplot2")
+#' plot(res)
 #' res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="contrasts")
-#' plot(res2, plot_style="ggplot2")
+#' plot(res2)
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          summaryfun = c("means", "contrasts"),
                          n.aver = 1L, mirror = FALSE, savefuns=FALSE,
