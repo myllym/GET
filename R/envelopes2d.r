@@ -45,51 +45,32 @@ curve_set_results_to_image_results <- function(res_v, image_sets) {
 }
 
 # Functionality for central_region_2d and global_envelope_test_2d
-cr_or_GET_2d <- function(image_set, CR_or_GET = c("CR", "GET"), ...) {
+cr_or_GET_2d <- function(image_sets, CR_or_GET = c("CR", "GET"), ...) {
   CR_or_GET <- match.arg(CR_or_GET)
-  obs_d <- dim(obs)
-  sim_d <- dim(sim)
-  image_set <- check_image_set_dimensions(image_set)
-  # Create curve_set transforming the 2d functions to vectors
-  curve_set_v <- image_set_to_curve_set(image_set)
+  if(inherits(image_sets, "image_set")) image_sets <- list(image_sets)
+  obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
+  sim_d <- lapply(image_sets, function(x) { dim(x$sim_m) })
+  # Check that dimensions of different image sets are the same
+  if(!all(sapply(obs_d, FUN=identical, y=obs_d[[1]]))) stop("Dimensions of image sets (obs) do not match.\n")
+  if(!all(sapply(sim_d, FUN=identical, y=sim_d[[1]]))) stop("Dimensions of image sets (sim_m) do not match.\n")
+  # Check dimensions of each image set
+  image_sets <- lapply(image_sets, check_image_set_dimensions)
+  # Check equalities of the r values
+  if(!all(sapply(image_sets, FUN = function(x) {identical(x$r, y=image_sets[[1]]$r)}))) stop("The r values of image sets do not match.\n")
+  # Create curve sets transforming the 2d functions (matrices) to vectors
+  curve_sets_v <- lapply(image_sets, image_set_to_curve_set)
 
   # Prepare global envelope or global envelope test
   switch(CR_or_GET,
          CR = {
-           res_v <- central_region(curve_set_v, ...)
+           res_v <- central_region(curve_sets_v, ...)
          },
          GET = {
-           res_v <- global_envelope_test(curve_set_v, ...)
+           res_v <- global_envelope_test(curve_sets_v, ...)
          })
 
   # Transform the results to 2d
-  if(is.vector(curve_set_v[['obs']]))
-    res <- structure(list(rx=image_set$r[[1]], ry=image_set$r[[2]],
-                          obs=obs, #matrix(res_v$obs, nrow=obs_d[1], ncol=obs_d[2]),
-                          central=matrix(res_v$central, nrow=obs_d[1], ncol=obs_d[2]),
-                          lo=matrix(res_v$lo, nrow=obs_d[1], ncol=obs_d[2]),
-                          hi=matrix(res_v$hi, nrow=obs_d[1], ncol=obs_d[2])),
-                     class = c("global_envelope_2d", "list"))
-  else
-    res <- structure(list(rx=image_set$r[[1]], ry=image_set$r[[2]],
-                          central=matrix(res_v$central, nrow=obs_d[2], ncol=obs_d[3]),
-                          lo=matrix(res_v$lo, nrow=obs_d[2], ncol=obs_d[3]),
-                          hi=matrix(res_v$hi, nrow=obs_d[2], ncol=obs_d[3])),
-                     class = c("global_envelope_2d", "list"))
-  attr(res, "method") <- attr(res_v, "method")
-  attr(res, "type") <- attr(res_v, "type")
-  attr(res, "alternative") <- attr(res_v, "einfo")$alternative
-  attr(res, "k_alpha") <- attr(res_v, "k_alpha")
-  attr(res, "alpha") <- attr(res_v, "alpha")
-  attr(res, "k") <- attr(res_v, "k")
-  if(CR_or_GET == "GET") {
-    attr(res, "p") <- attr(res_v, "p")
-    if(attr(res_v, "type") == "rank") {
-      attr(res, "p_interval") <- attr(res_v, "p_interval")
-      attr(res, "ties") <- attr(res_v, "ties")
-    }
-  }
-  attr(res, "call") <- match.call()
+  res <- curve_set_results_to_image_results(res_v, image_sets)
   res
 }
 
