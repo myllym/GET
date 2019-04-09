@@ -208,6 +208,19 @@ print.global_envelope_2d <- function(x, ...) {
   GEprinthelper(x, ...)
 }
 
+#' Print method for the class 'combined_global_envelope_2d'
+#' @usage \method{print}{combined_global_envelope_2d}(x, ...)
+#'
+#' @param x an 'combined_global_envelope_2d' object
+#' @param ... Ignored.
+#'
+#' @method print combined_global_envelope_2d
+#' @export
+print.combined_global_envelope_2d <- function(x, ...) {
+  GEprinthelper(attr(x, "level2_ge"), ...)
+}
+
+
 #' Plot method for the class 'global_envelope_2d'
 #'
 #' Plot method for the class 'global_envelope_2d'
