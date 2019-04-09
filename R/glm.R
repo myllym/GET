@@ -22,7 +22,7 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
   Nfunc <- nrow(data.l[[1]]) # Number of functions
   nr <- ncol(data.l[[1]]) # Number of argument values
   if(length(curve_sets) > 1) { # Factors provided in the curve_sets
-    for(i in 2:length(vars)) data.l[[i]] <- curve_sets[[vars[i]]][['obs']]
+    for(i in 2:length(vars)) data.l[[i]] <- t(curve_sets[[vars[i]]][['obs']])
   }
   else {
     if(is.null(factors)) stop("No factors provided.\n")
