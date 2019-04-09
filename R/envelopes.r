@@ -346,13 +346,11 @@ print.combined_global_envelope <- function(x, ...) {
 }
 
 #' Plot method for the class 'global_envelope'
-#' @usage \method{plot}{global_envelope}(x, plot_style = c("basic", "fv", "ggplot2"),
-#'    dotplot = length(x$r)<10,
-#'    main, ylim, xlab, ylab, use_ggplot2,
-#'    color_outside = TRUE, env.col = 1, base_size = 15,
-#'    labels = NULL, add = FALSE, digits=3,
-#'    level = 1, separate_yaxes = TRUE, max_ncols_of_plots = 2,
-#'    nticks = 5, ...)
+#' @usage \method{plot}{global_envelope}(x, plot_style = c("ggplot2", "fv", "basic"),
+#' dotplot = length(x$r)<10,
+#' main, ylim, xlab, ylab,
+#' color_outside = TRUE, env.col = 1, base_size = 15,
+#' labels = NULL, add = FALSE, digits = 3, ...)
 #' @param x An 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
 #' The option "basic" (default) offers a very basic global envelope plot.
@@ -371,23 +369,12 @@ print.combined_global_envelope <- function(x, ...) {
 #' outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.
 #' @param env.col The color for the envelope lines (or dotplot arrows). Default 1 (black).
 #' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
+#' @param labels A character vector of suitable length.
+#' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
 #' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
 #' Not available for \code{plot_style = "ggplot2"}.
 #' @param digits The number of digits used for printing the p-value or p-interval in the main,
 #' if using the default main.
-#' @param level 1 or 2. In the case of combined tests (with several test functions), two different plots are available:
-#' 1 for plotting the combined global envelopes (default and most often wanted) or
-#' 2 for plotting the second level test result.
-#' @param separate_yaxes Logical (default FALSE). If TRUE, then separate y-axes are used for
-#' different parts of a combined test. If FALSE, then the components are displayed one next to each other
-#' with a joint y-axis.
-#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
-#' number of columns for figures. Default 2. Relevant only for combined tests with several test functions.
-#' @param labels A character vector of suitable length.
-#' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
-#' Labels for the separate plots, ignored if separate_yaxes is FALSE.
-#' @param nticks The number of ticks on the xaxis. Relevant only for combined tests with
-#' \code{separate_yaxes = TRUE}.
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
 #' @method plot global_envelope
@@ -397,34 +384,18 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
-                                 labels = NULL, add = FALSE, digits = 3,
-                                 level = 1, separate_yaxes = TRUE, max_ncols_of_plots = 2,
-                                 nticks = 5, ...) {
+                                 labels = NULL, add = FALSE, digits = 3, ...) {
   plot_style <- match.arg(plot_style)
-  if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
+  if(dotplot) plot_style <- "basic"
   if(plot_style == "ggplot2") use_ggplot2 <- TRUE
   else use_ggplot2 <- FALSE
   # main
   if(missing('main')) {
-    if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test (two step)
-      attr(x, "einfo")$alternative <- attr(attr(x, "global_envelope_ls")[[1]], "einfo")$alternative
       main <- env_main_default(x, digits=digits)
-    }
-    else {
-      main <- env_main_default(x, digits=digits)
-    }
   }
   # ylim
   if(missing('ylim')) {
-    if(!separate_yaxes | plot_style != "ggplot2") {
-      if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test (level 1)
-        ylim <- env_ylim_default(attr(x, "global_envelope_ls"), use_ggplot2)
-      }
-      else {
-        ylim <- env_ylim_default(x, use_ggplot2)
-      }
-    }
-    else ylim <- NULL
+    ylim <- env_ylim_default(x, use_ggplot2)
   }
   # ylab, ylab, labels
   if(missing('xlab')) {
@@ -437,66 +408,146 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   }
   if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
 
-  if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test, level 1 plots
+  if(retick_xaxis(list(x))$retick_xaxis) {
+    if(plot_style == "fv") {
+      warning("The plot style fv not available for the case where r distances are not increasing.\n Setting plot_style to basic.\n")
+      plot_style <- "basic"
+    }
+    separate_yaxes <- TRUE
+  }
+  else { # no need for new xticks and combined test outputs
+    separate_yaxes <- FALSE
+  }
+  switch(plot_style,
+         basic = {
+           if(dotplot) {
+             if(length(labels) != length(x$r)) labels <- NULL
+             env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                         color_outside=color_outside, labels=labels,
+                         add=add, arrows.col=env.col, ...)
+           }
+           else {
+             if(separate_yaxes) main <- labels
+             env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                            color_outside=color_outside,
+                            separate_yaxes=separate_yaxes,
+                            add=add, env.col=env.col, ...)
+           }
+         },
+         fv = {
+           spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
+         },
+         ggplot2 = {
+           env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                           separate_yaxes=separate_yaxes,
+                           labels=labels, ...)
+         })
+}
+
+#' Plot method for the class 'combined_global_envelope'
+#' @usage \method{plot}{combined_global_envelope}(x, plot_style = c("ggplot2", "fv", "basic"),
+#'    main, ylim, xlab, ylab,
+#'    color_outside = TRUE, env.col = 1, base_size = 15,
+#'    labels = NULL, add = FALSE, digits=3,
+#'    level = 1, separate_yaxes = TRUE, max_ncols_of_plots = 2,
+#'    nticks = 5, ...)
+#' @param x An 'combined_global_envelope' object
+#' @inheritParams plot.global_envelope
+#' @param labels A character vector of suitable length.
+#' If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
+#' Labels for the separate plots, ignored if separate_yaxes is FALSE.
+#' @param level 1 or 2. In the case of combined tests (with several test functions), two different plots are available:
+#' 1 for plotting the combined global envelopes (default and most often wanted) or
+#' 2 for plotting the second level test result.
+#' @param separate_yaxes Logical (default FALSE). If TRUE, then separate y-axes are used for
+#' different parts of a combined test. If FALSE, then the components are displayed one next to each other
+#' with a joint y-axis.
+#' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
+#' number of columns for figures. Default 2. Relevant only for combined tests with several test functions.
+#' @param nticks The number of ticks on the xaxis. Relevant only for combined tests with
+#' \code{separate_yaxes = TRUE}.
+#' @method plot combined_global_envelope
+#' @export
+#' @seealso \code{\link{central_region}}
+plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
+                                 main, ylim, xlab, ylab,
+                                 color_outside = TRUE, env.col = 1, base_size = 15,
+                                 labels = NULL, add = FALSE, digits = 3,
+                                 level = 1, separate_yaxes = TRUE, max_ncols_of_plots = 2,
+                                 nticks = 5, ...) {
+  plot_style <- match.arg(plot_style)
+  if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
+  if(level == 2) {
+    plot.global_envelope(attr(x, "level2_ge"), plot_style=plot_style,
+                         main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                         color_outside=color_outside, env.col=env.col, base_size=base_size,
+                         labels=labels, add=add, digits=digits, ...)
+  }
+  else { # Level 1 plots
+    if(plot_style == "ggplot2") use_ggplot2 <- TRUE
+    else use_ggplot2 <- FALSE
+    # main
+    if(missing('main')) {
+      alt <- attr(x[[1]], "einfo")$alternative
+      main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
+    }
+    # ylim
+    if(missing('ylim')) {
+      if(!separate_yaxes | plot_style != "ggplot2") {
+        ylim <- env_ylim_default(x, use_ggplot2)
+      }
+      else ylim <- NULL
+    }
+    # ylab, ylab, labels
+    if(missing('xlab')) {
+      if(plot_style == "ggplot2") {
+        xlab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "xexp")))
+      }
+      else {
+        if(attr(x[[1]], "xlab") == attr(x[[1]], "argu")) xlab <- lapply(x, function(y) { substitute(italic(i), list(i=attr(y, "xexp"))) })
+        else xlab <- lapply(x, function(y) { substitute(paste(i, " (", italic(j), ")", sep=""), list(i=attr(y, "xexp"), j=attr(y, "argu"))) })
+      }
+    }
+    if(missing('ylab')) {
+      if(plot_style == "ggplot2" | (!separate_yaxes & plot_style != "fv")) {
+        ylab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "yexp")))
+      }
+      else {
+        if(inherits(attr(x[[1]], "yexp"), "character")) ylab <- lapply(x, function(y) attr(y, "yexp"))
+        else ylab <- lapply(x, function(y) { substitute(italic(i), list(i=attr(y, "yexp"))) })
+      }
+    }
+    if(is.null(labels) & !is.null(attr(x, "labels"))) labels <- attr(x, "labels")
+    else {
+      if(plot_style == "ggplot2") {
+        labels <- sapply(x, function(y) attr(y, "ylab"), simplify=TRUE)
+        if(all(sapply(labels, FUN=identical, y=labels[[1]]))) labels <- NULL
+      }
+    }
+
     switch(plot_style,
            basic = {
              if(separate_yaxes) main <- labels
-             env_basic_plot(attr(x, "global_envelope_ls"), main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+             env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                             color_outside=color_outside, separate_yaxes=separate_yaxes,
                             max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col,
                             nticks=nticks, ...)
            },
            fv = {
              if(!separate_yaxes) cat("Note: separate_yaxes = FALSE not available for plot_style = \"fv\".\n")
-             n_of_plots <- length(attr(x, "global_envelope_ls"))
+             n_of_plots <- length(x)
              ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
              nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
              par(mfrow=c(nrows_of_plots, ncols_of_plots))
-             for(i in 1:length(attr(x, "global_envelope_ls")))
-               spatstat::plot.fv(attr(x, "global_envelope_ls")[[i]],
-                                 main=labels[i], ylim=ylim, xlab=xlab, ylab=ylab, add=FALSE, ...)
+             for(i in 1:length(x))
+               spatstat::plot.fv(x[[i]],
+                                 main=labels[i], ylim=ylim, xlab=xlab[[i]], ylab=ylab[[i]], add=FALSE, ...)
            },
            ggplot2 = {
-             env_ggplot(attr(x, "global_envelope_ls"), base_size=base_size,
+             env_ggplot(x, base_size=base_size,
                         main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                         separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
                         labels=labels, nticks=nticks, ...)
-           })
-  }
-  else {
-    if(retick_xaxis(list(x))$retick_xaxis) {
-      if(plot_style == "fv") {
-        warning("The plot style fv not available for the case where r distances are not increasing.\n Setting plot_style to basic.\n")
-        plot_style <- "basic"
-      }
-    }
-    else { # no need for new xticks and combined test outputs
-      separate_yaxes <- FALSE
-    }
-    switch(plot_style,
-           basic = {
-             if(dotplot) {
-               if(length(labels) != length(x$r)) labels <- NULL
-               env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                           color_outside=color_outside, labels=labels,
-                           add=add, arrows.col=env.col, ...)
-             }
-             else {
-               if(separate_yaxes) main <- labels
-               env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                              color_outside=color_outside,
-                              separate_yaxes=separate_yaxes,
-                              max_ncols_of_plots=max_ncols_of_plots,
-                              add=add, env.col=env.col, nticks=nticks, ...)
-             }
-           },
-           fv = {
-             spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
-           },
-           ggplot2 = {
-             env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                             separate_yaxes=separate_yaxes, max_ncols_of_plots=max_ncols_of_plots,
-                             labels=labels, nticks=nticks, ...)
            })
   }
 }
