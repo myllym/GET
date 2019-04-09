@@ -8,10 +8,10 @@ check_image_set_dimensions <- function(image_set) {
   if(length(r) > 0L) {
     if(!all(unlist(lapply(r, FUN=is.vector))) || !all(unlist(lapply(r, FUN=is.numeric))) || !all(unlist(lapply(r, FUN=is.finite)))) stop("Error in image_set[[\'r\']].\n")
     nr <- unlist(lapply(r, FUN=length))
-    if(length(nr) != 2 || !all(nr == c(obs_d[length(obs_d)-1], obs_d[length(obs_d)]))) stop("Unsuitable image_set[[\'r\']].\n")
+    if(length(nr) != 2 || !all(nr == c(obs_d[1], obs_d[2]))) stop("Unsuitable image_set[[\'r\']].\n")
   }
   else {
-    image_set$r <- list(x = 1:obs_d[length(obs_d)-1], y = 1:obs_d[length(obs_d)])
+    image_set$r <- list(x = 1:obs_d[1], y = 1:obs_d[2])
   }
   # If obs_d is 3, then set sim_m and theo to NULL
   if(length(obs_d) == 3) {
@@ -33,9 +33,9 @@ image_set_to_curve_set <- function(image_set, ...) {
   if(!(length(obs_d) %in% c(2,3))) stop("Error in the dimension of image_set[['r']].\n")
   # Create curve_set transforming the 2d functions to vectors
   if(length(obs_d) == 3) {
-    obs_v <- matrix(nrow=obs_d[2]*obs_d[3], ncol=obs_d[1])
-    for(i in 1:obs_d[1]) obs_v[,i] <- as.vector(image_set$obs[i,,])
-    curve_set_v <- create_curve_set(list(r=1:(obs_d[2]*obs_d[3]),
+    obs_v <- matrix(nrow=obs_d[1]*obs_d[2], ncol=obs_d[3])
+    for(i in 1:obs_d[3]) obs_v[,i] <- as.vector(image_set$obs[,,i])
+    curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
                                          obs=obs_v))
   }
   else {
@@ -47,9 +47,9 @@ image_set_to_curve_set <- function(image_set, ...) {
       }
       else stop("Unsuitable theo\n")
     } else theo_v <- NULL
-    if(!all(obs_d == sim_d[2:3])) stop("Something wrong with the dimensions of obs and sim_m.\n")
-    sim_v <- matrix(nrow=sim_d[2]*sim_d[3], ncol=sim_d[1])
-    for(i in 1:sim_d[1]) sim_v[,i] <- as.vector(image_set$sim_m[i,,])
+    if(!all(obs_d == sim_d[1:2])) stop("Something wrong with the dimensions of obs and sim_m.\n")
+    sim_v <- matrix(nrow=sim_d[1]*sim_d[2], ncol=sim_d[3])
+    for(i in 1:sim_d[3]) sim_v[,i] <- as.vector(image_set$sim_m[,,i])
     curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
                                          obs=as.vector(image_set$obs),
                                          sim_m=sim_v))
@@ -83,11 +83,11 @@ check_image_set_content <- function(image_set) {
 #'   If not given, r is set to be a list of values from 1 to the number of first/second dimension
 #'   of 2d functions in \code{obs}.
 #'   \code{obs} must be either a 2d matrix (dimensions matching the lengths of r vectors)
-#'   or 3d array containing the observed 2d functions (dimensions matching the numbers of
-#'   functions and the lentghs of r vectors, in this order).
+#'   or 3d array containing the observed 2d functions (the third dimension matching the number
+#'   of functions).
 #'   If \code{obs} is a 3d array, then \code{sim_m} is ignored.
 #'   If \code{obs} is a 2d array, then \code{sim_m} must be a 3d array containing the simulated
-#'   images (2d functions).
+#'   images (2d functions) (the third dimension matching the number of functions).
 #'   If included, \code{theo} corresponds to the theoretical function
 #'   (e.g., under the null hypothesis) and its dimensions must either match the dimensions
 #'   of 2d functions in \code{obs} or it must be a constant.
