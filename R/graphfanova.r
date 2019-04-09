@@ -215,6 +215,7 @@ contrasts.m <- function(x, groups, ...) {
 #' see \code{test.equality}.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @export
+#' @seealso \code{\link{graph.fanova2d}}, \code{\link{frank.fanova}}
 #' @references
 #' Mrkvička, T., Hahn, U. and Myllymäki, M.
 #' A one-way ANOVA test for functional data with graphical interpretation.
