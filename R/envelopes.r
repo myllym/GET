@@ -303,9 +303,9 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   res.ls
 }
 
-# Helper function for plotting object with attributes "alpha", "type", "method"
+# Helper function for printing object with attributes "alpha", "type", "method"
 # and optionally "p", "p_interval", "ties", "alpha_star"
-GEprinthelper <- function(x) {
+GEprinthelper <- function(x, ...) {
   if(is.null(attr(x, "p"))) { # The case of a central region
     cat(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), "). \n",
         " Plot the object instead.\n", sep="")
