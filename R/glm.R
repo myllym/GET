@@ -38,12 +38,12 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
 }
 
 # Regress the given data (true or permuted) against the full model and
-# get an effect of interest at all r values as a long vector.
+# get an effect of interest at all r values in a matrix.
 # data.l = a list containing data (Y and factors), all variables in formula.full
 # nameinteresting = names of the interesting coefficients
 #' @importFrom stats lm
 #' @importFrom stats dummy.coef
-genCoefmeans <- function(data.l, formula.full, nameinteresting, ...) {
+genCoefmeans.m <- function(data.l, formula.full, nameinteresting, ...) {
   nr <- ncol(data.l[[1]])
   effect.a <- matrix(0, nrow=nr, ncol=length(nameinteresting))
   dimnames(effect.a) <- list(NULL, nameinteresting)
@@ -53,32 +53,26 @@ genCoefmeans <- function(data.l, formula.full, nameinteresting, ...) {
     allcoef <- unlist(stats::dummy.coef(M.full))
     effect.a[i,] <- allcoef[nameinteresting]
   }
-  res <- as.vector(effect.a) # to a vector
-  names(res) <- rep(nameinteresting, each=nr)
-  res
+  effect.a
 }
 
-# The constrasts of the interesting effects
+# The constrasts of the interesting effects in a matrix
 #' @importFrom stats lm
 #' @importFrom stats dummy.coef
-genCoefcontrasts <- function(data.l, formula.full, nameinteresting, ...) {
+genCoefcontrasts.m <- function(data.l, formula.full, nameinteresting, ...) {
   nr <- ncol(data.l[[1]])
   k <- length(nameinteresting)
-  effect.a <- matrix(0, nrow=nr, ncol=k)
-  dimnames(effect.a) <- list(NULL, nameinteresting)
-  for(i in 1:nr) {
-    df <- as.data.frame(lapply(data.l, FUN = function(x) x[,i]))
-    M.full <- stats::lm(formula.full, data=df, ...)
-    allcoef <- unlist(stats::dummy.coef(M.full))
-    effect.a[i,] <- allcoef[nameinteresting]
-  }
+  effect.a <- genCoefmeans.m(data.l=data.l, formula.full=formula.full, nameinteresting=nameinteresting, ...)
   # contrasts
-  cont <- NULL
+  cont <- matrix(0, nrow=nr, ncol=k*(k-1)/2)
+  cont.names <- vector(length=k*(k-1)/2)
+  counter <- 1
   for(i in 1:(k-1)) for(j in (i+1):k)  {
-    ct <- effect.a[,i] - effect.a[,j] # coef_i - coef_j
-    names(ct) <- rep(paste(nameinteresting[i], nameinteresting[j], sep="-"), nr)
-    cont <- c(cont, ct)
+    cont[,counter] <- effect.a[,i] - effect.a[,j] # coef_i - coef_j
+    cont.names[counter] <- paste(nameinteresting[i], nameinteresting[j], sep="-")
+    counter <- counter + 1
   }
+  colnames(cont) <- cont.names
   cont
 }
 
