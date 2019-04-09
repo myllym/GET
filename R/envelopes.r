@@ -599,6 +599,8 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param central Either "mean" or "median". If the curve sets do not contain the component
 #' \code{theo} for the theoretical central function, then the central function (used for plotting only)
 #' is calculated either as the mean or median of functions provided in the curve sets.
+#' @param nstep 1 or 2 for how to contruct a combined global envelope if list of curve sets
+#' is provided. 2 (default) for a two-step combining procedure, 1 for one-step.
 #' @param ... Additional parameters to be passed to \code{\link{forder}}.
 #' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
@@ -1152,18 +1154,26 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
                           alternative = c("two.sided", "less", "greater"),
                           ties = "erl", probs = c(0.025, 0.975),
-                          central = "mean") {
+                          central = "mean", nstep = 2, ...) {
   if(class(curve_sets)[1] == "list" & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
   if(class(curve_sets)[1] == "list") {
-    res <- combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
-                              alternative=alternative, probs=probs,
-                              central=central)
+    if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
+    if(nstep == 2) {
+      res <- combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
+                                alternative=alternative, probs=probs,
+                                central=central, ...)
+    }
+    else { # One-step combining procedure
+      res <- combined_CR_or_GET_1step(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
+                                alternative=alternative, probs=probs,
+                                central=central, ...)
+    }
   }
   else {
     res <- individual_global_envelope_test(curve_sets, type=type, alpha=alpha,
                                            alternative=alternative,
                                            ties=ties, probs=probs,
-                                           central=central)
+                                           central=central, ...)
   }
   res
 }
