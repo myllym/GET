@@ -174,11 +174,11 @@ central_region_2d <- function(image_set, ...) {
 #'     simulations[[sss]] <- ppp(uppp$x[f], uppp$y[f], window=X$window)
 #'   }
 #'   # Calculate the raw residuals for simulations
-#'   sim <- array(0, c(nsim, u$smooth$Z$dim))
+#'   sim <- array(0, c(u$smooth$Z$dim, nsim))
 #'   for(i in 1:length(simulations)) {
 #'     model=ppm(simulations[[i]],interaction=Hardcore(HD));
 #'     u_sim <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth", sigma=ds, plot.it=FALSE)
-#'     sim[i,,] <- u_sim$smooth$Z$v
+#'     sim[,,i] <- u_sim$smooth$Z$v
 #'     if((i %% 100)==0) cat(i, ' ')
 #'   }
 #'   # Constract the global envelope test for the (2D) raw residuals
