@@ -92,6 +92,7 @@ testUnequalCovTrans <- function(x, groups, lag=1) {
 #-----------------
 # x = An array with the original functions
 # groups = a factor vector representing the assignment to groups
+# ... Ignored
 
 Fvalues <- function(x, groups) {
   ni <- groupn(groups)
