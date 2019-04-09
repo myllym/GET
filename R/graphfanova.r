@@ -119,32 +119,30 @@ corrFvalues <- function(x, groups) {
   Fvalues
 }
 
+#- means and contrasts as matrices
 
-#- means as long vector
-
-# ... Ignored
-means <- function(x, groups, ...) {
-  jm <- as.vector(t(groupmeans(x, groups)))
-  names(jm) <- rep(levels(groups), each = dim(x)[2])
+means.m <- function(x, groups, ...) {
+  jm <- t(groupmeans(x, groups))
+  colnames(jm) <- levels(groups)
   jm
 }
 
-#- contrasts as long vectors
-
-# ... Ignored
-contrasts <- function(x, groups, ...) {
+contrasts.m <- function(x, groups, ...) {
   k <- nlevels(groups)
   gnam <- levels(groups)
   mea <- groupmeans(x, groups)
-  cont <- NULL
-  nt <- dim(x)[2]
+  cont <- matrix(0, nrow=dim(x)[2], ncol=k*(k-1)/2)
+  cont.names <- vector(length=k*(k-1)/2)
+  counter <- 1
   for(i in 1:(k-1)) for(j in (i+1):k) {
-    ct <- mea[i, ] - mea[j, ]
-    names(ct) <- rep(paste(gnam[i], gnam[j], sep="-"), nt)
-    cont <- c(cont, ct)
+    cont[, counter] <- mea[i, ] - mea[j, ]
+    cont.names[counter] <- paste(gnam[i], gnam[j], sep="-")
+    counter <- counter+1
   }
+  colnames(cont) <- cont.names
   cont
 }
+
 
 #' One-way graphical functional ANOVA
 #'
