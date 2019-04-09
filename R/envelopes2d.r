@@ -240,19 +240,11 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' Default to red (255, 0, 0).
 #' @param transparency A number between 0 and 255 (default 85, 33% transparency).
 #' Corresponds to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
-#' @param main A vector of length 5 giving titles for the 4 (if there is an observed function) or
-#' 5 plots. A default exists, but this argument allows modifying it.
-#' The default is \code{c("Observed", "Lower envelope", "Upper envelope",
-#' "Significance: below (red)", "Significance: above (red)")}.
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot global_envelope_2d
 #' @export
-#' @importFrom grDevices rgb
-#' @importFrom grDevices gray
-#' @importFrom spatstat as.im
-#' @importFrom spatstat contour.im
-plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, main, ...) {
+plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, ...) {
   env_2d_plot_helper(x, var='obs', sign.col=sign.col,transparency=transparency, ...)
   env_2d_plot_helper(x, var='lo', sign.col=sign.col,transparency=transparency, ...)
   env_2d_plot_helper(x, var='hi', sign.col=sign.col,transparency=transparency, ...)
