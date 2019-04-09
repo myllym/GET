@@ -852,63 +852,81 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   cr <- x
   x$lo <- attr(x, "whisker.lo"); x$hi <- attr(x, "whisker.hi") # Functional boxplot
 
-  if("global_envelope_ls" %in% names(attributes(x)) & level == 1) { # Combined test, level 1 plots
-    # Set also first level bounds of x to whiskers
-    for(i in 1:length(attr(x, "global_envelope_ls"))) {
-      attr(x, "global_envelope_ls")[[i]]$lo <- attr(attr(x, "global_envelope_ls")[[i]], "whisker.lo")
-      attr(x, "global_envelope_ls")[[i]]$hi <- attr(attr(x, "global_envelope_ls")[[i]], "whisker.hi")
+  if(retick_xaxis(x)$retick_xaxis) {
+    if(plot_style == "fv") {
+      warning("The plot style fv not available for the case where r distances are not increasing.\n Setting plot_style to basic.\n")
+      plot_style <- "basic"
     }
-    switch(plot_style,
-           basic = {
-             plot.global_envelope(x, plot_style=plot_style, dotplot=dotplot, env.col=bp.col, ..., curve_sets=curve_sets)
-           },
-           fv = {
-             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ...)
-             if(outliers) cat("For fv style & combined boxplots, plotting outliers is not implemented.\n")
-           },
-           ggplot2 = {
-             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ...,
-                                  curve_sets=curve_sets, x2=attr(cr, "global_envelope_ls"))
-           })
   }
-  else {
-    if(retick_xaxis(x)$retick_xaxis) {
-      if(plot_style == "fv") {
-        warning("The plot style fv not available for the case where r distances are not increasing.\n Setting plot_style to basic.\n")
-        plot_style <- "basic"
-      }
-    }
-    else { # no need for new xticks and combined test outputs
-      separate_yaxes <- FALSE
-    }
-    switch(plot_style,
-           basic = {
-             if(dotplot) {
-               # Functional boxplot
-               plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=TRUE, ..., curve_sets=curve_sets)
-               # Central region
-               plot.global_envelope(cr, plot_style=plot_style, env.col=cr.col, dotplot=TRUE, add=TRUE, ..., curve_sets=NULL)
-             }
-             else {
-               plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=FALSE, ..., curve_sets=curve_sets)
-               # Central region
-               lines(cr$r, cr$lo, lty=2, col=cr.col)
-               lines(cr$r, cr$hi, lty=2, col=cr.col)
-             }
-           },
-           fv = {
-             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=NULL)
-             # Outliers
-             for(i in 1:ncol(attr(x, "curve_set")$obs)) {
-               if(any(curve_sets$obs[,i] < x$lo | curve_sets$obs[,i] > x$hi))
-                 lines(curve_sets$r, curve_sets$obs[,i], col=grey(0.5))
-             }
+  switch(plot_style,
+         basic = {
+           if(dotplot) {
+             # Functional boxplot
+             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=TRUE, ..., curve_sets=curve_sets)
+             # Central region
+             plot.global_envelope(cr, plot_style=plot_style, env.col=cr.col, dotplot=TRUE, add=TRUE, ..., curve_sets=NULL)
+           }
+           else {
+             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=FALSE, ..., curve_sets=curve_sets)
              # Central region
              lines(cr$r, cr$lo, lty=2, col=cr.col)
              lines(cr$r, cr$hi, lty=2, col=cr.col)
+           }
+         },
+         fv = {
+           plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=NULL)
+           # Outliers
+           for(i in 1:ncol(attr(x, "curve_set")$obs)) {
+             if(any(curve_sets$obs[,i] < x$lo | curve_sets$obs[,i] > x$hi))
+               lines(curve_sets$r, curve_sets$obs[,i], col=grey(0.5))
+           }
+           # Central region
+           lines(cr$r, cr$lo, lty=2, col=cr.col)
+           lines(cr$r, cr$hi, lty=2, col=cr.col)
+         },
+         ggplot2 = {
+           plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
+         })
+}
+
+#' Plot method for the class 'combined_fboxplot'
+#' @usage \method{plot}{combined_fboxplot}(x, plot_style = c("ggplot2", "fv", "basic"), level = 1,
+#'    outliers = TRUE, bp.col = 2, cr.col = 1, ...)
+#'
+#' @param x an 'combined_fboxplot' object
+#' @inheritParams plot.combined_global_envelope
+#' @inheritParams plot.fboxplot
+#' @param ... Additional arguments to be passed to \code{\link{plot.combined_global_envelope}}.
+#'
+#' @method plot combined_fboxplot
+#' @export
+plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), level = 1,
+                          outliers = TRUE, bp.col = 2, cr.col = 1, ...) {
+  plot_style <- match.arg(plot_style)
+  if(outliers) curve_sets <- attr(x, "curve_sets") else curve_sets <- NULL
+  cr <- x
+  attr(x, "level2_ge")$lo <- attr(attr(x, "level2_ge"), "whisker.lo")
+  attr(x, "level2_ge")$hi <- attr(attr(x, "level2_ge"), "whisker.hi") # Functional boxplot
+
+  if(level == 2) {
+    plot.fboxplot(x, plot_style=plot_style, outliers=outliers, bp.col=bp.col, cr.col=cr.col, ...)
+  }
+  else { # Combined test, level 1 plots
+    # Set also first level bounds of x to whiskers
+    for(i in 1:length(x)) {
+      x[[i]]$lo <- attr(x[[i]], "whisker.lo")
+      x[[i]]$hi <- attr(x[[i]], "whisker.hi")
+    }
+    switch(plot_style,
+           basic = {
+             plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets)
+           },
+           fv = {
+             plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ...)
+             if(outliers) cat("For fv style & combined boxplots, plotting outliers is not implemented.\n")
            },
            ggplot2 = {
-             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
+             plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
            })
   }
 }
