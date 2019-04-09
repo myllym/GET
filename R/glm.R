@@ -7,7 +7,7 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(class(curve_sets)[1] != "list") {
     curve_sets <- list(Y=curve_sets)
-    if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... \n")
+    if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.\n")
   }
   if(!( all(vars %in% names(curve_sets)) | all(vars[-1] %in% names(factors)) )) stop("The variables in the formula not found in the given data (curve_sets and factors).\n")
   if(!all(lapply(curve_sets, class) %in% c("curve_set", "fdata"))) stop("The components of curve_sets do not have a valid class.\n")
