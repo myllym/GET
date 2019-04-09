@@ -831,8 +831,8 @@ print.fboxplot <- function(x, ...) {
 }
 
 #' Plot method for the class 'fboxplot'
-#' @usage \method{plot}{fboxplot}(x, plot_style = c("basic", "fv", "ggplot2"),
-#'    dotplot = length(x$r)<10, level = 1,
+#' @usage \method{plot}{fboxplot}(x, plot_style = c("ggplot2", "fv", "basic"),
+#'    dotplot = length(x$r)<10,
 #'    outliers = TRUE, bp.col = 2, cr.col = 1, ...)
 #'
 #' @param x an 'fboxplot' object
