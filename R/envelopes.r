@@ -333,6 +333,18 @@ print.global_envelope <- function(x, ...) {
   GEprinthelper(x)
 }
 
+#' Print method for the class 'global_envelope'
+#' @usage \method{print}{combined_global_envelope}(x, ...)
+#'
+#' @param x an 'combined_global_envelope' object
+#' @param ... Ignored.
+#'
+#' @method print combined_global_envelope
+#' @export
+print.combined_global_envelope <- function(x, ...) {
+  GEprinthelper(attr(x, "level2_ge"))
+}
+
 #' Plot method for the class 'global_envelope'
 #' @usage \method{plot}{global_envelope}(x, plot_style = c("basic", "fv", "ggplot2"),
 #'    dotplot = length(x$r)<10,
