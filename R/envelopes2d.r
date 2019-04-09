@@ -251,3 +251,35 @@ plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 8
   env_2d_plot_helper(x, var='lo.sign', sign.col=sign.col,transparency=transparency, ...)
   env_2d_plot_helper(x, var='hi.sign', sign.col=sign.col,transparency=transparency, ...)
 }
+
+#' Plot method for the class 'combined_global_envelope_2d'
+#'
+#' Plot method for the class 'combined_global_envelope_2d'
+#'
+#'
+#' Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
+#' If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the
+#' minimum and maximum of the function values is used for each image separately.
+#' If \code{col} is provided, the same specification will be used for each produced plot,
+#' which may make it easier to compare the figures with each other.
+#'
+#' @usage \method{plot}{combined_global_envelope_2d}(x, sign.col = c(255, 0, 0), transparency = 85, ...)
+#'
+#' @param x an 'combined_global_envelope_2d' object
+#' @inheritParams plot.global_envelope_2d
+#' @method plot combined_global_envelope_2d
+#' @export
+plot.combined_global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, ...) {
+  for(i in 1:length(x)) {
+    main <- paste(names(x)[i], ": ", c("Observed",
+                                       "Lower envelope",
+                                       "Upper envelope",
+                                       "Sign. below (red)",
+                                       "Sign. above (red)"), sep="")
+    env_2d_plot_helper(x[[i]], var='obs', sign.col=sign.col, transparency=transparency, main=main[1], ...)
+    env_2d_plot_helper(x[[i]], var='lo', sign.col=sign.col, transparency=transparency, main=main[2], ...)
+    env_2d_plot_helper(x[[i]], var='hi', sign.col=sign.col, transparency=transparency, main=main[3], ...)
+    env_2d_plot_helper(x[[i]], var='lo.sign', sign.col=sign.col, transparency=transparency, main=main[4], ...)
+    env_2d_plot_helper(x[[i]], var='hi.sign', sign.col=sign.col, transparency=transparency, main=main[5], ...)
+  }
+}
