@@ -95,7 +95,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 
 #' Graphical functional GLM
 #'
-#' Graphical functional general linear model (GLM)
+#' Non-parametric graphical tests of significance in functional general linear model (GLM)
 #'
 #'
 #' The function \code{graph.fglm} performs the graphical functional GLM of Mrkvička et al. (2019).
