@@ -207,7 +207,8 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
                                         obs = obs[,i],
                                         sim_m = sim[,i,]))
   }
-  res <- do.call(global_envelope_test, c(list(curve_sets=csets, alternative="two.sided"), GET.args))
+  res <- do.call(global_envelope_test,
+                 c(list(curve_sets=csets, alternative="two.sided", nstep=1), GET.args))
   attr(res, "method") <- "Graphical functional GLM" # Change method name
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
