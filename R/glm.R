@@ -158,8 +158,8 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   summaryfun <- match.arg(summaryfun)
   # setting that 'fun' is a function
   switch(summaryfun, 
-         means = {genCoef = genCoefmeans},
-         contrasts = {genCoef = genCoefcontrasts}
+         means = {genCoef = genCoefmeans.m},
+         contrasts = {genCoef = genCoefcontrasts.m}
   )
 
   # Fit the full model at the first argument value to get the variables
@@ -199,12 +199,15 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   }
   sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun, mc.cores=mc.cores), mc.args))
   sim <- sapply(sim, function(x) x, simplify="array")
-  complabels <- unique(names(obs))
+  complabels <- colnames(obs)
 
-  cset <- create_curve_set(list(r = rep(X$r, times=length(complabels)),
-                                obs = obs,
-                                sim_m = sim))
-  res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="two.sided"), GET.args))
+  csets <- NULL
+  for(i in 1:ncol(obs)) {
+    csets[[i]] <- create_curve_set(list(r = X$r,
+                                        obs = obs[,i],
+                                        sim_m = sim[,i,]))
+  }
+  res <- do.call(global_envelope_test, c(list(curve_sets=csets, alternative="two.sided"), GET.args))
   attr(res, "method") <- "Graphical functional GLM" # Change method name
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
