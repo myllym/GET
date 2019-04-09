@@ -454,7 +454,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     counter <- 0
     outliers <- NULL
     if(!is.null(curve_sets)) {
-      if(inherits(curve_sets, "list")) curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
+      if(inherits(curve_sets, "list")) curve_sets <- combine_curve_sets(curve_sets)
       for(j in 1:ncol(curve_sets$obs)) {
         if(any(curve_sets$obs[,j] < x[['lo']] | curve_sets$obs[,j] > x[['hi']])) {
           outliers <- c(outliers, curve_sets$obs[,j])
