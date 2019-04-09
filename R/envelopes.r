@@ -285,20 +285,22 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   nr <- length(curve_sets[[1]]$r) # all curve sets have the same
   idx <- lapply(1:nfuns, FUN = function(i) ((i-1)*nr+1):(i*nr))
   # Split the envelopes to the original groups
-  res <- split(res, f = rep(1:nfuns, each=nr))
-  res <- lapply(res, FUN = function(x) { class(x) <- c("global_envelope", class(x)); x })
-  attr(res, "level2_ge") <- data.frame()
+  res.ls <- split(res, f = rep(1:nfuns, each=nr))
+  res.ls <- lapply(res.ls, FUN = function(x) { class(x) <- c("global_envelope", class(x)); x })
+  # Create empty "level2_ge" attribute containing the test information
+  attr(res.ls, "level2_ge") <- data.frame(r=1, obs=attr(res, "k")[1],
+                                          central=mean(attr(res, "k")),
+                                          lo=attr(res, "k_alpha"), hi=NA)
+  mostattributes(attr(res.ls, "level2_ge")) <- attributes(res)
+  # Set unreasonable attributes of individuals sets of curves to NULL
   anames <- c("p", "p_interval", "ties", "k", "k_alpha", "method")
-  anames <- anames[anames %in% names(attributes(res[[1]]))]
+  anames <- anames[anames %in% names(attributes(res.ls[[1]]))]
   for(name in anames) {
-    attr(attr(res, "level2_ge"), name) <- attr(res[[1]], name)
-    for(i in 1:length(res)) attr(res, name) <- NULL
+    for(i in 1:length(res.ls)) attr(res.ls[[i]], name) <- NULL
   }
-  for(name in c("einfo", "type", "argu", "xlab", "xexp", "ylab", "yexp"))
-    attr(attr(res, "level2_ge"), name) <- attr(res[[1]], name)
-  attr(res, "method") <- "Combined global envelope (one-step)"
-  class(res) <- c("combined_global_envelope", class(res))
-  res
+  attr(res.ls, "method") <- "Combined global envelope (one-step)"
+  class(res.ls) <- c("combined_global_envelope", class(res.ls))
+  res.ls
 }
 
 # Helper function for plotting object with attributes "alpha", "type", "method"
