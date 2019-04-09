@@ -115,26 +115,35 @@ print.image_set <- function(x, ...) {
 }
 
 #' Plot method for the class 'image_set'
-#' @usage \method{plot}{image_set}(x, idx = 1, ...)
+#' @usage \method{plot}{image_set}(x, idx = 1, obs = TRUE, ...)
 #'
 #' @param x an 'image_set' object
 #' @param idx Indices of the images in the image_set to be plotted.
+#' @param obs Logical. TRUE, then idx is understood as an index to \code{image_set$obs},
+#' otherwise to \code{image_set$sim_m}.
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot image_set
 #' @importFrom spatstat im
 #' @export
-plot.image_set <- function(x, idx = 1, ...) {
-  if(!all(idx %in% 1:dim(x$obs)[1])) stop("Unreasonable indices \'idx\'.\n")
+plot.image_set <- function(x, idx = 1, obs = TRUE, ...) {
+  if(obs) {
+    if(!((length(idx)==1 && idx == 1) | all(idx %in% 1:dim(x$obs)[3]))) stop("Unreasonable indices \'idx\'.\n")
+    obs <- x$obs
+  }
+  else {
+    if(is.null(x$sim_m) || !all(idx %in% 1:dim(x$sim_m)[3])) stop("Unreasonable indices \'idx\'.\n")
+    obs <- x$sim_m
+  }
   extraargs <- list(...)
   if(!("col" %in% names(extraargs)))
-    col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(x$obs[idx,,]))
+    col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(obs[,,idx]))
   else col <- NULL
   if(!("main" %in% names(extraargs)))
     main <- paste("Image ", idx, sep="")
   else if(length(extraargs[['main']] == 1)) main <- rep(extraargs[['main']], times=length(idx))
   for(i in 1:length(idx)) {
-    obs.im <- spatstat::im(x$obs[idx[i],,], xcol=x$r[[1]], yrow=x$r[[2]])
+    obs.im <- spatstat::im(obs[,,idx[i]], xcol=x$r[[1]], yrow=x$r[[2]])
     spatstat::plot.im(obs.im, col=col, main=main[i], ...)
   }
 }
