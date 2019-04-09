@@ -233,6 +233,9 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' The test is able to find if the factor of interest is significant and also which
 #' argument values of the functional domain are responsible for the potential rejection.
 #'
+#' @references
+#' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019). New methods for multiple testing in permutation inference for the general linear model.
+#'
 #' @inheritParams graph.fglm
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
