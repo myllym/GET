@@ -205,7 +205,7 @@ global_envelope_test_2d <- function(image_set, ...) {
 #' @method print global_envelope_2d
 #' @export
 print.global_envelope_2d <- function(x, ...) {
-  print.global_envelope(x, ...)
+  GEprinthelper(x, ...)
 }
 
 #' Plot method for the class 'global_envelope_2d'
