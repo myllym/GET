@@ -134,7 +134,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   attr(res, "xlab") <- picked_attr[['xlab']]
   attr(res, "xexp") <- picked_attr[['xexp']]
   # Extra for global envelopes
-  class(res) <- c("global_envelope", "envelope", class(res))
+  class(res) <- c("global_envelope", class(res))
   attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
   attr(res, "k_alpha") <- kalpha
@@ -586,7 +586,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' \code{theo} for the theoretical central function, then the central function (used for plotting only)
 #' is calculated either as the mean or median of functions provided in the curve sets.
 #' @param ... Additional parameters to be passed to \code{\link{forder}}.
-#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -944,7 +944,7 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' For 'midrank' the mid-rank within the tied values is taken.
 #' For 'erl' the extreme rank length p-value is calculated.
 #' The default is 'erl'.
-#' @return An object of class "global_envelope", "envelope" and "fv"
+#' @return An object of class "global_envelope" and "fv"
 #' (see \code{\link[spatstat]{fv.object}}), which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -1200,7 +1200,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #' length p-value is given (Myllymäki et al., 2017, Mrkvička et al., 2018). See details and additional
 #' sections thereafter.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
-#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -1280,7 +1280,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
 #' @inheritParams rank_envelope
-#' @return An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
