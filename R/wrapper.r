@@ -232,8 +232,7 @@ ecdfcontrasts <- function(x, groups, r) {
 #' }
 GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x, max)))), length=100),
                       summaryfun = c("means", "contrasts"),
-                      nsim,
-                      savefuns=FALSE, ...) {
+                      nsim, ...) {
   if(!is.list(x) && length(x)<2) stop("At least two groups should be provided.\n")
   x.lengths <- as.numeric(lapply(x, FUN = length))
   if(!is.null(names(x))) groups <- rep(names(x), times=x.lengths)
@@ -285,6 +284,5 @@ GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapp
   attr(res, "summaryfun") <- summaryfun
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
-  if(savefuns) attr(res, "curve_set") <- cset
   res
 }
