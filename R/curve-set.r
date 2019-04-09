@@ -336,15 +336,15 @@ plot.curve_set <- function(x, ylim, xlab = "r", ylab = "obs",
     }
 }
 
-#' Combine curve sets.
-#'
-#' Combine curve sets to a one curve set, e.g. for testing by means of several test functions.
-#' @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
-#' @return A curve set that is a combination of the curve sets given in 'x'.
-#' @export
-combine_curve_sets <- function(x) {
+# Combine curve sets.
+#
+# Combine curve sets to a one curve set, e.g. for testing by means of several test functions.
+# @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
+# @param equalr Whether to demand equal lengths of r vectors of the different curve sets
+# @return A curve set that is a combination of the curve sets given in 'x'.
+combine_curve_sets <- function(x, equalr=TRUE) {
     cset <- NULL
-    x <- check_curve_set_dimensions(x)
+    x <- check_curve_set_dimensions(x, equalr=equalr)
     name_vec <- lapply(x, FUN=names)
     if('r' %in% name_vec[[1]]) {
       cset$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
