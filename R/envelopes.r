@@ -262,15 +262,17 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   }
 
   # Return
-  res <- res_erl
-  attr(res, "global_envelope_ls") <- res_ls
+  res <- res_ls
+  attr(res, "level2_ge") <- res_erl
   attr(res, "level2_curve_set") <- curve_set_u
+  attr(res, "method") <- "Combined global envelope (two-step)"
+  class(res) <- c("combined_global_envelope", class(res))
   res
 }
 
 # Functionality for combined_central_region and combined_global_envelope_test (one-step procedure)
 combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
-  curve_set <- combine_curve_sets(curve_sets, equalr=TRUE)
+  curve_set <- combine_curve_sets(curve_sets)
   switch(CR_or_GET,
          CR = {
            res <- individual_central_region(curve_set, coverage=coverage, ...)
