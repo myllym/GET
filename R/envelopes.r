@@ -690,12 +690,20 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),
-                           central = "median", ...) {
+                           central = "median", nstep = 2, ...) {
   if(class(curve_sets)[1] == "list" & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
   if(class(curve_sets)[1] == "list") {
-    res <- combined_CR_or_GET(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
-                              alternative=alternative, probs=probs,
-                              central=central, ...)
+    if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
+    if(nstep == 2) {
+      res <- combined_CR_or_GET(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
+                                alternative=alternative, probs=probs,
+                                central=central, ...)
+    }
+    else { # One-step combining procedure
+      res <- combined_CR_or_GET_1step(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
+                                      alternative=alternative, probs=probs,
+                                      central=central, ...)
+    }
   }
   else {
     res <- individual_central_region(curve_sets, type=type, coverage=coverage,
