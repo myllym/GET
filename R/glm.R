@@ -270,3 +270,121 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
   do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
 }
+
+#' Graphical functional GLM for images
+#'
+#' Non-parametric graphical tests of significance in functional general linear model (GLM)
+#' for images
+#'
+#' @inheritParams graph.fglm
+#' @param image_sets A named list of sets of images giving the dependent variable (Y), and
+#' possibly additionally all the factors. The dimensions of the elements should
+#' match with each other, i.e. the factor values should be given for each argument value
+#' and each function.
+#' @param ... Additional parameters to be passed to \code{\link{graph.fglm}}.
+#' @seealso \code{\link{graph.fglm}}, \code{\link{frank.fglm2d}}
+#' @export
+#' @examples
+#' data("imageset1")
+#' # Testing discrete factor group
+#' res.g <- graph.fglm2d(nsim = 99,
+#'                       formula.full = Y ~ group + z,
+#'                       formula.reduced = Y ~ z,
+#'                       image_sets = list(Y = imageset1$image_set),
+#'                       factors = data.frame(group = imageset1$Group,
+#'                                            z = imageset1$z))
+#' par(mfrow=c(1,3))
+#' plot(res.g)
+#' # Testing discrete factor group with contrasts
+#' res.gc <- graph.fglm2d(nsim = 99,
+#'                        formula.full = Y ~ group + z,
+#'                        formula.reduced = Y ~ z,
+#'                        image_sets = list(Y = imageset1$image_set),
+#'                        factors = data.frame(group = imageset1$Group,
+#'                                             z = imageset1$z),
+#'                        summaryfun = "contrasts")
+#' par(mfrow=c(1,3))
+#' plot(res.gc)
+#'
+#' # Testing continuous factor z
+#' res.z <- graph.fglm2d(nsim = 99,
+#'                       formula.full = Y ~ group + z,
+#'                       formula.reduced = Y ~ group,
+#'                       image_sets = list(Y = imageset1$image_set),
+#'                       factors = data.frame(group = imageset1$Group,
+#'                                            z = imageset1$z))
+#' par(mfrow=c(1,3))
+#' plot(res.z)
+graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
+  if(class(image_sets)[1] == "image_set") image_sets <- list(image_sets)
+  obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
+  sim_d <- lapply(image_sets, function(x) { dim(x$sim_m) })
+  # Check that dimensions of different image sets are the same
+  if(!all(sapply(obs_d, FUN=identical, y=obs_d[[1]]))) stop("Dimensions of image sets (obs) do not match.\n")
+  if(!all(sapply(sim_d, FUN=identical, y=sim_d[[1]]))) stop("Dimensions of image sets (sim_m) do not match.\n")
+  # Check dimensions of each image set
+  image_sets <- lapply(image_sets, check_image_set_dimensions)
+  # Check equalities of the r values
+  if(!all(sapply(image_sets, FUN = function(x) { identical(x$r, y=image_sets[[1]]$r) }))) stop("The r values of image sets do not match.\n")
+  # Create curve sets transforming the 2d functions (matrices) to vectors
+  curve_sets_v <- lapply(image_sets, image_set_to_curve_set)
+
+  res_v <- graph.fglm(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
+                      curve_sets=curve_sets_v, factors=factors, ...)
+  # Transform the results to 2d
+  res <- curve_set_results_to_image_results(res_v, image_sets)
+  attr(res, "call") <- match.call()
+  res
+}
+
+#' F rank functional GLM for images
+#'
+#' Multiple testing in permutation inference for the general linear model (GLM)
+#'
+#' @inheritParams frank.fglm
+#' @inheritParams graph.fglm2d
+#' @param ... Additional parameters to be passed to \code{\link{frank.fglm}}.
+#' @seealso \code{\link{frank.fglm}}, \code{\link{graph.fglm2d}}
+#' @export
+#' @examples
+#' data("imageset1")
+#' # Testing discrete factor group
+#' res.g <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
+#'                        formula.full = Y ~ group + z,
+#'                        formula.reduced = Y ~ z,
+#'                        image_sets = list(Y = imageset1$image_set),
+#'                        factors = data.frame(group = imageset1$Group,
+#'                                             z = imageset1$z))
+#' par(mfrow=c(1,3))
+#' plot(res.g)
+#'
+#' # Testing continuous factor z
+#' res.z <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
+#'                       formula.full = Y ~ group + z,
+#'                       formula.reduced = Y ~ group,
+#'                       image_sets = list(Y = imageset1$image_set),
+#'                       factors = data.frame(group = imageset1$Group,
+#'                                            z = imageset1$z))
+#' par(mfrow=c(1,3))
+#' plot(res.z)
+frank.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
+  if(class(image_sets)[1] == "image_set") image_sets <- list(image_sets)
+  obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
+  sim_d <- lapply(image_sets, function(x) { dim(x$sim_m) })
+  # Check that dimensions of different image sets are the same
+  if(!all(sapply(obs_d, FUN=identical, y=obs_d[[1]]))) stop("Dimensions of image sets (obs) do not match.\n")
+  if(!all(sapply(sim_d, FUN=identical, y=sim_d[[1]]))) stop("Dimensions of image sets (sim_m) do not match.\n")
+  # Check dimensions of each image set
+  image_sets <- lapply(image_sets, check_image_set_dimensions)
+  # Check equalities of the r values
+  if(!all(sapply(image_sets, FUN = function(x) {identical(x$r, y=image_sets[[1]]$r)}))) stop("The r values of image sets do not match.\n")
+  # Create curve sets transforming the 2d functions (matrices) to vectors
+  curve_sets_v <- lapply(image_sets, image_set_to_curve_set)
+
+  res_v <- frank.fglm(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
+                      curve_sets=curve_sets_v, factors=factors, ...)
+  # Transform the results to 2d
+  res <- curve_set_results_to_image_results(res_v, image_sets)
+  attr(res, "call") <- match.call()
+  res
+}
