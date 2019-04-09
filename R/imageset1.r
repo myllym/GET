@@ -26,7 +26,7 @@
 #' @keywords curves
 #' @name imageset1
 #' @docType data
-#' @seealso \code{\link{graph.fanova_2d}}, \code{\link{graph.fglm_2d}}
+#' @seealso \code{\link{graph.fanova2d}}, \code{\link{graph.fglm2d}}
 #' @examples
 #' data(imageset1)
 #' par(mfrow=c(2,5))
