@@ -1,3 +1,49 @@
+# res_v = global envelope test results for images (in image_sets)
+# that have been transformed to vectors for testing
+curve_set_results_to_image_results <- function(res_v, image_sets) {
+  if(!(class(res_v)[1] %in% c("global_envelope", "combined_global_envelope"))) stop("Invalid res_v.\n")
+  if(class(image_sets)[1] != "list") image_sets <- list(image_sets)
+  obs_d <- dim(image_sets[[1]]$obs)
+  switch(class(res_v)[1],
+    global_envelope = {
+      if(!is.null(res_v$obs)) {
+        res <- structure(list(r=list(rx=image_sets[[1]]$r[[1]], ry=image_sets[[1]]$r[[2]]),
+                              obs=matrix(res_v$obs, nrow=obs_d[1], ncol=obs_d[2]),
+                              central=matrix(res_v$central, nrow=obs_d[1], ncol=obs_d[2]),
+                              lo=matrix(res_v$lo, nrow=obs_d[1], ncol=obs_d[2]),
+                              hi=matrix(res_v$hi, nrow=obs_d[1], ncol=obs_d[2])))
+      }
+      else {
+        res <- structure(list(r=list(rx=image_sets[[1]]$r[[1]], ry=image_sets[[1]]$r[[2]]),
+                              central=matrix(res_v$central, nrow=obs_d[1], ncol=obs_d[2]),
+                              lo=matrix(res_v$lo, nrow=obs_d[1], ncol=obs_d[2]),
+                              hi=matrix(res_v$hi, nrow=obs_d[1], ncol=obs_d[2])))
+      }
+      mostattributes(res) <- attributes(res_v)
+      attr(res, "xlab") <- attr(res, "xexp") <- attr(res, "ylab") <- attr(res, "xexp") <- attr(res, "call") <- NULL
+      class(res) <- c("global_envelope_2d", "list")
+    },
+    combined_global_envelope = {
+      res <- list()
+      for(i in 1:length(res_v)) {
+        res[[i]] <- structure(list(r=list(rx=image_sets[[1]]$r[[1]], ry=image_sets[[1]]$r[[2]]),
+                                   obs=matrix(res_v[[i]]$obs, nrow=obs_d[1], ncol=obs_d[2]),
+                                   central=matrix(res_v[[i]]$central, nrow=obs_d[1], ncol=obs_d[2]),
+                                   lo=matrix(res_v[[i]]$lo, nrow=obs_d[1], ncol=obs_d[2]),
+                                   hi=matrix(res_v[[i]]$hi, nrow=obs_d[1], ncol=obs_d[2])))
+        mostattributes(res[[i]]) <- attributes(res_v[[i]])
+        attr(res[[i]], "xlab") <- attr(res[[i]], "xexp") <- attr(res[[i]], "ylab") <- attr(res[[i]], "xexp") <- attr(res[[i]], "call") <- NULL
+        class(res[[i]]) <- c("global_envelope_2d", "list")
+      }
+      names(res) <- names(res_v)
+      mostattributes(res) <- attributes(res_v)
+      attr(res, "xlab") <- attr(res, "xexp") <- attr(res, "ylab") <- attr(res, "xexp") <- attr(res, "call") <- NULL
+      class(res) <- c("combined_global_envelope_2d", "list")
+    }
+  )
+  res
+}
+
 # Functionality for central_region_2d and global_envelope_test_2d
 cr_or_GET_2d <- function(image_set, CR_or_GET = c("CR", "GET"), ...) {
   CR_or_GET <- match.arg(CR_or_GET)
