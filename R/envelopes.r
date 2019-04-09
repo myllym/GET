@@ -787,23 +787,33 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
   res <- central_region(curve_sets, ...)
-  dist <- factor * (res$hi - res$lo)
-  attr(res, "whisker.lo") <- res$lo - dist
-  attr(res, "whisker.hi") <- res$hi + dist
-  attr(res, "method") <- "Functional boxplot"
-  if(!is.null(attr(res, "global_envelope_ls"))) { # Combined case
-    for(i in 1:length(attr(res, "global_envelope_ls"))) {
-      dist <- factor * (attr(res, "global_envelope_ls")[[i]]$hi - attr(res, "global_envelope_ls")[[i]]$lo)
-      attr(attr(res, "global_envelope_ls")[[i]], "whisker.lo") <- attr(res, "global_envelope_ls")[[i]]$lo - dist
-      attr(attr(res, "global_envelope_ls")[[i]], "whisker.hi") <- attr(res, "global_envelope_ls")[[i]]$hi + dist
-      attr(attr(res, "global_envelope_ls")[[i]], "method") <- "Functional boxplot"
-      class(attr(res, "global_envelope_ls")[[i]]) <- c("fboxplot", class(attr(res, "global_envelope_ls")[[i]]))
+  if(inherits(res, "combined_global_envelope")) {
+    dist <- factor * (attr(res, "level2_ge")$hi - attr(res, "level2_ge")$lo)
+    attr(attr(res, "level2_ge"), "whisker.lo") <- attr(res, "level2_ge")$lo - dist
+    attr(attr(res, "level2_ge"), "whisker.hi") <- attr(res, "level2_ge")$hi + dist
+    attr(attr(res, "level2_ge"), "method") <- "Functional boxplot"
+    for(i in 1:length(res)) {
+      dist <- factor * (res[[i]]$hi - res[[i]]$lo)
+      attr(res[[i]], "whisker.lo") <- res[[i]]$lo - dist
+      attr(res[[i]], "whisker.hi") <- res[[i]]$hi + dist
+      attr(res[[i]], "method") <- "Functional boxplot"
+      class(res[[i]]) <- c("fboxplot", class(res[[i]]))
     }
+    attr(res, "curve_sets") <- curve_sets
+    attr(res, "factor") <- factor
+    attr(res, "call") <- match.call()
+    class(res) <- c("combined_fboxplot", class(res))
   }
-  attr(res, "curve_sets") <- curve_sets
-  attr(res, "factor") <- factor
-  attr(res, "call") <- match.call()
-  class(res) <- c("fboxplot", class(res))
+  else {
+    dist <- factor * (res$hi - res$lo)
+    attr(res, "whisker.lo") <- res$lo - dist
+    attr(res, "whisker.hi") <- res$hi + dist
+    attr(res, "method") <- "Functional boxplot"
+    attr(res, "curve_sets") <- curve_sets
+    attr(res, "factor") <- factor
+    attr(res, "call") <- match.call()
+    class(res) <- c("fboxplot", class(res))
+  }
   res
 }
 
