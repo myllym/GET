@@ -329,25 +329,29 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   summaryfun <- match.arg(summaryfun)
   # setting that 'summaryfun' is a function
   switch(summaryfun, 
-         means = {fun = means},
-         contrasts = {fun = contrasts}
+         means = {fun = means.m},
+         contrasts = {fun = contrasts.m}
          )
 
   obs <- fun(x, groups)
   # simulations by permuting to which groups the functions belong to
-  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)))
+  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)), simplify = "array")
   # labels for comparisons (rownames(sim) is the same as names(obs))
-  complabels <- unique(names(obs))
+  complabels <- colnames(obs)
 
-  cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
-                                obs = obs,
-                                sim_m = sim))
-  res <- global_envelope_test(cset, alternative="two.sided", ...)
+  csets <- NULL
+  for(i in 1:ncol(obs)) {
+    csets[[i]] <- create_curve_set(list(r = r,
+                                        obs = obs[,i],
+                                        sim_m = sim[,i,]))
+  }
+  res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
+  if(inherits(res, "combined_global_envelope")) names(res) <- complabels
   attr(res, "method") <- "Graphical functional ANOVA" # Change method name
   attr(res, "summaryfun") <- summaryfun
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
-  if(savefuns) attr(res, "simfuns") <- sim
+  if(savefuns) attr(res, "simfuns") <- csets
   res
 }
 
