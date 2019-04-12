@@ -274,8 +274,8 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
 #
 # @inheritParams env_dotplot
 # @param x An 'global_envelope' object or a list of them.
-# @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
-# a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
+# @param separate_yaxes Logical (default TRUE). If TRUE, then separate y-axes are used for
+# different parts of a combined test.
 # @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 # number of columns for figures. Default 2.
 # @param env.col The color for the envelope lines. Default 1 (black).
@@ -289,7 +289,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
 #' @importFrom graphics axis
 #' @importFrom graphics abline
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
-                           separate_yaxes = FALSE, max_ncols_of_plots = 2, add = FALSE, env.col = 1,
+                           separate_yaxes = TRUE, max_ncols_of_plots = 2, add = FALSE, env.col = 1,
                            nticks = 5, curve_sets = NULL, obs.type = "l", ...) {
     if(!inherits(x, "list")) x <- list(x)
     # Handle combined tests; correct labels on x-axis
@@ -400,8 +400,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 # @param ylim See \code{\link{plot.default}}.
 # @param xlab See \code{\link{plot.default}}.
 # @param ylab See \code{\link{plot.default}}.
-# @param separate_yaxes Logical (default FALSE). By default also the combined envelope plots have
-# a common y-axis. If TRUE, then separate y-axes are used for different parts of a combined test.
+# @param separate_yaxes Logical (default TRUE). If TRUE, then separate y-axes are used for
+# different parts of a combined test.
 # @param labels Labels for the separate plots. Ignored if separate_yaxes is FALSE.
 # @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
 # number of columns for figures. Default 2.
