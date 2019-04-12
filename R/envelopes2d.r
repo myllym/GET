@@ -92,8 +92,7 @@ cr_or_GET_2d <- function(image_sets, CR_or_GET = c("CR", "GET"), ...) {
 #'
 #' Essentially a data frame containing columns
 #' \itemize{
-#' \item rx = the vector of values of the argument rx on x-coordinate at which the test was made
-#' \item rx = the vector of values of the argument ry on y-coordinate at which the test was made
+#' \item r = a list of vectors of values of x- and y-coordinates at which the test was made
 #' \item obs = the data function (matrix), if there is only one data function. Otherwise not existing.
 #' \item lo = the lower envelope (matrix) based on the simulated functions
 #' \item hi = the upper envelope (matrix) based on the simulated functions
@@ -127,8 +126,7 @@ central_region_2d <- function(image_set, ...) {
 #'
 #' Essentially a data frame containing columns
 #' \itemize{
-#' \item rx = the vector of values of the argument rx on x-coordinate at which the test was made
-#' \item rx = the vector of values of the argument ry on y-coordinate at which the test was made
+#' \item r = a list of vectors of values of x- and y-coordinates at which the test was made
 #' \item obs = the data function (matrix), if there is only one data function. Otherwise not existing.
 #' \item lo = the lower envelope (matrix) based on the simulated functions
 #' \item hi = the upper envelope (matrix) based on the simulated functions
