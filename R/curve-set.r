@@ -124,6 +124,7 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     if(!all(is.numeric(r)) || !all(is.finite(r))) {
         stop('curve_set[["r"]] must have only finite numeric values.')
     }
+    if(!all(r[-1] - r[-n_r] > 0)) warning('Values in curve_set[["r"]] are not increasing.')
 
     obs <- curve_set[['obs']]
     if(!is.vector(obs) & !is.matrix(obs)) {
