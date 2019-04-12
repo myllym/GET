@@ -444,7 +444,7 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' \code{\link{graph.fanova}} and transform results back to images (2d).
 #'
 #' @inheritParams graph.fanova
-#' @inheritParams frank.fanova2d
+#' @param image_set A set of images containing the data, see \code{\link{create_image_set}}.
 #' @param ... Additional parameters to be passed to \code{\link{graph.fanova}}.
 #' @return A \code{global_envelope_2d} or \code{combined_global_envelope_2d} object, which can be
 #' printed and plotted directly.
@@ -497,7 +497,7 @@ graph.fanova2d <- function(nsim, image_set, groups, ...) {
 #' \code{\link{frank.fanova}} and transform results back to images (2d).
 #'
 #' @inheritParams frank.fanova
-#' @param image_set A set of images containing the data, see \code{\link{create_image_set}}.
+#' @inheritParams graph.fanova2d
 #' @param ... Additional parameters to be passed to \code{\link{frank.fanova}}.
 #' @export
 #' @references
