@@ -74,7 +74,7 @@ pick_attributes <- function(curve_set, alternative, type) {
 # combined tests. Called also from plot.global_envelope for checking if fv plot style is available.
 retick_xaxis <- function(x) {
   if(!inherits(x, "list")) x <- list(x)
-  if(any(unlist(lapply(x, FUN=function(x) { !(inherits(x, "global_envelope") | inherits(x, "fboxplot") | inherits(x, "curve_set")) }))))
+  if(any(sapply(x, FUN=function(x) { !(inherits(x, c("global_envelope", "fboxplot", "curve_set"))) })))
     stop("x should consist of global_envelope objects.\n")
   r_values_ls <- lapply(x, FUN=function(x) x$r)
   r_values <- do.call(c, r_values_ls, quote=FALSE)
@@ -133,7 +133,7 @@ combined_global_envelope_rhelper <- function(x, nticks = 5) {
     r_break_values <- c(r_break_values, seq(r_starts[nslots], r_ends[nslots], length=nticks))
     loc_break_values <- c(loc_break_values, seq(loc_starts[nslots], loc_ends[nslots], length=nticks))
   }
-  if(class(x[[1]])[1] %in% c("global_envelope", "fboxplot")) {
+  if(inherits(x[[1]], c("global_envelope", "fboxplot"))) {
     if(!is.null(x[[1]]$obs))
       x_vec <- data.frame(r = r_values,
                           obs = do.call(c, lapply(x, FUN = function(x) x$obs), quote=FALSE),
