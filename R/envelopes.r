@@ -389,15 +389,13 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  labels = NULL, add = FALSE, digits = 3, ...) {
   plot_style <- match.arg(plot_style)
   if(dotplot) plot_style <- "basic"
-  if(plot_style == "ggplot2") use_ggplot2 <- TRUE
-  else use_ggplot2 <- FALSE
   # main
   if(missing('main')) {
       main <- env_main_default(x, digits=digits)
   }
   # ylim
   if(missing('ylim')) {
-    ylim <- env_ylim_default(x, use_ggplot2)
+    ylim <- env_ylim_default(x, plot_style == "ggplot2")
   }
   # ylab, ylab, labels
   if(missing('xlab')) {
