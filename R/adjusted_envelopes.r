@@ -1,182 +1,171 @@
-# A helper function to generate simulations from "X" and calculate test functions for them.
+# A helper function to generate simulated functions from "X" using given functions/arguments,
+# when X is a ppp or model object of spatstat.
 #
+# Case 1.
 # If simfun is NULL, then
-# 1) If X is a point pattern (object of class "ppp"), then CSR is simulated.
-# 2) If X is a fitted point process model (object of class "ppm" or "kppm"),
-# the simulated model is that model.
-# simfun and simfun.arg can alternatively be used to specify how to generate the simulations,
-# see global_envelope_with_sims below. Then X can be general.
+# a) If X is a point pattern (object of class "ppp"), then CSR is simulated (with variable number of points).
+# b) If X is a fitted point process model (object of class "ppm" or "kppm"),
+# the simulated model is that model (by spatstat).
 # If testfuns is given, then also several different test functions can be calculated.
-simpatterns_and_funcs_from_X <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfuns=NULL, ...,
-                                         savepatterns=FALSE, verbose=FALSE, calc_funcs=TRUE) {
+#
+# Case 2.
+# simfun and simfun.arg are used to specify how to generate the simulations,
+# X should be a point pattern.
+funcs_from_X_and_funs <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfuns=NULL,
+                                  ..., savepatterns=FALSE, verbose=FALSE, calc_funcs=TRUE) {
+  extraargs <- list(...)
   nfuns <- length(testfuns)
-  testfuns_argnames_ls <- lapply(testfuns, function(x) names(x))
+  if(nfuns < 1) nfuns <- 1
+  for(i in 1:nfuns)
+    if(any(names(extraargs) %in% names(testfuns[[i]])))
+      stop(paste("formal argument(s) \"", names(extraargs)[which(names(extraargs) %in% names(testfuns[[i]]))], "\" matched by multiple actual arguments\n", sep=""))
+
   X.ls <- NULL
+  # Simulations
   if(!is.null(simfun)) {
     # Create simulations by the given function
     simpatterns <- replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)
-    # Calculate the test functions
-    if(is.null(testfuns)) {
-      X.ls[[1]] <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
-    }
-    else {
-      # More than one test function, calculate only the first one unless if calc_funcs==TRUE
-      i <- 1
-      tmpstring <- paste("X.ls[[1]] <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
-      for(j in 1:length(testfuns_argnames_ls[[i]]))
-        tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], "=testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-      tmpstring <- paste(tmpstring, "savefuns=TRUE, savepatterns=savepatterns, verbose=verbose, ...)", sep="")
-      eval(parse(text = tmpstring))
-      if(calc_funcs & nfuns > 1) {
-        for(i in 2:nfuns) {
-          tmpstring <- paste("X.ls[[i]] <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
-          for(j in 1:length(testfuns_argnames_ls[[i]]))
-            tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], "=testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-          tmpstring <- paste(tmpstring, "savefuns=TRUE, savepatterns=FALSE, verbose=verbose, ...)", sep="")
-          eval(parse(text = tmpstring))
-        }
-      }
-    }
   }
   else {
-    # Create simulations from the given model and calculate the test functions
-    if(is.null(testfuns)) {
-      X.ls[[1]] <- spatstat::envelope(X, nsim=nsim, ..., savefuns = TRUE, savepatterns = savepatterns, verbose=verbose)
-    }
-    else {
-      i <- 1
-      tmpstring <- paste("X.ls[[1]] <- spatstat::envelope(X, nsim=nsim, ", sep="")
-      for(j in 1:length(testfuns_argnames_ls[[i]]))
-        tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], " = testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-      tmpstring <- paste(tmpstring, "savefuns = TRUE, savepatterns = TRUE, verbose=verbose, ...)", sep="")
-      eval(parse(text = tmpstring))
-      if(calc_funcs) {
-        simpatterns <- attr(X.ls[[1]], "simpatterns")
-        if(calc_funcs & nfuns > 1) {
-          for(i in 2:nfuns) {
-            tmpstring <- paste("X.ls[[i]] <- spatstat::envelope(X, nsim=nsim, simulate=simpatterns, ", sep="")
-            for(j in 1:length(testfuns_argnames_ls[[i]]))
-              tmpstring <- paste(tmpstring, paste(testfuns_argnames_ls[[i]][j], "=testfuns[[", i, "]]", "[[", j, "]], ", sep=""), sep="")
-            tmpstring <- paste(tmpstring, "savefuns=TRUE, savepatterns=FALSE, verbose=verbose, ...)", sep="")
-            eval(parse(text = tmpstring))
-          }
-        }
-      }
+    simpatterns <- NULL
+  }
+  # Calculate the first test functions and generate simulations if simpatterns is NULL
+  X.ls[[1]] <- do.call(spatstat::envelope, c(list(Y=X, nsim=nsim, simulate=simpatterns),
+                                             testfuns[[1]],
+                                             list(savefuns=TRUE, savepatterns=savepatterns, verbose=verbose),
+                                             extraargs))
+  simpatterns <- attr(X.ls[[1]], "simpatterns")
+  # More than one test function, calculate the rest if calc_funcs==TRUE
+  if(calc_funcs & nfuns > 1) {
+    for(i in 2:nfuns) {
+      X.ls[[i]] <- do.call(spatstat::envelope, c(list(Y=X, nsim=nsim, simulate=simpatterns),
+                                                 testfuns[[i]],
+                                                 list(savefuns=TRUE, savepatterns=FALSE, verbose=verbose),
+                                                 extraargs))
     }
   }
   X.ls
 }
 
-# A global envelope test
-#
-# A global envelope test including simulations from a point process model.
-#
-#
-# Details of the tests are given in \code{\link{global_envelope_test}}.
-# For the combined directional quantile and studentized envelope tests of Mrkvička et al. (2017)
-# see \code{\link{combined_scaled_MAD_envelope}}.
-#
-# The specification of X is important here:
-# if simfun is not provided, the function \code{\link[spatstat]{envelope}} is used to generate
-# simulations under the null hypothesis and to calculate the test functions (specified in the
-# arguments ...) and then
-# \itemize{
-# \item If X is a point pattern, the null hypothesis is CSR.
-# \item If X is a fitted model, the null hypothesis is that model.
-# }
-# If simfun is provided, then the null model is the one simulated by this given function,
-# and X is expected to be a point pattern of \code{\link[spatstat]{ppp}} object, for which data
-# pattern and simulations \code{\link[spatstat]{envelope}} calculates the test statistics.
-#
-# If savefuns is TRUE, all the simulated functions are saved in an attribute "simfuns" as a list
-# of curve sets for each test function.
-#
-# @param X An object containing point pattern data. A point pattern (object of class "ppp")
-# or a fitted point process model (object of class "ppm" or "kppm"). See
-# \code{\link[spatstat]{envelope}}.
-# @param nsim The number of simulations.
-# @param simfun A function for generating simulations from the null model. If given, this function
-# is called by replicate(n=nsim, simfun(simfun.param), simplify=FALSE) to make nsim simulations.
-# The function should return an \code{\link[spatstat]{ppp}} object as those are further passed to
-# \code{\link[spatstat]{envelope}}.
-# If the function is not provided, then \code{\link[spatstat]{envelope}} is used also for generating
-# the point patterns from the null hypothesis.
-# @param simfun.arg The parameter to be passed to simfun. The function simfun should handle
-# with the structure of simfun.param.
-# @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
-# A list of parameters should be provided for each test function that is to be used in the combined test.
-# @param ... Additional parameters to \code{\link[spatstat]{envelope}} in the case where only one test
-# function is used. In that case, this is an alternative to providing the parameter in the argument
-# testfuns.
-# For example, the test function in the argument 'fun' and further specifications regarding that.
-# If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null hypothesis
-# (if simfun not provided), then also recall to specify how to generate the simulations.
-# @param type The type of the test to be applied, see \code{\link{global_envelope_test}}.
-# @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
-# @param alternative A character string specifying the alternative hypothesis. Must be one of
-# the following: "two.sided" (default), "less" or "greater" for "rank". Relevant only for the
-# rank test (otherwise ignored).
-# @param r_min The minimum radius to include in the test.
-# @param r_max The maximum radius to include in the test. Note: cannot be larger than r-values used
-# in calculating functions by \code{\link[spatstat]{envelope}}.
-# @param take_residual If (needed for visual reasons only) the theoretical or mean behaviour of the
-# test function is reduced from the test functions. If TRUE, then: If \code{\link[spatstat]{envelope}}
-# provides the theoretical value 'theo' for the simulated model, then this value is used. Otherwise,
-# the theoretical function is taken as the mean of the simulations.
-# @param ties Ties method to be passed to \code{\link{global_envelope_test}}.
-# Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
-# length p-value.
-# @param save.envelope Logical flag indicating whether to save all envelope test results.
-# @param savefuns Logical flag indicating whether to save all the simulated function values.
-# See \code{\link[spatstat]{envelope}}.
-# @param savepatterns Logical flag indicating whether to save all the simulated point patterns.
-# See \code{\link[spatstat]{envelope}}.
-# @param verbose Logical flag indicating whether to print progress reports during the simulations.
-# See \code{\link[spatstat]{envelope}}.
-# @param MrkvickaEtal2017 Logical. If TRUE and type is "st" or "qdir", then the combined scaled MAD
-# envelope presented in Mrkvička et al. (2017) is calculated. Otherwise, the two-step procedure
-# described in \code{\link{global_envelope_test}} is used for combining the tests.
-# @seealso \code{\link[spatstat]{envelope}} (that is used to perform simulations),
-# \code{\link{global_envelope_test}}
-#' @importFrom spatstat envelope
-global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
-        testfuns = NULL, ...,
-        type = "erl", alpha = 0.05, alternative = c("two.sided", "greater", "less"),
-        r_min = NULL, r_max = NULL, take_residual = FALSE,
-        ties = "erl", probs = c(0.025, 0.975),
-        save.envelope = TRUE, savefuns = FALSE, savepatterns = FALSE,
-        verbose = FALSE, MrkvickaEtal2017 = FALSE) {
-  alt <- match.arg(alternative)
-  nfuns <- length(testfuns)
-  if(nfuns < 1) nfuns <- 1
-  if(!is.null(r_min) & length(r_min) != nfuns) stop("r_min should give the minimum distances for each of the test functions.\n")
-  if(!is.null(r_max) & length(r_max) != nfuns) stop("r_max should give the maximum distances for each of the test functions.\n")
+# A helper function to perform simulations for the dg.global_envelope_test
+#' @importFrom spatstat is.ppm
+#' @importFrom spatstat is.kppm
+#' @importFrom spatstat is.lppm
+#' @importFrom spatstat is.slrm
+#' @importFrom spatstat is.ppp
+#' @importFrom spatstat update.ppm
+#' @importFrom spatstat update.kppm
+#' @importFrom spatstat update.lppm
+#' @importFrom spatstat update.slrm
+#' @importFrom parallel mclapply
+dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
+                        simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
+                        testfuns=NULL, ..., verbose=TRUE, mc.cores=1L) {
+  cat("Performing simulations based on simfun, fitfun, simfun.arg, testfuns, ...\n")
+  # Check if X is a (ppp) model object of spatstat
+  Xispppmodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
 
-  # Create simulations from the given model and calculate the test functions
-  curve_sets_ls <- simpatterns_and_funcs_from_X(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg,
-                                                testfuns=testfuns, ...,
-                                                savepatterns=savepatterns, verbose=verbose, calc_funcs=TRUE)
-  # Crop curves (if r_min or r_max given)
-  tmpfunc <- function(i) crop_curves(curve_sets_ls[[i]], r_min=r_min[i], r_max=r_max[i])
-  curve_sets_ls <- lapply(1:nfuns, FUN=tmpfunc)
+  # Case 1: X is a ppp or model object of spatstat
+  # a) If X is a ppp object and simfun and fitfun provided,
+  # then model is fitted by fitfun and simulations from the fitted model are generated by simfun.
+  # b) If X is a model object of spatstat, then spatstat is used for fitting and simulation.
+  if(spatstat::is.ppp(X) | Xispppmodel) {
+    simfun.arg <- NULL
+    if(Xispppmodel & (!is.null(simfun) | !is.null(fitfun))) {
+      cat("X is a fitted model object of spatstat; simfun & fitfun ignored.\n")
+      simfun <- fitfun <- NULL
+    }
+    if(!Xispppmodel) {
+      if(is.null(simfun) | is.null(fitfun)) {
+        cat("Note: \'simfun\' and/or \'fitfun\' not provided and \'X\' is not a fitted model object of spatstat.\n",
+            "The spatstat's function \'envelope\' is used for simulations and model fitting, \n",
+            "and CSR is tested (with intensity parameter).\n")
+        simfun <- fitfun <- NULL
+      }
+      else simfun.arg <- fitfun(X)
+    }
+    # Create simulated functions from the given model (provided either by simfun, or in X itself if Xispppmodel)
+    stage1_cset_ls <- funcs_from_X_and_funs(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg,
+                                            testfuns=testfuns, ...,
+                                            savepatterns=FALSE, verbose=verbose, calc_funcs=TRUE)
+    # Create another set of simulations to be used to estimate the second-state p-value
+    # following Baddeley et al. (2017).
+    simpatterns <- attr(funcs_from_X_and_funs(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg,
+                                              testfuns=testfuns, ...,
+                                              savepatterns=TRUE, verbose=verbose, calc_funcs=FALSE)[[1]],
+                        "simpatterns")
+    # For each of the simulated patterns in 'simpatterns', fit the model and
+    # create nsim simulations from it
+    loopfun <- function(rep) {
+      # Create a simulation
+      Xsim <- simpatterns[[rep]]
+      if(Xispppmodel)
+        switch(class(X)[1],
+               ppm = {
+                 Xsim <- spatstat::update.ppm(X, Xsim)
+               },
+               kppm = {
+                 Xsim <- spatstat::update.kppm(X, Xsim)
+               },
+               lppm = {
+                 Xsim <- spatstat::update.lppm(X, Xsim)
+               },
+               slrm = {
+                 Xsim <- spatstat::update.slrm(X, Xsim)
+               })
+      else {
+        if(!is.null(fitfun)) simfun.arg <- fitfun(Xsim) # a fitted model to be passed to simfun
+      }
+      # Create simulations from the given model and calculate the test functions
+      funcs_from_X_and_funs(Xsim, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg,
+                            testfuns=testfuns, ...,
+                            savepatterns=FALSE, verbose=verbose, calc_funcs=TRUE)
+    }
+    stage2_csets_lsls <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores)
+  }
+  # Case 2: X general; fitfun, simfun, calcfun must be provided
+  #------------------------------------------------------------
+  else { # FIXME the use of calcfun!
+    if(is.null(fitfun) | is.null(simfun)) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.\n")
+    cat("Note: Model to be fitted by fitfun(X), simulations by simfun and calcfun;\n",
+        "simfun should accept the object returned by fitfun as its argument.\n",
+        "calcfun should accept the object returned by simfun as its argument.\n")
+    # Fit the model to X
+    simfun.arg <- fitfun(X) # fitted model to be passed to simfun
+    # Generate nsim simulations by the given function using the fitted model
+    stage1_cset_ls <- replicate(n=nsim, expr=simfun(simfun.arg), simplify=FALSE) # list of data objects
+    stage1_cset_ls <- sapply(stage1_cset_ls, FUN=calcfun, simplify=TRUE) # matrix of functions
+    stage1_cset_ls <- list(create_curve_set(list(r=1:nrow(stage1_cset_ls), obs=calcfun(X), sim_m=stage1_cset_ls)))
+    # Create another set of simulations to be used to estimate the second-state p-value
+    # following Baddeley et al. (2017).
+    Xsims <- replicate(n=nsim, expr=simfun(simfun.arg), simplify=FALSE) # list of data objects
+    loopfun <- function(rep) {
+      # Fit the model to the simulated pattern Xsims[[rep]]
+      simfun.arg <- fitfun(Xsims[[rep]])
+      # Generate nsim simulations from the fitted model
+      cset <- replicate(n=nsim, expr=simfun(simfun.arg), simplify=FALSE) # list of data objects
+      cset <- sapply(cset, FUN=calcfun, simplify=TRUE) # matrix of functions
+      list(create_curve_set(list(r=1:nrow(cset), obs=calcfun(X), sim_m=cset)))
+    }
+    stage2_csets_lsls <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores)
+  }
+  list(X=stage1_cset_ls, X.ls=stage2_csets_lsls)
+}
 
-  # Make the test
-  if(length(curve_sets_ls) > 1 & MrkvickaEtal2017 & type %in% c("st", "qdir")) {
-    global_envtest <- combined_scaled_MAD_envelope(curve_sets_ls, type=type, alpha=alpha, probs=probs)
+# A helper function to make a global envelope test for the purposes of dg.global_envelope_test
+# @param curve_sets_ls A list of curve_sets.
+# @inheritParams dg.global_envelope_test
+dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, MrkvickaEtal2017, ..., save.envelope=FALSE) {
+  if(length(curve_sets) > 1 & MrkvickaEtal2017 & type %in% c("st", "qdir")) {
+    global_envtest <- combined_scaled_MAD_envelope(curve_sets, type=type, alpha=alpha, probs=probs, ...)
   }
   else {
-    global_envtest <- global_envelope_test(curve_sets_ls, type=type, alpha=alpha,
-                                           alternative=alt, ties=ties, probs=probs)
+    global_envtest <- global_envelope_test(curve_sets, type=type, alpha=alpha,
+                                           alternative=alternative, ties=ties, probs=probs, ...)
   }
-  stat <- attr(global_envtest, "k")[1]
-  pval <- attr(global_envtest, "p")
-
-  res <- structure(list(statistic = as.numeric(stat), p.value = pval,
-                  method = type, curve_set = curve_sets_ls), class = "global_envelope_with_sims")
+  res <- structure(list(stat = as.numeric(attr(global_envtest, "k")[1]), pval = attr(global_envtest, "p")),
+                   class = "dg_GET_helper")
   if(save.envelope) attr(res, "envelope_test") <- global_envtest
-  if(savefuns) attr(res, "simfuns") <- curve_sets_ls # FIXME two times curve_set_ls saved
-  if(savepatterns) attr(res, "simpatterns") <- attr(curve_sets_ls[[1]], "simpatterns")
-
   res
 }
 
@@ -185,87 +174,100 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' Adjusted global envelope tests.
 #'
 #'
-#' The specification of X is important here:
-#'
-#' 1) If simfun = NULL and fitfun = NULL (default), then \code{\link[spatstat]{envelope}}
-#' is used for generating simulations under the null hypothesis and
+#' The specification of X, X.ls, fitfun, simfun is important here:
 #' \itemize{
-#' \item If \code{X} is a point pattern, the null hypothesis is CSR.
-#' \item If \code{X} is a fitted model, the null hypothesis is that model.
+#' \item If \code{X.ls} is provided, then the global envelope test is calculated based on
+#' functions in these objects. \code{X} should be a \code{curve_set} (see \code{\link{create_curve_set}})
+#' or an \code{\link[spatstat]{envelope}} object including the observed function and simulations
+#' from the tested model. \code{X.ls} should be a list of \code{curve_set} or
+#' \code{\link[spatstat]{envelope}} objects, where each component contains an "observed"
+#' function f that has been simulated from the model fitted to the data and the simulations
+#' that have been obtained from the same model that has been fitted to the "observed" f.
+#' The user has the responsibility that the functions have been generated correctly,
+#' the test is done based on these provided simulations.
+#' \item Otherwise,
+#' \itemize{
+#'   \item If \code{X} is a fitted (point process) model object of the R library \pkg{spatstat},
+#' then the simulations from this model are generated and summary functions for testing calculated
+#' by \code{\link[spatstat]{envelope}}. Which summary function to use and how to calculate it,
+#' can be passed to \code{\link[spatstat]{envelope}} either in \code{...} or \code{testfuns}.
+#' Unless otherwise specified the default function of \code{\link[spatstat]{envelope}},
+#' i.g. the K-function, is used. The argument \code{testfuns} should be used to specify the
+#' test functions in the case where one wants to base the test on several test functions.
+#'   \item If \code{X} is a \code{\link[spatstat]{ppp}} object, \code{simfun} should be
+#' used to specify how to generate simulations from the model that is be fitted to \code{X}
+#' by \code{fitfun}. If \code{simfun} and \code{fitfun} are not given, then
+#' \code{\link[spatstat]{envelope}} is used for simulations and model fitting and the complete
+#' spatial randomness (CSR) is tested (with intensity parameter).
+#'   \item For a general \code{X}, \code{simfun} and \code{fitfun} should be provided.
+#' The function \code{fitfun} is used for fitting the desired model M and the function \code{simfun}
+#' for simulating from a fitted model M. These functions should be coupled with each other such
+#' that the object returned by \code{fitfun} is directly accepted as the (single) argument in
+#' \code{simfun}.
+#' In the case, that the global envelope should not be calculated directly for \code{X} (\code{X} is
+#' not a function), \code{calcfun} can be used to specify how to calculate the function from
+#' \code{X} and from simulations generated by \code{simfun}.
+#' Special attention is needed in the correct specification of the functions, see examples.
 #' }
-#' No other \code{X} are allowed then.
+#' }
 #'
-#' 2) The user can provide the function for fitting the model (\code{fitfun}) and for simulating
-#' from the fitted model (\code{simfun}). These functions should be coupled with each other such
-#' that the object returned by \code{fitfun} is directly accepted as the (single) argument in \code{simfun}.
-#' Further \code{X} should then be an \code{\link[spatstat]{ppp}} object and 'fitfun' should accept as
-#' the argument an \code{\link[spatstat]{ppp}} object (\code{X} and further simulated point patterns).
-#'
-#'
-#' A note: The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though an
-#' inner function, mimics the structure in the function \code{\link[spatstat]{dg.envelope}}
-#' in the use of \code{\link[spatstat]{envelope}}. However, this function allows for more general
-#' use as described above and for the different global envelope tests.
-#'
-#' For the rank envelope test, the test is the test described in Myllymäki et al. (2017) with the
-#' adjustment of Baddeley et al. (2017).
+#' For the rank envelope test, the global envelope test is the test described in
+#' Myllymäki et al. (2017) with the adjustment of Baddeley et al. (2017).
 #' For other test types, the test (also) uses the two-stage procedure of Dao and Genton (2014) with
 #' the adjustment of Baddeley et al. (2017).
 #'
 #' See examples in \code{\link{saplings}}.
 #'
-#' @param X An object containing point pattern data. A point pattern (object of class "ppp")
-#' or a fitted point process model (object of class "ppm" or "kppm"). See
-#' \code{\link[spatstat]{envelope}}.
+#' @param X An object containing the data in some form.
+#' A \code{curve_set} (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
+#' object, as the \code{curve_sets} argument of \code{\link{global_envelope_test}}
+#' (need to provide \code{X.ls}), or
+#' a fitted point process model of \pkg{spatstat} (e.g. object of class \code{\link[spatstat]{ppm}} or
+#' \code{\link[spatstat]{kppm}}), or a point pattern object of class \code{\link[spatstat]{ppp}},
+#' or another data object (need to provide \code{simfun}, \code{fitfun}, \code{calcfun}).
+#' @param X.ls A list of objects as \code{curve_sets} argument of \code{\link{global_envelope_test}},
+#' giving the second stage simulations, see details.
 #' @param nsim The number of simulations to be generated in the primary test.
+#' Ignored if \code{X.ls} provided.
 #' @param nsimsub Number of simulations in each basic test. There will be nsim repetitions of the
 #' basic test, each involving nsimsub simulated realisations, so there will be a total of
 #' nsim * (1 + nsimsub) simulations.
 #' @param simfun A function for generating simulations from the null model. If given, this function
-#' is called by replicate(n=nsim, simfun(simfun.param), simplify=FALSE) to make nsim simulations.
-#' The function should return an \code{\link[spatstat]{ppp}} object as those are further passed to
-#' \code{\link[spatstat]{envelope}}.
-#' If the function is not provided, then \code{\link[spatstat]{envelope}} is used also for generating
-#' the point patterns from the null hypothesis.
-#' @param fitfun A function for estimating the parameters of the null model. If not given, then
-#' \code{\link[spatstat]{envelope}} takes care of the parameter estimation as well (and X should be a fitted
-#' model object). The function 'fitfun' should return the fitted model in the form that it can be directly
-#' passed to 'simfun' as the argument 'simfun.arg'.
-#' @param simfun.arg The parameter to be passed to simfun. The function simfun should handle
-#' with the structure of simfun.param. FIXME should be here or not?
-#' @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
-#' A list of parameters should be provided for each test function that is to be used in the combined test.
+#' is called by \code{replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)} to make nsim
+#' simulations. Here \code{simfun.arg} is obtained by \code{fitfun(X)}.
+#' @param fitfun A function for estimating the parameters of the null model.
+#' The function should return the fitted model in the form that it can be directly
+#' passed to \code{simfun} as its argument.
+#' @param calcfun A function for calculating a summary function from a simulation of the model.
+#' The default is the identity function, i.e. the simulations from the model are functions themselves.
+#' @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}
+#' if \code{X} is a point pattern of a fitted point process model of \pkg{spatstat}.
+#' A list of parameters should be provided for each test function that is to be used in the
+#' combined test.
 #' @param ... Additional parameters to \code{\link[spatstat]{envelope}} in the case where only one test
-#' function is used. In that case, this is an alternative to providing the parameter in the argument
+#' function is used. In that case, this is an alternative to providing the parameters in the argument
 #' testfuns. If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null
 #' hypothesis (if simfun not provided), then also recall to specify how to generate the simulations.
 #' @inheritParams global_envelope_test
-#' @param r_min The minimum radius to include in the test.
-#' @param r_max The maximum radius to include in the test. Note: cannot be larger than r-values used
+#' @param r_min The minimum argument value to include in the test.
+#' @param r_max The maximum argument value to include in the test.
 #' in calculating functions by \code{\link[spatstat]{envelope}}.
-#' @param take_residual If (needed for visual reasons only) the theoretical or mean behaviour of the
-#' test function is reduced from the test functions. If TRUE, then: If \code{\link[spatstat]{envelope}}
-#' provides the theoretical value 'theo' for the simulated model, then this value is used. Otherwise,
-#' the theoretical function is taken as the mean of the simulations.
-# @param ties Ties method to be passed to \code{\link{global_envelope_test}}.
-# Used to obtain a point estimate for the p-value for the "rank" test. Default to extreme rank
-# length p-value.
+#' @param take_residual Logical. If TRUE (needed for visual reasons only) the mean of the simulated
+#' functions is reduced from the functions in each first and second stage test.
 #' @param save.cons.envelope Logical flag indicating whether to save the unadjusted envelope test results.
 #' @param savefuns Logical flag indicating whether to save all the simulated function values.
-#' See \code{\link[spatstat]{envelope}}.
-#' @param savepatterns Logical flag indicating whether to save all the simulated point patterns.
-#' See \code{\link[spatstat]{envelope}}.
+#' Similar to the same argument of \code{\link[spatstat]{envelope}}.
 #' @param verbose Logical flag indicating whether to print progress reports during the simulations.
-#' See \code{\link[spatstat]{envelope}}.
+#' Similar to the same argument of \code{\link[spatstat]{envelope}}.
 #' @param MrkvickaEtal2017 Logical. If TRUE, type is "st" or "qdir" and several test functions are used,
 #' then the combined scaled MAD envelope presented in Mrkvička et al. (2017) is calculated. Otherwise,
 #' the two-step procedure described in \code{\link{global_envelope_test}} is used for combining the tests.
-#' Default to FALSE.
+#' Default to FALSE. The option kept for historical reasons.
 #' @param mc.cores The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 #' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
 #' (no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
-#'
-#' @return An object of class \code{global_envelope} or \code{combined_global_envelope}.
+#' Parallelization can be used in generating simulations and in calculating the second stage tests.
+#' @return An object of class \code{global_envelope}. See \code{\link{global_envelope_test}}.
 #' @references
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
 #'
@@ -277,91 +279,126 @@ global_envelope_with_sims <- function(X, nsim, simfun = NULL, simfun.arg = NULL,
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
 #' \code{\link{plot.global_envelope}}, \code{\link{saplings}}
 #' @export
-#' @importFrom spatstat is.ppm
-#' @importFrom spatstat is.kppm
-#' @importFrom spatstat is.lppm
-#' @importFrom spatstat is.slrm
-#' @importFrom spatstat is.ppp
-#' @importFrom spatstat update.ppm
-#' @importFrom spatstat update.kppm
-#' @importFrom spatstat update.lppm
-#' @importFrom spatstat update.slrm
+#' @aliases dg.GET
 #' @importFrom parallel mclapply
 #' @importFrom stats quantile
-dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
-        simfun=NULL, fitfun=NULL, simfun.arg=NULL, testfuns=NULL, ..., type = "erl",
-        alpha = 0.05, alternative = c("two.sided","less", "greater"),
-        r_min=NULL, r_max=NULL, take_residual=FALSE,
-        save.cons.envelope = savefuns || savepatterns, savefuns = FALSE, savepatterns = FALSE,
-        verbose=TRUE, MrkvickaEtal2017 = FALSE, mc.cores=1L) {
-    Xismodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
-    if(is.null(simfun) != is.null(fitfun)) stop("Either both \'simfun\' and \'fitfun\' should be provided or neither of them.\n")
-    if((is.null(simfun) | is.null(fitfun)) & !Xismodel)
-      warning("\'simfun\' and/or \'fitfun\' not provided and \'X\' is not a fitted model object.\n",
-              "As \'envelope\' is used for simulations and model fitting, \n",
-              "\'X\' should be a fitted model object.")
-    if(!is.null(fitfun) & !spatstat::is.ppp(X))
-      stop("Model to be fitted by fitfun(X) and simulations to be generated by simfun;\n but X is not an ppp object.\n")
-    nfuns <- length(testfuns)
-    if(nfuns < 1) nfuns <- 1
-    alt <- match.arg(alternative)
-    simfun.arg <- NULL
-    if(!is.null(fitfun)) simfun.arg <- fitfun(X) # fitted model parameters to be passed to simfun
-    if(verbose) cat("Applying test to original data...\n")
-    tX <- global_envelope_with_sims(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg,
-            testfuns=testfuns, ..., type = type, alpha = alpha, alternative = alt,
-            r_min=r_min, r_max=r_max, take_residual=take_residual,
-            ties='midrank', # Note: ties argument do not matter here (p-values not used for the rank test), using 'midrank' as a faster alternative.
-            save.envelope = save.cons.envelope, savefuns = TRUE, savepatterns = savepatterns,
-            verbose = verbose, MrkvickaEtal2017=MrkvickaEtal2017)
-    if(verbose) cat("Done.\n")
-    # Create another set of simulated patterns to be used to estimate the second-state p-value
-    # following Baddeley et al. (2017).
-    # FIXME: unnecessary calculations of test functions in simpatterns_and_funcs_from_X
-    simpatterns <- attr(simpatterns_and_funcs_from_X(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg, testfuns=testfuns, ...,
-                                                     savepatterns=TRUE, verbose=verbose,
-                                                     calc_funcs=FALSE)[[1]], "simpatterns")
+dg.global_envelope_test <- function(X, X.ls = NULL,
+                                    nsim = 499, nsimsub = nsim,
+                                    simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
+                                    testfuns=NULL, ...,
+                                    type = "erl",
+                                    alpha = 0.05, alternative = c("two.sided","less", "greater"),
+                                    probs = c(0.025, 0.975),
+                                    r_min=NULL, r_max=NULL, take_residual=FALSE,
+                                    save.cons.envelope = savefuns, savefuns = FALSE,
+                                    verbose=TRUE, MrkvickaEtal2017 = FALSE, mc.cores=1L) {
+  alt <- match.arg(alternative)
 
-    if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... \n"))
-    # For each of the simulated patterns in 'simpatterns', perform the test and calculate
-    # the extreme rank (or deviation) measure and p-value
-    loopfun <- function(rep) {
-      Xsim <- simpatterns[[rep]]
-      if(!is.null(fitfun)) simfun.arg <- fitfun(Xsim) # a fitted model to be passed to simfun
-      if(Xismodel)
-          switch(class(X)[1],
-                 ppm = {
-                     Xsim <- spatstat::update.ppm(X, Xsim)
-                 },
-                 kppm = {
-                     Xsim <- spatstat::update.kppm(X, Xsim)
-                 },
-                 lppm = {
-                     Xsim <- spatstat::update.lppm(X, Xsim)
-                 },
-                 slrm = {
-                     Xsim <- spatstat::update.slrm(X, Xsim)
-                 })
-      tXsim <- global_envelope_with_sims(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg,
-              testfuns=testfuns, ..., type = type, alpha = alpha, alternative = alt,
-              r_min=r_min, r_max=r_max, take_residual=take_residual,
-              ties='midrank', # Note: the ties method does not matter here
-              save.envelope = FALSE, savefuns = FALSE, savepatterns = FALSE,
-              verbose = verbose, MrkvickaEtal2017=MrkvickaEtal2017)
-      list(stat = tXsim$statistic, pval = tXsim$p.value)
+  # Simulations
+  #------------
+  # 1) All simulations provided
+  #----------------------------
+  if(!is.null(X.ls)) {
+    nsim <- length(X.ls)
+    # Check dimensions of each curve_set and transform to curve_sets
+    if(class(X)[1] != "list") {
+      X <- list(X) # The observed curves (a list of curve_set objects)
+      X.ls <- lapply(X.ls, FUN=list) # The simulated curves (a list of lists of curve_set objects)
     }
-    mclapply_res <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores)
-    stats <- sapply(mclapply_res, function(x) x$stat)
-    pvals <- sapply(mclapply_res, function(x) x$pval)
+    picked_attr_ls <- lapply(X, FUN=pick_attributes, alternative=alt, type=type)
+    X <- check_curve_set_dimensions(X)
+    X.ls <- lapply(X.ls, FUN = check_curve_set_dimensions)
+    # Check equality of dimensions over repetitions
+    if(!all(sapply(X.ls, FUN=function(curve_set) { identical(curve_set[[1]]$r, y=X[[1]]$r) }))) stop("The number of argument values in the observed and simulated sets of curves differ.\n")
+    if(!all(sapply(X.ls, FUN=function(curve_set) { identical(dim(curve_set[[1]]$sim_m), y=dim(X[[1]]$sim_m)) }))) stop("The number of simulations in the observed and simulated sets of curves differ.\n")
+    # Checking r_min, r_max
+    if(!is.null(r_min) & length(r_min) != length(X)) stop("r_min should give the minimum distances for each of the test functions.\n")
+    if(!is.null(r_max) & length(r_max) != length(X)) stop("r_max should give the maximum distances for each of the test functions.\n")
+    cat("Using the simulations provided in X and X.ls.\n")
+  }
+  # 2) Simulations if X.ls not provided
+  #------------------------------------
+  else { # Perform simulations
+    tmp <- dg.simulate(X=X, nsim=nsim, nsimsub=nsimsub,
+                       simfun=simfun, fitfun=fitfun, calcfun=calcfun, testfuns=testfuns, ...,
+                       verbose=verbose, mc.cores=mc.cores)
+    picked_attr_ls <- lapply(tmp$X, FUN=pick_attributes, alternative=alt, type=type)
+    X <- check_curve_set_dimensions(tmp$X)
+    X.ls <- lapply(tmp$X.ls, FUN = check_curve_set_dimensions)
+  }
 
-    # The adjusted test
-    if(MrkvickaEtal2017 & type %in% c("st", "qdir") & length(nfuns) > 1) { # Combined tests as in Mrkvicka et al. (2017)
-      res <- attr(tX, "envelope_test")
-      #-- The rank test at the second level
-      # Calculate the critical rank / alpha
+  # Crop curves (if r_min or r_max given)
+  #------------
+  nfuns <- length(X)
+  # Cropping (and tranforming to curve_sets)
+  if(!is.null(r_min) | !is.null(r_max)) {
+    tmpfunc <- function(i, csets) crop_curves(csets[[i]], r_min=r_min[i], r_max=r_max[i])
+    X <- lapply(1:nfuns, FUN=tmpfunc, csets=X)
+    for(sim in 1:length(X.ls)) X.ls[[sim]] <- lapply(1:nfuns, FUN=tmpfunc, csets=X.ls[[sim]])
+  }
+
+  # Take residual
+  #--------------
+  if(take_residual) {
+    tmpfunc <- function(i, csets) residual(csets[[i]])
+    X <- lapply(1:nfuns, FUN=tmpfunc, csets=X)
+    for(sim in 1:length(X.ls)) X.ls[[sim]] <- lapply(1:nfuns, FUN=tmpfunc, csets=X.ls[[sim]])
+  }
+
+  # Individual tests
+  #-----------------
+  # For data
+  obs_res <- dg_GET_helper(curve_sets=X, type=type, alpha=alpha, alternative=alt, ties="midrank",
+                           probs=probs, MrkvickaEtal2017=MrkvickaEtal2017, save.envelope=TRUE)
+  # For simulations
+  loopfun <- function(rep) {
+    tmp <- dg_GET_helper(curve_sets=X.ls[[rep]], type=type, alpha=alpha, alternative=alt, ties="midrank",
+                         probs=probs, MrkvickaEtal2017=MrkvickaEtal2017)
+    list(stat = tmp$stat, pval = tmp$pval)
+  }
+  mclapply_res <- parallel::mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores)
+  stats <- sapply(mclapply_res, function(x) x$stat)
+  pvals <- sapply(mclapply_res, function(x) x$pval)
+
+  # The adjusted test
+  #------------------
+  if(MrkvickaEtal2017 & type %in% c("st", "qdir") & nfuns > 1) { # Combined tests as in Mrkvicka et al. (2017)
+    res <- attr(obs_res, "envelope_test")
+    #-- The rank test at the second level
+    # Calculate the critical rank / alpha
+    kalpha_star <- stats::quantile(stats, probs=alpha, type=1)
+    data_and_sim_curves <- data_and_sim_curves(attr(res, "level2_curve_set")) # the second step "curves"
+    nr <- ncol(data_and_sim_curves)
+    Nfunc <- nrow(data_and_sim_curves)
+    LB <- array(0, nr)
+    UB <- array(0, nr)
+    for(i in 1:nr){
+      Hod <- sort(data_and_sim_curves[,i])
+      LB[i]<- Hod[kalpha_star]
+      UB[i]<- Hod[Nfunc-kalpha_star+1]
+    }
+    # -> kalpha_star, LB, UB of the (second level) rank test
+    # Update res object with adjusted values
+    res$lo <- LB
+    res$hi <- UB
+    attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
+    # Re-calculate the new qdir/st envelopes
+    envchars <- combined_scaled_MAD_bounding_curves_chars(X, type = type)
+    central_curves_ls <- lapply(X, function(x) get_T_0(x))
+    bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=UB,
+                                                           lower_f=envchars$lower_f, upper_f=envchars$upper_f)
+    # Update the first level envelopes for plotting
+    for(i in 1:length(attr(res, "global_envelope_ls"))) {
+      attr(res, "global_envelope_ls")[[i]]$lo <- bounding_curves$lower_ls[[i]]
+      attr(res, "global_envelope_ls")[[i]]$hi <- bounding_curves$upper_ls[[i]]
+    }
+  }
+  else { # Otherwise, the ERL test is used at the second level of a combined test
+    if(type == "rank" & nfuns == 1) {
+      # Calculate the critical rank (instead of alpha) and the adjusted envelope following Myllymäki et al. (2017)
       kalpha_star <- stats::quantile(stats, probs=alpha, type=1)
-      data_and_sim_curves <- data_and_sim_curves(attr(res, "level2_curve_set")) # the second step "curves"
-      nr <- ncol(data_and_sim_curves)
+      data_and_sim_curves <- data_and_sim_curves(X[[1]]) # all the functions
+      nr <- length(X[[1]]$r)
       Nfunc <- nrow(data_and_sim_curves)
       LB <- array(0, nr)
       UB <- array(0, nr)
@@ -370,61 +407,41 @@ dg.global_envelope_test <- function(X, nsim = 499, nsimsub = nsim,
         LB[i]<- Hod[kalpha_star]
         UB[i]<- Hod[Nfunc-kalpha_star+1]
       }
-      # -> kalpha_star, LB, UB of the (second level) rank test
+      # For getting automatically an global_envelope object, first call central_region
+      res <- central_region(X, type=type, coverage=1-alpha, alternative=alt, central="mean")
       # Update res object with adjusted values
       res$lo <- LB
       res$hi <- UB
       attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
-      # Re-calculate the new qdir/st envelopes
-      envchars <- combined_scaled_MAD_bounding_curves_chars(attr(tX, "simfuns"), type = type)
-      central_curves_ls <- lapply(attr(tX, "simfuns"), function(x) get_T_0(x))
-      bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=UB,
-                                                             lower_f=envchars$lower_f, upper_f=envchars$upper_f)
-      # Update the first level envelopes for plotting
-      for(i in 1:length(attr(res, "global_envelope_ls"))) {
-        attr(res, "global_envelope_ls")[[i]]$lo <- bounding_curves$lower_ls[[i]]
-        attr(res, "global_envelope_ls")[[i]]$hi <- bounding_curves$upper_ls[[i]]
-      }
     }
-    else { # Otherwise, the ERL test is used at the second level of a combined test
-      if(type == "rank" & nfuns == 1) {
-        # Calculate the critical rank (instead of alpha) and the adjusted envelope following Myllymäki et al. (2017)
-        kalpha_star <- stats::quantile(stats, probs=alpha, type=1)
-        data_and_sim_curves <- data_and_sim_curves(tX$curve_set[[1]]) # all the functions
-        nr <- length(tX$curve_set[[1]]$r)
-        Nfunc <- nrow(data_and_sim_curves)
-        LB <- array(0, nr)
-        UB <- array(0, nr)
-        for(i in 1:nr){
-          Hod <- sort(data_and_sim_curves[,i])
-          LB[i]<- Hod[kalpha_star]
-          UB[i]<- Hod[Nfunc-kalpha_star+1]
-        }
-        # For getting automatically an global_envelope object, first call central_region
-        res <- central_region(tX$curve_set, type=type, coverage=1-alpha, alternative=alt, central="mean")
-        # Update res object with adjusted values
-        res$lo <- LB
-        res$hi <- UB
-        attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
-      }
-      else {
-        alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
-        res <- global_envelope_test(tX$curve_set, type=type, alpha=alpha_star, alternative=alt)
-        # Save additional arguments
-        attr(res, "alpha") <- alpha
-        attr(res, "alpha_star") <- alpha_star
-      }
+    else {
+      alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
+      res <- global_envelope_test(X, type=type, alpha=alpha_star, alternative=alt)
+      # Save additional arguments
+      attr(res, "alpha") <- alpha
+      attr(res, "alpha_star") <- alpha_star
     }
+  }
 
-    # Changes
-    attr(res, "method") <- "Adjusted global envelope test" # Change method name
-    attr(res, "call") <- match.call() # Update "call" attribute
-    # Additions
-    if(savepatterns) attr(res, "simpatterns") <- simpatterns
-    if(savefuns) attr(res, "simfuns") <- attr(tX, "simfuns")
-    if(save.cons.envelope) attr(res, "unadjusted_test") <- attr(tX, "envelope_test")
-    attr(res, "simulated_p") <- pvals
-    attr(res, "simulated_k") <- stats
-    # Return
-    res
+  # Update attributes
+  if(nfuns == 1) {
+    for(n in names(picked_attr_ls[[1]])) attr(res, n) <- picked_attr_ls[[1]][[n]]
+  }
+  else { # nfuns > 1, first level envelopes given in attr(x, "global_envelope_ls")
+    for(n in names(picked_attr_ls[[1]]))
+      for(i in 1:nfuns)
+        attr(x, "global_envelope_ls")[[i]][[n]] <- picked_attr_ls[[i]][[n]]
+  }
+  attr(res, "method") <- "Adjusted global envelope test" # Change method name
+  attr(res, "call") <- match.call() # Update "call" attribute
+  # Additions
+  if(savefuns) {
+    attr(res, "simfuns") <- X
+    attr(res, "simfuns.ls") <- X.ls
+  }
+  if(save.cons.envelope) attr(res, "unadjusted_test") <- attr(obs_res, "envelope_test")
+  attr(res, "simulated_p") <- pvals
+  attr(res, "simulated_k") <- stats
+  # Return
+  res
 }
