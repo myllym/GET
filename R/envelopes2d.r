@@ -48,6 +48,7 @@ curve_set_results_to_image_results <- function(res_v, image_sets) {
 cr_or_GET_2d <- function(image_sets, CR_or_GET = c("CR", "GET"), ...) {
   CR_or_GET <- match.arg(CR_or_GET)
   if(inherits(image_sets, "image_set")) image_sets <- list(image_sets)
+  if(!all(unlist((lapply(image_sets, function(x) { inherits(x, "image_set") }))))) stop("The list does not contain image_set objects.\n")
   obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
   sim_d <- lapply(image_sets, function(x) { dim(x$sim_m) })
   # Check that dimensions of different image sets are the same
