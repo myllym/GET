@@ -258,6 +258,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   for(i in 1:length(curve_sets)) {
     res_ls[[i]]$lo <- LB[[i]]
     res_ls[[i]]$hi <- UB[[i]]
+    attr(res_ls[[i]], "alpha") <- NULL
     attr(res_ls[[i]], "k_alpha") <- NULL
   }
 
