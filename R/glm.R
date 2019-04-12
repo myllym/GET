@@ -10,7 +10,7 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
     if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.\n")
   }
   if(!( all(vars %in% names(curve_sets)) | all(vars[-1] %in% names(factors)) )) stop("The variables in the formula not found in the given data (curve_sets and factors).\n")
-  if(!all(lapply(curve_sets, class) %in% c("curve_set", "fdata"))) stop("The components of curve_sets do not have a valid class.\n")
+  if(!all(sapply(curve_sets, function(x) inherits(x, c("curve_set", "fdata"))))) stop("The components of curve_sets do not have a valid class.\n")
   curve_sets <- lapply(curve_sets, convert_fdata)
   if(!all(lapply(curve_sets[['obs']], is.matrix))) stop("The curve_set must include data functions (sim_m ignored).\n")
   curve_sets <- check_curve_set_dimensions(curve_sets)
