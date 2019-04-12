@@ -3,12 +3,14 @@
 #' GDP per capita with country groups and profit tax
 #'
 #'
-#' The data includes the GDP per capita (current US$) for years 1980-2017.
-#' The data is World Bank national accounts data, and OECD National Accounts data files.
+#' The data includes the GDP per capita (current US$) for years 1980-2017
+#' (World Bank national accounts data, and OECD National Accounts data files).
 #' The data have been downloaded from the webpage
 #' \url{https://datamarket.com/data/set/15c9/gdp-per-capita-current-us#!ds=15c9!hd1&display=line},
 #' distributed under the CC-BY 4.0 (\url{https://datacatalog.worldbank.org/public-licenses#cc-by}).
-#' From the same webpage the profit tax in 2010 was downloaded.
+#' From the same webpage the profit tax in 2010 (World Bank, Doing Business Project (http://www.doingbusiness.org/ExploreTopics/PayingTaxes/)
+#' and Total tax rate (% of commercial profits) (World Bank, Doing Business project (http://www.doingbusiness.org/))
+#' were downloaded.
 #' Furthermore, different country groups were formed from
 #' countries for which the GDP was available for 1980-2017 and profit tax for 2010:
 #' \itemize{
@@ -29,7 +31,8 @@
 #'
 #' @usage data(GDPtax)
 #' @references
-#'
+#' World Bank national accounts data, and OECD National Accounts data files. URL: https://data.worldbank.org/indicator/NY.GDP.PCAP.CD
+#' World Bank, Doing Business Project (http://www.doingbusiness.org/ExploreTopics/PayingTaxes/). URL: https://data.worldbank.org/indicator/IC.TAX.PRFT.CP.ZS
 #' @keywords datasets
 #' @keywords curves
 #' @name GDPtax
