@@ -86,7 +86,8 @@ cr_or_GET_2d <- function(image_sets, CR_or_GET = c("CR", "GET"), ...) {
 #'
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 #'
-#' @param image_set An image set, i.e. a set of 2d functions. See \code{\link{create_image_set}}.
+#' @param image_sets An image set, i.e. a set of 2d functions (or a list of them).
+#' See \code{\link{create_image_set}}.
 #' @param ... Additional parameters to be passed to \code{\link{central_region}}.
 #' @return An object of class "global_envelope_2d" (and "list"),
 #' which can be printed and plotted directly.
@@ -104,9 +105,10 @@ cr_or_GET_2d <- function(image_sets, CR_or_GET = c("CR", "GET"), ...) {
 #' \code{k_alpha}, \code{alpha}, \code{k}, and \code{call}, see more detailed description in
 #' \code{\link{central_region}}.
 #' @export
-central_region_2d <- function(image_set, ...) {
-  if(class(image_set)[1] != "image_set") stop("image_set should be an object of class image_set.\n")
-  cr_or_GET_2d(image_set, CR_or_GET = "CR", ...)
+central_region_2d <- function(image_sets, ...) {
+  res <- cr_or_GET_2d(image_sets, CR_or_GET = "CR", ...)
+  attr(res, "call") <- match.call()
+  res
 }
 
 #' 2D global envelope test
@@ -190,9 +192,10 @@ central_region_2d <- function(image_set, ...) {
 #'   plot(res, col=spatstat::colourmap(grDevices::gray(0:255/255),
 #'                    range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
 #' }
-global_envelope_test_2d <- function(image_set, ...) {
-  if(class(image_set)[1] != "image_set") stop("image_set should be an object of class image_set.\n")
-  cr_or_GET_2d(image_set, CR_or_GET = "GET", ...)
+global_envelope_test_2d <- function(image_sets, ...) {
+  res <- cr_or_GET_2d(image_sets, CR_or_GET = "GET", ...)
+  attr(res, "call") <- match.call()
+  res
 }
 
 #' Print method for the class 'global_envelope_2d'
