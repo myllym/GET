@@ -409,16 +409,6 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   }
   if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
 
-  if(retick_xaxis(list(x))$retick_xaxis) {
-    if(plot_style == "fv") {
-      warning("The plot style fv not available for the case where r distances are not increasing.\n Setting plot_style to basic.\n")
-      plot_style <- "basic"
-    }
-    separate_yaxes <- TRUE
-  }
-  else { # no need for new xticks and combined test outputs
-    separate_yaxes <- FALSE
-  }
   switch(plot_style,
          basic = {
            if(dotplot) {
@@ -428,10 +418,9 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                          add=add, arrows.col=env.col, ...)
            }
            else {
-             if(separate_yaxes) main <- labels
              env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                             color_outside=color_outside,
-                            separate_yaxes=separate_yaxes,
+                            separate_yaxes=FALSE,
                             add=add, env.col=env.col, ...)
            }
          },
@@ -440,7 +429,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
          },
          ggplot2 = {
            env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                           separate_yaxes=separate_yaxes,
+                           separate_yaxes=FALSE,
                            labels=labels, ...)
          })
 }
