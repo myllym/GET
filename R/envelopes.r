@@ -460,7 +460,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param level 1 or 2. In the case of combined tests (with several test functions), two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
-#' @param separate_yaxes Logical (default FALSE). If TRUE, then separate y-axes are used for
+#' @param separate_yaxes Logical (default TRUE). If TRUE, then separate y-axes are used for
 #' different parts of a combined test. If FALSE, then the components are displayed one next to each other
 #' with a joint y-axis.
 #' @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
