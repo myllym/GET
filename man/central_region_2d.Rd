@@ -4,16 +4,11 @@
 \alias{central_region_2d}
 \title{2D central region / global envelope}
 \usage{
-central_region_2d(obs, sim = NULL, rx, ry, ...)
+central_region_2d(image_sets, ...)
 }
 \arguments{
-\item{obs}{A 2d matrix or 3d array containing the observed 2d functions.}
-
-\item{sim}{A 3d array containing the simulated 2d functions.}
-
-\item{rx}{Argument values for x-coordinate (first dimension of 2d functions).}
-
-\item{ry}{Argument values for y-coordinate (second dimension of 2d functions).}
+\item{image_sets}{An image set, i.e. a set of 2d functions (or a list of them).
+See \code{\link{create_image_set}}.}
 
 \item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
 }
@@ -23,8 +18,7 @@ which can be printed and plotted directly.
 
 Essentially a data frame containing columns
 \itemize{
-\item rx = the vector of values of the argument rx on x-coordinate at which the test was made
-\item rx = the vector of values of the argument ry on y-coordinate at which the test was made
+\item r = a list of vectors of values of x- and y-coordinates at which the test was made
 \item obs = the data function (matrix), if there is only one data function. Otherwise not existing.
 \item lo = the lower envelope (matrix) based on the simulated functions
 \item hi = the upper envelope (matrix) based on the simulated functions

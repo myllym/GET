@@ -21,7 +21,7 @@ sections thereafter.}
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \value{
-An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 which can be printed and plotted directly.
 
 Essentially a data frame containing columns

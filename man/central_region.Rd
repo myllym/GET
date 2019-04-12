@@ -6,7 +6,8 @@
 \usage{
 central_region(curve_sets, type = "erl", coverage = 0.5,
   alternative = c("two.sided", "less", "greater"), probs = c((1 -
-  coverage)/2, 1 - (1 - coverage)/2), central = "median", ...)
+  coverage)/2, 1 - (1 - coverage)/2), central = "median", nstep = 2,
+  ...)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
@@ -29,10 +30,13 @@ The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 20
 \code{theo} for the theoretical central function, then the central function (used for plotting only)
 is calculated either as the mean or median of functions provided in the curve sets.}
 
+\item{nstep}{1 or 2 for how to contruct a combined global envelope if list of curve sets
+is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
+
 \item{...}{Additional parameters to be passed to \code{\link{forder}}.}
 }
 \value{
-An object of class "global_envelope", "envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 which can be printed and plotted directly.
 
 Essentially a data frame containing columns

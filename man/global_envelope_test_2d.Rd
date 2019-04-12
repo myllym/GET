@@ -4,16 +4,11 @@
 \alias{global_envelope_test_2d}
 \title{2D global envelope test}
 \usage{
-global_envelope_test_2d(obs, sim, rx, ry, ...)
+global_envelope_test_2d(image_sets, ...)
 }
 \arguments{
-\item{obs}{A 2d matrix or 3d array containing the observed 2d functions.}
-
-\item{sim}{A 3d array containing the simulated 2d functions.}
-
-\item{rx}{Argument values for x-coordinate (first dimension of 2d functions).}
-
-\item{ry}{Argument values for y-coordinate (second dimension of 2d functions).}
+\item{image_sets}{An image set, i.e. a set of 2d functions (or a list of them).
+See \code{\link{create_image_set}}.}
 
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
@@ -23,8 +18,7 @@ which can be printed and plotted directly.
 
 Essentially a data frame containing columns
 \itemize{
-\item rx = the vector of values of the argument rx on x-coordinate at which the test was made
-\item rx = the vector of values of the argument ry on y-coordinate at which the test was made
+\item r = a list of vectors of values of x- and y-coordinates at which the test was made
 \item obs = the data function (matrix), if there is only one data function. Otherwise not existing.
 \item lo = the lower envelope (matrix) based on the simulated functions
 \item hi = the upper envelope (matrix) based on the simulated functions
@@ -73,17 +67,22 @@ if(require(spatstat, quietly=TRUE)) {
     simulations[[sss]] <- ppp(uppp$x[f], uppp$y[f], window=X$window)
   }
   # Calculate the raw residuals for simulations
-  sim <- array(0, c(nsim, u$smooth$Z$dim))
+  sim <- array(0, c(u$smooth$Z$dim, nsim))
   for(i in 1:length(simulations)) {
     model=ppm(simulations[[i]],interaction=Hardcore(HD));
     u_sim <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth", sigma=ds, plot.it=FALSE)
-    sim[i,,] <- u_sim$smooth$Z$v
+    sim[,,i] <- u_sim$smooth$Z$v
     if((i \%\% 100)==0) cat(i, ' ')
   }
   # Constract the global envelope test for the (2D) raw residuals
-  res <- global_envelope_test_2d(obs, sim)
+  iset <- create_image_set(list(obs=obs, sim_m=sim))
+  res <- global_envelope_test_2d(iset)
   par(mfrow=c(2,3))
   plot(res)
+  # The same colors for all plots:
+  par(mfrow=c(2,3))
+  plot(res, col=spatstat::colourmap(grDevices::gray(0:255/255),
+                   range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
 }
 }
 \references{

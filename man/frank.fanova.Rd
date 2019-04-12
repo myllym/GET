@@ -68,7 +68,7 @@ plot(res, ylab="F-statistic")
 }
 }
 \references{
-Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018)
 A one-way ANOVA test for functional data with graphical interpretation.
 arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
 }

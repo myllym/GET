@@ -2,47 +2,54 @@
 % Please edit documentation in R/adjusted_envelopes.r
 \name{dg.global_envelope_test}
 \alias{dg.global_envelope_test}
+\alias{dg.GET}
 \title{Adjusted global envelope tests}
 \usage{
-dg.global_envelope_test(X, nsim = 499, nsimsub = nsim, simfun = NULL,
-  fitfun = NULL, simfun.arg = NULL, testfuns = NULL, ...,
-  type = "erl", alpha = 0.05, alternative = c("two.sided", "less",
-  "greater"), r_min = NULL, r_max = NULL, take_residual = FALSE,
-  save.cons.envelope = savefuns || savepatterns, savefuns = FALSE,
-  savepatterns = FALSE, verbose = TRUE, MrkvickaEtal2017 = FALSE,
-  mc.cores = 1L)
+dg.global_envelope_test(X, X.ls = NULL, nsim = 499, nsimsub = nsim,
+  simfun = NULL, fitfun = NULL, calcfun = function(X) {     X },
+  testfuns = NULL, ..., type = "erl", alpha = 0.05,
+  alternative = c("two.sided", "less", "greater"), probs = c(0.025,
+  0.975), r_min = NULL, r_max = NULL, take_residual = FALSE,
+  save.cons.envelope = savefuns, savefuns = FALSE, verbose = TRUE,
+  MrkvickaEtal2017 = FALSE, mc.cores = 1L)
 }
 \arguments{
-\item{X}{An object containing point pattern data. A point pattern (object of class "ppp")
-or a fitted point process model (object of class "ppm" or "kppm"). See
-\code{\link[spatstat]{envelope}}.}
+\item{X}{An object containing the data in some form.
+A \code{curve_set} (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
+object, as the \code{curve_sets} argument of \code{\link{global_envelope_test}}
+(need to provide \code{X.ls}), or
+a fitted point process model of \pkg{spatstat} (e.g. object of class \code{\link[spatstat]{ppm}} or
+\code{\link[spatstat]{kppm}}), or a point pattern object of class \code{\link[spatstat]{ppp}},
+or another data object (need to provide \code{simfun}, \code{fitfun}, \code{calcfun}).}
 
-\item{nsim}{The number of simulations to be generated in the primary test.}
+\item{X.ls}{A list of objects as \code{curve_sets} argument of \code{\link{global_envelope_test}},
+giving the second stage simulations, see details.}
+
+\item{nsim}{The number of simulations to be generated in the primary test.
+Ignored if \code{X.ls} provided.}
 
 \item{nsimsub}{Number of simulations in each basic test. There will be nsim repetitions of the
 basic test, each involving nsimsub simulated realisations, so there will be a total of
 nsim * (1 + nsimsub) simulations.}
 
 \item{simfun}{A function for generating simulations from the null model. If given, this function
-is called by replicate(n=nsim, simfun(simfun.param), simplify=FALSE) to make nsim simulations.
-The function should return an \code{\link[spatstat]{ppp}} object as those are further passed to
-\code{\link[spatstat]{envelope}}.
-If the function is not provided, then \code{\link[spatstat]{envelope}} is used also for generating
-the point patterns from the null hypothesis.}
+is called by \code{replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)} to make nsim
+simulations. Here \code{simfun.arg} is obtained by \code{fitfun(X)}.}
 
-\item{fitfun}{A function for estimating the parameters of the null model. If not given, then
-\code{\link[spatstat]{envelope}} takes care of the parameter estimation as well (and X should be a fitted
-model object). The function 'fitfun' should return the fitted model in the form that it can be directly
-passed to 'simfun' as the argument 'simfun.arg'.}
+\item{fitfun}{A function for estimating the parameters of the null model.
+The function should return the fitted model in the form that it can be directly
+passed to \code{simfun} as its argument.}
 
-\item{simfun.arg}{The parameter to be passed to simfun. The function simfun should handle
-with the structure of simfun.param. FIXME should be here or not?}
+\item{calcfun}{A function for calculating a summary function from a simulation of the model.
+The default is the identity function, i.e. the simulations from the model are functions themselves.}
 
-\item{testfuns}{A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}.
-A list of parameters should be provided for each test function that is to be used in the combined test.}
+\item{testfuns}{A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}
+if \code{X} is a point pattern of a fitted point process model of \pkg{spatstat}.
+A list of parameters should be provided for each test function that is to be used in the
+combined test.}
 
 \item{...}{Additional parameters to \code{\link[spatstat]{envelope}} in the case where only one test
-function is used. In that case, this is an alternative to providing the parameter in the argument
+function is used. In that case, this is an alternative to providing the parameters in the argument
 testfuns. If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null
 hypothesis (if simfun not provided), then also recall to specify how to generate the simulations.}
 
@@ -56,65 +63,82 @@ Must be one of the following: "two.sided" (default), "less" or "greater".
 The last two options only available for types \code{'rank'}, \code{'erl'},
 \code{'cont'} and \code{'area'}.}
 
-\item{r_min}{The minimum radius to include in the test.}
+\item{probs}{A two-element vector containing the lower and upper
+quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
+The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).}
 
-\item{r_max}{The maximum radius to include in the test. Note: cannot be larger than r-values used
+\item{r_min}{The minimum argument value to include in the test.}
+
+\item{r_max}{The maximum argument value to include in the test.
 in calculating functions by \code{\link[spatstat]{envelope}}.}
 
-\item{take_residual}{If (needed for visual reasons only) the theoretical or mean behaviour of the
-test function is reduced from the test functions. If TRUE, then: If \code{\link[spatstat]{envelope}}
-provides the theoretical value 'theo' for the simulated model, then this value is used. Otherwise,
-the theoretical function is taken as the mean of the simulations.}
+\item{take_residual}{Logical. If TRUE (needed for visual reasons only) the mean of the simulated
+functions is reduced from the functions in each first and second stage test.}
 
 \item{save.cons.envelope}{Logical flag indicating whether to save the unadjusted envelope test results.}
 
 \item{savefuns}{Logical flag indicating whether to save all the simulated function values.
-See \code{\link[spatstat]{envelope}}.}
-
-\item{savepatterns}{Logical flag indicating whether to save all the simulated point patterns.
-See \code{\link[spatstat]{envelope}}.}
+Similar to the same argument of \code{\link[spatstat]{envelope}}.}
 
 \item{verbose}{Logical flag indicating whether to print progress reports during the simulations.
-See \code{\link[spatstat]{envelope}}.}
+Similar to the same argument of \code{\link[spatstat]{envelope}}.}
 
 \item{MrkvickaEtal2017}{Logical. If TRUE, type is "st" or "qdir" and several test functions are used,
 then the combined scaled MAD envelope presented in Mrkvička et al. (2017) is calculated. Otherwise,
 the two-step procedure described in \code{\link{global_envelope_test}} is used for combining the tests.
-Default to FALSE.}
+Default to FALSE. The option kept for historical reasons.}
 
 \item{mc.cores}{The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
-(no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.}
+(no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
+Parallelization can be used in generating simulations and in calculating the second stage tests.}
 }
 \value{
-An object of class \code{global_envelope} or \code{combined_global_envelope}.
+An object of class \code{global_envelope}. See \code{\link{global_envelope_test}}.
 }
 \description{
 Adjusted global envelope tests.
 }
 \details{
-The specification of X is important here:
-
-1) If simfun = NULL and fitfun = NULL (default), then \code{\link[spatstat]{envelope}}
-is used for generating simulations under the null hypothesis and
+The specification of X, X.ls, fitfun, simfun is important here:
 \itemize{
-\item If X is a point pattern, the null hypothesis is CSR.
-\item If X is a fitted model, the null hypothesis is that model.
+\item If \code{X.ls} is provided, then the global envelope test is calculated based on
+functions in these objects. \code{X} should be a \code{curve_set} (see \code{\link{create_curve_set}})
+or an \code{\link[spatstat]{envelope}} object including the observed function and simulations
+from the tested model. \code{X.ls} should be a list of \code{curve_set} or
+\code{\link[spatstat]{envelope}} objects, where each component contains an "observed"
+function f that has been simulated from the model fitted to the data and the simulations
+that have been obtained from the same model that has been fitted to the "observed" f.
+The user has the responsibility that the functions have been generated correctly,
+the test is done based on these provided simulations.
+\item Otherwise,
+\itemize{
+  \item If \code{X} is a fitted (point process) model object of the R library \pkg{spatstat},
+then the simulations from this model are generated and summary functions for testing calculated
+by \code{\link[spatstat]{envelope}}. Which summary function to use and how to calculate it,
+can be passed to \code{\link[spatstat]{envelope}} either in \code{...} or \code{testfuns}.
+Unless otherwise specified the default function of \code{\link[spatstat]{envelope}},
+i.g. the K-function, is used. The argument \code{testfuns} should be used to specify the
+test functions in the case where one wants to base the test on several test functions.
+  \item If \code{X} is a \code{\link[spatstat]{ppp}} object, \code{simfun} should be
+used to specify how to generate simulations from the model that is be fitted to \code{X}
+by \code{fitfun}. If \code{simfun} and \code{fitfun} are not given, then
+\code{\link[spatstat]{envelope}} is used for simulations and model fitting and the complete
+spatial randomness (CSR) is tested (with intensity parameter).
+  \item For a general \code{X}, \code{simfun} and \code{fitfun} should be provided.
+The function \code{fitfun} is used for fitting the desired model M and the function \code{simfun}
+for simulating from a fitted model M. These functions should be coupled with each other such
+that the object returned by \code{fitfun} is directly accepted as the (single) argument in
+\code{simfun}.
+In the case, that the global envelope should not be calculated directly for \code{X} (\code{X} is
+not a function), \code{calcfun} can be used to specify how to calculate the function from
+\code{X} and from simulations generated by \code{simfun}.
+Special attention is needed in the correct specification of the functions, see examples.
+}
 }
 
-2) The user can provide the function for fitting the model (fitfun) and for simulating
-from the fitted model (simfun). These functions should be coupled with each other such
-that the object returned by 'fitfun' is directly accepted as the (single) argument in 'simfun'.
-Further X should then be an \code{\link[spatstat]{ppp}} object and 'fitfun' should accept as
-the argument an \code{\link[spatstat]{ppp}} object (X and further simulated point patterns).
-
-A note: The structure of the code, which utilizes \code{\link[spatstat]{envelope}} though an
-inner function, mimics the structure in the function \code{\link[spatstat]{dg.envelope}}
-in the use of \code{\link[spatstat]{envelope}}. However, this function allows for more general
-use as described above and for the different global envelope tests.
-
-For the rank envelope test, the test is the test described in Myllymäki et al. (2017) with the
-adjustment of Baddeley et al. (2017).
+For the rank envelope test, the global envelope test is the test described in
+Myllymäki et al. (2017) with the adjustment of Baddeley et al. (2017).
 For other test types, the test (also) uses the two-stage procedure of Dao and Genton (2014) with
 the adjustment of Baddeley et al. (2017).
 
