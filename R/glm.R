@@ -138,6 +138,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' @importFrom stats dummy.coef
 #' @importFrom parallel mclapply
 #' @examples
+#' \donttest{
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' res.tax_within_group <- graph.fglm(nsim = 999,
@@ -146,7 +147,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #'                                   curve_sets = GDPtax$curve_set,
 #'                                   factors = factors.df)
 #' plot(res.tax_within_group, plot_style="ggplot2")
-#'
+#' }
 graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        summaryfun = c("means", "contrasts"),
                        savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1, mc.args = NULL) {
@@ -285,6 +286,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' @seealso \code{\link{graph.fglm}}, \code{\link{frank.fglm2d}}
 #' @export
 #' @examples
+#' \donttest{
 #' data("imageset1")
 #' # Testing discrete factor group
 #' res.g <- graph.fglm2d(nsim = 99,
@@ -315,6 +317,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #'                                            z = imageset1$z))
 #' par(mfrow=c(1,3))
 #' plot(res.z)
+#' }
 graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
   if(class(image_sets)[1] == "image_set") image_sets <- list(image_sets)
   obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
@@ -347,6 +350,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' @seealso \code{\link{frank.fglm}}, \code{\link{graph.fglm2d}}
 #' @export
 #' @examples
+#' \donttest{
 #' data("imageset1")
 #' # Testing discrete factor group
 #' res.g <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
@@ -367,6 +371,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #'                                            z = imageset1$z))
 #' par(mfrow=c(1,3))
 #' plot(res.z)
+#' }
 frank.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
   if(class(image_sets)[1] == "image_set") image_sets <- list(image_sets)
   obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
