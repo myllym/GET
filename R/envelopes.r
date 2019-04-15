@@ -918,6 +918,9 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
              plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
            })
   }
+  else {
+    plot.fboxplot(x, plot_style=plot_style, outliers=outliers, bp.col=bp.col, cr.col=cr.col, ...)
+  }
 }
 
 
