@@ -881,15 +881,14 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), level = 1,
                           outliers = TRUE, bp.col = 2, cr.col = 1, ...) {
   plot_style <- match.arg(plot_style)
+  if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   if(outliers) curve_sets <- attr(x, "curve_sets") else curve_sets <- NULL
   cr <- x
   attr(x, "level2_ge")$lo <- attr(attr(x, "level2_ge"), "whisker.lo")
   attr(x, "level2_ge")$hi <- attr(attr(x, "level2_ge"), "whisker.hi") # Functional boxplot
 
-  if(level == 2) {
-    plot.fboxplot(x, plot_style=plot_style, outliers=outliers, bp.col=bp.col, cr.col=cr.col, ...)
-  }
-  else { # Combined test, level 1 plots
+  # Combined test, level 1 plots
+  if(level == 1) {
     # Set also first level bounds of x to whiskers
     for(i in 1:length(x)) {
       x[[i]]$lo <- attr(x[[i]], "whisker.lo")
