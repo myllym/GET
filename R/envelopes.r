@@ -659,6 +659,7 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #' @export
 #' @seealso \code{\link{global_envelope_test}}
+#' @aliases global_envelope
 #' @examples
 #' ## A central region of a set of functions
 #' #----------------------------------------
