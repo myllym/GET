@@ -197,20 +197,25 @@ env_main_default <- function(x, digits=3, alternative=attr(x, "einfo")$alternati
 env_ylim_default <- function(x, use_ggplot2) {
   if(!inherits(x, "list")) x <- list(x)
   if(!use_ggplot2)
-    switch(attr(x[[1]], "einfo")$alternative,
-            two.sided = {
-              ylim <- c(do.call(min, lapply(x, function(x) min(x[['obs']],x[['lo']],x[['hi']],x[['central']])), quote=FALSE),
-                        do.call(max, lapply(x, function(x) max(x[['obs']],x[['lo']],x[['hi']],x[['central']])), quote=FALSE))
-            },
-            less = {
-              ylim <- c(do.call(min, lapply(x, function(x) min(x[['obs']],x[['lo']],x[['central']])), quote=FALSE),
-                        do.call(max, lapply(x, function(x) max(x[['obs']],x[['lo']],x[['central']])), quote=FALSE))
-            },
-            greater = {
-              ylim <- c(do.call(min, lapply(x, function(x) min(x[['obs']],x[['hi']],x[['central']])), quote=FALSE),
-                        do.call(max, lapply(x, function(x) max(x[['obs']],x[['hi']],x[['central']])), quote=FALSE))
-            })
+    ylim <- lapply(x, {
+      function(y) {
+        switch(attr(y, "einfo")$alternative,
+               two.sided = {
+                 ylim <- c(min(y[['obs']],y[['lo']],y[['hi']],y[['central']]),
+                           max(y[['obs']],y[['lo']],y[['hi']],y[['central']]))
+               },
+               less = {
+                 ylim <- c(min(y[['obs']],y[['lo']],y[['central']]),
+                           max(y[['obs']],y[['lo']],y[['central']]))
+               },
+               greater = {
+                 ylim <- c(min(y[['obs']],y[['hi']],y[['central']]),
+                           max(y[['obs']],y[['hi']],y[['central']]))
+               })
+      }
+    })
   else ylim <- NULL
+  if(length(ylim)==1) ylim <- unlist(ylim)
   ylim
 }
 
