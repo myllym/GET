@@ -344,7 +344,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         if(length(ylab) == 1) ylab <- rep(ylab, times=n_of_plots)
         tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
         if(!is.null(curve_sets)) {
-          curve_sets <- combine_curve_sets(curve_sets)
+          curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
         }
         for(i in 1:n_of_plots) {
             ylim <- c(min(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
