@@ -279,10 +279,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
 #
 # @inheritParams env_dotplot
 # @param x An 'global_envelope' object or a list of them.
-# @param separate_yaxes Logical (default TRUE). If TRUE, then separate y-axes are used for
-# different parts of a combined test.
-# @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
-# number of columns for figures. Default 2.
+# @param max_ncols_of_plots The maximum number of columns for figures. Default 2.
 # @param env.col The color for the envelope lines. Default 1 (black).
 # @param nticks The number of ticks on the xaxis, if the xaxis is re-ticked for combined tests.
 # @param obs.type The line type of the observed function (if exists).
@@ -294,9 +291,10 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
 #' @importFrom graphics axis
 #' @importFrom graphics abline
 env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
-                           separate_yaxes = TRUE, max_ncols_of_plots = 2, add = FALSE, env.col = 1,
+                           max_ncols_of_plots = 2, add = FALSE, env.col = 1,
                            nticks = 5, curve_sets = NULL, obs.type = "l", ...) {
     if(!inherits(x, "list")) x <- list(x)
+    Nfunc <- length(x)
     # Handle combined tests; correct labels on x-axis
     # a) if x is a list of global_envelope objects
     # b) if x[['r']] contains repeated values (when length(x) == 1)
@@ -304,7 +302,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     alt <- attr(x[[1]], "einfo")$alternative
     x <- rdata$x_vec
     # Plot
-    if(!separate_yaxes) {
+    if(Nfunc==1) {
         if(!rdata$retick_xaxis) {
             if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                     type="l", lty=3, lwd=2, ...)
@@ -405,11 +403,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 # @param ylim See \code{\link{plot.default}}.
 # @param xlab See \code{\link{plot.default}}.
 # @param ylab See \code{\link{plot.default}}.
-# @param separate_yaxes Logical (default TRUE). If TRUE, then separate y-axes are used for
-# different parts of a combined test.
-# @param labels Labels for the separate plots. Ignored if separate_yaxes is FALSE.
-# @param max_ncols_of_plots If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
-# number of columns for figures. Default 2.
+# @param labels Labels for the separate plots.
+# @param max_ncols_of_plots The maximum number of columns for figures. Default 2.
 # @param labels Labels for components of the combined tests.
 # @param nticks The number of ticks on the xaxis, if the xaxis is re-ticked for combined tests.
 # @param curve_sets If provided, then curves going outside the envelope are plotted.
@@ -428,9 +423,10 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 guides
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
-                       separate_yaxes = TRUE, max_ncols_of_plots = 2,
+                       max_ncols_of_plots = 2,
                        labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL) {
     if(!inherits(x, "list")) x <- list(x)
+    Nfunc <- length(x)
     if(!is.null(x2)) {
       if(!inherits(x2, "list")) x2 <- list(x2)
       if(length(x) != length(x2)) {
@@ -468,158 +464,157 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       }
     }
 
-    if(!separate_yaxes | is.null(rdata$r_values_newstart_id)) {
-        if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
-        if(is.null(x[['obs']])) {
-          df <- data.frame(r = x[['r']],
-                           curves = x[['central']],
-                           type = factor("Central function", levels = "Central function"),
-                           lower = x[['lo']],
-                           upper = x[['hi']],
-                           main = main)
-          if(!is.null(x2)) {
-            df$lower2 <- x2[['lo']]
-            df$upper2 <- x2[['hi']]
-          }
+    if(Nfunc==1 | is.null(rdata$r_values_newstart_id)) {
+      if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
+      if(is.null(x[['obs']])) {
+        df <- data.frame(r = x[['r']],
+                         curves = x[['central']],
+                         type = factor("Central function", levels = "Central function"),
+                         lower = x[['lo']],
+                         upper = x[['hi']],
+                         main = main)
+        if(!is.null(x2)) {
+          df$lower2 <- x2[['lo']]
+          df$upper2 <- x2[['hi']]
         }
-        else {
-          df <- data.frame(r = rep(x[['r']], times=2),
-                           curves = c(x[['obs']], x[['central']]),
-                           type = factor(rep(c("Data function", "Central function"),
-                                             each=length(x[['r']])),
-                                         levels=c("Central function", "Data function")),
-                           lower = rep(x[['lo']], times=2),
-                           upper = rep(x[['hi']], times=2),
-                           main = main)
-          if(!is.null(x2)) {
-            df$lower2 <- rep(x2[['lo']], times=2)
-            df$upper2 <- rep(x2[['hi']], times=2)
-          }
+      }
+      else {
+        df <- data.frame(r = rep(x[['r']], times=2),
+                         curves = c(x[['obs']], x[['central']]),
+                         type = factor(rep(c("Data function", "Central function"),
+                                           each=length(x[['r']])),
+                                       levels=c("Central function", "Data function")),
+                         lower = rep(x[['lo']], times=2),
+                         upper = rep(x[['hi']], times=2),
+                         main = main)
+        if(!is.null(x2)) {
+          df$lower2 <- rep(x2[['lo']], times=2)
+          df$upper2 <- rep(x2[['hi']], times=2)
         }
-        if(is.null(x2)) {
-          p <- ( ggplot2::ggplot()
-                 + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
-                                        fill = 'grey59', alpha = 1)
-          )
-        }
-        else {
-          p <- ( ggplot2::ggplot()
-                 + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
-                                        fill = 'grey80', alpha = 1)
-                 + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower2, ymax = ~upper2),
-                                        fill = 'grey59', alpha = 1)
-          )
-        }
-        p <- ( p + ggplot2::geom_line(data = df, ggplot2::aes_(x = ~r, y = ~curves, group = ~type,
-                                    linetype = ~type, size = ~type))
-                    + ggplot2::facet_grid('~ main', scales = 'free')
-                    + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
-                    + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
-                    + ggplot2::scale_size_manual(values = size.values, name = '')
-                    + ThemePlain(base_size=base_size)
-                    )
-        if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
-        if(!is.null(outliers)) {
-          outliers.df <- data.frame(r = rep(x[['r']], times=counter),
-                                    curves = outliers,
-                                    id = rep(1:counter, each=length(x[['r']])))
-          p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
-        }
-        if(rdata$retick_xaxis) {
-            p <- p + ggplot2::scale_x_continuous(name = xlab,
-                                                 breaks = rdata$loc_break_values,
-                                                 labels = paste(round(rdata$r_break_values, digits=2)),
-                                                 limits = range(rdata$new_r_values))
-            p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id],
-                                         linetype = "dotted")
-        }
-        else p <- p + ggplot2::scale_x_continuous(name = xlab)
+      }
+      if(is.null(x2)) {
+        p <- ( ggplot2::ggplot()
+               + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
+                                      fill = 'grey59', alpha = 1)
+        )
+      }
+      else {
+        p <- ( ggplot2::ggplot()
+               + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
+                                      fill = 'grey80', alpha = 1)
+               + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower2, ymax = ~upper2),
+                                      fill = 'grey59', alpha = 1)
+        )
+      }
+      p <- ( p + ggplot2::geom_line(data = df, ggplot2::aes_(x = ~r, y = ~curves, group = ~type,
+                                                             linetype = ~type, size = ~type))
+             + ggplot2::facet_grid('~ main', scales = 'free')
+             + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
+             + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+             + ggplot2::scale_size_manual(values = size.values, name = '')
+             + ThemePlain(base_size=base_size)
+      )
+      if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
+      if(!is.null(outliers)) {
+        outliers.df <- data.frame(r = rep(x[['r']], times=counter),
+                                  curves = outliers,
+                                  id = rep(1:counter, each=length(x[['r']])))
+        p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
+      }
+      if(rdata$retick_xaxis) {
+        p <- p + ggplot2::scale_x_continuous(name = xlab,
+                                             breaks = rdata$loc_break_values,
+                                             labels = paste(round(rdata$r_break_values, digits=2)),
+                                             limits = range(rdata$new_r_values))
+        p <- p + ggplot2::geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id],
+                                     linetype = "dotted")
+      }
+      else p <- p + ggplot2::scale_x_continuous(name = xlab)
     }
     else {
-        if(!is.null(ylim)) cat("Note: \"ylim\" ignored as separate yaxes are used.\n")
-        n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
-        ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
-        nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
-        if(is.null(labels)) labels <- paste(1:n_of_plots)
-        if(length(labels)!=n_of_plots) {
-            if(length(labels)==1) {
-                labels <- paste(labels, " - ", 1:n_of_plots, sep="")
-                warning(paste("Consider giving labels as a vector of length ", n_of_plots,
-                              " containing the label for each test function/vector used.\n", sep=""))
-            }
-            else {
-                warning("The length of the vector labels is unreasonable. Setting labels to empty.\n")
-                labels <- rep("", times=n_of_plots)
-            }
-        }
-
-        tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
-        func_labels <- NULL
-        for(i in 1:(length(tmp_indeces)-1)) {
-            func_labels <- c(func_labels, rep(labels[i], times=tmp_indeces[i+1]-tmp_indeces[i]))
-        }
-
-        if(is.null(x[['obs']])) {
-          df <- data.frame(r = x[['r']],
-                           curves =x[['central']],
-                           type = factor("Central function", levels="Central function"),
-                           lower = x[['lo']],
-                           upper = x[['hi']],
-                           main = main,
-                           test_function = factor(func_labels, levels=labels))
-          if(!is.null(x2)) {
-            df$lower2 <- x2[['lo']]
-            df$upper2 <- x2[['hi']]
-          }
+      n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
+      ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
+      nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
+      if(is.null(labels)) labels <- paste(1:n_of_plots)
+      if(length(labels)!=n_of_plots) {
+        if(length(labels)==1) {
+          labels <- paste(labels, " - ", 1:n_of_plots, sep="")
+          warning(paste("Consider giving labels as a vector of length ", n_of_plots,
+                        " containing the label for each test function/vector used.\n", sep=""))
         }
         else {
-          df <- data.frame(r = rep(x[['r']], times=2),
-                           curves = c(x[['obs']], x[['central']]),
-                           type = factor(rep(c("Data function", "Central function"),
-                                             each=length(x[['r']])),
-                                         levels=c("Central function", "Data function")),
-                           lower = rep(x[['lo']], times=2),
-                           upper = rep(x[['hi']], times=2),
-                           main = main,
-                           test_function = factor(func_labels, levels=labels))
-          if(!is.null(x2)) {
-            df$lower2 <- rep(x2[['lo']], times=2)
-            df$upper2 <- rep(x2[['hi']], times=2)
-          }
+          warning("The length of the vector labels is unreasonable. Setting labels to empty.\n")
+          labels <- rep("", times=n_of_plots)
         }
-        if(is.null(x2)) {
-          p <- ( ggplot2::ggplot()
-                 + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
-                                        fill = 'grey59', alpha = 1)
-          )
+      }
+
+      tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
+      func_labels <- NULL
+      for(i in 1:(length(tmp_indeces)-1)) {
+        func_labels <- c(func_labels, rep(labels[i], times=tmp_indeces[i+1]-tmp_indeces[i]))
+      }
+
+      if(is.null(x[['obs']])) {
+        df <- data.frame(r = x[['r']],
+                         curves =x[['central']],
+                         type = factor("Central function", levels="Central function"),
+                         lower = x[['lo']],
+                         upper = x[['hi']],
+                         main = main,
+                         test_function = factor(func_labels, levels=labels))
+        if(!is.null(x2)) {
+          df$lower2 <- x2[['lo']]
+          df$upper2 <- x2[['hi']]
         }
-        else {
-          p <- ( ggplot2::ggplot()
-                 + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
-                                        fill = 'grey80', alpha = 1)
-                 + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower2, ymax = ~upper2),
-                                        fill = 'grey59', alpha = 1)
-          )
+      }
+      else {
+        df <- data.frame(r = rep(x[['r']], times=2),
+                         curves = c(x[['obs']], x[['central']]),
+                         type = factor(rep(c("Data function", "Central function"),
+                                           each=length(x[['r']])),
+                                       levels=c("Central function", "Data function")),
+                         lower = rep(x[['lo']], times=2),
+                         upper = rep(x[['hi']], times=2),
+                         main = main,
+                         test_function = factor(func_labels, levels=labels))
+        if(!is.null(x2)) {
+          df$lower2 <- rep(x2[['lo']], times=2)
+          df$upper2 <- rep(x2[['hi']], times=2)
         }
-        p <- (p + ggplot2::geom_line(data = df, ggplot2::aes_(x = ~r, y = ~curves, group = ~type,
-                                    linetype = ~type, size = ~type))
-                + ggplot2::facet_wrap(~ test_function, scales="free",
-                                      nrow=nrows_of_plots, ncol=ncols_of_plots)
-                + ggplot2::scale_y_continuous(name = ylab)
-                + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
-                + ggplot2::scale_size_manual(values = size.values, name = '')
-                + ThemePlain(base_size=base_size)
-                + ggplot2::labs(title=main)
+      }
+      if(is.null(x2)) {
+        p <- ( ggplot2::ggplot()
+               + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
+                                      fill = 'grey59', alpha = 1)
         )
-        if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
-        if(!is.null(outliers)) {
-          outliers.df <- data.frame(r = rep(x[['r']], times=counter),
-                                    curves = outliers,
-                                    id = rep(1:counter, each=length(x[['r']])),
-                                    test_function = factor(func_labels, levels=labels))
-          p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
-        }
-        p <- p + ggplot2::scale_x_continuous(name = xlab)
+      }
+      else {
+        p <- ( ggplot2::ggplot()
+               + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower, ymax = ~upper),
+                                      fill = 'grey80', alpha = 1)
+               + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~lower2, ymax = ~upper2),
+                                      fill = 'grey59', alpha = 1)
+        )
+      }
+      p <- (p + ggplot2::geom_line(data = df, ggplot2::aes_(x = ~r, y = ~curves, group = ~type,
+                                                            linetype = ~type, size = ~type))
+            + ggplot2::facet_wrap(~ test_function, scales="free",
+                                  nrow=nrows_of_plots, ncol=ncols_of_plots)
+            + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
+            + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
+            + ggplot2::scale_size_manual(values = size.values, name = '')
+            + ThemePlain(base_size=base_size)
+            + ggplot2::labs(title=main)
+      )
+      if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
+      if(!is.null(outliers)) {
+        outliers.df <- data.frame(r = rep(x[['r']], times=counter),
+                                  curves = outliers,
+                                  id = rep(1:counter, each=length(x[['r']])),
+                                  test_function = factor(func_labels, levels=labels))
+        p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
+      }
+      p <- p + ggplot2::scale_x_continuous(name = xlab)
     }
     # Return
     p
