@@ -628,7 +628,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
 
 # A helper function for plotting 2d images
 # See plot.global_envelope_2d for description of parameters.
-env_2d_plot_helper <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign'),
+env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign'),
                                sign.col = c(255, 0, 0), transparency = 85, main, ...) {
   var <- match.arg(var)
   extraargs <- list(...)

@@ -247,11 +247,11 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' @method plot global_envelope_2d
 #' @export
 plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, ...) {
-  env_2d_plot_helper(x, var='obs', sign.col=sign.col,transparency=transparency, ...)
-  env_2d_plot_helper(x, var='lo', sign.col=sign.col,transparency=transparency, ...)
-  env_2d_plot_helper(x, var='hi', sign.col=sign.col,transparency=transparency, ...)
-  env_2d_plot_helper(x, var='lo.sign', sign.col=sign.col,transparency=transparency, ...)
-  env_2d_plot_helper(x, var='hi.sign', sign.col=sign.col,transparency=transparency, ...)
+  env2d_basic_plot(x, var='obs', sign.col=sign.col,transparency=transparency, ...)
+  env2d_basic_plot(x, var='lo', sign.col=sign.col,transparency=transparency, ...)
+  env2d_basic_plot(x, var='hi', sign.col=sign.col,transparency=transparency, ...)
+  env2d_basic_plot(x, var='lo.sign', sign.col=sign.col,transparency=transparency, ...)
+  env2d_basic_plot(x, var='hi.sign', sign.col=sign.col,transparency=transparency, ...)
 }
 
 #' Plot method for the class 'combined_global_envelope_2d'
@@ -278,10 +278,10 @@ plot.combined_global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transpa
                                        "Upper envelope",
                                        "Sign. below (red)",
                                        "Sign. above (red)"), sep="")
-    env_2d_plot_helper(x[[i]], var='obs', sign.col=sign.col, transparency=transparency, main=main[1], ...)
-    env_2d_plot_helper(x[[i]], var='lo', sign.col=sign.col, transparency=transparency, main=main[2], ...)
-    env_2d_plot_helper(x[[i]], var='hi', sign.col=sign.col, transparency=transparency, main=main[3], ...)
-    env_2d_plot_helper(x[[i]], var='lo.sign', sign.col=sign.col, transparency=transparency, main=main[4], ...)
-    env_2d_plot_helper(x[[i]], var='hi.sign', sign.col=sign.col, transparency=transparency, main=main[5], ...)
+    env2d_basic_plot(x[[i]], var='obs', sign.col=sign.col, transparency=transparency, main=main[1], ...)
+    env2d_basic_plot(x[[i]], var='lo', sign.col=sign.col, transparency=transparency, main=main[2], ...)
+    env2d_basic_plot(x[[i]], var='hi', sign.col=sign.col, transparency=transparency, main=main[3], ...)
+    env2d_basic_plot(x[[i]], var='lo.sign', sign.col=sign.col, transparency=transparency, main=main[4], ...)
+    env2d_basic_plot(x[[i]], var='hi.sign', sign.col=sign.col, transparency=transparency, main=main[5], ...)
   }
 }
