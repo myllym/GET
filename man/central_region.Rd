@@ -2,6 +2,7 @@
 % Please edit documentation in R/envelopes.r
 \name{central_region}
 \alias{central_region}
+\alias{global_envelope}
 \title{Central region / Global envelope}
 \usage{
 central_region(curve_sets, type = "erl", coverage = 0.5,

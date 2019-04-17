@@ -8,8 +8,7 @@
    main, ylim, xlab, ylab,
    color_outside = TRUE, env.col = 1, base_size = 15,
    labels = NULL, add = FALSE, digits=3,
-   level = 1, separate_yaxes = TRUE, max_ncols_of_plots = 2,
-   nticks = 5, ...)
+   level = 1, max_ncols_of_plots = 2, nticks = 5, ...)
 }
 \arguments{
 \item{x}{An 'combined_global_envelope' object}
@@ -38,7 +37,7 @@ outside the envelope. Currently red color is used. Relevant only for \code{plot_
 
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
-Labels for the separate plots, ignored if separate_yaxes is FALSE.}
+Otherwise labels for the separate plots.}
 
 \item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
 Not available for \code{plot_style = "ggplot2"}.}
@@ -50,15 +49,10 @@ if using the default main.}
 1 for plotting the combined global envelopes (default and most often wanted) or
 2 for plotting the second level test result.}
 
-\item{separate_yaxes}{Logical (default FALSE). If TRUE, then separate y-axes are used for
-different parts of a combined test. If FALSE, then the components are displayed one next to each other
-with a joint y-axis.}
+\item{max_ncols_of_plots}{The maximum number of columns for the figures. Default 2.
+(Relates to the number of curve_sets that have been combined.)}
 
-\item{max_ncols_of_plots}{If separate_yaxes is TRUE, then max_ncols_of_plots gives the maximum
-number of columns for figures. Default 2. Relevant only for combined tests with several test functions.}
-
-\item{nticks}{The number of ticks on the xaxis. Relevant only for combined tests with
-\code{separate_yaxes = TRUE}.}
+\item{nticks}{The number of ticks on the xaxis.}
 
 \item{...}{Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.}
 }
