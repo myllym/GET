@@ -510,6 +510,7 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
              ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
              nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
              par(mfrow=c(nrows_of_plots, ncols_of_plots))
+             if(is.vector(ylim) & length(ylim)==2) ylim <- rep(list(ylim), times=n_of_plots)
              for(i in 1:length(x))
                spatstat::plot.fv(x[[i]],
                                  main=labels[i], ylim=ylim[[i]], xlab=xlab[[i]], ylab=ylab[[i]], add=FALSE, ...)
