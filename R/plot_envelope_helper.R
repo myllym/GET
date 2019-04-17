@@ -341,26 +341,32 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
         nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
         graphics::par(mfrow=c(nrows_of_plots, ncols_of_plots))
-        cat("Note: \"ylim\" ignored as separate plots are produced.\n")
-        if(length(main) != n_of_plots) cat("Note: \"main\" Ignored.\n")
+        tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
+        if(is.null(ylim) | !(inherits(ylim, "list") && length(ylim) == n_of_plots)) {
+          if(is.vector(ylim) & length(ylim)==2) ylim <- rep(list(ylim), times=n_of_plots)
+          else {
+            ylim <- list()
+            for(i in 1:n_of_plots)
+              ylim[[i]] <- c(min(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                                 x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                                 x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]),
+                             max(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                                 x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+                                 x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
+          }
+        }
+        if(length(main) != n_of_plots) { main <- NULL; cat("Note: \"main\" Ignored.\n") }
         if(length(xlab) == 1) xlab <- rep(xlab, times=n_of_plots)
         if(length(ylab) == 1) ylab <- rep(ylab, times=n_of_plots)
-        tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
         if(!is.null(curve_sets)) {
           curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE, silent=TRUE)
         }
         for(i in 1:n_of_plots) {
-            ylim <- c(min(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                          x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                          x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]),
-                      max(x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                          x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                          x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
             if(!add)
               graphics::plot(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                             main=main[i], xlab=xlab[i], ylab=ylab[i],
-                             type="l", lty=3, lwd=2, ylim=ylim, ...)
+                             main=main[i], xlab=xlab[[i]], ylab=ylab[[i]],
+                             type="l", lty=3, lwd=2, ylim=ylim[[i]], ...)
             else
               graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
