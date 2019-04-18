@@ -132,8 +132,14 @@ print.image_set <- function(x, ...) {
 #' @export
 plot.image_set <- function(x, idx = 1, obs = TRUE, ...) {
   if(obs) {
-    if(!((length(idx)==1 && idx == 1) | all(idx %in% 1:dim(x$obs)[3]))) stop("Unreasonable indices \'idx\'.\n")
-    obs <- x$obs
+    if(length(dim(x$obs))==2) {
+      idx <- 1
+      obs <- array(x$obs, dim=c(dim(x$obs),1))
+    }
+    else {
+      if(!all(idx %in% 1:dim(x$obs)[3])) stop("Unreasonable indices \'idx\'.\n")
+      obs <- x$obs
+    }
   }
   else {
     if(is.null(x$sim_m) || !all(idx %in% 1:dim(x$sim_m)[3])) stop("Unreasonable indices \'idx\'.\n")
