@@ -4,17 +4,25 @@
 \alias{plot.combined_global_envelope_2d}
 \title{Plot method for the class 'combined_global_envelope_2d'}
 \usage{
-\method{plot}{combined_global_envelope_2d}(x, sign.col = c(255, 0, 0), transparency = 85, ...)
+\method{plot}{combined_global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
+ fixedscales = 2, sign.col = "red", transparency = 85/255,
+ contours = TRUE, main = NULL, ...)
 }
 \arguments{
 \item{x}{an 'combined_global_envelope_2d' object}
 
-\item{sign.col}{A vector of length 3 giving the color for the significant regions.
-The elements should correspond to red, green, blue of \code{\link[grDevices]{rgb}}.
-Default to red (255, 0, 0).}
+\item{plot_style}{Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)}
 
-\item{transparency}{A number between 0 and 255 (default 85, 33% transparency).
-Corresponds to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.}
+\item{fixedscales}{0, 1 or 2. See details.}
+
+\item{sign.col}{The color for the significant regions. Default to "red".}
+
+\item{transparency}{A number between 0 and 1 (default 85/255, 33% transparency).
+Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.}
+
+\item{contours}{Logical. Whether to draw contour lines to the observed function and the lower and upper envelope.}
+
+\item{main}{The overall main. Default exists.}
 
 \item{...}{Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.}
 }
@@ -27,4 +35,8 @@ If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values 
 minimum and maximum of the function values is used for each image separately.
 If \code{col} is provided, the same specification will be used for each produced plot,
 which may make it easier to compare the figures with each other.
+
+If fixedscales is FALSE (or 0) all images will have separate scale.
+If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
+If fixedscales is 2 all images will have common scale.
 }

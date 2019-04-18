@@ -30,7 +30,6 @@ data("imageset1")
 res <- frank.fanova2d(nsim = 19, # Increase nsim for serious analysis!
                       image_set = imageset1$image_set,
                       groups = imageset1$Group)
-par(mfrow=c(1,3))
 plot(res)
 }
 \references{

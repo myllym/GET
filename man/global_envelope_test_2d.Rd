@@ -77,12 +77,8 @@ if(require(spatstat, quietly=TRUE)) {
   # Constract the global envelope test for the (2D) raw residuals
   iset <- create_image_set(list(obs=obs, sim_m=sim))
   res <- global_envelope_test_2d(iset)
-  par(mfrow=c(2,3))
   plot(res)
-  # The same colors for all plots:
-  par(mfrow=c(2,3))
-  plot(res, col=spatstat::colourmap(grDevices::gray(0:255/255),
-                   range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
+  plot(res, fixedscales=FALSE)
 }
 }
 \references{
