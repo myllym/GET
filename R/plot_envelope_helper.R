@@ -693,7 +693,7 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
              }
              else spatstat::plot.im(obs.im, main=main, ...)
              if(sum(x$obs < x$lo) > 0)
-               spatstat::plot.im(spatstat::im(x$obs < x$lo, xcol=x$r[[1]], yrow=x$r[[2]]),
+               spatstat::plot.im(spatstat::as.im(list(x=x$r[[1]], y=x$r[[2]], z=x$obs < x$lo)),
                                  col=c(transparent, red), add=TRUE)
            }
          },
@@ -709,7 +709,7 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
              }
              else spatstat::plot.im(obs.im, main=main, ...)
              if(sum(x$obs > x$hi) > 0)
-               spatstat::plot.im(spatstat::im(x$obs > x$hi, xcol=x$r[[1]], yrow=x$r[[2]]),
+               spatstat::plot.im(spatstat::as.im(list(x=x$r[[1]], y=x$r[[2]], z=x$obs > x$hi)),
                                  col=c(transparent, red), add=TRUE)
            }
          })
