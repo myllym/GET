@@ -234,7 +234,8 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' If \code{col} is provided, the same specification will be used for each produced plot,
 #' which may make it easier to compare the figures with each other.
 #'
-#' @usage \method{plot}{global_envelope_2d}(x, sign.col = c(255, 0, 0), transparency = 85, ...)
+#' @usage \method{plot}{global_envelope_2d}(x, sign.col = c(255, 0, 0), transparency = 85,
+#'  contours = TRUE, ...)
 #'
 #' @param x an 'global_envelope_2d' object
 #' @param sign.col A vector of length 3 giving the color for the significant regions.
@@ -242,16 +243,17 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' Default to red (255, 0, 0).
 #' @param transparency A number between 0 and 255 (default 85, 33% transparency).
 #' Corresponds to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
+#' @param contours Logical. Whether to draw contours on the observed function and the lower and upper envelope.
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot global_envelope_2d
 #' @export
-plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, ...) {
-  env2d_basic_plot(x, var='obs', sign.col=sign.col,transparency=transparency, ...)
-  env2d_basic_plot(x, var='lo', sign.col=sign.col,transparency=transparency, ...)
-  env2d_basic_plot(x, var='hi', sign.col=sign.col,transparency=transparency, ...)
-  env2d_basic_plot(x, var='lo.sign', sign.col=sign.col,transparency=transparency, ...)
-  env2d_basic_plot(x, var='hi.sign', sign.col=sign.col,transparency=transparency, ...)
+plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, contours = TRUE, ...) {
+  env2d_basic_plot(x, var='obs', sign.col=sign.col,transparency=transparency, contours=contours, ...)
+  env2d_basic_plot(x, var='lo', sign.col=sign.col,transparency=transparency, contours=contours, ...)
+  env2d_basic_plot(x, var='hi', sign.col=sign.col,transparency=transparency, contours=contours, ...)
+  env2d_basic_plot(x, var='lo.sign', sign.col=sign.col,transparency=transparency, contours=contours, ...)
+  env2d_basic_plot(x, var='hi.sign', sign.col=sign.col,transparency=transparency, contours=contours, ...)
 }
 
 #' Plot method for the class 'combined_global_envelope_2d'
