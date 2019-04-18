@@ -313,7 +313,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
           if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                   type="l", lty=3, lwd=2, xaxt="n", ...)
           else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, xaxt="n", ...)
-          if(!is.null(curve_sets) && class(curve_sets)[1] == "list") curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE, silent=TRUE)
+          if(!is.null(curve_sets) && class(curve_sets)[1] == "list") curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
         }
         if(alt != "greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
         if(alt != "less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
@@ -360,7 +360,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         if(length(xlab) == 1) xlab <- rep(xlab, times=n_of_plots)
         if(length(ylab) == 1) ylab <- rep(ylab, times=n_of_plots)
         if(!is.null(curve_sets)) {
-          curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE, silent=TRUE)
+          curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
         }
         for(i in 1:n_of_plots) {
             if(!add)
@@ -462,7 +462,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     counter <- 0
     outliers <- NULL
     if(!is.null(curve_sets)) {
-      if(inherits(curve_sets, "list")) curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE, silent=TRUE)
+      if(inherits(curve_sets, "list")) curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
       for(j in 1:ncol(curve_sets$obs)) {
         if(any(curve_sets$obs[,j] < x[['lo']] | curve_sets$obs[,j] > x[['hi']])) {
           outliers <- c(outliers, curve_sets$obs[,j])
