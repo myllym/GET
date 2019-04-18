@@ -307,6 +307,7 @@ plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic
   switch(plot_style,
          basic = {
            sign.col <- as.numeric(col2rgb(sign.col, alpha = FALSE))
+           transparency <- 255*transparency
            for(i in 1:length(x)) {
              main.plots <- paste(names(x)[i], ": ", c("Observed",
                                                       "Lower envelope",
