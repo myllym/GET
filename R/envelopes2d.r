@@ -300,6 +300,7 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
 #' @export
 #' @importFrom ggplot2 facet_grid vars
 #' @importFrom gridExtra grid.arrange
+#' @importFrom grDevices col2rgb
 plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
                                              fixedscales = 2, sign.col = "red", transparency = 85/255,
                                              contours = TRUE, main = NULL, ...) {
