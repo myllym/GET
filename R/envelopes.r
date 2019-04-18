@@ -274,7 +274,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
 
 # Functionality for combined_central_region and combined_global_envelope_test (one-step procedure)
 combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
-  curve_set <- combine_curve_sets(curve_sets)
+  curve_set <- combine_curve_sets(curve_sets, equalr=TRUE)
   switch(CR_or_GET,
          CR = {
            res <- individual_central_region(curve_set, coverage=coverage, ...)
