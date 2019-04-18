@@ -718,3 +718,82 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
            }
          })
 }
+
+# 2d plots with ggplot2
+#----------------------
+globalVariables(c("main", "label"))
+
+# A helper function for env2d_ggplot2
+#' @importFrom ggplot2 ggplot geom_raster aes geom_contour coord_fixed .data labs
+env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) {
+  g <- ggplot() + geom_raster(data=df, aes(x=.data$x, y=.data$y, fill=.data$z))
+  g <- g + geom_raster(data=df[df$signif,], aes(x=.data$x, y=.data$y), fill=sign.col, alpha=transparency)
+  if(contours) g <- g + geom_contour(data=df[df$contour,], aes(x=.data$x, y=.data$y, z=.data$z))
+  g <- g + coord_fixed(ratio=1)
+  g <- g + labs(x="", y="", fill="")
+  g
+}
+
+#' @importFrom gridExtra grid.arrange
+#' @importFrom ggplot2 facet_wrap ggtitle theme element_blank vars
+env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", insertmain=TRUE) {
+  namelist <- list(obs = "Observed",
+                   lo = "Lower envelope" ,
+                   hi = "Upper envelope" ,
+                   lo.sign = "Significance: below (red)" ,
+                   hi.sign = "Significance: above (red)" )
+  if(!missing(main) && !is.null(main) && insertmain) {
+    for (i in seq_along(namelist)) {
+      namelist[[i]] <- paste(main, ": ", namelist[[i]])
+    }
+  }
+
+  df <- expand.grid(x=x$r[[1]], y=x$r[[2]])
+  adddf <- function(df, z, name, label=namelist[[name]], contour=FALSE, signif=FALSE) {
+    df$z <- c(z)
+    df$name <- name
+    df$label <- factor(label)
+    df$contour <- contour
+    df$signif <- c(signif)
+    df$main <- main
+    df
+  }
+  dfs <- list()
+  if(!is.null(x$obs)) {
+    dfs <- c(dfs, list(adddf(df, x$obs, "obs", contour=contours)))
+  }
+  if(attr(x, "einfo")$alternative != "greater") {
+    dfs <- c(dfs, list(adddf(df, x$lo, "lo", contour=contours)))
+  }
+  if(attr(x, "einfo")$alternative != "less") {
+    dfs <- c(dfs, list(adddf(df, x$hi, "hi", contour=contours)))
+  }
+  if(!is.null(x$obs) && attr(x, "einfo")$alternative != "greater") {
+    dfs <- c(dfs, list(adddf(df, x$obs, "lo.sign", signif=x$obs < x$lo)))
+  }
+  if(!is.null(x$obs) && attr(x, "einfo")$alternative != "less") {
+    dfs <- c(dfs, list(adddf(df, x$obs, "hi.sign", signif=x$obs > x$hi)))
+  }
+  if(fixedscales)
+    do.call(rbind, dfs)
+  else
+    dfs
+}
+
+# @param sign.col The color for the significant regions.
+# @param transparency A number between 0 and 1.
+# Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
+#' @importFrom ggplot2 theme element_blank facet_wrap vars
+env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, contours = TRUE) {
+  remove_axes_theme <- theme(axis.title.x=element_blank(),
+                             axis.text.x=element_blank(),
+                             axis.ticks.x=element_blank(),
+                             axis.title.y=element_blank(),
+                             axis.text.y=element_blank(),
+                             axis.ticks.y=element_blank())
+  lapply(dfs, function(df) {
+    g <- env2d_ggplot2_helper_1(df, sign.col, transparency)
+    g <- g + facet_wrap(vars(label))
+    g + remove_axes_theme
+  })
+}
