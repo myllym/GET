@@ -302,7 +302,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     alt <- attr(x[[1]], "einfo")$alternative
     x <- rdata$x_vec
     # Plot
-    if(Nfunc==1) {
+    if(Nfunc == 1 & is.null(rdata$r_values_newstart_id)) {
         if(!rdata$retick_xaxis) {
             if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                     type="l", lty=3, lwd=2, ...)
@@ -337,6 +337,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         }
     }
     else {
+        if(Nfunc == 1) warning("The r-values are non-increasing in the given object. Splitting to several plots.\n")
         n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
         ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
         nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
@@ -470,7 +471,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       }
     }
 
-    if(Nfunc==1 | is.null(rdata$r_values_newstart_id)) {
+    if(Nfunc == 1 & is.null(rdata$r_values_newstart_id)) {
       if(rdata$retick_xaxis) x[['r']] <- 1:length(x[['r']])
       if(is.null(x[['obs']])) {
         df <- data.frame(r = x[['r']],
@@ -538,6 +539,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       else p <- p + ggplot2::scale_x_continuous(name = xlab)
     }
     else {
+      if(Nfunc == 1) warning("The r-values are non-increasing in the given object. Splitting to several plots.\n")
       n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
       ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
       nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
