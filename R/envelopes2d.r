@@ -289,23 +289,62 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
 #' If \code{col} is provided, the same specification will be used for each produced plot,
 #' which may make it easier to compare the figures with each other.
 #'
-#' @usage \method{plot}{combined_global_envelope_2d}(x, sign.col = c(255, 0, 0), transparency = 85, ...)
+#' If fixedscales is FALSE (or 0) all images will have separate scale.
+#' If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
+#' If fixedscales is 2 all images will have common scale.
+#'
+#' @usage \method{plot}{combined_global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
+#'  fixedscales = 2, sign.col = c(255, 0, 0), transparency = 85/255,
+#'  contours = TRUE, main = NULL, ...)
 #'
 #' @param x an 'combined_global_envelope_2d' object
 #' @inheritParams plot.global_envelope_2d
+#' @param fixedscales 0, 1 or 2. See details.
 #' @method plot combined_global_envelope_2d
 #' @export
-plot.combined_global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, ...) {
-  for(i in 1:length(x)) {
-    main <- paste(names(x)[i], ": ", c("Observed",
-                                       "Lower envelope",
-                                       "Upper envelope",
-                                       "Sign. below (red)",
-                                       "Sign. above (red)"), sep="")
-    env2d_basic_plot(x[[i]], var='obs', sign.col=sign.col, transparency=transparency, main=main[1], ...)
-    env2d_basic_plot(x[[i]], var='lo', sign.col=sign.col, transparency=transparency, main=main[2], ...)
-    env2d_basic_plot(x[[i]], var='hi', sign.col=sign.col, transparency=transparency, main=main[3], ...)
-    env2d_basic_plot(x[[i]], var='lo.sign', sign.col=sign.col, transparency=transparency, main=main[4], ...)
-    env2d_basic_plot(x[[i]], var='hi.sign', sign.col=sign.col, transparency=transparency, main=main[5], ...)
-  }
+#' @importFrom ggplot2 facet_grid vars
+#' @importFrom gridExtra grid.arrange
+plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
+                                             fixedscales = 2, sign.col = "red", transparency = 85/255,
+                                             contours = TRUE, main = NULL, ...) {
+  plot_style <- match.arg(plot_style)
+  switch(plot_style,
+         basic = {
+           sign.col <- as.numeric(col2rgb(sign.col, alpha = FALSE))
+           for(i in 1:length(x)) {
+             main.plots <- paste(names(x)[i], ": ", c("Observed",
+                                                      "Lower envelope",
+                                                      "Upper envelope",
+                                                      "Sign. below (red)",
+                                                      "Sign. above (red)"), sep="")
+             env2d_basic_plot(x[[i]], var='obs', sign.col=sign.col, transparency=transparency, main=main.plots[1], ...)
+             env2d_basic_plot(x[[i]], var='lo', sign.col=sign.col, transparency=transparency, main=main.plots[2], ...)
+             env2d_basic_plot(x[[i]], var='hi', sign.col=sign.col, transparency=transparency, main=main.plots[3], ...)
+             env2d_basic_plot(x[[i]], var='lo.sign', sign.col=sign.col, transparency=transparency, main=main.plots[4], ...)
+             env2d_basic_plot(x[[i]], var='hi.sign', sign.col=sign.col, transparency=transparency, main=main.plots[5], ...)
+           }
+         },
+         ggplot2 = {
+           if(is.null(main)) fullmain <- env_main_default(attr(x, "level2_ge"), digits=3)
+           else fullmain <- NULL
+           dfs <- mapply(x, names(x), SIMPLIFY=FALSE, FUN=function(x, main) {
+             env2d_ggplot2_helper(x, fixedscales=fixedscales, contours=contours, main=main, insertmain=!fixedscales)
+           })
+           if(fixedscales==2) {
+             df <- do.call(rbind, dfs)
+             g <- env2d_ggplot2_helper_1(df, sign.col, transparency, contours) + facet_grid(rows=vars(main), cols=vars(label))
+             g + ggtitle(fullmain)
+           } else if(fixedscales==1) {
+             gs <- lapply(dfs, function(df) {
+               env2d_ggplot2_helper_1(df, sign.col, transparency, contours) + facet_grid(rows=vars(main), cols=vars(label))
+             })
+             grid.arrange(grobs=gs, ncol=1, top=fullmain)
+           } else if(fixedscales==0) {
+             gs <- lapply(dfs, function(dfs2) {
+               gs = env2d_ggplot2_helper_many_single_plots(dfs2, sign.col, transparency, contours)
+               grid.arrange(grobs=gs, nrow=1)
+             })
+             grid.arrange(grobs=gs, ncol=1, top=fullmain)
+           } else { stop("Invalid fixedscales argument.") }
+         })
 }
