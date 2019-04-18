@@ -234,26 +234,48 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' If \code{col} is provided, the same specification will be used for each produced plot,
 #' which may make it easier to compare the figures with each other.
 #'
-#' @usage \method{plot}{global_envelope_2d}(x, sign.col = c(255, 0, 0), transparency = 85,
-#'  contours = TRUE, ...)
+#' @usage \method{plot}{global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
+#' fixedscales = TRUE, sign.col = c(255, 0, 0), transparency = 85/255,
+#' contours = TRUE, main = NULL, ...)
 #'
 #' @param x an 'global_envelope_2d' object
-#' @param sign.col A vector of length 3 giving the color for the significant regions.
-#' The elements should correspond to red, green, blue of \code{\link[grDevices]{rgb}}.
-#' Default to red (255, 0, 0).
-#' @param transparency A number between 0 and 255 (default 85, 33% transparency).
-#' Corresponds to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
-#' @param contours Logical. Whether to draw contours on the observed function and the lower and upper envelope.
+#' @param plot_style Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)
+#' @param fixedscales Logical. TRUE for the same scales for all images.
+#' @param sign.col The color for the significant regions. Default to "red".
+#' @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
+#' Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
+#' @param contours Logical. Whether to draw contour lines to the observed function and the lower and upper envelope.
+#' @param main The overall main. Default exists.
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot global_envelope_2d
 #' @export
-plot.global_envelope_2d <- function(x, sign.col = c(255, 0, 0), transparency = 85, contours = TRUE, ...) {
-  env2d_basic_plot(x, var='obs', sign.col=sign.col,transparency=transparency, contours=contours, ...)
-  env2d_basic_plot(x, var='lo', sign.col=sign.col,transparency=transparency, contours=contours, ...)
-  env2d_basic_plot(x, var='hi', sign.col=sign.col,transparency=transparency, contours=contours, ...)
-  env2d_basic_plot(x, var='lo.sign', sign.col=sign.col,transparency=transparency, contours=contours, ...)
-  env2d_basic_plot(x, var='hi.sign', sign.col=sign.col,transparency=transparency, contours=contours, ...)
+#' @importFrom ggplot2 facet_wrap ggtitle
+#' @importFrom gridExtra grid.arrange
+plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
+                                    fixedscales = TRUE, sign.col = "red", transparency = 85/255,
+                                    contours = TRUE, main = NULL, ...) {
+  plot_style <- match.arg(plot_style)
+  switch(plot_style,
+         basic = {
+           env2d_basic_plot(x, var='obs', contours=contours, ...)
+           env2d_basic_plot(x, var='lo', contours=contours, ...)
+           env2d_basic_plot(x, var='hi', contours=contours, ...)
+           env2d_basic_plot(x, var='lo.sign', contours=contours, ...)
+           env2d_basic_plot(x, var='hi.sign', contours=contours, ...)
+         },
+         ggplot2 = {
+           if(is.null(main)) main <- env_main_default(x, digits=3)
+           dfs <- env2d_ggplot2_helper(x, fixedscales=fixedscales)
+           if(fixedscales) {
+             g <- env2d_ggplot2_helper_1(dfs, sign.col, transparency, contours)
+             g <- g + facet_wrap(vars(label))
+             g + ggtitle(main)
+           } else {
+             gs = env2d_ggplot2_helper_many_single_plots(dfs, sign.col, transparency, contours)
+             p1 = grid.arrange(grobs=gs, nrow=ceiling(length(gs)/3), top=main)
+           }
+         })
 }
 
 #' Plot method for the class 'combined_global_envelope_2d'
