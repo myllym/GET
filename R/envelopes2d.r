@@ -189,8 +189,8 @@ central_region_2d <- function(image_sets, ...) {
 #'   plot(res)
 #'   # The same colors for all plots:
 #'   par(mfrow=c(2,3))
-#'   plot(res, col=spatstat::colourmap(grDevices::gray(0:255/255),
-#'                    range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
+#'   plot(res, col=colourmap(grDevices::gray(0:255/255),
+#'                 range=c(min(res$obs, res$lo), max(res$obs, res$hi))))
 #' }
 global_envelope_test_2d <- function(image_sets, ...) {
   res <- cr_or_GET_2d(image_sets, CR_or_GET = "GET", ...)
