@@ -634,7 +634,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
 #' @importFrom spatstat plot.im
 #' @importFrom spatstat contour.im
 env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign'),
-                               sign.col = c(255, 0, 0), transparency = 85, main, ...) {
+                               sign.col = c(255, 0, 0), transparency = 85, main, contours = TRUE, ...) {
   var <- match.arg(var)
   extraargs <- list(...)
   if(length(sign.col)!=3) stop("Unreasonable length of sign.col.\n")
@@ -654,7 +654,7 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
                spatstat::plot.im(obs.im, col=col, main=main, ...)
              }
              else spatstat::plot.im(obs.im, main=main, ...)
-             spatstat::contour.im(obs.im, add=TRUE)
+             if(contours) spatstat::contour.im(obs.im, add=TRUE)
            }
          },
          # Lower envelope
@@ -668,7 +668,7 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
                spatstat::plot.im(lo.im, col=col, main=main, ...)
              }
              else spatstat::plot.im(lo.im, main=main, ...)
-             if(!is.character(col)) spatstat::contour.im(lo.im, add=TRUE)
+             if(contours) if(!is.character(col)) spatstat::contour.im(lo.im, add=TRUE)
            }
          },
          # Upper envelope
@@ -682,7 +682,7 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
                spatstat::plot.im(hi.im, col=col, main=main, ...)
              }
              else spatstat::plot.im(hi.im, main=main, ...)
-             if(!is.character(col)) spatstat::contour.im(hi.im, add=TRUE)
+             if(contours) if(!is.character(col)) spatstat::contour.im(hi.im, add=TRUE)
            }
          },
          # Significance
