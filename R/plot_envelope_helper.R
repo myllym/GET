@@ -178,13 +178,10 @@ env_main_default <- function(x, digits=3, alternative=attr(x, "einfo")$alternati
                       "Alternative = \"", alternative, "\"\n", sep="")
     }
     else {
-      switch(class(x)[1],
-             global_envelope = {
-               main <- paste(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
-             },
-             fboxplot = {
-               main <- paste("Functional boxplot based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
-             })
+      if(inherits(x, c("global_envelope", "global_envelope_2d")))
+         main <- paste(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
+      else if(inherits(x, "fboxplot"))
+        main <- paste("Functional boxplot based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
     }
   }
   main
