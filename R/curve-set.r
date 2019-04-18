@@ -93,7 +93,7 @@ fdata_to_curve_set <- function(fdata, ...) {
 # @param allow_Inf_values Logical. Can be used to allow infinite or nonnumeric
 # values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
 # away (in \code{\link{crop_curves}}).
-check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE, silent = FALSE) {
+check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
     possible_names <- c('r', 'obs', 'sim_m', 'theo', 'is_residual')
 
     n <- length(curve_set)
@@ -124,7 +124,6 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE, silent 
     if(!all(is.numeric(r)) || !all(is.finite(r))) {
         stop('curve_set[["r"]] must have only finite numeric values.')
     }
-    if(!silent) if(!all(r[-1] - r[-n_r] > 0)) warning('Values in curve_set[["r"]] are not increasing.')
 
     obs <- curve_set[['obs']]
     if(!is.vector(obs) & !is.matrix(obs)) {
@@ -343,7 +342,7 @@ plot.curve_set <- function(x, ylim, xlab = "r", ylab = "obs",
 # @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
 # @param equalr Whether to demand equal lengths of r vectors of the different curve sets
 # @return A curve set that is a combination of the curve sets given in 'x'.
-combine_curve_sets <- function(x, equalr = TRUE, silent=FALSE) {
+combine_curve_sets <- function(x, equalr = TRUE) {
     cset <- NULL
     x <- check_curve_set_dimensions(x, equalr=equalr)
     name_vec <- lapply(x, FUN=names)
@@ -375,7 +374,7 @@ combine_curve_sets <- function(x, equalr = TRUE, silent=FALSE) {
     if('is_residual' %in% name_vec[[1]])
       cset$is_residual <- x[[1]]$is_residual
     # Return the combined set of curves
-    create_curve_set(cset, silent=silent)
+    create_curve_set(cset)
 }
 
 # Check curve set dimensions
