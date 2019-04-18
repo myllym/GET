@@ -231,7 +231,7 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' which may make it easier to compare the figures with each other.
 #'
 #' @usage \method{plot}{global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
-#' fixedscales = TRUE, sign.col = c(255, 0, 0), transparency = 85/255,
+#' fixedscales = TRUE, sign.col = "red", transparency = 85/255,
 #' contours = TRUE, main = NULL, ...)
 #'
 #' @param x an 'global_envelope_2d' object
@@ -290,7 +290,7 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
 #' If fixedscales is 2 all images will have common scale.
 #'
 #' @usage \method{plot}{combined_global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
-#'  fixedscales = 2, sign.col = c(255, 0, 0), transparency = 85/255,
+#'  fixedscales = 2, sign.col = "red", transparency = 85/255,
 #'  contours = TRUE, main = NULL, ...)
 #'
 #' @param x an 'combined_global_envelope_2d' object
