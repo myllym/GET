@@ -41,4 +41,4 @@ Suggests:
 Description: The library provides Global Envelope Tests (GET) for testing
     with functional test statistics.
 License: GPL-3
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
