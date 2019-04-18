@@ -125,7 +125,10 @@ print.image_set <- function(x, ...) {
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot image_set
+#' @importFrom spatstat colourmap
+#' @importFrom grDevices gray
 #' @importFrom spatstat as.im
+#' @importFrom spatstat plot.im
 #' @export
 plot.image_set <- function(x, idx = 1, obs = TRUE, ...) {
   if(obs) {
