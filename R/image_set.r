@@ -124,7 +124,7 @@ print.image_set <- function(x, ...) {
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot image_set
-#' @importFrom spatstat im
+#' @importFrom spatstat as.im
 #' @export
 plot.image_set <- function(x, idx = 1, obs = TRUE, ...) {
   if(obs) {
@@ -143,7 +143,7 @@ plot.image_set <- function(x, idx = 1, obs = TRUE, ...) {
     main <- paste("Image ", idx, sep="")
   else if(length(extraargs[['main']] == 1)) main <- rep(extraargs[['main']], times=length(idx))
   for(i in 1:length(idx)) {
-    obs.im <- spatstat::im(obs[,,idx[i]], xcol=x$r[[1]], yrow=x$r[[2]])
+    obs.im <- spatstat::as.im(list(x=x$r[[1]], y=x$r[[2]], z=obs[,,idx[i]]))
     spatstat::plot.im(obs.im, col=col, main=main[i], ...)
   }
 }
