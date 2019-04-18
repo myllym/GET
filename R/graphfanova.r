@@ -458,15 +458,14 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' res <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       image_set = imageset1$image_set,
 #'                       groups = imageset1$Group)
-#' par(mfrow=c(2,5))
 #' plot(res)
 #' # Contrasts
 #' res.c <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
 #'                         image_set = imageset1$image_set,
 #'                         groups = imageset1$Group,
 #'                         summaryfun = "contrasts")
-#' par(mfrow=c(2,3))
 #' plot(res.c)
+#' plot(res.c, contours=FALSE)
 graph.fanova2d <- function(nsim, image_set, groups, ...) {
   if(class(image_set)[1] != "image_set") stop("The image_set does not have a valid class.\n")
   obs_d <- dim(image_set$obs)
@@ -509,7 +508,6 @@ graph.fanova2d <- function(nsim, image_set, groups, ...) {
 #' res <- frank.fanova2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       image_set = imageset1$image_set,
 #'                       groups = imageset1$Group)
-#' par(mfrow=c(1,3))
 #' plot(res)
 frank.fanova2d <- function(nsim, image_set, groups, ...) {
   if(class(image_set)[1] != "image_set") stop("The image_set does not have a valid class.\n")
