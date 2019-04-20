@@ -427,10 +427,10 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
   if(nfuns == 1) {
     for(n in names(picked_attr_ls[[1]])) attr(res, n) <- picked_attr_ls[[1]][[n]]
   }
-  else { # nfuns > 1, first level envelopes given in attr(x, "global_envelope_ls")
+  else { # nfuns > 1
     for(n in names(picked_attr_ls[[1]]))
       for(i in 1:nfuns)
-        attr(x, "global_envelope_ls")[[i]][[n]] <- picked_attr_ls[[i]][[n]]
+        attr(res[[i]], n) <- picked_attr_ls[[i]][[n]]
   }
   attr(res, "method") <- "Adjusted global envelope test" # Change method name
   attr(res, "call") <- match.call() # Update "call" attribute
