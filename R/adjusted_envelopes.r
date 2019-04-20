@@ -152,6 +152,12 @@ dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
   list(X=stage1_cset_ls, X.ls=stage2_csets_lsls)
 }
 
+GE.attr <- function(x, name = "p", ...) {
+  if(inherits(x, c("global_envelope", "global_envelope_2d"))) a <- attr(x, name)
+  if(inherits(x, c("combined_global_envelope", "combined_global_envelope_2d"))) a <- attr(attr(x, "level2_ge"), name)
+  a
+}
+
 # A helper function to make a global envelope test for the purposes of dg.global_envelope_test
 # @param curve_sets_ls A list of curve_sets.
 # @inheritParams dg.global_envelope_test
