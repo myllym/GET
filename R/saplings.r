@@ -62,7 +62,6 @@
 #' # -> The CSR hypothesis is clearly rejected and the rank envelope indicates clear
 #' # clustering of saplings. Next we explore the Matern cluster process as a null model.
 #'
-#' @examples
 #' \donttest{
 #' #-- Testing the Matern cluster process --# (a composite hypothesis)
 #' #----------------------------------------#
