@@ -424,8 +424,14 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
       alpha_star <- stats::quantile(pvals, probs=alpha, type=1)
       res <- global_envelope_test(X, type=type, alpha=alpha_star, alternative=alt)
       # Save additional arguments
-      attr(res, "alpha") <- alpha
-      attr(res, "alpha_star") <- alpha_star
+      if(nfuns == 1) {
+        attr(res, "alpha") <- alpha
+        attr(res, "alpha_star") <- alpha_star
+      }
+      else {
+        attr(attr(res, "level2_ge"), "alpha") <- alpha
+        attr(attr(res, "level2_ge"), "alpha_star") <- alpha_star
+      }
     }
   }
 
