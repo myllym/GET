@@ -385,18 +385,18 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
     }
     # -> kalpha_star, LB, UB of the (second level) rank test
     # Update res object with adjusted values
-    res$lo <- LB
-    res$hi <- UB
-    attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
+    attr(res, "level2_ge")$lo <- LB
+    attr(res, "level2_ge")$hi <- UB
+    attr(attr(res, "level2_ge"), "k_alpha_star") <- kalpha_star # Add kalpha_star
     # Re-calculate the new qdir/st envelopes
     envchars <- combined_scaled_MAD_bounding_curves_chars(X, type = type)
     central_curves_ls <- lapply(X, function(x) get_T_0(x))
     bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=UB,
                                                            lower_f=envchars$lower_f, upper_f=envchars$upper_f)
     # Update the first level envelopes for plotting
-    for(i in 1:length(attr(res, "global_envelope_ls"))) {
-      attr(res, "global_envelope_ls")[[i]]$lo <- bounding_curves$lower_ls[[i]]
-      attr(res, "global_envelope_ls")[[i]]$hi <- bounding_curves$upper_ls[[i]]
+    for(i in 1:length(res)) {
+      res[[i]]$lo <- bounding_curves$lower_ls[[i]]
+      res[[i]]$hi <- bounding_curves$upper_ls[[i]]
     }
   }
   else { # Otherwise, the ERL test is used at the second level of a combined test
