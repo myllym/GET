@@ -169,7 +169,7 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
     global_envtest <- global_envelope_test(curve_sets, type=type, alpha=alpha,
                                            alternative=alternative, ties=ties, probs=probs, ...)
   }
-  res <- structure(list(stat = as.numeric(attr(global_envtest, "k")[1]), pval = attr(global_envtest, "p")),
+  res <- structure(list(stat = as.numeric(GE.attr(global_envtest, "k")[1]), pval = GE.attr(global_envtest, "p")),
                    class = "dg_GET_helper")
   if(save.envelope) attr(res, "envelope_test") <- global_envtest
   res
