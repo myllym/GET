@@ -62,7 +62,6 @@
 #' # -> The CSR hypothesis is clearly rejected and the rank envelope indicates clear
 #' # clustering of saplings. Next we explore the Matern cluster process as a null model.
 #'
-#' \donttest{
 #' #-- Testing the Matern cluster process --# (a composite hypothesis)
 #' #----------------------------------------#
 #' # Fit the Matern cluster process to the pattern (using minimum contrast estimation with the pair
@@ -109,5 +108,5 @@
 #'                                r_min=c(rmin, rminJ), r_max=c(rmax, rmaxJ),
 #'                                save.cons.envelope=TRUE)
 #' plot(adjenvLJ)
-#' }}
+#' }
 NULL
