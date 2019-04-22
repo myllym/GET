@@ -197,31 +197,50 @@
 #' from the object returned by \code{\link[spatstat]{envelope}}. An \code{envelope} object can also
 #' directly be given to the functions mentioned above in this section.
 #'
+#' @section Example data (see references on the help pages of each data set):
+#' \itemize{
+#'  \item \code{\link{adult_trees}}: a point pattern of adult rees
+#'  \item \code{\link{cgec}}: centred government expenditure centralization (GEC) ratios (see \code{\link{graph.fanova}})
+#'  \item \code{\link{fallen_trees}}: a point pattern of fallen trees
+#'  \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
+#'  \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}})
+#'  \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
+#'  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{dg.global_envelope_test}})
+#' }
+#' The data sets are used to show examples of the functions of the library.
+#'
 #' @section Number of simulations:
 #'
 #' Note that the recommended minimum number of simulations for the rank
 #' envelope test based on a single function is nsim=2499, while for the
-#' "erl", "qdir" and "st" global envelope tests and deviation tests,
-#' a lower number of simulations can be used.
+#' "erl", "cont", "area", "qdir" and "st" global envelope tests and deviation tests,
+#' a lower number of simulations can be used, although the Monte Carlo error is obviously larger
+#' with a small number of simulations.
+#' For increasing number of simulations, all the global rank envelopes approach the same curves.
 #'
-#' Mrkvička et al. (2017) discusses the number of simulations for tests based on many functions.
+#' Mrkvička et al. (2017) discussed the number of simulations for tests based on many functions.
 #'
 #' @author
 #' Mari Myllymäki (mari.j.myllymaki@@gmail.com, mari.myllymaki@@luke.fi),
-#' Henri Seijo (henri.seijo@@aalto.fi, henri.seijo@@iki.fi),
 #' Tomáš Mrkvička (mrkvicka.toma@@gmail.com),
+#' Henri Seijo (henri.seijo@@iki.fi),
 #' Pavel Grabarnik (gpya@@rambler.ru),
 #' Ute Hahn (ute@@math.au.dk)
 #'
 #' @references
-#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
+#' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015) Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 #'
-#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017) Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
-#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
+#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 #'
-#' Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016). Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A: 40-53. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
+#' Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016) Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A: 40-53. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
 #'
+#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018) A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+#'
+#' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
+#'
+#' Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
 #' @name GET-package
 #' @docType package
 #' @aliases GET-package
