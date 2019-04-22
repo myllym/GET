@@ -11,6 +11,7 @@
 # Case 2.
 # simfun and simfun.arg are used to specify how to generate the simulations,
 # X should be a point pattern.
+#' @importFrom spatstat envelope
 funcs_from_X_and_funs <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfuns=NULL,
                                   ..., savepatterns=FALSE, verbose=FALSE, calc_funcs=TRUE) {
   extraargs <- list(...)
