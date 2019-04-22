@@ -130,9 +130,9 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' @return A \code{global_envelope} object.
 #' @export
 #' @references
-#' Mrkvička, T., Roskovec, T. and Rost, M. (2019). A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
+#' Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
 #'
-#' Freedman, D., & Lane, D. (1983). A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
+#' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 #' @importFrom stats lm
 #' @importFrom stats predict.lm
 #' @importFrom stats dummy.coef
@@ -235,7 +235,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' argument values of the functional domain are responsible for the potential rejection.
 #'
 #' @references
-#' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019). New methods for multiple testing in permutation inference for the general linear model.
+#' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
 #'
 #' @inheritParams graph.fglm
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
@@ -285,6 +285,10 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' @param ... Additional parameters to be passed to \code{\link{graph.fglm}}.
 #' @seealso \code{\link{graph.fglm}}, \code{\link{frank.fglm2d}}
 #' @export
+#' @references
+#' Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
+#'
+#' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 #' @examples
 #' \donttest{
 #' data("imageset1")
@@ -349,6 +353,8 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' @param ... Additional parameters to be passed to \code{\link{frank.fglm}}.
 #' @seealso \code{\link{frank.fglm}}, \code{\link{graph.fglm2d}}
 #' @export
+#' @references
+#' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
 #' @examples
 #' \donttest{
 #' data("imageset1")
