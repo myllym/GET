@@ -14,8 +14,7 @@ GET.necdf(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x,
 \item{r}{The sequence of argument values at which the distribution functions are compared.
 The default is 100 equally spaced values between the minimum and maximum over all groups.}
 
-\item{summaryfun}{Possible values are "means" and "contrasts".
-See description for their meaning.}
+\item{summaryfun}{Possible values are "means" and "contrasts". See \code{\link{graph.fanova}} for more information.}
 
 \item{nsim}{The number of random permutations.}
 

@@ -53,6 +53,16 @@ The global envelope test is applied to the observed and simulated F-statistics.
 The test is able to find if the factor of interest is significant and also which
 argument values of the functional domain are responsible for the potential rejection.
 }
+\examples{
+data(rimov)
+res <- frank.fglm(nsim=99, # Increase the number of simulations for serious analysis!
+                  formula.full = Y~Year,
+                  formula.reduced = Y~1,
+                  curve_set=rimov, factors = data.frame(Year = 1979:2014))
+plot(res)
+}
 \references{
-Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019). New methods for multiple testing in permutation inference for the general linear model.
+Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
+
+Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 }

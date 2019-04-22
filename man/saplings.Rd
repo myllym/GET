@@ -21,7 +21,7 @@ program headed by project leader Prof. O.V. Smirnova.
 }
 \examples{
 # This is an example analysis of the saplings data set in Myllymäki et al. (2017).
-require(spatstat)
+if(require(spatstat, quietly=TRUE)) {
 data(saplings)
 
 # First choose the r-distances for L (r) and J (rJ) functions, respectively.
@@ -37,7 +37,7 @@ rJ <- seq(0, rmaxJ, by=rstepJ)
 # First, a CSR test using the L(r)-r function:
 # Note: CSR is simulated by fixing the number of points and generating nsim simulations
 # from the binomial process, i.e. we deal with a simple hypothesis.
-env <- envelope(saplings, nsim=2499,
+env <- envelope(saplings, nsim=999,
  simulate=expression(runifpoint(saplings$n, win=saplings$window)), # Simulate CSR
  fun="Lest", correction="translate", # T(r) = estimator of L with translational edge correction
  transform = expression(.-r),        # Take the L(r)-r function instead of L(r)
@@ -49,12 +49,11 @@ curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
 # Perform a global envelope test
 res <- global_envelope_test(curve_set)
 # Plot the result.
-plot(res, plot_style="ggplot2", ylab=expression(italic(hat(L)(r)-r)))
+plot(res, ylab=expression(italic(hat(L)(r)-r)))
 
 # -> The CSR hypothesis is clearly rejected and the rank envelope indicates clear
 # clustering of saplings. Next we explore the Matern cluster process as a null model.
 
-\donttest{
 #-- Testing the Matern cluster process --# (a composite hypothesis)
 #----------------------------------------#
 # Fit the Matern cluster process to the pattern (using minimum contrast estimation with the pair
@@ -76,7 +75,7 @@ system.time( # timing; takes a lot of time,
                                r_min=rmin, r_max=rmax)
 )
 # Plot the test result
-plot(adjenvL, plot_style="ggplot2", ylab=expression(italic(L(r)-r)))
+plot(adjenvL, ylab=expression(italic(L(r)-r)))
 
 # From the test with the L(r)-r function, it appears that the Matern cluster model would be
 # a reasonable model for the saplings pattern.
@@ -89,7 +88,7 @@ system.time( # timing; takes a lot of time if nsim is reasonably large
                                 r_min=rminJ, r_max=rmaxJ)
 )
 # Plot the test result
-plot(adjenvJ, plot_style="ggplot2", ylab=expression(italic(J(r))))
+plot(adjenvJ, ylab=expression(italic(J(r))))
 # -> the Matern cluster process not adequate for the saplings data
 
 # Test with the two test functions jointly
@@ -100,7 +99,7 @@ adjenvLJ <- dg.global_envelope_test(X = fitted_model,
                                type = "erl", nsim = nsim, nsimsub = nsim,
                                r_min=c(rmin, rminJ), r_max=c(rmax, rmaxJ),
                                save.cons.envelope=TRUE)
-plot(adjenvLJ, plot_style="ggplot2")
+plot(adjenvLJ)
 }
 }
 \references{

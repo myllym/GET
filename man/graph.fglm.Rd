@@ -65,6 +65,12 @@ The Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the 
 consequently, the test approximately achieves the desired significance level.
 }
 \examples{
+data(rimov)
+res <- graph.fglm(nsim=99, # Increase the number of simulations for serious analysis!
+                  formula.full = Y~Year,
+                  formula.reduced = Y~1,
+                  curve_set=rimov, factors = data.frame(Year = 1979:2014))
+plot(res)
 \donttest{
 data(GDPtax)
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
@@ -77,7 +83,7 @@ plot(res.tax_within_group, plot_style="ggplot2")
 }
 }
 \references{
-Mrkvička, T., Roskovec, T. and Rost, M. (2019). A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
+Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
 
-Freedman, D., & Lane, D. (1983). A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
+Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 }

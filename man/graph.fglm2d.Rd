@@ -64,6 +64,11 @@ par(mfrow=c(1,3))
 plot(res.z)
 }
 }
+\references{
+Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
+
+Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
+}
 \seealso{
 \code{\link{graph.fglm}}, \code{\link{frank.fglm2d}}
 }

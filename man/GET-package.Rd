@@ -3,11 +3,11 @@
 \docType{package}
 \name{GET-package}
 \alias{GET-package}
-\title{Global Envelope Tests (GET)}
+\title{GET: Global Envelopes in R}
 \description{
 Global envelopes alias central regions and global envelope tests, including
 global envelope (tests) for single and many functions and multivariate vectors,
-adjusted global envelope tests, graphical functional ANOVA.
+adjusted global envelope tests, graphical functional ANOVA and general linear model (GLM).
 }
 \details{
 The \pkg{GET} library provides central regions (i.e. global envelopes) and global envelope tests.
@@ -27,7 +27,7 @@ can be done by any other way, thus allowing for any models/functions.
 \code{\link{central_region}}.
 E.g. 50\% central region of growth curves of girls \code{\link[fda]{growth}}.
 \itemize{
-           \item First create a curve_set of the growth curves
+           \item First create a curve_set of the growth curves, e.g.
 
                  \code{
                    cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
@@ -91,8 +91,23 @@ Also the adjusted tests can be based on several test functions.
 \item \emph{One-way functional ANOVA}:
  \itemize{
   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
-  \item rank envelope based on F-values: \code{\link{frank.fanova}}
+  \item \emph{Graphical} functional ANOVA tests for images (2d functions): \code{\link{graph.fanova2d}}
+  \item Global rank envelope based on F-values: \code{\link{frank.fanova}}
+  \item Global rank envelope based on F-values for images: \code{\link{frank.fanova2d}}
  }
+\item \emph{Functional general linear model (GLM)}:
+ \itemize{
+  \item \emph{Graphical} functional GLM: \code{\link{graph.fglm}}
+  \item \emph{Graphical} functional GLM for images: \code{\link{graph.fglm2d}}
+  \item Global rank envelope based on F-values: \code{\link{frank.fglm}}
+  \item Global rank envelope based on F-values: \code{\link{frank.fglm2d}}
+ }
+\item Wrapper functions to perform global envelopes for specific purposes:
+ \itemize{
+  \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
+  \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
+ }
+
 \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no gpaphical
 interpretation)
 }
@@ -107,7 +122,21 @@ for your data (T_1(r)) and for each simulation (T_2(r), ..., T_{nsim+1}(r)) in o
 Given the set of the functions T_i(r), i=1,...,nsim+1, you can perform a test
 by \code{\link{global_envelope_test}}.
 
-1) The workflow utilizing \pkg{spatstat}:
+1) The workflow when using your own programs for simulations:
+
+\itemize{
+\item (Fit the model and) Create nsim simulations from the (fitted) null model.
+\item Calculate the functions T_1(r), T_2(r), ..., T_{nsim+1}(r).
+\item Use \code{\link{create_curve_set}} to create a curve_set object
+      from the functions T_i(r), i=1,...,s+1.
+\item Perform the test and plot the result
+
+      \code{res <- global_envelope_test(curve_set) # curve_set is the 'curve_set'-object you created}
+
+      \code{plot(res)}
+}
+
+2) The workflow utilizing \pkg{spatstat}:
 
 E.g. Say we have a point pattern, for which we would like to test a hypothesis, as a \code{\link[spatstat]{ppp}} object.
 
@@ -161,20 +190,6 @@ E.g. Say we have a point pattern, for which we would like to test a hypothesis, 
          }
 
 }
-
-2) The workflow when using your own programs for simulations:
-
-\itemize{
-\item (Fit the model and) Create nsim simulations from the (fitted) null model.
-\item Calculate the functions T_1(r), T_2(r), ..., T_{nsim+1}(r).
-\item Use \code{\link{create_curve_set}} to create a curve_set object
-      from the functions T_i(r), i=1,...,s+1.
-\item Perform the test and plot the result
-
-      \code{res <- global_envelope_test(curve_set) # curve_set is the 'curve_set'-object you created}
-
-      \code{plot(res)}
-}
 }
 
 \section{Functions for modifying sets of functions}{
@@ -192,30 +207,52 @@ from the object returned by \code{\link[spatstat]{envelope}}. An \code{envelope}
 directly be given to the functions mentioned above in this section.
 }
 
+\section{Example data (see references on the help pages of each data set)}{
+
+\itemize{
+ \item \code{\link{adult_trees}}: a point pattern of adult rees
+ \item \code{\link{cgec}}: centred government expenditure centralization (GEC) ratios (see \code{\link{graph.fanova}})
+ \item \code{\link{fallen_trees}}: a point pattern of fallen trees
+ \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
+ \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}})
+ \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
+ \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{dg.global_envelope_test}})
+}
+The data sets are used to show examples of the functions of the library.
+}
+
 \section{Number of simulations}{
 
 
 Note that the recommended minimum number of simulations for the rank
 envelope test based on a single function is nsim=2499, while for the
-"erl", "qdir" and "st" global envelope tests and deviation tests,
-a lower number of simulations can be used.
+"erl", "cont", "area", "qdir" and "st" global envelope tests and deviation tests,
+a lower number of simulations can be used, although the Monte Carlo error is obviously larger
+with a small number of simulations.
+For increasing number of simulations, all the global rank envelopes approach the same curves.
 
-Mrkvička et al. (2017) discusses the number of simulations for tests based on many functions.
+Mrkvička et al. (2017) discussed the number of simulations for tests based on many functions.
 }
 
 \references{
-Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
+Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015) Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 
-Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017) Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 
-Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
+Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 
-Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016). Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A: 40-53. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
+Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016) Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A: 40-53. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
+
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018) A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+
+Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
+
+Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
 }
 \author{
 Mari Myllymäki (mari.j.myllymaki@gmail.com, mari.myllymaki@luke.fi),
-Henri Seijo (henri.seijo@aalto.fi, henri.seijo@iki.fi),
 Tomáš Mrkvička (mrkvicka.toma@gmail.com),
+Henri Seijo (henri.seijo@iki.fi),
 Pavel Grabarnik (gpya@rambler.ru),
 Ute Hahn (ute@math.au.dk)
 }
