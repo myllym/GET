@@ -1,8 +1,8 @@
-#' Global Envelope Tests (GET)
+#' GET: Global Envelopes in R
 #'
 #' Global envelopes alias central regions and global envelope tests, including
 #' global envelope (tests) for single and many functions and multivariate vectors,
-#' adjusted global envelope tests, graphical functional ANOVA.
+#' adjusted global envelope tests, graphical functional ANOVA and general linear model (GLM).
 #'
 #'
 #' The \pkg{GET} library provides central regions (i.e. global envelopes) and global envelope tests.
@@ -22,7 +22,7 @@
 #' \code{\link{central_region}}.
 #' E.g. 50\% central region of growth curves of girls \code{\link[fda]{growth}}.
 #' \itemize{
-#'            \item First create a curve_set of the growth curves
+#'            \item First create a curve_set of the growth curves, e.g.
 #'
 #'                  \code{
 #'                    cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
@@ -86,8 +86,23 @@
 #' \item \emph{One-way functional ANOVA}:
 #'  \itemize{
 #'   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
-#'   \item rank envelope based on F-values: \code{\link{frank.fanova}}
+#'   \item \emph{Graphical} functional ANOVA tests for images (2d functions): \code{\link{graph.fanova2d}}
+#'   \item Global rank envelope based on F-values: \code{\link{frank.fanova}}
+#'   \item Global rank envelope based on F-values for images: \code{\link{frank.fanova2d}}
 #'  }
+#' \item \emph{Functional general linear model (GLM)}:
+#'  \itemize{
+#'   \item \emph{Graphical} functional GLM: \code{\link{graph.fglm}}
+#'   \item \emph{Graphical} functional GLM for images: \code{\link{graph.fglm2d}}
+#'   \item Global rank envelope based on F-values: \code{\link{frank.fglm}}
+#'   \item Global rank envelope based on F-values: \code{\link{frank.fglm2d}}
+#'  }
+#' \item Wrapper functions to perform global envelopes for specific purposes:
+#'  \itemize{
+#'   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
+#'   \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
+#'  }
+#'
 #' \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no gpaphical
 #' interpretation)
 #' }
@@ -100,7 +115,21 @@
 #' Given the set of the functions T_i(r), i=1,...,nsim+1, you can perform a test
 #' by \code{\link{global_envelope_test}}.
 #'
-#' 1) The workflow utilizing \pkg{spatstat}:
+#' 1) The workflow when using your own programs for simulations:
+#'
+#' \itemize{
+#' \item (Fit the model and) Create nsim simulations from the (fitted) null model.
+#' \item Calculate the functions T_1(r), T_2(r), ..., T_{nsim+1}(r).
+#' \item Use \code{\link{create_curve_set}} to create a curve_set object
+#'       from the functions T_i(r), i=1,...,s+1.
+#' \item Perform the test and plot the result
+#'
+#'       \code{res <- global_envelope_test(curve_set) # curve_set is the 'curve_set'-object you created}
+#'
+#'       \code{plot(res)}
+#' }
+#'
+#' 2) The workflow utilizing \pkg{spatstat}:
 #'
 #' E.g. Say we have a point pattern, for which we would like to test a hypothesis, as a \code{\link[spatstat]{ppp}} object.
 #'
@@ -153,20 +182,6 @@
 #'                  }
 #'          }
 #'
-#' }
-#'
-#' 2) The workflow when using your own programs for simulations:
-#'
-#' \itemize{
-#' \item (Fit the model and) Create nsim simulations from the (fitted) null model.
-#' \item Calculate the functions T_1(r), T_2(r), ..., T_{nsim+1}(r).
-#' \item Use \code{\link{create_curve_set}} to create a curve_set object
-#'       from the functions T_i(r), i=1,...,s+1.
-#' \item Perform the test and plot the result
-#'
-#'       \code{res <- global_envelope_test(curve_set) # curve_set is the 'curve_set'-object you created}
-#'
-#'       \code{plot(res)}
 #' }
 #'
 #' @section Functions for modifying sets of functions:
