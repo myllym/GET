@@ -138,6 +138,12 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' @importFrom stats dummy.coef
 #' @importFrom parallel mclapply
 #' @examples
+#' data(rimov)
+#' res <- graph.fglm(nsim=99, # Increase the number of simulations for serious analysis!
+#'                   formula.full = Y~Year,
+#'                   formula.reduced = Y~1,
+#'                   curve_set=rimov, factors = data.frame(Year = 1979:2014))
+#' plot(res)
 #' \donttest{
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
@@ -237,7 +243,14 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
 #'
-#' @inheritParams graph.fglm
+#' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
+#' @examples
+#' data(rimov)
+#' res <- frank.fglm(nsim=99, # Increase the number of simulations for serious analysis!
+#'                   formula.full = Y~Year,
+#'                   formula.reduced = Y~1,
+#'                   curve_set=rimov, factors = data.frame(Year = 1979:2014))
+#' plot(res)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        ..., GET.args = NULL, mc.cores = 1, mc.args = NULL) {
