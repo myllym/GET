@@ -201,6 +201,7 @@ ecdfcontrasts <- function(x, groups, r) {
 #' @param r The sequence of argument values at which the distribution functions are compared.
 #' The default is 100 equally spaced values between the minimum and maximum over all groups.
 #' @inheritParams graph.fanova
+#' @param summaryfun Possible values are "means" and "contrasts". See \code{\link{graph.fanova}} for more information.
 #' @export
 #' @examples
 #' if(require(fda, quietly=TRUE)) {
