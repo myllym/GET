@@ -528,8 +528,8 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
            })
   }
   else {
-     plot.global_envelope(attr(x, "level2_ge"), plot_style=plot_style,
-                          main=main, ylim=ylim[[1]], xlab=xlab, ylab=ylab,
+     plot.global_envelope(attr(x, "level2_ge"), dotplot = TRUE,
+                          main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                           color_outside=color_outside, env.col=env.col, base_size=base_size,
                           labels=labels, add=add, digits=digits, ...)
   }
