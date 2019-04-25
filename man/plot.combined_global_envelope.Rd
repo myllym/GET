@@ -8,7 +8,8 @@
    main, ylim, xlab, ylab,
    color_outside = TRUE, env.col = 1, base_size = 15,
    labels = NULL, add = FALSE, digits=3,
-   level = 1, max_ncols_of_plots = 2, nticks = 5, ...)
+   level = 1, max_ncols_of_plots = 2, nticks = 5,
+   legend = TRUE, ...)
 }
 \arguments{
 \item{x}{An 'combined_global_envelope' object}
@@ -53,6 +54,8 @@ if using the default main.}
 (Relates to the number of curve_sets that have been combined.)}
 
 \item{nticks}{The number of ticks on the xaxis.}
+
+\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.}
 
 \item{...}{Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.}
 }

@@ -144,6 +144,11 @@ the adjustment of Baddeley et al. (2017).
 
 See examples in \code{\link{saplings}}.
 }
+\examples{
+if(require(spatstat, quietly = TRUE)) {
+
+}
+}
 \references{
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
 

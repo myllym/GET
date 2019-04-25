@@ -8,7 +8,7 @@
 dotplot = length(x$r)<10,
 main, ylim, xlab, ylab,
 color_outside = TRUE, env.col = 1, base_size = 15,
-labels = NULL, add = FALSE, digits = 3, ...)
+labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...)
 }
 \arguments{
 \item{x}{An 'global_envelope' object}
@@ -47,6 +47,8 @@ Not available for \code{plot_style = "ggplot2"}.}
 
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}
+
+\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.}
 
 \item{...}{Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.}
 }
