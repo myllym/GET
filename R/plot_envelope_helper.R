@@ -414,6 +414,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 # @param curve_sets If provided, then curves going outside the envelope are plotted.
 # @param x2 Another 'global_envelope' object, which is plotted within x, i.e. x2 is assumed to be narrower
 # of the two envelopes.
+# @param legend Logical. If FALSE, then legend is removed.
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_ribbon
 #' @importFrom ggplot2 aes_
@@ -426,9 +427,11 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @importFrom ggplot2 geom_vline
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 guides
+#' @importFrom ggplot2 theme
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                        max_ncols_of_plots = 2,
-                       labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL) {
+                       labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL,
+                       legend = TRUE) {
     if(!inherits(x, "list")) x <- list(x)
     Nfunc <- length(x)
     if(!is.null(x2)) {
@@ -621,6 +624,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       }
       p <- p + ggplot2::scale_x_continuous(name = xlab)
     }
+    if(!legend) p <- p + theme(legend.position = "none")
     # Return
     p
 }
