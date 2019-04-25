@@ -352,7 +352,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' dotplot = length(x$r)<10,
 #' main, ylim, xlab, ylab,
 #' color_outside = TRUE, env.col = 1, base_size = 15,
-#' labels = NULL, add = FALSE, digits = 3, ...)
+#' labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...)
 #' @param x An 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
 #' The option "basic" (default) offers a very basic global envelope plot.
@@ -377,6 +377,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' Not available for \code{plot_style = "ggplot2"}.
 #' @param digits The number of digits used for printing the p-value or p-interval in the main,
 #' if using the default main.
+#' @param legend Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
 #' @method plot global_envelope
@@ -386,7 +387,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
-                                 labels = NULL, add = FALSE, digits = 3, ...) {
+                                 labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...) {
   plot_style <- match.arg(plot_style)
   if(dotplot) plot_style <- "basic"
   # main
@@ -427,7 +428,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
          },
          ggplot2 = {
            env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                      labels=labels, ...)
+                      labels=labels, legend=legend, ...)
          })
 }
 
@@ -436,7 +437,8 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #'    main, ylim, xlab, ylab,
 #'    color_outside = TRUE, env.col = 1, base_size = 15,
 #'    labels = NULL, add = FALSE, digits=3,
-#'    level = 1, max_ncols_of_plots = 2, nticks = 5, ...)
+#'    level = 1, max_ncols_of_plots = 2, nticks = 5,
+#'    legend = TRUE, ...)
 #' @param x An 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
 #' @param labels A character vector of suitable length.
@@ -455,7 +457,8 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
                                  main, ylim, xlab, ylab,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
                                  labels = NULL, add = FALSE, digits = 3,
-                                 level = 1, max_ncols_of_plots = 2, nticks = 5, ...) {
+                                 level = 1, max_ncols_of_plots = 2, nticks = 5,
+                                 legend = TRUE, ...) {
   plot_style <- match.arg(plot_style)
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   # main
@@ -519,7 +522,7 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
              env_ggplot(x, base_size=base_size,
                         main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                         max_ncols_of_plots=max_ncols_of_plots,
-                        labels=labels, nticks=nticks, ...)
+                        labels=labels, nticks=nticks, legend=legend, ...)
            })
   }
   else {
