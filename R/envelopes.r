@@ -467,7 +467,9 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
     main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
   }
   # ylim
-  if(missing('ylim')) ylim <- env_ylim_default(x, use_ggplot2 = plot_style == "ggplot2")
+  if(missing('ylim'))
+    if(level == 1) ylim <- env_ylim_default(x, use_ggplot2 = plot_style == "ggplot2")
+    else ylim <- env_ylim_default(attr(x, "level2_ge"), use_ggplot2 = FALSE)
   # ylab, ylab, labels
   if(missing('xlab')) {
     if(plot_style == "ggplot2") {
