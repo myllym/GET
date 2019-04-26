@@ -142,7 +142,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' res <- graph.fglm(nsim=99, # Increase the number of simulations for serious analysis!
 #'                   formula.full = Y~Year,
 #'                   formula.reduced = Y~1,
-#'                   curve_set=rimov, factors = data.frame(Year = 1979:2014))
+#'                   curve_sets=list(Y=rimov), factors = data.frame(Year = 1979:2014))
 #' plot(res)
 #' \donttest{
 #' data(GDPtax)
@@ -150,7 +150,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' res.tax_within_group <- graph.fglm(nsim = 999,
 #'                                   formula.full = Y~Group+Tax+Group:Tax,
 #'                                   formula.reduced = Y~Group+Tax,
-#'                                   curve_sets = GDPtax$curve_set,
+#'                                   curve_sets = list(Y=GDPtax$curve_set),
 #'                                   factors = factors.df)
 #' plot(res.tax_within_group, plot_style="ggplot2")
 #' }
@@ -251,7 +251,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' res <- frank.fglm(nsim=99, # Increase the number of simulations for serious analysis!
 #'                   formula.full = Y~Year,
 #'                   formula.reduced = Y~1,
-#'                   curve_set=rimov, factors = data.frame(Year = 1979:2014))
+#'                   curve_sets=list(Y=rimov), factors = data.frame(Year = 1979:2014))
 #' plot(res)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
