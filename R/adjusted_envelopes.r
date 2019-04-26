@@ -120,7 +120,7 @@ dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
   }
   # Case 2: X general; fitfun, simfun, calcfun must be provided
   #------------------------------------------------------------
-  else { # FIXME the use of calcfun!
+  else {
     if(is.null(fitfun) | is.null(simfun)) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.\n")
     cat("Note: Model to be fitted by fitfun(X), simulations by simfun and calcfun;\n",
         "simfun should accept the object returned by fitfun as its argument.\n",
