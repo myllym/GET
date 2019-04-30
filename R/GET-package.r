@@ -78,6 +78,7 @@
 #'  the most extreme to the least extreme ones. The core functionality of calculating the measures
 #'  is in the function \code{\link{forder}}, which can be used to obtain different measures for sets of
 #'  curves. Usually there is no need to call \code{\link{forder}} directly.
+#' \item \emph{Functional boxplots}: \code{\link{fboxplot}}
 #' \item \emph{Adjusted} global envelope tests for composite hypotheses
 #' \itemize{
 #'   \item \code{\link{dg.global_envelope_test}}, see a detailed example in \code{\link{saplings}}
