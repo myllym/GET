@@ -816,6 +816,20 @@ print.fboxplot <- function(x, ...) {
       " Plot the object instead.\n", sep="")
 }
 
+#' Print method for the class 'combined_fboxplot'
+#' @usage \method{print}{combined_fboxplot}(x, ...)
+#'
+#' @param x an 'combined_fboxplot' object
+#' @param ... Ignored.
+#'
+#' @method print combined_fboxplot
+#' @export
+print.combined_fboxplot <- function(x, ...) {
+  cat(attr(x, "method"), " based on ", 100*(1-attr(attr(x, "level2_ge"), "alpha")),
+      "% central region (", attr(attr(x, "level2_ge"), "type"), "). \n",
+      " Plot the object instead.\n", sep="")
+}
+
 #' Plot method for the class 'fboxplot'
 #' @usage \method{plot}{fboxplot}(x, plot_style = c("ggplot2", "fv", "basic"),
 #'    dotplot = length(x$r)<10,
