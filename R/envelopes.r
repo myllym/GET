@@ -310,7 +310,7 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
 GEprinthelper <- function(x, ...) {
   if(is.null(attr(x, "p"))) { # The case of a central region
     if(inherits(x, c("fboxplot", "combined_fboxplot")))
-      cat(attr(x, "method"), " based on")
+      cat(attr(x, "method"), " based on ", sep="")
     cat(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), "). \n",
         " Plot the object instead.\n", sep="")
   }
