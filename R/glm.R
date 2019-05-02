@@ -119,7 +119,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' possibly additionally all the factors. The dimensions of the elements should
 #' match with each other, i.e. the factor values should be given for each argument value
 #' and each function. If factors are given in the argument \code{factors}, then can also be just
-#' the curve set representing Y.
+#' the curve set representing Y. Also \code{\link[fda.usc]{fdata}} objects allowed.
 #' @param factors A data frame of factors. An alternative way to specify factors when they
 #' are constant for all argument values. The number of rows of the data frame should be equal
 #' to the number of curves. Each column should specify the values of a factor.
