@@ -776,6 +776,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
     attr(attr(res, "level2_ge"), "whisker.lo") <- attr(res, "level2_ge")$lo - dist
     attr(attr(res, "level2_ge"), "whisker.hi") <- attr(res, "level2_ge")$hi + dist
     attr(attr(res, "level2_ge"), "method") <- "Functional boxplot"
+    class(attr(res, "level2_ge")) <- c("fboxplot", class(attr(res, "level2_ge")))
     for(i in 1:length(res)) {
       dist <- factor * (res[[i]]$hi - res[[i]]$lo)
       attr(res[[i]], "whisker.lo") <- res[[i]]$lo - dist
@@ -785,6 +786,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
     }
     attr(res, "curve_sets") <- curve_sets
     attr(res, "factor") <- factor
+    attr(res, "method") <- "Combined functional boxplot"
     attr(res, "call") <- match.call()
     class(res) <- c("combined_fboxplot", class(res))
   }
