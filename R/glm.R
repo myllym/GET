@@ -9,31 +9,30 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
     curve_sets <- list(Y=curve_sets)
     if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.\n")
   }
-  if(!( all(vars %in% names(curve_sets)) | all(vars[-1] %in% names(factors)) )) stop("The variables in the formula not found in the given data (curve_sets and factors).\n")
+  available <- unique(c(names(curve_sets), names(factors)))
+  if(!all(vars[-1] %in% available)) stop("The variables in the formula not found in the given data (curve_sets and factors).\n")
   if(!all(sapply(curve_sets, function(x) inherits(x, c("curve_set", "fdata"))))) stop("The components of curve_sets do not have a valid class.\n")
   curve_sets <- lapply(curve_sets, convert_fdata)
   if(!all(lapply(curve_sets[['obs']], is.matrix))) stop("The curve_set must include data functions (sim_m ignored).\n")
   curve_sets <- check_curve_set_dimensions(curve_sets)
   # Put the functions and factors into data.l
   data.l <- list()
-  data.l[[1]] <- t(curve_sets[[vars[1]]][['obs']]) # -> each row corresponds to a data function
+  data.l[['Y']] <- t(curve_sets[[vars[1]]][['obs']]) # -> each row corresponds to a data function
   # The argument values
   r <- curve_sets[[vars[1]]][['r']]
   Nfunc <- nrow(data.l[[1]]) # Number of functions
   nr <- ncol(data.l[[1]]) # Number of argument values
-  if(length(curve_sets) > 1) { # Factors provided in the curve_sets
-    for(i in 2:length(vars)) data.l[[i]] <- t(curve_sets[[vars[i]]][['obs']])
+  vars.csets <- vars[vars %in% names(curve_sets)]
+  if(length(curve_sets) > 1 & length(vars.csets) > 1) { # Factors provided in the curve_sets
+    for(i in 2:length(vars.csets)) data.l[[vars.csets[i]]] <- t(curve_sets[[vars.csets[i]]][['obs']])
   }
-  else {
-    if(is.null(factors)) stop("No factors provided.\n")
-    else {
-      if(class(factors)[1] != "data.frame") stop("Invalid factors argument.\n")
-      if(nrow(factors) != nrow(data.l[[1]])) stop("The dimensions of Y and factors do not match.\n")
-      # Expand the factors to each argument value
-      for(i in 2:length(vars)) data.l[[i]] <- matrix(factors[,vars[i]], nrow=nrow(factors), ncol=nr)
-    }
+  vars.factors <- vars[vars %in% names(factors)]
+  if(!is.null(factors) & length(vars.factors) > 0) {
+    if(class(factors)[1] != "data.frame") stop("Invalid factors argument.\n")
+    if(nrow(factors) != nrow(data.l[[1]])) stop("The dimensions of Y and factors do not match.\n")
+    # Expand the factors to each argument value
+    for(i in 1:length(vars.factors)) data.l[[vars.factors[i]]] <- matrix(factors[,vars.factors[i]], nrow=nrow(factors), ncol=nr)
   }
-  names(data.l) <- vars
   list(data.l=data.l, r=r, Nfunc=Nfunc, nr=nr)
 }
 
