@@ -69,6 +69,8 @@ fdata_to_curve_set <- function(fdata, ...) {
   if(!inherits(fdata, 'fdata')) {
     stop('fdata is not a fdata object.')
   }
+  if(!is.null(fdata[['fdata2d']]) && fdata[['fdata2d']])
+    stop("No support for converting this type of functional data, only functional data observed in a single grid supported.\n")
 
   r <- fdata[['argvals']]
   n_r <- length(r)
