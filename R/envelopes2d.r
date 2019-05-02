@@ -44,7 +44,7 @@ curve_set_results_to_image_results <- function(res_v, image_sets) {
   res
 }
 
-# Functionality for central_region_2d and global_envelope_test_2d
+# Functionality for central_region2d and global_envelope_test2d
 cr_or_GET_2d <- function(image_sets, CR_or_GET = c("CR", "GET"), ...) {
   CR_or_GET <- match.arg(CR_or_GET)
   if(inherits(image_sets, "image_set")) image_sets <- list(image_sets)
@@ -105,7 +105,7 @@ cr_or_GET_2d <- function(image_sets, CR_or_GET = c("CR", "GET"), ...) {
 #' \code{k_alpha}, \code{alpha}, \code{k}, and \code{call}, see more detailed description in
 #' \code{\link{central_region}}.
 #' @export
-central_region_2d <- function(image_sets, ...) {
+central_region2d <- function(image_sets, ...) {
   res <- cr_or_GET_2d(image_sets, CR_or_GET = "CR", ...)
   attr(res, "call") <- match.call()
   res
@@ -122,7 +122,7 @@ central_region_2d <- function(image_sets, ...) {
 #'
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 #'
-#' @inheritParams central_region_2d
+#' @inheritParams central_region2d
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @return An object of class "global_envelope_2d" (and "list"),
 #' which can be printed and plotted directly.
@@ -184,11 +184,11 @@ central_region_2d <- function(image_sets, ...) {
 #'   }
 #'   # Constract the global envelope test for the (2D) raw residuals
 #'   iset <- create_image_set(list(obs=obs, sim_m=sim))
-#'   res <- global_envelope_test_2d(iset)
+#'   res <- global_envelope_test2d(iset)
 #'   plot(res)
 #'   plot(res, fixedscales=FALSE)
 #' }
-global_envelope_test_2d <- function(image_sets, ...) {
+global_envelope_test2d <- function(image_sets, ...) {
   res <- cr_or_GET_2d(image_sets, CR_or_GET = "GET", ...)
   attr(res, "call") <- match.call()
   res
