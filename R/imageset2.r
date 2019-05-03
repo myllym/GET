@@ -19,16 +19,16 @@
 #' the discrete group factor in the list component \code{Group},
 #' and the continuous factor z in the list component \code{z}.
 #'
-#' @usage data(imageset1)
+#' @usage data(imageset2)
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
 #' @keywords datasets
 #' @keywords curves
-#' @name imageset1
+#' @name imageset2
 #' @docType data
 #' @seealso \code{\link{graph.fanova2d}}, \code{\link{graph.fglm2d}}
 #' @examples
-#' data(imageset1)
+#' data(imageset2)
 #' par(mfrow=c(2,5))
 #' plot(imageset2$image_set, idx=c(1:5, 11:15))
 NULL
