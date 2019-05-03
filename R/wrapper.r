@@ -169,11 +169,9 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.param = NULL
 # Ecdf means
 # y is a vector for which groups gives grouping
 #' @importFrom stats ecdf
-ecdfmeans <- function(x, groups, r) {
+ecdfmeans.m <- function(x, groups, r) {
   ecdf.ls <- by(x, INDICES=groups, FUN=stats::ecdf, simplify=FALSE)
-  jm <- unlist(lapply(ecdf.ls, FUN = function(x) { x(r) }))
-  names(jm) <- rep(levels(groups), each = length(r))
-  jm
+  sapply(ecdf.ls, FUN = function(x) { x(r) }, simplify=TRUE)
 }
 
 # Ecdf contrasts
