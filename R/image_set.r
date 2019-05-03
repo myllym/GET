@@ -130,7 +130,7 @@ print.image_set <- function(x, ...) {
 #' @importFrom spatstat as.im
 #' @importFrom spatstat plot.im
 #' @export
-plot.image_set <- function(x, idx = 1, obs = TRUE, ...) {
+plot.image_set <- function(x, idx = 1, obs = TRUE, main, col, ...) {
   if(obs) {
     if(length(dim(x$obs))==2) {
       idx <- 1
@@ -145,13 +145,11 @@ plot.image_set <- function(x, idx = 1, obs = TRUE, ...) {
     if(is.null(x$sim_m) || !all(idx %in% 1:dim(x$sim_m)[3])) stop("Unreasonable indices \'idx\'.\n")
     obs <- x$sim_m
   }
-  extraargs <- list(...)
-  if(!("col" %in% names(extraargs)))
-    col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(obs[,,idx]))
-  else col <- NULL
-  if(!("main" %in% names(extraargs)))
+  if(missing(main))
     main <- paste("Image ", idx, sep="")
-  else if(length(extraargs[['main']] == 1)) main <- rep(extraargs[['main']], times=length(idx))
+  else if(length(main) == 1) main <- rep(main, times=length(idx))
+  if(missing(col))
+    col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(obs[,,idx]))
   for(i in 1:length(idx)) {
     obs.im <- spatstat::as.im(list(x=x$r[[1]], y=x$r[[2]], z=obs[,,idx[i]]))
     spatstat::plot.im(obs.im, col=col, main=main[i], ...)
