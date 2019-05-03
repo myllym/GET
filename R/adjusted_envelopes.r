@@ -294,7 +294,7 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
 #' r <- seq(0, rmax, by=rstep)
 #'
 #' # Fit the Matern cluster process to the pattern
-#' (using minimum contrast estimation with the K-function)
+#' # (using minimum contrast estimation with the K-function)
 #' M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
 #' summary(M1)
 #'
