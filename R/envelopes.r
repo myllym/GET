@@ -295,11 +295,12 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
                                           lo=attr(res, "k_alpha"), hi=NA)
   mostattributes(attr(res_ls, "level2_ge")) <- attributes(res)
   # Set unreasonable attributes of individuals sets of curves to NULL
-  anames <- c("p", "p_interval", "ties", "alpha", "k", "k_alpha", "method")
+  anames <- c("p", "p_interval", "ties", "k", "k_alpha", "method")
   anames <- anames[anames %in% names(attributes(res_ls[[1]]))]
   for(name in anames) {
     for(i in 1:length(res_ls)) attr(res_ls[[i]], name) <- NULL
   }
+  attr(res_ls[[i]], "alpha") <- NA
   if(!is.null(curve_sets)) names(res_ls) <- names(curve_sets)
   attr(res_ls, "method") <- "Combined global envelope (one-step)"
   class(res_ls) <- c("combined_global_envelope", class(res_ls))
