@@ -312,23 +312,23 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 #' @examples
 #' \donttest{
-#' data("imageset1")
+#' data("imageset2")
 #' # Testing discrete factor group
 #' res.g <- graph.fglm2d(nsim = 99,
 #'                       formula.full = Y ~ group + z,
 #'                       formula.reduced = Y ~ z,
-#'                       image_sets = list(Y = imageset1$image_set),
-#'                       factors = data.frame(group = imageset1$Group,
-#'                                            z = imageset1$z))
+#'                       image_sets = list(Y = imageset2$image_set),
+#'                       factors = data.frame(group = imageset2$Group,
+#'                                            z = imageset2$z))
 #' par(mfrow=c(1,3))
 #' plot(res.g)
 #' # Testing discrete factor group with contrasts
 #' res.gc <- graph.fglm2d(nsim = 99,
 #'                        formula.full = Y ~ group + z,
 #'                        formula.reduced = Y ~ z,
-#'                        image_sets = list(Y = imageset1$image_set),
-#'                        factors = data.frame(group = imageset1$Group,
-#'                                             z = imageset1$z),
+#'                        image_sets = list(Y = imageset2$image_set),
+#'                        factors = data.frame(group = imageset2$Group,
+#'                                             z = imageset2$z),
 #'                        summaryfun = "contrasts")
 #' par(mfrow=c(1,3))
 #' plot(res.gc)
@@ -337,9 +337,9 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' res.z <- graph.fglm2d(nsim = 99,
 #'                       formula.full = Y ~ group + z,
 #'                       formula.reduced = Y ~ group,
-#'                       image_sets = list(Y = imageset1$image_set),
-#'                       factors = data.frame(group = imageset1$Group,
-#'                                            z = imageset1$z))
+#'                       image_sets = list(Y = imageset2$image_set),
+#'                       factors = data.frame(group = imageset2$Group,
+#'                                            z = imageset2$z))
 #' par(mfrow=c(1,3))
 #' plot(res.z)
 #' }
@@ -378,14 +378,14 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
 #' @examples
 #' \donttest{
-#' data("imageset1")
+#' data("imageset2")
 #' # Testing discrete factor group
 #' res.g <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
 #'                        formula.full = Y ~ group + z,
 #'                        formula.reduced = Y ~ z,
-#'                        image_sets = list(Y = imageset1$image_set),
-#'                        factors = data.frame(group = imageset1$Group,
-#'                                             z = imageset1$z))
+#'                        image_sets = list(Y = imageset2$image_set),
+#'                        factors = data.frame(group = imageset2$Group,
+#'                                             z = imageset2$z))
 #' par(mfrow=c(1,3))
 #' plot(res.g)
 #'
@@ -393,9 +393,9 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' res.z <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       formula.full = Y ~ group + z,
 #'                       formula.reduced = Y ~ group,
-#'                       image_sets = list(Y = imageset1$image_set),
-#'                       factors = data.frame(group = imageset1$Group,
-#'                                            z = imageset1$z))
+#'                       image_sets = list(Y = imageset2$image_set),
+#'                       factors = data.frame(group = imageset2$Group,
+#'                                            z = imageset2$z))
 #' par(mfrow=c(1,3))
 #' plot(res.z)
 #' }
