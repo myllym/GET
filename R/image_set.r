@@ -122,6 +122,8 @@ print.image_set <- function(x, ...) {
 #' @param idx Indices of the images in the image_set to be plotted.
 #' @param obs Logical. TRUE, then idx is understood as an index to \code{image_set$obs},
 #' otherwise to \code{image_set$sim_m}.
+#' @param main The title. Default exists.
+#' @param col Colours to be passed to \code{\link[spatstat]{plot.im}}. A default exists.
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot image_set

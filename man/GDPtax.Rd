@@ -37,7 +37,7 @@ countries for which the GDP was available for 1980-2017 and profit tax for 2010:
 }
 \examples{
 data(GDPtax)
-GDPcset <- GDPtax$curve_set
+GDPcset <- GDPtax$GDP
 # Plot data in groups
 subs <- function(group, ...) {
   cset <- GDPcset
