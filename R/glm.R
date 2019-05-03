@@ -286,7 +286,11 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   sim <- sapply(sim, function(x) x, simplify="array")
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
-  do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
+  res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
+  attr(res, "ylab") <- "F(r)"
+  attr(res, "yexp") <- quote(F(r))
+  attr(res, "fname") <- "F"
+  res
 }
 
 #' Graphical functional GLM for images
