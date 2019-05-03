@@ -39,7 +39,7 @@
 #' @seealso \code{\link{graph.fglm}}
 #' @examples
 #' data(GDPtax)
-#' GDPcset <- GDPtax$curve_set
+#' GDPcset <- GDPtax$GDP
 #' # Plot data in groups
 #' subs <- function(group, ...) {
 #'   cset <- GDPcset
