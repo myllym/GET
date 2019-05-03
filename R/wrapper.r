@@ -177,18 +177,20 @@ ecdfmeans.m <- function(x, groups, r) {
 # Ecdf contrasts
 # y is a vector for which groups gives grouping
 #' @importFrom stats ecdf
-ecdfcontrasts <- function(x, groups, r) {
+ecdfcontrasts.m <- function(x, groups, r) {
+  k <- nlevels(groups)
   gnames <- levels(groups)
   ecdf.ls <- by(x, INDICES=groups, FUN=stats::ecdf, simplify=FALSE)
-  dffs <- NULL
-  for(i in 1:(length(ecdf.ls)-1)) {
-    for(j in (i+1):length(ecdf.ls)) {
-      dff <- ecdf.ls[[i]](r) - ecdf.ls[[j]](r)
-      names(dff) <- rep(paste(gnames[i], gnames[j], sep="-"), length(r))
-      dffs <- c(dffs, dff)
-    }
+  cont <- matrix(0, nrow=length(r), ncol=k*(k-1)/2)
+  cont.names <- vector(length=k*(k-1)/2)
+  counter <- 1
+  for(i in 1:(k-1)) for(j in (i+1):k) {
+    cont[, counter] <- ecdf.ls[[i]](r) - ecdf.ls[[j]](r)
+    cont.names[counter] <- paste(gnames[i], gnames[j], sep="-")
+    counter <- counter+1
   }
-  dffs
+  colnames(cont) <- cont.names
+  cont
 }
 
 #' Graphical n sample test of correspondence of distribution functions
