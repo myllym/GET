@@ -80,7 +80,7 @@ dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
       else simfun.arg <- fitfun(X)
     }
     # Create simulated functions from the given model (provided either by simfun, or in X itself if Xispppmodel)
-    stage1_cset_ls <- funcs_from_X_and_funs(X, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg,
+    stage1_cset_ls <- funcs_from_X_and_funs(X, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg,
                                             testfuns=testfuns, ...,
                                             savepatterns=FALSE, verbose=verbose, calc_funcs=TRUE)
     # Create another set of simulations to be used to estimate the second-state p-value
@@ -112,7 +112,7 @@ dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
         if(!is.null(fitfun)) simfun.arg <- fitfun(Xsim) # a fitted model to be passed to simfun
       }
       # Create simulations from the given model and calculate the test functions
-      funcs_from_X_and_funs(Xsim, nsim=nsim, simfun=simfun, simfun.arg=simfun.arg,
+      funcs_from_X_and_funs(Xsim, nsim=nsimsub, simfun=simfun, simfun.arg=simfun.arg,
                             testfuns=testfuns, ...,
                             savepatterns=FALSE, verbose=verbose, calc_funcs=TRUE)
     }
@@ -128,7 +128,7 @@ dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
     # Fit the model to X
     simfun.arg <- fitfun(X) # fitted model to be passed to simfun
     # Generate nsim simulations by the given function using the fitted model
-    stage1_cset_ls <- replicate(n=nsim, expr=simfun(simfun.arg), simplify=FALSE) # list of data objects
+    stage1_cset_ls <- replicate(n=nsimsub, expr=simfun(simfun.arg), simplify=FALSE) # list of data objects
     stage1_cset_ls <- sapply(stage1_cset_ls, FUN=calcfun, simplify=TRUE) # matrix of functions
     stage1_cset_ls <- list(create_curve_set(list(r=1:nrow(stage1_cset_ls), obs=calcfun(X), sim_m=stage1_cset_ls)))
     # Create another set of simulations to be used to estimate the second-state p-value
@@ -137,8 +137,8 @@ dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
     loopfun <- function(rep) {
       # Fit the model to the simulated pattern Xsims[[rep]]
       simfun.arg <- fitfun(Xsims[[rep]])
-      # Generate nsim simulations from the fitted model
-      cset <- replicate(n=nsim, expr=simfun(simfun.arg), simplify=FALSE) # list of data objects
+      # Generate nsimsub simulations from the fitted model
+      cset <- replicate(n=nsimsub, expr=simfun(simfun.arg), simplify=FALSE) # list of data objects
       cset <- sapply(cset, FUN=calcfun, simplify=TRUE) # matrix of functions
       list(create_curve_set(list(r=1:nrow(cset), obs=calcfun(X), sim_m=cset)))
     }
@@ -230,9 +230,9 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
 #' giving the second stage simulations, see details.
 #' @param nsim The number of simulations to be generated in the primary test.
 #' Ignored if \code{X.ls} provided.
-#' @param nsimsub Number of simulations in each basic test. There will be nsim repetitions of the
-#' basic test, each involving nsimsub simulated realisations, so there will be a total of
-#' nsim * (1 + nsimsub) simulations.
+#' @param nsimsub Number of simulations in each basic test. There will be \code{nsim} repetitions
+#' of the basic test, each involving \code{nsimsub} simulated realisations.
+#' Total number of simulations will be nsim * (nsimsub + 1).
 #' @param simfun A function for generating simulations from the null model. If given, this function
 #' is called by \code{replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)} to make nsim
 #' simulations. Here \code{simfun.arg} is obtained by \code{fitfun(X)}.
@@ -303,7 +303,6 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
   # 1) All simulations provided
   #----------------------------
   if(!is.null(X.ls)) {
-    nsim <- length(X.ls)
     # Check dimensions of each curve_set and transform to curve_sets
     if(class(X)[1] != "list") {
       X <- list(X) # The observed curves (a list of curve_set objects)
@@ -360,7 +359,7 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
                          probs=probs, MrkvickaEtal2017=MrkvickaEtal2017)
     list(stat = tmp$stat, pval = tmp$pval)
   }
-  mclapply_res <- mclapply(X=1:nsim, FUN=loopfun, mc.cores=mc.cores)
+  mclapply_res <- mclapply(X=1:length(X.ls), FUN=loopfun, mc.cores=mc.cores)
   stats <- sapply(mclapply_res, function(x) x$stat)
   pvals <- sapply(mclapply_res, function(x) x$pval)
 
