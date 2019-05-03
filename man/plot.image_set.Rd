@@ -4,7 +4,7 @@
 \alias{plot.image_set}
 \title{Plot method for the class 'image_set'}
 \usage{
-\method{plot}{image_set}(x, idx = 1, obs = TRUE, ...)
+\method{plot}{image_set}(x, idx = 1, obs = TRUE, main, col, ...)
 }
 \arguments{
 \item{x}{an 'image_set' object}
