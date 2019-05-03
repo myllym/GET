@@ -31,14 +31,14 @@ Multiple testing in permutation inference for the general linear model (GLM)
 }
 \examples{
 \donttest{
-data("imageset1")
+data("imageset2")
 # Testing discrete factor group
 res.g <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                        formula.full = Y ~ group + z,
                        formula.reduced = Y ~ z,
-                       image_sets = list(Y = imageset1$image_set),
-                       factors = data.frame(group = imageset1$Group,
-                                            z = imageset1$z))
+                       image_sets = list(Y = imageset2$image_set),
+                       factors = data.frame(group = imageset2$Group,
+                                            z = imageset2$z))
 par(mfrow=c(1,3))
 plot(res.g)
 
@@ -46,9 +46,9 @@ plot(res.g)
 res.z <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                       formula.full = Y ~ group + z,
                       formula.reduced = Y ~ group,
-                      image_sets = list(Y = imageset1$image_set),
-                      factors = data.frame(group = imageset1$Group,
-                                           z = imageset1$z))
+                      image_sets = list(Y = imageset2$image_set),
+                      factors = data.frame(group = imageset2$Group,
+                                           z = imageset2$z))
 par(mfrow=c(1,3))
 plot(res.z)
 }

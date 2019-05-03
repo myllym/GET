@@ -2,6 +2,7 @@
 % Please edit documentation in R/adjusted_envelopes.r
 \name{dg.global_envelope_test}
 \alias{dg.global_envelope_test}
+\alias{dg.GET}
 \title{Adjusted global envelope tests}
 \usage{
 dg.global_envelope_test(X, X.ls = NULL, nsim = 499, nsimsub = nsim,
@@ -154,8 +155,8 @@ data(saplings)
 rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
 r <- seq(0, rmax, by=rstep)
 
-# Fit the Matern cluster process to the pattern (using minimum contrast estimation with the
-# K-function)
+# Fit the Matern cluster process to the pattern
+# (using minimum contrast estimation with the K-function)
 M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
 summary(M1)
 
@@ -167,9 +168,9 @@ nsim <- 19 # Increase nsim for serious analysis!
 # This can be done and is preferable when the model is a point process model of spatstat.
 # Make the adjusted directional quantile global envelope test using the L(r)-r function
 adjenvL <- dg.global_envelope_test(X = M1, nsim = nsim,
-                                   testfuns = list(L = list(fun="Lest", correction="translate",
-                                                            transform = expression(.-r), r=r)), # passed to envelope
-                                   type = "qdir", r_min=rmin, r_max=rmax)
+            testfuns = list(L = list(fun="Lest", correction="translate",
+                           transform = expression(.-r), r=r)), # passed to envelope
+            type = "qdir", r_min=rmin, r_max=rmax)
 # Plot the test result
 plot(adjenvL)
 
@@ -213,9 +214,9 @@ simf <- function(M) {
   simulate(M, nsim=1)[[1]]
 }
 res <- dg.global_envelope_test(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
-                               testfuns = list(L = list(fun="Lest", correction="translate",
-                                                        transform = expression(.-r), r=r)),
-                               type="qdir", r_min=rmin, r_max=rmax)
+         testfuns = list(L = list(fun="Lest", correction="translate",
+                         transform = expression(.-r), r=r)),
+         type="qdir", r_min=rmin, r_max=rmax)
 plot(res)
 }
 }

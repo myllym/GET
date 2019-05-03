@@ -14,6 +14,10 @@
 \item{obs}{Logical. TRUE, then idx is understood as an index to \code{image_set$obs},
 otherwise to \code{image_set$sim_m}.}
 
+\item{main}{The title. Default exists.}
+
+\item{col}{Colours to be passed to \code{\link[spatstat]{plot.im}}. A default exists.}
+
 \item{...}{Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.}
 }
 \description{
