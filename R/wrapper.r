@@ -254,22 +254,26 @@ GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapp
   }
   # setting that 'summaryfun' is a function
   switch(summaryfun,
-         means = {fun <- ecdfmeans},
-         contrasts = {fun <- ecdfcontrasts}
+         means = {fun <- ecdfmeans.m},
+         contrasts = {fun <- ecdfcontrasts.m}
   )
   x <- unlist(x)
   # Observed difference between the ecdfs
   obs <- fun(x, groups, r)
   # Simulations by permuting to which groups each value belongs to
   cat("Creating ", nsim, " permutations.\n", sep="")
-  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE), r))
-  complabels <- unique(names(obs))
-  # Create a curve_set
-  cset <- create_curve_set(list(r = rep(r, times=length(complabels)),
-                                obs = obs,
-                                sim_m = sim))
+  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE), r), simplify = "array")
+  complabels <- colnames(obs)
+
+  csets <- list()
+  for(i in 1:ncol(obs)) {
+    csets[[i]] <- create_curve_set(list(r = r,
+                                        obs = obs[,i],
+                                        sim_m = sim[,i,]))
+  }
+  names(csets) <- complabels
   # GET
-  res <- global_envelope_test(cset, alternative="two.sided", ...)
+  res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
   attr(res, "xlab") <- "x"
   attr(res, "xexp") <- quote(x)
   switch(summaryfun,
