@@ -321,7 +321,7 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
   # 2) Simulations if X.ls not provided
   #------------------------------------
   else { # Perform simulations
-    cat("Performing simulations, ...\n")
+    if(verbose) cat("Performing simulations, ...\n")
     tmp <- dg.simulate(X=X, nsim=nsim, nsimsub=nsimsub,
                        simfun=simfun, fitfun=fitfun, calcfun=calcfun, testfuns=testfuns, ...,
                        verbose=verbose, mc.cores=mc.cores)
