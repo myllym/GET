@@ -116,7 +116,7 @@ print.image_set <- function(x, ...) {
 }
 
 #' Plot method for the class 'image_set'
-#' @usage \method{plot}{image_set}(x, idx = 1, obs = TRUE, ...)
+#' @usage \method{plot}{image_set}(x, idx = 1, obs = TRUE, main, col, ...)
 #'
 #' @param x an 'image_set' object
 #' @param idx Indices of the images in the image_set to be plotted.
