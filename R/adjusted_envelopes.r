@@ -56,7 +56,6 @@ funcs_from_X_and_funs <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfun
 dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
                         simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
                         testfuns=NULL, ..., verbose=TRUE, mc.cores=1L) {
-  cat("Performing simulations based on simfun, fitfun, simfun.arg, testfuns, ...\n")
   # Check if X is a (ppp) model object of spatstat
   Xispppmodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
 
@@ -322,6 +321,7 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
   # 2) Simulations if X.ls not provided
   #------------------------------------
   else { # Perform simulations
+    cat("Performing simulations, ...\n")
     tmp <- dg.simulate(X=X, nsim=nsim, nsimsub=nsimsub,
                        simfun=simfun, fitfun=fitfun, calcfun=calcfun, testfuns=testfuns, ...,
                        verbose=verbose, mc.cores=mc.cores)
