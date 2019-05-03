@@ -19,7 +19,8 @@ see \code{formula} in \code{\link[stats]{lm}}.}
 \item{curve_sets}{A named list of sets of curves giving the dependent variable (Y), and
 possibly additionally all the factors. The dimensions of the elements should
 match with each other, i.e. the factor values should be given for each argument value
-and each function.}
+and each function. If factors are given in the argument \code{factors}, then can also be just
+the curve set representing Y. Also \code{\link[fda.usc]{fdata}} objects allowed.}
 
 \item{factors}{A data frame of factors. An alternative way to specify factors when they
 are constant for all argument values. The number of rows of the data frame should be equal
@@ -54,12 +55,14 @@ The test is able to find if the factor of interest is significant and also which
 argument values of the functional domain are responsible for the potential rejection.
 }
 \examples{
+\dontrun{
 data(rimov)
 res <- frank.fglm(nsim=99, # Increase the number of simulations for serious analysis!
                   formula.full = Y~Year,
                   formula.reduced = Y~1,
-                  curve_set=rimov, factors = data.frame(Year = 1979:2014))
+                  curve_sets=list(Y=rimov), factors = data.frame(Year = 1979:2014))
 plot(res)
+}
 }
 \references{
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.

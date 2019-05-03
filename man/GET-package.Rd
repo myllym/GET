@@ -83,6 +83,7 @@ for the function, see examples in \code{\link{global_envelope_test}}.
  the most extreme to the least extreme ones. The core functionality of calculating the measures
  is in the function \code{\link{forder}}, which can be used to obtain different measures for sets of
  curves. Usually there is no need to call \code{\link{forder}} directly.
+\item \emph{Functional boxplots}: \code{\link{fboxplot}}
 \item \emph{Adjusted} global envelope tests for composite hypotheses
 \itemize{
   \item \code{\link{dg.global_envelope_test}}, see a detailed example in \code{\link{saplings}}
@@ -91,19 +92,19 @@ Also the adjusted tests can be based on several test functions.
 \item \emph{One-way functional ANOVA}:
  \itemize{
   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
-  \item \emph{Graphical} functional ANOVA tests for images (2d functions): \code{\link{graph.fanova2d}}
   \item Global rank envelope based on F-values: \code{\link{frank.fanova}}
-  \item Global rank envelope based on F-values for images: \code{\link{frank.fanova2d}}
+  \item Image (2d function) counterparts: \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}}
  }
 \item \emph{Functional general linear model (GLM)}:
  \itemize{
   \item \emph{Graphical} functional GLM: \code{\link{graph.fglm}}
-  \item \emph{Graphical} functional GLM for images: \code{\link{graph.fglm2d}}
   \item Global rank envelope based on F-values: \code{\link{frank.fglm}}
-  \item Global rank envelope based on F-values: \code{\link{frank.fglm2d}}
+  \item Image (2d function) counterparts: \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}}
  }
 \item Wrapper functions to perform global envelopes for specific purposes:
  \itemize{
+  \item Central regions for images (2d functions): \code{\link{central_region2d}}
+  \item Global envelope tests for images (2d functions): \code{\link{global_envelope_test2d}}
   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
   \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
  }
