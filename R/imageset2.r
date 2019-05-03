@@ -30,5 +30,5 @@
 #' @examples
 #' data(imageset1)
 #' par(mfrow=c(2,5))
-#' plot(imageset1$image_set, idx=c(1:5, 11:15))
+#' plot(imageset2$image_set, idx=c(1:5, 11:15))
 NULL
