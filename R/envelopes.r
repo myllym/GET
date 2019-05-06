@@ -256,8 +256,8 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   UB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
   # Update the bounding curves (lo, hi) and kalpha to the first level central regions
   for(i in 1:length(curve_sets)) {
-    res_ls[[i]]$lo <- LB[[i]]
-    res_ls[[i]]$hi <- UB[[i]]
+    if(attr(res_ls[[i]], "einfo")$alternative != "greater") res_ls[[i]]$lo <- LB[[i]]
+    if(attr(res_ls[[i]], "einfo")$alternative != "less") res_ls[[i]]$hi <- UB[[i]]
     attr(res_ls[[i]], "alpha") <- NA
     attr(res_ls[[i]], "k_alpha") <- NULL
   }
