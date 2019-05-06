@@ -261,7 +261,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
     attr(res_ls[[i]], "alpha") <- NA
     attr(res_ls[[i]], "k_alpha") <- NULL
   }
-  if(!is.null(curve_sets)) names(res_ls) <- names(curve_sets)
+  if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
 
   # Return
   res <- res_ls
