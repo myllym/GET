@@ -14,9 +14,14 @@
 \item{obs}{Logical. TRUE, then idx is understood as an index to \code{image_set$obs},
 otherwise to \code{image_set$sim_m}.}
 
+\item{plot_style}{Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)}
+
 \item{main}{The title. Default exists.}
 
-\item{col}{Colours to be passed to \code{\link[spatstat]{plot.im}}. A default exists.}
+\item{col}{Colours to be passed to \code{\link[spatstat]{plot.im}} if
+\code{plot_style = "basic"}. A default exists.}
+
+\item{max_ncols_of_plots}{The maximum number of columns for the figures. Default 4.}
 
 \item{...}{Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.}
 }
