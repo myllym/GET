@@ -135,6 +135,7 @@ print.image_set <- function(x, ...) {
 #' @importFrom spatstat as.im
 #' @importFrom spatstat plot.im
 #' @importFrom graphics par
+#' @importFrom ggplot2 ggplot aes .data geom_raster facet_wrap vars
 #' @export
 plot.image_set <- function(x, idx = 1, obs = TRUE, plot_style = c("ggplot2", "basic"),
                            main, col, max_ncols_of_plots = 4, ...) {
