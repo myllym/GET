@@ -176,7 +176,7 @@ plot.image_set <- function(x, idx = 1, obs = TRUE, plot_style = c("ggplot2", "ba
            xy <- expand.grid(x=x$r[[1]], y=x$r[[2]])
            dfs <- lapply(1:length(idx), function(i) {
              xy$z <- c(obs[,,idx[i]])
-             xy$title <- main[i]
+             xy$title <- factor(main[i])
              xy
            })
            df <- do.call(rbind, dfs)
