@@ -509,6 +509,7 @@ graph.fanova2d <- function(nsim, image_set, groups, ...) {
 #'                       image_set = imageset1$image_set,
 #'                       groups = imageset1$Group)
 #' plot(res)
+#' plot(res, fixedscales=FALSE, contours=FALSE)
 frank.fanova2d <- function(nsim, image_set, groups, ...) {
   if(class(image_set)[1] != "image_set") stop("The image_set does not have a valid class.\n")
   obs_d <- dim(image_set$obs)
