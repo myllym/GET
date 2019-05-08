@@ -796,7 +796,7 @@ env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, 
                              axis.text.y=element_blank(),
                              axis.ticks.y=element_blank())
   lapply(dfs, function(df) {
-    g <- env2d_ggplot2_helper_1(df, sign.col, transparency)
+    g <- env2d_ggplot2_helper_1(df, sign.col, transparency, contours)
     g <- g + facet_wrap(vars(label))
     g + remove_axes_theme
   })
