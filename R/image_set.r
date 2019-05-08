@@ -118,12 +118,15 @@ print.image_set <- function(x, ...) {
 #' Plot method for the class 'image_set'
 #' @usage \method{plot}{image_set}(x, idx = 1, obs = TRUE, main, col, ...)
 #'
+#' @inheritParams plot.global_envelope_2d
 #' @param x an 'image_set' object
 #' @param idx Indices of the images in the image_set to be plotted.
 #' @param obs Logical. TRUE, then idx is understood as an index to \code{image_set$obs},
 #' otherwise to \code{image_set$sim_m}.
 #' @param main The title. Default exists.
-#' @param col Colours to be passed to \code{\link[spatstat]{plot.im}}. A default exists.
+#' @param col Colours to be passed to \code{\link[spatstat]{plot.im}} if
+#' \code{plot_style = "basic"}. A default exists.
+#' @param max_ncols_of_plots The maximum number of columns for the figures. Default 4.
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
 #' @method plot image_set
@@ -131,8 +134,11 @@ print.image_set <- function(x, ...) {
 #' @importFrom grDevices gray
 #' @importFrom spatstat as.im
 #' @importFrom spatstat plot.im
+#' @importFrom graphics par
 #' @export
-plot.image_set <- function(x, idx = 1, obs = TRUE, main, col, ...) {
+plot.image_set <- function(x, idx = 1, obs = TRUE, plot_style = c("ggplot2", "basic"),
+                           main, col, max_ncols_of_plots = 4, ...) {
+  plot_style <- match.arg(plot_style)
   if(obs) {
     if(length(dim(x$obs))==2) {
       idx <- 1
@@ -150,10 +156,32 @@ plot.image_set <- function(x, idx = 1, obs = TRUE, main, col, ...) {
   if(missing(main))
     main <- paste("Image ", idx, sep="")
   else if(length(main) == 1) main <- rep(main, times=length(idx))
-  if(missing(col))
-    col <- spatstat::colourmap(grDevices::gray(0:255/255), range=range(obs[,,idx]))
-  for(i in 1:length(idx)) {
-    obs.im <- spatstat::as.im(list(x=x$r[[1]], y=x$r[[2]], z=obs[,,idx[i]]))
-    spatstat::plot.im(obs.im, col=col, main=main[i], ...)
-  }
+
+  switch(plot_style,
+         basic = {
+           n_of_plots <- length(idx)
+           ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
+           nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
+           par(mfrow=c(nrows_of_plots, ncols_of_plots))
+           if(missing(col))
+             col <- colourmap(grDevices::gray(0:255/255), range=range(obs[,,idx]))
+           for(i in 1:length(idx)) {
+             obs.im <- as.im(list(x=x$r[[1]], y=x$r[[2]], z=obs[,,idx[i]]))
+             plot.im(obs.im, col=col, main=main[i], ...)
+           }
+         },
+         ggplot2 = {
+           max_ncols_of_plots <- min(max_ncols_of_plots, length(idx))
+           xy <- expand.grid(x=x$r[[1]], y=x$r[[2]])
+           dfs <- lapply(1:length(idx), function(i) {
+             xy$z <- c(obs[,,idx[i]])
+             xy$title <- main[i]
+             xy
+           })
+           df <- do.call(rbind, dfs)
+           ggplot(df, aes(x=.data$x, y=.data$y, fill=.data$z)) +
+             geom_raster() +
+             facet_wrap(vars(.data$title), ncol=max_ncols_of_plots) +
+             labs(x="", y="", fill="")
+         })
 }
