@@ -116,7 +116,8 @@ print.image_set <- function(x, ...) {
 }
 
 #' Plot method for the class 'image_set'
-#' @usage \method{plot}{image_set}(x, idx = 1, obs = TRUE, main, col, ...)
+#' @usage \method{plot}{image_set}(x, idx = 1, obs = TRUE, plot_style = c("ggplot2", "basic"),
+#'  main, col, max_ncols_of_plots = 4, ...)
 #'
 #' @inheritParams plot.global_envelope_2d
 #' @param x an 'image_set' object
