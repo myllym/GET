@@ -23,9 +23,6 @@ library(GET)
 help('GET-package')
 ```
 
-In order to use the function random_labelling, the R library `marksummary` is
-needed. It is available at https://github.com/myllym/marksummary.
-
 ## Branches
 
 The branch for public use is called `master`. There are no other public branches at the moment.
