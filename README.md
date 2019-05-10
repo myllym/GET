@@ -17,10 +17,10 @@ install.packages("remotes")
 ```
 
 After installation, in order to start using `GET`, load it to R and see
-the main help page, which describes the usage of the functions of the library:
+the main help page, which describes the functions of the library:
 ```R
 library(GET)
-help(GET)
+help('GET-package')
 ```
 
 In order to use the function random_labelling, the R library `marksummary` is
