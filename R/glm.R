@@ -152,7 +152,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #'                                   formula.reduced = Y~Group+Tax,
 #'                                   curve_sets = list(Y=GDPtax$GDP),
 #'                                   factors = factors.df)
-#' plot(res.tax_within_group, plot_style="ggplot2")
+#' plot(res.tax_within_group)
 #' }
 graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        summaryfun = c("means", "contrasts"),
