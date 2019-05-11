@@ -80,7 +80,7 @@ res.tax_within_group <- graph.fglm(nsim = 999,
                                   formula.reduced = Y~Group+Tax,
                                   curve_sets = list(Y=GDPtax$GDP),
                                   factors = factors.df)
-plot(res.tax_within_group, plot_style="ggplot2")
+plot(res.tax_within_group)
 }
 }
 \references{
