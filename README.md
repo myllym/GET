@@ -1,6 +1,6 @@
 # GET
 
-An R library for Global Envelope Tests
+The R package provides global envelopes which can be used in various situations including detection of central or outlying vectors or functions, functional boxplots, goodness-of-fit testing with multivariate or functional test statistics, functional ANOVA, functional GLM, n-sample correspondence of distribution functions, confidence and prediction bands from a set of multivariate vectors or functions.
 
 ## Installation
 
