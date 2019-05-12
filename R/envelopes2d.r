@@ -251,7 +251,7 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' @importFrom gridExtra grid.arrange
 plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
                                     fixedscales = TRUE, sign.col = "red", transparency = 85/255,
-                                    contours = TRUE, main = NULL, ...) {
+                                    contours = FALSE, main = NULL, ...) {
   plot_style <- match.arg(plot_style)
   switch(plot_style,
          basic = {
@@ -304,7 +304,7 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
 #' @importFrom grDevices col2rgb
 plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
                                              fixedscales = 2, sign.col = "red", transparency = 85/255,
-                                             contours = TRUE, main = NULL, ...) {
+                                             contours = FALSE, main = NULL, ...) {
   plot_style <- match.arg(plot_style)
   switch(plot_style,
          basic = {
