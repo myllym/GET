@@ -324,6 +324,7 @@ plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic
            }
          },
          ggplot2 = {
+           if(is.null(names(x))) names(x) <- paste(1:length(x))
            if(is.null(main)) fullmain <- env_main_default(attr(x, "level2_ge"), digits=3)
            else fullmain <- NULL
            dfs <- mapply(x, names(x), SIMPLIFY=FALSE, FUN=function(x, main) {
