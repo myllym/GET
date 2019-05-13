@@ -346,7 +346,6 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                                         sim_m = sim[,i,]))
   }
   res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
-  if(inherits(res, "combined_global_envelope")) names(res) <- complabels
   attr(res, "method") <- "Graphical functional ANOVA" # Change method name
   attr(res, "summaryfun") <- summaryfun
   attr(res, "labels") <- complabels
