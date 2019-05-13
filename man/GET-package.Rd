@@ -60,7 +60,7 @@ E.g. A test of complete spatial randomness (CSR) for a point pattern \code{X}:
 
                  \code{
                    env <- envelope(X, nsim=999, savefuns=TRUE, fun=Kest,
-                                   simulate=expression(runifpoint(X$n, win=X$window)))
+                                   simulate=expression(runifpoint(ex=X)))
                  }
            \item Perform the test (see \code{\link{global_envelope_test}} for further arguments)
 
@@ -161,7 +161,7 @@ E.g. Say we have a point pattern, for which we would like to test a hypothesis, 
 
                  \code{
                    env <- envelope(X, nsim=999, savefuns=TRUE,
-                                   simulate=expression(runifpoint(X$n, win=X$window)))
+                                   simulate=expression(runifpoint(ex=X)))
                  }
            \item Perform the test
 

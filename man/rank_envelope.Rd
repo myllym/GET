@@ -97,7 +97,7 @@ if(require(spatstat, quietly=TRUE)) {
   pp <- unmark(spruces)
   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
   env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
-                  simulate=expression(runifpoint(pp$n, win=pp$window)))
+                  simulate=expression(runifpoint(ex=pp)))
   # The rank envelope test
   res <- rank_envelope(env)
   # Plot the result.

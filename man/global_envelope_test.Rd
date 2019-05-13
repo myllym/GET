@@ -179,7 +179,7 @@ if(require(spatstat, quietly=TRUE)) {
   env <- envelope(pp, fun="Lest", nsim=1999,
                   savefuns=TRUE, # save the functions
                   correction="translate", # edge correction for L
-                  simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
+                  simulate=expression(runifpoint(ex=pp))) # Simulate CSR
   # The rank envelope test (extreme rank length (ERL) breaking of ties)
   res <- global_envelope_test(env)
   # Plot the result.
@@ -269,7 +269,7 @@ if(require(spatstat, quietly=TRUE)) {
 
   # Perform simulations of CSR and calculate the L-functions
   system.time( env_L <- envelope(X, nsim=nsim,
-   simulate=expression(runifpoint(X$n, win=X$window)),
+   simulate=expression(runifpoint(ex=X)),
    fun="Lest", correction="translate",
    transform=expression(.-r), # Take the L(r)-r function instead of L(r)
    r=r,                         # Specify the distance vector
