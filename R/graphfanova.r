@@ -341,7 +341,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 
   csets <- NULL
   for(i in 1:ncol(obs)) {
-    csets[[i]] <- create_curve_set(list(r = r,
+    csets[[complabels[i]]] <- create_curve_set(list(r = r,
                                         obs = obs[,i],
                                         sim_m = sim[,i,]))
   }
