@@ -210,9 +210,9 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 
   csets <- NULL
   for(i in 1:ncol(obs)) {
-    csets[[i]] <- create_curve_set(list(r = X$r,
-                                        obs = obs[,i],
-                                        sim_m = sim[,i,]))
+    csets[[complabels[i]]] <- create_curve_set(list(r = X$r,
+                                                    obs = obs[,i],
+                                                    sim_m = sim[,i,]))
   }
   res <- do.call(global_envelope_test,
                  c(list(curve_sets=csets, alternative="two.sided", nstep=1), GET.args))
