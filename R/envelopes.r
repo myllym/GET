@@ -1063,7 +1063,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   env <- envelope(pp, fun="Lest", nsim=1999,
 #'                   savefuns=TRUE, # save the functions
 #'                   correction="translate", # edge correction for L
-#'                   simulate=expression(runifpoint(pp$n, win=pp$window))) # Simulate CSR
+#'                   simulate=expression(runifpoint(ex=pp))) # Simulate CSR
 #'   # The rank envelope test (extreme rank length (ERL) breaking of ties)
 #'   res <- global_envelope_test(env)
 #'   # Plot the result.
@@ -1153,7 +1153,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'
 #'   # Perform simulations of CSR and calculate the L-functions
 #'   system.time( env_L <- envelope(X, nsim=nsim,
-#'    simulate=expression(runifpoint(X$n, win=X$window)),
+#'    simulate=expression(runifpoint(ex=X)),
 #'    fun="Lest", correction="translate",
 #'    transform=expression(.-r), # Take the L(r)-r function instead of L(r)
 #'    r=r,                         # Specify the distance vector
@@ -1328,7 +1328,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #'   pp <- unmark(spruces)
 #'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #'   env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
-#'                   simulate=expression(runifpoint(pp$n, win=pp$window)))
+#'                   simulate=expression(runifpoint(ex=pp)))
 #'   # The rank envelope test
 #'   res <- rank_envelope(env)
 #'   # Plot the result.
@@ -1407,7 +1407,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #'   ## Test for complete spatial randomness (CSR)
 #'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #'   env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
-#'                   simulate=expression(runifpoint(pp$n, win=pp$window)))
+#'                   simulate=expression(runifpoint(ex=pp)))
 #'   res_qdir <- qdir_envelope(env) # The directional quantile envelope test
 #'   plot(res_qdir)
 #'   # or (requires R library ggplot2)
