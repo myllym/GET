@@ -51,8 +51,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #' @param data A data frame where the names in formula are to be found. If NULL,
 #' the data are assumed to be found in the \code{object}.
 #' @param ... Additional parameters to be passed to \code{\link[gstat]{variogram}}.
-#' @param GET.param A list of parameters to be passed to \code{global_envelope_test}. If NULL,
-#' the default global envelope test is used.
+#' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @inheritParams graph.fanova
 #' @importFrom plyr is.formula
 #' @importFrom stats formula
@@ -101,7 +100,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #'   g.GET <- GET.variogram(object = g)
 #'   plot(g.GET)
 #' }
-GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.param = NULL, savefuns = TRUE) {
+GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL, savefuns = TRUE) {
   if(!inherits(object, "formula") & !inherits(object, "gstat")) stop("object does not have the formula or gstat class.\n")
   # Check data w.r.t. formula
   if(inherits(object, "formula")) {
