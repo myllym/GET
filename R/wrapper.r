@@ -138,14 +138,7 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL,
   cset <- create_curve_set(list(r = obs$dist,
                                 obs = obs$gamma,
                                 sim_m = sim))
-  if(!is.null(GET.param)) {
-    tmpstring <- paste("res <- global_envelope_test(cset", sep="")
-    for(i in 1:length(GET.param))
-      tmpstring <- paste(tmpstring, paste(", ", names(GET.param)[i], "=GET.param[[", i, "]]", sep=""), sep="")
-    tmpstring <- paste(tmpstring, ")", sep="")
-    eval(parse(text = tmpstring))
-  }
-  else res <- global_envelope_test(cset)
+  res <- do.call(global_envelope_test, c(list(curve_sets=cset), GET.args))
   attr(res, "xlab") <- attr(res, "xexp") <- "distance"
   attr(res, "ylab") <- attr(res, "yexp") <- attr(obs, "what")
   if(length(levels(obs$id)) == 1) labels <- ""
