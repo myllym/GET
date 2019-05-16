@@ -89,7 +89,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #'   plot(lzn.dir)
 #'   # with global envelopes
 #'   lzn.dir.GET <- GET.variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))
-#'   plot(lzn.dir.GET, plot_style="ggplot2", base_size=10)
+#'   plot(lzn.dir.GET, base_size=10)
 #'
 #'   # Use instead gstat objects
 #'   g <- gstat(id = "ln.zinc", formula = log(zinc)~1, data = meuse)
