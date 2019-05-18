@@ -135,11 +135,19 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL,
     permvariogram(object=object, data=data, vars=vars, perm=TRUE, ...)$gamma
   }
   sim <- sapply(1:nsim, FUN = fun, ..., simplify = TRUE)
-  cset <- create_curve_set(list(r = obs$dist,
-                                obs = obs$gamma,
-                                sim_m = sim))
-  res <- do.call(global_envelope_test, c(list(curve_sets=cset), GET.args))
-  attr(res, "xlab") <- attr(res, "xexp") <- "distance"
+
+  obs.s <- split(obs, f=list(id=obs$id, dir.hor=obs$dir.hor))
+  sim.s <- lapply(by(sim, INDICES=list(id=obs$id, dir.hor=obs$dir.hor), FUN=identity),
+                  as.matrix)
+  csets <- NULL
+  for(i in 1:length(obs.s)) {
+    csets[[names(obs.s)[[i]]]] <- create_curve_set(list(r = obs.s[[i]]$dist,
+                                                        obs = obs.s[[i]]$gamma,
+                                                        sim_m = sim.s[[i]]))
+  }
+  res <- do.call(global_envelope_test, c(list(curve_sets=csets), GET.args))
+
+s  attr(res, "xlab") <- attr(res, "xexp") <- "distance"
   attr(res, "ylab") <- attr(res, "yexp") <- attr(obs, "what")
   if(length(levels(obs$id)) == 1) labels <- ""
   else labels <- levels(obs$id)
