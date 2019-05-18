@@ -233,7 +233,7 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #'
 #' @usage \method{plot}{global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
 #' fixedscales = TRUE, sign.col = "red", transparency = 85/255,
-#' contours = TRUE, main = NULL, ...)
+#' contours = FALSE, main = NULL, ...)
 #'
 #' @param x an 'global_envelope_2d' object
 #' @param plot_style Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)
@@ -292,7 +292,7 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
 #'
 #' @usage \method{plot}{combined_global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
 #'  fixedscales = 2, sign.col = "red", transparency = 85/255,
-#'  contours = TRUE, main = NULL, ...)
+#'  contours = FALSE, main = NULL, ...)
 #'
 #' @param x an 'combined_global_envelope_2d' object
 #' @inheritParams plot.global_envelope_2d
