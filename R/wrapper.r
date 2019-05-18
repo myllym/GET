@@ -145,9 +145,9 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL,
                                                         obs = obs.s[[i]]$gamma,
                                                         sim_m = sim.s[[i]]))
   }
-  res <- do.call(global_envelope_test, c(list(curve_sets=csets), GET.args))
+  res <- do.call(global_envelope_test, c(list(curve_sets=csets, nstep=1), GET.args))
 
-s  attr(res, "xlab") <- attr(res, "xexp") <- "distance"
+  attr(res, "xlab") <- attr(res, "xexp") <- "distance"
   attr(res, "ylab") <- attr(res, "yexp") <- attr(obs, "what")
   if(length(levels(obs$id)) == 1) labels <- ""
   else labels <- levels(obs$id)
