@@ -4,7 +4,7 @@
 \alias{GET.variogram}
 \title{Variogram and residual variogram with global envelopes}
 \usage{
-GET.variogram(object, nsim = 999, data = NULL, ..., GET.param = NULL,
+GET.variogram(object, nsim = 999, data = NULL, ..., GET.args = NULL,
   savefuns = TRUE)
 }
 \arguments{
@@ -21,8 +21,7 @@ the data are assumed to be found in the \code{object}.}
 
 \item{...}{Additional parameters to be passed to \code{\link[gstat]{variogram}}.}
 
-\item{GET.param}{A list of parameters to be passed to \code{global_envelope_test}. If NULL,
-the default global envelope test is used.}
+\item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.}
 
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
@@ -66,7 +65,7 @@ if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
   plot(lzn.dir)
   # with global envelopes
   lzn.dir.GET <- GET.variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))
-  plot(lzn.dir.GET, plot_style="ggplot2", base_size=10)
+  plot(lzn.dir.GET, base_size=10)
 
   # Use instead gstat objects
   g <- gstat(id = "ln.zinc", formula = log(zinc)~1, data = meuse)

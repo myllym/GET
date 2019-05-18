@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{combined_global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
  fixedscales = 2, sign.col = "red", transparency = 85/255,
- contours = TRUE, main = NULL, ...)
+ contours = FALSE, main = NULL, ...)
 }
 \arguments{
 \item{x}{an 'combined_global_envelope_2d' object}
