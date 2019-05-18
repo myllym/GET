@@ -156,7 +156,7 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL,
   }
   attr(res, "labels") <- labels
   attr(res, "variogram") <- obs
-  if(savefuns) attr(res, "curve_set") <- cset
+  if(savefuns) attr(res, "curve_set") <- csets
   attr(res, "call") <- match.call()
   res
 }
