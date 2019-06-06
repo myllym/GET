@@ -265,14 +265,16 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
            env2d_basic_plot(x, var='hi.sign', sign.col=sign.col, transparency=transparency, contours=contours, ...)
          },
          ggplot2 = {
-           if(is.null(main)) main <- env_main_default(x, digits=3)
+           if(is.null(main)) main <- env_main_default(x, digits=digits)
+           w <- x$r$rx[2]-x$r$rx[1]
+           h <- x$r$ry[2]-x$r$ry[1]
            dfs <- env2d_ggplot2_helper(x, fixedscales=fixedscales)
            if(fixedscales) {
-             g <- env2d_ggplot2_helper_1(dfs, sign.col, transparency, contours)
+             g <- env2d_ggplot2_helper_1(dfs, w, h, sign.col, transparency, contours)
              g <- g + facet_wrap(vars(label))
              g + ggtitle(main)
            } else {
-             gs = env2d_ggplot2_helper_many_single_plots(dfs, sign.col, transparency, contours)
+             gs = env2d_ggplot2_helper_many_single_plots(dfs, w, h, sign.col, transparency, contours)
              p1 = grid.arrange(grobs=gs, nrow=ceiling(length(gs)/3), top=main)
            }
          })
@@ -330,21 +332,23 @@ plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic
            if(is.null(names(x))) names(x) <- paste(1:length(x))
            if(is.null(main)) fullmain <- env_main_default(attr(x, "level2_ge"), digits=3)
            else fullmain <- NULL
+           w <- x[[1]]$r$rx[2]-x[[1]]$r$rx[1]
+           h <- x[[1]]$r$ry[2]-x[[1]]$r$ry[1]
            dfs <- mapply(x, names(x), SIMPLIFY=FALSE, FUN=function(x, main) {
              env2d_ggplot2_helper(x, fixedscales=fixedscales, contours=contours, main=main, insertmain=!fixedscales)
            })
            if(fixedscales==2) {
              df <- do.call(rbind, dfs)
-             g <- env2d_ggplot2_helper_1(df, sign.col, transparency, contours) + facet_grid(rows=vars(main), cols=vars(label))
+             g <- env2d_ggplot2_helper_1(df, w, h, sign.col, transparency, contours) + facet_grid(rows=vars(main), cols=vars(label))
              g + ggtitle(fullmain)
            } else if(fixedscales==1) {
              gs <- lapply(dfs, function(df) {
-               env2d_ggplot2_helper_1(df, sign.col, transparency, contours) + facet_grid(rows=vars(main), cols=vars(label))
+               env2d_ggplot2_helper_1(df, w, h, sign.col, transparency, contours) + facet_grid(rows=vars(main), cols=vars(label))
              })
              grid.arrange(grobs=gs, ncol=1, top=fullmain)
            } else if(fixedscales==0) {
              gs <- lapply(dfs, function(dfs2) {
-               gs = env2d_ggplot2_helper_many_single_plots(dfs2, sign.col, transparency, contours)
+               gs = env2d_ggplot2_helper_many_single_plots(dfs2, w, h, sign.col, transparency, contours)
                grid.arrange(grobs=gs, nrow=1)
              })
              grid.arrange(grobs=gs, ncol=1, top=fullmain)
