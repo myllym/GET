@@ -233,8 +233,9 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #'
 #' @usage \method{plot}{global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
 #' fixedscales = TRUE, sign.col = "red", transparency = 85/255,
-#' contours = FALSE, main = NULL, ...)
+#' contours = FALSE, main = NULL, digits = 3, ...)
 #'
+#' @inheritParams plot.global_envelope
 #' @param x an 'global_envelope_2d' object
 #' @param plot_style Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)
 #' @param fixedscales Logical. TRUE for the same scales for all images.
@@ -251,7 +252,7 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' @importFrom gridExtra grid.arrange
 plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
                                     fixedscales = TRUE, sign.col = "red", transparency = 85/255,
-                                    contours = FALSE, main = NULL, ...) {
+                                    contours = FALSE, main = NULL, digits = 3, ...) {
   plot_style <- match.arg(plot_style)
   switch(plot_style,
          basic = {
@@ -292,7 +293,7 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
 #'
 #' @usage \method{plot}{combined_global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
 #'  fixedscales = 2, sign.col = "red", transparency = 85/255,
-#'  contours = FALSE, main = NULL, ...)
+#'  contours = FALSE, main = NULL, digits = 3, ...)
 #'
 #' @param x an 'combined_global_envelope_2d' object
 #' @inheritParams plot.global_envelope_2d
@@ -304,7 +305,7 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
 #' @importFrom grDevices col2rgb
 plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
                                              fixedscales = 2, sign.col = "red", transparency = 85/255,
-                                             contours = FALSE, main = NULL, ...) {
+                                             contours = FALSE, main = NULL, digits = 3, ...) {
   plot_style <- match.arg(plot_style)
   switch(plot_style,
          basic = {
