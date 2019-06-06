@@ -256,11 +256,13 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
   plot_style <- match.arg(plot_style)
   switch(plot_style,
          basic = {
-           env2d_basic_plot(x, var='obs', contours=contours, ...)
-           env2d_basic_plot(x, var='lo', contours=contours, ...)
-           env2d_basic_plot(x, var='hi', contours=contours, ...)
-           env2d_basic_plot(x, var='lo.sign', contours=contours, ...)
-           env2d_basic_plot(x, var='hi.sign', contours=contours, ...)
+           sign.col <- as.numeric(col2rgb(sign.col, alpha = FALSE))
+           transparency <- 255*transparency
+           env2d_basic_plot(x, var='obs', sign.col=sign.col, transparency=transparency, contours=contours, ...)
+           env2d_basic_plot(x, var='lo', sign.col=sign.col, transparency=transparency, contours=contours, ...)
+           env2d_basic_plot(x, var='hi', sign.col=sign.col, transparency=transparency, contours=contours, ...)
+           env2d_basic_plot(x, var='lo.sign', sign.col=sign.col, transparency=transparency, contours=contours, ...)
+           env2d_basic_plot(x, var='hi.sign', sign.col=sign.col, transparency=transparency, contours=contours, ...)
          },
          ggplot2 = {
            if(is.null(main)) main <- env_main_default(x, digits=3)
