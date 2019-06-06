@@ -321,11 +321,11 @@ plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic
                                                       "Upper envelope",
                                                       "Sign. below (red)",
                                                       "Sign. above (red)"), sep="")
-             env2d_basic_plot(x[[i]], var='obs', sign.col=sign.col, transparency=transparency, main=main.plots[1], ...)
-             env2d_basic_plot(x[[i]], var='lo', sign.col=sign.col, transparency=transparency, main=main.plots[2], ...)
-             env2d_basic_plot(x[[i]], var='hi', sign.col=sign.col, transparency=transparency, main=main.plots[3], ...)
-             env2d_basic_plot(x[[i]], var='lo.sign', sign.col=sign.col, transparency=transparency, main=main.plots[4], ...)
-             env2d_basic_plot(x[[i]], var='hi.sign', sign.col=sign.col, transparency=transparency, main=main.plots[5], ...)
+             env2d_basic_plot(x[[i]], var='obs', sign.col=sign.col, transparency=transparency, contours=contours, main=main.plots[1], ...)
+             env2d_basic_plot(x[[i]], var='lo', sign.col=sign.col, transparency=transparency, contours=contours, main=main.plots[2], ...)
+             env2d_basic_plot(x[[i]], var='hi', sign.col=sign.col, transparency=transparency, contours=contours, main=main.plots[3], ...)
+             env2d_basic_plot(x[[i]], var='lo.sign', sign.col=sign.col, transparency=transparency, contours=contours, main=main.plots[4], ...)
+             env2d_basic_plot(x[[i]], var='hi.sign', sign.col=sign.col, transparency=transparency, contours=contours, main=main.plots[5], ...)
            }
          },
          ggplot2 = {
