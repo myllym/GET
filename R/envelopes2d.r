@@ -330,7 +330,7 @@ plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic
          },
          ggplot2 = {
            if(is.null(names(x))) names(x) <- paste(1:length(x))
-           if(is.null(main)) fullmain <- env_main_default(attr(x, "level2_ge"), digits=3)
+           if(is.null(main)) fullmain <- env_main_default(attr(x, "level2_ge"), digits=digits)
            else fullmain <- NULL
            w <- x[[1]]$r$rx[2]-x[[1]]$r$rx[1]
            h <- x[[1]]$r$ry[2]-x[[1]]$r$ry[1]
