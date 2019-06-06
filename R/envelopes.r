@@ -432,7 +432,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
          },
          ggplot2 = {
            env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                      labels=labels, legend=legend, ...)
+                      labels=labels, legend=legend, color_outside=color_outside, ...)
          })
 }
 
