@@ -428,10 +428,11 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 guides
 #' @importFrom ggplot2 theme
+#' @importFrom ggplot2 geom_point
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                        max_ncols_of_plots = 2,
                        labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL,
-                       legend = TRUE) {
+                       legend = TRUE, color_outside=TRUE) {
     if(!inherits(x, "list")) x <- list(x)
     Nfunc <- length(x)
     if(!is.null(x2)) {
@@ -625,6 +626,13 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       p <- p + ggplot2::scale_x_continuous(name = xlab)
     }
     if(!legend) p <- p + theme(legend.position = "none")
+    if(!is.null(x[['obs']])) {
+      if(color_outside) {
+        df.outside <- df[df$type == "Data function",]
+        df.outside <- df.outside[df.outside$curves < df.outside$lower | df.outside$curves > df.outside$upper,]
+        p <- p + geom_point(data=df.outside, ggplot2::aes_(x = ~r, y = ~curves), color="red", size=1)
+      }
+    }
     # Return
     p
 }
