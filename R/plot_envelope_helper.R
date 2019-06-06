@@ -728,10 +728,11 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
 globalVariables(c("main", "label"))
 
 # A helper function for env2d_ggplot2
-#' @importFrom ggplot2 ggplot geom_raster aes geom_contour coord_fixed .data labs
-env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) {
-  g <- ggplot() + geom_raster(data=df, aes(x=.data$x, y=.data$y, fill=.data$z))
-  g <- g + geom_raster(data=df[df$signif,], aes(x=.data$x, y=.data$y), fill=sign.col, alpha=transparency)
+# Pixel size: w = rx[2]-rx[1], h = ry[2]-ry[1]
+#' @importFrom ggplot2 ggplot geom_tile aes geom_contour coord_fixed .data labs
+env2d_ggplot2_helper_1 <- function(df, w, h, sign.col, transparency, contours = TRUE) {
+  g <- ggplot() + geom_tile(data=df, aes(x=.data$x, y=.data$y, fill=.data$z), width=w, height=h)
+  g <- g + geom_tile(data=df[df$signif,], aes(x=.data$x, y=.data$y), fill=sign.col, alpha=transparency, width=w, height=h)
   if(contours) g <- g + geom_contour(data=df[df$contour,], aes(x=.data$x, y=.data$y, z=.data$z))
   g <- g + coord_fixed(ratio=1)
   g <- g + labs(x="", y="", fill="")
@@ -788,7 +789,7 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
 # @param transparency A number between 0 and 1.
 # Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
 #' @importFrom ggplot2 theme element_blank facet_wrap vars
-env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, contours = TRUE) {
+env2d_ggplot2_helper_many_single_plots <- function(dfs, w, h, sign.col, transparency, contours = TRUE) {
   remove_axes_theme <- theme(axis.title.x=element_blank(),
                              axis.text.x=element_blank(),
                              axis.ticks.x=element_blank(),
@@ -796,7 +797,7 @@ env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, 
                              axis.text.y=element_blank(),
                              axis.ticks.y=element_blank())
   lapply(dfs, function(df) {
-    g <- env2d_ggplot2_helper_1(df, sign.col, transparency, contours)
+    g <- env2d_ggplot2_helper_1(df, w, h, sign.col, transparency, contours)
     g <- g + facet_wrap(vars(label))
     g + remove_axes_theme
   })
