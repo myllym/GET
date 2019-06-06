@@ -1,13 +1,13 @@
 #' A simulated set of images
 #'
-#' A simulated set of images with two simulated covariates
+#' A simulated set of images with a categorical factor
 #'
 #'
-#' We considered a categorical factor \code{Group} obtaining the values 1 or 2
+#' We considered a categorical factor \code{Group} obtaining the values 0 or 1
 #' according to the group to which the image belongs to (10 images in the first group,
 #' 10 images in the second). The images were simulated in the square window [-1,1]^2 from the
 #' general linear model (GLM)
-#' \deqn{Y(r) = \exp(-10\cdot ||r||) \cdot g + \epsilon(r),}{Y(r) = exp(-10 ||r||) g + e(r),}
+#' \deqn{Y(r) = \exp(-10\cdot ||r||) \cdot (1+g) + \epsilon(r),}{Y(r) = exp(-10 ||r||) (1+g) + e(r),}
 #' where ||r|| denotes the Euclidean distance of the pixel to the origin, g is the group and
 #' the error stems from an inhomogeneous distribution over $I$ with the normal and
 #' bimodal errors in the middle and periphery of the image:
