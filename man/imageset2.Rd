@@ -14,12 +14,12 @@ data(imageset2)
 A simulated set of images with two simulated covariates
 }
 \details{
-We considered a categorical factor \code{Group} obtaining the values 1 or 2
+We considered a categorical factor \code{Group} obtaining the values 0 or 1
 according to the group to which the image belongs to (10 images in the first group,
 10 images in the second), and a continous factor z that was generated from the uniform
 distribution on (0,1). The images were simulated in the square window [-1,1]^2 from the
 general linear model (GLM)
-\deqn{Y(r) = \exp(-10\cdot ||r||) \cdot (g + z) + \epsilon(r),}{Y(r) = exp(-10 ||r||) (g + z) + e(r),}
+\deqn{Y(r) = \exp(-10\cdot ||r||) \cdot (1 + g + z) + \epsilon(r),}{Y(r) = exp(-10 ||r||) (1 + g + z) + e(r),}
 where ||r|| denotes the Euclidean distance of the pixel to the origin, g is the group and
 the error stems from an inhomogeneous distribution over $I$ with the normal and
 bimodal errors in the middle and periphery of the image:

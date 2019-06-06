@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{combined_global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
  fixedscales = 2, sign.col = "red", transparency = 85/255,
- contours = FALSE, main = NULL, ...)
+ contours = FALSE, main = NULL, digits = 3, ...)
 }
 \arguments{
 \item{x}{an 'combined_global_envelope_2d' object}
@@ -23,6 +23,9 @@ Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significa
 \item{contours}{Logical. Whether to draw contour lines to the observed function and the lower and upper envelope.}
 
 \item{main}{The overall main. Default exists.}
+
+\item{digits}{The number of digits used for printing the p-value or p-interval in the main,
+if using the default main.}
 
 \item{...}{Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.}
 }
