@@ -112,9 +112,9 @@ This envelope is constructed as the convex hull of the functions which have extr
 length measure that is larger or equal to the critical \eqn{\alpha}{alpha} level of the
 extreme rank length measure.
  \item \code{'cont'}: The global rank envelope based on the continuous rank
- (Hahn, 2015; Mrkvička and Narisetty, 2018) based on minimum of continuous pointwise ranks.
+ (Hahn, 2015; Mrkvička et al., 2019) based on minimum of continuous pointwise ranks.
  It is contructed as the convex hull in a similar way as the \code{'erl'} envelope.
- \item \code{'area'}: The global rank envelope based on the area rank (Mrkvička and Narisetty, 2018)
+ \item \code{'area'}: The global rank envelope based on the area rank (Mrkvička et al., 2019)
  which is based on area between continuous pointwise ranks and minimum pointwise ranks
  for those argument (r) values for which pointwise ranks achieve the minimum
  (it is a combination of erl and cont).
@@ -206,11 +206,13 @@ lines(CB.lo, lty=2)
 lines(CB.hi, lty=2)
 }
 \references{
-Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
-
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 
+Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
+
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
+
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }

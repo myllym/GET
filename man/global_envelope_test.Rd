@@ -107,9 +107,9 @@ with intrinsic graphical interpretation.
   \item \code{'erl'}: the completely non-parametric rank envelope test based on extreme rank lengths
   (Myllymäki et al., 2017; Mrkvička et al., 2018) based on number of minimal pointwise ranks
  \item \code{'cont'}: the completely non-parametric rank envelope test based on continuous rank
- (Hahn, 2015; Mrkvička and Narisetty, 2018) based on minimum of continuous pointwise ranks
+ (Hahn, 2015; Mrkvička et al., 2019) based on minimum of continuous pointwise ranks
  \item \code{'area'}: the completely non-parametric rank envelope test based on area rank
- (Mrkvička and Narisetty, 2018) based on area between continuous pointwise ranks and minimum
+ (Mrkvička et al., 2019) based on area between continuous pointwise ranks and minimum
  pointwise ranks for those argument (r) values for which pointwise ranks achieve the minimum
  (it is a combination of erl and cont)
   \item "qdir", the directional quantile envelope test, protected against unequal variance and
@@ -130,8 +130,8 @@ The options are
 \itemize{
 \item 'rank': extreme ranks (Myllymäki et al., 2017)
 \item 'erl': extreme rank lengths (Myllymäki et al., 2017; Mrkvička et al., 2018)
-\item 'cont': continuous ranks (Hahn, 2015; Mrkvička and Narisetty, 2018)
-\item 'area': area ranks (Mrkvička and Narisetty, 2018)
+\item 'cont': continuous ranks (Hahn, 2015; Mrkvička et al., 2019)
+\item 'area': area ranks (Mrkvička et al., 2019)
 \item 'qdir': the directional quantile maximum absolute deviation (MAD) measure (Myllymäki et al., 2015, 2017)
 \item 'st': the studentized MAD measure (Myllymäki et al., 2015, 2017)
 \item 'unscaled': the unscaled MAD measure (Ripley, 1981)
@@ -327,13 +327,15 @@ if(requireNamespace("mvtnorm", quietly=TRUE)) {
 
 }
 \references{
-Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
-
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 
-Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
+Mrkvička, T., Myllymäki, M., Jilek, M., and Hahn, U. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
+
+Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
 
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
+
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
