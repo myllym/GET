@@ -111,6 +111,12 @@ Also the adjusted tests can be based on several test functions.
 
 \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no gpaphical
 interpretation)
+\item Most functions accept the curves provided in a \code{curve_set} (or
+\code{image_set}) object.
+Use \code{\link{create_curve_set}} (or \code{\link{create_image_set}}) to create a
+\code{curve_set} (or \code{image_set}) object from the functions T_i(r), i=1,...,s+1.
+Other formats to provide the curves to the above functions are also accepted,
+see the information on the help pages.
 }
 See the help files of the functions for examples.
 }
