@@ -132,7 +132,7 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
       stop('curve_set[["obs"]] must be a vector or a matrix.')
     }
     if((is.vector(obs) && length(obs) != n_r) | (is.matrix(obs) && nrow(obs) != n_r)) {
-        stop('curve_set[["obs"]] must have as many values or columns as ',
+        stop('curve_set[["obs"]] must have as many values or rows as ',
              'curve_set[["r"]].')
     }
     if (!(allow_Inf_values | ( all(is.numeric(obs)) && all(is.finite(obs)) ))) {
