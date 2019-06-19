@@ -32,10 +32,10 @@ to the number of curves. Each column should specify the values of a factor.}
 
 \item{mc.cores}{The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
-(no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
+(no parallelization). For details, see \code{\link{mclapply}}, for which the argument is passed.
 Parallelization can be used in generating simulations and in calculating the second stage tests.}
 
-\item{mc.args}{A named list of additional arguments to be passed to \code{\link[parallel]{mclapply}}.
+\item{mc.args}{A named list of additional arguments to be passed to \code{\link{mclapply}}.
 Only relevant if \code{mc.cores} is more than 1.}
 }
 \description{

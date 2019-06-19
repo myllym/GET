@@ -125,7 +125,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' to the number of curves. Each column should specify the values of a factor.
 #' @param ... Additional arguments to be passed to \code{\link[stats]{lm}}.
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
-#' @param mc.args A named list of additional arguments to be passed to \code{\link[parallel]{mclapply}}.
+#' @param mc.args A named list of additional arguments to be passed to \code{\link{mclapply}}.
 #' Only relevant if \code{mc.cores} is more than 1.
 #' @return A \code{global_envelope} object.
 #' @export

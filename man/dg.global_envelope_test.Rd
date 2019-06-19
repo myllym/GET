@@ -93,7 +93,7 @@ Default to FALSE. The option kept for historical reasons.}
 
 \item{mc.cores}{The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
-(no parallelization). For details, see \code{\link[parallel]{mclapply}}, for which the argument is passed.
+(no parallelization). For details, see \code{\link{mclapply}}, for which the argument is passed.
 Parallelization can be used in generating simulations and in calculating the second stage tests.}
 }
 \value{
