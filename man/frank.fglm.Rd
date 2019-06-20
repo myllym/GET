@@ -55,7 +55,7 @@ The test is able to find if the factor of interest is significant and also which
 argument values of the functional domain are responsible for the potential rejection.
 }
 \examples{
-\dontrun{
+\donttest{
 data(rimov)
 res <- frank.fglm(nsim=99, # Increase the number of simulations for serious analysis!
                   formula.full = Y~Year,

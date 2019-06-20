@@ -75,9 +75,11 @@ see \code{\link{global_envelope_test}} for full list of alternatives.
 #-------------------------------------------
 if(require("spatstat", quietly=TRUE)) {
   pp <- spruces
+  \donttest{nsim <- 999 # Number of simulations}
+  \dontshow{nsim <- 19 # Number of simulations for testing}
   ## Test for complete spatial randomness (CSR)
   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-  env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
+  env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate",
                   simulate=expression(runifpoint(ex=pp)))
   res_qdir <- qdir_envelope(env) # The directional quantile envelope test
   plot(res_qdir)

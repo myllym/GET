@@ -34,6 +34,8 @@ of the fitted model.
 }
 \examples{
 if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
+  \donttest{nsim <- 999 # Number of simulations for the tests below}
+  \dontshow{nsim <- 19 # Number of simulations for testing}
   # Examples from gstat complemented with global envelopes
   #-------------------------------------------------------
   data(meuse)
@@ -47,7 +49,7 @@ if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
   lzn.vgm <- variogram(object=log(zinc)~1, data=meuse)
   plot(lzn.vgm)
   # Variogram with global envelopes is as easy:
-  lzn.vgm.GET <- GET.variogram(object=log(zinc)~1, data=meuse)
+  lzn.vgm.GET <- GET.variogram(object=log(zinc)~1, nsim=nsim, data=meuse)
   plot(lzn.vgm.GET)
 
   # Instead of the constant mean, denoted by ~1, a mean function can
@@ -57,14 +59,14 @@ if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
   # to a fitted mean function are shown.
   plot(lznr.vgm)
   # The variogram with global envelopes (obtained by permuting the residuals):
-  lznr.vgm.GET <- GET.variogram(object=log(zinc)~sqrt(dist), data=meuse)
+  lznr.vgm.GET <- GET.variogram(object=log(zinc)~sqrt(dist), nsim=nsim, data=meuse)
   plot(lznr.vgm.GET)
 
   # Directional variograms
   lzn.dir = variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))
   plot(lzn.dir)
   # with global envelopes
-  lzn.dir.GET <- GET.variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))
+  lzn.dir.GET <- GET.variogram(object=log(zinc)~1, nsim=nsim, data=meuse, alpha=c(0, 45, 90, 135))
   plot(lzn.dir.GET, base_size=10)
 
   # Use instead gstat objects
@@ -73,7 +75,7 @@ if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
   # The variogram
   plot(variogram(g))
   # The variogram with global envelopes:
-  g.GET <- GET.variogram(object = g)
+  g.GET <- GET.variogram(object = g, nsim=nsim)
   plot(g.GET)
 }
 }

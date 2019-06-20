@@ -38,7 +38,8 @@ require(spatstat)
 data(saplings)
 X <- saplings
 
-nsim <- 499 # the number of simulations for the tests
+\donttest{nsim <- 499 # Number of simulations for the tests}
+\dontshow{nsim <- 19 # Number of simulations for testing}
 # Specify distances for different test functions
 n <- 500 # the number of r-values
 rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
