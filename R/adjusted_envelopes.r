@@ -286,77 +286,78 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
 #' @importFrom parallel mclapply
 #' @importFrom stats quantile
 #' @examples
+#' \donttest{
 #' if(require(spatstat, quietly=TRUE)) {
-#' data(saplings)
+#'   data(saplings)
 #'
-#' # First choose the r-distances
-#' rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
-#' r <- seq(0, rmax, by=rstep)
+#'   # First choose the r-distances
+#'   rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
+#'   r <- seq(0, rmax, by=rstep)
 #'
-#' # Fit the Matern cluster process to the pattern
-#' # (using minimum contrast estimation with the K-function)
-#' M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
-#' summary(M1)
+#'   # Fit the Matern cluster process to the pattern
+#'   # (using minimum contrast estimation with the K-function)
+#'   M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
+#'   summary(M1)
 #'
-#' # Number of simulations
-#' nsim <- 19 # Increase nsim for serious analysis!
+#'   # Number of simulations
+#'   nsim <- 19 # Increase nsim for serious analysis!
 #'
-#' # Option 1: Give the fitted model object to dg.GET
-#' #-------------------------------------------------
-#' # This can be done and is preferable when the model is a point process model of spatstat.
-#' # Make the adjusted directional quantile global envelope test using the L(r)-r function
-#' adjenvL <- dg.global_envelope_test(X = M1, nsim = nsim,
-#'             testfuns = list(L = list(fun="Lest", correction="translate",
-#'                            transform = expression(.-r), r=r)), # passed to envelope
-#'             type = "qdir", r_min=rmin, r_max=rmax)
-#' # Plot the test result
-#' plot(adjenvL)
+#'   # Option 1: Give the fitted model object to dg.GET
+#'   #-------------------------------------------------
+#'   # This can be done and is preferable when the model is a point process model of spatstat.
+#'   # Make the adjusted directional quantile global envelope test using the L(r)-r function
+#'   adjenvL <- dg.global_envelope_test(X = M1, nsim = nsim,
+#'               testfuns = list(L = list(fun="Lest", correction="translate",
+#'                              transform = expression(.-r), r=r)), # passed to envelope
+#'               type = "qdir", r_min=rmin, r_max=rmax)
+#'   # Plot the test result
+#'   plot(adjenvL)
 #'
-#' # Option 2: Generate the simulations by yourself
-#' #-----------------------------------------------
-#' # and provide them as curve_set or envelope objects
-#' # Preferable when you want to have a full control
-#' # on the simulations yourself.
-#' M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
-#' # Generate nsim simulations by the given function using the fitted model
-#' X <- envelope(M1, nsim=nsim, savefuns=TRUE,
-#'               fun="Lest", correction="translate",
-#'               transform = expression(.-r), r=r)
-#' plot(X)
-#' # Create another set of simulations to be used to estimate
-#' # the second-state p-value (as proposed by Baddeley et al., 2017).
-#' simpatterns2 <- simulate(M1, nsim=nsim)
-#' # Calculate the functions for each pattern
-#' simf <- function(rep) {
-#'   # Fit the model to the simulated pattern Xsims[[rep]]
-#'   sim_fit <- kppm(simpatterns2[[rep]], clusters = "MatClust", statistic="K")
-#'   # Generate nsim simulations from the fitted model
-#'   envelope(sim_fit, nsim=nsim, savefuns=TRUE,
-#'            fun="Lest", correction="translate",
-#'            transform = expression(.-r), r=r)
-#' }
-#' X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
-#' # Perform the adjusted test
-#' res <- dg.global_envelope_test(X=X, X.ls=X.ls, type="qdir",
-#'                                r_min=rmin, r_max=rmax)
-#' plot(res)
+#'   # Option 2: Generate the simulations by yourself
+#'   #-----------------------------------------------
+#'   # and provide them as curve_set or envelope objects
+#'   # Preferable when you want to have a full control
+#'   # on the simulations yourself.
+#'   M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
+#'   # Generate nsim simulations by the given function using the fitted model
+#'   X <- envelope(M1, nsim=nsim, savefuns=TRUE,
+#'                 fun="Lest", correction="translate",
+#'                 transform = expression(.-r), r=r)
+#'   plot(X)
+#'   # Create another set of simulations to be used to estimate
+#'   # the second-state p-value (as proposed by Baddeley et al., 2017).
+#'   simpatterns2 <- simulate(M1, nsim=nsim)
+#'   # Calculate the functions for each pattern
+#'   simf <- function(rep) {
+#'     # Fit the model to the simulated pattern Xsims[[rep]]
+#'     sim_fit <- kppm(simpatterns2[[rep]], clusters = "MatClust", statistic="K")
+#'     # Generate nsim simulations from the fitted model
+#'     envelope(sim_fit, nsim=nsim, savefuns=TRUE,
+#'              fun="Lest", correction="translate",
+#'              transform = expression(.-r), r=r)
+#'   }
+#'   X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
+#'   # Perform the adjusted test
+#'   res <- dg.global_envelope_test(X=X, X.ls=X.ls, type="qdir",
+#'                                  r_min=rmin, r_max=rmax)
+#'   plot(res)
 #'
-#' # Option 3: Provide fitfun and simfun functions
-#' #----------------------------------------------
-#' # fitfun = a function to fit the model
-#' # simfun = a function to make a simulation from the model
-#' fitf <- function(X) {
-#'   kppm(X, clusters = "MatClust", statistic="K")
-#' }
-#' simf <- function(M) {
-#'   simulate(M, nsim=1)[[1]]
-#' }
-#' res <- dg.global_envelope_test(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
-#'          testfuns = list(L = list(fun="Lest", correction="translate",
-#'                          transform = expression(.-r), r=r)),
-#'          type="qdir", r_min=rmin, r_max=rmax)
-#' plot(res)
-#' }
+#'   # Option 3: Provide fitfun and simfun functions
+#'   #----------------------------------------------
+#'   # fitfun = a function to fit the model
+#'   # simfun = a function to make a simulation from the model
+#'   fitf <- function(X) {
+#'     kppm(X, clusters = "MatClust", statistic="K")
+#'   }
+#'   simf <- function(M) {
+#'     simulate(M, nsim=1)[[1]]
+#'   }
+#'   res <- dg.global_envelope_test(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
+#'            testfuns = list(L = list(fun="Lest", correction="translate",
+#'                            transform = expression(.-r), r=r)),
+#'            type="qdir", r_min=rmin, r_max=rmax)
+#'   plot(res)
+#' }}
 dg.global_envelope_test <- function(X, X.ls = NULL,
                                     nsim = 499, nsimsub = nsim,
                                     simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
