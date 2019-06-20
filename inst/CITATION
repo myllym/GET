@@ -22,8 +22,8 @@ citEntry(
 citEntry(
     entry = "Article",
     title = "Multiple Monte Carlo testing, with applications in spatial point processes",
-	author = personList(as.person("T. Mrkvička"),
-	                    as.person("M. Myllymäki"),
+    author = personList(as.person("T. Mrkvička"),
+                        as.person("M. Myllymäki"),
                         as.person("U. Hahn")),
     journal = "Statistics and Computing",
     year = "2017",
@@ -39,9 +39,9 @@ Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9"
 citEntry(
     entry = "Article",
     title = "A one-way ANOVA test for functional data with graphical interpretation",
-	author = personList(as.person("T. Mrkvička"),
-                      as.person("U. Hahn"),
-                      as.person("M. Myllymäki")),
+    author = personList(as.person("T. Mrkvička"),
+                        as.person("U. Hahn"),
+                        as.person("M. Myllymäki")),
     journal = "arXiv:1612.03608 [stat.ME]",
     year = "2018",
     volume = "",
@@ -50,13 +50,32 @@ citEntry(
     textVersion = "Mrkvička, T., Hahn, U. and Myllymäki, M. (2018).
 A one-way ANOVA test for functional data with graphical interpretation.
 arXiv:1612.03608 [stat.ME]",
-    header = "If you use graphical ANOVA tests, please also cite:"
+    header = "If you use functional ANOVA, please also cite:"
+)
+
+citEntry(
+    entry = "Article",
+    title = "Monte Carlo testing in spatial statistics, with applications to spatial residuals",
+    author = personList(as.person("T. Mrkvička"),
+                        as.person("S. Soubeyrand"),
+                        as.person("M. Myllymäki"),
+                        as.person("P. Grabarnik"),
+                        as.person("U. Hahn")),
+    journal = "Spatial Statistics",
+    year = "2016",
+    volume = "18, Part A",
+    pages = "40--53",
+    url = "        http://dx.doi.org/10.1016/j.spasta.2016.04.005",
+    textVersion = "Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P. and Hahn, U. (2016).
+Monte Carlo testing in spatial statistics, with applications to spatial residuals.
+Spatial Statistics 18, Part A: 40--53. doi: 10.1016/j.spasta.2016.04.005",
+    header = "If you use apply tests to spatial residuals, please also cite:"
 )
 
 citEntry(
     entry = "Article",
     title = "Deviation test construction and power comparison for marked spatial point patterns",
-	author = personList(as.person("M. Myllymäki"),
+    author = personList(as.person("M. Myllymäki"),
                         as.person("P. Grabarnik"),
                         as.person("H. Seijo"),
                         as.person("D. Stoyan")),
@@ -69,23 +88,4 @@ citEntry(
 Deviation test construction and power comparison for marked spatial point patterns.
 Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004",
     header = "If you use deviation tests, please also cite:"
-)
-
-citEntry(
-    entry = "Article",
-    title = "Monte Carlo testing in spatial statistics, with applications to spatial residuals",
-	author = personList(as.person("T. Mrkvička"),
-	                    as.person("S. Soubeyrand"),
-	                    as.person("M. Myllymäki"),
-                        as.person("P. Grabarnik"),
-                        as.person("U. Hahn")),
-    journal = "Spatial Statistics",
-    year = "2016",
-    volume = "18, Part A",
-    pages = "40--53",
-    url = "        http://dx.doi.org/10.1016/j.spasta.2016.04.005",
-    textVersion = "Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P. and Hahn, U. (2016).
-Monte Carlo testing in spatial statistics, with applications to spatial residuals.
-Spatial Statistics 18, Part A: 40--53. doi: 10.1016/j.spasta.2016.04.005",
-    header = "If you use apply tests to spatial residuals, please also cite:"
 )
