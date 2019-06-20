@@ -1118,7 +1118,6 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   # 4) Plot the test result
 #'   plot(res, ylab=expression(italic(L[m](r)-L(r))))
 #'
-#'   \dontrun{
 #'   ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
 #'   #-----------------------------------------------
 #'   pp <- unmark(spruces)
