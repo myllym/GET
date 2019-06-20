@@ -238,7 +238,8 @@ contrasts.m <- function(x, groups, ...) {
 #' for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
 #'
 #' # Number of simulations
-#' nsim <- 2499 # increase to reduce Monte Carlo error
+#' \donttest{nsim <- 2499 # increase to reduce Monte Carlo error}
+#' \dontshow{nsim <- 19}
 #'
 #' # Test for unequal lag 1 covariances
 #' res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec,
@@ -281,7 +282,8 @@ contrasts.m <- function(x, groups, ...) {
 #' # in Mrkvicka et al. (arXiv:1612.03608v2).
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' nsim <- 999
+#' \donttest{nsim <- 999}
+#' \dontshow{nsim <- 19}
 #'
 #' # Test for equality of variances in the groups
 #' resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
@@ -391,7 +393,9 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' \donttest{
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)
+#' \donttest{nsim <- 2499}
+#' \dontshow{nsim <- 19}
+#' res <- frank.fanova(nsim=nsim, curve_set=rimov, groups=groups)
 #' plot(res, ylab="F-statistic")
 #' }
 frank.fanova <- function(nsim, curve_set, groups, variances="equal",
