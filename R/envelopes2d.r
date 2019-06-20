@@ -158,7 +158,8 @@ central_region2d <- function(image_sets, ...) {
 #'                     sigma=ds, plot.it=FALSE)
 #'   obs <- u$smooth$Z$v
 #'   # Generate simulations from the hard-core null model
-#'   nsim <- 1999
+#'   \donttest{nsim <- 1999 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations for testing}
 #'   simulations <- NULL
 #'   ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
 #'                     X$window$yrange[2]-X$window$yrange[1]) / 10
