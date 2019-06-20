@@ -1163,28 +1163,28 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
 #'
 #'   # Perform simulations of CSR and calculate the L-functions
-#'   system.time( env_L <- envelope(X, nsim=nsim,
+#'   env_L <- envelope(X, nsim=nsim,
 #'    simulate=expression(runifpoint(ex=X)),
 #'    fun="Lest", correction="translate",
 #'    transform=expression(.-r), # Take the L(r)-r function instead of L(r)
-#'    r=r,                         # Specify the distance vector
-#'    savefuns=TRUE,               # Save the estimated functions
-#'    savepatterns=TRUE) )         # Save the simulated patterns
+#'    r=r,                       # Specify the distance vector
+#'    savefuns=TRUE,             # Save the estimated functions
+#'    savepatterns=TRUE)         # Save the simulated patterns
 #'   # Take the simulations from the returned object
 #'   simulations <- attr(env_L, "simpatterns")
 #'   # Then calculate the other test functions F, G, J for each simulated pattern
-#'   system.time( env_F <- envelope(X, nsim=nsim,
-#'                                  simulate=simulations,
-#'                                  fun="Fest", correction="Kaplan", r=rJ,
-#'                                  savefuns=TRUE) )
-#'   system.time( env_G <- envelope(X, nsim=nsim,
-#'                                  simulate=simulations,
-#'                                  fun="Gest", correction="km", r=rJ,
-#'                                  savefuns=TRUE) )
-#'   system.time( env_J <- envelope(X, nsim=nsim,
-#'                                  simulate=simulations,
-#'                                  fun="Jest", correction="none", r=rJ,
-#'                                  savefuns=TRUE) )
+#'   env_F <- envelope(X, nsim=nsim,
+#'                     simulate=simulations,
+#'                     fun="Fest", correction="Kaplan", r=rJ,
+#'                     savefuns=TRUE)
+#'   env_G <- envelope(X, nsim=nsim,
+#'                     simulate=simulations,
+#'                     fun="Gest", correction="km", r=rJ,
+#'                     savefuns=TRUE)
+#'   env_J <- envelope(X, nsim=nsim,
+#'                     simulate=simulations,
+#'                     fun="Jest", correction="none", r=rJ,
+#'                     savefuns=TRUE)
 #'
 #'   # Crop the curves to the desired r-interval I
 #'   curve_set_L <- crop_curves(env_L, r_min=rmin, r_max=rmax)
