@@ -138,13 +138,14 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' @importFrom stats dummy.coef
 #' @importFrom parallel mclapply
 #' @examples
+#' \donttest{
 #' data(rimov)
 #' res <- graph.fglm(nsim=99, # Increase the number of simulations for serious analysis!
 #'                   formula.full = Y~Year,
 #'                   formula.reduced = Y~1,
 #'                   curve_sets=list(Y=rimov), factors = data.frame(Year = 1979:2014))
 #' plot(res)
-#' \donttest{
+#'
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' res.tax_within_group <- graph.fglm(nsim = 999,
@@ -247,7 +248,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #'
 #' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(rimov)
 #' res <- frank.fglm(nsim=99, # Increase the number of simulations for serious analysis!
 #'                   formula.full = Y~Year,
