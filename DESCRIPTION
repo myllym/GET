@@ -6,19 +6,19 @@ Encoding: UTF-8
 Authors@R: c(
     person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre',
     'ths'),
-    email = 'mari.j.myllymaki@gmail.com'),
-    person(given = 'Henri', family = 'Seijo', role = 'aut',
-    email = 'henri.seijo@iki.fi'),
+    email = 'mari.myllymaki@luke.fi'),
     person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
-    person(given = 'Pavel', family = 'Grabarnik', role = 'aut',
+    person(given = 'Pavel', family = 'Grabarnik', role = 'ctb',
     email = list('gpya@rambler.ru', 'pavel.grabarnik@gmail.com')),
-    person(given = 'Ute', family = 'Hahn', role = 'aut',
-    email = 'ute@math.au.dk')
+    person(given = 'Ute', family = 'Hahn', role = 'ctb',
+    email = 'ute@math.au.dk'),
+    person(given = 'Mikko', family = 'Kuronen', role = 'ctb',
+    email = 'mikko.kuronen@luke.fi'),
+    person(given = 'Henri', family = 'Seijo', role = 'ctb',
+    email = 'henri.seijo@iki.fi')
     )
-Author: Mari Myllymäki, Henri Seijo, Tomáš Mrkvička, Pavel Grabarnik and Ute
-    Hahn
-Maintainer: Mari Myllymäki <mari.j.myllymaki@gmail.com>
+Maintainer: Mari Myllymäki <mari.myllymaki@luke.fi>
 Imports:
     caTools,
     fda.usc,
