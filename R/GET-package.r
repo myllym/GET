@@ -227,12 +227,14 @@
 #'
 #' Mrkvička et al. (2017) discussed the number of simulations for tests based on many functions.
 #'
+#' @section Acknowledgements:
+#'
+#' Pavel Grabarnik, Ute Hahn, Mikko Kuronen and Henri Seijo have made contributions
+#' and suggestions of code.
+#'
 #' @author
-#' Mari Myllymäki (mari.j.myllymaki@@gmail.com, mari.myllymaki@@luke.fi),
-#' Tomáš Mrkvička (mrkvicka.toma@@gmail.com),
-#' Henri Seijo (henri.seijo@@iki.fi),
-#' Pavel Grabarnik (gpya@@rambler.ru),
-#' Ute Hahn (ute@@math.au.dk)
+#' Mari Myllymäki (mari.myllymaki@@luke.fi, mari.j.myllymaki@@gmail.com) and
+#' Tomáš Mrkvička (mrkvicka.toma@@gmail.com)
 #'
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015) Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
