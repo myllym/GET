@@ -703,7 +703,8 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #' s0 <- sd(resid0)
 #'
 #' # Bootstrap regression
-#' B <- 2000 # Number of bootstrap samples
+#' \donttest{B <- 2000 # Number of bootstrap samples}
+#' \dontshow{B <- 20 # Number of bootstrap samples}
 #' ftheta1 <- array(0, c(B,length(x)))
 #' s1 <- array(0,B)
 #' for(i in 1:B) {
@@ -1062,9 +1063,11 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' if(require(spatstat, quietly=TRUE)) {
 #'   ## Testing complete spatial randomness (CSR)
 #'   #-------------------------------------------
+#'   \donttest{nsim <- 1999 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
 #'   pp <- unmark(spruces)
 #'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#'   env <- envelope(pp, fun="Lest", nsim=1999,
+#'   env <- envelope(pp, fun="Lest", nsim=nsim,
 #'                   savefuns=TRUE, # save the functions
 #'                   correction="translate", # edge correction for L
 #'                   simulate=expression(runifpoint(ex=pp))) # Simulate CSR
@@ -1097,7 +1100,9 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   # The command below specifies that the test function is T(r) = \hat{L}_mm(r),
 #'   # which is an estimator of the mark-weighted L function, L_mm(r),
 #'   # with translational edge correction.
-#'   env <- envelope(mpp, fun=Kmark, nsim = 1999, f=function(m1, m2) { m1*m2 },
+#'   \donttest{nsim <- 1999 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
+#'   env <- envelope(mpp, fun=Kmark, nsim = nsim, f=function(m1, m2) { m1*m2 },
 #'                   correction="translate", returnL=TRUE,
 #'                   simulate=expression(rlabel(mpp, permute=TRUE)), # Permute the marks
 #'                   savefuns=TRUE) # Save the functions
@@ -1128,7 +1133,9 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'
 #'   # Using direct algorihm can be faster, because the perfect simulation is used here.
 #'   simulations <- NULL
-#'   for(j in 1:999) {
+#'   \donttest{nsim <- 999 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
+#'   for(j in 1:nsim) {
 #'      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
 #'                                    R=fittedmodel$interaction$par$hc,
 #'                                    W=pp$window)
@@ -1138,7 +1145,6 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #'   curve_set <- crop_curves(env, r_min=1, r_max=3.5)
 #'   res <- global_envelope_test(curve_set, type="erl"); plot(res, ylab=expression(italic(J(r))))
-#'   }
 #'
 #'   # A combined global envelope test
 #'   #--------------------------------
@@ -1147,7 +1153,8 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   data(saplings)
 #'   X <- saplings
 #'
-#'   nsim <- 499 # the number of simulations for the tests
+#'   \donttest{nsim <- 499 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
 #'   # Specify distances for different test functions
 #'   n <- 500 # the number of r-values
 #'   rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
@@ -1330,8 +1337,10 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #' #-------------------------------------------
 #' if(require(spatstat, quietly=TRUE)) {
 #'   pp <- unmark(spruces)
+#'   \donttest{nsim <- 2499 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations for testing}
 #'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#'   env <- envelope(pp, fun="Lest", nsim=2499, savefuns=TRUE, correction="translate",
+#'   env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate",
 #'                   simulate=expression(runifpoint(ex=pp)))
 #'   # The rank envelope test
 #'   res <- rank_envelope(env)
@@ -1408,9 +1417,11 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' #-------------------------------------------
 #' if(require("spatstat", quietly=TRUE)) {
 #'   pp <- spruces
+#'   \donttest{nsim <- 999 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations for testing}
 #'   ## Test for complete spatial randomness (CSR)
 #'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#'   env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate",
+#'   env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate",
 #'                   simulate=expression(runifpoint(ex=pp)))
 #'   res_qdir <- qdir_envelope(env) # The directional quantile envelope test
 #'   plot(res_qdir)
