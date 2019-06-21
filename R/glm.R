@@ -247,15 +247,6 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
 #'
 #' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
-#' @examples
-#' \donttest{
-#' data(rimov)
-#' res <- frank.fglm(nsim=99, # Increase the number of simulations for serious analysis!
-#'                   formula.full = Y~Year,
-#'                   formula.reduced = Y~1,
-#'                   curve_sets=list(Y=rimov), factors = data.frame(Year = 1979:2014))
-#' plot(res)
-#' }
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        ..., GET.args = NULL, mc.cores = 1, mc.args = NULL) {
