@@ -55,14 +55,14 @@ The test is able to find if the factor of interest is significant and also which
 argument values of the functional domain are responsible for the potential rejection.
 }
 \examples{
-\donttest{
-data(rimov)
-res <- frank.fglm(nsim=99, # Increase the number of simulations for serious analysis!
-                  formula.full = Y~Year,
-                  formula.reduced = Y~1,
-                  curve_sets=list(Y=rimov), factors = data.frame(Year = 1979:2014))
-plot(res)
-}
+data(GDPtax)
+factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
+res.tax_within_group <- frank.fglm(nsim = 999,
+                                   formula.full = Y~Group+Tax+Group:Tax,
+                                   formula.reduced = Y~Group+Tax,
+                                   curve_sets = list(Y=GDPtax$GDP),
+                                   factors = factors.df)
+plot(res.tax_within_group)
 }
 \references{
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
