@@ -1,19 +1,28 @@
 #' GET: Global Envelopes in R
 #'
-#' Global envelopes alias central regions and global envelope tests, including
-#' global envelope (tests) for single and many functions and multivariate vectors,
-#' adjusted global envelope tests, graphical functional ANOVA and general linear model (GLM).
+#' The \pkg{GET} package provides global envelopes which
+#' can be used for central regions of functional or
+#' multivariate data (e.g. outlier detection, functional boxplot),
+#' for graphical Monte Carlo and permutation tests where the test statistic
+#' is a multivariate vector or function (e.g. goodness-of-fit testing for point
+#' patterns and random sets, functional ANOVA, functional GLM, n-sample test of
+#' correspondence of distribution functions), and for global confidence and
+#' prediction bands (e.g. confidence band in polynomial regression,
+#' Bayesian posterior prediction).
 #'
 #'
-#' The \pkg{GET} library provides central regions (i.e. global envelopes) and global envelope tests.
+#' The \pkg{GET} package provides central regions (i.e. global envelopes) and
+#' global envelope tests with intrinsic graphical interpretation.
 #' The central regions can be constructed from (functional) data.
-#' The tests are Monte Carlo tests, which demand simulations from the tested null model.
-#' The methods are applicable for any multivariate vector data and functional data (after discretization).
+#' The tests are Monte Carlo or permutation tests, which demand simulations
+#' from the tested null model. The methods are applicable for any multivariate
+#' vector data and functional data (after discretization).
 #'
-#' In the special case of point processes, the functions are typically estimators of summary functions.
-#' The package supports the use of the R library \pkg{spatstat} for generating
-#' simulations and calculating estimators of the chosen summary function, but alternatively these
-#' can be done by any other way, thus allowing for any models/functions.
+#' In the special case of spatial processes (spatial point processes, random sets),
+#' the functions are typically estimators of summary functions. The package supports
+#' the use of the R library \pkg{spatstat} for generating simulations and calculating
+#' estimators of the chosen summary function, but alternatively these can be done by
+#' any other way, thus allowing for any models/functions.
 #'
 #'
 #' @section Key functions in \pkg{GET}:
