@@ -35,7 +35,7 @@ plot(imageset2$image_set, idx=c(1:5, 11:15), max_ncols_of_plots=5)
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
 }
 \seealso{
-\code{\link{graph.fanova2d}}, \code{\link{graph.fglm2d}}
+\code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}}
 }
 \keyword{curves}
 \keyword{datasets}

@@ -5,20 +5,29 @@
 \alias{GET-package}
 \title{GET: Global Envelopes in R}
 \description{
-Global envelopes alias central regions and global envelope tests, including
-global envelope (tests) for single and many functions and multivariate vectors,
-adjusted global envelope tests, graphical functional ANOVA and general linear model (GLM).
+The \pkg{GET} package provides global envelopes which
+can be used for central regions of functional or
+multivariate data (e.g. outlier detection, functional boxplot),
+for graphical Monte Carlo and permutation tests where the test statistic
+is a multivariate vector or function (e.g. goodness-of-fit testing for point
+patterns and random sets, functional ANOVA, functional GLM, n-sample test of
+correspondence of distribution functions), and for global confidence and
+prediction bands (e.g. confidence band in polynomial regression,
+Bayesian posterior prediction).
 }
 \details{
-The \pkg{GET} library provides central regions (i.e. global envelopes) and global envelope tests.
+The \pkg{GET} package provides central regions (i.e. global envelopes) and
+global envelope tests with intrinsic graphical interpretation.
 The central regions can be constructed from (functional) data.
-The tests are Monte Carlo tests, which demand simulations from the tested null model.
-The methods are applicable for any multivariate vector data and functional data (after discretization).
+The tests are Monte Carlo or permutation tests, which demand simulations
+from the tested null model. The methods are applicable for any multivariate
+vector data and functional data (after discretization).
 
-In the special case of point processes, the functions are typically estimators of summary functions.
-The package supports the use of the R library \pkg{spatstat} for generating
-simulations and calculating estimators of the chosen summary function, but alternatively these
-can be done by any other way, thus allowing for any models/functions.
+In the special case of spatial processes (spatial point processes, random sets),
+the functions are typically estimators of summary functions. The package supports
+the use of the R library \pkg{spatstat} for generating simulations and calculating
+estimators of the chosen summary function, but alternatively these can be done by
+any other way, thus allowing for any models/functions.
 }
 \section{Key functions in \pkg{GET}}{
 
@@ -221,7 +230,9 @@ directly be given to the functions mentioned above in this section.
  \item \code{\link{cgec}}: centred government expenditure centralization (GEC) ratios (see \code{\link{graph.fanova}})
  \item \code{\link{fallen_trees}}: a point pattern of fallen trees
  \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
- \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}})
+ \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}})
+ \item \code{\link{imageset2}}: a simulated set of images (see \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}})
+ \item \code{\link{imageset3}}: a simulated set of images
  \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{dg.global_envelope_test}})
 }
