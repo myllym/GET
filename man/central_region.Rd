@@ -133,10 +133,6 @@ of T(r) over the distances r and from the asymmetry of distribution of T(r).
 We recommend to use the other alternatives instead. This unscaled global envelope is
 provided for reference.
 }
-We note that the global envelopes \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'}
-are completely non-parametric tests and thus protected against the unequal variances
-of the test function T(r) for different distances r and also against asymmetry of the distribution
-of T(r).
 
 For each curve in the curve_set, both the data curve and the simulations,
 an above mention measure k is determined. The measure values
@@ -145,6 +141,13 @@ are returned in the attribute 'k' (in a case of one observed curve only, k[1] is
 Based on the chosen measure, the central region, i.e. the global envelope, is constructed
 on the chosen interval of argument values (the functions in the \code{curve_set} are assumed
 to be given on this interval only).
+
+If a list of (suitable) objects are provided in the argument \code{curve_sets},
+then by default (\code{nstep = 2}) the two-step combining procedure is used to
+construct the combined global envelope as described in Myllymäki and Mrkvička (2019).
+If \code{nstep = 1} and the lengths of the multivariate vectors in each component
+of the list are equal, then the one-step combining procedure is used where the
+functions are concatenated together into a one long vector.
 }
 \examples{
 ## A central region of a set of functions
@@ -214,6 +217,8 @@ Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multip
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+
+Myllymäki, M. and Mrkvička, T. Global envelopes in R.
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }

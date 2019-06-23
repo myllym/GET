@@ -608,10 +608,6 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #' We recommend to use the other alternatives instead. This unscaled global envelope is
 #' provided for reference.
 #' }
-#' We note that the global envelopes \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'}
-#' are completely non-parametric tests and thus protected against the unequal variances
-#' of the test function T(r) for different distances r and also against asymmetry of the distribution
-#' of T(r).
 #'
 #' For each curve in the curve_set, both the data curve and the simulations,
 #' an above mention measure k is determined. The measure values
@@ -621,6 +617,13 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #' on the chosen interval of argument values (the functions in the \code{curve_set} are assumed
 #' to be given on this interval only).
 #'
+#' If a list of (suitable) objects are provided in the argument \code{curve_sets},
+#' then by default (\code{nstep = 2}) the two-step combining procedure is used to
+#' construct the combined global envelope as described in Myllymäki and Mrkvička (2019).
+#' If \code{nstep = 1} and the lengths of the multivariate vectors in each component
+#' of the list are equal, then the one-step combining procedure is used where the
+#' functions are concatenated together into a one long vector.
+#'
 #' @references
 #' Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 #'
@@ -629,6 +632,8 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+#'
+#' Myllymäki, M. and Mrkvička, T. Global envelopes in R.
 #'
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'
@@ -1001,6 +1006,14 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' However, if affordable, we recommend some thousands of simulations in any case
 #' to achieve a good power and repeatability of the test.
 #'
+#' @section Tests based on several functions:
+#' If a list of (suitable) objects are provided in the argument \code{curve_sets},
+#' then by default (\code{nstep = 2}) the two-step combining procedure is used to
+#' perform the combined global test as described in Myllymäki and Mrkvička (2019).
+#' If \code{nstep = 1} and the lengths of the multivariate vectors in each component
+#' of the list are equal, then the one-step combining procedure is used where the
+#' functions are concatenated together into a one long vector.
+#'
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 #'
@@ -1011,6 +1024,8 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+#'
+#' Myllymäki, M., Mrkvička, T. Global envelopes in R.
 #'
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'

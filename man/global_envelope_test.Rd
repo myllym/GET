@@ -170,6 +170,16 @@ However, if affordable, we recommend some thousands of simulations in any case
 to achieve a good power and repeatability of the test.
 }
 
+\section{Tests based on several functions}{
+
+If a list of (suitable) objects are provided in the argument \code{curve_sets},
+then by default (\code{nstep = 2}) the two-step combining procedure is used to
+perform the combined global test as described in Myllymäki and Mrkvička (2019).
+If \code{nstep = 1} and the lengths of the multivariate vectors in each component
+of the list are equal, then the one-step combining procedure is used where the
+functions are concatenated together into a one long vector.
+}
+
 \examples{
 if(require(spatstat, quietly=TRUE)) {
   ## Testing complete spatial randomness (CSR)
@@ -341,6 +351,8 @@ Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multip
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+
+Myllymäki, M., Mrkvička, T. Global envelopes in R.
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
