@@ -77,7 +77,7 @@ and in the case that \code{type = 'rank'} also
 }
 }
 \description{
-Global envelope test, p-values and global envelopes
+Global envelope test, global envelopes and p-values
 }
 \details{
 Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
@@ -97,10 +97,10 @@ envelopes in a general setting, the function \code{\link{global_envelope_test}}
 is devoted to testing as its name suggests.
 
 The function \code{global_envelope_test} is the main function for global envelope tests
-using single functions (for simple hypotheses).
+(for simple hypotheses).
 Different \code{type} of global envelope tests can be performed.
-We use such ordering of the functions for which we are able to construct global envelopes
-with intrinsic graphical interpretation.
+We use such ordering of the functions for which we are able to construct global
+envelopes with intrinsic graphical interpretation.
 \itemize{
   \item \code{'rank'}: the completely non-parametric rank envelope test (Myllymäki et al., 2017)
   based on minimum of pointwise ranks
