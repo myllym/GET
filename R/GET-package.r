@@ -219,7 +219,9 @@
 #'  \item \code{\link{cgec}}: centred government expenditure centralization (GEC) ratios (see \code{\link{graph.fanova}})
 #'  \item \code{\link{fallen_trees}}: a point pattern of fallen trees
 #'  \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
-#'  \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}})
+#'  \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}})
+#'  \item \code{\link{imageset2}}: a simulated set of images (see \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}})
+#'  \item \code{\link{imageset3}}: a simulated set of images
 #'  \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
 #'  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{dg.global_envelope_test}})
 #' }
