@@ -1,6 +1,6 @@
 # GET: Global envelopes in R
 
-The R package provides global envelopes which can be used in various situations including detection of central or outlying vectors or functions, functional boxplots, goodness-of-fit testing with multivariate or functional test statistics, functional ANOVA, functional GLM, n-sample correspondence of distribution functions, confidence and prediction bands from a set of multivariate vectors or functions.
+The R package provides global envelopes which can be used for central regions of functional or multivariate data (e.g. outlier detection, functional boxplot), for graphical Monte Carlo and permutation tests where the test statistic is a multivariate vector or function (e.g. goodness-of-fit testing for point patterns and random sets, functional ANOVA, functional GLM, n-sample test of correspondence of distribution functions), and for global confidence and prediction bands (e.g. confidence band in polynomial regression, Bayesian posterior prediction).
 
 ## Installation
 
