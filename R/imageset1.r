@@ -24,7 +24,7 @@
 #' @keywords curves
 #' @name imageset1
 #' @docType data
-#' @seealso \code{\link{graph.fanova2d}}, \code{\link{graph.fglm2d}}
+#' @seealso \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}}
 #' @examples
 #' data(imageset1)
 #' plot(imageset1$image_set, idx=c(1:5, 11:15), max_ncols_of_plots = 5)
