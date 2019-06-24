@@ -55,6 +55,38 @@ arXiv:1612.03608 [stat.ME]",
 
 citEntry(
     entry = "Article",
+    title = "New methods for multiple testing in permutation inference for the general linear model",
+    author = personList(as.person("T. Mrkvička"),
+                        as.person("M. Myllymäki"),
+                        as.person("N.N. Narisetty")),
+    journal = "arXiv:1906.09004 [stat.ME]",
+    year = "2019",
+    volume = "",
+    pages = "",
+    url = "https://arxiv.org/abs/1906.09004",
+    textVersion = "Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019).
+New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]",
+    header = "If you use functional GLM, please also cite:"
+)
+
+citEntry(
+    entry = "Article",
+    title = "A nonparametric graphical tests of significance in functional GLM",
+    author = personList(as.person("T. Mrkvička"),
+                        as.person("T. Roskovec"),
+                        as.person("M. Rost")),
+    journal = "arXiv:1902.04926 [stat.ME]",
+    year = "2019",
+    volume = "",
+    pages = "",
+    url = "https://arxiv.org/abs/1902.04926",
+    textVersion = "Mrkvička, T., Roskovec, T. and Rost, M. (2019).
+A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]",
+    header = "If you use functional GLM, please also cite:"
+)
+
+citEntry(
+    entry = "Article",
     title = "Monte Carlo testing in spatial statistics, with applications to spatial residuals",
     author = personList(as.person("T. Mrkvička"),
                         as.person("S. Soubeyrand"),
