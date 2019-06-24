@@ -647,10 +647,11 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #' @param nstep 1 or 2 for how to contruct a combined global envelope if list of curve sets
 #' is provided. 2 (default) for a two-step combining procedure, 1 for one-step.
 #' @param ... Additional parameters to be passed to \code{\link{forder}}.
-#' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-#' which can be printed and plotted directly.
+#' @return Either an object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
+#' or an "combined_global_envelope" for the case that \code{curve_sets} is a list of
+#' objects. The objects can be printed and plotted directly.
 #'
-#' Essentially a data frame containing columns
+#' The "global_envelope" object is essentially a data frame containing columns
 #' \itemize{
 #' \item r = the vector of values of the argument r at which the test was made
 #' \item obs = the data function, if there is only one data function. Otherwise not existing.
@@ -674,6 +675,12 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
 #' Attributes of an object \code{res} can be obtained using the function
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
+#'
+#' The "combined_global_envelope" is a list of "global_envelope" objects
+#' corresponding to the components of \code{curve_sets}. The second level envelope
+#' on which the envelope construction is based on is saved in the attribute
+#' "level2_ge".
+#'
 #' @export
 #' @seealso \code{\link{global_envelope_test}}
 #' @aliases global_envelope
@@ -1046,10 +1053,11 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' For 'midrank' the mid-rank within the tied values is taken.
 #' For 'erl' the extreme rank length p-value is calculated.
 #' The default is 'erl'.
-#' @return An object of class "global_envelope" and "fv"
-#' (see \code{\link[spatstat]{fv.object}}), which can be printed and plotted directly.
+#' @return Either an object of class "global_envelope" and "fv"
+#' (see \code{\link[spatstat]{fv.object}}) or "combined_global_envelope" for
+#' combined tests. The objects can be printed and plotted directly.
 #'
-#' Essentially a data frame containing columns
+#' The "global_envelope" is essentially a data frame containing columns
 #' \itemize{
 #' \item r = the vector of values of the argument r at which the test was made
 #' \item obs = values of the data function
@@ -1070,6 +1078,11 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   \item p_interval = The p-value interval [p_liberal, p_conservative].
 #'   \item ties = As the argument \code{ties}.
 #' }
+#'
+#' The "combined_global_envelope" is a list of "global_envelope" objects
+#' corresponding to the components of \code{curve_sets}. The second level envelope
+#' on which the envelope construction is based on is saved in the attribute
+#' "level2_ge".
 #' @export
 #' @seealso \code{\link{plot.global_envelope}}, \code{\link{central_region}},
 #' \code{\link{global_envelope_test2d}}
