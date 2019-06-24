@@ -31,7 +31,7 @@ The library `spptest` has become `GET`, which is developed further.
 
 ## References
 
-To cite GET in publications use (a selection of):
+To cite GET in publications use (a suitable selection of):
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).
 Global envelope tests for spatial processes. Journal of the Royal Statistical Society:
