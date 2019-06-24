@@ -1,4 +1,4 @@
-citHeader("To cite package ‘GET’ in publications use:")
+citHeader("To cite package ‘GET’ in publications use (a suitable selection of):")
 
 citEntry(
     entry = "Article",
@@ -49,8 +49,7 @@ citEntry(
     url = "https://arxiv.org/abs/1612.03608",
     textVersion = "Mrkvička, T., Hahn, U. and Myllymäki, M. (2018).
 A one-way ANOVA test for functional data with graphical interpretation.
-arXiv:1612.03608 [stat.ME]",
-    header = "If you use functional ANOVA, please also cite:"
+arXiv:1612.03608 [stat.ME]"
 )
 
 citEntry(
@@ -65,8 +64,7 @@ citEntry(
     pages = "",
     url = "https://arxiv.org/abs/1906.09004",
     textVersion = "Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019).
-New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]",
-    header = "If you use functional GLM, please also cite:"
+New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]"
 )
 
 citEntry(
@@ -81,8 +79,24 @@ citEntry(
     pages = "",
     url = "https://arxiv.org/abs/1902.04926",
     textVersion = "Mrkvička, T., Roskovec, T. and Rost, M. (2019).
-A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]",
-    header = "If you use functional GLM, please also cite:"
+A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]"
+)
+
+citEntry(
+    entry = "Article",
+    title = "Deviation test construction and power comparison for marked spatial point patterns",
+    author = personList(as.person("M. Myllymäki"),
+                        as.person("P. Grabarnik"),
+                        as.person("H. Seijo"),
+                        as.person("D. Stoyan")),
+    journal = "Spatial Statistics",
+    year = "2015",
+    volume = "11",
+    pages = "19--34",
+    url = "https://dx.doi.org/10.1016/j.spasta.2014.11.004",
+    textVersion = "Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
+Deviation test construction and power comparison for marked spatial point patterns.
+Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004"
 )
 
 citEntry(
@@ -101,23 +115,4 @@ citEntry(
     textVersion = "Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P. and Hahn, U. (2016).
 Monte Carlo testing in spatial statistics, with applications to spatial residuals.
 Spatial Statistics 18, Part A: 40--53. doi: 10.1016/j.spasta.2016.04.005",
-    header = "If you use apply tests to spatial residuals, please also cite:"
-)
-
-citEntry(
-    entry = "Article",
-    title = "Deviation test construction and power comparison for marked spatial point patterns",
-    author = personList(as.person("M. Myllymäki"),
-                        as.person("P. Grabarnik"),
-                        as.person("H. Seijo"),
-                        as.person("D. Stoyan")),
-    journal = "Spatial Statistics",
-    year = "2015",
-    volume = "11",
-    pages = "19--34",
-    url = "https://dx.doi.org/10.1016/j.spasta.2014.11.004",
-    textVersion = "Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
-Deviation test construction and power comparison for marked spatial point patterns.
-Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004",
-    header = "If you use deviation tests, please also cite:"
 )
