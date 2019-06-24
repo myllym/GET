@@ -51,10 +51,11 @@ is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
 \item{...}{Additional parameters to be passed to \code{\link{forder}}.}
 }
 \value{
-An object of class "global_envelope" and "fv"
-(see \code{\link[spatstat]{fv.object}}), which can be printed and plotted directly.
+Either an object of class "global_envelope" and "fv"
+(see \code{\link[spatstat]{fv.object}}) or "combined_global_envelope" for
+combined tests. The objects can be printed and plotted directly.
 
-Essentially a data frame containing columns
+The "global_envelope" is essentially a data frame containing columns
 \itemize{
 \item r = the vector of values of the argument r at which the test was made
 \item obs = values of the data function
@@ -75,6 +76,11 @@ and in the case that \code{type = 'rank'} also
   \item p_interval = The p-value interval [p_liberal, p_conservative].
   \item ties = As the argument \code{ties}.
 }
+
+The "combined_global_envelope" is a list of "global_envelope" objects
+corresponding to the components of \code{curve_sets}. The second level envelope
+on which the envelope construction is based on is saved in the attribute
+"level2_ge".
 }
 \description{
 Global envelope test, global envelopes and p-values
@@ -346,7 +352,7 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing,
 
 Mrkvička, T., Myllymäki, M., Jilek, M., and Hahn, U. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 
-Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
+Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 

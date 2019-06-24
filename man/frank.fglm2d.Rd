@@ -54,7 +54,7 @@ plot(res.z)
 }
 }
 \references{
-Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
+Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 }
 \seealso{
 \code{\link{frank.fglm}}, \code{\link{graph.fglm2d}}

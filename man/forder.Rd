@@ -73,9 +73,9 @@ where \eqn{\mathbf{R}_j \prec \mathbf{R}_i}{RP_j "<" RP_i} if and only if
 there exists \eqn{n\leq d}{n<=d} such that for the first k, \eqn{k<n}{k<n}, pointwise ordered
 ranks of \eqn{\mathbf{R}_j}{RP_j} and \eqn{\mathbf{R}_i}{RP_i} are equal and the n'th rank of
 \eqn{\mathbf{R}_j}{RP_j} is smaller than that of \eqn{\mathbf{R}_i}{RP_i}.
- \item \code{'cont'}: continuous rank (Hahn, 2015; Mrkvička and Narisetty, 2018)
+ \item \code{'cont'}: continuous rank (Hahn, 2015; Mrkvička et al., 2019)
 based on minimum of continuous pointwise ranks
- \item \code{'area'}: area rank (Mrkvička and Narisetty, 2018) based on area between continuous
+ \item \code{'area'}: area rank (Mrkvička et al., 2019) based on area between continuous
  pointwise ranks and minimum pointwise ranks for those argument (r) values for which pointwise
  ranks achieve the minimum (it is a combination of erl and cont)
  \item \code{'max'} and \code{'int'} and \code{'int2'}:
@@ -94,4 +94,15 @@ if(requireNamespace("fda", quietly = TRUE)) {
   forder(curve_set, measure = "rank")
   forder(curve_set, measure = "erl")
 }
+}
+\references{
+Hahn U (2015). “A note on simultaneous Monte Carlo tests.” Technical report, Centre for Stochastic Geometry and advanced Bioimaging, Aarhus University.
+
+Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
+
+Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+
+Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
+
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 }
