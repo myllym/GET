@@ -26,6 +26,10 @@ to the number of curves. Each column should specify the values of a factor.}
 
 \item{...}{Additional parameters to be passed to \code{\link{graph.fglm}}.}
 }
+\value{
+A \code{global_envelope_2d} or \code{combined_global_envelope_2d} object,
+which can be printed and plotted directly.
+}
 \description{
 Non-parametric graphical tests of significance in functional general linear model (GLM)
 for images

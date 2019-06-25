@@ -51,7 +51,7 @@ if(require(spatstat, quietly=TRUE)) {
   obs <- u$smooth$Z$v
   # Generate simulations from the hard-core null model
   \donttest{nsim <- 1999 # Number of simulations}
-  \dontshow{nsim <- 19 # Number of simulations for testing}
+  \dontshow{nsim <- 9 # Number of simulations for testing}
   simulations <- NULL
   ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
                     X$window$yrange[2]-X$window$yrange[1]) / 10

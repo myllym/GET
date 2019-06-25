@@ -113,7 +113,7 @@ from the tested model. \code{X.ls} should be a list of \code{curve_set} or
 function f that has been simulated from the model fitted to the data and the simulations
 that have been obtained from the same model that has been fitted to the "observed" f.
 The user has the responsibility that the functions have been generated correctly,
-the test is done based on these provided simulations.
+the test is done based on these provided simulations. See the examples.
 \item Otherwise,
 \itemize{
   \item If \code{X} is a fitted (point process) model object of the R library \pkg{spatstat},
@@ -145,7 +145,7 @@ Myllymäki et al. (2017) with the adjustment of Baddeley et al. (2017).
 For other test types, the test (also) uses the two-stage procedure of Dao and Genton (2014) with
 the adjustment of Baddeley et al. (2017).
 
-See examples in \code{\link{saplings}}.
+See examples also in \code{\link{saplings}}.
 }
 \examples{
 \donttest{

@@ -28,6 +28,7 @@ in Mrkvička et al. (2018). The function transforms images to vectors (1d), call
 \code{\link{graph.fanova}} and transform results back to images (2d).
 }
 \examples{
+\donttest{
 data("imageset1")
 res <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
                       image_set = imageset1$image_set,
@@ -40,6 +41,7 @@ res.c <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
                         summaryfun = "contrasts")
 plot(res.c)
 plot(res.c, contours=FALSE)
+}
 }
 \references{
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018)

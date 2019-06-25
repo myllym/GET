@@ -38,6 +38,9 @@ Parallelization can be used in generating simulations and in calculating the sec
 \item{mc.args}{A named list of additional arguments to be passed to \code{\link{mclapply}}.
 Only relevant if \code{mc.cores} is more than 1.}
 }
+\value{
+A \code{global_envelope} object, which can be printed and plotted directly.
+}
 \description{
 Multiple testing in permutation inference for the general linear model (GLM)
 }
@@ -57,7 +60,9 @@ argument values of the functional domain are responsible for the potential rejec
 \examples{
 data(GDPtax)
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-res.tax_within_group <- frank.fglm(nsim = 999,
+\donttest{nsim <- 999}
+\dontshow{nsim <- 19}
+res.tax_within_group <- frank.fglm(nsim = nsim,
                                    formula.full = Y~Group+Tax+Group:Tax,
                                    formula.reduced = Y~Group+Tax,
                                    curve_sets = list(Y=GDPtax$GDP),

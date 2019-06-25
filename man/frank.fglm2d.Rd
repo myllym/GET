@@ -26,6 +26,10 @@ to the number of curves. Each column should specify the values of a factor.}
 
 \item{...}{Additional parameters to be passed to \code{\link{frank.fglm}}.}
 }
+\value{
+A \code{global_envelope_2d} object, which can be printed and plotted
+directly.
+}
 \description{
 Multiple testing in permutation inference for the general linear model (GLM)
 }

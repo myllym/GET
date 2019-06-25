@@ -26,12 +26,14 @@ in Mrkvička et al. (2018). The function transforms images to vectors (1d), call
 \code{\link{frank.fanova}} and transform results back to images (2d).
 }
 \examples{
+\donttest{
 data("imageset1")
 res <- frank.fanova2d(nsim = 19, # Increase nsim for serious analysis!
                       image_set = imageset1$image_set,
                       groups = imageset1$Group)
 plot(res)
 plot(res, fixedscales=FALSE, contours=FALSE)
+}
 }
 \references{
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018)

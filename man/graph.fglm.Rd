@@ -46,7 +46,8 @@ Parallelization can be used in generating simulations and in calculating the sec
 Only relevant if \code{mc.cores} is more than 1.}
 }
 \value{
-A \code{global_envelope} object.
+A \code{global_envelope} or \code{combined_global_envelope} object,
+which can be printed and plotted directly.
 }
 \description{
 Non-parametric graphical tests of significance in functional general linear model (GLM)

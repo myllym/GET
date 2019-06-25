@@ -35,7 +35,7 @@ of the fitted model.
 \examples{
 if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
   \donttest{nsim <- 999 # Number of simulations for the tests below}
-  \dontshow{nsim <- 19 # Number of simulations for testing}
+  \dontshow{nsim <- 9 # Number of simulations for testing}
   # Examples from gstat complemented with global envelopes
   #-------------------------------------------------------
   data(meuse)
