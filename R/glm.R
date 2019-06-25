@@ -252,7 +252,9 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' @examples
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-#' res.tax_within_group <- frank.fglm(nsim = 999,
+#' \donttest{nsim <- 999}
+#' \dontshow{nsim <- 9}
+#' res.tax_within_group <- frank.fglm(nsim = nsim,
 #'                                    formula.full = Y~Group+Tax+Group:Tax,
 #'                                    formula.reduced = Y~Group+Tax,
 #'                                    curve_sets = list(Y=GDPtax$GDP),
