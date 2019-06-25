@@ -127,7 +127,8 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @param mc.args A named list of additional arguments to be passed to \code{\link{mclapply}}.
 #' Only relevant if \code{mc.cores} is more than 1.
-#' @return A \code{global_envelope} or \code{combined_global_envelope} object.
+#' @return A \code{global_envelope} or \code{combined_global_envelope} object,
+#' which can be printed and plotted directly.
 #' @export
 #' @references
 #' Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
@@ -242,7 +243,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' argument values of the functional domain are responsible for the potential rejection.
 #'
 #' @inheritParams graph.fglm
-#' @return A \code{global_envelope} object.
+#' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
@@ -307,7 +308,8 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' and each function.
 #' @param ... Additional parameters to be passed to \code{\link{graph.fglm}}.
 #' @seealso \code{\link{graph.fglm}}, \code{\link{frank.fglm2d}}
-#' @return A \code{global_envelope_2d} or \code{combined_global_envelope_2d} object.
+#' @return A \code{global_envelope_2d} or \code{combined_global_envelope_2d} object,
+#' which can be printed and plotted directly.
 #' @export
 #' @references
 #' Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
@@ -378,7 +380,8 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' @export
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
-#' @return A \code{global_envelope_2d} object.
+#' @return A \code{global_envelope_2d} object, which can be printed and plotted
+#' directly.
 #' @examples
 #' \donttest{
 #' data("imageset2")
