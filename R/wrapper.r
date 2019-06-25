@@ -59,7 +59,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #' @examples
 #' if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
 #'   \donttest{nsim <- 999 # Number of simulations for the tests below}
-#'   \dontshow{nsim <- 19 # Number of simulations for testing}
+#'   \dontshow{nsim <- 9 # Number of simulations for testing}
 #'   # Examples from gstat complemented with global envelopes
 #'   #-------------------------------------------------------
 #'   data(meuse)
@@ -236,9 +236,9 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'   }
 #'   \dontshow{
 #'   # The test with lower number of simulations
-#'   res_m <- GET.necdf(fm.list, summaryfun="means", nsim=19)
+#'   res_m <- GET.necdf(fm.list, summaryfun="means", nsim=9)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=19)
+#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=9)
 #'   plot(res_c)
 #'   }
 #' }
