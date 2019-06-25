@@ -75,8 +75,10 @@
 #' #-------------------------------------------
 #' require(spatstat)
 #' pp <- unmark(spruces)
+#' \donttest{nsim <- 999}
+#' \dontshow{nsim <- 19}
 #' # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-#' env <- envelope(pp, fun="Lest", nsim=999, savefuns=TRUE, correction="translate")
+#' env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate")
 #' # The deviation test using the integral deviation measure
 #' res <- deviation_test(env, measure = 'int')
 #' res
