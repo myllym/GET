@@ -457,6 +457,7 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' A one-way ANOVA test for functional data with graphical interpretation.
 #' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
 #' @examples
+#' \donttest{
 #' data("imageset1")
 #' res <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       image_set = imageset1$image_set,
@@ -469,6 +470,7 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
 #'                         summaryfun = "contrasts")
 #' plot(res.c)
 #' plot(res.c, contours=FALSE)
+#' }
 graph.fanova2d <- function(nsim, image_set, groups, ...) {
   if(class(image_set)[1] != "image_set") stop("The image_set does not have a valid class.\n")
   obs_d <- dim(image_set$obs)
@@ -507,12 +509,14 @@ graph.fanova2d <- function(nsim, image_set, groups, ...) {
 #' A one-way ANOVA test for functional data with graphical interpretation.
 #' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
 #' @examples
+#' \donttest{
 #' data("imageset1")
 #' res <- frank.fanova2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       image_set = imageset1$image_set,
 #'                       groups = imageset1$Group)
 #' plot(res)
 #' plot(res, fixedscales=FALSE, contours=FALSE)
+#' }
 frank.fanova2d <- function(nsim, image_set, groups, ...) {
   if(class(image_set)[1] != "image_set") stop("The image_set does not have a valid class.\n")
   obs_d <- dim(image_set$obs)
