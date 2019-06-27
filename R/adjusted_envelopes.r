@@ -48,12 +48,12 @@ funcs_from_X_and_funs <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfun
   X.ls
 }
 
-# A helper function to perform simulations for the dg.global_envelope_test
+# A helper function to perform simulations for the adj.global_envelope_test
 #' @importFrom spatstat is.ppm is.kppm is.lppm is.slrm
 #' @importFrom spatstat is.ppp
 #' @importFrom spatstat update.ppm update.kppm update.lppm update.slrm
 #' @importFrom parallel mclapply
-dg.simulate <- function(X, nsim = 499, nsimsub = nsim,
+adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
                         simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
                         testfuns=NULL, ..., verbose=TRUE, mc.cores=1L) {
   # Check if X is a (ppp) model object of spatstat
@@ -152,10 +152,10 @@ GE.attr <- function(x, name = "p", ...) {
   a
 }
 
-# A helper function to make a global envelope test for the purposes of dg.global_envelope_test
+# A helper function to make a global envelope test for the purposes of adj.global_envelope_test
 # @param curve_sets_ls A list of curve_sets.
-# @inheritParams dg.global_envelope_test
-dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, MrkvickaEtal2017, ..., save.envelope=FALSE) {
+# @inheritParams adj.global_envelope_test
+adj_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, MrkvickaEtal2017, ..., save.envelope=FALSE) {
   if(length(curve_sets) > 1 & MrkvickaEtal2017 & type %in% c("st", "qdir")) {
     global_envtest <- combined_scaled_MAD_envelope(curve_sets, type=type, alpha=alpha, probs=probs, ...)
   }
@@ -164,7 +164,7 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
                                            alternative=alternative, ties=ties, probs=probs, ...)
   }
   res <- structure(list(stat = as.numeric(GE.attr(global_envtest, "k")[1]), pval = GE.attr(global_envtest, "p")),
-                   class = "dg_GET_helper")
+                   class = "adj_GET_helper")
   if(save.envelope) attr(res, "envelope_test") <- global_envtest
   res
 }
@@ -282,7 +282,7 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
 #' \code{\link{plot.global_envelope}}, \code{\link{saplings}}
 #' @export
-#' @aliases dg.GET
+#' @aliases adj.GET
 #' @importFrom parallel mclapply
 #' @importFrom stats quantile
 #' @examples
@@ -302,11 +302,11 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
 #'   # Number of simulations
 #'   nsim <- 19 # Increase nsim for serious analysis!
 #'
-#'   # Option 1: Give the fitted model object to dg.GET
+#'   # Option 1: Give the fitted model object to adj.GET
 #'   #-------------------------------------------------
 #'   # This can be done and is preferable when the model is a point process model of spatstat.
 #'   # Make the adjusted directional quantile global envelope test using the L(r)-r function
-#'   adjenvL <- dg.global_envelope_test(X = M1, nsim = nsim,
+#'   adjenvL <- adj.global_envelope_test(X = M1, nsim = nsim,
 #'               testfuns = list(L = list(fun="Lest", correction="translate",
 #'                              transform = expression(.-r), r=r)), # passed to envelope
 #'               type = "qdir", r_min=rmin, r_max=rmax)
@@ -338,7 +338,7 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
 #'   }
 #'   X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
 #'   # Perform the adjusted test
-#'   res <- dg.global_envelope_test(X=X, X.ls=X.ls, type="qdir",
+#'   res <- adj.global_envelope_test(X=X, X.ls=X.ls, type="qdir",
 #'                                  r_min=rmin, r_max=rmax)
 #'   plot(res)
 #'
@@ -352,13 +352,13 @@ dg_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mrk
 #'   simf <- function(M) {
 #'     simulate(M, nsim=1)[[1]]
 #'   }
-#'   res <- dg.global_envelope_test(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
+#'   res <- adj.global_envelope_test(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
 #'            testfuns = list(L = list(fun="Lest", correction="translate",
 #'                            transform = expression(.-r), r=r)),
 #'            type="qdir", r_min=rmin, r_max=rmax)
 #'   plot(res)
 #' }}
-dg.global_envelope_test <- function(X, X.ls = NULL,
+adj.global_envelope_test <- function(X, X.ls = NULL,
                                     nsim = 499, nsimsub = nsim,
                                     simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
                                     testfuns=NULL, ...,
@@ -395,7 +395,7 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
   #------------------------------------
   else { # Perform simulations
     if(verbose) cat("Performing simulations, ...\n")
-    tmp <- dg.simulate(X=X, nsim=nsim, nsimsub=nsimsub,
+    tmp <- adj.simulate(X=X, nsim=nsim, nsimsub=nsimsub,
                        simfun=simfun, fitfun=fitfun, calcfun=calcfun, testfuns=testfuns, ...,
                        verbose=verbose, mc.cores=mc.cores)
     picked_attr_ls <- lapply(tmp$X, FUN=pick_attributes, alternative=alt, type=type)
@@ -424,11 +424,11 @@ dg.global_envelope_test <- function(X, X.ls = NULL,
   # Individual tests
   #-----------------
   # For data
-  obs_res <- dg_GET_helper(curve_sets=X, type=type, alpha=alpha, alternative=alt, ties="midrank",
+  obs_res <- adj_GET_helper(curve_sets=X, type=type, alpha=alpha, alternative=alt, ties="midrank",
                            probs=probs, MrkvickaEtal2017=MrkvickaEtal2017, save.envelope=TRUE)
   # For simulations
   loopfun <- function(rep) {
-    tmp <- dg_GET_helper(curve_sets=X.ls[[rep]], type=type, alpha=alpha, alternative=alt, ties="midrank",
+    tmp <- adj_GET_helper(curve_sets=X.ls[[rep]], type=type, alpha=alpha, alternative=alt, ties="midrank",
                          probs=probs, MrkvickaEtal2017=MrkvickaEtal2017)
     list(stat = tmp$stat, pval = tmp$pval)
   }

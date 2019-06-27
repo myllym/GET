@@ -111,7 +111,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' consequently, the test approximately achieves the desired significance level.
 #'
 #' @inheritParams graph.fanova
-#' @inheritParams dg.global_envelope_test
+#' @inheritParams adj.global_envelope_test
 #' @param formula.full The formula specifying the general linear model,
 #' see \code{formula} in \code{\link[stats]{lm}}.
 #' @param formula.reduced The formula of the reduced model with nuisance factors only.

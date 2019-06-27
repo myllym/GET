@@ -78,7 +78,7 @@
 #'
 #'   # Make the adjusted directional quantile global envelope test using the L(r)-r function
 #'   # (For the rank envelope test, choose type = "rank" instead and increase nsim.)
-#'   adjenvL <- dg.global_envelope_test(X = fitted_model,
+#'   adjenvL <- adj.global_envelope_test(X = fitted_model,
 #'                      fun="Lest", correction="translate",
 #'                      transform = expression(.-r), r=r,
 #'                      type = "qdir", nsim = nsim, nsimsub = nsim,
@@ -91,7 +91,7 @@
 #'   # To further explore the goodness-of-fit of the Matern cluster process, test the
 #'   # model with the J function:
 #'   # This takes quite some time if nsim is reasonably large.
-#'   adjenvJ <- dg.global_envelope_test(X = fitted_model,
+#'   adjenvJ <- adj.global_envelope_test(X = fitted_model,
 #'                      fun="Jest", correction="none", r=rJ,
 #'                      type = "qdir", nsim = nsim, nsimsub = nsim,
 #'                      r_min=rminJ, r_max=rmaxJ)
@@ -100,7 +100,7 @@
 #'   # -> the Matern cluster process not adequate for the saplings data
 #'
 #'   # Test with the two test functions jointly
-#'   adjenvLJ <- dg.global_envelope_test(X = fitted_model,
+#'   adjenvLJ <- adj.global_envelope_test(X = fitted_model,
 #'                      testfuns = list(L = list(fun="Lest", correction="translate",
 #'                                          transform = expression(.-r), r=r),
 #'                                      J = list(fun="Jest", correction="none", r=rJ)),

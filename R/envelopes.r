@@ -1146,7 +1146,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   # 4) Plot the test result
 #'   plot(res, ylab=expression(italic(L[m](r)-L(r))))
 #'
-#'   ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
+#'   ## Goodness-of-fit test (typically conservative, see adj.global_envelope for adjusted tests)
 #'   #-----------------------------------------------
 #'   pp <- unmark(spruces)
 #'   # Minimum distance between points in the pattern
@@ -1437,7 +1437,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' @export
 #' @name qdir_envelope
 #' @seealso \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}},
-#' \code{\link{global_envelope_test2d}}, \code{\link{dg.global_envelope_test}}
+#' \code{\link{global_envelope_test2d}}, \code{\link{adj.global_envelope_test}}
 #' @examples
 #' # See more examples in ?global_envelope_test
 #' ## Testing complete spatial randomness (CSR)

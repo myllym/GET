@@ -90,7 +90,7 @@
 #' \item \emph{Functional boxplots}: \code{\link{fBoxplot}}
 #' \item \emph{Adjusted} global envelope tests for composite hypotheses
 #' \itemize{
-#'   \item \code{\link{dg.global_envelope_test}}, see a detailed example in \code{\link{saplings}}
+#'   \item \code{\link{adj.global_envelope_test}}, see a detailed example in \code{\link{saplings}}
 #' }
 #' Also the adjusted tests can be based on several test functions.
 #' \item \emph{One-way functional ANOVA}:
@@ -187,7 +187,7 @@
 #'            \item Fit the model to your data by means of the function
 #'                  \code{\link[spatstat]{ppm}} or \code{\link[spatstat]{kppm}}.
 #'                  See the help documentation for possible models.
-#'            \item Use \code{\link{dg.global_envelope_test}} to create nsim simulations
+#'            \item Use \code{\link{adj.global_envelope_test}} to create nsim simulations
 #'                  from the fitted model, to calculate the functions you want,
 #'                  and to make an adjusted global envelope test.
 #'                  See the detailed example in \code{\link{saplings}}.
@@ -223,7 +223,7 @@
 #'  \item \code{\link{imageset2}}: a simulated set of images (see \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}})
 #'  \item \code{\link{imageset3}}: a simulated set of images
 #'  \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
-#'  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{dg.global_envelope_test}})
+#'  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{adj.global_envelope_test}})
 #' }
 #' The data sets are used to show examples of the functions of the library.
 #'
