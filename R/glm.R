@@ -158,7 +158,7 @@ genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
 #' }
 graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        summaryfun = c("means", "contrasts"),
-                       savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1, mc.args = NULL) {
+                       savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1L, mc.args = NULL) {
   # Set up the contrasts
   options(contrasts = c("contr.sum", "contr.poly"))
   # Preliminary checks and formulation of the data to suitable form for further processing
