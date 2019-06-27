@@ -6,7 +6,7 @@
 \usage{
 graph.fglm(nsim, formula.full, formula.reduced, curve_sets,
   factors = NULL, summaryfun = c("means", "contrasts"),
-  savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1,
+  savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1L,
   mc.args = NULL)
 }
 \arguments{

@@ -108,5 +108,5 @@ Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
 \seealso{
 \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}},
-\code{\link{global_envelope_test2d}}, \code{\link{dg.global_envelope_test}}
+\code{\link{global_envelope_test2d}}, \code{\link{adj.global_envelope_test}}
 }

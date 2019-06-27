@@ -245,7 +245,7 @@ if(require(spatstat, quietly=TRUE)) {
   # 4) Plot the test result
   plot(res, ylab=expression(italic(L[m](r)-L(r))))
 
-  ## Goodness-of-fit test (typically conservative, see dg.global_envelope for adjusted tests)
+  ## Goodness-of-fit test (typically conservative, see adj.global_envelope for adjusted tests)
   #-----------------------------------------------
   pp <- unmark(spruces)
   # Minimum distance between points in the pattern

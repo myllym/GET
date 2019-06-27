@@ -61,7 +61,7 @@ argument values of the functional domain are responsible for the potential rejec
 data(GDPtax)
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 \donttest{nsim <- 999}
-\dontshow{nsim <- 19}
+\dontshow{nsim <- 9}
 res.tax_within_group <- frank.fglm(nsim = nsim,
                                    formula.full = Y~Group+Tax+Group:Tax,
                                    formula.reduced = Y~Group+Tax,
