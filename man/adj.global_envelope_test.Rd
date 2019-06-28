@@ -2,7 +2,7 @@
 % Please edit documentation in R/adjusted_envelopes.r
 \name{adj.global_envelope_test}
 \alias{adj.global_envelope_test}
-\alias{adj.GET}
+\alias{dg.global_envelope_test}
 \title{Adjusted global envelope tests}
 \usage{
 adj.global_envelope_test(X, X.ls = NULL, nsim = 499, nsimsub = nsim,
