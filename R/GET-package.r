@@ -190,7 +190,7 @@
 #'            \item Use \code{\link{adj.global_envelope_test}} to create nsim simulations
 #'                  from the fitted model, to calculate the functions you want,
 #'                  and to make an adjusted global envelope test.
-#'                  See the detailed example in \code{\link{saplings}}.
+#'                  See the example also in \code{\link{saplings}}.
 #'            \item Plot the result
 #'
 #'                  \code{
