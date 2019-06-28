@@ -282,7 +282,7 @@ adj_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' @seealso \code{\link{rank_envelope}}, \code{\link{qdir_envelope}}, \code{\link{st_envelope}},
 #' \code{\link{plot.global_envelope}}, \code{\link{saplings}}
 #' @export
-#' @aliases adj.GET
+#' @aliases dg.global_envelope_test
 #' @importFrom parallel mclapply
 #' @importFrom stats quantile
 #' @examples
