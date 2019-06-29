@@ -1,11 +1,17 @@
+# Identity scaling
+identity_scaling <- function(curve_set, ...) {
+    identity(curve_set)
+}
+
 # Studentised scaling
 #
 # Scale with the standard deviation.
 #
 # @inheritParams convert_envelope
+# @param ... Ignored.
 # @return A scaled curve_set.
 #' @importFrom stats sd
-st_scaling <- function(curve_set) {
+st_scaling <- function(curve_set, ...) {
     sim_sd <- curve_set_sd(curve_set)
     res <- weigh_curves(curve_set, divisor_to_coeff(sim_sd))
     res
@@ -110,6 +116,7 @@ qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
 # @param scaling The name of the scaling to use. Options include 'none',
 #   'q', 'qdir' and 'st'. 'qdir' is default.
 # @param ... Further arguments passed to the chosen scaling function.
+# probs and quantile.type for 'q' and 'qdir'. Ignored for 'none' and 'st'.
 scale_curves <- function(curve_set, scaling = 'qdir', ...) {
     curve_set <- convert_envelope(curve_set)
 
@@ -122,7 +129,7 @@ scale_curves <- function(curve_set, scaling = 'qdir', ...) {
                      q = q_scaling,
                      qdir = qdir_scaling,
                      st = st_scaling,
-                     none = identity)
+                     none = identity_scaling)
 
     scaled_set <- scaler(curve_set, ...)
     scaled_set
