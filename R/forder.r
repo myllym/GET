@@ -202,7 +202,7 @@ combined_forder <- function(curve_sets, ...) {
 #'   quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).
 #' @param quantile.type As type argument of \code{\link[stats]{quantile}}, how to
-#' calculate quantiles for the measure 'q' or 'qdir'.
+#' calculate quantiles for 'q' or 'qdir'.
 #' @export
 #' @references
 #' Hahn U (2015). “A note on simultaneous Monte Carlo tests.” Technical report, Centre for Stochastic Geometry and advanced Bioimaging, Aarhus University.
