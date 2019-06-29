@@ -3,6 +3,7 @@
 individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       alternative = c("two.sided", "less", "greater"),
                                       probs = c((1-coverage)/2, 1-(1-coverage)/2),
+                                      quantile.type = 7,
                                       central = "median", ...) {
   if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
@@ -38,7 +39,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
            scaling <- "none"
          })
   distance <- forder(curve_set, measure=measure, scaling=scaling,
-                     alternative=alternative, probs=probs, ...)
+                     alternative=alternative, probs=probs, quantile.type=quantile.type, ...)
 
   data_and_sim_curves <- data_and_sim_curves(curve_set) # all the functions
   Nfunc <- length(distance) # Number of functions
@@ -86,7 +87,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          },
          qdir = {
            curve_set_res <- residual(curve_set, use_theo=TRUE)
-           quant_m <- curve_set_quant(curve_set_res, probs=probs)
+           quant_m <- curve_set_quant(curve_set_res, probs=probs, type=quantile.type)
            #-- the 100(1-alpha)% global directional quantile envelope
            distancesorted <- sort(distance)
            kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
@@ -147,12 +148,14 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
 # Functionality for global envelope tests based on a curve set (individual central region + p-values)
 individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.05,
                                             alternative = c("two.sided", "less", "greater"),
-                                            ties = "erl", probs = c(0.025, 0.975),
+                                            ties = "erl",
+                                            probs = c(0.025, 0.975), quantile.type = 7,
                                             central = "mean", ...) {
   alternative <- match.arg(alternative)
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
-                                   alternative=alternative, probs=probs,
+                                   alternative=alternative,
+                                   probs=probs, quantile.type=quantile.type,
                                    central=central, ...)
   # The type of the p-value
   possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
@@ -746,24 +749,28 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),
+                           quantile.type = 7,
                            central = "median", nstep = 2, ...) {
   if(class(curve_sets)[1] == "list" & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
   if(class(curve_sets)[1] == "list") {
     if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
     if(nstep == 2) {
       res <- combined_CR_or_GET(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
-                                alternative=alternative, probs=probs,
+                                alternative=alternative,
+                                probs=probs, quantile.type=quantile.type,
                                 central=central, ...)
     }
     else { # One-step combining procedure
       res <- combined_CR_or_GET_1step(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
-                                      alternative=alternative, probs=probs,
+                                      alternative=alternative,
+                                      probs=probs, quantile.type=quantile.type,
                                       central=central, ...)
     }
   }
   else {
     res <- individual_central_region(curve_sets, type=type, coverage=coverage,
-                                     alternative=alternative, probs=probs,
+                                     alternative=alternative,
+                                     probs=probs, quantile.type=quantile.type,
                                      central=central, ...)
   }
   res
@@ -1249,26 +1256,28 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'
 global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
                           alternative = c("two.sided", "less", "greater"),
-                          ties = "erl", probs = c(0.025, 0.975),
+                          ties = "erl", probs = c(0.025, 0.975), quantile.type=7,
                           central = "mean", nstep = 2, ...) {
   if(class(curve_sets)[1] == "list" & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
   if(class(curve_sets)[1] == "list") {
     if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
     if(nstep == 2) {
       res <- combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
-                                alternative=alternative, probs=probs,
+                                alternative=alternative,
+                                probs=probs, quantile.type=quantile.type,
                                 central=central, ...)
     }
     else { # One-step combining procedure
       res <- combined_CR_or_GET_1step(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
-                                alternative=alternative, probs=probs,
+                                alternative=alternative,
+                                probs=probs, quantile.type=quantile.type,
                                 central=central, ...)
     }
   }
   else {
     res <- individual_global_envelope_test(curve_sets, type=type, alpha=alpha,
-                                           alternative=alternative,
-                                           ties=ties, probs=probs,
+                                           alternative=alternative, ties=ties,
+                                           probs=probs, quantile.type=quantile.type,
                                            central=central, ...)
   }
   res
