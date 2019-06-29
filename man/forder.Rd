@@ -6,7 +6,7 @@
 \usage{
 forder(curve_sets, r_min = NULL, r_max = NULL, measure = "erl",
   scaling = "qdir", alternative = c("two.sided", "less", "greater"),
-  use_theo = TRUE, probs = c(0.025, 0.975))
+  use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
@@ -33,6 +33,9 @@ see \code{\link{deviation_test}}.}
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).}
+
+\item{quantile.type}{As type argument of \code{\link[stats]{quantile}}, how to
+calculate quantiles for the measure 'q' or 'qdir'.}
 }
 \value{
 A vector containing one of the above mentioned measures k for each of the functions

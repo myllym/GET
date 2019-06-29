@@ -7,7 +7,8 @@
 \usage{
 global_envelope_test(curve_sets, type = "erl", alpha = 0.05,
   alternative = c("two.sided", "less", "greater"), ties = "erl",
-  probs = c(0.025, 0.975), central = "mean", nstep = 2, ...)
+  probs = c(0.025, 0.975), quantile.type = 7, central = "mean",
+  nstep = 2, ...)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}})
@@ -40,6 +41,9 @@ The default is 'erl'.}
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).}
+
+\item{quantile.type}{As type argument of \code{\link[stats]{quantile}}, how to
+calculate quantiles for the measure 'q' or 'qdir'.}
 
 \item{central}{Either "mean" or "median". If the curve sets do not contain the component
 \code{theo} for the theoretical central function, then the central function (used for plotting only)
