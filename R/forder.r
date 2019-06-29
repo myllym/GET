@@ -36,7 +36,8 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
 individual_forder <- function(curve_set, r_min = NULL, r_max = NULL,
                               measure = 'erl', scaling = 'qdir',
                               alternative=c("two.sided", "less", "greater"),
-                              use_theo = TRUE, probs = c(0.025, 0.975)) {
+                              use_theo = TRUE,
+                              probs = c(0.025, 0.975), quantile.type = 7) {
   possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!\n")
 
@@ -200,6 +201,8 @@ combined_forder <- function(curve_sets, ...) {
 #' @param probs A two-element vector containing the lower and upper
 #'   quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
 #'   The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).
+#' @param quantile.type As type argument of \code{\link[stats]{quantile}}, how to
+#' calculate quantiles for the measure 'q' or 'qdir'.
 #' @export
 #' @references
 #' Hahn U (2015). “A note on simultaneous Monte Carlo tests.” Technical report, Centre for Stochastic Geometry and advanced Bioimaging, Aarhus University.
@@ -221,15 +224,16 @@ combined_forder <- function(curve_sets, ...) {
 #'   forder(curve_set, measure = "erl")
 #' }
 forder <- function(curve_sets, r_min = NULL, r_max = NULL,
-                    measure = 'erl', scaling = 'qdir',
-                    alternative=c("two.sided", "less", "greater"),
-                    use_theo = TRUE, probs = c(0.025, 0.975)) {
+                   measure = 'erl', scaling = 'qdir',
+                   alternative=c("two.sided", "less", "greater"),
+                   use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7) {
   if(class(curve_sets)[1] == "list") {
     curve_sets <- check_curve_set_dimensions(curve_sets)
     res <- combined_forder(curve_sets, r_min = r_min, r_max = r_max,
                            measure = measure, scaling = scaling,
                            alternative = alternative,
-                           use_theo = use_theo, probs = probs)
+                           use_theo = use_theo,
+                           probs = probs, quantile.type = quantile.type)
     distance <- res$distance
     names(distance) <- rownames(data_and_sim_curves(curve_sets[[1]]))
   }
@@ -238,7 +242,8 @@ forder <- function(curve_sets, r_min = NULL, r_max = NULL,
     res <- individual_forder(curve_sets, r_min = r_min, r_max = r_max,
                              measure = measure, scaling = scaling,
                              alternative = alternative,
-                             use_theo = use_theo, probs = probs)
+                             use_theo = use_theo,
+                             probs = probs, quantile.type = quantile.type)
     distance <- res$distance
     names(distance) <- rownames(data_and_sim_curves(curve_sets))
   }
