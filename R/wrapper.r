@@ -215,10 +215,19 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'   plot(ecdf(m.a), col=grey(0.7), add=TRUE)
 #'   # Create a list of the data
 #'   fm.list <- list(Girls=f.a, Boys=m.a)
+#'   \donttest{
 #'   res_m <- GET.necdf(fm.list, summaryfun="means")
 #'   plot(res_m)
 #'   res_c <- GET.necdf(fm.list, summaryfun="contrasts")
 #'   plot(res_c)
+#'   }
+#'   \dontshow{
+#'   # The test with lower number of simulations
+#'   res_m <- GET.necdf(fm.list, summaryfun="means", nsim=4)
+#'   plot(res_m)
+#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=4)
+#'   plot(res_c)
+#'   }
 #'
 #'   # Heights of boys and girls at age 14
 #'   f.a <- growth$hgtf["14",] # girls at age 14
@@ -236,9 +245,9 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'   }
 #'   \dontshow{
 #'   # The test with lower number of simulations
-#'   res_m <- GET.necdf(fm.list, summaryfun="means", nsim=9)
+#'   res_m <- GET.necdf(fm.list, summaryfun="means", nsim=4)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=9)
+#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=4)
 #'   plot(res_c)
 #'   }
 #' }
