@@ -195,7 +195,7 @@ if(require(spatstat, quietly=TRUE)) {
   ## Testing complete spatial randomness (CSR)
   #-------------------------------------------
   \donttest{nsim <- 1999 # Number of simulations}
-  \dontshow{nsim <- 19 # Number of simulations}
+  \dontshow{nsim <- 9 # Number of simulations}
   pp <- unmark(spruces)
   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
   env <- envelope(pp, fun="Lest", nsim=nsim,
@@ -232,7 +232,7 @@ if(require(spatstat, quietly=TRUE)) {
   # which is an estimator of the mark-weighted L function, L_mm(r),
   # with translational edge correction.
   \donttest{nsim <- 1999 # Number of simulations}
-  \dontshow{nsim <- 19 # Number of simulations}
+  \dontshow{nsim <- 9 # Number of simulations}
   env <- envelope(mpp, fun=Kmark, nsim = nsim, f=function(m1, m2) { m1*m2 },
                   correction="translate", returnL=TRUE,
                   simulate=expression(rlabel(mpp, permute=TRUE)), # Permute the marks
@@ -264,7 +264,7 @@ if(require(spatstat, quietly=TRUE)) {
   # Using direct algorihm can be faster, because the perfect simulation is used here.
   simulations <- NULL
   \donttest{nsim <- 999 # Number of simulations}
-  \dontshow{nsim <- 19 # Number of simulations}
+  \dontshow{nsim <- 9 # Number of simulations}
   for(j in 1:nsim) {
      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
                                    R=fittedmodel$interaction$par$hc,
@@ -284,7 +284,7 @@ if(require(spatstat, quietly=TRUE)) {
   X <- saplings
 
   \donttest{nsim <- 499 # Number of simulations}
-  \dontshow{nsim <- 19 # Number of simulations}
+  \dontshow{nsim <- 9 # Number of simulations}
   # Specify distances for different test functions
   n <- 500 # the number of r-values
   rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
