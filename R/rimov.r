@@ -14,9 +14,9 @@
 #'
 #' @usage data(rimov)
 #' @references
-#' Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
+#' Mrkvička, T., Hahn, U. and Myllymäki, M. (2018)
 #' A one-way ANOVA test for functional data with graphical interpretation.
-#' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+#' arXiv:1612.03608v2 [stat.ME] (http://arxiv.org/abs/1612.03608v2)
 #' @keywords datasets
 #' @keywords curves
 #' @name rimov
