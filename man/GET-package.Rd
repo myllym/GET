@@ -255,7 +255,7 @@ Mrkvička et al. (2017) discussed the number of simulations for tests based on m
 \section{Acknowledgements}{
 
 
-Pavel Grabarnik, Ute Hahn, Mikko Kuronen and Henri Seijo have made contributions
+Pavel Grabarnik, Ute Hahn, Mikko Kuronen, Michael Rost and Henri Seijo have made contributions
 and suggestions of code.
 }
 

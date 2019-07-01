@@ -32,9 +32,9 @@ for(i in 1:3) subs(i, main=paste("group ", i, sep=""), ylab="Temperature")
 # See example analysis in ?graph.fanova
 }
 \references{
-Mrkvička, T., Hahn, U. and Myllymäki, M. (2016)
+Mrkvička, T., Hahn, U. and Myllymäki, M. (2018)
 A one-way ANOVA test for functional data with graphical interpretation.
-arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+arXiv:1612.03608v2 [stat.ME] (http://arxiv.org/abs/1612.03608v2)
 }
 \seealso{
 graph.fanova
