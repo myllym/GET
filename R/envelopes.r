@@ -719,7 +719,7 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #'
 #' # Bootstrap regression
 #' \donttest{B <- 2000 # Number of bootstrap samples}
-#' \dontshow{B <- 10 # Number of bootstrap samples}
+#' \dontshow{B <- 20 # Number of bootstrap samples}
 #' ftheta1 <- array(0, c(B,length(x)))
 #' s1 <- array(0,B)
 #' for(i in 1:B) {
@@ -1099,7 +1099,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   ## Testing complete spatial randomness (CSR)
 #'   #-------------------------------------------
 #'   \donttest{nsim <- 1999 # Number of simulations}
-#'   \dontshow{nsim <- 9 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
 #'   pp <- unmark(spruces)
 #'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #'   env <- envelope(pp, fun="Lest", nsim=nsim,
@@ -1136,7 +1136,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   # which is an estimator of the mark-weighted L function, L_mm(r),
 #'   # with translational edge correction.
 #'   \donttest{nsim <- 1999 # Number of simulations}
-#'   \dontshow{nsim <- 9 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
 #'   env <- envelope(mpp, fun=Kmark, nsim = nsim, f=function(m1, m2) { m1*m2 },
 #'                   correction="translate", returnL=TRUE,
 #'                   simulate=expression(rlabel(mpp, permute=TRUE)), # Permute the marks
@@ -1168,7 +1168,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   # Using direct algorihm can be faster, because the perfect simulation is used here.
 #'   simulations <- NULL
 #'   \donttest{nsim <- 999 # Number of simulations}
-#'   \dontshow{nsim <- 9 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
 #'   for(j in 1:nsim) {
 #'      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
 #'                                    R=fittedmodel$interaction$par$hc,
@@ -1188,7 +1188,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #'   X <- saplings
 #'
 #'   \donttest{nsim <- 499 # Number of simulations}
-#'   \dontshow{nsim <- 9 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
 #'   # Specify distances for different test functions
 #'   n <- 500 # the number of r-values
 #'   rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
@@ -1374,7 +1374,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #' if(require(spatstat, quietly=TRUE)) {
 #'   pp <- unmark(spruces)
 #'   \donttest{nsim <- 2499 # Number of simulations}
-#'   \dontshow{nsim <- 9 # Number of simulations for testing}
+#'   \dontshow{nsim <- 19 # Number of simulations for testing}
 #'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #'   env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate",
 #'                   simulate=expression(runifpoint(ex=pp)))
@@ -1454,7 +1454,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' if(require("spatstat", quietly=TRUE)) {
 #'   pp <- spruces
 #'   \donttest{nsim <- 999 # Number of simulations}
-#'   \dontshow{nsim <- 9 # Number of simulations for testing}
+#'   \dontshow{nsim <- 19 # Number of simulations for testing}
 #'   ## Test for complete spatial randomness (CSR)
 #'   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
 #'   env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate",
