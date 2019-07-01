@@ -451,7 +451,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
 #' Otherwise labels for the separate plots.
-#' @param level 1 or 2. In the case of combined tests (with several test functions), two different plots are available:
+#' @param level 1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
 #' @param max_ncols_of_plots The maximum number of columns for the figures. Default 2.
