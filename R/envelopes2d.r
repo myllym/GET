@@ -141,6 +141,7 @@ central_region2d <- function(image_sets, ...) {
 #' type is \code{'rank'}) and \code{call}, see more detailed description in
 #' \code{\link{global_envelope_test}}.
 #' @export
+#' @aliases GET.2d
 #' @examples
 #' # Example of spatial point pattern residuals
 #' #-------------------------------------------
