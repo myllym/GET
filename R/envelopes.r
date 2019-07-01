@@ -294,9 +294,19 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   res_ls <- lapply(res_ls, FUN = function(x) { class(x) <- c("global_envelope", class(x)); x })
   # Create empty "level2_ge" attribute containing the test information
   attr(res_ls, "level2_ge") <- data.frame(r=1, obs=attr(res, "k")[1],
-                                          central=mean(attr(res, "k")),
-                                          lo=attr(res, "k_alpha"), hi=NA)
+                                          central=mean(attr(res, "k")))
+  if(attr(res, "type") %in% c("qdir", "st", "unscaled")) {
+    attr(res_ls, "level2_ge")$lo <- NA
+    attr(res_ls, "level2_ge")$hi <- attr(res, "k_alpha")
+    alt2 <- "greater"
+  }
+  else {
+    attr(res_ls, "level2_ge")$lo <- attr(res, "k_alpha")
+    attr(res_ls, "level2_ge")$hi <- NA
+    alt2 <- "less"
+  }
   mostattributes(attr(res_ls, "level2_ge")) <- attributes(res)
+  attr(attr(res_ls, "level2_ge"), "einfo")$alternative <- alt2
   # Set unreasonable attributes of individuals sets of curves to NULL
   anames <- c("p", "p_interval", "ties", "k", "k_alpha", "method")
   anames <- anames[anames %in% names(attributes(res_ls[[1]]))]
