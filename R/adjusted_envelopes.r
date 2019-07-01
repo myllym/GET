@@ -48,7 +48,7 @@ funcs_from_X_and_funs <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfun
   X.ls
 }
 
-# A helper function to perform simulations for the adj.global_envelope_test
+# A helper function to perform simulations for the GET.composite
 #' @importFrom spatstat is.ppm is.kppm is.lppm is.slrm
 #' @importFrom spatstat is.ppp
 #' @importFrom spatstat update.ppm update.kppm update.lppm update.slrm
@@ -152,9 +152,9 @@ GE.attr <- function(x, name = "p", ...) {
   a
 }
 
-# A helper function to make a global envelope test for the purposes of adj.global_envelope_test
+# A helper function to make a global envelope test for the purposes of GET.composite
 # @param curve_sets_ls A list of curve_sets.
-# @inheritParams adj.global_envelope_test
+# @inheritParams GET.composite
 adj_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, MrkvickaEtal2017, ..., save.envelope=FALSE) {
   if(length(curve_sets) > 1 & MrkvickaEtal2017 & type %in% c("st", "qdir")) {
     global_envtest <- combined_scaled_MAD_envelope(curve_sets, type=type, alpha=alpha, probs=probs, ...)
@@ -301,18 +301,18 @@ adj_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   \donttest{nsim <- 19 # Increase nsim for serious analysis!}
 #'   \dontshow{nsim <- 4}
 #'
-#'   # Option 1: Give the fitted model object to adj.GET
-#'   #-------------------------------------------------
+#'   # Option 1: Give the fitted model object to GET.composite
+#'   #--------------------------------------------------------
 #'   # This can be done and is preferable when the model is a point process model of spatstat.
 #'   # Make the adjusted directional quantile global envelope test using the L(r)-r function
 #'   \donttest{
-#'   adjenvL <- adj.global_envelope_test(X = M1, nsim = nsim,
+#'   adjenvL <- GET.composite(X = M1, nsim = nsim,
 #'               testfuns = list(L = list(fun="Lest", correction="translate",
 #'                              transform = expression(.-r), r=r)), # passed to envelope
 #'               type = "qdir", r_min=rmin, r_max=rmax)
 #'   }
 #'   \dontshow{
-#'   adjenvL <- adj.global_envelope_test(X = M1, nsim = nsim,
+#'   adjenvL <- GET.composite(X = M1, nsim = nsim,
 #'               testfuns = list(L = list(fun="Lest", correction="translate",
 #'                              transform = expression(.-r), r=r)), # passed to envelope
 #'               type = "qdir", alpha = 1/(nsim+1), r_min=rmin, r_max=rmax)
@@ -346,12 +346,12 @@ adj_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
 #'   # Perform the adjusted test
 #'   \donttest{
-#'   res <- adj.global_envelope_test(X=X, X.ls=X.ls, type="qdir",
-#'                                  r_min=rmin, r_max=rmax)
+#'   res <- GET.composite(X=X, X.ls=X.ls, type="qdir",
+#'                       r_min=rmin, r_max=rmax)
 #'   }
 #'   \dontshow{
-#'   res <- adj.global_envelope_test(X=X, X.ls=X.ls, type="qdir", alpha=1/(nsim+1),
-#'                                  r_min=rmin, r_max=rmax)
+#'   res <- GET.composite(X=X, X.ls=X.ls, type="qdir", alpha=1/(nsim+1),
+#'                       r_min=rmin, r_max=rmax)
 #'   }
 #'   plot(res)
 #'
@@ -366,29 +366,29 @@ adj_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'     simulate(M, nsim=1)[[1]]
 #'   }
 #'   \donttest{
-#'   res <- adj.global_envelope_test(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
+#'   res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
 #'            testfuns = list(L = list(fun="Lest", correction="translate",
 #'                            transform = expression(.-r), r=r)),
 #'            type="qdir", r_min=rmin, r_max=rmax)
 #'   }
 #'   \dontshow{
-#'   res <- adj.global_envelope_test(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
+#'   res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
 #'            testfuns = list(L = list(fun="Lest", correction="translate",
 #'                            transform = expression(.-r), r=r)),
 #'            type="qdir", alpha=1/(nsim+1), r_min=rmin, r_max=rmax)
 #'   }
 #'   plot(res)
 #' }
-adj.global_envelope_test <- function(X, X.ls = NULL,
-                                    nsim = 499, nsimsub = nsim,
-                                    simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
-                                    testfuns=NULL, ...,
-                                    type = "erl",
-                                    alpha = 0.05, alternative = c("two.sided","less", "greater"),
-                                    probs = c(0.025, 0.975),
-                                    r_min=NULL, r_max=NULL, take_residual=FALSE,
-                                    save.cons.envelope = savefuns, savefuns = FALSE,
-                                    verbose=TRUE, MrkvickaEtal2017 = FALSE, mc.cores=1L) {
+GET.composite <- function(X, X.ls = NULL,
+                         nsim = 499, nsimsub = nsim,
+                         simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
+                         testfuns=NULL, ...,
+                         type = "erl",
+                         alpha = 0.05, alternative = c("two.sided","less", "greater"),
+                         probs = c(0.025, 0.975),
+                         r_min=NULL, r_max=NULL, take_residual=FALSE,
+                         save.cons.envelope = savefuns, savefuns = FALSE,
+                         verbose=TRUE, MrkvickaEtal2017 = FALSE, mc.cores=1L) {
   alt <- match.arg(alternative)
 
   # Simulations
