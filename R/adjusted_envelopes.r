@@ -155,7 +155,7 @@ GE.attr <- function(x, name = "p", ...) {
 # A helper function to make a global envelope test for the purposes of GET.composite
 # @param curve_sets_ls A list of curve_sets.
 # @inheritParams GET.composite
-adj_GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, MrkvickaEtal2017, ..., save.envelope=FALSE) {
+adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, MrkvickaEtal2017, ..., save.envelope=FALSE) {
   if(length(curve_sets) > 1 & MrkvickaEtal2017 & type %in% c("st", "qdir")) {
     global_envtest <- combined_scaled_MAD_envelope(curve_sets, type=type, alpha=alpha, probs=probs, ...)
   }
@@ -445,11 +445,11 @@ GET.composite <- function(X, X.ls = NULL,
   # Individual tests
   #-----------------
   # For data
-  obs_res <- adj_GET_helper(curve_sets=X, type=type, alpha=alpha, alternative=alt, ties="midrank",
+  obs_res <- adj.GET_helper(curve_sets=X, type=type, alpha=alpha, alternative=alt, ties="midrank",
                            probs=probs, MrkvickaEtal2017=MrkvickaEtal2017, save.envelope=TRUE)
   # For simulations
   loopfun <- function(rep) {
-    tmp <- adj_GET_helper(curve_sets=X.ls[[rep]], type=type, alpha=alpha, alternative=alt, ties="midrank",
+    tmp <- adj.GET_helper(curve_sets=X.ls[[rep]], type=type, alpha=alpha, alternative=alt, ties="midrank",
                          probs=probs, MrkvickaEtal2017=MrkvickaEtal2017)
     list(stat = tmp$stat, pval = tmp$pval)
   }
