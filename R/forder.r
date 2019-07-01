@@ -163,8 +163,8 @@ combined_forder <- function(curve_sets, ...) {
 #' Mrkvička et al. (2017, page 1241) or Mrkvička et al. (2018, page 6).
 #'  \item \code{'erl'}: extreme rank length (Myllymäki et al., 2017).
 #'  Considering the vector of pointwise ordered ranks \eqn{\mathbf{R}_i}{RP_i} of the ith curve,
-#'  the extreme rank length measure \eqn{R_i^{\text{erl}}}{Rerl_i} is equal to
-#' \deqn{R_i^{\text{erl}} = \frac{1}{s+1}\sum_{j=1}^{s+1} \1(\mathbf{R}_j \prec \mathbf{R}_i)}{Rerl_i = \sum_{j=1}^{s} 1(RP_j "<" RP_i) / (s + 1)}
+#'  the extreme rank length measure \eqn{R_i^{erl}}{Rerl_i} is equal to
+#' \deqn{R_i^{erl} = \frac{1}{s+1}\sum_{j=1}^{s+1} \mathbf{1}(\mathbf{R}_j \prec \mathbf{R}_i)}{Rerl_i = \sum_{j=1}^{s} 1(RP_j "<" RP_i) / (s + 1)}
 #' where \eqn{\mathbf{R}_j \prec \mathbf{R}_i}{RP_j "<" RP_i} if and only if
 #' there exists \eqn{n\leq d}{n<=d} such that for the first k, \eqn{k<n}{k<n}, pointwise ordered
 #' ranks of \eqn{\mathbf{R}_j}{RP_j} and \eqn{\mathbf{R}_i}{RP_i} are equal and the n'th rank of

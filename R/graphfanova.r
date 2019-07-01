@@ -179,9 +179,9 @@ contrasts.m <- function(x, groups, ...) {
 #'
 #' The test as such assumes that the variances are equal across the groups of functions. To deal with
 #' unequal variances, the differences are rescaled as the first step as follows
-#' \deqn{S_{ij}(r) = \frac{T_{ij}(r) - \overline{T}(r))}{\sqrt{\text{Var}(T_j(r))}} \sqrt{\text{Var}(T(r))} + \overline{T}(r))}{S_{ij}(r) = ( T_{ij}(r) - \bar{T}(r) ) / Sd(T_j(r)) * Sd(T(r)) + \bar{T}(r))}
+#' \deqn{S_{ij}(r) = \frac{T_{ij}(r) - \overline{T}(r))}{\sqrt{Var(T_j(r))}} \sqrt{Var(T(r))} + \overline{T}(r))}{S_{ij}(r) = ( T_{ij}(r) - \bar{T}(r) ) / Sd(T_j(r)) * Sd(T(r)) + \bar{T}(r))}
 #' where \eqn{\overline{T}({\bf r})}{\bar{T}(r)} is the overall sample mean and
-#' \eqn{\sqrt{\text{Var}(T(r))}}{Sd(T(r))} is the overall sample standard deviation.
+#' \eqn{\sqrt{Var(T(r))}}{Sd(T(r))} is the overall sample standard deviation.
 #' This scaling of the test functions can be obtained by giving the argument \code{variances = "unequal"}.
 #'
 #' @param nsim The number of random permutations.
