@@ -41,7 +41,7 @@ A one-way functional ANOVA based on the rank envelope applied to F values
 }
 \details{
 The test assumes that there are \eqn{J}{J} groups which contain
-\eqn{n_1,\dosts,n_J}{n1, ..., nJ} functions
+\eqn{n_1,\dots,n_J}{n1, ..., nJ} functions
 \eqn{T_{ij}, i=\dots,J, j=1,\dots,n_j}{T_{ij}, i=1,...,J, j=1,...,nj}.
 The functions should be given in the argument x, and the groups in the argument groups.
 The test assumes that there exists non random functions \eqn{\mu(r)}{\mu(r)} and

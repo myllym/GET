@@ -66,17 +66,17 @@ and given to the deviation_test function.
         \itemize{
           \item 'max' is the maximum deviation measure
 
-\deqn{u_i = \max_{r \in [r_{\text{min}}, r_{\text{max}}]} | w(r)(T_i(r) - T_0(r))|}{%
+\deqn{u_i = \max_{r \in [r_{min}, r_{max}]} | w(r)(T_i(r) - T_0(r))|}{%
                 u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
 
 \item 'int2' is the integral deviation measure
 
-\deqn{u_i = \int_{r_{\text{min}}}^{r_{\text{max}}} ( w(r)(T_i(r) - T_0(r)) )^2 dr}{%
+\deqn{u_i = \int_{r_{min}}^{r_{max}} ( w(r)(T_i(r) - T_0(r)) )^2 dr}{%
                 u_i = int_([r_min, r_max]) ( w(r)(T_i(r) - T_0(r)) )^2 dr}
 
 \item 'int' is the 'absolute' integral deviation measure
 
-\deqn{u_i = \int_{r_{\text{min}}}^{r_{\text{max}}} |w(r)(T_i(r) - T_0(r))| dr}{%
+\deqn{u_i = \int_{r_{min}}^{r_{max}} |w(r)(T_i(r) - T_0(r))| dr}{%
                 u_i = int_([r_min, r_max]) | w(r)(T_i(r) - T_0(r)) | dr}
 
 }

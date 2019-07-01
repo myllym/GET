@@ -75,7 +75,7 @@ If \code{type = "rank"} then the envelope is the global rank envelope proposed b
 Myllymäki et al. (2017).
 If \code{type = "erl"} then the envelope is the global rank envelope based on the
 extreme rank length ordering. This envelope is constructed as the convex hull of
-the functions which have extreme rank length measure \eqn{R_i^{\text{erl}}}{Rerl_i}
+the functions which have extreme rank length measure \eqn{R_i^{erl}}{Rerl_i}
 that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
 length measure (Mrkvička et al., 2018).
 }

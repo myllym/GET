@@ -97,9 +97,9 @@ In the case of one observed function only,
 the data function is considered to be \eqn{T_1(r)}{T_1(r)}.
 
 Generally an envelope is a band bounded by the vectors (or functions)
-\eqn{T_{\text{low}}}{T_lo} and \eqn{T_{\text{hi}}}{T_hi}.
+\eqn{T_{low}}{T_lo} and \eqn{T_{hi}}{T_hi}.
 A \eqn{100(1-\alpha)}{100(1-alpha)}\% or 100*coverage\% global envelope is a set
-\eqn{(T_{\text{low}}, T_{\text{hi}})}{(T_lo, T_hi)} of envelope vectors
+\eqn{(T_{low}, T_{hi})}{(T_lo, T_hi)} of envelope vectors
 such that the probability that \eqn{T_i}{T_i} falls outside this envelope
 in any of the d points of the vector \eqn{T_i}{T_i} is less or equal to \eqn{\alpha}{alpha}.
 The global envelopes can be constructed based on different measures
