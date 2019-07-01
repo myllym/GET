@@ -54,8 +54,8 @@ funcs_from_X_and_funs <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfun
 #' @importFrom spatstat update.ppm update.kppm update.lppm update.slrm
 #' @importFrom parallel mclapply
 adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
-                        simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
-                        testfuns=NULL, ..., verbose=TRUE, mc.cores=1L) {
+                         simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
+                         testfuns=NULL, ..., verbose=TRUE, mc.cores=1L) {
   # Check if X is a (ppp) model object of spatstat
   Xispppmodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
 
