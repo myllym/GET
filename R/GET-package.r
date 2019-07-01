@@ -240,7 +240,7 @@
 #'
 #' @section Acknowledgements:
 #'
-#' Pavel Grabarnik, Ute Hahn, Mikko Kuronen and Henri Seijo have made contributions
+#' Pavel Grabarnik, Ute Hahn, Mikko Kuronen, Michael Rost and Henri Seijo have made contributions
 #' and suggestions of code.
 #'
 #' @author
