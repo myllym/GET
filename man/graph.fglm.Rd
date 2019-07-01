@@ -67,14 +67,23 @@ The Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the 
 consequently, the test approximately achieves the desired significance level.
 }
 \examples{
-\donttest{
 data(rimov)
+\donttest{
 res <- graph.fglm(nsim=99, # Increase the number of simulations for serious analysis!
                   formula.full = Y~Year,
                   formula.reduced = Y~1,
-                  curve_sets=list(Y=rimov), factors = data.frame(Year = 1979:2014))
+                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
+}
+\dontshow{
+res <- graph.fglm(nsim=4,
+                  formula.full = Y~Year,
+                  formula.reduced = Y~1,
+                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
+                  GET.args = list(alpha=0.2))
+}
 plot(res)
 
+\donttest{
 data(GDPtax)
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 res.tax_within_group <- graph.fglm(nsim = 999,

@@ -17,7 +17,7 @@ For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R li
 The option "fv" is currently only available for tests with one test function, whereas the other true allow
 also tests with several tests functions.}
 
-\item{level}{1 or 2. In the case of combined tests (with several test functions), two different plots are available:
+\item{level}{1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
 1 for plotting the combined global envelopes (default and most often wanted) or
 2 for plotting the second level test result.}
 

@@ -60,13 +60,21 @@ argument values of the functional domain are responsible for the potential rejec
 \examples{
 data(GDPtax)
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-\donttest{nsim <- 999}
-\dontshow{nsim <- 9}
-res.tax_within_group <- frank.fglm(nsim = nsim,
+\donttest{
+res.tax_within_group <- frank.fglm(nsim = 999,
                                    formula.full = Y~Group+Tax+Group:Tax,
                                    formula.reduced = Y~Group+Tax,
                                    curve_sets = list(Y=GDPtax$GDP),
                                    factors = factors.df)
+}
+\dontshow{
+res.tax_within_group <- frank.fglm(nsim = 4,
+                                   formula.full = Y~Group+Tax+Group:Tax,
+                                   formula.reduced = Y~Group+Tax,
+                                   curve_sets = list(Y=GDPtax$GDP),
+                                   factors = factors.df,
+                                   GET.args = list(alpha=0.20))
+}
 plot(res.tax_within_group)
 }
 \references{

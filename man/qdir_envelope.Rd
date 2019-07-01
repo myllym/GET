@@ -76,7 +76,7 @@ see \code{\link{global_envelope_test}} for full list of alternatives.
 if(require("spatstat", quietly=TRUE)) {
   pp <- spruces
   \donttest{nsim <- 999 # Number of simulations}
-  \dontshow{nsim <- 9 # Number of simulations for testing}
+  \dontshow{nsim <- 19 # Number of simulations for testing}
   ## Test for complete spatial randomness (CSR)
   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
   env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate",
@@ -108,5 +108,5 @@ Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
 \seealso{
 \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}},
-\code{\link{global_envelope_test2d}}, \code{\link{adj.global_envelope_test}}
+\code{\link{global_envelope_test2d}}, \code{\link{GET.composite}}
 }

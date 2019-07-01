@@ -190,7 +190,7 @@ s0 <- sd(resid0)
 
 # Bootstrap regression
 \donttest{B <- 2000 # Number of bootstrap samples}
-\dontshow{B <- 10 # Number of bootstrap samples}
+\dontshow{B <- 20 # Number of bootstrap samples}
 ftheta1 <- array(0, c(B,length(x)))
 s1 <- array(0,B)
 for(i in 1:B) {

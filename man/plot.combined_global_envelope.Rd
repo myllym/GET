@@ -46,7 +46,7 @@ Not available for \code{plot_style = "ggplot2"}.}
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}
 
-\item{level}{1 or 2. In the case of combined tests (with several test functions), two different plots are available:
+\item{level}{1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
 1 for plotting the combined global envelopes (default and most often wanted) or
 2 for plotting the second level test result.}
 

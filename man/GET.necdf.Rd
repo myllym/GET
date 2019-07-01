@@ -41,9 +41,9 @@ if(require(fda, quietly=TRUE)) {
   }
   \dontshow{
   # The test with lower number of simulations
-  res_m <- GET.necdf(fm.list, summaryfun="means", nsim=4)
+  res_m <- GET.necdf(fm.list, summaryfun="means", nsim=4, alpha=0.2)
   plot(res_m)
-  res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=4)
+  res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=4, alpha=0.2)
   plot(res_c)
   }
 
@@ -63,9 +63,9 @@ if(require(fda, quietly=TRUE)) {
   }
   \dontshow{
   # The test with lower number of simulations
-  res_m <- GET.necdf(fm.list, summaryfun="means", nsim=4)
+  res_m <- GET.necdf(fm.list, summaryfun="means", nsim=4, alpha=0.2)
   plot(res_m)
-  res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=4)
+  res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=4, alpha=0.2)
   plot(res_c)
   }
 }

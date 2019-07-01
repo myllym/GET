@@ -103,7 +103,7 @@ for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
 
 # Number of simulations
 \donttest{nsim <- 2499 # increase to reduce Monte Carlo error}
-\dontshow{nsim <- 4}
+\dontshow{nsim <- 19}
 
 # Test for unequal lag 1 covariances
 res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec,
@@ -147,7 +147,7 @@ plot(res2, max_ncols_of_plots=3,
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 \donttest{nsim <- 999}
-\dontshow{nsim <- 4}
+\dontshow{nsim <- 19}
 
 # Test for equality of variances in the groups
 resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
