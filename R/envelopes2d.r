@@ -185,7 +185,8 @@ central_region2d <- function(image_sets, ...) {
 #'   }
 #'   # Constract the global envelope test for the (2D) raw residuals
 #'   iset <- create_image_set(list(obs=obs, sim_m=sim))
-#'   res <- global_envelope_test2d(iset)
+#'   \donttest{res <- global_envelope_test2d(iset)}
+#'   \dontshow{res <- global_envelope_test2d(iset, alpha=1/(nsim+1))}
 #'   plot(res)
 #'   plot(res, contours=FALSE) + ggplot2::scale_fill_gradient(low="black", high="white")
 #'   plot(res, fixedscales=FALSE)
