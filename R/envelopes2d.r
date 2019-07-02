@@ -143,6 +143,7 @@ central_region2d <- function(image_sets, ...) {
 #' @export
 #' @aliases GET.2d
 #' @examples
+#' \donttest{
 #' # Example of spatial point pattern residuals
 #' #-------------------------------------------
 #' if(require(spatstat, quietly=TRUE)) {
@@ -159,8 +160,7 @@ central_region2d <- function(image_sets, ...) {
 #'                     sigma=ds, plot.it=FALSE)
 #'   obs <- u$smooth$Z$v
 #'   # Generate simulations from the hard-core null model
-#'   \donttest{nsim <- 1999 # Number of simulations}
-#'   \dontshow{nsim <- 4 # Number of simulations for testing}
+#'   nsim <- 499 # Number of simulations; increase for serious analysis!
 #'   simulations <- NULL
 #'   ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
 #'                     X$window$yrange[2]-X$window$yrange[1]) / 10
@@ -186,12 +186,11 @@ central_region2d <- function(image_sets, ...) {
 #'   }
 #'   # Constract the global envelope test for the (2D) raw residuals
 #'   iset <- create_image_set(list(obs=obs, sim_m=sim))
-#'   \donttest{res <- global_envelope_test2d(iset)}
-#'   \dontshow{res <- global_envelope_test2d(iset, alpha=1/(nsim+1))}
+#'   res <- global_envelope_test2d(iset)
 #'   plot(res)
 #'   plot(res, contours=FALSE) + ggplot2::scale_fill_gradient(low="black", high="white")
 #'   plot(res, fixedscales=FALSE)
-#' }
+#' }}
 global_envelope_test2d <- function(image_sets, ...) {
   res <- cr_or_GET_2d(image_sets, CR_or_GET = "GET", ...)
   attr(res, "call") <- match.call()
