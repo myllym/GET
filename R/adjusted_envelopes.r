@@ -285,6 +285,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' @importFrom parallel mclapply
 #' @importFrom stats quantile
 #' @examples
+#' \donttest{
 #' if(require(spatstat, quietly=TRUE)) {
 #'   data(saplings)
 #'
@@ -298,25 +299,16 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   summary(M1)
 #'
 #'   # Number of simulations
-#'   \donttest{nsim <- 19 # Increase nsim for serious analysis!}
-#'   \dontshow{nsim <- 4}
+#'   nsim <- 19 # Increase nsim for serious analysis!
 #'
 #'   # Option 1: Give the fitted model object to GET.composite
 #'   #--------------------------------------------------------
 #'   # This can be done and is preferable when the model is a point process model of spatstat.
 #'   # Make the adjusted directional quantile global envelope test using the L(r)-r function
-#'   \donttest{
 #'   adjenvL <- GET.composite(X = M1, nsim = nsim,
 #'               testfuns = list(L = list(fun="Lest", correction="translate",
 #'                              transform = expression(.-r), r=r)), # passed to envelope
 #'               type = "qdir", r_min=rmin, r_max=rmax)
-#'   }
-#'   \dontshow{
-#'   adjenvL <- GET.composite(X = M1, nsim = nsim,
-#'               testfuns = list(L = list(fun="Lest", correction="translate",
-#'                              transform = expression(.-r), r=r)), # passed to envelope
-#'               type = "qdir", alpha = 1/(nsim+1), r_min=rmin, r_max=rmax)
-#'   }
 #'   # Plot the test result
 #'   plot(adjenvL)
 #'
@@ -345,14 +337,8 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   }
 #'   X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
 #'   # Perform the adjusted test
-#'   \donttest{
 #'   res <- GET.composite(X=X, X.ls=X.ls, type="qdir",
 #'                       r_min=rmin, r_max=rmax)
-#'   }
-#'   \dontshow{
-#'   res <- GET.composite(X=X, X.ls=X.ls, type="qdir", alpha=1/(nsim+1),
-#'                       r_min=rmin, r_max=rmax)
-#'   }
 #'   plot(res)
 #'
 #'   # Option 3: Provide fitfun and simfun functions
@@ -365,20 +351,12 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   simf <- function(M) {
 #'     simulate(M, nsim=1)[[1]]
 #'   }
-#'   \donttest{
 #'   res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
 #'            testfuns = list(L = list(fun="Lest", correction="translate",
 #'                            transform = expression(.-r), r=r)),
 #'            type="qdir", r_min=rmin, r_max=rmax)
-#'   }
-#'   \dontshow{
-#'   res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
-#'            testfuns = list(L = list(fun="Lest", correction="translate",
-#'                            transform = expression(.-r), r=r)),
-#'            type="qdir", alpha=1/(nsim+1), r_min=rmin, r_max=rmax)
-#'   }
 #'   plot(res)
-#' }
+#' }}
 GET.composite <- function(X, X.ls = NULL,
                          nsim = 499, nsimsub = nsim,
                          simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
