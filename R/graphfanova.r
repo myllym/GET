@@ -268,7 +268,6 @@ contrasts.m <- function(x, groups, ...) {
 #'      labels = paste("Group ", 1:3, sep=""),
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(T)[i](r))))
-#' }
 #' # b) using 'contrasts'
 #' res2 <- graph.fanova(nsim = nsim, curve_set = cgec,
 #'                     groups = attr(cgec, "group"),
