@@ -47,6 +47,9 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   # Define the central curve T_0
   T_0 <- get_T_0(curve_set)
 
+  # Check reasonability of Nfunc vs alpha
+  if(Nfunc*alpha < 1-.Machine$double.eps^0.5) stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha, ". So, s*alpha is ", Nfunc*alpha, ".\n", sep="")
+
   #-- Global envelopes
   switch(type,
          rank = {
