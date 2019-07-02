@@ -148,6 +148,7 @@ the adjustment of Baddeley et al. (2017).
 See examples also in \code{\link{saplings}}.
 }
 \examples{
+\donttest{
 if(require(spatstat, quietly=TRUE)) {
   data(saplings)
 
@@ -161,25 +162,16 @@ if(require(spatstat, quietly=TRUE)) {
   summary(M1)
 
   # Number of simulations
-  \donttest{nsim <- 19 # Increase nsim for serious analysis!}
-  \dontshow{nsim <- 4}
+  nsim <- 19 # Increase nsim for serious analysis!
 
   # Option 1: Give the fitted model object to GET.composite
   #--------------------------------------------------------
   # This can be done and is preferable when the model is a point process model of spatstat.
   # Make the adjusted directional quantile global envelope test using the L(r)-r function
-  \donttest{
   adjenvL <- GET.composite(X = M1, nsim = nsim,
               testfuns = list(L = list(fun="Lest", correction="translate",
                              transform = expression(.-r), r=r)), # passed to envelope
               type = "qdir", r_min=rmin, r_max=rmax)
-  }
-  \dontshow{
-  adjenvL <- GET.composite(X = M1, nsim = nsim,
-              testfuns = list(L = list(fun="Lest", correction="translate",
-                             transform = expression(.-r), r=r)), # passed to envelope
-              type = "qdir", alpha = 1/(nsim+1), r_min=rmin, r_max=rmax)
-  }
   # Plot the test result
   plot(adjenvL)
 
@@ -208,14 +200,8 @@ if(require(spatstat, quietly=TRUE)) {
   }
   X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
   # Perform the adjusted test
-  \donttest{
   res <- GET.composite(X=X, X.ls=X.ls, type="qdir",
                       r_min=rmin, r_max=rmax)
-  }
-  \dontshow{
-  res <- GET.composite(X=X, X.ls=X.ls, type="qdir", alpha=1/(nsim+1),
-                      r_min=rmin, r_max=rmax)
-  }
   plot(res)
 
   # Option 3: Provide fitfun and simfun functions
@@ -228,20 +214,12 @@ if(require(spatstat, quietly=TRUE)) {
   simf <- function(M) {
     simulate(M, nsim=1)[[1]]
   }
-  \donttest{
   res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
            testfuns = list(L = list(fun="Lest", correction="translate",
                            transform = expression(.-r), r=r)),
            type="qdir", r_min=rmin, r_max=rmax)
-  }
-  \dontshow{
-  res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
-           testfuns = list(L = list(fun="Lest", correction="translate",
-                           transform = expression(.-r), r=r)),
-           type="qdir", alpha=1/(nsim+1), r_min=rmin, r_max=rmax)
-  }
   plot(res)
-}
+}}
 }
 \references{
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172

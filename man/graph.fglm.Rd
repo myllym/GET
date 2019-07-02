@@ -69,7 +69,7 @@ consequently, the test approximately achieves the desired significance level.
 \examples{
 data(rimov)
 \donttest{
-res <- graph.fglm(nsim=99, # Increase the number of simulations for serious analysis!
+res <- graph.fglm(nsim=19, # Increase the number of simulations for serious analysis!
                   formula.full = Y~Year,
                   formula.reduced = Y~1,
                   curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))

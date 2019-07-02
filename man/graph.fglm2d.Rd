@@ -38,7 +38,7 @@ for images
 \donttest{
 data("imageset2")
 # Testing discrete factor group
-res.g <- graph.fglm2d(nsim = 99,
+res.g <- graph.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                       formula.full = Y ~ group + z,
                       formula.reduced = Y ~ z,
                       image_sets = list(Y = imageset2$image_set),
@@ -46,7 +46,7 @@ res.g <- graph.fglm2d(nsim = 99,
                                            z = imageset2$z))
 plot(res.g)
 # Testing discrete factor group with contrasts
-res.gc <- graph.fglm2d(nsim = 99,
+res.gc <- graph.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                        formula.full = Y ~ group + z,
                        formula.reduced = Y ~ z,
                        image_sets = list(Y = imageset2$image_set),
@@ -57,7 +57,7 @@ par(mfrow=c(1,3))
 plot(res.gc)
 
 # Testing continuous factor z
-res.z <- graph.fglm2d(nsim = 99,
+res.z <- graph.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                       formula.full = Y ~ group + z,
                       formula.reduced = Y ~ group,
                       image_sets = list(Y = imageset2$image_set),
