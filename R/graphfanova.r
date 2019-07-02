@@ -238,8 +238,8 @@ contrasts.m <- function(x, groups, ...) {
 #' for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
 #'
 #' # Number of simulations
-#' \donttest{nsim <- 2499 # increase to reduce Monte Carlo error}
-#' \dontshow{nsim <- 19}
+#' \donttest{
+#' nsim <- 2499 # increase to reduce Monte Carlo error
 #'
 #' # Test for unequal lag 1 covariances
 #' res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec,
@@ -268,22 +268,31 @@ contrasts.m <- function(x, groups, ...) {
 #'      labels = paste("Group ", 1:3, sep=""),
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(T)[i](r))))
+#' }
 #' # b) using 'contrasts'
 #' res2 <- graph.fanova(nsim = nsim, curve_set = cgec,
 #'                     groups = attr(cgec, "group"),
 #'                     variances = "equal",
 #'                     summaryfun = "contrasts")
+#' }
+#' \dontshow{
+#' res2 <- graph.fanova(nsim = 4, curve_set = cgec,
+#'                     groups = attr(cgec, "group"),
+#'                     variances = "equal",
+#'                     summaryfun = "contrasts",
+#'                     alpha = 0.2)
+#' }
 #' plot(res2, max_ncols_of_plots=3,
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
 #'
+#' \donttest{
 #' #-- Rimov water temperatures example
 #' # This is an example analysis of the water temperature data set
 #' # in Mrkvicka et al. (arXiv:1612.03608v2).
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' \donttest{nsim <- 999}
-#' \dontshow{nsim <- 19}
+#' nsim <- 999
 #'
 #' # Test for equality of variances in the groups
 #' resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
@@ -299,6 +308,7 @@ contrasts.m <- function(x, groups, ...) {
 #' plot(res)
 #' res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="contrasts")
 #' plot(res2)
+#' }
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          summaryfun = c("means", "contrasts"),
                          n.aver = 1L, mirror = FALSE, savefuns=FALSE,
