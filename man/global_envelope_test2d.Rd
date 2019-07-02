@@ -35,6 +35,7 @@ type is \code{'rank'}) and \code{call}, see more detailed description in
 Provides global envelope tests based on 2D functions
 }
 \examples{
+\donttest{
 # Example of spatial point pattern residuals
 #-------------------------------------------
 if(require(spatstat, quietly=TRUE)) {
@@ -51,8 +52,7 @@ if(require(spatstat, quietly=TRUE)) {
                     sigma=ds, plot.it=FALSE)
   obs <- u$smooth$Z$v
   # Generate simulations from the hard-core null model
-  \donttest{nsim <- 1999 # Number of simulations}
-  \dontshow{nsim <- 4 # Number of simulations for testing}
+  nsim <- 499 # Number of simulations; increase for serious analysis!
   simulations <- NULL
   ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
                     X$window$yrange[2]-X$window$yrange[1]) / 10
@@ -78,12 +78,11 @@ if(require(spatstat, quietly=TRUE)) {
   }
   # Constract the global envelope test for the (2D) raw residuals
   iset <- create_image_set(list(obs=obs, sim_m=sim))
-  \donttest{res <- global_envelope_test2d(iset)}
-  \dontshow{res <- global_envelope_test2d(iset, alpha=1/(nsim+1))}
+  res <- global_envelope_test2d(iset, type="area")
   plot(res)
   plot(res, contours=FALSE) + ggplot2::scale_fill_gradient(low="black", high="white")
   plot(res, fixedscales=FALSE)
-}
+}}
 }
 \references{
 Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P. and Hahn, U. (2016). Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A: 40--53. doi: 10.1016/j.spasta.2016.04.005

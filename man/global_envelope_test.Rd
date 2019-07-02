@@ -223,6 +223,7 @@ if(require(spatstat, quietly=TRUE)) {
   # Do the rank envelope test (erl)
   res <- global_envelope_test(curve_set); plot(res, ylab=expression(italic(L(r)-r)))
 
+  \donttest{
   ## Random labeling test
   #----------------------
   mpp <- spruces
@@ -231,8 +232,7 @@ if(require(spatstat, quietly=TRUE)) {
   # The command below specifies that the test function is T(r) = \\hat{L}_mm(r),
   # which is an estimator of the mark-weighted L function, L_mm(r),
   # with translational edge correction.
-  \donttest{nsim <- 1999 # Number of simulations}
-  \dontshow{nsim <- 19 # Number of simulations}
+  nsim <- 1999 # Number of simulations
   env <- envelope(mpp, fun=Kmark, nsim = nsim, f=function(m1, m2) { m1*m2 },
                   correction="translate", returnL=TRUE,
                   simulate=expression(rlabel(mpp, permute=TRUE)), # Permute the marks
@@ -263,8 +263,7 @@ if(require(spatstat, quietly=TRUE)) {
 
   # Using direct algorihm can be faster, because the perfect simulation is used here.
   simulations <- NULL
-  \donttest{nsim <- 999 # Number of simulations}
-  \dontshow{nsim <- 19 # Number of simulations}
+  nsim <- 999 # Number of simulations
   for(j in 1:nsim) {
      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
                                    R=fittedmodel$interaction$par$hc,
@@ -275,6 +274,7 @@ if(require(spatstat, quietly=TRUE)) {
                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
   curve_set <- crop_curves(env, r_min=1, r_max=3.5)
   res <- global_envelope_test(curve_set, type="erl"); plot(res, ylab=expression(italic(J(r))))
+  }
 
   # A combined global envelope test
   #--------------------------------

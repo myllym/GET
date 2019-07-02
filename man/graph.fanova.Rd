@@ -88,6 +88,91 @@ where \eqn{\overline{T}({\bf r})}{\bar{T}(r)} is the overall sample mean and
 \eqn{\sqrt{Var(T(r))}}{Sd(T(r))} is the overall sample standard deviation.
 This scaling of the test functions can be obtained by giving the argument \code{variances = "unequal"}.
 }
+\examples{
+#-- Centred government expenditure centralization ratios example
+# This is an example analysis of the centred GEC in Mrkvicka et al.
+data(cgec)
+# Plot data in groups
+subs <- function(group, ...) {
+  cset <- cgec
+  cset$obs <- cgec$obs[, attr(cset, "group") == group]
+  plot(cset, ...)
+}
+par(mfrow=c(1,3))
+for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
+
+# Number of simulations
+\donttest{
+nsim <- 2499 # increase to reduce Monte Carlo error
+
+# Test for unequal lag 1 covariances
+res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec,
+                         groups = attr(cgec, "group"),
+                         test.equality = "cov", cov.lag = 1)
+plot(res.cov1, max_ncols_of_plots=3,
+     labels = paste("Group ", 1:3, sep=""),
+     xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
+     ylab=expression(italic(bar(W)[i](r))))
+# Test for equality of variances among groups
+res.var <- graph.fanova(nsim = nsim, curve_set = cgec,
+                        groups = attr(cgec, "group"),
+                        test.equality = "var")
+plot(res.var, max_ncols_of_plots=3,
+     labels = paste("Group ", 1:3, sep=""),
+     xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
+     ylab=expression(italic(bar(Z)[i](r))))
+
+# Test for equality of means assuming equality of variances
+# a) using 'means'
+res <- graph.fanova(nsim = nsim, curve_set = cgec,
+                    groups = attr(cgec, "group"),
+                    variances = "equal",
+                    summaryfun = "means")
+plot(res, max_ncols_of_plots=3,
+     labels = paste("Group ", 1:3, sep=""),
+     xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
+     ylab=expression(italic(bar(T)[i](r))))
+# b) using 'contrasts'
+res2 <- graph.fanova(nsim = nsim, curve_set = cgec,
+                    groups = attr(cgec, "group"),
+                    variances = "equal",
+                    summaryfun = "contrasts")
+}
+\dontshow{
+res2 <- graph.fanova(nsim = 4, curve_set = cgec,
+                    groups = attr(cgec, "group"),
+                    variances = "equal",
+                    summaryfun = "contrasts",
+                    alpha = 0.2)
+}
+plot(res2, max_ncols_of_plots=3,
+     xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
+     ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
+
+\donttest{
+#-- Rimov water temperatures example
+# This is an example analysis of the water temperature data set
+# in Mrkvicka et al. (arXiv:1612.03608v2).
+data(rimov)
+groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
+nsim <- 999
+
+# Test for equality of variances in the groups
+resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
+                     test.equality="var")
+plot(resV)
+# Test for equality of lag 1 covariances in the groups
+resC <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
+                     test.equality="cov", cov.lag=1)
+plot(resC)
+
+# Test the equality of means in the groups (fANOVA), assuming equality of variances
+res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means")
+plot(res)
+res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="contrasts")
+plot(res2)
+}
+}
 \references{
 Mrkvička, T., Hahn, U. and Myllymäki, M.
 A one-way ANOVA test for functional data with graphical interpretation.
