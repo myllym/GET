@@ -222,6 +222,7 @@ combined_forder <- function(curve_sets, ...) {
 #'   forder(curve_set, measure = "max", scaling="qdir")
 #'   forder(curve_set, measure = "rank")
 #'   forder(curve_set, measure = "erl")
+#'   forder(curve_set, measure = "area")
 #' }
 forder <- function(curve_sets, r_min = NULL, r_max = NULL,
                    measure = 'erl', scaling = 'qdir',
