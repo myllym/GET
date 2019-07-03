@@ -75,11 +75,11 @@ res <- graph.fglm(nsim=19, # Increase the number of simulations for serious anal
                   curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
 }
 \dontshow{
-res <- graph.fglm(nsim=4,
+res <- graph.fglm(nsim=3,
                   formula.full = Y~Year,
                   formula.reduced = Y~1,
                   curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
-                  GET.args = list(alpha=0.2))
+                  GET.args = list(alpha=0.25))
 }
 plot(res)
 
