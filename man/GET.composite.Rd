@@ -100,7 +100,7 @@ Parallelization can be used in generating simulations and in calculating the sec
 An object of class \code{global_envelope}. See \code{\link{global_envelope_test}}.
 }
 \description{
-Adjusted global envelope tests.
+Adjusted global envelope tests for composite null hypothesis.
 }
 \details{
 The specification of X, X.ls, fitfun, simfun is important here:

@@ -171,7 +171,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 
 #' Adjusted global envelope tests
 #'
-#' Adjusted global envelope tests.
+#' Adjusted global envelope tests for composite null hypothesis.
 #'
 #'
 #' The specification of X, X.ls, fitfun, simfun is important here:
