@@ -1,7 +1,7 @@
 Package: GET
 Version: 0.1-2
 Date: 2019-06-28
-Title: Global Envelopes in R
+Title: Global Envelopes
 Encoding: UTF-8
 Authors@R: c(
     person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre'),
