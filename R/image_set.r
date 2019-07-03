@@ -164,13 +164,14 @@ plot.image_set <- function(x, idx = 1, obs = TRUE, plot_style = c("ggplot2", "ba
            n_of_plots <- length(idx)
            ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
            nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
-           par(mfrow=c(nrows_of_plots, ncols_of_plots))
+           opar <- par(mfrow=c(nrows_of_plots, ncols_of_plots))
            if(missing(col))
              col <- colourmap(grDevices::gray(0:255/255), range=range(obs[,,idx]))
            for(i in 1:length(idx)) {
              obs.im <- as.im(list(x=x$r[[1]], y=x$r[[2]], z=obs[,,idx[i]]))
              plot.im(obs.im, col=col, main=main[i], ...)
            }
+           on.exit(par(opar))
          },
          ggplot2 = {
            max_ncols_of_plots <- min(max_ncols_of_plots, length(idx))
