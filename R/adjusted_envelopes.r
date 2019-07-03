@@ -286,7 +286,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' @importFrom stats quantile
 #' @examples
 #' \donttest{
-#' if(require(spatstat, quietly=TRUE)) {
+#' if(require("spatstat", quietly=TRUE)) {
 #'   data(saplings)
 #'
 #'   # First choose the r-distances

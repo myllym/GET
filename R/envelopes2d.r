@@ -146,7 +146,7 @@ central_region2d <- function(image_sets, ...) {
 #' \donttest{
 #' # Example of spatial point pattern residuals
 #' #-------------------------------------------
-#' if(require(spatstat, quietly=TRUE)) {
+#' if(require("spatstat", quietly=TRUE)) {
 #'   data(cells)
 #'   X <- cells
 #'   # Fit the hard-core process

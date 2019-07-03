@@ -1109,7 +1109,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' \code{\link{global_envelope_test2d}}
 #' @aliases GET
 #' @examples
-#' if(require(spatstat, quietly=TRUE)) {
+#' if(require("spatstat", quietly=TRUE)) {
 #'   ## Testing complete spatial randomness (CSR)
 #'   #-------------------------------------------
 #'   \donttest{nsim <- 1999 # Number of simulations}
@@ -1385,7 +1385,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #'
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
-#' if(require(spatstat, quietly=TRUE)) {
+#' if(require("spatstat", quietly=TRUE)) {
 #'   pp <- unmark(spruces)
 #'   \donttest{nsim <- 2499 # Number of simulations}
 #'   \dontshow{nsim <- 19 # Number of simulations for testing}
