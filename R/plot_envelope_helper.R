@@ -338,7 +338,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
         ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
         nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
-        graphics::par(mfrow=c(nrows_of_plots, ncols_of_plots))
+        opar <- par(mfrow=c(nrows_of_plots, ncols_of_plots))
         tmp_indeces <- c(1, rdata$r_values_newstart_id, length(rdata$new_r_values)+1)
         if(is.null(ylim) | !(inherits(ylim, "list") && length(ylim) == n_of_plots)) {
           if(is.vector(ylim) & length(ylim)==2) ylim <- rep(list(ylim), times=n_of_plots)
@@ -393,6 +393,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
               }
             }
         }
+        on.exit(par(opar))
     }
 }
 
