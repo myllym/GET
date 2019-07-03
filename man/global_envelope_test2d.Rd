@@ -38,7 +38,7 @@ Provides global envelope tests based on 2D functions
 \donttest{
 # Example of spatial point pattern residuals
 #-------------------------------------------
-if(require(spatstat, quietly=TRUE)) {
+if(require("spatstat", quietly=TRUE)) {
   data(cells)
   X <- cells
   # Fit the hard-core process

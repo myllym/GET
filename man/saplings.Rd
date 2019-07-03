@@ -21,7 +21,7 @@ program headed by project leader Prof. O.V. Smirnova.
 }
 \examples{
 # This is an example analysis of the saplings data set in MyllymÃ¤ki et al. (2017).
-if(require(spatstat, quietly=TRUE)) {
+if(require("spatstat", quietly=TRUE)) {
   data(saplings)
 
   # First choose the r-distances for L (r) and J (rJ) functions, respectively.
@@ -57,7 +57,7 @@ if(require(spatstat, quietly=TRUE)) {
   # clustering of saplings. Next we explore the Matern cluster process as a null model.
 }
 \donttest{
-if(require(spatstat, quietly=TRUE)) {
+if(require("spatstat", quietly=TRUE)) {
   #-- Testing the Matern cluster process --# (a composite hypothesis)
   #----------------------------------------#
   # Fit the Matern cluster process to the pattern (using minimum contrast estimation with the pair

@@ -33,11 +33,11 @@ Therefore, one can inspect the hypothesis of "no spatial autocorrelation" of the
 of the fitted model.
 }
 \examples{
-if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
+if(require("sp", quietly=TRUE) & require("gstat", quietly=TRUE)) {
   # Examples from gstat complemented with global envelopes
   #-------------------------------------------------------
   data(meuse)
-  sp::coordinates(meuse) <- ~x+y
+  coordinates(meuse) <- ~x+y
   # topsoil zinc concentration, mg kg-1 soil ("ppm")
   bubble(meuse, "zinc",
          col=c("#00ff0088", "#00ff0088"), main="zinc concentrations (ppm)")
@@ -63,7 +63,7 @@ if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
   plot(lznr.vgm.GET)
 
   # Directional variograms
-  lzn.dir = variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))
+  lzn.dir <- variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))
   plot(lzn.dir)
   # with global envelopes
   \donttest{lzn.dir.GET <- GET.variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))}

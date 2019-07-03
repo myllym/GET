@@ -191,7 +191,7 @@ functions are concatenated together into a one long vector.
 }
 
 \examples{
-if(require(spatstat, quietly=TRUE)) {
+if(require("spatstat", quietly=TRUE)) {
   ## Testing complete spatial randomness (CSR)
   #-------------------------------------------
   \donttest{nsim <- 1999 # Number of simulations}

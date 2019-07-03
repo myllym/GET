@@ -96,6 +96,7 @@ if(requireNamespace("fda", quietly = TRUE)) {
   forder(curve_set, measure = "max", scaling="qdir")
   forder(curve_set, measure = "rank")
   forder(curve_set, measure = "erl")
+  forder(curve_set, measure = "area")
 }
 }
 \references{

@@ -149,7 +149,7 @@ See examples also in \code{\link{saplings}}.
 }
 \examples{
 \donttest{
-if(require(spatstat, quietly=TRUE)) {
+if(require("spatstat", quietly=TRUE)) {
   data(saplings)
 
   # First choose the r-distances

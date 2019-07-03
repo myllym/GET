@@ -32,58 +32,59 @@ or studentized) MAD envelope test is performed with the test functions saved in 
 Details of the combined test can be found in Mrkvicka et al. (2017)
 }
 \examples{
-# As an example test CSR of the saplings point pattern from spatstat by means of
-# L, F, G and J functions.
-require(spatstat)
-data(saplings)
-X <- saplings
+if(require("spatstat", quietly=TRUE)) {
+  # As an example test CSR of the saplings point pattern from spatstat by means of
+  # L, F, G and J functions.
+  data(saplings)
+  X <- saplings
 
-\donttest{nsim <- 499 # Number of simulations for the tests}
-\dontshow{nsim <- 19 # Number of simulations for testing}
-# Specify distances for different test functions
-n <- 500 # the number of r-values
-rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
-rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
-r <- seq(0, rmax, by=rstep)    # r-distances for Lest
-rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
+  \donttest{nsim <- 499 # Number of simulations for the tests}
+  \dontshow{nsim <- 19 # Number of simulations for testing}
+  # Specify distances for different test functions
+  n <- 500 # the number of r-values
+  rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
+  rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
+  r <- seq(0, rmax, by=rstep)    # r-distances for Lest
+  rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
 
-# Perform simulations of CSR and calculate the L-functions
-system.time( env_L <- envelope(X, nsim=nsim,
- simulate=expression(runifpoint(X$n, win=X$window)),
- fun="Lest", correction="translate",
- transform = expression(.-r), # Take the L(r)-r function instead of L(r)
- r=r,                         # Specify the distance vector
- savefuns=TRUE,               # Save the estimated functions
- savepatterns=TRUE) )         # Save the simulated patterns
-# Take the simulations from the returned object
-simulations <- attr(env_L, "simpatterns")
-# Then calculate the other test functions F, G, J for each simulated pattern
-system.time( env_F <- envelope(X, nsim=nsim,
+  # Perform simulations of CSR and calculate the L-functions
+  system.time( env_L <- envelope(X, nsim=nsim,
+   simulate=expression(runifpoint(X$n, win=X$window)),
+   fun="Lest", correction="translate",
+   transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+   r=r,                         # Specify the distance vector
+   savefuns=TRUE,               # Save the estimated functions
+   savepatterns=TRUE) )         # Save the simulated patterns
+  # Take the simulations from the returned object
+  simulations <- attr(env_L, "simpatterns")
+  # Then calculate the other test functions F, G, J for each simulated pattern
+  system.time( env_F <- envelope(X, nsim=nsim,
                                simulate=simulations,
                                fun="Fest", correction="Kaplan", r=rJ,
                                savefuns=TRUE) )
-system.time( env_G <- envelope(X, nsim=nsim,
+  system.time( env_G <- envelope(X, nsim=nsim,
                                simulate=simulations,
                                fun="Gest", correction="km", r=rJ,
                                savefuns=TRUE) )
-system.time( env_J <- envelope(X, nsim=nsim,
+  system.time( env_J <- envelope(X, nsim=nsim,
                                simulate=simulations,
                                fun="Jest", correction="none", r=rJ,
                                savefuns=TRUE) )
 
-# Crop the curves to the desired r-interval I
-curve_set_L <- crop_curves(env_L, r_min=rmin, r_max=rmax)
-curve_set_F <- crop_curves(env_F, r_min=rminJ, r_max=rmaxJ)
-curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
-curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
+  # Crop the curves to the desired r-interval I
+  curve_set_L <- crop_curves(env_L, r_min=rmin, r_max=rmax)
+  curve_set_F <- crop_curves(env_F, r_min=rminJ, r_max=rmaxJ)
+  curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
+  curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
 
-# The combined directional quantile envelope test
-res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
-                                                    curve_set_G, curve_set_J),
-                                    type = "qdir")
-plot(res, plot_style="ggplot2",
-     labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
-     separate_yaxes=TRUE, base_size=12)
+  # The combined directional quantile envelope test
+  res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
+                                                      curve_set_G, curve_set_J),
+                                      type = "qdir")
+  plot(res, plot_style="ggplot2",
+       labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
+       base_size=12)
+}
 
 }
 \references{
