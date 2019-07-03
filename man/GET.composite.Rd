@@ -44,7 +44,7 @@ passed to \code{simfun} as its argument.}
 The default is the identity function, i.e. the simulations from the model are functions themselves.
 The use of \code{calcfun} is still experimental. Preferably provide \code{X} and
 \code{X.ls} instead, if \code{X} is not a point pattern or fitted point process model object
-of \pkg{spatstat}}
+of \pkg{spatstat}.}
 
 \item{testfuns}{A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}
 if \code{X} is a point pattern of a fitted point process model of \pkg{spatstat}.

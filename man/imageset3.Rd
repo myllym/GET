@@ -33,7 +33,7 @@ plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), max_ncols_of_plots = 5) +
   ggplot2::scale_fill_gradient(low="black", high="white")
 }
 \references{
-Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model.
+Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 }
 \seealso{
 \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}}
