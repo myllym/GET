@@ -87,7 +87,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #'   plot(lznr.vgm.GET)
 #'
 #'   # Directional variograms
-#'   lzn.dir = variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))
+#'   lzn.dir <- variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))
 #'   plot(lzn.dir)
 #'   # with global envelopes
 #'   \donttest{lzn.dir.GET <- GET.variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))}
