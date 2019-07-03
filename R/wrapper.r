@@ -57,7 +57,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #' @importFrom stats formula
 #' @export
 #' @examples
-#' if(require(sp, quietly=TRUE) & require(gstat, quietly=TRUE)) {
+#' if(require("sp", quietly=TRUE) & require("gstat", quietly=TRUE)) {
 #'   # Examples from gstat complemented with global envelopes
 #'   #-------------------------------------------------------
 #'   data(meuse)
