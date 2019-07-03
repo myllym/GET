@@ -353,7 +353,6 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #'                        factors = data.frame(group = imageset2$Group,
 #'                                             z = imageset2$z),
 #'                        summaryfun = "contrasts")
-#' par(mfrow=c(1,3))
 #' plot(res.gc)
 #'
 #' # Testing continuous factor z
@@ -363,7 +362,6 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #'                       image_sets = list(Y = imageset2$image_set),
 #'                       factors = data.frame(group = imageset2$Group,
 #'                                            z = imageset2$z))
-#' par(mfrow=c(1,3))
 #' plot(res.z)
 #' }
 graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
@@ -411,7 +409,6 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #'                        image_sets = list(Y = imageset2$image_set),
 #'                        factors = data.frame(group = imageset2$Group,
 #'                                             z = imageset2$z))
-#' par(mfrow=c(1,3))
 #' plot(res.g)
 #'
 #' # Testing continuous factor z
@@ -421,7 +418,6 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #'                       image_sets = list(Y = imageset2$image_set),
 #'                       factors = data.frame(group = imageset2$Group,
 #'                                            z = imageset2$z))
-#' par(mfrow=c(1,3))
 #' plot(res.z)
 #' }
 frank.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
