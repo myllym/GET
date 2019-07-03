@@ -301,15 +301,15 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     # Plot
     if(Nfunc == 1 & is.null(rdata$r_values_newstart_id)) {
         if(!rdata$retick_xaxis) {
-            if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+            if(!add) plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                     type="l", lty=3, lwd=2, ...)
-            else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, ...)
+            else lines(x[['r']], x[['central']], lty=3, lwd=2, ...)
         }
         else {
           x[['r']] <- 1:length(x[['r']])
-          if(!add) graphics::plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+          if(!add) plot(x[['r']], x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                                   type="l", lty=3, lwd=2, xaxt="n", ...)
-          else graphics::lines(x[['r']], x[['central']], lty=3, lwd=2, xaxt="n", ...)
+          else lines(x[['r']], x[['central']], lty=3, lwd=2, xaxt="n", ...)
           if(!is.null(curve_sets) && class(curve_sets)[1] == "list") curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
         }
         if(alt != "greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
@@ -329,8 +329,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
           }
         }
         if(rdata$retick_xaxis) {
-            graphics::axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
-            graphics::abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
+            axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
+            abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
         }
     }
     else {
@@ -361,27 +361,27 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         }
         for(i in 1:n_of_plots) {
             if(!add)
-              graphics::plot(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+              plot(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              main=main[i], xlab=xlab[[i]], ylab=ylab[[i]],
                              type="l", lty=3, lwd=2, ylim=ylim[[i]], ...)
             else
-              graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
+              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              x[['central']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
                              lty=3, lwd=2, ...)
             if(alt != "greater")
-                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
+              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
             else
-                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
             if(alt != "less")
-                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
+              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
             else
-                graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
             if(!is.null(x[['obs']])) {
-              graphics::lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=1, type=obs.type)
+              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=1, type=obs.type)
               if(color_outside) {
                   outside <- x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] < x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] | x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)] > x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]
-                  graphics::points(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
+                  points(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)][outside], col="red")
               }
             }
             # curves/outliers
