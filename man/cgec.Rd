@@ -47,9 +47,9 @@ subs <- function(group, ...) {
   cset$obs <- cgec$obs[, attr(cset, "group") == group]
   plot(cset, ...)
 }
-par(mfrow=c(1,3))
+opar <- par(mfrow=c(1,3))
 for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
-
+par(opar)
 # See example analysis in ?graph.fanova
 }
 \references{

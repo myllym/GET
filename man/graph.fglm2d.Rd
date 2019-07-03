@@ -53,7 +53,6 @@ res.gc <- graph.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                        factors = data.frame(group = imageset2$Group,
                                             z = imageset2$z),
                        summaryfun = "contrasts")
-par(mfrow=c(1,3))
 plot(res.gc)
 
 # Testing continuous factor z
@@ -63,7 +62,6 @@ res.z <- graph.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                       image_sets = list(Y = imageset2$image_set),
                       factors = data.frame(group = imageset2$Group,
                                            z = imageset2$z))
-par(mfrow=c(1,3))
 plot(res.z)
 }
 }

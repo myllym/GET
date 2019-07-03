@@ -43,7 +43,6 @@ res.g <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                        image_sets = list(Y = imageset2$image_set),
                        factors = data.frame(group = imageset2$Group,
                                             z = imageset2$z))
-par(mfrow=c(1,3))
 plot(res.g)
 
 # Testing continuous factor z
@@ -53,7 +52,6 @@ res.z <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
                       image_sets = list(Y = imageset2$image_set),
                       factors = data.frame(group = imageset2$Group,
                                            z = imageset2$z))
-par(mfrow=c(1,3))
 plot(res.z)
 }
 }
