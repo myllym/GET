@@ -242,7 +242,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' The default is the identity function, i.e. the simulations from the model are functions themselves.
 #' The use of \code{calcfun} is still experimental. Preferably provide \code{X} and
 #' \code{X.ls} instead, if \code{X} is not a point pattern or fitted point process model object
-#' of \pkg{spatstat}
+#' of \pkg{spatstat}.
 #' @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}
 #' if \code{X} is a point pattern of a fitted point process model of \pkg{spatstat}.
 #' A list of parameters should be provided for each test function that is to be used in the
