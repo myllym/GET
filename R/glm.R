@@ -169,7 +169,8 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
                        summaryfun = c("means", "contrasts"),
                        savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1L, mc.args = NULL) {
   # Set up the contrasts
-  options(contrasts = c("contr.sum", "contr.poly"))
+  op <- options(contrasts = c("contr.sum", "contr.poly"))
+  on.exit(options(op))
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- fglm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors)
