@@ -228,14 +228,6 @@ contrasts.m <- function(x, groups, ...) {
 #' #-- Centred government expenditure centralization ratios example
 #' # This is an example analysis of the centred GEC in Mrkvicka et al.
 #' data(cgec)
-#' # Plot data in groups
-#' subs <- function(group, ...) {
-#'   cset <- cgec
-#'   cset$obs <- cgec$obs[, attr(cset, "group") == group]
-#'   plot(cset, ...)
-#' }
-#' par(mfrow=c(1,3))
-#' for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
 #'
 #' # Number of simulations
 #' \donttest{
