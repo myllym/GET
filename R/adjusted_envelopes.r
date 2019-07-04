@@ -145,7 +145,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' Adjusted global envelope tests for composite null hypothesis.
 #'
 #'
-#' The specification of X, X.ls, fitfun, simfun is important here:
+#' The specification of X, X.ls, fitfun, simfun is important:
 #' \itemize{
 #' \item If \code{X.ls} is provided, then the global envelope test is calculated based on
 #' functions in these objects. \code{X} should be a \code{curve_set} (see \code{\link{create_curve_set}})
