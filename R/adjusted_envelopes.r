@@ -222,7 +222,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' A \code{curve_set} (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #' object, as the \code{curve_sets} argument of \code{\link{global_envelope_test}}
 #' (need to provide \code{X.ls}), or
-#' a fitted point process model of \pkg{spatstat} (e.g. object of class \code{\link[spatstat]{ppm}} or
+#' a fitted point process model of \pkg{\link{spatstat}} (e.g. object of class \code{\link[spatstat]{ppm}} or
 #' \code{\link[spatstat]{kppm}}), or a point pattern object of class \code{\link[spatstat]{ppp}},
 #' or another data object (need to provide \code{simfun}, \code{fitfun}, \code{calcfun}).
 #' @param X.ls A list of objects as \code{curve_sets} argument of \code{\link{global_envelope_test}},
@@ -242,9 +242,9 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' The default is the identity function, i.e. the simulations from the model are functions themselves.
 #' The use of \code{calcfun} is still experimental. Preferably provide \code{X} and
 #' \code{X.ls} instead, if \code{X} is not a point pattern or fitted point process model object
-#' of \pkg{spatstat}.
+#' of \pkg{\link{spatstat}}.
 #' @param testfuns A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}
-#' if \code{X} is a point pattern of a fitted point process model of \pkg{spatstat}.
+#' if \code{X} is a point pattern of a fitted point process model of \pkg{\link{spatstat}}.
 #' A list of parameters should be provided for each test function that is to be used in the
 #' combined test.
 #' @param ... Additional parameters to \code{\link[spatstat]{envelope}} in the case where only one test

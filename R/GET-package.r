@@ -20,7 +20,7 @@
 #'
 #' In the special case of spatial processes (spatial point processes, random sets),
 #' the functions are typically estimators of summary functions. The package supports
-#' the use of the R library \pkg{spatstat} for generating simulations and calculating
+#' the use of the R library \pkg{\link{spatstat}} for generating simulations and calculating
 #' estimators of the chosen summary function, but alternatively these can be done by
 #' any other way, thus allowing for any models/functions.
 #'
@@ -145,7 +145,7 @@
 #'       \code{plot(res)}
 #' }
 #'
-#' 2) The workflow utilizing \pkg{spatstat}:
+#' 2) The workflow utilizing \pkg{\link{spatstat}}:
 #'
 #' E.g. Say we have a point pattern, for which we would like to test a hypothesis, as a \code{\link[spatstat]{ppp}} object.
 #'
@@ -158,7 +158,7 @@
 #'                  under CSR and to calculate the functions you want.
 #'                  Important: use the option 'savefuns=TRUE' and
 #'                  specify the number of simulations \code{nsim}.
-#'                  See the help documentation in \pkg{spatstat}
+#'                  See the help documentation in \pkg{\link{spatstat}}
 #'                  for possible test functions (if \code{fun} not given, \code{Kest} is used,
 #'                  i.e. an estimator of the K function).
 #'
