@@ -1,19 +1,13 @@
 # A helper function to generate simulated functions from "X" using given functions/arguments,
 # when X is a ppp or model object of spatstat.
 #
-# Case 1.
-# If simfun is NULL, then
 # a) If X is a point pattern (object of class "ppp"), then CSR is simulated (with variable number of points).
 # b) If X is a fitted point process model (object of class "ppm" or "kppm"),
 # the simulated model is that model (by spatstat).
 # If testfuns is given, then also several different test functions can be calculated.
-#
-# Case 2.
-# simfun and simfun.arg are used to specify how to generate the simulations,
-# X should be a point pattern.
 #' @importFrom spatstat envelope
-funcs_from_X_and_funs <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfuns=NULL,
-                                  ..., savepatterns=FALSE, verbose=FALSE, calc_funcs=TRUE) {
+funcs_from_X_and_funs <- function(X, nsim, testfuns=NULL, ...,
+                                  savepatterns=FALSE, verbose=FALSE, calc_funcs=TRUE) {
   extraargs <- list(...)
   nfuns <- length(testfuns)
   if(nfuns < 1) nfuns <- 1
@@ -23,21 +17,14 @@ funcs_from_X_and_funs <- function(X, nsim, simfun=NULL, simfun.arg=NULL, testfun
 
   X.ls <- NULL
   # Simulations
-  if(!is.null(simfun)) {
-    # Create simulations by the given function
-    simpatterns <- replicate(n=nsim, simfun(simfun.arg), simplify=FALSE)
-  }
-  else {
-    simpatterns <- NULL
-  }
-  # Calculate the first test functions and generate simulations if simpatterns is NULL
-  X.ls[[1]] <- do.call(envelope, c(list(Y=X, nsim=nsim, simulate=simpatterns),
+  # Calculate the first test functions and generate simulations
+  X.ls[[1]] <- do.call(envelope, c(list(Y=X, nsim=nsim, simulate=NULL),
                                         testfuns[[1]],
                                         list(savefuns=TRUE, savepatterns=savepatterns, verbose=verbose),
                                         extraargs))
-  simpatterns <- attr(X.ls[[1]], "simpatterns")
   # More than one test function, calculate the rest if calc_funcs==TRUE
   if(calc_funcs & nfuns > 1) {
+    simpatterns <- attr(X.ls[[1]], "simpatterns")
     for(i in 2:nfuns) {
       X.ls[[i]] <- do.call(envelope, c(list(Y=X, nsim=nsim, simulate=simpatterns),
                                             testfuns[[i]],
