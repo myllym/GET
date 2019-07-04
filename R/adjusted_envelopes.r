@@ -240,7 +240,8 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
 #' (no parallelization). For details, see \code{\link{mclapply}}, for which the argument is passed.
 #' Parallelization can be used in generating simulations and in calculating the second stage tests.
-#' @return An object of class \code{global_envelope}. See \code{\link{global_envelope_test}}.
+#' @return An object of class \code{global_envelope} or \code{combined_global_envelope}, which can be
+#' printed and plotted directly. See \code{\link{global_envelope_test}}.
 #' @references
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
 #'
