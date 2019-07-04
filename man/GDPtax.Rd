@@ -44,9 +44,7 @@ subs <- function(group, ...) {
   cset$obs <- GDPcset$obs[, GDPtax$Group == group]
   plot(cset, ...)
 }
-opar <- par(mfrow=c(2,2))
 for(i in 1:4) subs(i, main=paste("Group ", i, sep=""), ylab="GDP")
-par(opar)
 # See example analysis in ?graph.fglm
 }
 \references{

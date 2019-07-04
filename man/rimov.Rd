@@ -27,9 +27,7 @@ subs <- function(group, ...) {
   cset$obs <- rimov$obs[, groups == group]
   plot(cset, ...)
 }
-opar <- par(mfrow=c(1,3))
 for(i in 1:3) subs(i, main=paste("group ", i, sep=""), ylab="Temperature")
-par(opar)
 # See example analysis in ?graph.fanova
 }
 \references{
