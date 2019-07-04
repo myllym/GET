@@ -315,17 +315,23 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   #----------------------------------------------
 #'   # fitfun = a function to fit the model
 #'   # simfun = a function to make a simulation from the model
+#'   # calcfun = a function to calculate the test vector from data/simulation
 #'   fitf <- function(X) {
 #'     kppm(X, clusters = "MatClust", statistic="K")
 #'   }
 #'   simf <- function(M) {
 #'     simulate(M, nsim=1)[[1]]
 #'   }
-#'   res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf,
-#'            testfuns = list(L = list(fun="Lest", correction="translate",
-#'                            transform = expression(.-r), r=r)),
-#'            type="qdir", r_min=rmin, r_max=rmax)
-#'   plot(res)
+#'   calcf <- function(X) {
+#'     rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
+#'     r <- seq(0, rmax, by=rstep)
+#'     L <- Lest(X, correction = "translate", r = r)[['trans']] - r
+#'     L[r >= rmin & r <= rmax]
+#'   }
+#'   res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf, calcfun=calcf,
+#'                        type="area")
+#'   plot(res, xlab="Index")
+#'   # Note: r-values are not passed; r in the x-axis is from 1 to length of r.
 #' }}
 GET.composite <- function(X, X.ls = NULL,
                          nsim = 499, nsimsub = nsim,
