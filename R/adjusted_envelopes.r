@@ -274,16 +274,16 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   # Option 1: Give the fitted model object to GET.composite
 #'   #--------------------------------------------------------
 #'   # This can be done and is preferable when the model is a point process model of spatstat.
-#'   # Make the adjusted directional quantile global envelope test using the L(r)-r function
+#'   # Make the adjusted global area rank envelope test using the L(r)-r function
 #'   adjenvL <- GET.composite(X = M1, nsim = nsim,
 #'               testfuns = list(L = list(fun="Lest", correction="translate",
 #'                              transform = expression(.-r), r=r)), # passed to envelope
-#'               type = "qdir", r_min=rmin, r_max=rmax)
+#'               type = "area", r_min=rmin, r_max=rmax)
 #'   # Plot the test result
 #'   plot(adjenvL)
 #'
-#'   # Option 2: Generate the simulations by yourself
-#'   #-----------------------------------------------
+#'   # Option 2: Generate the simulations "by yourself"
+#'   #-------------------------------------------------
 #'   # and provide them as curve_set or envelope objects
 #'   # Preferable when you want to have a full control
 #'   # on the simulations yourself.
@@ -307,7 +307,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   }
 #'   X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
 #'   # Perform the adjusted test
-#'   res <- GET.composite(X=X, X.ls=X.ls, type="qdir",
+#'   res <- GET.composite(X=X, X.ls=X.ls, type="area",
 #'                       r_min=rmin, r_max=rmax)
 #'   plot(res)
 #'
