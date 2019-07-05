@@ -308,7 +308,49 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'              transform = expression(.-r), r=r)
 #'   }
 #'   X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
-#'   # Perform the adjusted test
+#'   # 5. Perform the adjusted test
+#'   res <- GET.composite(X=X, X.ls=X.ls, type="area",
+#'                       r_min=rmin, r_max=rmax)
+#'   plot(res)
+#'
+#'   # Option 2: Generate the simulations "by yourself"
+#'   # Writing with for-loops (instead of envelope calls)
+#'   # Serves as an example for non-spatstat models.
+#'   #-------------------------------------------------
+#'   # 1. Fit the model
+#'   M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
+#'   # Generate nsim simulations by the given function using the fitted model
+#'   # 2. Simulate a sample from the fitted null model and
+#'   # compute the test vectors for data and each simulation
+#'   nsim <- nsimsub <- 19 # Number of simulations
+#'   # Observed function
+#'   obs.L <- Lest(saplings, correction = "translate", r = r)
+#'   obs <- obs.L[['trans']] - r
+#'   # Simulated functions
+#'   sim <- matrix(nrow = length(r), ncol = nsimsub)
+#'   for(i in 1:nsimsub) {
+#'     sim.X <- simulate(M1)[[1]]
+#'     sim[, i] <- Lest(sim.X, correction = "translate", r = r)[['trans']] - r
+#'   }
+#'   # Create a curve_set
+#'   X <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
+#'   # 3. Simulate another sample from the fitted null model.
+#'   sims2 <- simulate(M1, nsim=nsim) # list of simulations
+#'   # 4. Fit the null model to each of the patterns,
+#'   # simulate a sample from the null model,
+#'   # and compute the test vectors for all.
+#'   X.ls <- list()
+#'   for(rep in 1:nsim) {
+#'     M2 <- kppm(sims2[[rep]], clusters = "LGCP", statistic="K")
+#'     obs2 <- Lest(sims2[[rep]], correction = "translate", r = r)[['trans']] - r
+#'     sim2 <- matrix(nrow = length(r), ncol = nsimsub)
+#'     for(i in 1:nsimsub) {
+#'       sim2.X <- simulate(M2)[[1]]
+#'       sim2[, i] <- Lest(sim2.X, correction = "translate", r = r)[['trans']] - r
+#'     }
+#'     X.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
+#'   }
+#'   # 5. Perform the adjusted test
 #'   res <- GET.composite(X=X, X.ls=X.ls, type="area",
 #'                       r_min=rmin, r_max=rmax)
 #'   plot(res)
