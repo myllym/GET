@@ -264,18 +264,18 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
 #'   r <- seq(0, rmax, by=rstep)
 #'
-#'   # Fit the Matern cluster process to the pattern
-#'   # (using minimum contrast estimation with the K-function)
-#'   M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
-#'   summary(M1)
-#'
 #'   # Number of simulations
 #'   nsim <- 19 # Increase nsim for serious analysis!
 #'
 #'   # Option 1: Give the fitted model object to GET.composite
 #'   #--------------------------------------------------------
-#'   # This can be done and is preferable when the model is a point process model of spatstat.
-#'   # Make the adjusted global area rank envelope test using the L(r)-r function
+#'   # This can be done and is preferable when the model is
+#'   # a point process model of spatstat.
+#'   # 1. Fit the Matern cluster process to the pattern
+#'   # (using minimum contrast estimation with the K-function)
+#'   M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
+#'   summary(M1)
+#'   # 2. Make the adjusted global area rank envelope test using the L(r)-r function
 #'   adjenvL <- GET.composite(X = M1, nsim = nsim,
 #'               testfuns = list(L = list(fun="Lest", correction="translate",
 #'                              transform = expression(.-r), r=r)), # passed to envelope
@@ -286,18 +286,19 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   # Option 2: Generate the simulations "by yourself"
 #'   #-------------------------------------------------
 #'   # and provide them as curve_set or envelope objects
-#'   # Preferable when you want to have a full control
+#'   # Preferable when you want to have a control
 #'   # on the simulations yourself.
+#'   # 1. Fit the model
 #'   M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
-#'   # Generate nsim simulations by the given function using the fitted model
+#'   # 2. Generate nsim simulations by the given function using the fitted model
 #'   X <- envelope(M1, nsim=nsim, savefuns=TRUE,
 #'                 fun="Lest", correction="translate",
 #'                 transform = expression(.-r), r=r)
 #'   plot(X)
-#'   # Create another set of simulations to be used to estimate
+#'   # 3. Create another set of simulations to be used to estimate
 #'   # the second-state p-value (as proposed by Baddeley et al., 2017).
 #'   simpatterns2 <- simulate(M1, nsim=nsim)
-#'   # Calculate the functions for each pattern
+#'   # 4. Calculate the functions for each pattern
 #'   simf <- function(rep) {
 #'     # Fit the model to the simulated pattern Xsims[[rep]]
 #'     sim_fit <- kppm(simpatterns2[[rep]], clusters = "MatClust", statistic="K")
