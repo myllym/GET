@@ -288,7 +288,7 @@ GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapp
   # Observed difference between the ecdfs
   obs <- fun(x, groups, r)
   # Simulations by permuting to which groups each value belongs to
-  cat("Creating ", nsim, " permutations.\n", sep="")
+  message("Creating ", nsim, " permutations.\n", sep="")
   sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE), r), simplify = "array")
   complabels <- colnames(obs)
 
