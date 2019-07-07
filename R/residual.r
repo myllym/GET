@@ -1,7 +1,8 @@
 #' Residual form of the functions
 #'
 #' Subtract the theoretical function S_{H_0} or the mean of the functions
-#' in the curve set.
+#' in the curve set. If the \code{curve_set} object contains already residuals
+#' T_i(r) - T_0(r), use_theo ignored and the same object returned.
 #'
 #'
 #' The mean of the functions in the \code{curve_set} is
@@ -23,8 +24,7 @@ residual <- function(curve_set, use_theo = TRUE) {
     curve_set <- convert_envelope(curve_set)
 
     if(with(curve_set, exists('is_residual')) && curve_set[['is_residual']]) {
-        cat("The curve_set object contains already residuals T_i(r) - T_0(r), \n",
-            "use_theo ignored.\n")
+        # "The curve_set object contains already residuals T_i(r) - T_0(r), use_theo ignored.
         res <- curve_set
     }
     else {
