@@ -28,21 +28,21 @@ residual <- function(curve_set, use_theo = TRUE) {
         res <- curve_set
     }
     else {
-        if (length(use_theo) != 1L || !inherits(use_theo, 'logical') ||
+        if(length(use_theo) != 1L || !inherits(use_theo, 'logical') ||
             !is.finite(use_theo)) {
             stop('use_theo must be either TRUE or FALSE.')
         }
 
         theo <- curve_set[['theo']]
         n_theo <- length(theo)
-        if (n_theo < 1L && use_theo) {
+        if(n_theo < 1L && use_theo) {
             # warnings('use_theo == TRUE but the theoretical curve is missing. ',
             #          'Behaving as if use_theo == FALSE.')
             # Silently setting use_theo to FALSE, when 'theo' not provided:
             use_theo <- FALSE
         }
 
-        if (use_theo) {
+        if(use_theo) {
             mid <- theo
         } else {
             mid <- curve_set_mean(curve_set)
