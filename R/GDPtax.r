@@ -47,5 +47,4 @@
 #'   plot(cset, ...)
 #' }
 #' for(i in 1:4) subs(i, main=paste("Group ", i, sep=""), ylab="GDP")
-#' # See example analysis in ?graph.fglm
 NULL
