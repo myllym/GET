@@ -204,8 +204,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   }
   # The interesting coefficients
   nameinteresting <- setdiff(namecoef.full, namecoef.red)
-  cat("The inspected coefficients are: \n")
-  cat(nameinteresting)
+  message("The inspected coefficients are: \n", nameinteresting, "\n")
   # Fit the full model to the data and obtain the effects
   obs <- genCoef(X$data.l, formula.full, nameinteresting, ...)
   # Simulations by permuting the residuals
