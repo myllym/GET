@@ -201,6 +201,11 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'
 #' Compare the distributions of two (or more) groups.
 #'
+#'
+#' The default number of permutation, if nsim is not specified, is
+#' n*1000 - 1 for the case \code{"means"} and (n*(n-1)/2)*1000 - 1 for the case \code{"contrasts"},
+#' where n is the length of x.
+#'
 #' @param x A list (of length n) of values in the n groups.
 #' @param r The sequence of argument values at which the distribution functions are compared.
 #' The default is 100 equally spaced values between the minimum and maximum over all groups.
