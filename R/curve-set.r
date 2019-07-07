@@ -288,7 +288,6 @@ is.curve_set <- function(x) inherits(x, 'curve_set')
 #' @export
 #' @importFrom utils str
 print.curve_set <- function(x, ...) {
-    cat("curve_set object containing:\n")
     utils::str(x)
 }
 
