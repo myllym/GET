@@ -51,5 +51,4 @@
 #'   plot(cset, ...)
 #' }
 #' for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
-#' # See example analysis in ?graph.fanova
 NULL
