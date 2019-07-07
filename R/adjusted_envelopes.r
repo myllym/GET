@@ -49,7 +49,7 @@ adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
   # Case 1: fitfun, simfun, calcfun provided
   # Model fitted by fitfun, simulated by simfun; X can be general
   if(!is.null(fitfun) & !is.null(simfun)) {
-    cat("Note: Model to be fitted by fitfun(X), simulations by simfun and calcfun;\n",
+    message("Note: Model to be fitted by fitfun(X), simulations by simfun and calcfun;\n",
         "simfun should accept the object returned by fitfun as its argument.\n",
         "calcfun should accept the object returned by simfun as its argument.\n")
     # Fit the model to X
@@ -76,9 +76,9 @@ adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
   # b) If X is a model object of spatstat, then spatstat is used for fitting and simulation.
   else {
     if(!is.ppp(X) & !Xispppmodel) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.\n")
-    if(Xispppmodel) cat("X is a fitted model object of spatstat;\n using spatstat to simulate the model and calculate the test functions.\n")
+    if(Xispppmodel) message("X is a fitted model object of spatstat;\n using spatstat to simulate the model and calculate the test functions.\n")
     else
-      cat("Note: \'simfun\' and/or \'fitfun\' not provided and \'X\' is a ppp object of spatstat.\n",
+      message("Note: \'simfun\' and/or \'fitfun\' not provided and \'X\' is a ppp object of spatstat.\n",
           "The spatstat's function \'envelope\' is used for simulations and model fitting, \n",
           "and CSR is tested (with intensity parameter).\n")
     # Create simulated functions from the given model
@@ -408,12 +408,12 @@ GET.composite <- function(X, X.ls = NULL,
     # Checking r_min, r_max
     if(!is.null(r_min) & length(r_min) != length(X)) stop("r_min should give the minimum distances for each of the test functions.\n")
     if(!is.null(r_max) & length(r_max) != length(X)) stop("r_max should give the maximum distances for each of the test functions.\n")
-    cat("Using the simulations provided in X and X.ls.\n")
+    message("Using the simulations provided in X and X.ls.\n")
   }
   # 2) Simulations if X.ls not provided
   #------------------------------------
   else { # Perform simulations
-    if(verbose) cat("Performing simulations, ...\n")
+    if(verbose) message("Performing simulations, ...\n")
     tmp <- adj.simulate(X=X, nsim=nsim, nsimsub=nsimsub,
                        simfun=simfun, fitfun=fitfun, calcfun=calcfun, testfuns=testfuns, ...,
                        verbose=verbose, mc.cores=mc.cores)
