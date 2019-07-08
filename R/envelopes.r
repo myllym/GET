@@ -1306,16 +1306,6 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #' If instead choosing \code{type} to be \code{"erl"}, \code{"cont"} or \code{"area"},
 #' then the global envelope corresponds to these measures.
 #'
-#' @section Global envelope:
-#' The 100(1-alpha)\% global envelope is provided in addition to the p-values.
-#' If \code{type = "rank"} then the envelope is the global rank envelope proposed by
-#' Myllymäki et al. (2017).
-#' If \code{type = "erl"} then the envelope is the global rank envelope based on the
-#' extreme rank length ordering. This envelope is constructed as the convex hull of
-#' the functions which have extreme rank length measure \eqn{R_i^{erl}}{Rerl_i}
-#' that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
-#' length measure (Mrkvička et al., 2018).
-#'
 #' @section Number of simulations:
 #' The extreme rank length ordering test (\code{type = "erl"}) allows in principle a lower numbe
 #' of simulations to be used than the test based on extreme ranks (\code{type = "rank"}).
