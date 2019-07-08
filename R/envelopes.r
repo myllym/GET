@@ -1286,9 +1286,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 
 #' The rank envelope test
 #'
-#' The rank envelope test, p-values and global envelopes
-#'
-#'
+#' The rank envelope test, p-values and global envelopes.
 #' The test corresponds to the global envelope test that can be carriet out by
 #' \code{\link{global_envelope_test}} by specifying the \code{type} for which the options
 #' \code{"rank"}, \code{"erl"}, \code{"cont"} and \code{"area"} are available. The last
@@ -1384,8 +1382,8 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #'
 #' Performs the global scaled MAD envelope tests, either directional quantile or studentised,
 #' or the unscaled MAD envelope test. These tests correspond to calling the
-#' function \code{\link{global_envelope_test}} with \code{"qdir"}, \code{type = "st"} and
-#' \code{"unscaled"}, respectively. The functions \code{qdir_envelope}, \code{st_envelope} and
+#' function \code{\link{global_envelope_test}} with \code{type="qdir"}, \code{type = "st"} and
+#' \code{type="unscaled"}, respectively. The functions \code{qdir_envelope}, \code{st_envelope} and
 #' \code{unscaled_envelope} have been kept for historical reasons;
 #' preferably use \code{\link{global_envelope_test}} with the suitable \code{type} argument.
 #'
