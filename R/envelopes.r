@@ -344,35 +344,25 @@ GEprinthelper <- function(x, ...) {
 }
 
 #' Print method for the class 'global_envelope'
-#' @usage \method{print}{global_envelope}(x, ...)
 #'
 #' @param x an 'global_envelope' object
 #' @param ... Ignored.
-#'
-#' @method print global_envelope
 #' @export
 print.global_envelope <- function(x, ...) {
   GEprinthelper(x)
 }
 
 #' Print method for the class 'global_envelope'
-#' @usage \method{print}{combined_global_envelope}(x, ...)
 #'
 #' @param x an 'combined_global_envelope' object
 #' @param ... Ignored.
-#'
-#' @method print combined_global_envelope
 #' @export
 print.combined_global_envelope <- function(x, ...) {
   GEprinthelper(attr(x, "level2_ge"))
 }
 
 #' Plot method for the class 'global_envelope'
-#' @usage \method{plot}{global_envelope}(x, plot_style = c("ggplot2", "fv", "basic"),
-#' dotplot = length(x$r)<10,
-#' main, ylim, xlab, ylab,
-#' color_outside = TRUE, env.col = 1, base_size = 15,
-#' labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...)
+#'
 #' @param x An 'global_envelope' object
 #' @param plot_style One of the following "basic", "fv" or "ggplot2".
 #' The option "basic" (default) offers a very basic global envelope plot.
@@ -400,7 +390,6 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param legend Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
-#' @method plot global_envelope
 #' @export
 #' @seealso \code{\link{central_region}}
 plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
@@ -453,12 +442,6 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 }
 
 #' Plot method for the class 'combined_global_envelope'
-#' @usage \method{plot}{combined_global_envelope}(x, plot_style = c("ggplot2", "fv", "basic"),
-#'    main, ylim, xlab, ylab,
-#'    color_outside = TRUE, env.col = 1, base_size = 15,
-#'    labels = NULL, add = FALSE, digits=3,
-#'    level = 1, max_ncols_of_plots = 2, nticks = 5,
-#'    legend = TRUE, ...)
 #' @param x An 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
 #' @param labels A character vector of suitable length.
@@ -470,7 +453,6 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param max_ncols_of_plots The maximum number of columns for the figures. Default 2.
 #' (Relates to the number of curve_sets that have been combined.)
 #' @param nticks The number of ticks on the xaxis.
-#' @method plot combined_global_envelope
 #' @export
 #' @seealso \code{\link{central_region}}
 plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
@@ -844,9 +826,6 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
 }
 
 #' Plot method for the class 'fboxplot'
-#' @usage \method{plot}{fboxplot}(x, plot_style = c("ggplot2", "fv", "basic"),
-#'    dotplot = length(x$r)<10,
-#'    outliers = TRUE, bp.col = 2, cr.col = 1, ...)
 #'
 #' @param x an 'fboxplot' object
 #' @inheritParams plot.global_envelope
@@ -854,8 +833,6 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
 #' @param bp.col The color for the boxplot bounds. Default 2 (red).
 #' @param cr.col The color for the central region bounds.
 #' @param ... Additional arguments to be passed to \code{\link{plot.global_envelope}}.
-#'
-#' @method plot fboxplot
 #' @export
 plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                           dotplot = length(x$r)<10,
@@ -903,15 +880,12 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 }
 
 #' Plot method for the class 'combined_fboxplot'
-#' @usage \method{plot}{combined_fboxplot}(x, plot_style = c("ggplot2", "fv", "basic"), level = 1,
-#'    outliers = TRUE, bp.col = 2, cr.col = 1, ...)
 #'
 #' @param x an 'combined_fboxplot' object
 #' @inheritParams plot.combined_global_envelope
 #' @inheritParams plot.fboxplot
 #' @param ... Additional arguments to be passed to \code{\link{plot.combined_global_envelope}}.
 #'
-#' @method plot combined_fboxplot
 #' @export
 plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), level = 1,
                           outliers = TRUE, bp.col = 2, cr.col = 1, ...) {

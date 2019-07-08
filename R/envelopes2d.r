@@ -197,25 +197,19 @@ global_envelope_test2d <- function(image_sets, ...) {
   res
 }
 
-#' Print method for the class 'global_envelope_2d'
-#' @usage \method{print}{global_envelope_2d}(x, ...)
+#' Print method for the class 'global_envelope2d'
 #'
 #' @param x an 'global_envelope_2d' object
 #' @param ... Ignored.
-#'
-#' @method print global_envelope_2d
 #' @export
 print.global_envelope_2d <- function(x, ...) {
   GEprinthelper(x, ...)
 }
 
-#' Print method for the class 'combined_global_envelope_2d'
-#' @usage \method{print}{combined_global_envelope_2d}(x, ...)
+#' Print method for the class 'combined_global_envelope2d'
 #'
 #' @param x an 'combined_global_envelope_2d' object
 #' @param ... Ignored.
-#'
-#' @method print combined_global_envelope_2d
 #' @export
 print.combined_global_envelope_2d <- function(x, ...) {
   GEprinthelper(attr(x, "level2_ge"), ...)
@@ -232,10 +226,6 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' minimum and maximum of the function values is used for each image separately.
 #' If \code{col} is provided, the same specification will be used for each produced plot,
 #' which may make it easier to compare the figures with each other.
-#'
-#' @usage \method{plot}{global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
-#' fixedscales = TRUE, sign.col = "red", transparency = 85/255,
-#' contours = FALSE, main = NULL, digits = 3, ...)
 #'
 #' @inheritParams plot.global_envelope
 #' @param x an 'global_envelope_2d' object
