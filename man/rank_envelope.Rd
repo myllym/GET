@@ -23,50 +23,30 @@ sections thereafter.}
 \value{
 An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 which can be printed and plotted directly.
-
-Essentially a data frame containing columns
-\itemize{
-\item r = the vector of values of the argument r at which the test was made
-\item obs = values of the test function for the data point pattern
-\item lo = the lower envelope based on the simulated functions
-\item hi = the upper envelope based on the simulated functions
-\item central = If the curve_set (or envelope object) contains a component 'theo',
-      then this function is used as the central curve and returned in this component.
-      Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-      Used for visualization only.
-}
-Additionally, the return value has attributes
-\itemize{
-  \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
-  \item alternative = The alternative specified in the function call.
-  \item p = A point estimate for the p-value (default is the mid-rank p-value).
-  \item p_interval = The p-value interval [p_liberal, p_conservative].
-  \item ties = As the argument \code{ties}.
-  \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
-  \item k = Global rank values (for type="rank") or extreme rank lengths (for type="erl").
-  k[1] is the value for the data pattern.
-  \item call = The call of the function.
-}
-and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
+See \code{\link{global_envelope_test}} for more details.
 }
 \description{
 The rank envelope test, p-values and global envelopes
 }
 \details{
-The rank envelope test is a completely non-parametric test, which provides
-the 100(1-alpha)\% global envelope for the chosen test function T(r) on
-the chosen interval of distances and associated p-values.
-
 The test corresponds to the global envelope test that can be carriet out by
 \code{\link{global_envelope_test}} by specifying the \code{type} for which the options
 \code{"rank"}, \code{"erl"}, \code{"cont"} and \code{"area"} are available. The last
 three are modifications of the first one to treat the ties in the extreme rank ordering
-used in \code{"rank"}.
+used in \code{"rank"}. This function is kept for historical reasons.
 
-Note: Earlier it was possible to specify to the extreme rank lengths breaking of ties for the rank
-envelope with specifying the argument \code{lexo = TRUE}. This is obsolete now. The same can be done
-by choosing \code{type = "rank"} and \code{ties = "erl"}, which is in fact the default of this
-\code{rank_envelope} function.
+The \code{"rank"} envelope test is a completely non-parametric test, which provides
+the 100(1-alpha)\% global envelope for the chosen test function T(r) on
+the chosen interval of distances and associated p-values.
+The other three types are solutions to break the ties in the extreme ranks
+on which the \code{"rank"} envelope test is based on.
+
+Note: The method to break ties for the global \code{type = "rank"} envelope
+(Myllymäki et al., 2017) can be done by the argument \code{ties} with default
+to \code{ties = "erl"} corresponding to the extreme rank length breaking of ties.
+In this case the global envelope corresponds to the extreme rank measure.
+If instead choosing \code{type} to be \code{"erl"}, \code{"cont"} or \code{"area"},
+then the global envelope corresponds to these measures.
 }
 \section{Global envelope}{
 
@@ -126,5 +106,5 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing,
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 }
 \seealso{
-\code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}}
+\code{\link{global_envelope_test}}
 }

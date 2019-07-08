@@ -131,6 +131,19 @@ envelopes with intrinsic graphical interpretation.
 }
 See \code{\link{forder}} and \code{\link{central_region}} and the references
 for more detailed description of the measures and the corresponding envelopes.
+
+The first four types are global rank envelopes.
+The \code{'rank'} envelope test is a completely non-parametric test,
+which provides the 100(1-alpha)% global envelope for the chosen test function
+T(r) on the chosen interval of distances and associated p-values.
+The other three are modifications of \code{'rank'} to treat the ties in
+the extreme rank ordering on which the \code{'rank'} test is based on.
+
+The last three envelopes are global scaled maximum absolute difference (MAD)
+envelope tests. The unscaled envelope test leads to envelopes with constant width over the
+distances r. Thus, it suffers from unequal variance of T(r) over the distances r and
+from the asymmetry of distribution of T(r). We recommend to use the other global
+envelope tests available. The unscaled envelope is provided as a reference.
 }
 \section{Ranking of the curves}{
 
@@ -368,5 +381,5 @@ Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
 \seealso{
 \code{\link{plot.global_envelope}}, \code{\link{central_region}},
-\code{\link{global_envelope_test2d}}
+\code{\link{global_envelope_test2d}}, \code{\link{GET.composite}}
 }

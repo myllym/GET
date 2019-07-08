@@ -10,8 +10,9 @@ combined_scaled_MAD_envelope(curve_sets, type = c("qdir", "st"),
 \arguments{
 \item{curve_sets}{A list of objects of type 'curve_set' or \code{\link[spatstat]{envelope}}.}
 
-\item{type}{Either "qdir" for the \code{\link{qdir_envelope}} test or
-"st" for the \code{\link{st_envelope}} test.}
+\item{type}{Either "qdir" for the direction quantile envelope test (type \code{'qdir'}
+in \code{\link{global_envelope_test}}) or "st" for the studentized envelope test
+(type \code{'st'} \code{\link{global_envelope_test}}).}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 
@@ -23,8 +24,7 @@ The default values are 0.025 and 0.975.}
 \code{theo} for the theoretical central function, then the central function (used for plotting only)
 is calculated either as the mean or median of functions provided in the curve sets.}
 
-\item{...}{Additional parameters to be passed to \code{\link{qdir_envelope}} (if type = "qdir")
-or \code{\link{st_envelope}} (if type = "st").}
+\item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
 }
 \description{
 Given a list of 'curve_set' objects (see \code{\link{create_curve_set}}), a combined global scaled (directional quantile
