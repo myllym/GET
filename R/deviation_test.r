@@ -89,15 +89,15 @@
 deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
         use_theo = TRUE, scaling = 'qdir',
         measure = 'max', savedevs=FALSE) {
-    curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
-    curve_set <- residual(curve_set, use_theo = use_theo)
-    curve_set <- scale_curves(curve_set, scaling = scaling)
-    devs <- deviation(curve_set, measure = measure)
-    p <- estimate_p_value(devs)
-    if(savedevs) res <- list(p=p, devs=devs, call=match.call())
-    else res <- list(p=p, call=match.call())
-    class(res) <- 'deviation_test'
-    res
+  curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
+  curve_set <- residual(curve_set, use_theo = use_theo)
+  curve_set <- scale_curves(curve_set, scaling = scaling)
+  devs <- deviation(curve_set, measure = measure)
+  p <- estimate_p_value(devs)
+  if(savedevs) res <- list(p=p, devs=devs, call=match.call())
+  else res <- list(p=p, call=match.call())
+  class(res) <- 'deviation_test'
+  res
 }
 
 #' Print method for the class 'deviation_test'
@@ -106,5 +106,5 @@ deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
 #' @param ... Ignored.
 #' @export
 print.deviation_test <- function(x, ...) {
-    with(x, cat("p-value of the test: ", p, "\n", sep=""))
+  with(x, cat("p-value of the test: ", p, "\n", sep=""))
 }
