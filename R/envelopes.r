@@ -1343,33 +1343,9 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
-#'
-#' Essentially a data frame containing columns
-#' \itemize{
-#' \item r = the vector of values of the argument r at which the test was made
-#' \item obs = values of the test function for the data point pattern
-#' \item lo = the lower envelope based on the simulated functions
-#' \item hi = the upper envelope based on the simulated functions
-#' \item central = If the curve_set (or envelope object) contains a component 'theo',
-#'       then this function is used as the central curve and returned in this component.
-#'       Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-#'       Used for visualization only.
-#' }
-#' Additionally, the return value has attributes
-#' \itemize{
-#'   \item method = The name of the envelope test ("Rank envelope test" for the rank envelope test)
-#'   \item alternative = The alternative specified in the function call.
-#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item p_interval = The p-value interval [p_liberal, p_conservative].
-#'   \item ties = As the argument \code{ties}.
-#'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
-#'   \item k = Global rank values (for type="rank") or extreme rank lengths (for type="erl").
-#'   k[1] is the value for the data pattern.
-#'   \item call = The call of the function.
-#' }
-#' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
+#' See \code{\link{global_envelope_test}} for more details.
 #' @export
-#' @seealso \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}}
+#' @seealso \code{\link{global_envelope_test}}
 #' @examples
 #' # See ?global_envelope_test for more examples
 #'
@@ -1425,32 +1401,10 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' @inheritParams rank_envelope
 #' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' which can be printed and plotted directly.
-#'
-#' Essentially a data frame containing columns
-#' \itemize{
-#' \item r = the vector of values of the argument r at which the test was made
-#' \item obs = values of the test function for the data point pattern
-#' \item lo = the lower envelope based on the simulated functions
-#' \item hi = the upper envelope based on the simulated functions
-#' \item central = If the curve_set (or envelope object) contains a component 'theo',
-#'       then this function is used as the central curve and returned in this component.
-#'       Otherwise, the central curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-#'       Used for visualization only.
-#' }
-#' Additionally, the return value has attributes
-#' \itemize{
-#'   \item method = The name of the method ("Global envelope test")
-#'   \item alternative = "two-sided
-#'   \item p = A point estimate for the p-value (default is the mid-rank p-value).
-#'   \item u_alpha = The value of u corresponding to the 100(1-alpha)\% global envelope.
-#'   \item u = Deviation values (u[1] is the value for the data pattern).
-#'   \item call = The call of the function.
-#' }
-#' and a punch of attributes for the "fv" object type.
+#' See \code{\link{global_envelope_test}} for more details.
 #' @export
 #' @name qdir_envelope
-#' @seealso \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}},
-#' \code{\link{global_envelope_test2d}}, \code{\link{GET.composite}}
+#' @seealso \code{\link{global_envelope_test}}
 #' @examples
 #' # See more examples in ?global_envelope_test
 #' ## Testing complete spatial randomness (CSR)
