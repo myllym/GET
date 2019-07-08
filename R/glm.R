@@ -327,7 +327,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' and each function.
 #' @param ... Additional parameters to be passed to \code{\link{graph.fglm}}.
 #' @seealso \code{\link{graph.fglm}}, \code{\link{frank.fglm2d}}
-#' @return A \code{global_envelope_2d} or \code{combined_global_envelope_2d} object,
+#' @return A \code{global_envelope2d} or \code{combined_global_envelope2d} object,
 #' which can be printed and plotted directly.
 #' @export
 #' @references
@@ -397,7 +397,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' @export
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
-#' @return A \code{global_envelope_2d} object, which can be printed and plotted
+#' @return A \code{global_envelope2d} object, which can be printed and plotted
 #' directly.
 #' @examples
 #' \donttest{

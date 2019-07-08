@@ -21,7 +21,7 @@ curve_set_results_to_image_results <- function(res_v, image_sets) {
       }
       mostattributes(res) <- attributes(res_v)
       attr(res, "xlab") <- attr(res, "xexp") <- attr(res, "ylab") <- attr(res, "xexp") <- attr(res, "call") <- NULL
-      class(res) <- c("global_envelope_2d", "list")
+      class(res) <- c("global_envelope2d", "list")
     },
     combined_global_envelope = {
       res <- list()
@@ -33,12 +33,12 @@ curve_set_results_to_image_results <- function(res_v, image_sets) {
                                    hi=matrix(res_v[[i]]$hi, nrow=obs_d[1], ncol=obs_d[2])))
         mostattributes(res[[i]]) <- attributes(res_v[[i]])
         attr(res[[i]], "xlab") <- attr(res[[i]], "xexp") <- attr(res[[i]], "ylab") <- attr(res[[i]], "xexp") <- attr(res[[i]], "call") <- NULL
-        class(res[[i]]) <- c("global_envelope_2d", "list")
+        class(res[[i]]) <- c("global_envelope2d", "list")
       }
       names(res) <- names(res_v)
       mostattributes(res) <- attributes(res_v)
       attr(res, "xlab") <- attr(res, "xexp") <- attr(res, "ylab") <- attr(res, "xexp") <- attr(res, "call") <- NULL
-      class(res) <- c("combined_global_envelope_2d", "list")
+      class(res) <- c("combined_global_envelope2d", "list")
     }
   )
   res
@@ -89,7 +89,7 @@ cr_or_GET_2d <- function(image_sets, CR_or_GET = c("CR", "GET"), ...) {
 #' @param image_sets An image set, i.e. a set of 2d functions (or a list of them).
 #' See \code{\link{create_image_set}}.
 #' @param ... Additional parameters to be passed to \code{\link{central_region}}.
-#' @return An object of class "global_envelope_2d" (and "list"),
+#' @return An object of class "global_envelope2d" (and "list"),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -124,7 +124,7 @@ central_region2d <- function(image_sets, ...) {
 #'
 #' @inheritParams central_region2d
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
-#' @return An object of class "global_envelope_2d" (and "list"),
+#' @return An object of class "global_envelope2d" (and "list"),
 #' which can be printed and plotted directly.
 #'
 #' Essentially a data frame containing columns
@@ -199,26 +199,26 @@ global_envelope_test2d <- function(image_sets, ...) {
 
 #' Print method for the class 'global_envelope2d'
 #'
-#' @param x an 'global_envelope_2d' object
+#' @param x an 'global_envelope2d' object
 #' @param ... Ignored.
 #' @export
-print.global_envelope_2d <- function(x, ...) {
+print.global_envelope2d <- function(x, ...) {
   GEprinthelper(x, ...)
 }
 
 #' Print method for the class 'combined_global_envelope2d'
 #'
-#' @param x an 'combined_global_envelope_2d' object
+#' @param x an 'combined_global_envelope2d' object
 #' @param ... Ignored.
 #' @export
-print.combined_global_envelope_2d <- function(x, ...) {
+print.combined_global_envelope2d <- function(x, ...) {
   GEprinthelper(attr(x, "level2_ge"), ...)
 }
 
 
-#' Plot method for the class 'global_envelope_2d'
+#' Plot method for the class 'global_envelope2d'
 #'
-#' Plot method for the class 'global_envelope_2d'
+#' Plot method for the class 'global_envelope2d'
 #'
 #'
 #' Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
@@ -228,7 +228,7 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' which may make it easier to compare the figures with each other.
 #'
 #' @inheritParams plot.global_envelope
-#' @param x an 'global_envelope_2d' object
+#' @param x an 'global_envelope2d' object
 #' @param plot_style Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)
 #' @param fixedscales Logical. TRUE for the same scales for all images.
 #' @param sign.col The color for the significant regions. Default to "red".
@@ -238,11 +238,10 @@ print.combined_global_envelope_2d <- function(x, ...) {
 #' @param main The overall main. Default exists.
 #' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #'
-#' @method plot global_envelope_2d
 #' @export
 #' @importFrom ggplot2 facet_wrap ggtitle
 #' @importFrom gridExtra grid.arrange
-plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
+plot.global_envelope2d <- function(x, plot_style = c("ggplot2", "basic"),
                                     fixedscales = TRUE, sign.col = "red", transparency = 85/255,
                                     contours = FALSE, main = NULL, digits = 3, ...) {
   plot_style <- match.arg(plot_style)
@@ -272,9 +271,9 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
          })
 }
 
-#' Plot method for the class 'combined_global_envelope_2d'
+#' Plot method for the class 'combined_global_envelope2d'
 #'
-#' Plot method for the class 'combined_global_envelope_2d'
+#' Plot method for the class 'combined_global_envelope2d'
 #'
 #'
 #' Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
@@ -287,19 +286,15 @@ plot.global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
 #' If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
 #' If fixedscales is 2 all images will have common scale.
 #'
-#' @usage \method{plot}{combined_global_envelope_2d}(x, plot_style = c("ggplot2", "basic"),
-#'  fixedscales = 2, sign.col = "red", transparency = 85/255,
-#'  contours = FALSE, main = NULL, digits = 3, ...)
-#'
-#' @param x an 'combined_global_envelope_2d' object
-#' @inheritParams plot.global_envelope_2d
+#' @param x an 'combined_global_envelope2d' object
+#' @inheritParams plot.global_envelope2d
 #' @param fixedscales 0, 1 or 2. See details.
-#' @method plot combined_global_envelope_2d
+#' @method plot combined_global_envelope2d
 #' @export
 #' @importFrom ggplot2 facet_grid vars
 #' @importFrom gridExtra grid.arrange
 #' @importFrom grDevices col2rgb
-plot.combined_global_envelope_2d <- function(x, plot_style = c("ggplot2", "basic"),
+plot.combined_global_envelope2d <- function(x, plot_style = c("ggplot2", "basic"),
                                              fixedscales = 2, sign.col = "red", transparency = 85/255,
                                              contours = FALSE, main = NULL, digits = 3, ...) {
   plot_style <- match.arg(plot_style)

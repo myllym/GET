@@ -115,7 +115,7 @@ print.image_set <- function(x, ...) {
 
 #' Plot method for the class 'image_set'
 #'
-#' @inheritParams plot.global_envelope_2d
+#' @inheritParams plot.global_envelope2d
 #' @param x an 'image_set' object
 #' @param idx Indices of the images in the image_set to be plotted.
 #' @param obs Logical. TRUE, then idx is understood as an index to \code{image_set$obs},
