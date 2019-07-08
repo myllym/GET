@@ -104,7 +104,7 @@ create_image_set <- function(image_set, ...) {
 #' Print method for the class 'image_set'
 #'
 #' @param x an 'image_set' object
-#' @param ... Ignored.
+#' @param ... Passed to \code{\link[utils]{str}}.
 #'
 #' @export
 #' @importFrom utils str

@@ -281,7 +281,7 @@ is.curve_set <- function(x) inherits(x, 'curve_set')
 #' Print method for the class 'curve_set'
 #'
 #' @param x an 'curve_set' object
-#' @param ... Ignored.
+#' @param ... Passed to \code{\link[utils]{str}}.
 #'
 #' @export
 #' @importFrom utils str
