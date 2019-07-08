@@ -1014,11 +1014,16 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' The same is done for other measures, the p-value always being correspondent to the chosen measure.
 #'
 #' @section Number of simulations:
+#' For the global \code{"rank"} envelope test, Myllymäki et al. (2017) recommended to use
+#' at least 2500 simulations for testing at the significance level alpha = 0.05 for single
+#' function tests, based on experiments with summary functions for point processes.
+#' In this case, the width of the p-interval associated with the extreme rank measure tended
+#' to be smaller than 0.01.
 #' The tests \code{'erl'}, \code{'cont'} and \code{'area'}, similarly as
 #' the MAD deviation/envelope tests \code{'qdir'}, \code{'st'} and \code{'unscaled'},
 #' allow in principle a lower number of simulations to be used than the test based on
 #' extreme ranks (\code{'rank'}), because no ties occur for these measures.
-#' However, if affordable, we recommend some thousands of simulations in any case
+#' If affordable, we recommend in any case some thousands of simulations for all the measures
 #' to achieve a good power and repeatability of the test.
 #'
 #' @section Tests based on several functions:
