@@ -1307,10 +1307,14 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #' then the global envelope corresponds to these measures.
 #'
 #' @section Number of simulations:
-#' The extreme rank length ordering test (\code{type = "erl"}) allows in principle a lower numbe
-#' of simulations to be used than the test based on extreme ranks (\code{type = "rank"}).
-#' However, we recommend some thousands of simulations in any case to achieve a good power
-#' and repeatability of the test.
+#' The global \code{"erl"}, \code{"cont"}, \code{"area"} envelope tests allow 
+#' in principle a lower number of simulations to be used than the global \code{"rank"} test
+#' based on extreme ranks.
+#' However, if feasible, we recommend some thousands of simulations in any case to achieve
+#' a good power and repeatability of the test.
+#' For the global \code{"rank"} envelope test, Myllymäki et al. (2017) recommended to use
+#' at least 2500 simulations for testing at the significance level alpha = 0.05 for single
+#' function tests, experimented with summary functions for point processes.
 #'
 #' @references
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
