@@ -28,8 +28,8 @@ See \code{\link{global_envelope_test}} for more details.
 \description{
 Performs the global scaled MAD envelope tests, either directional quantile or studentised,
 or the unscaled MAD envelope test. These tests correspond to calling the
-function \code{\link{global_envelope_test}} with \code{"qdir"}, \code{type = "st"} and
-\code{"unscaled"}, respectively. The functions \code{qdir_envelope}, \code{st_envelope} and
+function \code{\link{global_envelope_test}} with \code{type="qdir"}, \code{type = "st"} and
+\code{type="unscaled"}, respectively. The functions \code{qdir_envelope}, \code{st_envelope} and
 \code{unscaled_envelope} have been kept for historical reasons;
 preferably use \code{\link{global_envelope_test}} with the suitable \code{type} argument.
 }

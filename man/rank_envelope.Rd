@@ -26,15 +26,14 @@ which can be printed and plotted directly.
 See \code{\link{global_envelope_test}} for more details.
 }
 \description{
-The rank envelope test, p-values and global envelopes
-}
-\details{
+The rank envelope test, p-values and global envelopes.
 The test corresponds to the global envelope test that can be carriet out by
 \code{\link{global_envelope_test}} by specifying the \code{type} for which the options
 \code{"rank"}, \code{"erl"}, \code{"cont"} and \code{"area"} are available. The last
 three are modifications of the first one to treat the ties in the extreme rank ordering
 used in \code{"rank"}. This function is kept for historical reasons.
-
+}
+\details{
 The \code{"rank"} envelope test is a completely non-parametric test, which provides
 the 100(1-alpha)\% global envelope for the chosen test function T(r) on
 the chosen interval of distances and associated p-values.
@@ -48,24 +47,16 @@ In this case the global envelope corresponds to the extreme rank measure.
 If instead choosing \code{type} to be \code{"erl"}, \code{"cont"} or \code{"area"},
 then the global envelope corresponds to these measures.
 }
-\section{Global envelope}{
-
-The 100(1-alpha)\% global envelope is provided in addition to the p-values.
-If \code{type = "rank"} then the envelope is the global rank envelope proposed by
-Myllymäki et al. (2017).
-If \code{type = "erl"} then the envelope is the global rank envelope based on the
-extreme rank length ordering. This envelope is constructed as the convex hull of
-the functions which have extreme rank length measure \eqn{R_i^{erl}}{Rerl_i}
-that is larger or equal to the critical \eqn{\alpha}{alpha} level of the extreme rank
-length measure (Mrkvička et al., 2018).
-}
-
 \section{Number of simulations}{
 
-The extreme rank length ordering test (\code{type = "erl"}) allows in principle a lower numbe
-of simulations to be used than the test based on extreme ranks (\code{type = "rank"}).
-However, we recommend some thousands of simulations in any case to achieve a good power
-and repeatability of the test.
+The global \code{"erl"}, \code{"cont"}, \code{"area"} envelope tests allow 
+in principle a lower number of simulations to be used than the global \code{"rank"} test
+based on extreme ranks.
+However, if feasible, we recommend some thousands of simulations in any case to achieve
+a good power and repeatability of the test.
+For the global \code{"rank"} envelope test, Myllymäki et al. (2017) recommended to use
+at least 2500 simulations for testing at the significance level alpha = 0.05 for single
+function tests, experimented with summary functions for point processes.
 }
 
 \examples{
