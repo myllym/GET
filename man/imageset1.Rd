@@ -28,7 +28,7 @@ with scale parameter 0.15 and standard deviation 0.2.
 \examples{
 data(imageset1)
 plot(imageset1$image_set, idx=c(1:5, 11:15), max_ncols_of_plots = 5)
-# Change colors:
+# Colors can be changed as follows:
 plot(imageset1$image_set, idx=c(1:5, 11:15), max_ncols_of_plots = 5) +
   ggplot2::scale_fill_gradient(low="black", high="white")
 }
