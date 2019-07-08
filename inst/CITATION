@@ -1,4 +1,4 @@
-citHeader("To cite package ‘GET’ in publications use (a suitable selection of):")
+citHeader("To cite package ‘GET’ in publications use:")
 
 citEntry(
     entry = "Article",
@@ -33,7 +33,8 @@ citEntry(
     url = "http://dx.doi.org/10.1007/s11222-016-9683-9",
     textVersion = "Mrkvička, T., Myllymäki, M., and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
-Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9"
+Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9",
+    header = "and a suitable selection of:"
 )
 
 citEntry(
