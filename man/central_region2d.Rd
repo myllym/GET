@@ -13,7 +13,7 @@ See \code{\link{create_image_set}}.}
 \item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
 }
 \value{
-An object of class "global_envelope_2d" (and "list"),
+An object of class "global_envelope2d" (and "list"),
 which can be printed and plotted directly.
 
 Essentially a data frame containing columns

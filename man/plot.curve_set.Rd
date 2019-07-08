@@ -4,7 +4,8 @@
 \alias{plot.curve_set}
 \title{Plot method for the class 'curve_set'}
 \usage{
-\method{plot}{curve_set}(x, ylim, xlab="r", ylab="obs", col_obs=1, col_sim=grDevices::grey(0.7), ...)
+\method{plot}{curve_set}(x, ylim, xlab = "r", ylab = "obs",
+  col_obs = 1, col_sim = grDevices::grey(0.7), ...)
 }
 \arguments{
 \item{x}{An \code{curve_set} object}

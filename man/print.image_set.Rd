@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an 'image_set' object}
 
-\item{...}{Ignored.}
+\item{...}{Passed to \code{\link[utils]{str}}.}
 }
 \description{
 Print method for the class 'image_set'

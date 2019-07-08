@@ -4,12 +4,11 @@
 \alias{plot.combined_global_envelope}
 \title{Plot method for the class 'combined_global_envelope'}
 \usage{
-\method{plot}{combined_global_envelope}(x, plot_style = c("ggplot2", "fv", "basic"),
-   main, ylim, xlab, ylab,
-   color_outside = TRUE, env.col = 1, base_size = 15,
-   labels = NULL, add = FALSE, digits=3,
-   level = 1, max_ncols_of_plots = 2, nticks = 5,
-   legend = TRUE, ...)
+\method{plot}{combined_global_envelope}(x, plot_style = c("ggplot2",
+  "fv", "basic"), main, ylim, xlab, ylab, color_outside = TRUE,
+  env.col = 1, base_size = 15, labels = NULL, add = FALSE,
+  digits = 3, level = 1, max_ncols_of_plots = 2, nticks = 5,
+  legend = TRUE, ...)
 }
 \arguments{
 \item{x}{An 'combined_global_envelope' object}

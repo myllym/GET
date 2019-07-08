@@ -4,8 +4,9 @@
 \alias{plot.combined_fboxplot}
 \title{Plot method for the class 'combined_fboxplot'}
 \usage{
-\method{plot}{combined_fboxplot}(x, plot_style = c("ggplot2", "fv", "basic"), level = 1,
-   outliers = TRUE, bp.col = 2, cr.col = 1, ...)
+\method{plot}{combined_fboxplot}(x, plot_style = c("ggplot2", "fv",
+  "basic"), level = 1, outliers = TRUE, bp.col = 2, cr.col = 1,
+  ...)
 }
 \arguments{
 \item{x}{an 'combined_fboxplot' object}

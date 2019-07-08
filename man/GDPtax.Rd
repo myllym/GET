@@ -45,7 +45,6 @@ subs <- function(group, ...) {
   plot(cset, ...)
 }
 for(i in 1:4) subs(i, main=paste("Group ", i, sep=""), ylab="GDP")
-# See example analysis in ?graph.fglm
 }
 \references{
 World Bank national accounts data, and OECD National Accounts data files. URL: https://data.worldbank.org/indicator/NY.GDP.PCAP.CD

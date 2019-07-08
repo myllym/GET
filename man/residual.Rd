@@ -21,7 +21,8 @@ A curve set object containing residual summary functions. theo is
 }
 \description{
 Subtract the theoretical function S_{H_0} or the mean of the functions
-in the curve set.
+in the curve set. If the \code{curve_set} object contains already residuals
+T_i(r) - T_0(r), use_theo ignored and the same object returned.
 }
 \details{
 The mean of the functions in the \code{curve_set} is

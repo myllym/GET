@@ -48,7 +48,6 @@ subs <- function(group, ...) {
   plot(cset, ...)
 }
 for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
-# See example analysis in ?graph.fanova
 }
 \references{
 Eurostat (2018). "Government revenue, expenditure and main aggregates (gov10amain)”. Retrieved from https://ec.europa.eu/eurostat/data/database(26/10/2018).

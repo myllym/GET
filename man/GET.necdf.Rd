@@ -23,6 +23,11 @@ The default is 100 equally spaced values between the minimum and maximum over al
 \description{
 Compare the distributions of two (or more) groups.
 }
+\details{
+The default number of permutation, if nsim is not specified, is
+n*1000 - 1 for the case \code{"means"} and (n*(n-1)/2)*1000 - 1 for the case \code{"contrasts"},
+where n is the length of x.
+}
 \examples{
 if(require(fda, quietly=TRUE)) {
   # Heights of boys and girls at age 10

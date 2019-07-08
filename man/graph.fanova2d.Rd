@@ -16,7 +16,7 @@ graph.fanova2d(nsim, image_set, groups, ...)
 \item{...}{Additional parameters to be passed to \code{\link{graph.fanova}}.}
 }
 \value{
-A \code{global_envelope_2d} or \code{combined_global_envelope_2d} object, which can be
+A \code{global_envelope2d} or \code{combined_global_envelope2d} object, which can be
 printed and plotted directly.
 }
 \description{
