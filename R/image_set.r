@@ -109,8 +109,7 @@ create_image_set <- function(image_set, ...) {
 #' @export
 #' @importFrom utils str
 print.image_set <- function(x, ...) {
-  cat("image_set object containing:\n")
-  utils::str(x)
+  str(x, ...)
 }
 
 #' Plot method for the class 'image_set'
