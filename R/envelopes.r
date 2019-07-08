@@ -1093,7 +1093,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' "level2_ge".
 #' @export
 #' @seealso \code{\link{plot.global_envelope}}, \code{\link{central_region}},
-#' \code{\link{global_envelope_test2d}}
+#' \code{\link{global_envelope_test2d}}, \code{\link{GET.composite}}
 #' @aliases GET
 #' @examples
 #' if(require("spatstat", quietly=TRUE)) {
