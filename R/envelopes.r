@@ -909,7 +909,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
            },
            fv = {
              plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ...)
-             if(outliers) cat("For fv style & combined boxplots, plotting outliers is not implemented.\n")
+             if(outliers) warning("For fv style & combined boxplots, plotting outliers is not implemented.\n")
            },
            ggplot2 = {
              plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
