@@ -47,16 +47,10 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
 #' Details of the combined test can be found in Mrkvicka et al. (2017)
 #'
-#' @param curve_sets A list of objects of type 'curve_set' or \code{\link[spatstat]{envelope}}.
+#' @inheritParams global_envelope_test
 #' @param type Either "qdir" for the direction quantile envelope test (type \code{'qdir'}
 #' in \code{\link{global_envelope_test}}) or "st" for the studentized envelope test
 #' (type \code{'st'} \code{\link{global_envelope_test}}).
-#' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
-#' @param probs A two-element vector containing the lower and upper
-#' quantiles for the envelope, in that order and on the interval [0, 1].
-#' The default values are 0.025 and 0.975.
-#' @inheritParams central_region
-#' @param ... Additional parameters to be passed to \code{\link{central_region}}.
 #' @references
 #' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
 #' Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
