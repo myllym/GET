@@ -1,4 +1,5 @@
 # Functionality for central regions based on a curve set
+# @param ... Ignored.
 #' @importFrom spatstat fv
 individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       alternative = c("two.sided", "less", "greater"),
@@ -149,6 +150,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
 }
 
 # Functionality for global envelope tests based on a curve set (individual central region + p-values)
+# @param ... Ignored.
 individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.05,
                                             alternative = c("two.sided", "less", "greater"),
                                             ties = "erl",
