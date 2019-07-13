@@ -159,7 +159,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
                                    alternative=alternative,
                                    probs=probs, quantile.type=quantile.type,
-                                   central=central, ...)
+                                   central=central)
   # The type of the p-value
   possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
   if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
