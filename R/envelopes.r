@@ -1066,6 +1066,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' For 'midrank' the mid-rank within the tied values is taken.
 #' For 'erl' the extreme rank length p-value is calculated.
 #' The default is 'erl'.
+#' @param ... Additional parameters to be passed to \code{\link{central_region}} (and \code{\link{forder}}).
 #' @return Either an object of class "global_envelope" and "fv"
 #' (see \code{\link[spatstat]{fv.object}}) or "combined_global_envelope" for
 #' combined tests. The objects can be printed and plotted directly.
