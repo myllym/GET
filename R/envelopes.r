@@ -39,7 +39,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
            scaling <- "none"
          })
   distance <- forder(curve_set, measure=measure, scaling=scaling,
-                     alternative=alternative, probs=probs, quantile.type=quantile.type, ...)
+                     alternative=alternative, probs=probs, quantile.type=quantile.type)
 
   data_and_sim_curves <- data_and_sim_curves(curve_set) # all the functions
   Nfunc <- length(distance) # Number of functions
