@@ -51,6 +51,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' @param type Either "qdir" for the direction quantile envelope test (type \code{'qdir'}
 #' in \code{\link{global_envelope_test}}) or "st" for the studentized envelope test
 #' (type \code{'st'} \code{\link{global_envelope_test}}).
+#' @param ... Additional parameters to be passed to \code{\link{central_region}}.
 #' @references
 #' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
 #' Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
