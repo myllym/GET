@@ -101,10 +101,7 @@ individual_forder <- function(curve_set, r_min = NULL, r_max = NULL,
                distance <- distance / (Nfunc-1)
            },
            area = {
-             RRRm <- apply(allranks, MARGIN=1, FUN=min)
-             RRRm <- ceiling(RRRm) # = R_i
-             distance <- array(0, Nfunc)
-             for(j in 1:Nfunc) distance[j] <- sum(pmin(RRRm[j], allranks[j,]))
+             distance <- apply(allranks, MARGIN=1, FUN=function(x) { sum(pmin(ceiling(min(x)), x)) })
              if(alternative == "two.sided")
                distance <- distance / (ceiling(Nfunc/2)*nr)
              else
