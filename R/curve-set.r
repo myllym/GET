@@ -444,13 +444,12 @@ curve_set_median <- function(curve_set) {
 
 # A helper function to obtain the sd of functions in curve_set.
 #
-# If obs is a matrix, then take the sd of the functions in obs. (ignore sim_m)
-# If obs is a vector, then take the sd of the functions in sim_m.
+# No matter whether obs is a matrix or a vector, the quantiles are calculated
+# from all the functions in 'obs' and 'sim_m'.
 #' @importFrom stats sd
 curve_set_sd <- function(curve_set) {
-  if(with(curve_set, is.matrix(obs))) sim_sd <- apply(curve_set[['obs']], 1, stats::sd)
-  else sim_sd <- apply(curve_set[['sim_m']], 1, stats::sd)
-  sim_sd
+  funcs <- data_and_sim_curves(curve_set)
+  apply(funcs, MARGIN = 2, FUN = sd)
 }
 
 # A helper function to obtain the quantiles of functions in curve_set.
