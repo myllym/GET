@@ -5,7 +5,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       alternative = c("two.sided", "less", "greater"),
                                       probs = c((1-coverage)/2, 1-(1-coverage)/2),
                                       quantile.type = 7,
-                                      central = "median", ...) {
+                                      central = "median") {
   if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
@@ -150,12 +150,11 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
 }
 
 # Functionality for global envelope tests based on a curve set (individual central region + p-values)
-# @param ... Ignored.
 individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.05,
                                             alternative = c("two.sided", "less", "greater"),
                                             ties = "erl",
                                             probs = c(0.025, 0.975), quantile.type = 7,
-                                            central = "mean", ...) {
+                                            central = "mean") {
   alternative <- match.arg(alternative)
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
@@ -647,7 +646,7 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
 #' is calculated either as the mean or median of functions provided in the curve sets.
 #' @param nstep 1 or 2 for how to contruct a combined global envelope if list of curve sets
 #' is provided. 2 (default) for a two-step combining procedure, 1 for one-step.
-#' @param ... Additional parameters to be passed to \code{\link{forder}}.
+#' @param ... Ignored.
 #' @return Either an object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
 #' or an "combined_global_envelope" for the case that \code{curve_sets} is a list of
 #' objects. The objects can be printed and plotted directly.
@@ -1068,7 +1067,7 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
 #' For 'midrank' the mid-rank within the tied values is taken.
 #' For 'erl' the extreme rank length p-value is calculated.
 #' The default is 'erl'.
-#' @param ... Additional parameters to be passed to \code{\link{central_region}} (and \code{\link{forder}}).
+#' @param ... Additional parameters to be passed to \code{\link{central_region}}.
 #' @return Either an object of class "global_envelope" and "fv"
 #' (see \code{\link[spatstat]{fv.object}}) or "combined_global_envelope" for
 #' combined tests. The objects can be printed and plotted directly.
