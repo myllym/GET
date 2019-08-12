@@ -68,8 +68,8 @@ individual_forder <- function(curve_set, r_min = NULL, r_max = NULL,
       hiranks <- Nfunc+1-loranks
     }
     else { # 'cont', 'area'
-      hiranks <- cont_pointwise_hiranks(data_and_sim_curves)
-      loranks <- cont_pointwise_hiranks(-data_and_sim_curves)
+      if(alternative != "less") hiranks <- cont_pointwise_hiranks(data_and_sim_curves)
+      if(alternative != "greater") loranks <- cont_pointwise_hiranks(-data_and_sim_curves)
     }
     switch(alternative,
            "two.sided" = {
