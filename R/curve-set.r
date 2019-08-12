@@ -60,7 +60,7 @@ envelope_to_curve_set <- function(env, ...) {
   res
 }
 
-# Turn an \code{\link[spatstat]{fdata}} object into a curve_set object.
+# Turn an \code{\link[fda.usc]{fdata}} object into a curve_set object.
 #
 # @param fdata An \code{\link[fda.usc]{fdata}} object.
 # @return A corresponding curve_set object.
