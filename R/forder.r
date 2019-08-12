@@ -9,25 +9,31 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
   for(i in 1:nr) {
     y <- data_and_sim_curves[,i]
     ordery <- order(y, decreasing = TRUE) # index of function values at "i" from largest to smallest
-    for(j in 2:(Nfunc-1)) {
-      if(y[ordery[j-1]] == y[ordery[j+1]])
-        RRR[ordery[j],i] <- j-1
-      else
-        RRR[ordery[j],i] <- j-1+(y[ordery[j-1]]-y[ordery[j]])/(y[ordery[j-1]]-y[ordery[j+1]])
+    y <- y[ordery]
+    ties <- y[1:(Nfunc-2)] == y[3:Nfunc] # same as j = 2:(Nfunc-1); ties <- y[j-1] == y[j+1]
+    RR <- 0:(Nfunc-1) # Initialize the vector with j-1 (values for the case of ties)
+    RR[1] <- exp(-(y[1]-y[2])/(y[2]-y[Nfunc]))
+    if(!any(ties)) {
+      RR[2:(Nfunc-1)] <- 1:(Nfunc-2)+(y[1:(Nfunc-2)]-y[2:(Nfunc-1)])/(y[1:(Nfunc-2)]-y[3:Nfunc])
+      # same as j <- 2:(Nfunc-1); RR[j] <- j-1+(y[j-1]-y[j])/(y[j-1]-y[j+1])
     }
-    RRR[ordery[1],i] <- exp(-(y[ordery[1]]-y[ordery[2]])/(y[ordery[2]]-y[ordery[Nfunc]]))
-    RRR[ordery[Nfunc],i] <- Nfunc-1
-    # Treat ties
-    j <- 1
-    while(j <= Nfunc-2) {
-      k <- 1
-      if(y[ordery[j]] == y[ordery[j+2]]) {
-        k <- 3; S <- 3*j+3
-        while(j+k <= Nfunc && y[ordery[j]] == y[ordery[j+k]]) { k <- k+1; S <- S+j+k }
-        for(t in j:(j+k-1)) { RRR[ordery[t],i] <- S/k }
+    else { # The case of some ties
+      j <- (2:(Nfunc-1))[!ties]
+      jm1 <- j-1
+      RR[j] <- jm1+(y[jm1]-y[j])/(y[jm1]-y[j+1])
+      # Treat ties
+      j <- 1
+      while(j <= Nfunc-2) {
+        k <- 1
+        if(ties[j]) {
+          k <- 3; S <- 3*j+3
+          while(j+k <= Nfunc && y[j] == y[j+k]) { k <- k+1; S <- S+j+k }
+          for(t in j:(j+k-1)) { RR[t] <- S/k }
+        }
+        j <- j+k
       }
-      j <- j+k
     }
+    RRR[ordery, i] <- RR
   }
   RRR
 }
