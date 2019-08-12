@@ -435,13 +435,11 @@ curve_set_mean <- function(curve_set) {
 
 # A helper function to obtain the median of functions in curve_set.
 #
-# If obs is a matrix, then take the median of the functions in obs. (ignore sim_m)
-# If obs is a vector, then take the median of the functions in sim_m.
+# Calculate the median of all the functions in the curve_set (obs and sim_m).
 #' @importFrom stats median
 curve_set_median <- function(curve_set) {
-  if(with(curve_set, is.matrix(obs))) mid <- apply(curve_set[['obs']], 1, median)
-  else mid <- apply(curve_set[['sim_m']], 1, stats::median)
-  mid
+  funcs <- data_and_sim_curves(curve_set)
+  apply(funcs, MARGIN = 2, FUN = median)
 }
 
 # A helper function to obtain the sd of functions in curve_set.
