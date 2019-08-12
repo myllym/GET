@@ -454,13 +454,12 @@ curve_set_sd <- function(curve_set) {
 
 # A helper function to obtain the quantiles of functions in curve_set.
 #
-# If obs is a matrix, then take the quantiles of the functions in obs. (ignore sim_m)
-# If obs is a vector, then take the quantiles of the functions in sim_m.
+# No matter whether obs is a matrix or a vector, the quantiles are calculated
+# from all the functions in 'obs' and 'sim_m'.
 # @param ... Additional parameters passed to \code{\link[stats]{quantile}}.
 #' @importFrom stats quantile
 curve_set_quant <- function(curve_set, probs, ...) {
-  if(with(curve_set, is.matrix(obs))) quant_m <- apply(curve_set[['obs']], 1, stats::quantile, probs = probs, ...)
-  else quant_m <- apply(curve_set[['sim_m']], 1, stats::quantile, probs = probs, ...)
+  funcs <- data_and_sim_curves(curve_set)
   # Dimensions: 2, r_idx.
-  quant_m
+  apply(funcs, MARGIN = 2, FUN = quantile, probs = probs, ...)
 }
