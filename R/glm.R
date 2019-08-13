@@ -36,6 +36,22 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
   list(data.l=data.l, r=r, Nfunc=Nfunc, nr=nr)
 }
 
+# M1 = full model; M2 = reduced model
+# Return the names of the coefficients that are in M1, but not in M2
+factorname_diff <- function(M1, M2) {
+  # Names of the coefficients in the full model
+  namecoef.full <- names(unlist(stats::dummy.coef(M1)))
+  # Names of the coefficients in the reduced model
+  namecoef.red <- names(unlist(stats::dummy.coef(M2)))
+  # Change the names of the coefficients in the reduced model,
+  # if the full model includes discrete factors, but the reduced model not
+  if(length(M2$xlevels) == 0 & length(M1$xlevels) > 0) {
+    namecoef.red <- paste(namecoef.red, ".", namecoef.red, sep="")
+  }
+  # The interesting coefficients
+  setdiff(namecoef.full, namecoef.red)
+}
+
 # Regress the given data (true or permuted) against the full model and
 # get an effect of interest at all r values in a matrix.
 # data.l = a list containing data (Y and factors), all variables in formula.full
