@@ -108,6 +108,60 @@ genFvaluesLM <- function(data.l, formula.full, formula.reduced, ...) {
   Fvalues
 }
 
+# Parameter estimate b for lm
+bcoef <- function(Y, X) {
+  solve(t(X)%*%X) %*% t(X) %*% Y
+}
+
+# Y = observed data
+# X1 = design matrix of the full model
+# X2 = design matrix of the reduced model
+# This F is the same as obtained by (but faster):
+# M.full <- stats::lm(formula = formula.full, data = df, ...)
+# M.reduced <- stats::lm(formula = formula.reduced, data = df, ...)
+# Anova.res <- stats::anova(M.reduced, M.full); Anova.res$F[2]
+Fvalue <- function(Y, X1, X2) {
+  # Parameter estimates b
+  b1 <- bcoef(Y, X1)
+  b2 <- bcoef(Y, X2)
+  # Errors
+  e1 <- Y - X1%*%b1
+  e2 <- Y - X2%*%b2
+  # F-statistic
+  (length(Y)-length(b1))*(t(e2)%*%e2-t(e1)%*%e1)/((length(b1)-length(b2))*t(e1)%*%e1)
+}
+
+# General F-values from lm-model together with the design matrices
+#' @importFrom stats lm
+#' @importFrom stats anova
+genFvaluesObs <- function(data.l, formula.full, formula.reduced) {
+  nr <- ncol(data.l[[1]])
+  Fvalues <- vector(length=nr)
+  # Case i = 1
+  df <- as.data.frame(lapply(data.l, FUN = function(x) x[,1]))
+  # Call first lm to obtain the design matrices
+  M.full <- stats::lm(formula = formula.full, data = df, x = TRUE)
+  M.reduced <- stats::lm(formula = formula.reduced, data = df, x = TRUE)
+  # Design matrices are M.full$x, M.reduced$x (the same for each i)
+  Fvalues[1] <- Fvalue(Y = df$Y, X1 = M.full$x, X2 = M.reduced$x)
+  for(i in 2:nr) {
+    Fvalues[i] <- Fvalue(Y = data.l$Y[,i], X1 = M.full$x, X2 = M.reduced$x)
+  }
+  list(Fvalues = Fvalues, full.X = M.full$x, reduced.X = M.reduced$x)
+}
+
+# General F-value from lm-model
+# data.l = data
+# designX.full = design matrix of the full model
+# designX.reduced = design matrix of the reduced model
+genFvaluesSim <- function(data.l, designX.full, designX.reduced) {
+  nr <- ncol(data.l[[1]])
+  Fvalues <- vector(length=nr)
+  for(i in 1:nr) {
+    Fvalues[i] <- Fvalue(Y = data.l$Y[,i], X1 = designX.full, X2 = designX.reduced)
+  }
+  Fvalues
+}
 
 #' Graphical functional GLM
 #'
