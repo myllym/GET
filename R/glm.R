@@ -91,10 +91,11 @@ genCoefcontrasts.m <- function(data.l, formula.full, nameinteresting, ...) {
   cont
 }
 
-# General F-values from lm-model
+
+# General F-values from lm-model using lm (slow but ... arguments allowed)
 #' @importFrom stats lm
 #' @importFrom stats anova
-genFvalues <- function(data.l, formula.full, formula.reduced, ...) {
+genFvaluesLM <- function(data.l, formula.full, formula.reduced, ...) {
   nr <- ncol(data.l[[1]])
   Fvalues <- vector(length=nr)
   for(i in 1:nr) {
