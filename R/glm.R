@@ -316,8 +316,8 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #'
 #' @inheritParams graph.fglm
 #' @param fast Logical. If TRUE and no additional parameters are passed to \code{\link[stats]{lm}}
-#' in \code{...}, then a faster implementation to calculate the F-values is used. If FALSE, then
-#' \code{\link[stats]{lm}} is utilized for F-value calculation (slow).
+#' in \code{...}, then a faster implementation to calculate the test statistics is used.
+#' If FALSE, then \code{\link[stats]{lm}} is utilized for the test statistic calculation (slow).
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export
 #' @references
