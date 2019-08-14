@@ -37,7 +37,7 @@ is calculated either as the mean or median of functions provided in the curve se
 \item{nstep}{1 or 2 for how to contruct a combined global envelope if list of curve sets
 is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
 
-\item{...}{Additional parameters to be passed to \code{\link{forder}}.}
+\item{...}{Ignored.}
 }
 \value{
 Either an object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),

@@ -52,7 +52,7 @@ is calculated either as the mean or median of functions provided in the curve se
 \item{nstep}{1 or 2 for how to contruct a combined global envelope if list of curve sets
 is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
 
-\item{...}{Additional parameters to be passed to \code{\link{forder}}.}
+\item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
 }
 \value{
 Either an object of class "global_envelope" and "fv"
