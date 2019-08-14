@@ -315,6 +315,9 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' argument values of the functional domain are responsible for the potential rejection.
 #'
 #' @inheritParams graph.fglm
+#' @param fast Logical. If TRUE and no additional parameters are passed to \code{\link[stats]{lm}}
+#' in \code{...}, then a faster implementation to calculate the F-values is used. If FALSE, then
+#' \code{\link[stats]{lm}} is utilized for F-value calculation (slow).
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export
 #' @references
@@ -342,33 +345,61 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' plot(res.tax_within_group)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
-                       ..., GET.args = NULL, mc.cores = 1, mc.args = NULL) {
+                       savefuns = TRUE, ..., GET.args = NULL, mc.cores = 1, mc.args = NULL,
+                       fast = TRUE) {
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- fglm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors)
 
+  extraargs <- list(...)
+  if(length(extraargs) < 1 & fast) {
+    # Fit the reduced model at each argument value
+    loopfun1 <- function(i, ...) { # ... ignored
+      df <- as.data.frame(lapply(X$data.l, FUN = function(x) x[,i])) # create the data.frame at the ith argument value
+      b <- bcoef(Y = df$Y, X = obs$reduced.X)
+      fit <- obs$reduced.X%*%b
+      # Save predictions and residuals
+      list(fitted.m = fit, res.m = df$Y - fit)
+    }
+    # Simulations by permuting the residuals + calculate F-values
+    loopfun2 <- function(i, ...) { # ... ignored
+      permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
+      # Permute the residuals (rows in res.m) and create new 'y'
+      Yperm <- fitted.m + res.m[permutation, ]
+      # Regress the permuted data against the full model and get a new effect of interest
+      genFvaluesSim(Yperm, obs$full.X, obs$reduced.X)
+    }
+  }
+  else {
+    fast <- FALSE
+    # Fit the reduced model at each argument value
+    loopfun1 <- function(i, ...) {
+      df <- as.data.frame(lapply(X$data.l, FUN = function(x) x[,i])) # create the data.frame at the ith argument value
+      mod.red <- lm(formula.reduced, data=df, ...)
+      # Save predictions and residuals
+      list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
+    }
+    # Simulations by permuting the residuals + calculate F-values
+    loopfun2 <- function(i, ...) {
+      permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
+      # Permute the residuals (rows in res.m) and create new 'y'
+      X$data.l[['Y']] <- fitted.m + res.m[permutation, ]
+      # Regress the permuted data against the full model and get a new effect of interest
+      genFvaluesLM(X$data.l, formula.full, formula.reduced, ...)
+    }
+  }
+  # Calculate the F-statistic for the data, and, if fast, obtain the design matrices (obs$full.X and obs$reduced.X)
+  if(fast) obs <- genFvaluesObs(X$data.l, formula.full, formula.reduced)
+  else obs <- genFvaluesLM(X$data.l, formula.full, formula.reduced, ...)
   # Freedman-Lane procedure
-  # Fit the reduced model at each argument value
-  fitted.m <- res.m <- matrix(0, X$Nfunc, X$nr)
-  for(i in 1:X$nr) {
-    df <- as.data.frame(lapply(X$data.l, FUN = function(x) x[,i])) # create the data.frame at the ith argument value
-    mod.red <- stats::lm(formula.reduced, data=df, ...)
-    # Save predictions and residuals
-    fitted.m[,i] <- mod.red$fitted.values
-    res.m[,i] <- mod.red$residuals
-  }
-  # Calculate the F-statistic for the data
-  obs <- genFvalues(X$data.l, formula.full, formula.reduced, ...)
-  # Simulations by permuting the residuals + calculate F-values
-  loopfun <- function(i, ...) {
-    permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
-    # Permute the residuals (rows in res.m) and create new 'y'
-    X$data.l[[1]] <- fitted.m + res.m[permutation, ]
-    # Regress the permuted data against the full model and get a new effect of interest
-    genFvalues(X$data.l, formula.full, formula.reduced, ...)
-  }
-  sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun, mc.cores=mc.cores), mc.args))
+  # Fit the reduced model at each argument value to get fitted values and residuals
+  mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
+  fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
+  res.m <- sapply(mclapply_res, function(x) x$res.m)
+  # Simulations by permuting the residuals + F-values for each permutation
+  sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
   sim <- sapply(sim, function(x) x, simplify="array")
+  if(fast) obs <- obs$Fvalues
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
   res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
