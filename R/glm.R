@@ -390,6 +390,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' match with each other, i.e. the factor values should be given for each argument value
 #' and each function.
 #' @param ... Additional parameters to be passed to \code{\link{graph.fglm}}.
+#' The possibly saved simulations are currently only provided in a vector format.
 #' @seealso \code{\link{graph.fglm}}, \code{\link{frank.fglm2d}}
 #' @return A \code{global_envelope2d} or \code{combined_global_envelope2d} object,
 #' which can be printed and plotted directly.
@@ -447,6 +448,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
   # Transform the results to 2d
   res <- curve_set_results_to_image_results(res_v, image_sets)
   attr(res, "call") <- match.call()
+  if(!is.null(attr(res_v, "simfuns"))) attr(res, "simfuns") <- attr(res_v, "simfuns")
   res
 }
 
@@ -457,6 +459,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' @inheritParams frank.fglm
 #' @inheritParams graph.fglm2d
 #' @param ... Additional parameters to be passed to \code{\link{frank.fglm}}.
+#' The possibly saved simulations are currently only provided in a vector format.
 #' @seealso \code{\link{frank.fglm}}, \code{\link{graph.fglm2d}}
 #' @export
 #' @references
@@ -503,5 +506,6 @@ frank.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
   # Transform the results to 2d
   res <- curve_set_results_to_image_results(res_v, image_sets)
   attr(res, "call") <- match.call()
+  if(!is.null(attr(res_v, "simfuns"))) attr(res, "simfuns") <- attr(res_v, "simfuns")
   res
 }
