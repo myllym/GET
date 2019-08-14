@@ -358,7 +358,6 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
       df <- as.data.frame(lapply(X$data.l, FUN = function(x) x[,i])) # create the data.frame at the ith argument value
       b <- bcoef(Y = df$Y, X = obs$reduced.X)
       fit <- obs$reduced.X%*%b
-      # Save predictions and residuals
       list(fitted.m = fit, res.m = df$Y - fit)
     }
     # Simulations by permuting the residuals + calculate F-values
