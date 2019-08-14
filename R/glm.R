@@ -151,14 +151,14 @@ genFvaluesObs <- function(data.l, formula.full, formula.reduced) {
 }
 
 # General F-value from lm-model
-# data.l = data
+# Y = data, the dependent
 # designX.full = design matrix of the full model
 # designX.reduced = design matrix of the reduced model
-genFvaluesSim <- function(data.l, designX.full, designX.reduced) {
-  nr <- ncol(data.l[[1]])
+genFvaluesSim <- function(Y, designX.full, designX.reduced) {
+  nr <- ncol(Y)
   Fvalues <- vector(length=nr)
   for(i in 1:nr) {
-    Fvalues[i] <- Fvalue(Y = data.l$Y[,i], X1 = designX.full, X2 = designX.reduced)
+    Fvalues[i] <- Fvalue(Y = Y[,i], X1 = designX.full, X2 = designX.reduced)
   }
   Fvalues
 }
