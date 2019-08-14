@@ -293,7 +293,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   attr(res, "method") <- "Graphical functional GLM" # Change method name
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
-  if(savefuns) attr(res, "simfuns") <- sim
+  if(savefuns) attr(res, "simfuns") <- csets
   res
 }
 
@@ -375,6 +375,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   attr(res, "ylab") <- "F(r)"
   attr(res, "yexp") <- quote(F(r))
   attr(res, "fname") <- "F"
+  if(savefuns) attr(res, "simfuns") <- cset
   res
 }
 
