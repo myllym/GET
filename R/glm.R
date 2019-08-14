@@ -266,15 +266,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
     fitted.m[,i] <- mod.red$fitted.values
     res.m[,i] <- mod.red$residuals
   }
-  # Names of the coefficients in the reduced model
-  namecoef.red <- names(unlist(stats::dummy.coef(mod.red)))
-  # Change the names of the coefficients in the reduced model,
-  # if the full model includes discrete factors, but the reduced model not
-  if(length(mod.red$xlevels) == 0 & length(mod.full$xlevels) > 0) {
-    namecoef.red <- paste(namecoef.red, ".", namecoef.red, sep="")
-  }
-  # The interesting coefficients
-  nameinteresting <- setdiff(namecoef.full, namecoef.red)
+  nameinteresting <- factorname_diff(mod.full, mod.red)
   message("The inspected coefficients are: \n", nameinteresting, "\n")
   # Fit the full model to the data and obtain the effects
   obs <- genCoef(X$data.l, formula.full, nameinteresting, ...)
