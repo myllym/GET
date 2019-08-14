@@ -252,33 +252,38 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
          contrasts = {genCoef = genCoefcontrasts.m}
   )
 
-  # Fit the full model at the first argument value to get the variables
-  df <- as.data.frame(lapply(X$data.l, FUN = function(x) x[,1]))
-  mod.full <- lm(formula.full, data=df, ...)
-  namecoef.full <- names(unlist(stats::dummy.coef(mod.full)))
-  # Freedman-Lane procedure
   # Fit the reduced model at each argument value
-  fitted.m <- res.m <- matrix(0, X$Nfunc, X$nr)
-  for(i in 1:X$nr) {
+  loopfun1 <- function(i, ...) {
     df <- as.data.frame(lapply(X$data.l, FUN = function(x) x[,i])) # create the data.frame at the ith argument value
-    mod.red <- stats::lm(formula.reduced, data=df, ...)
-    # Save predictions and residuals
-    fitted.m[,i] <- mod.red$fitted.values
-    res.m[,i] <- mod.red$residuals
+    mod.red <- lm(formula.reduced, data=df, ...)
+    list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
   }
-  nameinteresting <- factorname_diff(mod.full, mod.red)
-  message("The inspected coefficients are: \n", nameinteresting, "\n")
-  # Fit the full model to the data and obtain the effects
-  obs <- genCoef(X$data.l, formula.full, nameinteresting, ...)
-  # Simulations by permuting the residuals
-  loopfun <- function(i, ...) {
+  # Simulations by permuting the residuals + calculate the coefficients
+  loopfun2 <- function(i, ...) {
     permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
     # Permute the residuals (rows in res.m) and create new 'y'
     X$data.l[['Y']] <- fitted.m + res.m[permutation, ]
     # Regress the permuted data against the full model and get a new effect of interest
     genCoef(X$data.l, formula.full, nameinteresting, ...)
   }
-  sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun, mc.cores=mc.cores), mc.args))
+
+  # Fit the full model at the first argument value to get the names of interesting coefficients
+  df <- as.data.frame(lapply(X$data.l, FUN = function(x) x[,1]))
+  mod.full <- lm(formula = formula.full, data=df, ...)
+  mod.red <- lm(formula = formula.reduced, data=df, ...)
+  nameinteresting <- factorname_diff(mod.full, mod.red)
+  message("The inspected coefficients are: \n", paste(nameinteresting, " "), "\n")
+  # Fit the full model to the data and obtain the coefficients
+  obs <- genCoef(X$data.l, formula.full, nameinteresting, ...)
+
+  #-- Freedman-Lane procedure
+  # Fit the reduced model at each argument value to get the fitted values and residuals
+  mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
+  fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
+  res.m <- sapply(mclapply_res, function(x) x$res.m)
+
+  # Simulations by permuting the residuals + coefficients for each permutation
+  sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
   sim <- sapply(sim, function(x) x, simplify="array")
   complabels <- colnames(obs)
 
