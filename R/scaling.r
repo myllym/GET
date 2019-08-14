@@ -137,7 +137,7 @@ scale_curves <- function(curve_set, scaling = 'qdir', ...) {
 
 # Turns a divisor into a coeff.
 #
-# Takes the inverse of the input and replaces non-finite values with 1.
+# Takes the inverse of the input and replaces non-finite values with 0.
 #
 # @param x A number.
 divisor_to_coeff <- function(x) {
