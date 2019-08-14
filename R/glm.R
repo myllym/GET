@@ -274,7 +274,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   loopfun <- function(i, ...) {
     permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
     # Permute the residuals (rows in res.m) and create new 'y'
-    X$data.l[[1]] <- fitted.m + res.m[permutation, ]
+    X$data.l[['Y']] <- fitted.m + res.m[permutation, ]
     # Regress the permuted data against the full model and get a new effect of interest
     genCoef(X$data.l, formula.full, nameinteresting, ...)
   }
