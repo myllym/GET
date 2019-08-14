@@ -1,16 +1,39 @@
-# GET: Global envelopes in R
+GET: Global envelopes
+=====================
 
-The R package provides global envelopes which can be used for central regions of functional or multivariate data (e.g. outlier detection, functional boxplot), for graphical Monte Carlo and permutation tests where the test statistic is a multivariate vector or function (e.g. goodness-of-fit testing for point patterns and random sets, functional ANOVA, functional GLM, n-sample test of correspondence of distribution functions), and for global confidence and prediction bands (e.g. confidence band in polynomial regression, Bayesian posterior prediction).
+https://cran.r-project.org/package=GET
+
+The `R` package `GET` provides global envelopes which can be used for central regions of functional or multivariate data (e.g. outlier detection, functional boxplot), for graphical Monte Carlo and permutation tests where the test statistic is a multivariate vector or function (e.g. goodness-of-fit testing for point patterns and random sets, functional ANOVA, functional GLM, n-sample test of correspondence of distribution functions), and for global confidence and prediction bands (e.g. confidence band in polynomial regression, Bayesian posterior prediction).
+
+## This is the development version
+
+This repository holds a copy of the current development version of the contributed R package `GET`.
+
+This development version is as or more recent than the official release of `GET` on the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/package=GET
+
+## Where is the official release?
+
+For the most recent official release of `GET`, see https://cran.r-project.org/package=GET
 
 ## Installation
 
-You can install the `GET` library from github through `remotes` package with the following two R commands:
+### Installing the official release
+
+To install the official release of `GET` from CRAN, start `R` and type
 
 ```R
-library(remotes)
+install_packages('GET')
+```
+
+### Installing the development version
+
+The easiest way to install the `GET` library from github is through the `remotes` package. Start `R` and type:
+
+```R
+require(remotes)
 install_github('myllym/GET')
 ```
-If you do not have the R library `remotes` installed, install it first by
+If you do not have the R library `remotes` installed, install it first by running
 
 ```R
 install.packages("remotes")
@@ -19,24 +42,25 @@ install.packages("remotes")
 After installation, in order to start using `GET`, load it to R and see
 the main help page, which describes the functions of the library:
 ```R
-library(GET)
+require(GET)
 help('GET-package')
 ```
 
 ## Branches
 
 The branch for public use is called `master`. There are no other public branches at the moment.
-The branch 'no_fastdepth' of the library `spptest` was taken as the master branch of `GET` September 21, 2016.
-The library `spptest` has become `GET`, which is developed further.
+The branch 'no_fastdepth' of the library `spptest` was taken as the master branch of `GET` September 21, 2016. The `spptest` package is frozen to that version and no longer developed.
 
 ## References
 
-To cite GET in publications use (a suitable selection of):
+To cite GET in publications use
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).
 Global envelope tests for spatial processes. Journal of the Royal Statistical Society:
 Series B (Statistical Methodology) 79: 381-404. doi: 10.1111/rssb.12172 http://dx.doi.org/10.1111/rssb.12172
 (You can find the preprint of the article here: http://arxiv.org/abs/1307.0239v4)
+
+and a suitable selection of:
 
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
