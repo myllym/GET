@@ -227,10 +227,10 @@ combined_forder <- function(curve_sets, ...) {
 #'   forder(curve_set, measure = "erl")
 #'   forder(curve_set, measure = "area")
 #' }
-forder <- function(curve_sets, r_min = NULL, r_max = NULL,
-                   measure = 'erl', scaling = 'qdir',
+forder <- function(curve_sets, measure = 'erl', scaling = 'qdir',
                    alternative=c("two.sided", "less", "greater"),
-                   use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7) {
+                   use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7,
+                   r_min = NULL, r_max = NULL) {
   if(class(curve_sets)[1] == "list") {
     curve_sets <- check_curve_set_dimensions(curve_sets)
     res <- combined_forder(curve_sets, r_min = r_min, r_max = r_max,
