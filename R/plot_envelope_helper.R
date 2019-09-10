@@ -171,10 +171,11 @@ env_main_default <- function(x, digits=3, alternative=attr(x, "einfo")$alternati
   }
   else {
     if(!is.null(attr(x, "p"))) {
-      if(alternative == "two.sided")
-        main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"), digits=digits), sep="")
-      else
-        main <- paste(attr(x, "method"), ": p = ", round(attr(x, "p"), digits=digits), "\n",
+      p <- round(attr(x, "p"), digits=digits)
+      if(p > 0) main <- paste(attr(x, "method"), ": p = ", p, sep="")
+      else main <- paste(attr(x, "method"), ": p < ", 10^(-digits), sep="")
+      if(alternative != "two.sided")
+        main <- paste(main, "\n",
                       "Alternative = \"", alternative, "\"\n", sep="")
     }
     else {
