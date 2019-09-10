@@ -457,80 +457,37 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param nticks The number of ticks on the xaxis.
 #' @export
 #' @seealso \code{\link{central_region}}
-plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
-                                 main, ylim, xlab, ylab,
-                                 color_outside = TRUE, env.col = 1, base_size = 15,
+plot.combined_global_envelope <- function(x,
+                                 main, ylim = NULL, xlab, ylab,
+                                 color_outside = TRUE, env.col = 1, base_size = 12,
                                  labels = NULL, add = FALSE, digits = 3,
                                  level = 1, ncol = 2 + 1*(length(x)==3), nticks = 5,
                                  legend = TRUE, ...) {
-  plot_style <- match.arg(plot_style)
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   # main
   if(missing('main')) {
     alt <- attr(x[[1]], "einfo")$alternative
     main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
   }
-  # ylim
-  if(missing('ylim'))
-    if(level == 1) ylim <- env_ylim_default(x, use_ggplot2 = plot_style == "ggplot2")
-    else ylim <- env_ylim_default(attr(x, "level2_ge"), use_ggplot2 = FALSE)
   # ylab, ylab, labels
-  if(missing('xlab')) {
-    if(plot_style == "ggplot2") {
-      xlab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "xexp")))
-    }
-    else {
-      if(attr(x[[1]], "xlab") == attr(x[[1]], "argu")) xlab <- lapply(x, function(y) { substitute(italic(i), list(i=attr(y, "xexp"))) })
-      else xlab <- lapply(x, function(y) { substitute(paste(i, " (", italic(j), ")", sep=""), list(i=attr(y, "xexp"), j=attr(y, "argu"))) })
-    }
-  }
-  if(missing('ylab')) {
-    if(plot_style == "ggplot2") {
-      ylab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "yexp")))
-    }
-    else {
-      if(inherits(attr(x[[1]], "yexp"), "character")) ylab <- lapply(x, function(y) attr(y, "yexp"))
-      else ylab <- lapply(x, function(y) { substitute(italic(i), list(i=attr(y, "yexp"))) })
-    }
-  }
+  if(missing('xlab')) xlab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "xexp")))
+  if(missing('ylab')) ylab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "yexp")))
   if(is.null(labels)) {
     if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
     else {
       if(!is.null(names(x))) labels <- names(x)
       else {
-        if(plot_style == "ggplot2") {
-          labels <- sapply(x, function(y) attr(y, "ylab"), simplify=TRUE)
-          if(all(sapply(labels, FUN=identical, y=labels[[1]]))) labels <- NULL
-        }
+        labels <- sapply(x, function(y) attr(y, "ylab"), simplify=TRUE)
+        if(all(sapply(labels, FUN=identical, y=labels[[1]]))) labels <- NULL
       }
     }
   }
 
   if(level == 1) {
-    switch(plot_style,
-           basic = {
-             env_basic_plot(x, main=labels, ylim=ylim, xlab=xlab, ylab=ylab,
-                            color_outside=color_outside,
-                            max_ncols_of_plots=ncol, add=add, env.col=env.col,
-                            nticks=nticks, ...)
-           },
-           fv = {
-             n_of_plots <- length(x)
-             ncols_of_plots <- min(n_of_plots, ncol)
-             nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
-             opar <- par(mfrow=c(nrows_of_plots, ncols_of_plots))
-             on.exit(par(opar))
-             if(is.vector(ylim) & length(ylim)==2) ylim <- rep(list(ylim), times=n_of_plots)
-             for(i in 1:length(x))
-               spatstat::plot.fv(x[[i]],
-                                 main=labels[i], ylim=ylim[[i]], xlab=xlab[[i]], ylab=ylab[[i]], add=FALSE, ...)
-           },
-           ggplot2 = {
-             env_ggplot(x, base_size=base_size,
-                        main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                        max_ncols_of_plots=ncol,
-                        labels=labels, nticks=nticks, legend=legend, ...)
-           })
+    env_ggplot(x, base_size=base_size,
+              main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+              max_ncols_of_plots=ncol,
+              labels=labels, nticks=nticks, legend=legend, ...)
   }
   else {
      plot.global_envelope(attr(x, "level2_ge"), dotplot = TRUE,
@@ -889,9 +846,8 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param ... Additional arguments to be passed to \code{\link{plot.combined_global_envelope}}.
 #'
 #' @export
-plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), level = 1,
+plot.combined_fboxplot <- function(x, level = 1,
                           outliers = TRUE, bp.col = 2, cr.col = 1, ...) {
-  plot_style <- match.arg(plot_style)
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
   if(outliers) curve_sets <- attr(x, "curve_sets") else curve_sets <- NULL
   cr <- x
@@ -905,20 +861,10 @@ plot.combined_fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"), 
       x[[i]]$lo <- attr(x[[i]], "whisker.lo")
       x[[i]]$hi <- attr(x[[i]], "whisker.hi")
     }
-    switch(plot_style,
-           basic = {
-             plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets)
-           },
-           fv = {
-             plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ...)
-             if(outliers) warning("For fv style & combined boxplots, plotting outliers is not implemented.\n")
-           },
-           ggplot2 = {
-             plot.combined_global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
-           })
+    plot.combined_global_envelope(x, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
   }
   else {
-    plot.fboxplot(x, plot_style=plot_style, outliers=outliers, bp.col=bp.col, cr.col=cr.col, ...)
+    plot.fboxplot(x, outliers=outliers, bp.col=bp.col, cr.col=cr.col, ...)
   }
 }
 
