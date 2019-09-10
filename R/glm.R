@@ -12,6 +12,9 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
   available <- unique(c(names(curve_sets), names(factors)))
   if(!all(vars[-1] %in% available)) stop("The variables in the formula not found in the given data (curve_sets and factors).\n")
   if(!all(sapply(curve_sets, function(x) inherits(x, c("curve_set", "fdata"))))) stop("The components of curve_sets do not have a valid class.\n")
+  if(inherits(curve_sets[['Y']], "fdata")) {
+    einfo <- curve_sets[['Y']]$names
+  } else einfo <- NULL
   curve_sets <- lapply(curve_sets, convert_fdata)
   if(!all(lapply(curve_sets[['obs']], is.matrix))) stop("The curve_set must include data functions (sim_m ignored).\n")
   curve_sets <- check_curve_set_dimensions(curve_sets)
@@ -33,7 +36,7 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
     # Expand the factors to each argument value
     for(i in 1:length(vars.factors)) data.l[[vars.factors[i]]] <- matrix(factors[,vars.factors[i]], nrow=nrow(factors), ncol=nr)
   }
-  list(data.l=data.l, r=r, Nfunc=Nfunc, nr=nr)
+  list(data.l=data.l, r=r, Nfunc=Nfunc, nr=nr, einfo=einfo)
 }
 
 # M1 = full model; M2 = reduced model
