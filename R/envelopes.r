@@ -451,7 +451,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param level 1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
-#' @param max_ncols_of_plots The maximum number of columns for the figures. Default 2.
+#' @param ncol The maximum number of columns for the figures. Default 2.
 #' (Relates to the number of curve_sets that have been combined.)
 #' @param nticks The number of ticks on the xaxis.
 #' @export
@@ -460,7 +460,7 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
                                  main, ylim, xlab, ylab,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
                                  labels = NULL, add = FALSE, digits = 3,
-                                 level = 1, max_ncols_of_plots = 2, nticks = 5,
+                                 level = 1, ncol = 2, nticks = 5,
                                  legend = TRUE, ...) {
   plot_style <- match.arg(plot_style)
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
@@ -510,12 +510,12 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
            basic = {
              env_basic_plot(x, main=labels, ylim=ylim, xlab=xlab, ylab=ylab,
                             color_outside=color_outside,
-                            max_ncols_of_plots=max_ncols_of_plots, add=add, env.col=env.col,
+                            max_ncols_of_plots=ncol, add=add, env.col=env.col,
                             nticks=nticks, ...)
            },
            fv = {
              n_of_plots <- length(x)
-             ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
+             ncols_of_plots <- min(n_of_plots, ncol)
              nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
              opar <- par(mfrow=c(nrows_of_plots, ncols_of_plots))
              on.exit(par(opar))
@@ -527,7 +527,7 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
            ggplot2 = {
              env_ggplot(x, base_size=base_size,
                         main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                        max_ncols_of_plots=max_ncols_of_plots,
+                        max_ncols_of_plots=ncol,
                         labels=labels, nticks=nticks, legend=legend, ...)
            })
   }
