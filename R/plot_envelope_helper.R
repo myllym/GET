@@ -356,8 +356,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
           }
         }
         if(length(main) != n_of_plots) { main <- NULL; cat("Note: \"main\" Ignored.\n") }
-        if(!(inherits(xlab, "list") & length(xlab) == 1)) xlab <- rep(list(xlab), times=n_of_plots)
-        if(!(inherits(ylab, "list") & length(ylab) == 1)) ylab <- rep(list(ylab), times=n_of_plots)
+        if(!inherits(xlab, "list") && length(xlab) == 1) xlab <- rep(list(xlab), times=n_of_plots)
+        if(!inherits(ylab, "list") && length(ylab) == 1) ylab <- rep(list(ylab), times=n_of_plots)
         if(!is.null(curve_sets)) {
           curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
         }
