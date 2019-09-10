@@ -451,7 +451,8 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param level 1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
-#' @param ncol The maximum number of columns for the figures. Default 2.
+#' @param ncol The maximum number of columns for the figures.
+#' Default 2 or 3, if the length of x equals 3.
 #' (Relates to the number of curve_sets that have been combined.)
 #' @param nticks The number of ticks on the xaxis.
 #' @export
@@ -460,7 +461,7 @@ plot.combined_global_envelope <- function(x, plot_style = c("ggplot2", "fv", "ba
                                  main, ylim, xlab, ylab,
                                  color_outside = TRUE, env.col = 1, base_size = 15,
                                  labels = NULL, add = FALSE, digits = 3,
-                                 level = 1, ncol = 2, nticks = 5,
+                                 level = 1, ncol = 2 + 1*(length(x)==3), nticks = 5,
                                  legend = TRUE, ...) {
   plot_style <- match.arg(plot_style)
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
