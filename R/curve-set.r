@@ -312,6 +312,7 @@ print.curve_set <- function(x, ...) {
 #' @importFrom ggplot2 geom_line
 #' @importFrom ggplot2 scale_x_continuous
 #' @importFrom ggplot2 scale_y_continuous
+#' @importFrom ggplot2 labs
 plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
                            ylim, xlab = "r", ylab = "obs",
                            col_obs = 1, col_sim = grDevices::grey(0.7),
