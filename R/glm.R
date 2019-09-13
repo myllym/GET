@@ -300,6 +300,29 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
                  c(list(curve_sets=csets, alternative="two.sided", nstep=1), GET.args))
   attr(res, "method") <- "Graphical functional GLM" # Change method name
   attr(res, "labels") <- complabels
+  # Take the xlab and ylab from a fdata object, if such is given:
+  if(!is.null(X$einfo)) {
+    if(!is.null(X$einfo$xlab)) {
+      if(inherits(res, "global_envelope")) {
+        attr(res, "xlab") <- attr(res, "xexp") <- X$einfo$xlab
+        if(inherits(X$einfo$xlab, "expression")) attr(res, "xlab") <- deparse(X$einfo$xlab)
+      }
+      if(inherits(res, "combined_global_envelope")) {
+        attr(attr(res, "level2_ge"), "xlab") <- attr(attr(res, "level2_ge"), "xexp") <- X$einfo$xlab
+        if(inherits(X$einfo$xlab, "expression")) attr(attr(res, "level2_ge"), "xlab") <- deparse(X$einfo$xlab)
+      }
+    }
+    if(!is.null(X$einfo$ylab)) {
+      if(inherits(res, "global_envelope")) {
+        attr(res, "ylab") <- attr(res, "yexp") <- X$einfo$ylab
+        if(inherits(attr(res, "ylab"), "expression")) attr(res, "ylab") <- deparse(attr(res, "ylab"))
+      }
+      if(inherits(res, "combined_global_envelope")) {
+        attr(attr(res, "level2_ge"), "ylab") <- attr(attr(res, "level2_ge"), "yexp") <- X$einfo$ylab
+        if(inherits(X$einfo$ylab, "expression")) attr(attr(res, "level2_ge"), "ylab") <- deparse(X$einfo$ylab)
+      }
+    }
+  }
   attr(res, "call") <- match.call()
   if(savefuns) attr(res, "simfuns") <- csets
   res
