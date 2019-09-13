@@ -314,7 +314,7 @@ print.curve_set <- function(x, ...) {
 #' @importFrom ggplot2 scale_y_continuous
 #' @importFrom ggplot2 labs
 plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
-                           ylim, xlab = "r", ylab = "obs",
+                           ylim, xlab = "r", ylab = "obs", main = NULL,
                            col_obs = 1, col_sim = grDevices::grey(0.7),
                            base_size = 11, ...) {
   plot_style <- match.arg(plot_style)
@@ -355,9 +355,9 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
          basic = {
              # Plot
              if(!rdata$retick_xaxis)
-                 graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, col=col_obs, xlab=xlab, ylab=ylab, ...)
+                 graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, col=col_obs, xlab=xlab, ylab=ylab, main=main, ...)
              else
-                 graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, xaxt="n", col=col_obs, xlab=xlab, ylab=ylab,...)
+                 graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, xaxt="n", col=col_obs, xlab=xlab, ylab=ylab, main=main, ...)
              for(i in 2:ncol(funcs)) graphics::lines(rvalues, funcs[,i], col=col_sim)
              graphics::lines(rvalues, funcs[,1], type="l", col=col_obs, ...)
              if(rdata$retick_xaxis) {
