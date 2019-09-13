@@ -293,12 +293,14 @@ print.curve_set <- function(x, ...) {
 #' Plot method for the class 'curve_set'
 #'
 #' @param x An \code{curve_set} object
+#' @param plot_style Either "ggplot2" or "basic".
 #' @param ylim The y limits of the plot with the default being the minimum and maximum over all curves.
 #' @param xlab The label for the x-axis. Default "r".
 #' @param ylab The label for the y-axis. Default "obs".
 #' @param col_obs Color for 'obs' in the argument \code{x}.
 #' @param col_sim Color for 'sim_m' in the argument \code{x}.
 #' @param ... Additional parameters to be passed to plot and lines.
+#' @inheritParams plot.global_envelope
 #'
 #' @export
 #' @importFrom graphics plot
@@ -306,32 +308,61 @@ print.curve_set <- function(x, ...) {
 #' @importFrom grDevices grey
 #' @importFrom graphics axis
 #' @importFrom graphics abline
-plot.curve_set <- function(x, ylim, xlab = "r", ylab = "obs",
-                           col_obs = 1, col_sim = grDevices::grey(0.7), ...) {
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_line
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_y_continuous
+plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
+                           ylim, xlab = "r", ylab = "obs",
+                           col_obs = 1, col_sim = grDevices::grey(0.7),
+                           base_size = 11, ...) {
+  plot_style <- match.arg(plot_style)
   if(with(x, is.matrix(obs))) {
     funcs <- x[['obs']]
     col_sim <- col_obs
   }
   else funcs <- cbind(x[['obs']], x[['sim_m']])
-
-  if(missing('ylim')) ylim <- with(x, c(min(funcs), max(funcs)))
   rdata <- combined_global_envelope_rhelper(x)
   if(rdata$retick_xaxis) {
     rvalues <- rdata$new_r_values
   }
   else rvalues <- x$r
   nr <- length(rvalues)
-  # Plot
-  if(!rdata$retick_xaxis)
-    graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, col=col_obs, xlab=xlab, ylab=ylab, ...)
-  else
-    graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, xaxt="n", col=col_obs, xlab=xlab, ylab=ylab,...)
-  for(i in 2:ncol(funcs)) graphics::lines(rvalues, funcs[,i], col=col_sim)
-  graphics::lines(rvalues, funcs[,1], type="l", col=col_obs, ...)
-  if(rdata$retick_xaxis) {
-    graphics::axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
-    graphics::abline(v = (1:nr)[rdata$r_values_newstart_id], lty=3)
+  if(missing('ylim')) {
+    if(plot_style == "basic") ylim <- with(x, c(min(funcs), max(funcs)))
+    else ylim <- NULL
   }
+
+  switch(plot_style,
+         ggplot2 = {
+             df <- data.frame(r = rvalues, f = c(funcs), id = rep(1:ncol(funcs), each=nrow(funcs)))
+             p <- ( ggplot(data=df) + geom_line(aes_(x = ~r, y = ~f, group = ~id))
+                   + scale_y_continuous(name = ylab, limits = ylim)
+                   + ThemePlain(base_size=base_size))
+             if(rdata$retick_xaxis) {
+               p <- p + scale_x_continuous(name = xlab,
+                                                    breaks = rdata$loc_break_values,
+                                                    labels = paste(round(rdata$r_break_values, digits=2)),
+                                                    limits = range(rdata$new_r_values))
+               p <- p + geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id],
+                                  linetype = "dotted")
+             }
+             else p <- p + scale_x_continuous(name = xlab)
+             p
+         },
+         basic = {
+             # Plot
+             if(!rdata$retick_xaxis)
+                 graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, col=col_obs, xlab=xlab, ylab=ylab, ...)
+             else
+                 graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, xaxt="n", col=col_obs, xlab=xlab, ylab=ylab,...)
+             for(i in 2:ncol(funcs)) graphics::lines(rvalues, funcs[,i], col=col_sim)
+             graphics::lines(rvalues, funcs[,1], type="l", col=col_obs, ...)
+             if(rdata$retick_xaxis) {
+                 graphics::axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
+                 graphics::abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
+             }
+         })
 }
 
 # Combine curve sets.
