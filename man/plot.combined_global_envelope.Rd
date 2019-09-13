@@ -4,21 +4,13 @@
 \alias{plot.combined_global_envelope}
 \title{Plot method for the class 'combined_global_envelope'}
 \usage{
-\method{plot}{combined_global_envelope}(x, plot_style = c("ggplot2",
-  "fv", "basic"), main, ylim, xlab, ylab, color_outside = TRUE,
-  env.col = 1, base_size = 15, labels = NULL, add = FALSE,
-  digits = 3, level = 1, max_ncols_of_plots = 2, nticks = 5,
-  legend = TRUE, ...)
+\method{plot}{combined_global_envelope}(x, main, ylim = NULL, xlab, ylab,
+  color_outside = TRUE, env.col = 1, base_size = 12, labels = NULL,
+  add = FALSE, digits = 3, level = 1, ncol = 2 + 1 * (length(x) ==
+  3), nticks = 5, legend = TRUE, ...)
 }
 \arguments{
 \item{x}{An 'combined_global_envelope' object}
-
-\item{plot_style}{One of the following "basic", "fv" or "ggplot2".
-The option "basic" (default) offers a very basic global envelope plot.
-The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
-For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
-The option "fv" is currently only available for tests with one test function, whereas the other true allow
-also tests with several tests functions.}
 
 \item{main}{See \code{\link{plot.default}}. A sensible default exists.}
 
@@ -49,7 +41,8 @@ if using the default main.}
 1 for plotting the combined global envelopes (default and most often wanted) or
 2 for plotting the second level test result.}
 
-\item{max_ncols_of_plots}{The maximum number of columns for the figures. Default 2.
+\item{ncol}{The maximum number of columns for the figures.
+Default 2 or 3, if the length of x equals 3.
 (Relates to the number of curve_sets that have been combined.)}
 
 \item{nticks}{The number of ticks on the xaxis.}

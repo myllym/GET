@@ -4,16 +4,13 @@
 \alias{forder}
 \title{Functional ordering}
 \usage{
-forder(curve_sets, r_min = NULL, r_max = NULL, measure = "erl",
-  scaling = "qdir", alternative = c("two.sided", "less", "greater"),
-  use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7)
+forder(curve_sets, measure = "erl", scaling = "qdir",
+  alternative = c("two.sided", "less", "greater"), use_theo = TRUE,
+  probs = c(0.025, 0.975), quantile.type = 7, r_min = NULL,
+  r_max = NULL)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
-
-\item{r_min}{The minimum radius to include.}
-
-\item{r_max}{The maximum radius to include.}
 
 \item{measure}{The measure to use to order the functions from the most extreme to the least extreme
 one. Must be one of the following: 'rank', 'erl', 'cont', 'area', 'max', 'int', 'int2'. Default is 'erl'.}
@@ -36,6 +33,10 @@ The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 20
 
 \item{quantile.type}{As type argument of \code{\link[stats]{quantile}}, how to
 calculate quantiles for 'q' or 'qdir'.}
+
+\item{r_min}{The minimum radius to include.}
+
+\item{r_max}{The maximum radius to include.}
 }
 \value{
 A vector containing one of the above mentioned measures k for each of the functions

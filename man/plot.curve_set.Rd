@@ -4,11 +4,14 @@
 \alias{plot.curve_set}
 \title{Plot method for the class 'curve_set'}
 \usage{
-\method{plot}{curve_set}(x, ylim, xlab = "r", ylab = "obs",
-  col_obs = 1, col_sim = grDevices::grey(0.7), ...)
+\method{plot}{curve_set}(x, plot_style = c("ggplot2", "basic"), ylim,
+  xlab = "r", ylab = "obs", main = NULL, col_obs = 1,
+  col_sim = grDevices::grey(0.7), base_size = 11, ...)
 }
 \arguments{
 \item{x}{An \code{curve_set} object}
+
+\item{plot_style}{Either "ggplot2" or "basic".}
 
 \item{ylim}{The y limits of the plot with the default being the minimum and maximum over all curves.}
 
@@ -16,9 +19,13 @@
 
 \item{ylab}{The label for the y-axis. Default "obs".}
 
+\item{main}{See \code{\link{plot.default}}. A sensible default exists.}
+
 \item{col_obs}{Color for 'obs' in the argument \code{x}.}
 
 \item{col_sim}{Color for 'sim_m' in the argument \code{x}.}
+
+\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
 \item{...}{Additional parameters to be passed to plot and lines.}
 }

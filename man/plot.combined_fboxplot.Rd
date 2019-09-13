@@ -4,19 +4,11 @@
 \alias{plot.combined_fboxplot}
 \title{Plot method for the class 'combined_fboxplot'}
 \usage{
-\method{plot}{combined_fboxplot}(x, plot_style = c("ggplot2", "fv",
-  "basic"), level = 1, outliers = TRUE, bp.col = 2, cr.col = 1,
-  ...)
+\method{plot}{combined_fboxplot}(x, level = 1, outliers = TRUE,
+  bp.col = 2, cr.col = 1, ...)
 }
 \arguments{
 \item{x}{an 'combined_fboxplot' object}
-
-\item{plot_style}{One of the following "basic", "fv" or "ggplot2".
-The option "basic" (default) offers a very basic global envelope plot.
-The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
-For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
-The option "fv" is currently only available for tests with one test function, whereas the other true allow
-also tests with several tests functions.}
 
 \item{level}{1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
 1 for plotting the combined global envelopes (default and most often wanted) or

@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{global_envelope}(x, plot_style = c("ggplot2", "fv",
   "basic"), dotplot = length(x$r) < 10, main, ylim, xlab, ylab,
-  color_outside = TRUE, env.col = 1, base_size = 15, labels = NULL,
+  color_outside = TRUE, env.col = 1, base_size = 11, labels = NULL,
   add = FALSE, digits = 3, legend = TRUE, ...)
 }
 \arguments{

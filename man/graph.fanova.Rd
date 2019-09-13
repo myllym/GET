@@ -101,7 +101,7 @@ nsim <- 2499 # increase to reduce Monte Carlo error
 res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec,
                          groups = attr(cgec, "group"),
                          test.equality = "cov", cov.lag = 1)
-plot(res.cov1, max_ncols_of_plots=3,
+plot(res.cov1, ncol=3,
      labels = paste("Group ", 1:3, sep=""),
      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
      ylab=expression(italic(bar(W)[i](r))))
@@ -109,7 +109,7 @@ plot(res.cov1, max_ncols_of_plots=3,
 res.var <- graph.fanova(nsim = nsim, curve_set = cgec,
                         groups = attr(cgec, "group"),
                         test.equality = "var")
-plot(res.var, max_ncols_of_plots=3,
+plot(res.var, ncol=3,
      labels = paste("Group ", 1:3, sep=""),
      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
      ylab=expression(italic(bar(Z)[i](r))))
@@ -120,7 +120,7 @@ res <- graph.fanova(nsim = nsim, curve_set = cgec,
                     groups = attr(cgec, "group"),
                     variances = "equal",
                     summaryfun = "means")
-plot(res, max_ncols_of_plots=3,
+plot(res, ncol=3,
      labels = paste("Group ", 1:3, sep=""),
      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
      ylab=expression(italic(bar(T)[i](r))))
@@ -137,7 +137,7 @@ res2 <- graph.fanova(nsim = 4, curve_set = cgec,
                     summaryfun = "contrasts",
                     alpha = 0.2)
 }
-plot(res2, max_ncols_of_plots=3,
+plot(res2, ncol=3,
      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
 
