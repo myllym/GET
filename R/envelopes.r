@@ -470,8 +470,12 @@ plot.combined_global_envelope <- function(x,
     main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
   }
   # ylab, ylab, labels
-  if(missing('xlab')) xlab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "xexp")))
-  if(missing('ylab')) ylab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "yexp")))
+  if(missing('xlab'))
+    if(is.expression(attr(attr(x, "level2_ge"), "xexp"))) xlab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "xexp")))
+    else xlab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "xexp")))
+  if(missing('ylab'))
+    if(is.expression(attr(attr(x, "level2_ge"), "yexp"))) ylab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "yexp")))
+    else ylab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "yexp")))
   if(is.null(labels)) {
     if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
     else {
