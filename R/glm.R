@@ -128,10 +128,10 @@ Fvalue <- function(Y, X1, X2) {
   b1 <- bcoef(Y, X1)
   b2 <- bcoef(Y, X2)
   # Errors
-  e1 <- Y - X1%*%b1
-  e2 <- Y - X2%*%b2
+  e1 <- c(Y - X1%*%b1)
+  e2 <- c(Y - X2%*%b2)
   # F-statistic
-  (length(Y)-length(b1))*(t(e2)%*%e2-t(e1)%*%e1)/((length(b1)-length(b2))*t(e1)%*%e1)
+  (length(Y)-length(b1))*(sum(e2^2)-sum(e1^2))/((length(b1)-length(b2))*sum(e1^2))
 }
 
 # General F-values from lm-model together with the design matrices
