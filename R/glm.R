@@ -113,7 +113,7 @@ genFvaluesLM <- function(data.l, formula.full, formula.reduced, ...) {
 
 # Parameter estimate b for lm
 bcoef <- function(Y, X) {
-  solve(t(X)%*%X) %*% t(X) %*% Y
+  solve(a = t(X)%*%X, b = t(X) %*% Y)
 }
 
 # Y = observed data
