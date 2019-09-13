@@ -339,12 +339,13 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
              df <- data.frame(r = rvalues, f = c(funcs), id = rep(1:ncol(funcs), each=nrow(funcs)))
              p <- ( ggplot(data=df) + geom_line(aes_(x = ~r, y = ~f, group = ~id))
                    + scale_y_continuous(name = ylab, limits = ylim)
+                   + labs(title=main)
                    + ThemePlain(base_size=base_size))
              if(rdata$retick_xaxis) {
                p <- p + scale_x_continuous(name = xlab,
-                                                    breaks = rdata$loc_break_values,
-                                                    labels = paste(round(rdata$r_break_values, digits=2)),
-                                                    limits = range(rdata$new_r_values))
+                                           breaks = rdata$loc_break_values,
+                                           labels = paste(round(rdata$r_break_values, digits=2)),
+                                           limits = range(rdata$new_r_values))
                p <- p + geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id],
                                   linetype = "dotted")
              }
