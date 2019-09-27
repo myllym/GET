@@ -215,7 +215,8 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @inheritParams GET.composite
 #' @param formula.full The formula specifying the general linear model,
 #' see \code{formula} in \code{\link[stats]{lm}}.
-#' @param formula.reduced The formula of the reduced model with nuisance factors only.
+#' @param formula.reduced The formula of the reduced model with nuisance factors only. This model
+#' should be nested within the full model.
 #' @param curve_sets A named list of sets of curves giving the dependent variable (Y), and
 #' possibly additionally all the factors. The dimensions of the elements should
 #' match with each other, i.e. the factor values should be given for each argument value
