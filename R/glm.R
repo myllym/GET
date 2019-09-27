@@ -25,11 +25,11 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
   curve_sets <- check_curve_set_dimensions(curve_sets)
   # Put Y and factors into data.l
   data.l <- list()
-  data.l[['Y']] <- t(curve_sets[[vars[1]]][['obs']]) # -> each row corresponds to a data function
+  data.l[['Y']] <- t(curve_sets[['Y']][['obs']]) # -> each row corresponds to a data function
   # The argument values
-  r <- curve_sets[[vars[1]]][['r']]
-  Nfunc <- nrow(data.l[[1]]) # Number of functions
-  nr <- ncol(data.l[[1]]) # Number of argument values
+  r <- curve_sets[['Y']][['r']]
+  Nfunc <- nrow(data.l[['Y']]) # Number of functions
+  nr <- ncol(data.l[['Y']]) # Number of argument values
   vars.csets <- vars[vars %in% names(curve_sets)]
   if(length(curve_sets) > 1 & length(vars.csets) > 1) { # Factors provided in the curve_sets
     for(i in 2:length(vars.csets)) data.l[[vars.csets[i]]] <- t(curve_sets[[vars.csets[i]]][['obs']])
