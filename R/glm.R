@@ -156,20 +156,18 @@ Fvalue <- function(Y, X1, X2) {
 # General F-values from lm-model together with the design matrices
 #' @importFrom stats lm
 #' @importFrom stats anova
-genFvaluesObs <- function(data.l, formula.full, formula.reduced) {
-  nr <- ncol(data.l[[1]])
+genFvaluesObs <- function(dfs, formula.full, formula.reduced) {
+  nr <- length(dfs)
   Fvalues <- vector(length=nr)
-  # Case i = 1
-  df <- as.data.frame(lapply(data.l, FUN = function(x) x[,1]))
-  # Call first lm to obtain the design matrices
-  M.full <- stats::lm(formula = formula.full, data = df, x = TRUE)
-  M.reduced <- stats::lm(formula = formula.reduced, data = df, x = TRUE)
-  # Design matrices are M.full$x, M.reduced$x (the same for each i)
-  Fvalues[1] <- Fvalue(Y = df$Y, X1 = M.full$x, X2 = M.reduced$x)
-  for(i in 2:nr) {
-    Fvalues[i] <- Fvalue(Y = data.l$Y[,i], X1 = M.full$x, X2 = M.reduced$x)
+  x.full <- x.reduced <- list()
+  for(i in 1:nr) {
+    df <- dfs[[i]]
+    # Call lm to obtain the design matrices (x)
+    x.full[[i]] <- stats::lm(formula = formula.full, data = df, x = TRUE)$x
+    x.reduced[[i]] <- stats::lm(formula = formula.reduced, data = df, x = TRUE)$x
+    Fvalues[i] <- Fvalue(Y = df$Y, X1 = x.full[[i]], X2 = x.reduced[[i]])
   }
-  list(Fvalues = Fvalues, full.X = M.full$x, reduced.X = M.reduced$x)
+  list(Fvalues = Fvalues, full.X = x.full, reduced.X = x.reduced)
 }
 
 # General F-value from lm-model
@@ -180,7 +178,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
   nr <- ncol(Y)
   Fvalues <- vector(length=nr)
   for(i in 1:nr) {
-    Fvalues[i] <- Fvalue(Y = Y[,i], X1 = designX.full, X2 = designX.reduced)
+    Fvalues[i] <- Fvalue(Y = Y[,i], X1 = designX.full[[i]], X2 = designX.reduced[[i]])
   }
   Fvalues
 }
