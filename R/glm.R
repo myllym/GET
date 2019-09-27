@@ -46,16 +46,23 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
   list(Y=data.l[['Y']], dfs=dfs, r=r, Nfunc=Nfunc, nr=nr, einfo=einfo)
 }
 
+# Return the names of the coefficients that exist in the full model, but not in reduced model.
+# @param df The data frame at one argument value. This is needed because only the data
+# contain information about the levels of factors.
+# @param formula.full Formula for the full model.
+# @param formula.reduced Formula for the reduced model.
 # M1 = full model; M2 = reduced model
-# Return the names of the coefficients that are in M1, but not in M2
-factorname_diff <- function(M1, M2) {
+factorname_diff <- function(df, formula.full, formula.reduced, ...) {
+  M.full <- lm(formula = formula.full, data=df, ...)
+  M.red <- lm(formula = formula.reduced, data=df, ...)
+
   # Names of the coefficients in the full model
-  namecoef.full <- names(unlist(stats::dummy.coef(M1)))
+  namecoef.full <- names(unlist(stats::dummy.coef(M.full)))
   # Names of the coefficients in the reduced model
-  namecoef.red <- names(unlist(stats::dummy.coef(M2)))
+  namecoef.red <- names(unlist(stats::dummy.coef(M.red)))
   # Change the names of the coefficients in the reduced model,
   # if the full model includes discrete factors, but the reduced model not
-  if(length(M2$xlevels) == 0 & length(M1$xlevels) > 0) {
+  if(length(M.red$xlevels) == 0 & length(M.full$xlevels) > 0) {
     namecoef.red <- paste(namecoef.red, ".", namecoef.red, sep="")
   }
   # The interesting coefficients
