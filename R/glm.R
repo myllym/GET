@@ -23,7 +23,7 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
   curve_sets <- lapply(curve_sets, convert_fdata)
   if(!all(lapply(curve_sets[['obs']], is.matrix))) stop("The curve_set must include data functions (sim_m ignored).\n")
   curve_sets <- check_curve_set_dimensions(curve_sets)
-  # Put the functions and factors into data.l
+  # Put Y and factors into data.l
   data.l <- list()
   data.l[['Y']] <- t(curve_sets[[vars[1]]][['obs']]) # -> each row corresponds to a data function
   # The argument values
