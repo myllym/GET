@@ -71,16 +71,18 @@ factorname_diff <- function(df, formula.full, formula.reduced, ...) {
 
 # Regress the given data (true or permuted) against the full model and
 # get an effect of interest at all r values in a matrix.
-# data.l = a list containing data (Y and factors), all variables in formula.full
+# @param Y True or permuted values of Y inserted to dfs.
+# @param dfs A list containing data (Y and factors), all variables in formula.full
 # nameinteresting = names of the interesting coefficients
 #' @importFrom stats lm
 #' @importFrom stats dummy.coef
-genCoefmeans.m <- function(data.l, formula.full, nameinteresting, ...) {
-  nr <- ncol(data.l[[1]])
+genCoefmeans.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
+  nr <- ncol(Y)
   effect.a <- matrix(0, nrow=nr, ncol=length(nameinteresting))
   dimnames(effect.a) <- list(NULL, nameinteresting)
   for(i in 1:nr) {
-    df <- as.data.frame(lapply(data.l, FUN = function(x) x[,i]))
+    df <- dfs[[i]]
+    df$Y <- Y[,i]
     M.full <- stats::lm(formula.full, data=df, ...)
     allcoef <- unlist(stats::dummy.coef(M.full))
     effect.a[i,] <- allcoef[nameinteresting]
@@ -91,10 +93,10 @@ genCoefmeans.m <- function(data.l, formula.full, nameinteresting, ...) {
 # The constrasts of the interesting effects in a matrix
 #' @importFrom stats lm
 #' @importFrom stats dummy.coef
-genCoefcontrasts.m <- function(data.l, formula.full, nameinteresting, ...) {
-  nr <- ncol(data.l[[1]])
+genCoefcontrasts.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
+  nr <- ncol(Y)
   k <- length(nameinteresting)
-  effect.a <- genCoefmeans.m(data.l=data.l, formula.full=formula.full, nameinteresting=nameinteresting, ...)
+  effect.a <- genCoefmeans.m(Y=Y, dfs=dfs, formula.full=formula.full, nameinteresting=nameinteresting, ...)
   # contrasts
   cont <- matrix(0, nrow=nr, ncol=k*(k-1)/2)
   cont.names <- vector(length=k*(k-1)/2)
@@ -110,13 +112,16 @@ genCoefcontrasts.m <- function(data.l, formula.full, nameinteresting, ...) {
 
 
 # General F-values from lm-model using lm (slow but ... arguments allowed)
+# @param Y True or permuted values of Y inserted to dfs.
+# @param dfs The list of (factors) data at each argument value.
 #' @importFrom stats lm
 #' @importFrom stats anova
-genFvaluesLM <- function(data.l, formula.full, formula.reduced, ...) {
-  nr <- ncol(data.l[[1]])
+genFvaluesLM <- function(Y, dfs, formula.full, formula.reduced, ...) {
+  nr <- length(dfs)
   Fvalues <- vector(length=nr)
   for(i in 1:nr) {
-    df <- as.data.frame(lapply(data.l, FUN = function(x) x[,i]))
+    df <- dfs[[i]]
+    df$Y <- Y[,i]
     M.full <- stats::lm(formula = formula.full, data = df, ...)
     M.reduced <- stats::lm(formula = formula.reduced, data = df, ...)
     Anova.res <- stats::anova(M.reduced, M.full)
