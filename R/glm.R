@@ -37,7 +37,7 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
   vars.factors <- vars[vars %in% names(factors)]
   if(!is.null(factors) & length(vars.factors) > 0) {
     if(class(factors)[1] != "data.frame") stop("Invalid factors argument.\n")
-    if(nrow(factors) != nrow(data.l[[1]])) stop("The dimensions of Y and factors do not match.\n")
+    if(nrow(factors) != Nfunc) stop("The dimensions of Y and factors do not match.\n")
     # Expand the factors to each argument value
     for(i in 1:length(vars.factors)) data.l[[vars.factors[i]]] <- matrix(factors[,vars.factors[i]], nrow=nrow(factors), ncol=nr)
   }
