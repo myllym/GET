@@ -41,14 +41,15 @@ citEntry(
     entry = "Article",
     title = "A one-way ANOVA test for functional data with graphical interpretation",
     author = personList(as.person("T. Mrkvička"),
-                        as.person("U. Hahn"),
-                        as.person("M. Myllymäki")),
+                        as.person("M. Myllymäki"),
+                        as.person("M. Jilek"),
+                        as.person("U. Hahn")),
     journal = "arXiv:1612.03608 [stat.ME]",
     year = "2018",
     volume = "",
     pages = "",
     url = "https://arxiv.org/abs/1612.03608",
-    textVersion = "Mrkvička, T., Hahn, U. and Myllymäki, M. (2018).
+    textVersion = "Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018).
 A one-way ANOVA test for functional data with graphical interpretation.
 arXiv:1612.03608 [stat.ME]"
 )
