@@ -309,7 +309,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 
   # Simulations by permuting the residuals + coefficients for each permutation
   sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
-  sim <- sapply(sim, function(x) x, simplify="array")
+  sim <- simplify2array(sim)
   complabels <- colnames(obs)
 
   csets <- NULL
@@ -450,7 +450,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   res.m <- sapply(mclapply_res, function(x) x$res.m)
   # Simulations by permuting the residuals + F-values for each permutation
   sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
-  sim <- sapply(sim, function(x) x, simplify="array")
+  sim <- simplify2array(sim)
   if(fast) obs <- obs$Fvalues
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
