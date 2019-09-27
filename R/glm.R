@@ -1,16 +1,21 @@
 # Preliminary checks for the graph.fglm and frank.fglm
+#' @importFrom stats terms
 fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL) {
   # Preliminary checks
   vars <- all.vars(formula.full)
   vars.reduced <- all.vars(formula.reduced)
-  if(!all(vars.reduced %in% vars)) stop("The reduced model includes something extra, not in the full model.\n")
+  # Check that the reduced model is nested within the full model
+  if(!all(labels(terms(formula.reduced)) %in% labels(terms(formula.full)))) stop("The reduced model includes some extra variables, not in the full model.\n")
+  if(attr(terms(formula.full), "intercept") < attr(terms(formula.reduced), "intercept")) stop("The reduced model includes intercept, but the full model does not.\n")
+  # Check that the full model includes something in addition to the reduced model
+  if(all(labels(terms(formula.full)) %in% labels(terms(formula.reduced)))) stop("The full model should not be equal to the reduced model.\n")
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
+  if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.\n")
   if(class(curve_sets)[1] != "list") {
     curve_sets <- list(Y=curve_sets)
-    if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.\n")
   }
   available <- unique(c(names(curve_sets), names(factors)))
-  if(!all(vars[-1] %in% available)) stop("The variables in the formula not found in the given data (curve_sets and factors).\n")
+  if(!all(vars %in% available)) stop("The variables in the formula not found in the given data (curve_sets and factors).\n")
   if(!all(sapply(curve_sets, function(x) inherits(x, c("curve_set", "fdata"))))) stop("The components of curve_sets do not have a valid class.\n")
   if(inherits(curve_sets[['Y']], "fdata")) {
     einfo <- curve_sets[['Y']]$names
