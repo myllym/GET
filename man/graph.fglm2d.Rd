@@ -13,7 +13,8 @@ graph.fglm2d(nsim, formula.full, formula.reduced, image_sets,
 \item{formula.full}{The formula specifying the general linear model,
 see \code{formula} in \code{\link[stats]{lm}}.}
 
-\item{formula.reduced}{The formula of the reduced model with nuisance factors only.}
+\item{formula.reduced}{The formula of the reduced model with nuisance factors only. This model
+should be nested within the full model.}
 
 \item{image_sets}{A named list of sets of images giving the dependent variable (Y), and
 possibly additionally all the factors. The dimensions of the elements should

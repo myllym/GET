@@ -15,7 +15,8 @@ graph.fglm(nsim, formula.full, formula.reduced, curve_sets,
 \item{formula.full}{The formula specifying the general linear model,
 see \code{formula} in \code{\link[stats]{lm}}.}
 
-\item{formula.reduced}{The formula of the reduced model with nuisance factors only.}
+\item{formula.reduced}{The formula of the reduced model with nuisance factors only. This model
+should be nested within the full model.}
 
 \item{curve_sets}{A named list of sets of curves giving the dependent variable (Y), and
 possibly additionally all the factors. The dimensions of the elements should
@@ -65,6 +66,16 @@ The described tests are global envelope tests applied in the context of GLMs.
 The Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the functions
 (to obtain the simulations under the null hypothesis of "no effects");
 consequently, the test approximately achieves the desired significance level.
+
+The specification of the full and reduced formulas is important. The reduced model should be
+nested within the reduced model. The full model should include in addition to the reduced
+model the interesting factors whose effects are under investigation. Please avoid use of
+'*' when specifying interactions, e.g. factor1*factor2; instead explicitly specify all
+components of the model. The function \code{\link[stats]{dummy.coef}} is used to find the
+names of interesting factors and to extract them in terms of the original levels of the
+coefficients. According to its help page, this function is intented for human inspection
+of the output. Therefore, the investigated interesting factors are always printed for the user
+at the beginning of starting the simulations.
 }
 \examples{
 data(rimov)
