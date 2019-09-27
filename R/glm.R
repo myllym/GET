@@ -41,7 +41,9 @@ fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors
     # Expand the factors to each argument value
     for(i in 1:length(vars.factors)) data.l[[vars.factors[i]]] <- matrix(factors[,vars.factors[i]], nrow=nrow(factors), ncol=nr)
   }
-  list(data.l=data.l, r=r, Nfunc=Nfunc, nr=nr, einfo=einfo)
+  dfs <- lapply(1:nr, FUN = function(i) { as.data.frame(lapply(data.l, FUN = function(x) x[,i])) })
+
+  list(Y=data.l[['Y']], dfs=dfs, r=r, Nfunc=Nfunc, nr=nr, einfo=einfo)
 }
 
 # M1 = full model; M2 = reduced model
