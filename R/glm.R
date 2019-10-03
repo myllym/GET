@@ -1,6 +1,6 @@
-# Preliminary checks for the graph.fglm and frank.fglm
+# Preliminary checks for the graph.flm and frank.flm
 #' @importFrom stats terms
-fglm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL) {
+flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL) {
   # Preliminary checks
   vars <- all.vars(formula.full)
   vars.reduced <- all.vars(formula.reduced)
@@ -188,7 +188,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' Non-parametric graphical tests of significance in functional general linear model (GLM)
 #'
 #'
-#' The function \code{graph.fglm} performs the graphical functional GLM of Mrkvička et al. (2019).
+#' The function \code{graph.flm} performs the graphical functional GLM of Mrkvička et al. (2019).
 #' This is a nonparametric graphical test of significance of a covariate in functional GLM.
 #' The test is able to find not only if the factor of interest is significant, but also which
 #' functional domain is responsible for the potential rejection.
@@ -243,13 +243,13 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @examples
 #' data(rimov)
 #' \donttest{
-#' res <- graph.fglm(nsim=19, # Increase the number of simulations for serious analysis!
+#' res <- graph.flm(nsim=19, # Increase the number of simulations for serious analysis!
 #'                   formula.full = Y~Year,
 #'                   formula.reduced = Y~1,
 #'                   curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
 #' }
 #' \dontshow{
-#' res <- graph.fglm(nsim=3,
+#' res <- graph.flm(nsim=3,
 #'                   formula.full = Y~Year,
 #'                   formula.reduced = Y~1,
 #'                   curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
@@ -257,24 +257,36 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' }
 #' plot(res)
 #'
+#' # Test if there is a change in the slope in 1994,
+#' # i.e. the full model is T = a + b*year + c*year:group,
+#' res <- graph.flm(nsim = 19, # Increase the number of simulations for serious analysis!
+#'                   formula.full = Y ~ Year + Year:Group,
+#'                   formula.reduced = Y ~ Year,
+#'                   curve_sets = list(Y=rimov),
+#'                   factors = data.frame(Year = 1979:2014,
+#'                                        Group = factor(c(rep(1,times=24), rep(2,times=12)),
+#'                                                       levels=1:2)),
+#'                   summaryfun = "means")
+#' plot(res)
+#'
 #' \donttest{
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-#' res.tax_within_group <- graph.fglm(nsim = 999,
+#' res.tax_within_group <- graph.flm(nsim = 999,
 #'                                   formula.full = Y~Group+Tax+Group:Tax,
 #'                                   formula.reduced = Y~Group+Tax,
 #'                                   curve_sets = list(Y=GDPtax$GDP),
 #'                                   factors = factors.df)
 #' plot(res.tax_within_group)
 #' }
-graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
+graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        summaryfun = c("means", "contrasts"),
                        savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1L, mc.args = NULL) {
   # Set up the contrasts
   op <- options(contrasts = c("contr.sum", "contr.poly"))
   on.exit(options(op))
   # Preliminary checks and formulation of the data to suitable form for further processing
-  X <- fglm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
+  X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors)
   # Fit the full model at the first argument value to get the names of interesting coefficients
   nameinteresting <- factorname_diff(X$dfs[[1]], formula.full, formula.reduced, ...)
@@ -358,9 +370,9 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' Multiple testing in permutation inference for the general linear model (GLM)
 #'
 #'
-#' The function \code{frank.fglm} performs
+#' The function \code{frank.flm} performs
 #' a nonparametric test of significance of a covariate in the functional GLM.
-#' Similarly as in the graphical functional GLM (\code{\link{graph.fglm}}),
+#' Similarly as in the graphical functional GLM (\code{\link{graph.flm}}),
 #' the Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the functions
 #' (to obtain the simulations under the null hypothesis of "no effects");
 #' consequently, the test approximately achieves the desired significance level.
@@ -376,7 +388,7 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' '*' when specifying interactions, e.g. factor1*factor2; instead explicitly specify all
 #' components of the model.
 #'
-#' @inheritParams graph.fglm
+#' @inheritParams graph.flm
 #' @param fast Logical. If TRUE and no additional parameters are passed to \code{\link[stats]{lm}}
 #' in \code{...}, then a faster implementation to calculate the test statistics is used.
 #' If FALSE, then \code{\link[stats]{lm}} is utilized for the test statistic calculation (slow).
@@ -390,14 +402,14 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' \donttest{
-#' res.tax_within_group <- frank.fglm(nsim = 999,
+#' res.tax_within_group <- frank.flm(nsim = 999,
 #'                                    formula.full = Y~Group+Tax+Group:Tax,
 #'                                    formula.reduced = Y~Group+Tax,
 #'                                    curve_sets = list(Y=GDPtax$GDP),
 #'                                    factors = factors.df)
 #' }
 #' \dontshow{
-#' res.tax_within_group <- frank.fglm(nsim = 4,
+#' res.tax_within_group <- frank.flm(nsim = 4,
 #'                                    formula.full = Y~Group+Tax+Group:Tax,
 #'                                    formula.reduced = Y~Group+Tax,
 #'                                    curve_sets = list(Y=GDPtax$GDP),
@@ -406,11 +418,11 @@ graph.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' }
 #' plot(res.tax_within_group)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
-frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
+frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                        savefuns = TRUE, ..., GET.args = NULL, mc.cores = 1, mc.args = NULL,
                        fast = TRUE) {
   # Preliminary checks and formulation of the data to suitable form for further processing
-  X <- fglm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
+  X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors)
 
   extraargs <- list(...)
@@ -471,14 +483,14 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' Non-parametric graphical tests of significance in functional general linear model (GLM)
 #' for images
 #'
-#' @inheritParams graph.fglm
+#' @inheritParams graph.flm
 #' @param image_sets A named list of sets of images giving the dependent variable (Y), and
 #' possibly additionally all the factors. The dimensions of the elements should
 #' match with each other, i.e. the factor values should be given for each argument value
 #' and each function.
-#' @param ... Additional parameters to be passed to \code{\link{graph.fglm}}.
+#' @param ... Additional parameters to be passed to \code{\link{graph.flm}}.
 #' The possibly saved simulations are currently only provided in a vector format.
-#' @seealso \code{\link{graph.fglm}}, \code{\link{frank.fglm2d}}
+#' @seealso \code{\link{graph.flm}}, \code{\link{frank.flm2d}}
 #' @return A \code{global_envelope2d} or \code{combined_global_envelope2d} object,
 #' which can be printed and plotted directly.
 #' @export
@@ -490,7 +502,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' \donttest{
 #' data("imageset2")
 #' # Testing discrete factor group
-#' res.g <- graph.fglm2d(nsim = 19, # Increase nsim for serious analysis!
+#' res.g <- graph.flm2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       formula.full = Y ~ group + z,
 #'                       formula.reduced = Y ~ z,
 #'                       image_sets = list(Y = imageset2$image_set),
@@ -498,7 +510,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #'                                            z = imageset2$z))
 #' plot(res.g)
 #' # Testing discrete factor group with contrasts
-#' res.gc <- graph.fglm2d(nsim = 19, # Increase nsim for serious analysis!
+#' res.gc <- graph.flm2d(nsim = 19, # Increase nsim for serious analysis!
 #'                        formula.full = Y ~ group + z,
 #'                        formula.reduced = Y ~ z,
 #'                        image_sets = list(Y = imageset2$image_set),
@@ -508,7 +520,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' plot(res.gc)
 #'
 #' # Testing continuous factor z
-#' res.z <- graph.fglm2d(nsim = 19, # Increase nsim for serious analysis!
+#' res.z <- graph.flm2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       formula.full = Y ~ group + z,
 #'                       formula.reduced = Y ~ group,
 #'                       image_sets = list(Y = imageset2$image_set),
@@ -516,7 +528,7 @@ frank.fglm <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #'                                            z = imageset2$z))
 #' plot(res.z)
 #' }
-graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
+graph.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
   if(class(image_sets)[1] == "image_set") image_sets <- list(image_sets)
   obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
   sim_d <- lapply(image_sets, function(x) { dim(x$sim_m) })
@@ -530,7 +542,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
   # Create curve sets transforming the 2d functions (matrices) to vectors
   curve_sets_v <- lapply(image_sets, image_set_to_curve_set)
 
-  res_v <- graph.fglm(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
+  res_v <- graph.flm(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                       curve_sets=curve_sets_v, factors=factors, ...)
   # Transform the results to 2d
   res <- curve_set_results_to_image_results(res_v, image_sets)
@@ -543,11 +555,11 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #'
 #' Multiple testing in permutation inference for the general linear model (GLM)
 #'
-#' @inheritParams frank.fglm
-#' @inheritParams graph.fglm2d
-#' @param ... Additional parameters to be passed to \code{\link{frank.fglm}}.
+#' @inheritParams frank.flm
+#' @inheritParams graph.flm2d
+#' @param ... Additional parameters to be passed to \code{\link{frank.flm}}.
 #' The possibly saved simulations are currently only provided in a vector format.
-#' @seealso \code{\link{frank.fglm}}, \code{\link{graph.fglm2d}}
+#' @seealso \code{\link{frank.flm}}, \code{\link{graph.flm2d}}
 #' @export
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
@@ -557,7 +569,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' \donttest{
 #' data("imageset2")
 #' # Testing discrete factor group
-#' res.g <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
+#' res.g <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
 #'                        formula.full = Y ~ group + z,
 #'                        formula.reduced = Y ~ z,
 #'                        image_sets = list(Y = imageset2$image_set),
@@ -566,7 +578,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #' plot(res.g)
 #'
 #' # Testing continuous factor z
-#' res.z <- frank.fglm2d(nsim = 19, # Increase nsim for serious analysis!
+#' res.z <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       formula.full = Y ~ group + z,
 #'                       formula.reduced = Y ~ group,
 #'                       image_sets = list(Y = imageset2$image_set),
@@ -574,7 +586,7 @@ graph.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
 #'                                            z = imageset2$z))
 #' plot(res.z)
 #' }
-frank.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
+frank.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
   if(class(image_sets)[1] == "image_set") image_sets <- list(image_sets)
   obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
   sim_d <- lapply(image_sets, function(x) { dim(x$sim_m) })
@@ -588,7 +600,7 @@ frank.fglm2d <- function(nsim, formula.full, formula.reduced, image_sets, factor
   # Create curve sets transforming the 2d functions (matrices) to vectors
   curve_sets_v <- lapply(image_sets, image_set_to_curve_set)
 
-  res_v <- frank.fglm(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
+  res_v <- frank.flm(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                       curve_sets=curve_sets_v, factors=factors, ...)
   # Transform the results to 2d
   res <- curve_set_results_to_image_results(res_v, image_sets)
