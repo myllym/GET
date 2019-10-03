@@ -149,6 +149,71 @@ See examples also in \code{\link{saplings}}.
 }
 \examples{
 \donttest{
+# 1. Example of fallen trees data. Test the fit of a log Gaussian Cox process.
+if(require("spatstat", quietly=TRUE)) {
+  data("fallen_trees")
+  X <- unmark(fallen_trees)
+  # Fit the log Gaussian Cox process model using the K-function
+  M1 <- kppm(X, clusters = "LGCP", statistic = "K")
+  summary(M1)
+
+  # The number of simulations
+  # To test the code, use nsim <- 19
+  nsim <- 19
+  # For serious analysis, use at least nsim <- 499!
+  # Warning: The simulations take rather long with mc.cores = 1 and nsim = 499.
+
+  # a) Using envelope-function from spatstat
+  #-----------------------------------------
+  adjenvL <- GET.composite(X = M1, nsim = nsim, nsimsub = nsim,
+                         fun = "Lest", correction = "translate",
+                         transform = expression(.-r), r = r,
+                         type = 'area', r_min=rmin, r_max=rmax,
+                         verbose = FALSE)
+  plot(adjenvL, ylab = expression(italic(hat(L)(r)-r)))
+
+  # b) The general workflow for preparing simulations for GET.composite
+  #--------------------------------------------------------------------
+  # 1. Fit the model
+  M1 <- kppm(X~1, clusters = "LGCP", statistic="K")
+  # 2. Simulate a sample from the fitted null model and
+  #    compute the test vectors for data and each simulation
+  #- Observed function
+  obs.L <- Lest(X, correction = "translate", r = r)
+  obs <- obs.L[['trans']] - r
+  #- Simulated functions
+  sim <- matrix(nrow = length(r), ncol = nsimsub)
+  for(i in 1:nsimsub) {
+    sim.X <- simulate(M1)[[1]]
+    sim[, i] <- Lest(sim.X, correction = "translate", r = r)[['trans']] - r
+  }
+  # Create a curve_set
+  cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
+
+  # 3. Simulate another sample from the fitted null model.
+  sims2 <- simulate(M1, nsim=nsim)
+  # 4. Fit the null model to each of the patterns,
+  #    simulate a sample from the null model,
+  #    and compute the test vectors for all.
+  cset.ls <- list()
+  for(rep in 1:nsim) {
+    M2 <- kppm(sims2[[rep]], clusters = "LGCP", statistic="K")
+    obs2 <- Lest(sims2[[rep]], correction = "translate", r = r)[['trans']] - r
+    sim2 <- matrix(nrow = length(r), ncol = nsimsub)
+    for(i in 1:nsimsub) {
+      sim2.X <- simulate(M2)[[1]]
+      sim2[, i] <- Lest(sim2.X, correction = "translate", r = r)[['trans']] - r
+    }
+    cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
+  }
+  # Perform the adjusted test
+  res <- GET.composite(X=cset, X.ls=cset.ls, type='area',
+                       r_min=rmin, r_max=rmax)
+  plot(res)
+}
+}
+# 2. Example of saplings data. Test the fit of a Matern cluster process.
+\donttest{
 if(require("spatstat", quietly=TRUE)) {
   data(saplings)
 

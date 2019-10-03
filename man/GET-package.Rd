@@ -106,9 +106,9 @@ Also the adjusted tests can be based on several test functions.
  }
 \item \emph{Functional general linear model (GLM)}:
  \itemize{
-  \item \emph{Graphical} functional GLM: \code{\link{graph.fglm}}
-  \item Global rank envelope based on F-values: \code{\link{frank.fglm}}
-  \item Image (2d function) counterparts: \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}}
+  \item \emph{Graphical} functional GLM: \code{\link{graph.flm}}
+  \item Global rank envelope based on F-values: \code{\link{frank.flm}}
+  \item Image (2d function) counterparts: \code{\link{graph.flm2d}}, \code{\link{frank.flm2d}}
  }
 \item Wrapper functions to perform global envelopes for specific purposes:
  \itemize{
@@ -231,7 +231,7 @@ directly be given to the functions mentioned above in this section.
  \item \code{\link{fallen_trees}}: a point pattern of fallen trees
  \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
  \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}})
- \item \code{\link{imageset2}}: a simulated set of images (see \code{\link{graph.fglm2d}}, \code{\link{frank.fglm2d}})
+ \item \code{\link{imageset2}}: a simulated set of images (see \code{\link{graph.flm2d}}, \code{\link{frank.flm2d}})
  \item \code{\link{imageset3}}: a simulated set of images
  \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{GET.composite}})

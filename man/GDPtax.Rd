@@ -51,7 +51,7 @@ World Bank national accounts data, and OECD National Accounts data files. URL: h
 World Bank, Doing Business Project (http://www.doingbusiness.org/ExploreTopics/PayingTaxes/). URL: https://data.worldbank.org/indicator/IC.TAX.PRFT.CP.ZS
 }
 \seealso{
-\code{\link{graph.fglm}}
+\code{\link{graph.flm}}
 }
 \keyword{curves}
 \keyword{datasets}
