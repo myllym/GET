@@ -36,7 +36,7 @@
 #' @keywords curves
 #' @name GDPtax
 #' @docType data
-#' @seealso \code{\link{graph.fglm}}
+#' @seealso \code{\link{graph.flm}}
 #' @examples
 #' data(GDPtax)
 #' GDPcset <- GDPtax$GDP
