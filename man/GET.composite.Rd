@@ -149,7 +149,8 @@ See examples also in \code{\link{saplings}}.
 }
 \examples{
 \donttest{
-# 1. Example of fallen trees data. Test the fit of a log Gaussian Cox process.
+# 1. Example of fallen trees data.
+#    Test the fit of a log Gaussian Cox process.
 if(require("spatstat", quietly=TRUE)) {
   data("fallen_trees")
   X <- unmark(fallen_trees)
@@ -159,13 +160,17 @@ if(require("spatstat", quietly=TRUE)) {
 
   # The number of simulations
   # To test the code, use nsim <- 19
-  nsim <- 19
+  nsim <- nsimsub <- 19
   # For serious analysis, use at least nsim <- 499!
   # Warning: The simulations take rather long with mc.cores = 1 and nsim = 499.
 
+  # Distances
+  rmin <- 1; rmax <- 120; rstep <- (rmax-rmin)/500
+  r <- seq(0, rmax, by=rstep)
+
   # a) Using envelope-function from spatstat
   #-----------------------------------------
-  adjenvL <- GET.composite(X = M1, nsim = nsim, nsimsub = nsim,
+  adjenvL <- GET.composite(X = M1, nsim = nsim, nsimsub = nsimsub,
                          fun = "Lest", correction = "translate",
                          transform = expression(.-r), r = r,
                          type = 'area', r_min=rmin, r_max=rmax,
@@ -212,7 +217,8 @@ if(require("spatstat", quietly=TRUE)) {
   plot(res)
 }
 }
-# 2. Example of saplings data. Test the fit of a Matern cluster process.
+# 2. Example of saplings data.
+#    Test the fit of a Matern cluster process.
 \donttest{
 if(require("spatstat", quietly=TRUE)) {
   data(saplings)
