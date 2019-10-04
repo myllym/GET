@@ -268,13 +268,17 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'
 #'   # The number of simulations
 #'   # To test the code, use nsim <- 19
-#'   nsim <- 19
+#'   nsim <- nsimsub <- 19
 #'   # For serious analysis, use at least nsim <- 499!
 #'   # Warning: The simulations take rather long with mc.cores = 1 and nsim = 499.
 #'
+#'   # Distances
+#'   rmin <- 1; rmax <- 120; rstep <- (rmax-rmin)/500
+#'   r <- seq(0, rmax, by=rstep)
+#'
 #'   # a) Using envelope-function from spatstat
 #'   #-----------------------------------------
-#'   adjenvL <- GET.composite(X = M1, nsim = nsim, nsimsub = nsim,
+#'   adjenvL <- GET.composite(X = M1, nsim = nsim, nsimsub = nsimsub,
 #'                          fun = "Lest", correction = "translate",
 #'                          transform = expression(.-r), r = r,
 #'                          type = 'area', r_min=rmin, r_max=rmax,
