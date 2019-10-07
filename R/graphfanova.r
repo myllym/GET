@@ -108,10 +108,11 @@ Fvalues <- function(x, groups) {
 #' @importFrom stats anova
 corrFvalues <- function(x, groups) {
   Fvalues <- vector(length=ncol(x))
+  lgroups <- levels(groups)
   for(i in 1:ncol(x)) {
     df <- data.frame(value = x[,i], group = groups)
     wl <- 1 / as.vector(by(df$value, df$group, function(x){ var(x, na.rm=T) }))
-    df$w <- with(df, ifelse(group==1, wl[1], ifelse(group==2, wl[2], wl[3])))
+    df$w <- wl[sapply(1:nrow(df), FUN = function(i) { which(lgroups %in% df$group[i]) })]
     w.mod <- stats::lm(value~group, data=df, na.action=stats::na.omit, weights=df$w)
     temp <- stats::anova(w.mod)
     Fvalues[i] <- temp$F[1] # anova(aov(formula = Lvalues ~ group, data = df))$F[1]
