@@ -142,6 +142,7 @@ central_region2d <- function(image_sets, ...) {
 #' \code{\link{global_envelope_test}}.
 #' @export
 #' @aliases GET.2d
+#' @seealso \code{\link{plot.global_envelope2d}}
 #' @examples
 #' \donttest{
 #' # Example of spatial point pattern residuals
