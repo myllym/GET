@@ -755,8 +755,8 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
   namelist <- list(obs = "Observed",
                    lo = "Lower envelope" ,
                    hi = "Upper envelope" ,
-                   lo.sign = "Sign.: below (red)" ,
-                   hi.sign = "Sign.: above (red)" )
+                   lo.sign = "Sign.: below" ,
+                   hi.sign = "Sign.: above" )
   if(!missing(main) && !is.null(main) && insertmain) {
     for (i in seq_along(namelist)) {
       namelist[[i]] <- paste(main, ": ", namelist[[i]])
