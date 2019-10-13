@@ -577,7 +577,7 @@ graph.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors
 #'                                             z = imageset2$z))
 #' plot(res.g)
 #'
-#' # Testing continuous factor z
+#' # Testing the continuous factor z
 #' res.z <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
 #'                       formula.full = Y ~ group + z,
 #'                       formula.reduced = Y ~ group,
