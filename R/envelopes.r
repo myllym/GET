@@ -1110,7 +1110,7 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   # 3) Do the rank envelope test
 #'   res <- global_envelope_test(curve_set)
 #'   # 4) Plot the test result
-#'   plot(res, ylab=expression(italic(L[m](r)-L(r))))
+#'   plot(res, ylab=expression(italic(L[mm](r)-L(r))))
 #'
 #'   ## Goodness-of-fit test (typically conservative, see ?GET.composite for adjusted tests)
 #'   #-----------------------------------------------
