@@ -244,29 +244,29 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' data(rimov)
 #' \donttest{
 #' res <- graph.flm(nsim=19, # Increase the number of simulations for serious analysis!
-#'                   formula.full = Y~Year,
-#'                   formula.reduced = Y~1,
-#'                   curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
+#'                  formula.full = Y~Year,
+#'                  formula.reduced = Y~1,
+#'                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
 #' }
 #' \dontshow{
-#' res <- graph.flm(nsim=3,
-#'                   formula.full = Y~Year,
-#'                   formula.reduced = Y~1,
-#'                   curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
-#'                   GET.args = list(alpha=0.25))
+#' res <- graph.flm(nsim = 3,
+#'                  formula.full = Y~Year,
+#'                  formula.reduced = Y~1,
+#'                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
+#'                  GET.args = list(alpha=0.25))
 #' }
 #' plot(res)
 #'
 #' # Test if there is a change in the slope in 1994,
 #' # i.e. the full model is T = a + b*year + c*year:group,
 #' res <- graph.flm(nsim = 19, # Increase the number of simulations for serious analysis!
-#'                   formula.full = Y ~ Year + Year:Group,
-#'                   formula.reduced = Y ~ Year,
-#'                   curve_sets = list(Y=rimov),
-#'                   factors = data.frame(Year = 1979:2014,
-#'                                        Group = factor(c(rep(1,times=24), rep(2,times=12)),
-#'                                                       levels=1:2)),
-#'                   summaryfun = "means")
+#'                  formula.full = Y ~ Year + Year:Group,
+#'                  formula.reduced = Y ~ Year,
+#'                  curve_sets = list(Y=rimov),
+#'                  factors = data.frame(Year = 1979:2014,
+#'                                      Group = factor(c(rep(1,times=24), rep(2,times=12)),
+#'                                                     levels=1:2)),
+#'                  summaryfun = "means")
 #' plot(res)
 #'
 #' \donttest{
@@ -403,18 +403,18 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' \donttest{
 #' res.tax_within_group <- frank.flm(nsim = 999,
-#'                                    formula.full = Y~Group+Tax+Group:Tax,
-#'                                    formula.reduced = Y~Group+Tax,
-#'                                    curve_sets = list(Y=GDPtax$GDP),
-#'                                    factors = factors.df)
+#'                                   formula.full = Y~Group+Tax+Group:Tax,
+#'                                   formula.reduced = Y~Group+Tax,
+#'                                   curve_sets = list(Y=GDPtax$GDP),
+#'                                   factors = factors.df)
 #' }
 #' \dontshow{
 #' res.tax_within_group <- frank.flm(nsim = 4,
-#'                                    formula.full = Y~Group+Tax+Group:Tax,
-#'                                    formula.reduced = Y~Group+Tax,
-#'                                    curve_sets = list(Y=GDPtax$GDP),
-#'                                    factors = factors.df,
-#'                                    GET.args = list(alpha=0.20))
+#'                                   formula.full = Y~Group+Tax+Group:Tax,
+#'                                   formula.reduced = Y~Group+Tax,
+#'                                   curve_sets = list(Y=GDPtax$GDP),
+#'                                   factors = factors.df,
+#'                                   GET.args = list(alpha=0.20))
 #' }
 #' plot(res.tax_within_group)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
@@ -521,11 +521,11 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #'
 #' # Testing continuous factor z
 #' res.z <- graph.flm2d(nsim = 19, # Increase nsim for serious analysis!
-#'                       formula.full = Y ~ group + z,
-#'                       formula.reduced = Y ~ group,
-#'                       image_sets = list(Y = imageset2$image_set),
-#'                       factors = data.frame(group = imageset2$Group,
-#'                                            z = imageset2$z))
+#'                      formula.full = Y ~ group + z,
+#'                      formula.reduced = Y ~ group,
+#'                      image_sets = list(Y = imageset2$image_set),
+#'                      factors = data.frame(group = imageset2$Group,
+#'                                           z = imageset2$z))
 #' plot(res.z)
 #' }
 graph.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
@@ -570,20 +570,20 @@ graph.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors
 #' data("imageset2")
 #' # Testing discrete factor group
 #' res.g <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
-#'                        formula.full = Y ~ group + z,
-#'                        formula.reduced = Y ~ z,
-#'                        image_sets = list(Y = imageset2$image_set),
-#'                        factors = data.frame(group = imageset2$Group,
-#'                                             z = imageset2$z))
+#'                      formula.full = Y ~ group + z,
+#'                      formula.reduced = Y ~ z,
+#'                      image_sets = list(Y = imageset2$image_set),
+#'                      factors = data.frame(group = imageset2$Group,
+#'                                           z = imageset2$z))
 #' plot(res.g)
 #'
-#' # Testing the continuous factor z
+#' # Testing continuous factor z
 #' res.z <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
-#'                       formula.full = Y ~ group + z,
-#'                       formula.reduced = Y ~ group,
-#'                       image_sets = list(Y = imageset2$image_set),
-#'                       factors = data.frame(group = imageset2$Group,
-#'                                            z = imageset2$z))
+#'                      formula.full = Y ~ group + z,
+#'                      formula.reduced = Y ~ group,
+#'                      image_sets = list(Y = imageset2$image_set),
+#'                      factors = data.frame(group = imageset2$Group,
+#'                                           z = imageset2$z))
 #' plot(res.z)
 #' }
 frank.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
