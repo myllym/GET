@@ -56,29 +56,6 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   list(Y=data.l[['Y']], dfs=dfs, r=r, Nfunc=Nfunc, nr=nr, einfo=einfo)
 }
 
-# Return the names of the coefficients that exist in the full model, but not in reduced model.
-# @param df The data frame at one argument value. This is needed because only the data
-# contain information about the levels of factors.
-# @param formula.full Formula for the full model.
-# @param formula.reduced Formula for the reduced model.
-# M1 = full model; M2 = reduced model
-factorname_diff <- function(df, formula.full, formula.reduced, ...) {
-  M.full <- lm(formula = formula.full, data=df, ...)
-  M.red <- lm(formula = formula.reduced, data=df, ...)
-
-  # Names of the coefficients in the full model
-  namecoef.full <- names(unlist(stats::dummy.coef(M.full)))
-  # Names of the coefficients in the reduced model
-  namecoef.red <- names(unlist(stats::dummy.coef(M.red)))
-  # Change the names of the coefficients in the reduced model,
-  # if the full model includes discrete factors, but the reduced model not
-  if(length(M.red$xlevels) == 0 & length(M.full$xlevels) > 0) {
-    namecoef.red <- paste(namecoef.red, ".", namecoef.red, sep="")
-  }
-  # The interesting coefficients
-  setdiff(namecoef.full, namecoef.red)
-}
-
 # Regress the given data (true or permuted) against the full model and
 # get an effect of interest at all r values in a matrix.
 # @param Y True or permuted values of Y inserted to dfs.
