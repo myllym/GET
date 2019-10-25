@@ -315,11 +315,9 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   on.exit(options(op))
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
-                   curve_sets=curve_sets, factors=factors)
-  # Fit the full model at the first argument value to get the names of interesting coefficients
-  nameinteresting <- factorname_diff(X$dfs[[1]], formula.full, formula.reduced, ...)
-  if(length(nameinteresting) < 1) stop("Error in formula specifications. No interesting factors to investigate.\n")
-  message("The inspected coefficients are: \n", paste(nameinteresting, " "), "\n")
+                   curve_sets=curve_sets, factors=factors, fast=fast)
+
+  nameinteresting <- setdiff(labels(terms(formula.full)), labels(terms(formula.reduced)))
 
   summaryfun <- match.arg(summaryfun)
   # setting that 'fun' is a function
