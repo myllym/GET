@@ -471,6 +471,9 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 
   extraargs <- list(...)
   if(length(extraargs) > 0) fast <- FALSE
+  # The fast version is meant for the case where there are covariates that vary across the function.
+  # Then length(X$dfs) > 1.
+  if(length(X$dfs) == 1) fast <- FALSE
   # Calculate the F-statistic for the data, and, if fast, obtain also the design matrices
   if(fast) obs <- genFvaluesObs(X$dfs, formula.full, formula.reduced)
   else obs <- genFvaluesLM(X$Y, X$dfs, formula.full, formula.reduced, ...)
@@ -485,7 +488,11 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   }
   else {
     loopfun1 <- function(i, ...) {
-      mod.red <- lm(formula.reduced, data=X$dfs[[i]], ...)
+      if(length(X$dfs) == 1) {
+        df <- X$dfs[[1]]
+        df$Y <- X$Y[,i]
+      } else df <- X$dfs[[i]]
+      mod.red <- lm(formula.reduced, data=df, ...)
       list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
     }
   }
