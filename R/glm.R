@@ -107,8 +107,10 @@ genCoefmeans.mlm <- function(Y, df, formula.full, nameinteresting, ...) {
 #' @importFrom stats dummy.coef
 genCoefcontrasts.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
   nr <- ncol(Y)
-  k <- length(nameinteresting)
   effect.a <- genCoefmeans.m(Y=Y, dfs=dfs, formula.full=formula.full, nameinteresting=nameinteresting, ...)
+  nameinteresting <- colnames(effect.a) # including levels of factors
+  k <- length(nameinteresting)
+  if(k == 1) stop("The option \'contrasts\' only valid for discrete factors with at least two levels.\n")
   # contrasts
   cont <- matrix(0, nrow=nr, ncol=k*(k-1)/2)
   cont.names <- vector(length=k*(k-1)/2)
