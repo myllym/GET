@@ -64,15 +64,40 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' @importFrom stats lm
 #' @importFrom stats dummy.coef
 genCoefmeans.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
+  # If covariates are constant with respect to location
+  if(length(dfs) == 1) return(genCoefmeans.mlm(Y, dfs[[1]], formula.full, nameinteresting, ...))
   nr <- ncol(Y)
-  effect.a <- matrix(0, nrow=nr, ncol=length(nameinteresting))
-  dimnames(effect.a) <- list(NULL, nameinteresting)
-  for(i in 1:nr) {
+  effect.a <- sapply(1:nr, function(i) {
     df <- dfs[[i]]
     df$Y <- Y[,i]
     M.full <- stats::lm(formula.full, data=df, ...)
-    allcoef <- unlist(stats::dummy.coef(M.full))
-    effect.a[i,] <- allcoef[nameinteresting]
+    allcoef <- stats::dummy.coef(M.full)
+    unlist(allcoef[nameinteresting])
+  })
+  # Special case for when there is only 1 coefficient of interest
+  if(is.vector(effect.a)) {
+    name <- names(effect.a)[1]
+    dim(effect.a) <- c(length(effect.a), 1)
+    dimnames(effect.a) = list(NULL, name)
+    effect.a
+  } else t(effect.a)
+}
+
+# If covariates are constant with respect to location,
+# use a multiple linear model (instead of multiple linear models)
+#' @importFrom stats lm
+#' @importFrom stats coef
+#' @importFrom stats dummy.coef
+genCoefmeans.mlm <- function(Y, df, formula.full, nameinteresting, ...) {
+  df$Y <- Y
+  M.full <- stats::lm(formula.full, data=df, ...)
+  if(!length(M.full$xlevels)) { # Only continuous factors in the model
+    effect.a <- t(coef(M.full)[nameinteresting,, drop=FALSE])
+  } else {
+    allcoef <- stats::dummy.coef(M.full)
+    effect.a <- do.call(cbind, allcoef[nameinteresting])
+    factornames <- names(unlist(lapply(allcoef[nameinteresting], function(x) if(is.matrix(x)) x[1,] else x[1])))
+    dimnames(effect.a) <- list(NULL, factornames)
   }
   effect.a
 }
