@@ -253,10 +253,13 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @param factors A data frame of factors. An alternative way to specify factors when they
 #' are constant for all argument values. The number of rows of the data frame should be equal
 #' to the number of curves. Each column should specify the values of a factor.
-#' @param ... Additional arguments to be passed to \code{\link[stats]{lm}}.
+#' @param ... Additional arguments to be passed to \code{\link[stats]{lm}}. See details.
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @param mc.args A named list of additional arguments to be passed to \code{\link{mclapply}}.
 #' Only relevant if \code{mc.cores} is more than 1.
+#' @param cl Allows parallelization through the use of \code{\link{parLapply}} (works also
+#' in Windows), see the argument \code{cl} there, and examples.
+#' @param fast Logical. See details.
 #' @return A \code{global_envelope} or \code{combined_global_envelope} object,
 #' which can be printed and plotted directly.
 #' @export
@@ -423,9 +426,6 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' components of the model.
 #'
 #' @inheritParams graph.flm
-#' @param fast Logical. If TRUE and no additional parameters are passed to \code{\link[stats]{lm}}
-#' in \code{...}, then a faster implementation to calculate the test statistics is used.
-#' If FALSE, then \code{\link[stats]{lm}} is utilized for the test statistic calculation (slow).
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export
 #' @references
