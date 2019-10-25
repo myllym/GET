@@ -1,6 +1,6 @@
 # Preliminary checks for the graph.flm and frank.flm
 #' @importFrom stats terms
-flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL) {
+flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL, fast = TRUE) {
   # Preliminary checks
   vars <- all.vars(formula.full)
   vars.reduced <- all.vars(formula.reduced)
@@ -31,17 +31,27 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   Nfunc <- nrow(data.l[['Y']]) # Number of functions
   nr <- ncol(data.l[['Y']]) # Number of argument values
   vars.csets <- vars[vars %in% names(curve_sets)]
+  factors_in_curvesets <- !fast
   if(length(curve_sets) > 1 & length(vars.csets) > 1) { # Factors provided in the curve_sets
     for(i in 2:length(vars.csets)) data.l[[vars.csets[i]]] <- t(curve_sets[[vars.csets[i]]][['obs']])
+    factors_in_curvesets <- TRUE
   }
   vars.factors <- vars[vars %in% names(factors)]
   if(!is.null(factors) & length(vars.factors) > 0) {
     if(class(factors)[1] != "data.frame") stop("Invalid factors argument.\n")
     if(nrow(factors) != Nfunc) stop("The dimensions of Y and factors do not match.\n")
     # Expand the factors to each argument value
-    for(i in 1:length(vars.factors)) data.l[[vars.factors[i]]] <- matrix(factors[,vars.factors[i]], nrow=nrow(factors), ncol=nr)
+    for(i in 1:length(vars.factors)) {
+      data.l[[vars.factors[i]]] <- if(factors_in_curvesets) {
+        matrix(factors[,vars.factors[i]], nrow=nrow(factors), ncol=nr)
+      } else { factors[,vars.factors[i]] }
+    }
   }
-  dfs <- lapply(1:nr, FUN = function(i) { as.data.frame(lapply(data.l, FUN = function(x) x[,i])) })
+  dfs <- if(factors_in_curvesets) {
+    lapply(1:nr, FUN = function(i) { as.data.frame(lapply(data.l, FUN = function(x) x[,i])) })
+  } else {
+    list(as.data.frame(data.l[-1]))
+  }
 
   list(Y=data.l[['Y']], dfs=dfs, r=r, Nfunc=Nfunc, nr=nr, einfo=einfo)
 }
