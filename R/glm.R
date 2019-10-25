@@ -132,6 +132,7 @@ genCoefcontrasts.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
 #' @importFrom stats anova
 genFvaluesLM <- function(Y, dfs, formula.full, formula.reduced, ...) {
   nr <- length(dfs)
+  if(nr == 1) return(genFvaluesMLM(Y, dfs[[1]], formula.full, formula.reduced, ...))
   Fvalues <- vector(length=nr)
   for(i in 1:nr) {
     df <- dfs[[i]]
@@ -142,6 +143,19 @@ genFvaluesLM <- function(Y, dfs, formula.full, formula.reduced, ...) {
     Fvalues[i] <- Anova.res$F[2]
   }
   Fvalues
+}
+
+# If covariates are constant with respect to location,
+# use a multiple linear model (instead of multiple linear models)
+#' @importFrom stats lm
+#' @importFrom stats deviance
+#' @importFrom stats df.residual
+genFvaluesMLM <- function(Y, df, formula.full, formula.reduced, ...) {
+  df$Y <- Y
+  M.full <- lm(formula = formula.full, data = df, ...)
+  M.reduced <- lm(formula = formula.reduced, data = df, ...)
+  # F-statistic
+  (deviance(M.full)-deviance(M.reduced))/(df.residual(M.full)-df.residual(M.reduced))/(deviance(M.full)/df.residual(M.full))
 }
 
 # Parameter estimate b for lm
