@@ -40,20 +40,20 @@ Multiple testing in permutation inference for the general linear model (GLM)
 data("imageset2")
 # Testing discrete factor group
 res.g <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
-                       formula.full = Y ~ group + z,
-                       formula.reduced = Y ~ z,
-                       image_sets = list(Y = imageset2$image_set),
-                       factors = data.frame(group = imageset2$Group,
-                                            z = imageset2$z))
+                     formula.full = Y ~ group + z,
+                     formula.reduced = Y ~ z,
+                     image_sets = list(Y = imageset2$image_set),
+                     factors = data.frame(group = imageset2$Group,
+                                          z = imageset2$z))
 plot(res.g)
 
 # Testing continuous factor z
 res.z <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
-                      formula.full = Y ~ group + z,
-                      formula.reduced = Y ~ group,
-                      image_sets = list(Y = imageset2$image_set),
-                      factors = data.frame(group = imageset2$Group,
-                                           z = imageset2$z))
+                     formula.full = Y ~ group + z,
+                     formula.reduced = Y ~ group,
+                     image_sets = list(Y = imageset2$image_set),
+                     factors = data.frame(group = imageset2$Group,
+                                          z = imageset2$z))
 plot(res.z)
 }
 }

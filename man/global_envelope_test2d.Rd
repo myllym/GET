@@ -91,3 +91,6 @@ Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Glo
 
 Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
 }
+\seealso{
+\code{\link{plot.global_envelope2d}}
+}

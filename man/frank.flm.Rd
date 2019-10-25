@@ -6,7 +6,7 @@
 \usage{
 frank.flm(nsim, formula.full, formula.reduced, curve_sets,
   factors = NULL, savefuns = TRUE, ..., GET.args = NULL,
-  mc.cores = 1, mc.args = NULL, fast = TRUE)
+  mc.cores = 1, mc.args = NULL, cl = NULL, fast = TRUE)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -30,7 +30,7 @@ to the number of curves. Each column should specify the values of a factor.}
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
 
-\item{...}{Additional arguments to be passed to \code{\link[stats]{lm}}.}
+\item{...}{Additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
 
 \item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.}
 
@@ -42,9 +42,10 @@ Parallelization can be used in generating simulations and in calculating the sec
 \item{mc.args}{A named list of additional arguments to be passed to \code{\link{mclapply}}.
 Only relevant if \code{mc.cores} is more than 1.}
 
-\item{fast}{Logical. If TRUE and no additional parameters are passed to \code{\link[stats]{lm}}
-in \code{...}, then a faster implementation to calculate the test statistics is used.
-If FALSE, then \code{\link[stats]{lm}} is utilized for the test statistic calculation (slow).}
+\item{cl}{Allows parallelization through the use of \code{\link{parLapply}} (works also
+in Windows), see the argument \code{cl} there, and examples.}
+
+\item{fast}{Logical. See details.}
 }
 \value{
 A \code{global_envelope} object, which can be printed and plotted directly.
@@ -70,24 +71,45 @@ nested within the reduced model. The full model should include in addition to th
 model the interesting factors whose effects are under investigation. Please avoid use of
 '*' when specifying interactions, e.g. factor1*factor2; instead explicitly specify all
 components of the model.
+
+There are different versions of the implementation depending on the application.
+Given that the argument \code{fast} is TRUE, then
+\itemize{
+\item If all the covariates are constant across the functions, i.e. they can be provided in the
+argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
+the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
+The possible extra arguments passed in \code{...} to \code{\link[stats]{lm}} must be of the form that
+\code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
+needed.
+\item If some of the covariates vary across the space, i.e. they are provided in the list of curve sets in
+the argument \code{curve_sets} together with the dependent functions, but there are no extra arguments given
+by the user in \code{...}, there is a rather fast implementation of the F-value calculation (which does not
+use \code{\link[stats]{lm}}).
+\item If some of the covariates vary across the space and there are user specified extra arguments given in
+\code{...}, then the implementation fits a linear model at each argument value of the functions using
+\code{\link[stats]{lm}}, which can be rather slow. The arguments \code{...} are passed to \code{\link[stats]{lm}}
+for fitting each linear model.
+}
+By setting \code{fast = FALSE}, the latter version is used even in a case where faster implementation would be
+available. Usually this is not desired.
 }
 \examples{
 data(GDPtax)
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 \donttest{
 res.tax_within_group <- frank.flm(nsim = 999,
-                                   formula.full = Y~Group+Tax+Group:Tax,
-                                   formula.reduced = Y~Group+Tax,
-                                   curve_sets = list(Y=GDPtax$GDP),
-                                   factors = factors.df)
+                                  formula.full = Y~Group+Tax+Group:Tax,
+                                  formula.reduced = Y~Group+Tax,
+                                  curve_sets = list(Y=GDPtax$GDP),
+                                  factors = factors.df)
 }
 \dontshow{
 res.tax_within_group <- frank.flm(nsim = 4,
-                                   formula.full = Y~Group+Tax+Group:Tax,
-                                   formula.reduced = Y~Group+Tax,
-                                   curve_sets = list(Y=GDPtax$GDP),
-                                   factors = factors.df,
-                                   GET.args = list(alpha=0.20))
+                                  formula.full = Y~Group+Tax+Group:Tax,
+                                  formula.reduced = Y~Group+Tax,
+                                  curve_sets = list(Y=GDPtax$GDP),
+                                  factors = factors.df,
+                                  GET.args = list(alpha=0.20))
 }
 plot(res.tax_within_group)
 }
