@@ -463,7 +463,7 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
                       fast = TRUE) {
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
-                   curve_sets=curve_sets, factors=factors)
+                   curve_sets=curve_sets, factors=factors, fast=fast)
 
   extraargs <- list(...)
   if(length(extraargs) > 0) fast <- FALSE
