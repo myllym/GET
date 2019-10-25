@@ -308,11 +308,17 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' plot(res.tax_within_group)
 #' }
 graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
-                       summaryfun = c("means", "contrasts"),
-                       savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1L, mc.args = NULL) {
+                      summaryfun = c("means", "contrasts"),
+                      savefuns = FALSE, ..., GET.args = NULL,
+                      mc.cores = 1L, mc.args = NULL, cl = NULL,
+                      fast = TRUE) {
   # Set up the contrasts
   op <- options(contrasts = c("contr.sum", "contr.poly"))
   on.exit(options(op))
+  if(!is.null(cl)) {
+    clusterEvalQ(cl, { op <- options(contrasts = c("contr.sum", "contr.poly")) })
+    on.exit({ clusterEvalQ(cl, { options(op) }) }, add=TRUE)
+  }
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors, fast=fast)
@@ -335,7 +341,8 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
     mod.red <- lm(formula.reduced, data=X$dfs[[i]], ...)
     list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
   }
-  mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
+  if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
+  else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1, ...)
   fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
   res.m <- sapply(mclapply_res, function(x) x$res.m)
 
@@ -349,7 +356,8 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
     # Regress the permuted data against the full model and get a new effect of interest
     genCoef(Yperm(), X$dfs, formula.full, nameinteresting, ...)
   }
-  sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
+  if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
+  else sim <- parLapply(cl, 1:nsim, loopfun2, ...)
   sim <- simplify2array(sim)
   complabels <- colnames(obs)
 
@@ -445,8 +453,9 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' plot(res.tax_within_group)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
-                       savefuns = TRUE, ..., GET.args = NULL, mc.cores = 1, mc.args = NULL,
-                       fast = TRUE) {
+                      savefuns = TRUE, ..., GET.args = NULL,
+                      mc.cores = 1, mc.args = NULL, cl = NULL,
+                      fast = TRUE) {
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors)
@@ -471,7 +480,8 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
       list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
     }
   }
-  mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
+  if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
+  else mclapply_res <- parLapply(cl, X=1:X$nr, fun=loopfun1, ...)
   fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
   res.m <- sapply(mclapply_res, function(x) x$res.m)
   # Simulations by permuting the residuals + F-values for each permutation
