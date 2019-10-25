@@ -271,6 +271,8 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @importFrom stats predict.lm
 #' @importFrom stats dummy.coef
 #' @importFrom parallel mclapply
+#' @importFrom parallel parLapply
+#' @importFrom parallel clusterEvalQ
 #' @examples
 #' data(rimov)
 #' \donttest{
@@ -452,6 +454,9 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' }
 #' plot(res.tax_within_group)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
+#' @importFrom parallel mclapply
+#' @importFrom parallel parLapply
+#' @importFrom stats lm
 frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                       savefuns = TRUE, ..., GET.args = NULL,
                       mc.cores = 1, mc.args = NULL, cl = NULL,
