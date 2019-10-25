@@ -231,13 +231,25 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'
 #' The specification of the full and reduced formulas is important. The reduced model should be
 #' nested within the reduced model. The full model should include in addition to the reduced
-#' model the interesting factors whose effects are under investigation. Please avoid use of
-#' '*' when specifying interactions, e.g. factor1*factor2; instead explicitly specify all
-#' components of the model. The function \code{\link[stats]{dummy.coef}} is used to find the
-#' names of interesting factors and to extract them in terms of the original levels of the
-#' coefficients. According to its help page, this function is intented for human inspection
-#' of the output. Therefore, the investigated interesting factors are always printed for the user
-#' at the beginning of starting the simulations.
+#' model the interesting factors whose effects are under investigation.
+#' The implementation to find the coefficients of the interesting factors is based on dummy.coef and
+#' the restrictions there apply.
+#'
+#' There are different versions of the implementation depending on the application.
+#' Given that the argument \code{fast} is TRUE, then
+#' \itemize{
+#' \item If all the covariates are constant across the functions, i.e. they can be provided in the
+#' argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
+#' the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
+#' The possible extra arguments passed in \code{...} to \code{\link[stats]{lm}} must be of the form that
+#' \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
+#' needed.
+#' \item If some of the covariates vary across the space and there are user specified extra arguments given in
+#' \code{...}, then the implementation fits a linear model at each argument value of the functions using
+#' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{...} are passed to \code{\link[stats]{lm}}
+#' for fitting each linear model.
+#' }
+#' By setting \code{fast = FALSE}, it is possible to use the slow version for any case. Usually this is not desired.
 #'
 #' @inheritParams graph.fanova
 #' @inheritParams GET.composite
@@ -430,6 +442,27 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' model the interesting factors whose effects are under investigation. Please avoid use of
 #' '*' when specifying interactions, e.g. factor1*factor2; instead explicitly specify all
 #' components of the model.
+#'
+#' There are different versions of the implementation depending on the application.
+#' Given that the argument \code{fast} is TRUE, then
+#' \itemize{
+#' \item If all the covariates are constant across the functions, i.e. they can be provided in the
+#' argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
+#' the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
+#' The possible extra arguments passed in \code{...} to \code{\link[stats]{lm}} must be of the form that
+#' \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
+#' needed.
+#' \item If some of the covariates vary across the space, i.e. they are provided in the list of curve sets in
+#' the argument \code{curve_sets} together with the dependent functions, but there are no extra arguments given
+#' by the user in \code{...}, there is a rather fast implementation of the F-value calculation (which does not
+#' use \code{\link[stats]{lm}}).
+#' \item If some of the covariates vary across the space and there are user specified extra arguments given in
+#' \code{...}, then the implementation fits a linear model at each argument value of the functions using
+#' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{...} are passed to \code{\link[stats]{lm}}
+#' for fitting each linear model.
+#' }
+#' By setting \code{fast = FALSE}, the latter version is used even in a case where faster implementation would be
+#' available. Usually this is not desired.
 #'
 #' @inheritParams graph.flm
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
