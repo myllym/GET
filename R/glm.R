@@ -497,7 +497,7 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
     }
   }
   if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
-  else mclapply_res <- parLapply(cl, X=1:X$nr, fun=loopfun1, ...)
+  else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1, ...)
   fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
   res.m <- sapply(mclapply_res, function(x) x$res.m)
   # Simulations by permuting the residuals + F-values for each permutation
@@ -517,7 +517,8 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
       genFvaluesLM(Yperm(), X$dfs, formula.full, formula.reduced, ...)
     }
   }
-  sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
+  if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
+  else sim <- parLapply(cl, 1:nsim, loopfun2)
   sim <- simplify2array(sim)
   if(fast) obs <- obs$Fvalues
 
