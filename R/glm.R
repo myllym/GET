@@ -343,7 +343,11 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   #-- Freedman-Lane procedure
   # Fit the reduced model at each argument value to get the fitted values and residuals
   loopfun1 <- function(i, ...) {
-    mod.red <- lm(formula.reduced, data=X$dfs[[i]], ...)
+    if(length(X$dfs) == 1) {
+      df <- X$dfs[[1]]
+      df$Y <- X$Y[,i]
+    } else df <- X$dfs[[i]]
+    mod.red <- lm(formula.reduced, data=df, ...)
     list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
   }
   if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
