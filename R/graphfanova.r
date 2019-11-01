@@ -167,7 +167,7 @@ contrasts.m <- function(x, groups, ...) {
 #' then you should use the test function
 #' \deqn{\mathbf{T} = (\overline{T}_1({\bf r}), \overline{T}_2({\bf r}), \dots , \overline{T}_J({\bf r}))}{T = (\bar{T}_1(r), \bar{T}_2(r), ..., \bar{T}_J(r))}
 #' where \eqn{\overline{T}_i({\bf r})}{\bar{T}_i(r)} is a vector of mean values of functions in the group j.
-#' This can be done by choosing the summaryfun \code{"means"}.
+#' This test function is used when \code{contrasts = FALSE} (default).
 #'
 #' An alternative is to test the equivalent hypothesis
 #' \deqn{H_0 : \mu_i(r) - \mu_j(r) = 0, i=1,\dots,J-1, j=1,\dots,J.}{H0: \mu_i(r) - \mu_j(r) = 0, i=1,...,J-1, j=i,...,J.}
@@ -176,7 +176,7 @@ contrasts.m <- function(x, groups, ...) {
 #' test vector is taken to consist of the differences of the group averages of test functions, namely
 #' \deqn{\mathbf{T'} = (\overline{T}_1({\bf r})-\overline{T}_2({\bf r}),
 #' \overline{T}_1({\bf r})-\overline{T}_3({\bf r}), \dots , \overline{T}_{J-1}({\bf r})-\overline{T}_J({\bf r})).}{T' = (\bar{T}_1(r)-\bar{T}_2(r), \bar{T}_1(r)-\bar{T}_3(r), ..., \bar{T}_{J-1}(r)-\bar{T}_J(r)).}
-#' The summaryfun option \code{"contrasts"} can be used to perform the test based on this test vector.
+#' With the option \code{contrasts = TRUE} the test will be based on this test vector.
 #'
 #' The test as such assumes that the variances are equal across the groups of functions. To deal with
 #' unequal variances, the differences are rescaled as the first step as follows
@@ -193,8 +193,8 @@ contrasts.m <- function(x, groups, ...) {
 #' @param groups The original groups (a factor vector representing the assignment to groups).
 #' @param variances Either "equal" or "unequal". If "unequal", then correction for unequal variances
 #' as explained in details will be done.
-#' @param summaryfun Possible values are "means" and "contrasts".
-#' See description for their meaning.
+#' @param contrasts Logical. FALSE and TRUE specify the two test functions as described in
+#' description part of this help file.
 # Note: Possibly add a some arguments to specify which contrasts should be used.
 # (Try to find our how this is usually done in R, in ordinary anova.)
 #' @param n.aver If variances = "unequal", there is a possibility to use variances smoothed
@@ -210,7 +210,8 @@ contrasts.m <- function(x, groups, ...) {
 #' \deqn{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}
 #' If \code{cov}, then the equality of lag \code{cov.lag} covariance is tested by performing the fANOVA with
 #' \deqn{W_{ij}(r) = \sqrt{|V_{ij}(r)|\cdot sign(V_{ij}(r))},}{|V_{ij}(r)| sign(V_{ij}(r)),}
-#' where \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
+#' where
+#' \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
 #' See Mrkvicka et al. (2018) for more details.
 #' @param cov.lag The lag of the covariance for testing the equality of covariances,
 #' see \code{test.equality}.
@@ -256,7 +257,7 @@ contrasts.m <- function(x, groups, ...) {
 #' res <- graph.fanova(nsim = nsim, curve_set = cgec,
 #'                     groups = attr(cgec, "group"),
 #'                     variances = "equal",
-#'                     summaryfun = "means")
+#'                     contrasts = FALSE)
 #' plot(res, ncol=3,
 #'      labels = paste("Group ", 1:3, sep=""),
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
@@ -265,13 +266,13 @@ contrasts.m <- function(x, groups, ...) {
 #' res2 <- graph.fanova(nsim = nsim, curve_set = cgec,
 #'                     groups = attr(cgec, "group"),
 #'                     variances = "equal",
-#'                     summaryfun = "contrasts")
+#'                     contrasts = TRUE)
 #' }
 #' \dontshow{
 #' res2 <- graph.fanova(nsim = 4, curve_set = cgec,
 #'                     groups = attr(cgec, "group"),
 #'                     variances = "equal",
-#'                     summaryfun = "contrasts",
+#'                     contrasts = TRUE,
 #'                     alpha = 0.2)
 #' }
 #' plot(res2, ncol=3,
@@ -287,22 +288,22 @@ contrasts.m <- function(x, groups, ...) {
 #' nsim <- 999
 #'
 #' # Test for equality of variances in the groups
-#' resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
+#' resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE,
 #'                      test.equality="var")
 #' plot(resV)
 #' # Test for equality of lag 1 covariances in the groups
-#' resC <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
+#' resC <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE,
 #'                      test.equality="cov", cov.lag=1)
 #' plot(resC)
 #'
 #' # Test the equality of means in the groups (fANOVA), assuming equality of variances
-#' res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means")
+#' res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE)
 #' plot(res)
-#' res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="contrasts")
+#' res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = TRUE)
 #' plot(res2)
 #' }
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
-                         summaryfun = c("means", "contrasts"),
+                         contrasts = FALSE,
                          n.aver = 1L, mirror = FALSE, savefuns=FALSE,
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
@@ -330,12 +331,9 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
            r <- r[1:(length(r)-cov.lag)]
          })
 
-  summaryfun <- match.arg(summaryfun)
-  # setting that 'summaryfun' is a function
-  switch(summaryfun, 
-         means = {fun = means.m},
-         contrasts = {fun = contrasts.m}
-         )
+  # setting the 'fun', "means" or "constrasts"
+  if(!contrasts) fun <- means.m
+  else fun <- contrasts.m
 
   obs <- fun(x, groups)
   # simulations by permuting to which groups the functions belong to
@@ -351,7 +349,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   }
   res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
   attr(res, "method") <- "Graphical functional ANOVA" # Change method name
-  attr(res, "summaryfun") <- summaryfun
+  attr(res, "contrasts") <- contrasts
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
   if(savefuns) attr(res, "simfuns") <- csets
@@ -466,7 +464,7 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' res.c <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
 #'                         image_set = imageset1$image_set,
 #'                         groups = imageset1$Group,
-#'                         summaryfun = "contrasts")
+#'                         contrasts = TRUE)
 #' plot(res.c)
 #' plot(res.c, contours=FALSE)
 #' }
