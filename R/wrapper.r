@@ -210,7 +210,6 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #' @param r The sequence of argument values at which the distribution functions are compared.
 #' The default is 100 equally spaced values between the minimum and maximum over all groups.
 #' @inheritParams graph.fanova
-#' @param summaryfun Possible values are "means" and "contrasts". See \code{\link{graph.fanova}} for more information.
 #' @export
 #' @examples
 #' if(require(fda, quietly=TRUE)) {
@@ -223,16 +222,16 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'   # Create a list of the data
 #'   fm.list <- list(Girls=f.a, Boys=m.a)
 #'   \donttest{
-#'   res_m <- GET.necdf(fm.list, summaryfun="means")
+#'   res_m <- GET.necdf(fm.list)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts")
+#'   res_c <- GET.necdf(fm.list, contrasts = TRUE)
 #'   plot(res_c)
 #'   }
 #'   \dontshow{
 #'   # The test with lower number of simulations
-#'   res_m <- GET.necdf(fm.list, summaryfun="means", nsim=4, alpha=0.2)
+#'   res_m <- GET.necdf(fm.list, nsim=4, alpha=0.2)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=4, alpha=0.2)
+#'   res_c <- GET.necdf(fm.list, contrasts = TRUE, nsim=4, alpha=0.2)
 #'   plot(res_c)
 #'   }
 #'
@@ -245,46 +244,40 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'   # Create a list of the data
 #'   fm.list <- list(Girls=f.a, Boys=m.a)
 #'   \donttest{
-#'   res_m <- GET.necdf(fm.list, summaryfun="means")
+#'   res_m <- GET.necdf(fm.list)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts")
+#'   res_c <- GET.necdf(fm.list, contrasts = TRUE)
 #'   plot(res_c)
 #'   }
 #'   \dontshow{
 #'   # The test with lower number of simulations
-#'   res_m <- GET.necdf(fm.list, summaryfun="means", nsim=4, alpha=0.2)
+#'   res_m <- GET.necdf(fm.list, nsim=4, alpha=0.2)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, summaryfun="contrasts", nsim=4, alpha=0.2)
+#'   res_c <- GET.necdf(fm.list, contrasts = TRUE, nsim=4, alpha=0.2)
 #'   plot(res_c)
 #'   }
 #' }
 GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x, max)))), length=100),
-                      summaryfun = c("means", "contrasts"),
-                      nsim, ...) {
+                      contrasts = FALSE, nsim, ...) {
   if(!is.list(x) && length(x)<2) stop("At least two groups should be provided.\n")
   x.lengths <- as.numeric(lapply(x, FUN = length))
   if(!is.null(names(x))) groups <- rep(names(x), times=x.lengths)
   else groups <- rep(1:length(x), times=x.lengths)
   groups <- factor(groups, levels=unique(groups))
   gnames <- levels(groups)
-  summaryfun <- match.arg(summaryfun)
   if(missing(nsim)) {
-    switch(summaryfun,
-           means = {
-             nsim <- length(x)*1000 - 1
-           },
-           contrasts = {
-             J <- length(x)
-             nsim <- (J*(J-1)/2)*1000 - 1
-           }
-    )
+    if(!contrasts) {
+      nsim <- length(x)*1000 - 1
+    }
+    else {
+      J <- length(x)
+      nsim <- (J*(J-1)/2)*1000 - 1
+    }
     message("Creating ", nsim, " permutations.\n", sep="")
   }
-  # setting that 'summaryfun' is a function
-  switch(summaryfun,
-         means = {fun <- ecdfmeans.m},
-         contrasts = {fun <- ecdfcontrasts.m}
-  )
+  # setting the 'fun', "means" or "contrasts"
+  if(!contrasts) fun <- ecdfmeans.m
+  else fun <- ecdfcontrasts.m
   x <- unlist(x)
   # Observed difference between the ecdfs
   obs <- fun(x, groups, r)
@@ -303,17 +296,15 @@ GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapp
   res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
   attr(res, "xlab") <- "x"
   attr(res, "xexp") <- quote(x)
-  switch(summaryfun,
-         means = {
-           attr(res, "ylab") <- "F(x)"
-           attr(res, "yexp") <- quote(hat(F)(x))
-         },
-         contrasts = {
-           attr(res, "ylab") <- "diff. F(x)"
-           attr(res, "yexp") <- quote(hat(F)[i](x)-hat(F)[j](x))
-         }
-  )
-  attr(res, "summaryfun") <- summaryfun
+  if(!contrasts) {
+    attr(res, "ylab") <- "F(x)"
+    attr(res, "yexp") <- quote(hat(F)(x))
+  }
+  else {
+    attr(res, "ylab") <- "diff. F(x)"
+    attr(res, "yexp") <- quote(hat(F)[i](x)-hat(F)[j](x))
+  }
+  attr(res, "contrasts") <- contrasts
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
   res
