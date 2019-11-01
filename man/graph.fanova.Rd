@@ -5,9 +5,8 @@
 \title{One-way graphical functional ANOVA}
 \usage{
 graph.fanova(nsim, curve_set, groups, variances = "equal",
-  summaryfun = c("means", "contrasts"), n.aver = 1L, mirror = FALSE,
-  savefuns = FALSE, test.equality = c("mean", "var", "cov"),
-  cov.lag = 1, ...)
+  contrasts = FALSE, n.aver = 1L, mirror = FALSE, savefuns = FALSE,
+  test.equality = c("mean", "var", "cov"), cov.lag = 1, ...)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -22,8 +21,8 @@ the observed functions in the component \code{obs}.}
 \item{variances}{Either "equal" or "unequal". If "unequal", then correction for unequal variances
 as explained in details will be done.}
 
-\item{summaryfun}{Possible values are "means" and "contrasts".
-See description for their meaning.}
+\item{contrasts}{Logical. FALSE and TRUE specify the two test functions as described in
+description part of this help file.}
 
 \item{n.aver}{If variances = "unequal", there is a possibility to use variances smoothed
 by appying moving average to the estimated sample variances. n.aver determines
@@ -41,7 +40,8 @@ the graphical functional ANOVA test on the functions
 \deqn{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}{Z_{ij}(r) = T_{ij}(r) - \bar{T}_j(r).}
 If \code{cov}, then the equality of lag \code{cov.lag} covariance is tested by performing the fANOVA with
 \deqn{W_{ij}(r) = \sqrt{|V_{ij}(r)|\cdot sign(V_{ij}(r))},}{|V_{ij}(r)| sign(V_{ij}(r)),}
-where \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
+where
+\deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
 See Mrkvicka et al. (2018) for more details.}
 
 \item{cov.lag}{The lag of the covariance for testing the equality of covariances,
@@ -70,7 +70,7 @@ If you want to test the hypothesis
 then you should use the test function
 \deqn{\mathbf{T} = (\overline{T}_1({\bf r}), \overline{T}_2({\bf r}), \dots , \overline{T}_J({\bf r}))}{T = (\bar{T}_1(r), \bar{T}_2(r), ..., \bar{T}_J(r))}
 where \eqn{\overline{T}_i({\bf r})}{\bar{T}_i(r)} is a vector of mean values of functions in the group j.
-This can be done by choosing the summaryfun \code{"means"}.
+This test function is used when \code{contrasts = TRUE} (default).
 
 An alternative is to test the equivalent hypothesis
 \deqn{H_0 : \mu_i(r) - \mu_j(r) = 0, i=1,\dots,J-1, j=1,\dots,J.}{H0: \mu_i(r) - \mu_j(r) = 0, i=1,...,J-1, j=i,...,J.}
@@ -79,7 +79,7 @@ it can be directed tested by mean of the combined rank test (Mrkvička et al., 2
 test vector is taken to consist of the differences of the group averages of test functions, namely
 \deqn{\mathbf{T'} = (\overline{T}_1({\bf r})-\overline{T}_2({\bf r}),
 \overline{T}_1({\bf r})-\overline{T}_3({\bf r}), \dots , \overline{T}_{J-1}({\bf r})-\overline{T}_J({\bf r})).}{T' = (\bar{T}_1(r)-\bar{T}_2(r), \bar{T}_1(r)-\bar{T}_3(r), ..., \bar{T}_{J-1}(r)-\bar{T}_J(r)).}
-The summaryfun option \code{"contrasts"} can be used to perform the test based on this test vector.
+With the option \code{contrasts = TRUE} the test will be based on this test vector.
 
 The test as such assumes that the variances are equal across the groups of functions. To deal with
 unequal variances, the differences are rescaled as the first step as follows
@@ -119,7 +119,7 @@ plot(res.var, ncol=3,
 res <- graph.fanova(nsim = nsim, curve_set = cgec,
                     groups = attr(cgec, "group"),
                     variances = "equal",
-                    summaryfun = "means")
+                    contrasts = FALSE)
 plot(res, ncol=3,
      labels = paste("Group ", 1:3, sep=""),
      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
@@ -128,13 +128,13 @@ plot(res, ncol=3,
 res2 <- graph.fanova(nsim = nsim, curve_set = cgec,
                     groups = attr(cgec, "group"),
                     variances = "equal",
-                    summaryfun = "contrasts")
+                    contrasts = TRUE)
 }
 \dontshow{
 res2 <- graph.fanova(nsim = 4, curve_set = cgec,
                     groups = attr(cgec, "group"),
                     variances = "equal",
-                    summaryfun = "contrasts",
+                    contrasts = TRUE,
                     alpha = 0.2)
 }
 plot(res2, ncol=3,
@@ -150,18 +150,18 @@ groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 nsim <- 999
 
 # Test for equality of variances in the groups
-resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
+resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE,
                      test.equality="var")
 plot(resV)
 # Test for equality of lag 1 covariances in the groups
-resC <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means",
+resC <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE,
                      test.equality="cov", cov.lag=1)
 plot(resC)
 
 # Test the equality of means in the groups (fANOVA), assuming equality of variances
-res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="means")
+res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE)
 plot(res)
-res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, summaryfun="contrasts")
+res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = TRUE)
 plot(res2)
 }
 }

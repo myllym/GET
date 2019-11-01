@@ -5,9 +5,9 @@
 \title{Graphical functional GLM}
 \usage{
 graph.flm(nsim, formula.full, formula.reduced, curve_sets,
-  factors = NULL, summaryfun = c("means", "contrasts"),
-  savefuns = FALSE, ..., GET.args = NULL, mc.cores = 1L,
-  mc.args = NULL, cl = NULL, fast = TRUE)
+  factors = NULL, contrasts = FALSE, savefuns = FALSE, ...,
+  GET.args = NULL, mc.cores = 1L, mc.args = NULL, cl = NULL,
+  fast = TRUE)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
@@ -28,8 +28,8 @@ the curve set representing Y. Also \code{\link[fda.usc]{fdata}} objects allowed.
 are constant for all argument values. The number of rows of the data frame should be equal
 to the number of curves. Each column should specify the values of a factor.}
 
-\item{summaryfun}{Possible values are "means" and "contrasts".
-See description for their meaning.}
+\item{contrasts}{Logical. FALSE and TRUE specify the two test functions as described in
+description part of this help file.}
 
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
@@ -120,7 +120,7 @@ res <- graph.flm(nsim = 19, # Increase the number of simulations for serious ana
                  factors = data.frame(Year = 1979:2014,
                                      Group = factor(c(rep(1,times=24), rep(2,times=12)),
                                                     levels=1:2)),
-                 summaryfun = "means")
+                 contrasts = FALSE)
 plot(res)
 
 \donttest{

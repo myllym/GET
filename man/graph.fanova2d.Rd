@@ -38,7 +38,7 @@ plot(res)
 res.c <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
                         image_set = imageset1$image_set,
                         groups = imageset1$Group,
-                        summaryfun = "contrasts")
+                        contrasts = TRUE)
 plot(res.c)
 plot(res.c, contours=FALSE)
 }
