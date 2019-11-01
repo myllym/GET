@@ -311,7 +311,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'                  factors = data.frame(Year = 1979:2014,
 #'                                      Group = factor(c(rep(1,times=24), rep(2,times=12)),
 #'                                                     levels=1:2)),
-#'                  summaryfun = "means")
+#'                  contrasts = FALSE)
 #' plot(res)
 #'
 #' \donttest{
@@ -325,8 +325,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' plot(res.tax_within_group)
 #' }
 graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
-                      summaryfun = c("means", "contrasts"),
-                      savefuns = FALSE, ..., GET.args = NULL,
+                      contrasts = FALSE, savefuns = FALSE, ..., GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
                       fast = TRUE) {
   # Set up the contrasts
@@ -342,12 +341,9 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 
   nameinteresting <- setdiff(labels(terms(formula.full)), labels(terms(formula.reduced)))
 
-  summaryfun <- match.arg(summaryfun)
   # setting that 'fun' is a function
-  switch(summaryfun, 
-         means = {genCoef = genCoefmeans.m},
-         contrasts = {genCoef = genCoefcontrasts.m}
-  )
+  if(!contrasts) genCoef <- genCoefmeans.m
+  else genCoef <- genCoefcontrasts.m
 
   # Fit the full model to the data and obtain the coefficients
   obs <- genCoef(X$Y, X$dfs, formula.full, nameinteresting, ...)
@@ -602,7 +598,7 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #'                       image_sets = list(Y = imageset2$image_set),
 #'                       factors = data.frame(group = imageset2$Group,
 #'                                            z = imageset2$z),
-#'                       summaryfun = "contrasts")
+#'                       contrasts = TRUE)
 #' plot(res.gc)
 #'
 #' # Testing continuous factor z
