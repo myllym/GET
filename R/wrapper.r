@@ -202,8 +202,26 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #' Compare the distributions of two (or more) groups.
 #'
 #'
-#' The default number of permutation, if nsim is not specified, is
-#' n*1000 - 1 for the case \code{"means"} and (n*(n-1)/2)*1000 - 1 for the case \code{"contrasts"},
+#' A global envelope test can be performed to investigate whether the n distribution functions
+#' differ from each other significally and how do they differ. This test is a generalization of
+#' the two-sample Kolmogorov-Smirnov test with a graphical interpretation.
+#' We assume that the curves in the different groups are an i.i.d. samples from the distribution
+#' \deqn{F_i(r), i=1, \dots, n}{F_i(r), i=1, ..., n},
+#' and we want to test the hypothesis
+#' \deqn{F_1(r)= \dots = F_n(r)}{F_1(r)= ... = F_n(r)}.
+#' If \code{contrasts = FALSE} (default), then the test statistic is taken to be
+#' \deqn{\mathbf{T} = (\hat{F}_1(r), \dots, \hat{F}_n(r))}{T = (\hat{F}_1(r), \dots, \hat{F}_n(r))}
+#' where \eqn{\hat{F}_i(r) = (\hat{F}_i(r_1), \dots, \hat{F}_i(r_k))}{\hat{F}_i(r) = (\hat{F}_i(r_1), ..., \hat{F}_i(r_k))}
+#' is the ecdf of the $i$th sample evaluated at argument values
+#' \eqn{r = (r_1,\dots,r_k)}{r = (r_1, ...,r_k)}.
+#' This is our recommended test function for the test.
+#' Another possibility is given by \code{contrasts = TRUE}, and then the test statistic is
+#' \deqn{\mathbf{T} = (\hat{F}_1(r)-\hat{F}_2(r), \dots, \hat{F}_{n-1}(r)-\hat{F}_n(r))}{T = (\hat{F}_1(r)-\hat{F}_2(r), ..., \hat{F}_{n-1}(r)-\hat{F}_n(r))}
+#'
+#' The simulations under the null hypothesis that the distributions are the same can be obtained
+#' by permuting the individuals of the groups. The default number of permutation, if nsim is not specified,
+#' is n*1000 - 1 for the case \code{contrasts = FALSE} and
+#' (n*(n-1)/2)*1000 - 1 for the case \code{contrasts = TRUE},
 #' where n is the length of x.
 #'
 #' @param x A list (of length n) of values in the n groups.
