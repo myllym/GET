@@ -9,6 +9,9 @@ check_image_set_dimensions <- function(image_set) {
     if(!all(unlist(lapply(r, FUN=is.vector))) || !all(unlist(lapply(r, FUN=is.numeric))) || !all(unlist(lapply(r, FUN=is.finite)))) stop("Error in image_set[[\'r\']].\n")
     nr <- unlist(lapply(r, FUN=length))
     if(length(nr) != 2 || !all(nr == c(obs_d[1], obs_d[2]))) stop("Unsuitable image_set[[\'r\']].\n")
+    if(!all(r[[1]][2:length(r[[1]])]-r[[1]][1:(length(r[[1]])-1)] == r[[1]][2]-r[[1]][1]) ||
+       !all(r[[2]][2:length(r[[2]])]-r[[2]][1:(length(r[[2]])-1)] == r[[2]][2]-r[[2]][1]))
+      warning("The r values are not equally spaced. The plots do not yet support this case.\n")
   }
   else {
     image_set$r <- list(x = 1:obs_d[1], y = 1:obs_d[2])
