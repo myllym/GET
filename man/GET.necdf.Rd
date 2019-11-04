@@ -29,7 +29,7 @@ differ from each other significally and how do they differ. This test is a gener
 the two-sample Kolmogorov-Smirnov test with a graphical interpretation.
 We assume that the curves in the different groups are an i.i.d. samples from the distribution
 \deqn{F_i(r), i=1, \dots, n}{F_i(r), i=1, ..., n},
-and we want to test the hypothesis 
+and we want to test the hypothesis
 \deqn{F_1(r)= \dots = F_n(r)}{F_1(r)= ... = F_n(r)}.
 If \code{contrasts = FALSE} (default), then the test statistic is taken to be
 \deqn{\mathbf{T} = (\hat{F}_1(r), \dots, \hat{F}_n(r))}{T = (\hat{F}_1(r), \dots, \hat{F}_n(r))}
