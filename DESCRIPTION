@@ -21,8 +21,6 @@ Authors@R: c(
     )
 Maintainer: Mari Myllymäki <mari.myllymaki@luke.fi>
 Imports:
-    caTools,
-    fda.usc,
     ggplot2,
     graphics,
     grDevices,
@@ -36,6 +34,7 @@ Imports:
     stats,
     utils,
 Suggests:
+    fda.usc,
     testthat,
     mvtnorm,
     fda
