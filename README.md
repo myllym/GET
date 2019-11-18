@@ -55,6 +55,8 @@ The branch 'no_fastdepth' of the library `spptest` was taken as the master branc
 
 To cite GET in publications use
 
+Myllymäki, M. and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).
 Global envelope tests for spatial processes. Journal of the Royal Statistical Society:
 Series B (Statistical Methodology) 79: 381-404. doi: 10.1111/rssb.12172 http://dx.doi.org/10.1111/rssb.12172
