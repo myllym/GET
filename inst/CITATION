@@ -2,6 +2,21 @@ citHeader("To cite package ‘GET’ in publications use:")
 
 citEntry(
     entry = "Article",
+    title = "GET: Global envelopes in R",
+    author = personList(as.person("M. Myllymäki"),
+                        as.person("T. Mrkvička")),
+    journal = "arXiv:1911.06583 [stat.ME]",
+    year = "2019",
+    volume = "",
+    pages = "",
+    url = "https://arxiv.org/abs/1911.06583",
+    textVersion  =
+    paste("Myllymäki, M. and Mrkvička, T. (2019).",
+          "GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]")
+)
+
+citEntry(
+    entry = "Article",
     title = "Global envelope tests for spatial processes",
     author = personList(as.person("M. Myllymäki"),
                         as.person("T. Mrkvička"),
