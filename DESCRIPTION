@@ -32,7 +32,7 @@ Imports:
     sp,
     spatstat,
     stats,
-    utils,
+    utils
 Suggests:
     fda.usc,
     testthat,
