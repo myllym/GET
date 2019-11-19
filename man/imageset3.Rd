@@ -26,8 +26,10 @@ where G(r) is a Gaussian random field with the exponential correlation structure
 with scale parameter 0.15 and standard deviation 0.2.
 }
 \examples{
+\donttest{
 data(imageset3)
 plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), max_ncols_of_plots = 5)
+}
 }
 \references{
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
