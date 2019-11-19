@@ -1115,8 +1115,8 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   plot(res, ylab=expression(italic(L(r)-r)))
 #'
 #'   \donttest{
-#'   ## Random labeling test
-#'   #----------------------
+#'   # Random labeling test
+#'   #=====================
 #'   mpp <- spruces
 #'   # 1) Perform simulations under the random labelling hypothesis and calculate
 #'   # the test function T(r) for the data pattern (mpp) and each simulation.
@@ -1140,13 +1140,13 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   # 4) Plot the test result
 #'   plot(res, ylab=expression(italic(L[mm](r)-L(r))))
 #'
-#'   ## Goodness-of-fit test (typically conservative, see ?GET.composite for adjusted tests)
-#'   #-----------------------------------------------
-#'   pp <- unmark(spruces)
+#'   # Goodness-of-fit test (typically conservative, see ?GET.composite for adjusted tests)
+#'   #=====================
+#'   X <- unmark(spruces)
 #'   # Minimum distance between points in the pattern
-#'   min(nndist(pp))
+#'   min(nndist(X))
 #'   # Fit a model
-#'   fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
+#'   fittedmodel <- ppm(X, interaction=Hardcore(hc=1)) # Hardcore process
 #'
 #'   # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
 #'   #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
@@ -1158,17 +1158,17 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   for(j in 1:nsim) {
 #'      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
 #'                                    R=fittedmodel$interaction$par$hc,
-#'                                    W=pp$window)
+#'                                    W=X$window)
 #'      if(j%%10==0) cat(j, "...", sep="")
 #'   }
-#'   env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
+#'   env <- envelope(X, simulate=simulations, fun="Jest", nsim=length(simulations),
 #'                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
 #'   curve_set <- crop_curves(env, r_min=1, r_max=3.5)
 #'   res <- global_envelope_test(curve_set, type="erl"); plot(res, ylab=expression(italic(J(r))))
 #'   }
 #'
 #'   # A combined global envelope test
-#'   #--------------------------------
+#'   #================================
 #'   # As an example test CSR of the saplings point pattern by means of
 #'   # L, F, G and J functions.
 #'   data(saplings)
@@ -1218,8 +1218,8 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 #' }
 #'
-#' ## A test based on a low dimensional random vector
-#' #-------------------------------------------------
+#' # A test based on a low dimensional random vector
+#' #================================================
 #' # Let us generate some example data.
 #' X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
 #' if(requireNamespace("mvtnorm", quietly=TRUE)) {
