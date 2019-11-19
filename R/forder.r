@@ -219,13 +219,30 @@ combined_forder <- function(curve_sets, ...) {
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #' @examples
 #' if(requireNamespace("fda", quietly = TRUE)) {
-#'   curve_set <- create_curve_set(list(r = as.numeric(row.names(fda::growth$hgtf)),
-#'                                      obs = fda::growth$hgtf))
-#'   plot(curve_set, ylab="height")
-#'   forder(curve_set, measure = "max", scaling="qdir")
-#'   forder(curve_set, measure = "rank")
-#'   forder(curve_set, measure = "erl")
-#'   forder(curve_set, measure = "area")
+#'   # Consider ordering of the girls in the Berkeley Growth Study data
+#'   # available from the R package fda, see ?growth, according to their
+#'   # annual heights or/and changes within years.
+#'   # First create sets of curves (vectors), for raw heights and
+#'   # for the differences within the years
+#'   years <- paste(1:18)
+#'   curves <- fda::growth[['hgtf']][years,]
+#'   cset1 <- create_curve_set(list(r = as.numeric(years),
+#'                                  obs = curves))
+#'   plot(cset1, ylab="Height")
+#'   cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
+#'                                  obs = curves[-1,] - curves[-nrow(curves),]))
+#'   plot(cset2)
+#'
+#'   # Order the girls from most extreme one to the least extreme one, below using the 'area' measure
+#'   # a) according to their heights
+#'   forder(cset1, measure = 'area')
+#'   # Print the 10 most extreme girl indices
+#'   order(forder(cset1, measure = 'area'))[1:10]
+#'   # b) according to the changes (print indices)
+#'   order(forder(cset2, measure = 'area'))[1:10]
+#'   # c) simultaneously with respect to heights and changes (print indices)
+#'   csets <- list(Height = cset1, Change = cset2)
+#'   order(forder(csets, measure = 'area'))[1:10]
 #' }
 forder <- function(curve_sets, measure = 'erl', scaling = 'qdir',
                    alternative=c("two.sided", "less", "greater"),
