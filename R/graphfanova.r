@@ -244,13 +244,13 @@ contrasts.m <- function(x, groups, ...) {
 #'   Type <- factor(Type, levels = c("MonThu", "Fri", "Free"))
 #' \donttest{
 #'   # Plot of data
-#'   if(require("ggplot2", quietly=TRUE)) {
+#'   if(requireNamespace("ggplot2", quietly=TRUE)) {
 #'     df <- do.call(rbind, lapply(1:24, FUN = function(x) {
 #'       data.frame(Hour = x, NOx = poblenou[['nox']]$data[,x],
 #'                  Type = Type, Date = rownames(poblenou[['nox']]$data))
 #'     }))
-#'     ggplot(df) + geom_line(aes(x = Hour, y = NOx, group = Date)) +
-#'       facet_wrap(vars(Type)) + GET:::ThemePlain()
+#'     ggplot2::ggplot(df) + ggplot2::geom_line(aes(x = Hour, y = NOx, group = Date)) +
+#'       ggplot2::facet_wrap(vars(Type)) + GET:::ThemePlain()
 #'   }
 #' }
 #'   # Graphical functional ANOVA
