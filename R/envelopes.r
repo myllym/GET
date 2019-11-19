@@ -748,11 +748,21 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' @export
 #' @examples
 #' if(requireNamespace("fda", quietly=TRUE)) {
-#'   curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
-#'                                      obs=fda::growth$hgtf))
-#'   plot(curve_set, ylab="height")
-#'   bp <- fBoxplot(curve_set, coverage=0.50, type="area", factor=1)
+#'   years <- paste(1:18)
+#'   curves <- fda::growth[['hgtf']][years,]
+#'   # Heights
+#'   cset1 <- create_curve_set(list(r = as.numeric(years),
+#'                                  obs = curves))
+#'   plot(cset1, ylab="Height")
+#'   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
 #'   plot(bp)
+#'
+#'   # Considering simultaneously heights and height differences
+#'   cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
+#'              obs = curves[-1,] - curves[-nrow(curves),]))
+#'   csets <- list(Height = cset1, Change = cset2)
+#'   res <- fBoxplot(csets, type = 'area', factor = 1.5)
+#'   plot(res, xlab = "Age (years)", ylab = "")
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
   res <- central_region(curve_sets, ...)
