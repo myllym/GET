@@ -249,7 +249,7 @@ contrasts.m <- function(x, groups, ...) {
 #'       data.frame(Hour = x, NOx = poblenou[['nox']]$data[,x],
 #'                  Type = Type, Date = rownames(poblenou[['nox']]$data))
 #'     }))
-#'     ggplot2::ggplot(df) + ggplot2::geom_line(aes(x = Hour, y = NOx, group = Date)) +
+#'     ggplot2::ggplot(df) + ggplot2::geom_line(ggplot2::aes(x = Hour, y = NOx, group = Date)) +
 #'       ggplot2::facet_wrap(vars(Type)) + GET:::ThemePlain()
 #'   }
 #' }
