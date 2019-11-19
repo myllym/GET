@@ -65,28 +65,23 @@ function tests, experimented with summary functions for point processes.
 ## Testing complete spatial randomness (CSR)
 #-------------------------------------------
 if(require("spatstat", quietly=TRUE)) {
-  pp <- unmark(spruces)
+  X <- unmark(spruces)
   \donttest{nsim <- 2499 # Number of simulations}
   \dontshow{nsim <- 19 # Number of simulations for testing}
-  # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-  env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate",
-                  simulate=expression(runifpoint(ex=pp)))
+  # Generate nsim simulations under CSR, calculate centred L-function for the data and simulations
+  env <- envelope(X, fun="Lest", nsim=nsim, savefuns=TRUE,
+                  correction="translate", transform = expression(.-r),
+                  simulate=expression(runifpoint(ex=X)))
   # The rank envelope test
   res <- rank_envelope(env)
   # Plot the result.
-  # - The central curve is now obtained from env[['theo']], which is the
-  # value of the L-function under the null hypothesis (L(r) = r).
   plot(res)
-  # or (requires R library ggplot2)
-  plot(res, plot_style="ggplot2")
 
   ## Advanced use:
   # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
   curve_set <- crop_curves(env, r_min=1, r_max=7)
-  # For better visualisation, take the L(r)-r function
-  curve_set <- residual(curve_set, use_theo=TRUE)
   # Do the rank envelope test
-  res <- rank_envelope(curve_set); plot(res, plot_style="ggplot2")
+  res <- rank_envelope(curve_set); plot(res)
 }
 }
 \references{

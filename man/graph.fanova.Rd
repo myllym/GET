@@ -89,6 +89,46 @@ where \eqn{\overline{T}({\bf r})}{\bar{T}(r)} is the overall sample mean and
 This scaling of the test functions can be obtained by giving the argument \code{variances = "unequal"}.
 }
 \examples{
+#-- NOx levels example (see for details MyllymÃ¤ki and MrkviÄka, 2019)
+if(require("fda.usc", quietly=TRUE)) {
+  # Prepare data
+  data(poblenou)
+  Free <- poblenou$df$day.festive == 1 |
+    as.integer(poblenou$df$day.week) >= 6
+  MonThu <- poblenou$df$day.festive == 0 & poblenou$df$day.week \%in\% 1:4
+  Friday <- poblenou$df$day.festive == 0 & poblenou$df$day.week == 5
+  Type <- vector(length=length(Free))
+  Type[Free] <- "Free"
+  Type[MonThu] <- "MonThu"
+  Type[Friday] <- "Fri"
+  Type <- factor(Type, levels = c("MonThu", "Fri", "Free"))
+\donttest{
+  # Plot of data
+  if(require("ggplot2", quietly=TRUE)) {
+    df <- do.call(rbind, lapply(1:24, FUN = function(x) {
+      data.frame(Hour = x, NOx = poblenou[['nox']]$data[,x],
+                 Type = Type, Date = rownames(poblenou[['nox']]$data))
+    }))
+    ggplot(df) + geom_line(aes(x = Hour, y = NOx, group = Date)) +
+      facet_wrap(vars(Type)) + GET:::ThemePlain()
+  }
+}
+  # Graphical functional ANOVA
+  cset <- create_curve_set(list(r=0:23,
+             obs=t(log(poblenou[['nox']][['data']]))))
+\donttest{
+  res.c <- graph.fanova(nsim = 2999, curve_set = cset,
+                        groups = Type, variances = "unequal",
+                        contrasts = TRUE)
+}
+\dontshow{
+  res.c <- graph.fanova(nsim = 4, curve_set = cset,
+                        groups = Type, variances = "unequal",
+                        contrasts = TRUE, alpha = 0.2)
+}
+  plot(res.c, xlab = "Hour", ylab = "Diff.")
+}
+
 #-- Centred government expenditure centralization ratios example
 # This is an example analysis of the centred GEC in Mrkvicka et al.
 data(cgec)
@@ -173,6 +213,8 @@ arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
 Mrkvička, T., Myllymäki, M., and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
 Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
+
+Myllymäki, M and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 }
 \seealso{
 \code{\link{graph.fanova2d}}, \code{\link{frank.fanova}}

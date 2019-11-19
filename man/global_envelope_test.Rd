@@ -209,41 +209,59 @@ functions are concatenated together into a one long vector.
 }
 
 \examples{
+# Goodness-of-fit testing for simple hypothesis
 if(require("spatstat", quietly=TRUE)) {
-  ## Testing complete spatial randomness (CSR)
-  #-------------------------------------------
+  # Testing complete spatial randomness (CSR)
+  #==========================================
+  X <- unmark(spruces)
+
   \donttest{nsim <- 1999 # Number of simulations}
   \dontshow{nsim <- 19 # Number of simulations}
-  pp <- unmark(spruces)
+
+  # Illustration of general workflow for simple hypotheses
+  #=======================================================
+  # First illustrate the general workflow for the test by this example
+  # of CSR test for a point pattern X using the empirical L-function.
+  # Define the argument values at which the functions are evaluated
+  obs.L <- Lest(X, correction = "translate")
+  r <- obs.L[['r']]
+  # The test function for the data
+  obs <- obs.L[['trans']] - r
+  # Prepare simulations and calculate test functions for them at same r as 'obs'
+  sim <- matrix(nrow = length(r), ncol = nsim)
+  for(i in 1:nsim) {
+    sim.X <- runifpoint(ex = X) # simulation under CSR
+    sim[, i] <- Lest(sim.X, correction = "translate", r = r)[['trans']] - r
+  }
+  # Create a curve_set containing argument values, observed and simulated functions
+  cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
+  # Perform the test
+  res <- global_envelope_test(cset, type="erl")
+  plot(res, ylab = expression(italic(hat(L)(r)-r)))
+
+  # Simple hypothesis for a point pattern utilizing the spatstat package
+  #=====================================================================
   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
-  env <- envelope(pp, fun="Lest", nsim=nsim,
+  env <- envelope(X, fun="Lest", nsim=nsim,
                   savefuns=TRUE, # save the functions
                   correction="translate", # edge correction for L
-                  simulate=expression(runifpoint(ex=pp))) # Simulate CSR
-  # The rank envelope test (extreme rank length (ERL) breaking of ties)
-  res <- global_envelope_test(env)
-  # Plot the result.
-  # - The central curve is now obtained from env[['theo']], which is the
-  # value of the L-function under the null hypothesis (L(r) = r).
-  # - Three different plot styles are provided:
-  # a) ggplot2 style (requires ggplot2)
-  plot(res, plot_style="ggplot2")
-  # b) spatstat's style (requires spatstat)
-  plot(res, plot_style="fv")
-  # c) a basic style
-  plot(res, plot_style="basic")
+                  transform = expression(.-r), # centering
+                  simulate=expression(runifpoint(ex=X))) # Simulate CSR
+  # The rank envelope test (ERL)
+  res <- global_envelope_test(env, type="erl")
+  # Plot the result
+  plot(res)
 
   ## Advanced use:
   # Choose the interval of distances [r_min, r_max] (at the same time create a curve_set from 'env')
-  curve_set <- crop_curves(env, r_min=1, r_max=7)
-  # For better visualisation, take the L(r)-r function
-  curve_set <- residual(curve_set, use_theo=TRUE)
+  cset <- crop_curves(env, r_min=1, r_max=7)
   # Do the rank envelope test (erl)
-  res <- global_envelope_test(curve_set); plot(res, ylab=expression(italic(L(r)-r)))
+  res <- global_envelope_test(cset, type="erl")
+  plot(res, ylab=expression(italic(L(r)-r)))
 
   \donttest{
-  ## Random labeling test
-  #----------------------
+  # Random labeling test
+  #=====================
   mpp <- spruces
   # 1) Perform simulations under the random labelling hypothesis and calculate
   # the test function T(r) for the data pattern (mpp) and each simulation.
@@ -267,13 +285,13 @@ if(require("spatstat", quietly=TRUE)) {
   # 4) Plot the test result
   plot(res, ylab=expression(italic(L[mm](r)-L(r))))
 
-  ## Goodness-of-fit test (typically conservative, see ?GET.composite for adjusted tests)
-  #-----------------------------------------------
-  pp <- unmark(spruces)
+  # Goodness-of-fit test (typically conservative, see ?GET.composite for adjusted tests)
+  #=====================
+  X <- unmark(spruces)
   # Minimum distance between points in the pattern
-  min(nndist(pp))
+  min(nndist(X))
   # Fit a model
-  fittedmodel <- ppm(pp, interaction=Hardcore(hc=1)) # Hardcore process
+  fittedmodel <- ppm(X, interaction=Hardcore(hc=1)) # Hardcore process
 
   # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
   #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
@@ -285,17 +303,17 @@ if(require("spatstat", quietly=TRUE)) {
   for(j in 1:nsim) {
      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
                                    R=fittedmodel$interaction$par$hc,
-                                   W=pp$window)
+                                   W=X$window)
      if(j\%\%10==0) cat(j, "...", sep="")
   }
-  env <- envelope(pp, simulate=simulations, fun="Jest", nsim=length(simulations),
+  env <- envelope(X, simulate=simulations, fun="Jest", nsim=length(simulations),
                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
   curve_set <- crop_curves(env, r_min=1, r_max=3.5)
   res <- global_envelope_test(curve_set, type="erl"); plot(res, ylab=expression(italic(J(r))))
   }
 
   # A combined global envelope test
-  #--------------------------------
+  #================================
   # As an example test CSR of the saplings point pattern by means of
   # L, F, G and J functions.
   data(saplings)
@@ -345,8 +363,8 @@ if(require("spatstat", quietly=TRUE)) {
   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 }
 
-## A test based on a low dimensional random vector
-#-------------------------------------------------
+# A test based on a low dimensional random vector
+#================================================
 # Let us generate some example data.
 X <- matrix(c(-1.6,1.6),1,2) # data pattern X=(X_1,X_2)
 if(requireNamespace("mvtnorm", quietly=TRUE)) {
