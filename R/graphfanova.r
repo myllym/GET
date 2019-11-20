@@ -229,7 +229,7 @@ contrasts.m <- function(x, groups, ...) {
 #'
 #' Myllymäki, M and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #' @examples
-#' #-- NOx levels example (see for details Myllymäki and Mrkvička, 2019)
+#' #-- NOx levels example (see for details Myllymaki and Mrkvicka, 2019)
 #' if(require("fda.usc", quietly=TRUE)) {
 #'   # Prepare data
 #'   data(poblenou)
