@@ -250,7 +250,7 @@ contrasts.m <- function(x, groups, ...) {
 #'                  Type = Type, Date = rownames(poblenou[['nox']]$data))
 #'     }))
 #'     ggplot2::ggplot(df) + ggplot2::geom_line(ggplot2::aes(x = Hour, y = NOx, group = Date)) +
-#'       ggplot2::facet_wrap(vars(Type)) + GET:::ThemePlain()
+#'       ggplot2::facet_wrap(ggplot2::vars(Type)) + GET:::ThemePlain()
 #'   }
 #' }
 #'   # Graphical functional ANOVA
