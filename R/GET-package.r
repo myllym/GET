@@ -1,4 +1,4 @@
-#' GET: Global Envelopes in R
+#' Global Envelopes
 #'
 #' The \pkg{GET} package provides global envelopes which
 #' can be used for central regions of functional or

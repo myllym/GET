@@ -3,7 +3,7 @@
 \docType{package}
 \name{GET-package}
 \alias{GET-package}
-\title{GET: Global Envelopes in R}
+\title{Global Envelopes}
 \description{
 The \pkg{GET} package provides global envelopes which
 can be used for central regions of functional or
