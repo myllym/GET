@@ -89,7 +89,7 @@ where \eqn{\overline{T}({\bf r})}{\bar{T}(r)} is the overall sample mean and
 This scaling of the test functions can be obtained by giving the argument \code{variances = "unequal"}.
 }
 \examples{
-#-- NOx levels example (see for details MyllymÃ¤ki and MrkviÄka, 2019)
+#-- NOx levels example (see for details Myllymaki and Mrkvicka, 2019)
 if(require("fda.usc", quietly=TRUE)) {
   # Prepare data
   data(poblenou)
@@ -110,7 +110,7 @@ if(require("fda.usc", quietly=TRUE)) {
                  Type = Type, Date = rownames(poblenou[['nox']]$data))
     }))
     ggplot2::ggplot(df) + ggplot2::geom_line(ggplot2::aes(x = Hour, y = NOx, group = Date)) +
-      ggplot2::facet_wrap(vars(Type)) + GET:::ThemePlain()
+      ggplot2::facet_wrap(ggplot2::vars(Type)) + GET:::ThemePlain()
   }
 }
   # Graphical functional ANOVA
