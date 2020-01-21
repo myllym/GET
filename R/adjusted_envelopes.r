@@ -584,6 +584,10 @@ GET.composite <- function(X, X.ls = NULL,
     else {
       alpha_star <- quantile(pvals, probs=alpha, type=1)
       res <- global_envelope_test(X, type=type, alpha=alpha_star, alternative=alt)
+      # Original p-value
+      attr(res, "p_original") <- attr(res, "p")
+      # Adjusted p-value
+      attr(res, "p") <- estimate_p_value(x=-obs_res$pval, sim_vec=-pvals, ties="conservative")
       # Save additional arguments
       if(nfuns == 1) {
         attr(res, "alpha") <- alpha

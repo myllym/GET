@@ -4,10 +4,21 @@
 \alias{graph.flm}
 \title{Graphical functional GLM}
 \usage{
-graph.flm(nsim, formula.full, formula.reduced, curve_sets,
-  factors = NULL, contrasts = FALSE, savefuns = FALSE, ...,
-  GET.args = NULL, mc.cores = 1L, mc.args = NULL, cl = NULL,
-  fast = TRUE)
+graph.flm(
+  nsim,
+  formula.full,
+  formula.reduced,
+  curve_sets,
+  factors = NULL,
+  contrasts = FALSE,
+  savefuns = FALSE,
+  ...,
+  GET.args = NULL,
+  mc.cores = 1L,
+  mc.args = NULL,
+  cl = NULL,
+  fast = TRUE
+)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}
