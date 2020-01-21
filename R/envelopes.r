@@ -341,7 +341,6 @@ GEprinthelper <- function(x, ...) {
     if(!is.null(attr(x, "p_interval")))
       cat(" p-interval         : (", attr(x, "p_interval")[1], ", ", attr(x, "p_interval")[2],")\n", sep="")
   }
-  if(!is.null(attr(x, "alpha_star"))) cat(paste("The adjusted level of the test: ", attr(x, "alpha_star"), "\n", sep=""))
 }
 
 #' Print method for the class 'global_envelope'
