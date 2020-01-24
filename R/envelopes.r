@@ -377,6 +377,13 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param ylim See \code{\link{plot.default}}. A sensible default exists.
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylab See \code{\link{plot.default}}. A sensible default exists.
+#' @param coord A data frame of the spatial coordinates where the data have been observed.
+#' \code{nrow(coord)} should match the length of \code{x$r}, and the names of the columns
+#' should be either "x", "y", "width", "height" or "xmin", "ymin", "xmax", "ymax".
+#' Here x and y should give the (center) coordinates of the observed data,
+#' width and height give the size of the pixel places at (x,y) (most often constants).
+#' The xmin, ymin, xmax, ymax give an alternative way to specify the pixels where the data have
+#' been observed, namely the corner locations of each pixel.
 #' @param color_outside Logical. Whether to color the places where the data function goes
 #' outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.
 #' @param env.col The color for the envelope lines (or dotplot arrows). Default 1 (black).
@@ -395,14 +402,24 @@ print.combined_global_envelope <- function(x, ...) {
 plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
+                                 coord = NULL,
                                  color_outside = TRUE, env.col = 1, base_size = 11,
                                  labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...) {
   plot_style <- match.arg(plot_style)
-  if(dotplot) plot_style <- "basic"
   # main
   if(missing('main')) {
-      main <- env_main_default(x, digits=digits)
+    main <- env_main_default(x, digits=digits)
   }
+  if(!is.null(coord)) {
+    if(!is.data.frame(coord)) stop("coord is not a data.frame object.\n")
+    if(nrow(coord) != length(x$r)) stop("The number of rows in coord should match the length of x$r.\n")
+    if(!(identical(names(coord), c("x", "y", "width", "height"))
+       || identical(names(coord), c("xmin", "ymin", "xmax", "ymax"))))
+      stop("Unreasonable coord provided. You should provide x, y, width and height, or xmin, ymin, xmax and ymax. See help page for further information.\n")
+    x$r <- coord
+    return(plot.global_envelope2d(x, plot_style = plot_style, main = main, digits = digits, ...))
+  }
+  if(dotplot) plot_style <- "basic"
   # ylim
   if(missing('ylim')) {
     ylim <- env_ylim_default(x, plot_style == "ggplot2")
