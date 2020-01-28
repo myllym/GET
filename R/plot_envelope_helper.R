@@ -770,7 +770,22 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
     }
   }
 
-  df <- expand.grid(x=x$r[[1]], y=x$r[[2]])
+  if(all(sapply(x$r, length) == length(x$obs))) {
+    df <- as.data.frame(x$r)
+  } else {
+    if(!is.null(x$r$xmin)) {
+      df <- expand.grid(xmin=x$r$xmin, ymin=x$r$ymin)
+      df <- cbind(df, expand.grid(xmax=x$r$xmax, ymax=x$r$ymax))
+    } else {
+      df <- expand.grid(x=x$r$x, y=x$r$y)
+      if(!is.null(x$r$width)) {
+        df <- cbind(df, expand.grid(width=x$r$width, height=x$r$height))
+      } else {
+        df$width <- x$r$x[2] - x$r$x[1]
+        df$height <- x$r$y[2] - x$r$y[1]
+      }
+    }
+  }
   adddf <- function(df, z, name, label=namelist[[name]], contour=FALSE, signif=FALSE) {
     df$z <- c(z)
     df$name <- name
