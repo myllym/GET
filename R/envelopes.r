@@ -461,6 +461,15 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 }
 
 #' Plot method for the class 'combined_global_envelope'
+#'
+#' @description This function provides plots for combined global envelopes.
+#' Note that the argument \code{coord} is as for the single global envelopes
+#' (see \code{\link{plot.global_envelope}}), but its dimensions should match
+#' the dimensions of x[[i]] (for all i). That is, the plots with \code{coord}
+#' are currently provided only for the case where the components of the object \code{x}
+#' have the same \code{r}. This is suitable in particular for the functional ANOVA and
+#' functional general linear models (see \code{\link{graph.fanova}}, \code{\link{graph.flm}},
+#' \code{\link{frank.fanova}}, \code{\link{frank.flm}}) made for images.
 #' @param x An 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
 #' @param labels A character vector of suitable length.
