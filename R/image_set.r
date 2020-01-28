@@ -117,7 +117,7 @@ check_image_set_content <- function(image_set) {
 #' @export
 create_image_set <- function(image_set, ...) {
   image_set <- check_image_set_dimensions(image_set) # Check image_set dimensions and assign r if it does not exist
-  image_set_to_curve_set(image_set) # convert the images to functions and check the values
+  image_set_to_curve_set(image_set) # convert the images to functions to check the values
   class(image_set) <- 'image_set'
   image_set
 }
