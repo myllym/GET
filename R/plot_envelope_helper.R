@@ -799,7 +799,7 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
 # @param transparency A number between 0 and 1.
 # Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
 #' @importFrom ggplot2 theme element_blank facet_wrap vars
-env2d_ggplot2_helper_many_single_plots <- function(dfs, w, h, sign.col, transparency, contours = TRUE) {
+env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, contours = TRUE) {
   remove_axes_theme <- theme(axis.title.x=element_blank(),
                              axis.text.x=element_blank(),
                              axis.ticks.x=element_blank(),
@@ -807,7 +807,7 @@ env2d_ggplot2_helper_many_single_plots <- function(dfs, w, h, sign.col, transpar
                              axis.text.y=element_blank(),
                              axis.ticks.y=element_blank())
   lapply(dfs, function(df) {
-    g <- env2d_ggplot2_helper_1(df, w, h, sign.col, transparency, contours)
+    g <- env2d_ggplot2_helper_1(df, sign.col, transparency, contours)
     g <- g + facet_wrap(vars(label))
     g + remove_axes_theme
   })
