@@ -476,7 +476,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @export
 #' @seealso \code{\link{central_region}}
 plot.combined_global_envelope <- function(x,
-                                 main, ylim = NULL, xlab, ylab,
+                                 main, ylim = NULL, xlab, ylab, coord = NULL,
                                  color_outside = TRUE, env.col = 1, base_size = 12,
                                  labels = NULL, add = FALSE, digits = 3,
                                  level = 1, ncol = 2 + 1*(length(x)==3), nticks = 5,
@@ -486,6 +486,17 @@ plot.combined_global_envelope <- function(x,
   if(missing('main')) {
     alt <- attr(x[[1]], "einfo")$alternative
     main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
+  }
+  if(!is.null(coord)) {
+    if(!all(sapply(x, function(y) { identical(y$r, x[[1]]$r) })))
+      stop("The components of the combined test have different r. coord not supported.\n")
+    if(!is.data.frame(coord)) stop("coord is not a data.frame object.\n")
+    if(nrow(coord) != length(x[[1]]$r)) stop("The number of rows in coord should match the length of x[[i]]$r.\n")
+    if(!(identical(names(coord), c("x", "y", "width", "height"))
+         || identical(names(coord), c("xmin", "ymin", "xmax", "ymax"))))
+      stop("Unreasonable coord provided. You should provide x, y, width and height, or xmin, ymin, xmax and ymax. See help page for further information.\n")
+    for(i in 1:length(x)) x[[i]]$r <- coord
+    return(plot.combined_global_envelope2d(x, main = main, digits = digits, ...))
   }
   # ylab, ylab, labels
   if(missing('xlab'))
