@@ -384,6 +384,8 @@ print.combined_global_envelope <- function(x, ...) {
 #' width and height give the size of the pixel places at (x,y) (most often constants).
 #' The xmin, ymin, xmax, ymax give an alternative way to specify the pixels where the data have
 #' been observed, namely the corner locations of each pixel.
+#' If coord is provided, then a two-dimensional plot is made instead of 1-dimensional default
+#' plot.
 #' @param color_outside Logical. Whether to color the places where the data function goes
 #' outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.
 #' @param env.col The color for the envelope lines (or dotplot arrows). Default 1 (black).
