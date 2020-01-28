@@ -738,12 +738,19 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
 globalVariables(c("main", "label"))
 
 # A helper function for env2d_ggplot2
-# Pixel size: w = rx[2]-rx[1], h = ry[2]-ry[1]
-#' @importFrom ggplot2 ggplot geom_tile aes geom_contour coord_fixed .data labs
-env2d_ggplot2_helper_1 <- function(df, w, h, sign.col, transparency, contours = TRUE) {
-  g <- ggplot() + geom_tile(data=df, aes(x=.data$x, y=.data$y, fill=.data$z), width=w, height=h)
-  g <- g + geom_tile(data=df[df$signif,], aes(x=.data$x, y=.data$y), fill=sign.col, alpha=transparency, width=w, height=h)
-  if(contours) g <- g + geom_contour(data=df[df$contour,], aes(x=.data$x, y=.data$y, z=.data$z))
+#' @importFrom ggplot2 ggplot geom_tile geom_rect aes geom_contour coord_fixed .data labs
+env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) {
+  if(!is.null(df$xmin)) {
+    aesxy <- aes(xmin=.data$xmin, ymin=.data$ymin, xmax=.data$xmax, ymax=.data$ymax)
+    geom <- geom_rect
+  } else {
+    aesxy <- aes(x=.data$x, y=.data$y, width=.data$width, height=.data$height)
+    geom <- geom_tile
+  }
+  g <- ggplot(df, aesxy)
+  g <- g + geom(aes(fill=.data$z))
+  g <- g + geom(data=df[df$signif,], aesxy, fill=sign.col, alpha=transparency)
+  if(contours && !is.null(df$x)) g <- g + geom_contour(data=df[df$contour,], aes(x=.data$x, y=.data$y, z=.data$z))
   g <- g + coord_fixed(ratio=1)
   g <- g + labs(x="", y="", fill="")
   g
