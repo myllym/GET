@@ -4,8 +4,14 @@
 \alias{GET.variogram}
 \title{Variogram and residual variogram with global envelopes}
 \usage{
-GET.variogram(object, nsim = 999, data = NULL, ..., GET.args = NULL,
-  savefuns = TRUE)
+GET.variogram(
+  object,
+  nsim = 999,
+  data = NULL,
+  ...,
+  GET.args = NULL,
+  savefuns = TRUE
+)
 }
 \arguments{
 \item{object}{An object of class \code{gstat} or a \code{variogram.formula}.

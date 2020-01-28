@@ -4,9 +4,16 @@
 \alias{plot.image_set}
 \title{Plot method for the class 'image_set'}
 \usage{
-\method{plot}{image_set}(x, idx = 1, obs = TRUE,
-  plot_style = c("ggplot2", "basic"), main, col,
-  max_ncols_of_plots = 4, ...)
+\method{plot}{image_set}(
+  x,
+  idx = 1,
+  obs = TRUE,
+  plot_style = c("ggplot2", "basic"),
+  main,
+  col,
+  max_ncols_of_plots = 4,
+  ...
+)
 }
 \arguments{
 \item{x}{an 'image_set' object}

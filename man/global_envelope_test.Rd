@@ -5,10 +5,18 @@
 \alias{GET}
 \title{Global envelope test}
 \usage{
-global_envelope_test(curve_sets, type = "erl", alpha = 0.05,
-  alternative = c("two.sided", "less", "greater"), ties = "erl",
-  probs = c(0.025, 0.975), quantile.type = 7, central = "mean",
-  nstep = 2, ...)
+global_envelope_test(
+  curve_sets,
+  type = "erl",
+  alpha = 0.05,
+  alternative = c("two.sided", "less", "greater"),
+  ties = "erl",
+  probs = c(0.025, 0.975),
+  quantile.type = 7,
+  central = "mean",
+  nstep = 2,
+  ...
+)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}})
@@ -265,7 +273,7 @@ if(require("spatstat", quietly=TRUE)) {
   mpp <- spruces
   # 1) Perform simulations under the random labelling hypothesis and calculate
   # the test function T(r) for the data pattern (mpp) and each simulation.
-  # The command below specifies that the test function is T(r) = \\hat{L}_mm(r),
+  # The command below specifies that the test function is T(r) = \hat{L}_mm(r),
   # which is an estimator of the mark-weighted L function, L_mm(r),
   # with translational edge correction.
   nsim <- 1999 # Number of simulations
@@ -276,8 +284,8 @@ if(require("spatstat", quietly=TRUE)) {
   # 2)
   # Crop curves to desired r-interval
   curve_set <- crop_curves(env, r_min=1.5, r_max=9.5)
-  # Center the functions, i.e. take \\hat{L}_mm(r)-T_0(r).
-  # Below T_0(r) = \\hat{L}(r) is the mean of simulated functions.
+  # Center the functions, i.e. take \hat{L}_mm(r)-T_0(r).
+  # Below T_0(r) = \hat{L}(r) is the mean of simulated functions.
   # (This is only for visualization, does not affect the test result.)
   curve_set <- residual(curve_set)
   # 3) Do the rank envelope test

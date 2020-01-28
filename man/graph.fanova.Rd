@@ -4,9 +4,19 @@
 \alias{graph.fanova}
 \title{One-way graphical functional ANOVA}
 \usage{
-graph.fanova(nsim, curve_set, groups, variances = "equal",
-  contrasts = FALSE, n.aver = 1L, mirror = FALSE, savefuns = FALSE,
-  test.equality = c("mean", "var", "cov"), cov.lag = 1, ...)
+graph.fanova(
+  nsim,
+  curve_set,
+  groups,
+  variances = "equal",
+  contrasts = FALSE,
+  n.aver = 1L,
+  mirror = FALSE,
+  savefuns = FALSE,
+  test.equality = c("mean", "var", "cov"),
+  cov.lag = 1,
+  ...
+)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}

@@ -4,8 +4,14 @@
 \alias{combined_scaled_MAD_envelope}
 \title{Combined global scaled maximum absolute difference (MAD) envelope tests}
 \usage{
-combined_scaled_MAD_envelope(curve_sets, type = c("qdir", "st"),
-  alpha = 0.05, probs = c(0.025, 0.975), central = "mean", ...)
+combined_scaled_MAD_envelope(
+  curve_sets,
+  type = c("qdir", "st"),
+  alpha = 0.05,
+  probs = c(0.025, 0.975),
+  central = "mean",
+  ...
+)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}})

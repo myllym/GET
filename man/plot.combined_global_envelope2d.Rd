@@ -4,9 +4,17 @@
 \alias{plot.combined_global_envelope2d}
 \title{Plot method for the class 'combined_global_envelope2d'}
 \usage{
-\method{plot}{combined_global_envelope2d}(x, plot_style = c("ggplot2",
-  "basic"), fixedscales = 2, sign.col = "red", transparency = 85/255,
-  contours = FALSE, main = NULL, digits = 3, ...)
+\method{plot}{combined_global_envelope2d}(
+  x,
+  plot_style = c("ggplot2", "basic"),
+  fixedscales = 2,
+  sign.col = "red",
+  transparency = 85/255,
+  contours = FALSE,
+  main = NULL,
+  digits = 3,
+  ...
+)
 }
 \arguments{
 \item{x}{an 'combined_global_envelope2d' object}

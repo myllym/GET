@@ -4,9 +4,15 @@
 \alias{deviation_test}
 \title{Deviation test}
 \usage{
-deviation_test(curve_set, r_min = NULL, r_max = NULL,
-  use_theo = TRUE, scaling = "qdir", measure = "max",
-  savedevs = FALSE)
+deviation_test(
+  curve_set,
+  r_min = NULL,
+  r_max = NULL,
+  use_theo = TRUE,
+  scaling = "qdir",
+  measure = "max",
+  savedevs = FALSE
+)
 }
 \arguments{
 \item{curve_set}{A residual curve_set object. Can be obtained by using
@@ -66,20 +72,20 @@ and given to the deviation_test function.
         \itemize{
           \item 'max' is the maximum deviation measure
 
-\deqn{u_i = \max_{r \in [r_{min}, r_{max}]} | w(r)(T_i(r) - T_0(r))|}{%
+          \deqn{u_i = \max_{r \in [r_{min}, r_{max}]} | w(r)(T_i(r) - T_0(r))|}{%
                 u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
 
-\item 'int2' is the integral deviation measure
+          \item 'int2' is the integral deviation measure
 
-\deqn{u_i = \int_{r_{min}}^{r_{max}} ( w(r)(T_i(r) - T_0(r)) )^2 dr}{%
+          \deqn{u_i = \int_{r_{min}}^{r_{max}} ( w(r)(T_i(r) - T_0(r)) )^2 dr}{%
                 u_i = int_([r_min, r_max]) ( w(r)(T_i(r) - T_0(r)) )^2 dr}
 
-\item 'int' is the 'absolute' integral deviation measure
+          \item 'int' is the 'absolute' integral deviation measure
 
-\deqn{u_i = \int_{r_{min}}^{r_{max}} |w(r)(T_i(r) - T_0(r))| dr}{%
+          \deqn{u_i = \int_{r_{min}}^{r_{max}} |w(r)(T_i(r) - T_0(r))| dr}{%
                 u_i = int_([r_min, r_max]) | w(r)(T_i(r) - T_0(r)) | dr}
 
-}
+        }
   \item Calculates the p-value.
 }
 

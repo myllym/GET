@@ -5,13 +5,29 @@
 \alias{dg.global_envelope_test}
 \title{Adjusted global envelope tests}
 \usage{
-GET.composite(X, X.ls = NULL, nsim = 499, nsimsub = nsim,
-  simfun = NULL, fitfun = NULL, calcfun = function(X) {     X },
-  testfuns = NULL, ..., type = "erl", alpha = 0.05,
-  alternative = c("two.sided", "less", "greater"), probs = c(0.025,
-  0.975), r_min = NULL, r_max = NULL, take_residual = FALSE,
-  save.cons.envelope = savefuns, savefuns = FALSE, verbose = TRUE,
-  MrkvickaEtal2017 = FALSE, mc.cores = 1L)
+GET.composite(
+  X,
+  X.ls = NULL,
+  nsim = 499,
+  nsimsub = nsim,
+  simfun = NULL,
+  fitfun = NULL,
+  calcfun = function(X) {     X },
+  testfuns = NULL,
+  ...,
+  type = "erl",
+  alpha = 0.05,
+  alternative = c("two.sided", "less", "greater"),
+  probs = c(0.025, 0.975),
+  r_min = NULL,
+  r_max = NULL,
+  take_residual = FALSE,
+  save.cons.envelope = savefuns,
+  savefuns = FALSE,
+  verbose = TRUE,
+  MrkvickaEtal2017 = FALSE,
+  mc.cores = 1L
+)
 }
 \arguments{
 \item{X}{An object containing the data in some form.

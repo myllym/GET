@@ -5,10 +5,17 @@
 \alias{global_envelope}
 \title{Central region / Global envelope}
 \usage{
-central_region(curve_sets, type = "erl", coverage = 0.5,
-  alternative = c("two.sided", "less", "greater"), probs = c((1 -
-  coverage)/2, 1 - (1 - coverage)/2), quantile.type = 7,
-  central = "median", nstep = 2, ...)
+central_region(
+  curve_sets,
+  type = "erl",
+  coverage = 0.5,
+  alternative = c("two.sided", "less", "greater"),
+  probs = c((1 - coverage)/2, 1 - (1 - coverage)/2),
+  quantile.type = 7,
+  central = "median",
+  nstep = 2,
+  ...
+)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}

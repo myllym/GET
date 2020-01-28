@@ -4,9 +4,18 @@
 \alias{plot.curve_set}
 \title{Plot method for the class 'curve_set'}
 \usage{
-\method{plot}{curve_set}(x, plot_style = c("ggplot2", "basic"), ylim,
-  xlab = "r", ylab = "obs", main = NULL, col_obs = 1,
-  col_sim = grDevices::grey(0.7), base_size = 11, ...)
+\method{plot}{curve_set}(
+  x,
+  plot_style = c("ggplot2", "basic"),
+  ylim,
+  xlab = "r",
+  ylab = "obs",
+  main = NULL,
+  col_obs = 1,
+  col_sim = grDevices::grey(0.7),
+  base_size = 11,
+  ...
+)
 }
 \arguments{
 \item{x}{An \code{curve_set} object}

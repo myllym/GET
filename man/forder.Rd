@@ -4,10 +4,17 @@
 \alias{forder}
 \title{Functional ordering}
 \usage{
-forder(curve_sets, measure = "erl", scaling = "qdir",
-  alternative = c("two.sided", "less", "greater"), use_theo = TRUE,
-  probs = c(0.025, 0.975), quantile.type = 7, r_min = NULL,
-  r_max = NULL)
+forder(
+  curve_sets,
+  measure = "erl",
+  scaling = "qdir",
+  alternative = c("two.sided", "less", "greater"),
+  use_theo = TRUE,
+  probs = c(0.025, 0.975),
+  quantile.type = 7,
+  r_min = NULL,
+  r_max = NULL
+)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}

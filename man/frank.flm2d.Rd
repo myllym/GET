@@ -4,8 +4,14 @@
 \alias{frank.flm2d}
 \title{F rank functional GLM for images}
 \usage{
-frank.flm2d(nsim, formula.full, formula.reduced, image_sets,
-  factors = NULL, ...)
+frank.flm2d(
+  nsim,
+  formula.full,
+  formula.reduced,
+  image_sets,
+  factors = NULL,
+  ...
+)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}

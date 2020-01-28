@@ -9,10 +9,15 @@ create_image_set(image_set, ...)
 \arguments{
 \item{image_set}{A list containing elements \code{r}, \code{obs}, \code{sim_m} and \code{theo}.
 \code{r}, \code{sim_m} and \code{theo} are optional, \code{obs} needs to be provided always.
-\code{r} must be a list of two vectors describing the argument values where
-images have been observed (or simulated).
-r[[1]] should give the argument values for x-coordinate (first dimension of the 2d functions).
-r[[2]] should give the argument values for y-coordinate (second dimension of the 2d functions).
+If provided, \code{r} must be a \code{\link{data.frame}} describing the argument values
+where the images have been observed (or simulated). It must consist of the following two or
+four components:
+a) "x" and "y" giving the equally spaced argument values for the x- and y-coordinates
+(first and second dimension of the 2d functions) where the data have been observed,
+b) "x", "y", "width" and "height", where the width and height give the width and height of the
+pixels placed at x and y, or
+c) "xmin", "xmax", "ymin" and "ymax" giving the corner coordinates of the pixels
+where the data have been observed.
 If not given, r is set to be a list of values from 1 to the number of first/second dimension
 of 2d functions in \code{obs}.
 \code{obs} must be either a 2d matrix (dimensions matching the lengths of r vectors)

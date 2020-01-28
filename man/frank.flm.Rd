@@ -4,9 +4,20 @@
 \alias{frank.flm}
 \title{F rank functional GLM}
 \usage{
-frank.flm(nsim, formula.full, formula.reduced, curve_sets,
-  factors = NULL, savefuns = TRUE, ..., GET.args = NULL,
-  mc.cores = 1, mc.args = NULL, cl = NULL, fast = TRUE)
+frank.flm(
+  nsim,
+  formula.full,
+  formula.reduced,
+  curve_sets,
+  factors = NULL,
+  savefuns = TRUE,
+  ...,
+  GET.args = NULL,
+  mc.cores = 1,
+  mc.args = NULL,
+  cl = NULL,
+  fast = TRUE
+)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}

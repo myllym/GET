@@ -4,10 +4,24 @@
 \alias{plot.global_envelope}
 \title{Plot method for the class 'global_envelope'}
 \usage{
-\method{plot}{global_envelope}(x, plot_style = c("ggplot2", "fv",
-  "basic"), dotplot = length(x$r) < 10, main, ylim, xlab, ylab,
-  color_outside = TRUE, env.col = 1, base_size = 11, labels = NULL,
-  add = FALSE, digits = 3, legend = TRUE, ...)
+\method{plot}{global_envelope}(
+  x,
+  plot_style = c("ggplot2", "fv", "basic"),
+  dotplot = length(x$r) < 10,
+  main,
+  ylim,
+  xlab,
+  ylab,
+  coord = NULL,
+  color_outside = TRUE,
+  env.col = 1,
+  base_size = 11,
+  labels = NULL,
+  add = FALSE,
+  digits = 3,
+  legend = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{An 'global_envelope' object}
@@ -30,6 +44,16 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 \item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
+
+\item{coord}{A data frame of the spatial coordinates where the data have been observed.
+\code{nrow(coord)} should match the length of \code{x$r}, and the names of the columns
+should be either "x", "y", "width", "height" or "xmin", "ymin", "xmax", "ymax".
+Here x and y should give the (center) coordinates of the observed data,
+width and height give the size of the pixel places at (x,y) (most often constants).
+The xmin, ymin, xmax, ymax give an alternative way to specify the pixels where the data have
+been observed, namely the corner locations of each pixel.
+If coord is provided, then a two-dimensional plot is made instead of 1-dimensional default
+plot.}
 
 \item{color_outside}{Logical. Whether to color the places where the data function goes
 outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.}

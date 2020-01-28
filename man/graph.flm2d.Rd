@@ -4,8 +4,14 @@
 \alias{graph.flm2d}
 \title{Graphical functional GLM for images}
 \usage{
-graph.flm2d(nsim, formula.full, formula.reduced, image_sets,
-  factors = NULL, ...)
+graph.flm2d(
+  nsim,
+  formula.full,
+  formula.reduced,
+  image_sets,
+  factors = NULL,
+  ...
+)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}

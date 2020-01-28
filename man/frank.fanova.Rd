@@ -4,8 +4,15 @@
 \alias{frank.fanova}
 \title{Rank envelope F-test}
 \usage{
-frank.fanova(nsim, curve_set, groups, variances = "equal",
-  test.equality = c("mean", "var", "cov"), cov.lag = 1, ...)
+frank.fanova(
+  nsim,
+  curve_set,
+  groups,
+  variances = "equal",
+  test.equality = c("mean", "var", "cov"),
+  cov.lag = 1,
+  ...
+)
 }
 \arguments{
 \item{nsim}{The number of random permutations.}

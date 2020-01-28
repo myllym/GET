@@ -4,8 +4,13 @@
 \alias{GET.necdf}
 \title{Graphical n sample test of correspondence of distribution functions}
 \usage{
-GET.necdf(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x,
-  max)))), length = 100), contrasts = FALSE, nsim, ...)
+GET.necdf(
+  x,
+  r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x, max)))), length = 100),
+  contrasts = FALSE,
+  nsim,
+  ...
+)
 }
 \arguments{
 \item{x}{A list (of length n) of values in the n groups.}
