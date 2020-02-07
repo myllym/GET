@@ -28,7 +28,9 @@
 #' @name saplings
 #' @docType data
 #' @examples
-#' # This is an example analysis of the saplings data set in Myllymäki et al. (2017).
+#' # This is an example analysis of the saplings data set
+#' #=====================================================
+#' # Example of Myllymaki et al. (2017, Supplement S4).
 #' if(require("spatstat", quietly=TRUE)) {
 #'   data(saplings)
 #'
