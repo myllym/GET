@@ -59,7 +59,7 @@
 #'   # (at the same time create a curve_set from 'env')
 #'   curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
 #'   # Perform a global envelope test
-#'   res <- global_envelope_test(curve_set)
+#'   res <- global_envelope_test(curve_set, type="erl") # type="rank" and larger nsim was used in S4.
 #'   # Plot the result.
 #'   plot(res, ylab=expression(italic(hat(L)(r)-r)))
 #'
