@@ -184,7 +184,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' For the rank envelope test, the global envelope test is the test described in
 #' Myllymäki et al. (2017) with the adjustment of Baddeley et al. (2017).
 #' For other test types, the test (also) uses the two-stage procedure of Dao and Genton (2014) with
-#' the adjustment of Baddeley et al. (2017).
+#' the adjustment of Baddeley et al. (2017) as descripbed in Myllymäki and Mrkvička (2019).
 #'
 #' See examples also in \code{\link{saplings}}.
 #'
@@ -243,13 +243,16 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' @return An object of class \code{global_envelope} or \code{combined_global_envelope}, which can be
 #' printed and plotted directly. See \code{\link{global_envelope_test}}.
 #' @references
-#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
-#'
-#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27(5): 1239-1255. DOI: 10.1007/s11222-016-9683-9
+#' Baddeley, A., Hardegen, A., Lawrence, T., Milne, R. K., Nair, G. and Rakshit, S. (2017). On two-stage Monte Carlo tests of composite hypotheses. Computational Statistics and Data Analysis 114: 75-87. doi: http://dx.doi.org/10.1016/j.csda.2017.04.003
 #'
 #' Dao, N.A. and Genton, M. (2014). A Monte Carlo adjusted goodness-of-fit test for parametric models describing spatial point patterns. Journal of Graphical and Computational Statistics 23, 497-517.
 #'
-#' Baddeley, A., Hardegen, A., Lawrence, T., Milne, R. K., Nair, G. and Rakshit, S. (2017). On two-stage Monte Carlo tests of composite hypotheses. Computational Statistics and Data Analysis 114: 75-87. doi: http://dx.doi.org/10.1016/j.csda.2017.04.003
+#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27(5): 1239-1255. DOI: 10.1007/s11222-016-9683-9
+#'
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
+#'
+#' Myllymäki, M. and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+#'
 #' @seealso \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}}, \code{\link{saplings}}
 #' @export
 #' @aliases dg.global_envelope_test
