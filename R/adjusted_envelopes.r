@@ -256,78 +256,56 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' @importFrom parallel mclapply
 #' @importFrom stats quantile
 #' @examples
-#' \donttest{
-#' # 1. Example of fallen trees data.
-#' #    Test the fit of a log Gaussian Cox process.
-#' if(require("spatstat", quietly=TRUE)) {
-#'   data("fallen_trees")
-#'   X <- unmark(fallen_trees)
-#'   # Fit the log Gaussian Cox process model using the K-function
-#'   M1 <- kppm(X, clusters = "LGCP", statistic = "K")
-#'   summary(M1)
+#' # Graphical normality test (Myllymaki and Mrkvicka, 2020, Section 3.3.)
+#' #=========================
+#' library("fda.usc")
+#' data("poblenou")
+#' dat <- poblenou[['nox']][['data']][,'H10']
+#' n <- length(dat)
 #'
-#'   # The number of simulations
-#'   # To test the code, use nsim <- 19
-#'   nsim <- nsimsub <- 19
-#'   # For serious analysis, use at least nsim <- 499!
-#'   # Warning: The simulations take rather long with mc.cores = 1 and nsim = 499.
+#' # The number of simulations
+#' nsim <- nsimsub <- 199
 #'
-#'   # Distances
-#'   rmin <- 1; rmax <- 120; rstep <- (rmax-rmin)/500
-#'   r <- seq(0, rmax, by=rstep)
+#' set.seed(200127)
+#' # General setup
+#' #==============
+#' # 1. Fit the model
+#' mu <- mean(dat)
+#' sigma <- sd(dat)
+#' # 2. Simulate a sample from the fitted null model and
+#' #    compute the test vectors for data (obs) and each simulation (sim)
+#' r <- seq(min(dat), max(dat), length=100)
+#' obs <- stats::ecdf(dat)(r)
+#' sim <- sapply(1:nsimsub, function(i) {
+#'   x <- rnorm(n, mean = mu, sd = sigma)
+#'   stats::ecdf(x)(r)
+#' })
+#' cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
 #'
-#'   # a) Using envelope-function from spatstat
-#'   #-----------------------------------------
-#'   adjenvL <- GET.composite(X = M1, nsim = nsim, nsimsub = nsimsub,
-#'                          fun = "Lest", correction = "translate",
-#'                          transform = expression(.-r), r = r,
-#'                          type = 'area', r_min=rmin, r_max=rmax,
-#'                          verbose = FALSE)
-#'   plot(adjenvL, ylab = expression(italic(hat(L)(r)-r)))
-#'
-#'   # b) The general workflow for preparing simulations for GET.composite
-#'   #--------------------------------------------------------------------
-#'   # 1. Fit the model
-#'   M1 <- kppm(X~1, clusters = "LGCP", statistic="K")
-#'   # 2. Simulate a sample from the fitted null model and
-#'   #    compute the test vectors for data and each simulation
-#'   #- Observed function
-#'   obs.L <- Lest(X, correction = "translate", r = r)
-#'   obs <- obs.L[['trans']] - r
-#'   #- Simulated functions
-#'   sim <- matrix(nrow = length(r), ncol = nsimsub)
-#'   for(i in 1:nsimsub) {
-#'     sim.X <- simulate(M1)[[1]]
-#'     sim[, i] <- Lest(sim.X, correction = "translate", r = r)[['trans']] - r
-#'   }
-#'   # Create a curve_set
-#'   cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
-#'
-#'   # 3. Simulate another sample from the fitted null model.
-#'   sims2 <- simulate(M1, nsim=nsim)
-#'   # 4. Fit the null model to each of the patterns,
-#'   #    simulate a sample from the null model,
-#'   #    and compute the test vectors for all.
-#'   cset.ls <- list()
-#'   for(rep in 1:nsim) {
-#'     M2 <- kppm(sims2[[rep]], clusters = "LGCP", statistic="K")
-#'     obs2 <- Lest(sims2[[rep]], correction = "translate", r = r)[['trans']] - r
-#'     sim2 <- matrix(nrow = length(r), ncol = nsimsub)
-#'     for(i in 1:nsimsub) {
-#'       sim2.X <- simulate(M2)[[1]]
-#'       sim2[, i] <- Lest(sim2.X, correction = "translate", r = r)[['trans']] - r
-#'     }
-#'     cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
-#'   }
-#'   # Perform the adjusted test
-#'   res <- GET.composite(X=cset, X.ls=cset.ls, type='area',
-#'                        r_min=rmin, r_max=rmax)
-#'   plot(res)
+#' # 3. Simulate another sample from the fitted null model.
+#' # 4. Fit the null model to each of the patterns,
+#' #    simulate a sample from the null model,
+#' #    and compute the test vectors for all.
+#' cset.ls <- list()
+#' for(rep in 1:nsim) {
+#'   x <- rnorm(n, mean = mu, sd = sigma)
+#'   mu2 <- mean(x)
+#'   sigma2 <- sd(x)
+#'   obs2 <- stats::ecdf(x)(r)
+#'   sim2 <- sapply(1:nsimsub, function(i) {
+#'     x2 <- rnorm(n, mean = mu2, sd = sigma2)
+#'     stats::ecdf(x2)(r)
+#'   })
+#'   cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
 #' }
-#' }
+#' # Perform the adjusted test
+#' res <- GET.composite(X=cset, X.ls=cset.ls, type='erl')
+#' plot(res, xlab="NOx", ylab="Ecdf")
+#'
 #' @examples
-#' # 2. Example of saplings data.
-#' #    Test the fit of a Matern cluster process.
+#' # Example of a point pattern data
+#' #================================
+#' # Test the fit of a Matern cluster process.
 #' \donttest{
 #' if(require("spatstat", quietly=TRUE)) {
 #'   data(saplings)
@@ -384,70 +362,6 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   res <- GET.composite(X=X, X.ls=X.ls, type="area",
 #'                       r_min=rmin, r_max=rmax)
 #'   plot(res)
-#'
-#'   # Option 2: Generate the simulations "by yourself"
-#'   # Writing with for-loops (instead of envelope calls)
-#'   # Serves as an example for non-spatstat models.
-#'   #-------------------------------------------------
-#'   # 1. Fit the model
-#'   M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
-#'   # Generate nsim simulations by the given function using the fitted model
-#'   # 2. Simulate a sample from the fitted null model and
-#'   # compute the test vectors for data and each simulation
-#'   nsim <- nsimsub <- 19 # Number of simulations
-#'   # Observed function
-#'   obs.L <- Lest(saplings, correction = "translate", r = r)
-#'   obs <- obs.L[['trans']] - r
-#'   # Simulated functions
-#'   sim <- matrix(nrow = length(r), ncol = nsimsub)
-#'   for(i in 1:nsimsub) {
-#'     sim.X <- simulate(M1)[[1]]
-#'     sim[, i] <- Lest(sim.X, correction = "translate", r = r)[['trans']] - r
-#'   }
-#'   # Create a curve_set
-#'   X <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
-#'   # 3. Simulate another sample from the fitted null model.
-#'   sims2 <- simulate(M1, nsim=nsim) # list of simulations
-#'   # 4. Fit the null model to each of the patterns,
-#'   # simulate a sample from the null model,
-#'   # and compute the test vectors for all.
-#'   X.ls <- list()
-#'   for(rep in 1:nsim) {
-#'     M2 <- kppm(sims2[[rep]], clusters = "LGCP", statistic="K")
-#'     obs2 <- Lest(sims2[[rep]], correction = "translate", r = r)[['trans']] - r
-#'     sim2 <- matrix(nrow = length(r), ncol = nsimsub)
-#'     for(i in 1:nsimsub) {
-#'       sim2.X <- simulate(M2)[[1]]
-#'       sim2[, i] <- Lest(sim2.X, correction = "translate", r = r)[['trans']] - r
-#'     }
-#'     X.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
-#'   }
-#'   # 5. Perform the adjusted test
-#'   res <- GET.composite(X=X, X.ls=X.ls, type="area",
-#'                       r_min=rmin, r_max=rmax)
-#'   plot(res)
-#'
-#'   # Option 3: Provide fitfun and simfun functions
-#'   #----------------------------------------------
-#'   # fitfun = a function to fit the model
-#'   # simfun = a function to make a simulation from the model
-#'   # calcfun = a function to calculate the test vector from data/simulation
-#'   fitf <- function(X) {
-#'     kppm(X, clusters = "MatClust", statistic="K")
-#'   }
-#'   simf <- function(M) {
-#'     simulate(M, nsim=1)[[1]]
-#'   }
-#'   calcf <- function(X) {
-#'     rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
-#'     r <- seq(0, rmax, by=rstep)
-#'     L <- Lest(X, correction = "translate", r = r)[['trans']] - r
-#'     L[r >= rmin & r <= rmax]
-#'   }
-#'   res <- GET.composite(X = saplings, nsim=nsim, fitfun = fitf, simfun=simf, calcfun=calcf,
-#'                        type="area")
-#'   plot(res, xlab="Index")
-#'   # Note: r-values are not passed; r in the x-axis is from 1 to length of r.
 #' }}
 GET.composite <- function(X, X.ls = NULL,
                          nsim = 499, nsimsub = nsim,
