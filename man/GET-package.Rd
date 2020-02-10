@@ -226,6 +226,7 @@ directly be given to the functions mentioned above in this section.
 \section{Example data (see references on the help pages of each data set)}{
 
 \itemize{
+ \item \code{\link{abide_9002_23}}: see help page
  \item \code{\link{adult_trees}}: a point pattern of adult rees
  \item \code{\link{cgec}}: centred government expenditure centralization (GEC) ratios (see \code{\link{graph.fanova}})
  \item \code{\link{fallen_trees}}: a point pattern of fallen trees

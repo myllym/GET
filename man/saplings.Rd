@@ -20,7 +20,9 @@ The pattern is a sample part of data collected over 10 ha plot as a part of a re
 program headed by project leader Prof. O.V. Smirnova.
 }
 \examples{
-# This is an example analysis of the saplings data set in MyllymÃ¤ki et al. (2017).
+# This is an example analysis of the saplings data set
+#=====================================================
+# Example of Myllymaki et al. (2017, Supplement S4).
 if(require("spatstat", quietly=TRUE)) {
   data(saplings)
 
@@ -49,7 +51,7 @@ if(require("spatstat", quietly=TRUE)) {
   # (at the same time create a curve_set from 'env')
   curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
   # Perform a global envelope test
-  res <- global_envelope_test(curve_set)
+  res <- global_envelope_test(curve_set, type="erl") # type="rank" and larger nsim was used in S4.
   # Plot the result.
   plot(res, ylab=expression(italic(hat(L)(r)-r)))
 
