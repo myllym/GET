@@ -267,7 +267,8 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' n <- length(dat)
 #'
 #' # The number of simulations
-#' nsim <- nsimsub <- 199
+#' \donttest{nsim <- nsimsub <- 199}
+#' \dontshow{nsim <- nsimsub <- 19}
 #'
 #' set.seed(200127)
 #' # General setup

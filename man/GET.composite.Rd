@@ -172,7 +172,8 @@ dat <- poblenou[['nox']][['data']][,'H10']
 n <- length(dat)
 
 # The number of simulations
-nsim <- nsimsub <- 199
+\donttest{nsim <- nsimsub <- 199}
+\dontshow{nsim <- nsimsub <- 19}
 
 set.seed(200127)
 # General setup
