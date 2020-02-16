@@ -21,7 +21,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
     einfo <- curve_sets[['Y']]$names
   } else einfo <- NULL
   curve_sets <- lapply(curve_sets, convert_fdata)
-  if(!all(lapply(curve_sets[['obs']], is.matrix))) stop("The curve_set must include data functions (sim_m ignored).\n")
+  if(!all(sapply(curve_sets, function(x) is.matrix(x[['obs']])))) stop("The curve_set must include data functions (sim_m ignored).\n")
   curve_sets <- check_curve_set_dimensions(curve_sets)
   # Put Y and factors into data.l
   data.l <- list()

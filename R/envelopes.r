@@ -44,7 +44,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
 
   data_and_sim_curves <- data_and_sim_curves(curve_set) # all the functions
   Nfunc <- length(distance) # Number of functions
-  nr <- length(curve_set[['r']])
+  nr <- curve_set_narg(curve_set)
   # Define the central curve T_0
   T_0 <- get_T_0(curve_set)
 
@@ -120,11 +120,11 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          "greater" = { LB <- -Inf })
 
   if(is.vector(curve_set[['obs']])) {
-    df <- data.frame(r=curve_set[['r']], obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB)
+    df <- data.frame(curve_set_rdf(curve_set), obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB)
     picked_attr$einfo$nsim <- Nfunc-1
   }
   else {
-    df <- data.frame(r=curve_set[['r']], central=T_0, lo=LB, hi=UB)
+    df <- data.frame(curve_set_rdf(curve_set), central=T_0, lo=LB, hi=UB)
     picked_attr$einfo$nsim <- Nfunc
   }
   res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
@@ -291,7 +291,7 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
          })
   # Transform the envelope to a combined envelope
   nfuns <- length(curve_sets)
-  nr <- length(curve_sets[[1]]$r) # all curve sets have the same
+  nr <- curve_set_narg(curve_sets[[1]]) # all curve sets have the same
   idx <- lapply(1:nfuns, FUN = function(i) ((i-1)*nr+1):(i*nr))
   # Split the envelopes to the original groups
   res_ls <- split(res, f = rep(1:nfuns, each=nr))
@@ -877,9 +877,10 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
          fv = {
            plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=NULL)
            # Outliers
-           for(i in 1:ncol(attr(x, "curve_set")$obs)) {
-             if(any(curve_sets$obs[,i] < x$lo | curve_sets$obs[,i] > x$hi))
-               lines(curve_sets$r, curve_sets$obs[,i], col=grey(0.5))
+           funcs <- curve_set_funcs(curve_sets)
+           for(i in 1:ncol(funcs)) {
+             if(any(funcs[,i] < x$lo | funcs[,i] > x$hi))
+               lines(curve_sets$r, funcs[,i], col=grey(0.5))
            }
            # Central region
            lines(cr$r, cr$lo, lty=2, col=cr.col)
