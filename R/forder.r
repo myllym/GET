@@ -39,7 +39,7 @@ cont_pointwise_hiranks <- function(data_and_sim_curves) {
 }
 
 # Functionality for functional ordering based on a curve set
-individual_forder <- function(curve_set, r_min = NULL, r_max = NULL,
+individual_forder <- function(curve_set,
                               measure = 'erl', scaling = 'qdir',
                               alternative=c("two.sided", "less", "greater"),
                               use_theo = TRUE,
@@ -47,7 +47,7 @@ individual_forder <- function(curve_set, r_min = NULL, r_max = NULL,
   possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!\n")
 
-  curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max) # Checks also curve_set content
+  curve_set <- convert_envelope(curve_set)
 
   if(measure %in% c('max', 'int', 'int2')) {
     curve_set <- residual(curve_set, use_theo = use_theo)
@@ -189,7 +189,6 @@ combined_forder <- function(curve_sets, ...) {
 #' will be the first component (named 'obs') in the returned vector.
 #'
 #' @param curve_sets A \code{curve_set} object or a list of \code{curve_set} objects.
-#' @inheritParams crop_curves
 #' @param measure The measure to use to order the functions from the most extreme to the least extreme
 #' one. Must be one of the following: 'rank', 'erl', 'cont', 'area', 'max', 'int', 'int2'. Default is 'erl'.
 #' @param scaling The name of the scaling to use if measure is 'max', 'int' or 'int2'.
@@ -246,11 +245,10 @@ combined_forder <- function(curve_sets, ...) {
 #' }
 forder <- function(curve_sets, measure = 'erl', scaling = 'qdir',
                    alternative=c("two.sided", "less", "greater"),
-                   use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7,
-                   r_min = NULL, r_max = NULL) {
+                   use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7) {
   if(class(curve_sets)[1] == "list") {
     curve_sets <- check_curve_set_dimensions(curve_sets)
-    res <- combined_forder(curve_sets, r_min = r_min, r_max = r_max,
+    res <- combined_forder(curve_sets,
                            measure = measure, scaling = scaling,
                            alternative = alternative,
                            use_theo = use_theo,
@@ -260,7 +258,7 @@ forder <- function(curve_sets, measure = 'erl', scaling = 'qdir',
   }
   else {
     curve_sets <- convert_envelope(curve_sets)
-    res <- individual_forder(curve_sets, r_min = r_min, r_max = r_max,
+    res <- individual_forder(curve_sets,
                              measure = measure, scaling = scaling,
                              alternative = alternative,
                              use_theo = use_theo,
