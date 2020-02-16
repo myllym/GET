@@ -1,8 +1,10 @@
-#' Crop the curves to a certain interval.
+#' Crop the curves to a certain interval
 #'
-#' Crop the curves to a certain interval in preparation for a deviation
-#' test.
+#' Crop the curves to a certain interval
 #'
+#'
+#' The curves can be cropped to a certain interval defined by the arguments r_min and r_max.
+#' The interval should generally be chosen carefully for classical deviation tests.
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or
 #' an \code{\link[spatstat]{envelope}} object. If an envelope object is given,
 #' it must contain the summary functions from the simulated patterns which can be
