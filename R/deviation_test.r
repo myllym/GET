@@ -93,7 +93,7 @@ deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
   curve_set <- residual(curve_set, use_theo = use_theo)
   curve_set <- scale_curves(curve_set, scaling = scaling)
   devs <- deviation(curve_set, measure = measure)
-  p <- estimate_p_value(devs)
+  p <- estimate_p_value(devs[1], devs[-1])
   if(savedevs) res <- list(p=p, devs=devs, call=match.call())
   else res <- list(p=p, call=match.call())
   class(res) <- 'deviation_test'
