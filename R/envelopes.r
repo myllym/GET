@@ -378,6 +378,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylab See \code{\link{plot.default}}. A sensible default exists.
 #' @param coord A data frame of the spatial coordinates where the data have been observed.
+#' If given, then replaces x$r.
 #' \code{nrow(coord)} should match the length of \code{x$r}, and the names of the columns
 #' should be either "x", "y", "width", "height" or "xmin", "ymin", "xmax", "ymax".
 #' Here x and y should give the (center) coordinates of the observed data,
@@ -803,6 +804,8 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   plot(res, xlab = "Age (years)", ylab = "")
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
+  if(class(curve_sets)[1] != "list") { if(!is.vector(curve_sets$r)) stop("curve_sets$r should be a vector.\n") }
+  else if(!all(sapply(curve_sets, FUN=function(x) is.vector(x$r)))) stop("r of the curve_sets should be a vector.\n")
   res <- central_region(curve_sets, ...)
   if(inherits(res, "combined_global_envelope")) {
     dist <- factor * (attr(res, "level2_ge")$hi - attr(res, "level2_ge")$lo)
