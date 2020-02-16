@@ -77,19 +77,3 @@ estimate_p_value.default <- function(x, sim_vec, ties = 'conservative', ...) {
 p_value_ties_default <- function() {
     'conservative'
 }
-
-# Estimate p-value.
-#
-# Check \code{\link{estimate_p_value.default}} for details.
-#
-# @usage \method{estimate_p_value}{deviation_set}(deviation_set, ...)
-#
-# @param deviation_set A deviation_set object. Use deviation() to get one.
-# @param ... Additional parameters to be passed to \code{\link{estimate_p_value.default}}.
-# @return The p-value.
-estimate_p_value.deviation_set <- function(deviation_set, ...) {
-    check_deviation_set(deviation_set)
-    p <- with(deviation_set,
-              estimate_p_value.default(obs, sim, ...))
-    p
-}
