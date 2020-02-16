@@ -23,22 +23,18 @@ deviation <- function(curve_set, measure = 'max', ...) {
     stop('measure must be exactly one of the following: ',
          paste(possible_measures, collapse = ', '))
   }
+  data_and_sim_curves <- data_and_sim_curves(curve_set)
 
   switch(measure,
          'max' = {
-           res <- with(curve_set, list(obs = max(abs(obs)),
-                                       sim = apply(abs(sim_m), 2, max)))
+           res <- apply(abs(data_and_sim_curves), 1, max)
          },
          'int' = {
-           res <- with(curve_set, list(obs = sum(abs(obs)),
-                                       sim = apply(abs(sim_m), 2, sum)))
+           res <- rowSums(abs(data_and_sim_curves))
          },
          'int2' = {
-           res <- with(curve_set, list(obs = sum(obs ^ 2L),
-                                       sim = apply(sim_m ^ 2L, 2, sum)))
+           res <- rowSums((data_and_sim_curves)^2)
          })
-
-  res <- create_deviation_set(res)
   res
 }
 
