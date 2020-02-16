@@ -457,10 +457,12 @@ data_and_sim_curves <- function(curve_set) {
   }
   funcs
 }
+# Return all the functions from a curve set in a matrix.
+# Columns: functions, Rows: values of the functions at an argument value.
 curve_set_funcs <- function(curve_set) {
-  if(with(curve_set, is.matrix(obs))) funcs <- curve_set[['obs']] # all rows data (sim_m ignored)
+  if(with(curve_set, is.matrix(obs))) funcs <- curve_set[['obs']]
   else {
-    funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']]) # first row data, rest simulations
+    funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']])
     colnames(funcs) <- c('obs', paste("sim", 1:(ncol(funcs)-1), sep=""))
   }
   funcs
