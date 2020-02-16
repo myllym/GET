@@ -52,14 +52,7 @@ individual_forder <- function(curve_set,
   if(measure %in% c('max', 'int', 'int2')) {
     curve_set <- residual(curve_set, use_theo = use_theo)
     curve_set <- scale_curves(curve_set, scaling = scaling, probs = probs, type = quantile.type)
-    data_and_sim_curves <- data_and_sim_curves(curve_set)
-    # Create a tmp object with the first curve as 'obs' (deviation expects that)
-    curve_set_tmp <- create_curve_set(list(r=curve_set[['r']],
-                                           obs=data_and_sim_curves[1,],
-                                           sim_m=t(data_and_sim_curves[-1,]),
-                                           is_residual=curve_set[['is_residual']]))
-    devs <- deviation(curve_set_tmp, measure = measure)
-    distance <- c(devs$obs, devs$sim)
+    distance <- deviation(curve_set, measure = measure)
   }
   else {
     alternative <- match.arg(alternative)
