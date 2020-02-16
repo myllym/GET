@@ -457,6 +457,14 @@ data_and_sim_curves <- function(curve_set) {
   }
   funcs
 }
+curve_set_funcs <- function(curve_set) {
+  if(with(curve_set, is.matrix(obs))) funcs <- curve_set[['obs']] # all rows data (sim_m ignored)
+  else {
+    funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']]) # first row data, rest simulations
+    colnames(funcs) <- c('obs', paste("sim", 1:(ncol(funcs)-1), sep=""))
+  }
+  funcs
+}
 
 # A helper function to obtain the mean of functions in curve_set.
 #
