@@ -58,8 +58,7 @@ individual_forder <- function(curve_set,
     alternative <- match.arg(alternative)
     data_and_sim_curves <- data_and_sim_curves(curve_set)
     Nfunc <- dim(data_and_sim_curves)[1]
-    nr <- length(curve_set[['r']])
-    scaling <- NULL
+    nr <- curve_set_narg(curve_set)
 
     # calculate pointwise ranks
     if(measure %in% c('rank', 'erl')) {
