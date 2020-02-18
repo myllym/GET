@@ -106,8 +106,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'   res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
 #'                                                       curve_set_G, curve_set_J),
 #'                                       type = "qdir")
-#'   plot(res, plot_style="ggplot2",
-#'        labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
+#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
 #'        base_size=12)
 #' }
 #'
@@ -146,8 +145,10 @@ combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alp
     }
 
     # Return
-    res <- res_rank
-    attr(res, "global_envelope_ls") <- res_ls
+    res <- res_ls
+    attr(res, "level2_ge") <- res_rank
     attr(res, "level2_curve_set") <- curve_set_u
+    attr(res, "method") <- "Combined global envelope (scaled MAD)"
+    class(res) <- c("combined_global_envelope", class(res))
     res
 }
