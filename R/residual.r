@@ -36,11 +36,8 @@ residual <- function(curve_set, use_theo = TRUE) {
             use_theo <- FALSE
         }
 
-        if(use_theo) {
-            mid <- theo
-        } else {
-            mid <- curve_set_mean(curve_set)
-        }
+        if(use_theo) mid <- theo
+        else mid <- curve_set_mean(curve_set)
 
         res <- with(curve_set, list(r = r,
                                     obs = obs - mid))
