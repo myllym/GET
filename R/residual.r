@@ -74,7 +74,7 @@ get_T_0 <- function(curve_set, central = c("mean", "median")) {
             }
         }
         else {
-            T_0 <- rep(0, times=length(curve_set[['r']]))
+            T_0 <- rep(0, times=curve_set_narg(curve_set))
         }
     }
     else { # Assume curve_set does not contain residuals
