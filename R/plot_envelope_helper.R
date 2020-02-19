@@ -262,9 +262,10 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
       }
     }
     if(!is.null(curve_sets)) {
-      for(i in 1:ncol(curve_sets$obs)) {
-        if(any(curve_sets$obs[,i] < x[['lo']] | curve_sets$obs[,i] > x[['hi']])) {
-          graphics::points(1:nr, curve_sets$obs[,i], pch='x', col=grey(0.7), type="b")
+      funcs <- curve_set_funcs(curve_sets)
+      for(i in 1:ncol(funcs)) {
+        if(any(funcs[,i] < x[['lo']] | funcs[,i] > x[['hi']])) {
+          graphics::points(1:nr, funcs[,i], pch='x', col=grey(0.7), type="b")
         }
       }
     }
@@ -324,9 +325,10 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         }
         # curves/outliers
         if(!is.null(curve_sets)) {
-          for(i in 1:ncol(curve_sets$obs)) {
-            if(any(curve_sets$obs[,i] < x[['lo']] | curve_sets$obs[,i] > x[['hi']]))
-              lines(x[['r']], curve_sets$obs[,i], col=grey(0.7))
+          funcs <- curve_set_funcs(curve_sets)
+          for(i in 1:ncol(funcs)) {
+            if(any(funcs[,i] < x[['lo']] | funcs[,i] > x[['hi']]))
+              lines(x[['r']], funcs[,i], col=grey(0.7))
           }
         }
         if(rdata$retick_xaxis) {
@@ -388,10 +390,11 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
             }
             # curves/outliers
             if(!is.null(curve_sets)) {
-              for(j in 1:ncol(curve_sets$obs)) {
-                if(any(curve_sets$obs[,j] < x[['lo']] | curve_sets$obs[,j] > x[['hi']]))
+              funcs <- curve_set_funcs(curve_sets)
+              for(j in 1:ncol(funcs)) {
+                if(any(funcs[,j] < x[['lo']] | funcs[,j] > x[['hi']]))
                   lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                        curve_sets$obs[tmp_indeces[i]:(tmp_indeces[i+1]-1),j], col=grey(0.7))
+                        funcs[tmp_indeces[i]:(tmp_indeces[i+1]-1),j], col=grey(0.7))
               }
             }
         }
@@ -466,9 +469,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     outliers <- NULL
     if(!is.null(curve_sets)) {
       if(inherits(curve_sets, "list")) curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
-      for(j in 1:ncol(curve_sets$obs)) {
-        if(any(curve_sets$obs[,j] < x[['lo']] | curve_sets$obs[,j] > x[['hi']])) {
-          outliers <- c(outliers, curve_sets$obs[,j])
+      funcs <- curve_set_funcs(curve_sets)
+      for(j in 1:ncol(funcs)) {
+        if(any(funcs[,j] < x[['lo']] | funcs[,j] > x[['hi']])) {
+          outliers <- c(outliers, funcs[,j])
           counter <- counter + 1
         }
       }
