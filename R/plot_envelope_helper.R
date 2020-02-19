@@ -85,7 +85,7 @@ retick_xaxis <- function(x) {
 
 # Define breaking r values and labels on x-axis for plotting several
 # global envelopes or curve sets jointly.
-# @param x A global_envelope object of a list of global_envelope objects.
+# @param x A global_envelope object or a list of global_envelope objects.
 # Also curve_set objects allowed with a restricted use.
 # @param nticks Number of ticks per a sub test.
 combined_global_envelope_rhelper <- function(x, nticks = 5) {
