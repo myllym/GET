@@ -1,41 +1,73 @@
 # Continuous pointwise ranks
 #
 # Calculate continuous pointwise ranks of the curves from the largest (smallest rank)
-# to the smallest (largest rank).
-cont_pointwise_hiranks <- function(data_and_sim_curves) {
-  Nfunc <- dim(data_and_sim_curves)[1]
-  nr <- dim(data_and_sim_curves)[2]
-  RRR <- array(0, c(Nfunc, nr))
-  for(i in 1:nr) {
-    y <- data_and_sim_curves[,i]
-    ordery <- order(y, decreasing = TRUE) # index of function values at "i" from largest to smallest
-    y <- y[ordery]
-    ties <- y[1:(Nfunc-2)] == y[3:Nfunc] # same as j = 2:(Nfunc-1); ties <- y[j-1] == y[j+1]
-    RR <- 0:(Nfunc-1) # Initialize the vector with j-1 (values for the case of ties)
-    RR[1] <- exp(-(y[1]-y[2])/(y[2]-y[Nfunc]))
-    if(!any(ties)) {
-      RR[2:(Nfunc-1)] <- 1:(Nfunc-2)+(y[1:(Nfunc-2)]-y[2:(Nfunc-1)])/(y[1:(Nfunc-2)]-y[3:Nfunc])
-      # same as j <- 2:(Nfunc-1); RR[j] <- j-1+(y[j-1]-y[j])/(y[j-1]-y[j+1])
-    }
-    else { # The case of some ties
-      j <- (2:(Nfunc-1))[!ties]
-      jm1 <- j-1
-      RR[j] <- jm1+(y[jm1]-y[j])/(y[jm1]-y[j+1])
-      # Treat ties
-      j <- 1
-      while(j <= Nfunc-2) {
-        k <- 1
-        if(ties[j]) {
-          k <- 3; S <- 3*j+3
-          while(j+k <= Nfunc && y[j] == y[j+k]) { k <- k+1; S <- S+j+k }
-          for(t in j:(j+k-1)) { RR[t] <- S/k }
-        }
-        j <- j+k
-      }
-    }
-    RRR[ordery, i] <- RR
+# to the smallest (largest rank) for the data in the vector y (corresponding to functions at an argument value (r)).
+contrank <- function(y, ordery=order(y, decreasing=TRUE)) {
+  Nfunc <- length(y)
+  y <- y[ordery]
+  ties <- y[1:(Nfunc-2)] == y[3:Nfunc] # same as j = 2:(Nfunc-1); ties <- y[j-1] == y[j+1]
+  RR <- 0:(Nfunc-1) # Initialize the vector with j-1 (values for the case of ties)
+  RR[1] <- exp(-(y[1]-y[2])/(y[2]-y[Nfunc]))
+  if(!any(ties)) {
+    RR[2:(Nfunc-1)] <- 1:(Nfunc-2)+(y[1:(Nfunc-2)]-y[2:(Nfunc-1)])/(y[1:(Nfunc-2)]-y[3:Nfunc])
+    # same as j <- 2:(Nfunc-1); RR[j] <- j-1+(y[j-1]-y[j])/(y[j-1]-y[j+1])
   }
-  RRR
+  else { # The case of some ties
+    j <- (2:(Nfunc-1))[!ties]
+    jm1 <- j-1
+    RR[j] <- jm1+(y[jm1]-y[j])/(y[jm1]-y[j+1])
+    # Treat ties
+    j <- 1
+    while(j <= Nfunc-2) {
+      k <- 1
+      if(ties[j]) {
+        k <- 3; S <- 3*j+3
+        while(j+k <= Nfunc && y[j] == y[j+k]) { k <- k+1; S <- S+j+k }
+        for(t in j:(j+k-1)) { RR[t] <- S/k }
+      }
+      j <- j+k
+    }
+  }
+  RR[ordery] <- RR
+  RR
+}
+
+# @return A function to calculate pointwise rank in different situations given by the measure and the alternative
+find_calc_pointwiserank <- function(measure, alternative) {
+  if(measure %in% c('rank', 'erl')) {
+    avrank <- function(x) { rank(x, ties.method = "average") }
+    switch(alternative,
+           "two.sided" = {
+             function(x) {
+               loranks <- avrank(x)
+               hiranks <- length(x)+1-loranks
+               pmin(loranks, hiranks)
+             }
+           },
+           "less" = {
+             function(x) { avrank(x) }
+           },
+           "greater" = {
+             function(x) { length(x)+1-avrank(x) }
+           })
+  }
+  else if(measure %in% c('cont', 'area')) {
+    switch(alternative,
+           "two.sided" = {
+             function(y) {
+               ordery <- order(y, decreasing = TRUE)
+               hiranks <- contrank(y, ordery)
+               loranks <- contrank(-y, rev(ordery))
+               pmin(loranks, hiranks)
+             }
+           },
+           "less" = {
+             function(y) { contrank(-y) }
+           },
+           "greater" = {
+             function(y) { contrank(y) }
+           })
+  } else { stop("Internal error in GET.")}
 }
 
 # Functionality for functional ordering based on a curve set
