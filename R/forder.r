@@ -92,27 +92,15 @@ individual_forder <- function(curve_set,
     Nfunc <- dim(data_and_sim_curves)[1]
     nr <- curve_set_narg(curve_set)
 
-    # calculate pointwise ranks
-    if(measure %in% c('rank', 'erl')) {
-      loranks <- apply(data_and_sim_curves, MARGIN=2, FUN=rank, ties.method = "average")
-      hiranks <- Nfunc+1-loranks
+    # Calculate pointwise ranks for each argument value (r)
+    calc_pointwiserank <- find_calc_pointwiserank(measure, alternative)
+    for(i in 1:nr) {
+      data_and_sim_curves[,i] <- calc_pointwiserank(data_and_sim_curves[,i]) # overwriting curves by their ranks
     }
-    else { # 'cont', 'area'
-      if(alternative != "less") hiranks <- cont_pointwise_hiranks(data_and_sim_curves)
-      if(alternative != "greater") loranks <- cont_pointwise_hiranks(-data_and_sim_curves)
-    }
-    switch(alternative,
-           "two.sided" = {
-             allranks <- pmin(loranks, hiranks)
-           },
-           "less" = {
-             allranks <- loranks
-           },
-           "greater" = {
-             allranks <- hiranks
-           })
+    allranks <- data_and_sim_curves
+    data_and_sim_curves <- NULL
 
-    # calculate measures from the pointwise ranks
+    # Calculate measures from the pointwise ranks
     switch(measure,
            rank = {
              distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
