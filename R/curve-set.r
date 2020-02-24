@@ -248,21 +248,37 @@ check_residualness <- function(curve_set) {
   invisible(curve_set)
 }
 
+#' Create a curve set
+#'
 #' Create a curve set out of a list in the right form.
 #'
-#' @param curve_set A list containing elements r, obs, and optionally
-#'   the elements sim_m and theo.
-#'   \code{r} must be a vector describing the radius vector, the argument values where
-#'   functions have been observed (or simulated).
-#'   \code{obs} must be either 1) a vector containing the data function, in which case
-#'   \code{obs} must have same length as \code{r}, or
-#'   2) a matrix containing the s data functions, in which case it is assumed that
-#'   each column corresponds to a data function, and the number of rows must match the length or r.
-#'   If \code{obs} is a vector, \code{sim_m} must be a matrix containing the simulated functions.
-#'   Each column is assumed to correspond to a function, and the number of rows must match the
-#'   length of r. If \code{obs} is a matrix, \code{sim_m} is ignored.
-#'   If included, \code{theo} corresponds to the theoretical function (e.g., under the null hypothesis).
-#'   If present, its length must match the length of \code{r}.
+#'
+#' \code{obs} must be either
+#' \itemize{
+#' \item a vector containing the data function, or
+#' \item a matrix containing the s data functions, in which case it is assumed that
+#' each column corresponds to a data function.
+#' }
+#'
+#' If given, \code{r} describes the 1- or 2-dimensional argument values where the curves have been observed (or
+#' simulated). It must be either
+#' \itemize{
+#' \item a vector,
+#' \item a data.frame with columns "x", "y", "width" and "height",
+#' where the width and height give the width and height of the pixels placed at x and y, or
+#' \item a data.frame with columns "xmin", "xmax", "ymin" and "ymax" giving the corner coordinates of the pixels
+#' where the data have been observed.
+#' }
+#'
+#' If \code{obs} is a vector, \code{sim_m} must be a matrix containing the simulated functions.
+#' Each column is assumed to correspond to a function, and the number of rows must match the
+#' length of \code{obs}. If \code{obs} is a matrix, \code{sim_m} is ignored.
+#'
+#' If \code{obs} is a vector, \code{theo} can be given and it should then correspond
+#' to a theoretical function (e.g., under the null hypothesis). If present, its length must match the length of
+#' \code{obs}.
+#' @param curve_set A list containing the element obs, and optionally
+#'   the elements r, sim_m and theo. See details.
 #' @param ... Do not use. (For internal use only.)
 #' @return The given list adorned with the proper class name.
 #' @export
