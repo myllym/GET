@@ -458,7 +458,7 @@ data_and_sim_curves <- function(curve_set) {
   funcs
 }
 # Return all the functions from a curve set in a matrix.
-# Columns: functions, Rows: values of the functions at an argument value.
+# Columns: functions, Rows: values of the functions at an argument value. (same as in curve_set$obs)
 curve_set_funcs <- function(curve_set) {
   if(with(curve_set, is.matrix(obs))) funcs <- curve_set[['obs']]
   else {
