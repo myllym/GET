@@ -482,7 +482,7 @@ curve_set_mean <- function(curve_set) {
 #' @importFrom stats median
 curve_set_median <- function(curve_set) {
   funcs <- data_and_sim_curves(curve_set)
-  apply(funcs, MARGIN = 2, FUN = median)
+  sapply(1:ncol(funcs), function(i) { median(funcs[,i]) })
 }
 
 # A helper function to obtain the sd of functions in curve_set.
@@ -492,7 +492,7 @@ curve_set_median <- function(curve_set) {
 #' @importFrom stats sd
 curve_set_sd <- function(curve_set) {
   funcs <- data_and_sim_curves(curve_set)
-  apply(funcs, MARGIN = 2, FUN = sd)
+  sapply(1:ncol(funcs), FUN = function(i) { sd(funcs[,i]) })
 }
 
 # A helper function to obtain the quantiles of functions in curve_set.
@@ -504,7 +504,7 @@ curve_set_sd <- function(curve_set) {
 curve_set_quant <- function(curve_set, probs, ...) {
   funcs <- data_and_sim_curves(curve_set)
   # Dimensions: 2, r_idx.
-  apply(funcs, MARGIN = 2, FUN = quantile, probs = probs, ...)
+  sapply(1:ncol(funcs), FUN = function(i) { quantile(funcs[,i], probs=probs, ...) })
 }
 
 # Number of arguments where the curves have been evaluated
