@@ -509,12 +509,14 @@ curve_set_quant <- function(curve_set, probs, ...) {
 
 # Number of arguments where the curves have been evaluated
 curve_set_narg <- function(curve_set) {
-  if(is.vector(curve_set$r)) length(curve_set$r)
-  else nrow(curve_set$r)
+  r <- curve_set[['r']]
+  if(is.vector(r)) length(r)
+  else nrow(r)
 }
 
 # Return curve_set$r as a data.frame
 curve_set_rdf <- function(curve_set) {
-  if(is.vector(curve_set$r)) data.frame(r=curve_set$r)
-  else curve_set$r
+  r <- curve_set[['r']]
+  if(is.vector(r)) data.frame(r=r)
+  else r
 }
