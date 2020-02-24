@@ -774,17 +774,23 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
     }
   }
 
-  if(all(sapply(x$r, length) == length(x$obs))) {
-    df <- as.data.frame(x$r)
-  } else {
+  # If curve_set$r was created using a data.frame
+  if(!is.null(x[['x']])) df <- x[, c("height", "width", "x", "y")]
+  else if(!is.null(x[['xmin']])) df <- x[, c("xmax", "xmin", "ymax", "ymin")]
+  # The case of image_set
+  else {
+    # If image_set was created using (xmin, xmax, ymin, ymax) for x and y dimensions independently.
     if(!is.null(x$r$xmin)) {
       df <- expand.grid(xmin=x$r$xmin, ymin=x$r$ymin)
       df <- cbind(df, expand.grid(xmax=x$r$xmax, ymax=x$r$ymax))
     } else {
+      # If image_set was created using (x, y) for x and y dimensions indepently
       df <- expand.grid(x=x$r$x, y=x$r$y)
       if(!is.null(x$r$width)) {
+        # If also width and height were given
         df <- cbind(df, expand.grid(width=x$r$width, height=x$r$height))
       } else {
+        # If not assume equal spacing
         df$width <- x$r$x[2] - x$r$x[1]
         df$height <- x$r$y[2] - x$r$y[1]
       }
