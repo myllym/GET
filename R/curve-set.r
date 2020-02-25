@@ -208,12 +208,10 @@ convert_fdata <- function(curve_set, ...) {
 # Check that the curve_set object portrays residual curves.
 # @param curve_set A 'curve_set' object
 check_residualness <- function(curve_set) {
-  is_residual <- curve_set[['is_residual']]
-  if(length(is_residual) < 1L || !is_residual) {
+  if(!curve_set_isresidual(curve_set)) {
     stop('curve_set must consist of residual curves. Run function ',
          'residual first.')
   }
-  invisible(curve_set)
 }
 
 #' Create a curve set
