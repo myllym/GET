@@ -11,18 +11,8 @@ envelope_to_curve_set <- function(env, ...) {
   }
 
   r <- env[['r']]
-  n_r <- length(r)
-  if(n_r < 1L) {
-    stop('env[["r"]] must exist.')
-  }
-
-  obs <- env[['obs']]
-  if(length(obs) != n_r) {
-    stop('env[["obs"]] and env[["r"]] must have the same length.')
-  }
-
   simfuns_fv <- attr(env, 'simfuns', exact = TRUE)
-  if(length(simfuns_fv) < 1L) {
+  if(is.null(simfuns_fv)) {
     stop('env did not include the simulated curve set. envelope must ',
          'be run with savefuns = TRUE.')
   }
@@ -39,25 +29,15 @@ envelope_to_curve_set <- function(env, ...) {
 
   # Dimensions: r_idx, sim_idx.
   sim_m <- as.matrix(simulation_df[, !(simulation_df_names %in% 'r')])
-  if(nrow(sim_m) != n_r) {
-    stop('simulated curves must have the same length as r.')
-  }
 
   theo <- env[['theo']]
-  n_theo <- length(theo)
-  # If theo exists it must be correct.
-  if(n_theo > 0L && n_theo != n_r) {
-    stop('env[["theo"]] and env[["r"]] must have the same length.')
-  }
 
-  res <- list(r = r, obs = obs, sim_m = sim_m)
-  if(n_theo > 0L) {
+  res <- list(r = r, obs = env[['obs']], sim_m = sim_m)
+  if(!is.null(theo)) {
     res[['theo']] <- theo
   }
-  res[['is_residual']] <- FALSE
 
-  res <- create_curve_set(res, ...)
-  res
+  create_curve_set(res, ...)
 }
 
 # Turn an \code{\link[fda.usc]{fdata}} object into a curve_set object.
