@@ -17,7 +17,7 @@
 residual <- function(curve_set, use_theo = TRUE) {
     curve_set <- convert_envelope(curve_set)
 
-    if(with(curve_set, exists('is_residual')) && curve_set[['is_residual']]) {
+    if(curve_set_isresidual(curve_set)) {
         # "The curve_set object contains already residuals T_i(r) - T_0(r), use_theo ignored.
         res <- curve_set
     }
