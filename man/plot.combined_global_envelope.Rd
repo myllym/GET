@@ -10,7 +10,6 @@
   ylim = NULL,
   xlab,
   ylab,
-  coord = NULL,
   color_outside = TRUE,
   env.col = 1,
   base_size = 12,
@@ -34,16 +33,6 @@
 \item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
-
-\item{coord}{A data frame of the spatial coordinates where the data have been observed.
-\code{nrow(coord)} should match the length of \code{x$r}, and the names of the columns
-should be either "x", "y", "width", "height" or "xmin", "ymin", "xmax", "ymax".
-Here x and y should give the (center) coordinates of the observed data,
-width and height give the size of the pixel places at (x,y) (most often constants).
-The xmin, ymin, xmax, ymax give an alternative way to specify the pixels where the data have
-been observed, namely the corner locations of each pixel.
-If coord is provided, then a two-dimensional plot is made instead of 1-dimensional default
-plot.}
 
 \item{color_outside}{Logical. Whether to color the places where the data function goes
 outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.}
@@ -78,13 +67,6 @@ Default 2 or 3, if the length of x equals 3.
 }
 \description{
 This function provides plots for combined global envelopes.
-Note that the argument \code{coord} is as for the single global envelopes
-(see \code{\link{plot.global_envelope}}), but its dimensions should match
-the dimensions of x[[i]] (for all i). That is, the plots with \code{coord}
-are currently provided only for the case where the components of the object \code{x}
-have the same \code{r}. This is suitable in particular for the functional ANOVA and
-functional general linear models (see \code{\link{graph.fanova}}, \code{\link{graph.flm}},
-\code{\link{frank.fanova}}, \code{\link{frank.flm}}) made for images.
 }
 \seealso{
 \code{\link{central_region}}

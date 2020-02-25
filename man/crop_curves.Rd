@@ -2,7 +2,7 @@
 % Please edit documentation in R/crop.r
 \name{crop_curves}
 \alias{crop_curves}
-\title{Crop the curves to a certain interval.}
+\title{Crop the curves to a certain interval}
 \usage{
 crop_curves(curve_set, r_min = NULL, r_max = NULL)
 }
@@ -21,6 +21,9 @@ A curve_set object containing the cropped summary functions and
   the cropped radius vector.
 }
 \description{
-Crop the curves to a certain interval in preparation for a deviation
-test.
+Crop the curves to a certain interval
+}
+\details{
+The curves can be cropped to a certain interval defined by the arguments r_min and r_max.
+The interval should generally be chosen carefully for classical deviation tests.
 }

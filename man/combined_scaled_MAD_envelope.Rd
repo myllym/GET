@@ -92,8 +92,7 @@ if(require("spatstat", quietly=TRUE)) {
   res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
                                                       curve_set_G, curve_set_J),
                                       type = "qdir")
-  plot(res, plot_style="ggplot2",
-       labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
+  plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
        base_size=12)
 }
 

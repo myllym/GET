@@ -11,9 +11,7 @@ forder(
   alternative = c("two.sided", "less", "greater"),
   use_theo = TRUE,
   probs = c(0.025, 0.975),
-  quantile.type = 7,
-  r_min = NULL,
-  r_max = NULL
+  quantile.type = 7
 )
 }
 \arguments{
@@ -40,10 +38,6 @@ The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 20
 
 \item{quantile.type}{As type argument of \code{\link[stats]{quantile}}, how to
 calculate quantiles for 'q' or 'qdir'.}
-
-\item{r_min}{The minimum radius to include.}
-
-\item{r_max}{The maximum radius to include.}
 }
 \value{
 A vector containing one of the above mentioned measures k for each of the functions

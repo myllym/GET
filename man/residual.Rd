@@ -25,13 +25,7 @@ in the curve set. If the \code{curve_set} object contains already residuals
 T_i(r) - T_0(r), use_theo ignored and the same object returned.
 }
 \details{
-The mean of the functions in the \code{curve_set} is
-\itemize{
-\item the mean of the functions provided in \code{obs}, if \code{obs} is a matrix
-(i.e. many functions in \code{obs}).
-\item the mean of the functions provided in \code{sim_m}, if \code{obs} is a vector
-(i.e. only one function in \code{obs}).
-}
+The mean of the functions in the \code{curve_set} is the mean of all functions.
 If \code{use_theo = TRUE}, but the component \code{theo} does not exist in the
 \code{curve_set}, the mean of the functions is used silently.
 }
