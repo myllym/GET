@@ -149,7 +149,7 @@ divisor_to_coeff <- function(x) {
 weigh_curves <- function(curve_set, coeff) {
     curve_set[['obs']] <- coeff * curve_set[['obs']]
     if(!is.null(curve_set[['sim_m']])) curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
-    if(length(curve_set[['theo']]) > 0L) {
+    if(!is.null(curve_set[['theo']])) {
         curve_set[['theo']] <- coeff * curve_set[['theo']]
     }
     curve_set
