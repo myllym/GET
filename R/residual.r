@@ -58,26 +58,10 @@ get_T_0 <- function(curve_set, central = c("mean", "median")) {
     switch(central,
            mean = { centralf <- curve_set_mean },
            median = { centralf <- curve_set_median })
-    if(with(curve_set, exists('is_residual'))) {
-        if(!curve_set[['is_residual']]) {
-            if(with(curve_set, exists('theo'))) {
-                T_0 <- curve_set[['theo']]
-            }
-            else {
-                T_0 <- centralf(curve_set)
-            }
-        }
-        else {
-            T_0 <- rep(0, times=curve_set_narg(curve_set))
-        }
-    }
-    else { # Assume curve_set does not contain residuals
-        if(with(curve_set, exists('theo'))) {
-            T_0 <- curve_set[['theo']]
-        }
-        else {
-            T_0 <- centralf(curve_set)
-        }
-    }
-    T_0
+    if(curve_set_isresidual(curve_set))
+        rep(0, times=curve_set_narg(curve_set))
+    else if(!is.null(curve_set[['theo']]))
+        curve_set[['theo']]
+    else
+        centralf(curve_set)
 }
