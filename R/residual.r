@@ -39,9 +39,9 @@ residual <- function(curve_set, use_theo = TRUE) {
 
         res <- list(r = curve_set[['r']], obs = curve_set[['obs']] - mid)
         if(!is.null(curve_set[['sim_m']])) res[['sim_m']] <- curve_set[['sim_m']] - mid
-        res[['is_residual']] <- TRUE
 
         res <- create_curve_set(res)
+        res[['is_residual']] <- TRUE
     }
     res
 }
