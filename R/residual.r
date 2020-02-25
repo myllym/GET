@@ -37,8 +37,7 @@ residual <- function(curve_set, use_theo = TRUE) {
         if(use_theo) mid <- theo
         else mid <- curve_set_mean(curve_set)
 
-        res <- with(curve_set, list(r = r,
-                                    obs = obs - mid))
+        res <- list(r = curve_set[['r']], obs = curve_set[['obs']] - mid)
         if(!is.null(curve_set[['sim_m']])) res[['sim_m']] <- curve_set[['sim_m']] - mid
         res[['is_residual']] <- TRUE
 
