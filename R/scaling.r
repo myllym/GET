@@ -153,7 +153,7 @@ divisor_to_coeff <- function(x) {
 weigh_curves <- function(curve_set, coeff) {
     curve_set[['obs']] <- coeff * curve_set[['obs']]
     if(!is.null(curve_set[['sim_m']])) curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
-    if (length(curve_set[['theo']]) > 0L) {
+    if(length(curve_set[['theo']]) > 0L) {
         curve_set[['theo']] <- coeff * curve_set[['theo']]
     }
     curve_set
@@ -164,7 +164,7 @@ weigh_curves <- function(curve_set, coeff) {
 # @param probs A vector to be checked.
 check_probs <- function(probs) {
     # Leave further validity checking of probs and type to quantile.
-    if (length(probs) != 2L || !all(is.finite(probs)) ||
+    if(length(probs) != 2L || !all(is.finite(probs)) ||
         probs[1] >= probs[2] ||
         probs[1] < 0 || probs[2] < 0 || probs[1] > 1 || probs[2] > 1) {
         stop('probs must be a two-element vector with both values finite \n',
