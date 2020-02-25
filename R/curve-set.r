@@ -49,24 +49,11 @@ fdata_to_curve_set <- function(fdata, ...) {
   if(!inherits(fdata, 'fdata')) {
     stop('fdata is not a fdata object.')
   }
-  if(!is.null(fdata[['fdata2d']]) && fdata[['fdata2d']])
-    stop("No support for converting this type of functional data, only functional data observed in a single grid supported.\n")
-
   r <- fdata[['argvals']]
-  n_r <- length(r)
-  if(n_r < 1L) {
-    stop('fdata[["argvals"]] must exist.')
-  }
+  if(is.list(r))
+    stop("No support for converting this type of functional data, only functional data observed in a single grid supported.")
 
-  obs <- t(fdata[['data']])
-  if(nrow(obs) != n_r) {
-    stop('Number of functions in fdata[["data"]] and the length of fdata[["argvals"]] must be equal.')
-  }
-
-  res <- list(r = r, obs = obs)
-
-  res <- create_curve_set(res, ...)
-  res
+  create_curve_set(list(r = r, obs = t(fdata[['data']])), ...)
 }
 
 # Check the content validity of a potential curve_set object.
