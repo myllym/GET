@@ -360,7 +360,8 @@ combine_curve_sets <- function(x, equalr = TRUE) {
   x <- check_curve_set_dimensions(x, equalr=equalr)
   name_vec <- lapply(x, FUN=names)
   if('r' %in% name_vec[[1]]) {
-    cset$r <- c(sapply(x, FUN=function(curve_set) { curve_set['r'] }), recursive=TRUE)
+    if(is.vector(x[[1]]$r)) cset$r <- do.call(c, lapply(x, FUN=function(curve_set) { curve_set[['r']] }))
+    else cset$r <- do.call(rbind, lapply(x, FUN=function(curve_set) { curve_set[['r']] }))
   }
   if('obs' %in% name_vec[[1]]) {
     if(is.matrix(x[[1]]$obs)) {
