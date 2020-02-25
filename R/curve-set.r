@@ -63,7 +63,9 @@ fdata_to_curve_set <- function(fdata, ...) {
 # values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
 # away (in \code{\link{crop_curves}}).
 check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
-  possible_names <- c('r', 'obs', 'sim_m', 'theo', 'is_residual')
+  if(inherits(curve_set, "curve_set")) return(curve_set)
+
+  possible_names <- c('r', 'obs', 'sim_m', 'theo')
 
   n <- length(curve_set)
   if(n < 1L) {
@@ -82,74 +84,73 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
          ' names: ', paste(possible_names, collapse = ', '))
   }
 
-  r <- curve_set[['r']]
-  n_r <- length(r)
-  if(n_r < 1L) {
-    stop('curve_set[["r"]] must have at least one element.')
-  }
-  if(!is.vector(r)) {
-    stop('curve_set[["r"]] must be a vector.')
-  }
-  if(!all(is.numeric(r)) || !all(is.finite(r))) {
-    stop('curve_set[["r"]] must have only finite numeric values.')
-  }
-
   obs <- curve_set[['obs']]
-  if(!is.vector(obs) & !is.matrix(obs)) {
+  if(is.vector(obs)) narg <- length(obs)
+  else if(is.matrix(obs)) narg <- nrow(obs)
+  else {
     stop('curve_set[["obs"]] must be a vector or a matrix.')
-  }
-  if((is.vector(obs) && length(obs) != n_r) | (is.matrix(obs) && nrow(obs) != n_r)) {
-    stop('curve_set[["obs"]] must have as many values or rows as ',
-         'curve_set[["r"]].')
   }
   if(!(allow_Inf_values | ( all(is.numeric(obs)) && all(is.finite(obs)) ))) {
     stop('curve_set[["obs"]] must have only finite numeric values.')
   }
 
+  r <- curve_set[['r']]
+  if(is.null(r)) n_r <- narg
+  else if(is.data.frame(r)) {
+    if(!(identical(sort(names(r)), c("height", "width", "x", "y"))
+       || identical(sort(names(r)), c("xmax", "xmin", "ymax", "ymin"))))
+      stop('The names of curve_set[[\'r\']] must be either c("height", "width", "x", "y") or c("xmax", "xmin", "ymax", "ymin").\n')
+    n_r <- nrow(r)
+    if(!all(sapply(r, is.numeric)) || !all(sapply(r, is.finite))) {
+      stop('curve_set[["r"]] must have only finite numeric values.')
+    }
+  }
+  else if(is.vector(r)) {
+    if(!all(is.numeric(r)) || !all(is.finite(r))) {
+      stop('curve_set[["r"]] must have only finite numeric values.')
+    }
+    n_r <- length(r)
+  }
+  else {
+    stop("If r given, it must be either a vector or a data.frame.")
+  }
+  if(n_r != narg) {
+    stop('curve_set[["r"]] must be compatible with curve_set[["obs"]].')
+  }
+
   sim_m <- curve_set[['sim_m']]
-  if(length(sim_m) > 0L) {
+  if(!is.null(sim_m)) {
     dim_sim_m <- dim(sim_m)
     if(!is.matrix(sim_m)) {
       stop('curve_set[["sim_m"]] must be a matrix.')
     }
-    if(dim_sim_m[1] != n_r) {
+    if(dim_sim_m[1] != narg) {
       stop('curve_set[["sim_m"]] must have as many rows as there are ',
-           'elements in curve_set[["r"]].')
+           'elements in curve_set[["obs"]].')
     }
     if(dim_sim_m[2] < 1L) {
       stop('curve_set[["sim_m"]] must have at least one column.')
     }
-    if(!(allow_Inf_values | ( all(is.numeric(sim_m)) && all(is.finite(sim_m)) ))) {
+    if(!(allow_Inf_values | ( is.numeric(sim_m) && all(is.finite(sim_m)) ))) {
       stop('curve_set[["sim_m"]] must have only finite numeric values.')
     }
   }
 
   theo <- curve_set[['theo']]
-  n_theo <- length(theo)
-  if(n_theo > 0L) {
-    if(n_theo != n_r) {
+  if(!is.null(theo)) {
+    n_theo <- length(theo)
+    if(is.null(sim_m)) stop("theo can be provided only with sim_m.")
+    if(n_theo != narg) {
       stop('curve_set[["theo"]] must have as many values as ',
-           'curve_set[["r"]].')
+           'curve_set[["obs"]].')
     }
     if(!is.vector(theo)) {
       stop('curve_set[["theo"]] must be a vector.')
     }
-    if(!(allow_Inf_values | ( all(is.numeric(theo)) && all(is.finite(theo)) ))) {
+    if(!(allow_Inf_values | ( is.numeric(theo) && all(is.finite(theo)) ))) {
       stop('curve_set[["theo"]] must have only finite numeric ',
            'values.')
     }
-  }
-
-  is_residual <- curve_set[['is_residual']]
-  n_is_residual <- length(is_residual)
-  if(n_is_residual > 0L && (n_is_residual != 1L ||
-                             !is.logical(is_residual) ||
-                             !is.finite(is_residual))) {
-    stop('curve_set[["is_residual"]] must be either TRUE or FALSE.')
-  }
-
-  if(n_is_residual > 0L && is_residual && n_theo > 0L) {
-    stop('A residual curve set must not contain a theoretical curve.')
   }
 
   curve_set
