@@ -22,8 +22,7 @@ residual <- function(curve_set, use_theo = TRUE) {
         res <- curve_set
     }
     else {
-        if(length(use_theo) != 1L || !inherits(use_theo, 'logical') ||
-            !is.finite(use_theo)) {
+        if(length(use_theo) != 1L || !is.logical(use_theo)) {
             stop('use_theo must be either TRUE or FALSE.')
         }
 
