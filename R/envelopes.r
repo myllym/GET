@@ -239,11 +239,11 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   else alt2 <- "less"
   switch(CR_or_GET,
          CR = {
-           curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat, is_residual=FALSE))
+           curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat))
            res_erl <- individual_central_region(curve_set_u, type="erl", coverage=coverage, alternative=alt2)
          },
          GET = {
-           curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat[,1], sim_m=k_mat[,-1], is_residual=FALSE))
+           curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat[,1], sim_m=k_mat[,-1]))
            res_erl <- individual_global_envelope_test(curve_set_u, type="erl", alpha=1-coverage, alternative=alt2)
          }
   )
