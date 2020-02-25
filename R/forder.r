@@ -142,7 +142,7 @@ combined_forder <- function(curve_sets, ...) {
   # Create a curve_set for the ERL test
   k_ls <- lapply(res_ls, FUN = function(x) x$distance)
   k_mat <- do.call(rbind, k_ls, quote=FALSE)
-  curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat, is_residual=FALSE))
+  curve_set_u <- create_curve_set(list(r=1:ntests, obs=k_mat))
   # Construct the one-sided ERL central region
   if(res_ls[[1]]$measure %in% c('max', 'int', 'int2')) alt2 <- "greater"
   else alt2 <- "less"
