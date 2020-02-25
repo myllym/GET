@@ -384,11 +384,12 @@ combine_curve_sets <- function(x, equalr = TRUE) {
   }
   if('theo' %in% name_vec[[1]])
     cset$theo <- c(sapply(x, FUN=function(curve_set) { curve_set['theo'] }), recursive=TRUE)
+  res <- create_curve_set(cset)
   # check_curve_set_dimensions has checked that 'is_residual' is the same for all curve sets.
-  if('is_residual' %in% name_vec[[1]])
-    cset$is_residual <- x[[1]]$is_residual
+  if(curve_set_isresidual(x[[1]]))
+    res$is_residual <- TRUE
   # Return the combined set of curves
-  create_curve_set(cset)
+  res
 }
 
 # Check curve set dimensions
