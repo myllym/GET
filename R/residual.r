@@ -27,8 +27,7 @@ residual <- function(curve_set, use_theo = TRUE) {
         }
 
         theo <- curve_set[['theo']]
-        n_theo <- length(theo)
-        if(n_theo < 1L && use_theo) {
+        if(is.null(theo) && use_theo) {
             # warnings('use_theo == TRUE but the theoretical curve is missing. ',
             #          'Behaving as if use_theo == FALSE.')
             # Silently setting use_theo to FALSE, when 'theo' not provided:
