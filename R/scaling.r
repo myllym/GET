@@ -86,15 +86,11 @@ qdir_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
     lower_coeff <- abs_coeff[1, , drop = TRUE]
     upper_coeff <- abs_coeff[2, , drop = TRUE]
 
-    res <- with(curve_set, list(r = r,
-                                obs = weigh_both_sides(obs, upper_coeff,
-                                      lower_coeff)))
+    curve_set[['obs']] <- weigh_both_sides(curve_set[['obs']], upper_coeff, lower_coeff)
     if(!is.null(curve_set[['sim_m']]))
-      res[['sim_m']] <- weigh_both_sides(curve_set[['sim_m']], upper_coeff, lower_coeff)
-    res[['is_residual']] <- TRUE
+      curve_set[['sim_m']] <- weigh_both_sides(curve_set[['sim_m']], upper_coeff, lower_coeff)
 
-    res <- create_curve_set(res)
-    res
+    curve_set
 }
 
 # Scale curves.
