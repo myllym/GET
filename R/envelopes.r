@@ -127,17 +127,20 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
     df <- data.frame(curve_set_rdf(curve_set), central=T_0, lo=LB, hi=UB)
     picked_attr$einfo$nsim <- Nfunc
   }
-  res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
-            ylab = picked_attr[['ylab']], valu = "central", fmla = ". ~ r",
-            alim = c(min(curve_set[['r']]), max(curve_set[['r']])),
-            labl = picked_attr[['labl']], desc = picked_attr[['desc']],
-            unitname = NULL, fname = picked_attr[['fname']], yexp = picked_attr[['yexp']])
-  attr(res, "shade") <- c("lo", "hi")
+  if(is.vector(curve_set$r)) {
+    res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
+                        ylab = picked_attr[['ylab']], valu = "central", fmla = ". ~ r",
+                        alim = c(min(curve_set[['r']]), max(curve_set[['r']])),
+                        labl = picked_attr[['labl']], desc = picked_attr[['desc']],
+                        unitname = NULL, fname = picked_attr[['fname']], yexp = picked_attr[['yexp']])
+    attr(res, "shade") <- c("lo", "hi")
+    attr(res, "xlab") <- picked_attr[['xlab']]
+    attr(res, "xexp") <- picked_attr[['xexp']]
+  }
+  else res <- df
   if(type == "st") picked_attr$einfo$nSD <- kalpha
   if(type == "rank") picked_attr$einfo$nrank <- kalpha
   attr(res, "einfo") <- picked_attr[['einfo']]
-  attr(res, "xlab") <- picked_attr[['xlab']]
-  attr(res, "xexp") <- picked_attr[['xexp']]
   # Extra for global envelopes
   class(res) <- c("global_envelope", class(res))
   attr(res, "method") <- "Global envelope"
