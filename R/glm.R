@@ -26,11 +26,11 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
     einfo <- curve_sets[['Y']]$names
   } else einfo <- NULL
   curve_sets <- lapply(curve_sets, convert_fdata)
-  if(!all(sapply(curve_sets, function(x) is.matrix(x[['obs']])))) stop("The curve_set must include data functions (sim_m ignored).\n")
+  if(any(sapply(curve_sets, function(x) curve_set_is1obs(x)))) stop("All (data) functions of the curve_set must be equal.\n")
   curve_sets <- check_curve_set_dimensions(curve_sets)
   # Put Y and factors into data.l
   data.l <- list()
-  data.l[['Y']] <- t(curve_sets[['Y']][['obs']]) # -> each row corresponds to a data function
+  data.l[['Y']] <- data_and_sim_curves(curve_sets[['Y']]) # -> each row corresponds to a data function
   # The argument values
   r <- curve_sets[['Y']][['r']]
   Nfunc <- nrow(data.l[['Y']]) # Number of functions
@@ -38,7 +38,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   vars.csets <- vars[vars %in% names(curve_sets)]
   factors_in_curvesets <- !fast
   if(length(curve_sets) > 1 & length(vars.csets) > 1) { # Factors provided in the curve_sets
-    for(i in 2:length(vars.csets)) data.l[[vars.csets[i]]] <- t(curve_sets[[vars.csets[i]]][['obs']])
+    for(i in 2:length(vars.csets)) data.l[[vars.csets[i]]] <- data_and_sim_curves(curve_sets[[vars.csets[i]]])
     factors_in_curvesets <- TRUE
   }
   vars.factors <- vars[vars %in% names(factors)]
