@@ -394,7 +394,7 @@ GET.composite <- function(X, X.ls = NULL,
     X.ls <- lapply(X.ls, FUN = check_curve_set_dimensions)
     # Check equality of dimensions over repetitions
     if(!all(sapply(X.ls, FUN=function(curve_set) { identical(curve_set[[1]]$r, y=X[[1]]$r) }))) stop("The number of argument values in the observed and simulated sets of curves differ.\n")
-    if(!all(sapply(X.ls, FUN=function(curve_set) { identical(dim(curve_set[[1]]$sim_m), y=dim(X[[1]]$sim_m)) }))) stop("The number of simulations in the observed and simulated sets of curves differ.\n")
+    if(!all(sapply(X.ls, FUN=function(curve_set) { curve_set_nfunc(curve_set[[1]]) == curve_set_nfunc(X[[1]]) }))) stop("The number of simulations in the observed and simulated sets of curves differ.\n")
     # Checking r_min, r_max
     if(!is.null(r_min) & length(r_min) != length(X)) stop("r_min should give the minimum distances for each of the test functions.\n")
     if(!is.null(r_max) & length(r_max) != length(X)) stop("r_max should give the maximum distances for each of the test functions.\n")
