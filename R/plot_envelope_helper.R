@@ -137,7 +137,7 @@ combined_global_envelope_rhelper <- function(x, nticks = 5) {
 
 # An internal GET function for setting the default main for a global envelope plot.
 # @param x An 'global_envelope' object.
-env_main_default <- function(x, digits=3, alternative=attr(x, "einfo")$alternative) {
+env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {
   if(!is.null(attr(x, "p_interval"))) {
     if(alternative == "two.sided")
       main <- paste(attr(x, "method"), ": p-interval = (",
@@ -177,7 +177,7 @@ env_ylim_default <- function(x, use_ggplot2) {
   if(!use_ggplot2)
     ylim <- lapply(x, {
       function(y) {
-        switch(attr(y, "einfo")$alternative,
+        switch(get_alternative(y),
                two.sided = {
                  ylim <- c(min(y[['obs']],y[['lo']],y[['hi']],y[['central']]),
                            max(y[['obs']],y[['lo']],y[['hi']],y[['central']]))
@@ -225,11 +225,11 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
     if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
     if(!add) graphics::plot(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
     else graphics::points(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
-    if(attr(x, "einfo")$alternative!="greater")
+    if(get_alternative(x)!="greater")
         graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=arrows.col)
     else
         graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
-    if(attr(x, "einfo")$alternative!="less")
+    if(get_alternative(x)!="less")
         graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=arrows.col)
     else
         graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
@@ -278,7 +278,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
     # a) if x is a list of global_envelope objects
     # b) if x[['r']] contains repeated values (when length(x) == 1)
     rdata <- combined_global_envelope_rhelper(x, nticks=nticks)
-    alt <- attr(x[[1]], "einfo")$alternative
+    alt <- get_alternative(x[[1]])
     x <- rdata$x_vec
     # Plot
     if(Nfunc == 1 & is.null(rdata$r_values_newstart_id)) {
@@ -439,7 +439,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     # a) if x is a list of global_envelope objects
     # b) if x[['r']] contains repeated values (when length(x) == 1)
     rdata <- combined_global_envelope_rhelper(x, nticks=nticks)
-    alt <- attr(x[[1]], "einfo")$alternative
+    alt <- get_alternative(x[[1]])
     x <- rdata$x_vec
 
     linetype.values <- c('dashed', 'solid')
@@ -656,7 +656,7 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
          },
          # Lower envelope
          lo = {
-           if(attr(x, "einfo")$alternative != "greater") {
+           if(get_alternative(x) != "greater") {
              lo.im <- spatstat::as.im(list(x=x$r[[1]], y=x$r[[2]], z= x$lo))
              if(!("col" %in% names(extraargs))) {
                if(max(x$lo)>min(x$lo))
@@ -670,7 +670,7 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
          },
          # Upper envelope
          hi = {
-           if(attr(x, "einfo")$alternative != "less") {
+           if(get_alternative(x) != "less") {
              hi.im <- spatstat::as.im(list(x=x$r[[1]], y=x$r[[2]], z= x$hi))
              if(!("col" %in% names(extraargs))) {
                if(max(x$hi)>min(x$hi))
@@ -701,7 +701,7 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
          },
          hi.sign = {
            # Above
-           if(!is.null(x$obs) & attr(x, "einfo")$alternative != "less") {
+           if(!is.null(x$obs) & get_alternative(x) != "less") {
              obs.im <- spatstat::as.im(list(x=x$r[[1]], y=x$r[[2]], z=x$obs))
              transparent <- grDevices::rgb(0, 0, 0, max = 255, alpha = 0, names = "transparent")
              red <- grDevices::rgb(sign.col[1], sign.col[2], sign.col[3], max = 255, alpha = transparency, names = "red")
@@ -785,20 +785,21 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
     df$main <- main
     df
   }
+  alt <- get_alternative(x)
   dfs <- list()
   if(!is.null(x$obs)) {
     dfs <- c(dfs, list(adddf(df, x$obs, "obs", contour=contours)))
   }
-  if(attr(x, "einfo")$alternative != "greater") {
+  if(alt != "greater") {
     dfs <- c(dfs, list(adddf(df, x$lo, "lo", contour=contours)))
   }
-  if(attr(x, "einfo")$alternative != "less") {
+  if(alt != "less") {
     dfs <- c(dfs, list(adddf(df, x$hi, "hi", contour=contours)))
   }
-  if(!is.null(x$obs) && attr(x, "einfo")$alternative != "greater") {
+  if(!is.null(x$obs) && alt != "greater") {
     dfs <- c(dfs, list(adddf(df, x$obs, "lo.sign", signif=x$obs < x$lo)))
   }
-  if(!is.null(x$obs) && attr(x, "einfo")$alternative != "less") {
+  if(!is.null(x$obs) && alt != "less") {
     dfs <- c(dfs, list(adddf(df, x$obs, "hi.sign", signif=x$obs > x$hi)))
   }
   if(fixedscales)
