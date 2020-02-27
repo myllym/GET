@@ -87,7 +87,10 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'     ppm(X, model, covariates=covariates)
 #'   }
 #'   \dontshow{res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, 3, alpha=0.5)}
-#'   \donttest{res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, 999)}
+#'   \donttest{
+#'   nsim <- 19 # Increase nsim for serious analysis!
+#'   res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, nsim)
+#'   }
 #'   plot(res$F)
 #'   plot(res$S)
 #'
@@ -104,7 +107,8 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'
 #'   fullmodel <- ~ elevation + landuse
 #'   reducedmodel <- ~ landuse
-#'   res <- GET.spatialF(pp.lightning, fullmodel, reducedmodel, fitppm, covariates, 1999)
+#'   nsim <- 19 # Increase nsim for serious analysis!
+#'   res <- GET.spatialF(pp.lightning, fullmodel, reducedmodel, fitppm, covariates, nsim)
 #'   plot(res$F)
 #'   plot(res$S)
 #'
