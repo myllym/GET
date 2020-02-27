@@ -6,6 +6,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       probs = c((1-coverage)/2, 1-(1-coverage)/2),
                                       quantile.type = 7,
                                       central = "median") {
+  isenvelope <- inherits(curve_set, "envelope")
   if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
   alpha <- 1 - coverage
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
@@ -119,25 +120,26 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          "less" = { UB <- Inf },
          "greater" = { LB <- -Inf })
 
-  if(is.vector(curve_set[['obs']])) {
-    df <- data.frame(curve_set_rdf(curve_set), obs=curve_set[['obs']], central=T_0, lo=LB, hi=UB)
+  if(curve_set_is1obs(curve_set)) {
+    df <- data.frame(curve_set_rdf(curve_set), obs=curve_set_1obs(curve_set), central=T_0, lo=LB, hi=UB)
     picked_attr$einfo$nsim <- Nfunc-1
   }
   else {
     df <- data.frame(curve_set_rdf(curve_set), central=T_0, lo=LB, hi=UB)
     picked_attr$einfo$nsim <- Nfunc
   }
-  if(is.vector(curve_set$r)) {
+  if(isenvelope) {
     res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
                         ylab = picked_attr[['ylab']], valu = "central", fmla = ". ~ r",
                         alim = c(min(curve_set[['r']]), max(curve_set[['r']])),
                         labl = picked_attr[['labl']], desc = picked_attr[['desc']],
                         unitname = NULL, fname = picked_attr[['fname']], yexp = picked_attr[['yexp']])
     attr(res, "shade") <- c("lo", "hi")
-    attr(res, "xlab") <- picked_attr[['xlab']]
-    attr(res, "xexp") <- picked_attr[['xexp']]
   }
   else res <- df
+  attr(res, "argu") <- picked_attr[['argu']]
+  attr(res, "xlab") <- picked_attr[['xlab']]
+  attr(res, "xexp") <- picked_attr[['xexp']]
   if(type == "st") picked_attr$einfo$nSD <- kalpha
   if(type == "rank") picked_attr$einfo$nrank <- kalpha
   attr(res, "einfo") <- picked_attr[['einfo']]
