@@ -1,3 +1,7 @@
+get_alternative <- function(global_envelope) {
+  attr(global_envelope, "einfo")$alternative
+}
+
 # Functionality for central regions based on a curve set
 # @param ... Ignored.
 #' @importFrom spatstat fv
