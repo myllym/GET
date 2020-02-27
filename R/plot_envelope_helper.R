@@ -28,7 +28,7 @@ pick_attributes <- function(curve_set, alternative, type) {
     else {
         fname <- "T"
         argu <- "r"
-        if(is.vector(curve_set[['obs']])) {
+        if(curve_set_is1obs(curve_set)) {
           labl <- c("r", "T[obs](r)", "T[0](r)", "T[lo](r)", "T[hi](r)")
           desc <- c("distance argument r",
                     "observed value of %s for data pattern",
