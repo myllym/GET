@@ -522,3 +522,8 @@ curve_set_isresidual <- function(curve_set) {
 curve_set_is1obs <- function(curve_set) {
   is.vector(curve_set[['obs']])
 }
+
+curve_set_1obs <- function(curve_set) {
+  if(curve_set_is1obs(curve_set)) curve_set[['obs']]
+  else stop("Internal error.")
+}
