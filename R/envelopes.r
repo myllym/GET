@@ -66,26 +66,12 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
              UB[i]<- Hod[Nfunc-kalpha+1]
            }
          },
-         erl = {
-           #-- the 100(1-alpha)% global ERL envelope
-           distance_lexo_sorted <- sort(distance, decreasing=TRUE)
-           kalpha <- distance_lexo_sorted[floor((1-alpha)*Nfunc)]
-           curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
-           LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
-           UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
-         },
-         cont = {
-           #-- the 100(1-alpha)% global 'area' envelope (determined similarly as ERL from 'distance')
-           distance_cont_sorted <- sort(distance, decreasing=TRUE)
-           kalpha <- distance_cont_sorted[floor((1-alpha)*Nfunc)]
-           curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
-           LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
-           UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
-         },
+         erl =,
+         cont =,
          area = {
-           #-- the 100(1-alpha)% global 'area' envelope (determined similarly as ERL from 'distance')
-           distance_area_sorted <- sort(distance, decreasing=TRUE)
-           kalpha <- distance_area_sorted[floor((1-alpha)*Nfunc)]
+           #-- the 100(1-alpha)% global envelope
+           distancesorted <- sort(distance, decreasing=TRUE)
+           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
            LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
            UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
