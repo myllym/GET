@@ -351,8 +351,8 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
   curve_set <- convert_fdata(curve_set)
-  if(!is.matrix(curve_set[['obs']])) stop("The curve_set must include data functions (sim_m ignored).\n")
-  x <- t(curve_set[['obs']])
+  if(curve_set_is1obs(curve_set)) stop("All (data) functions of the curve_set must be equal.\n")
+  x <- data_and_sim_curves(curve_set)
   if(nrow(x) != length(groups)) stop("The length of groups should be equal with the number of functions.\n")
   if(!is.factor(groups)) {
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
@@ -442,8 +442,8 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
   if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
   curve_set <- convert_fdata(curve_set)
-  if(!is.matrix(curve_set[['obs']])) stop("The curve_set must include data functions (sim_m ignored).\n")
-  x <- t(curve_set[['obs']])
+  if(curve_set_is1obs(curve_set)) stop("All (data) functions of the curve_set must be equal.\n")
+  x <- data_and_sim_curves(curve_set)
   if(nrow(x) != length(groups)) stop("The length of groups should be equal with the number of functions.\n")
   if(!is.factor(groups)) {
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
