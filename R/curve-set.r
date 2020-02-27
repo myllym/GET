@@ -510,3 +510,9 @@ curve_set_isresidual <- function(curve_set) {
   if(is.null(x)) FALSE
   else x
 }
+
+# Check whether there is also one observed function (and many simulated ones), i.e.
+# the case of Monte Carlo and permutation tests.
+curve_set_is1obs <- function(curve_set) {
+  is.vector(curve_set[['obs']])
+}
