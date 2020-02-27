@@ -44,27 +44,7 @@ pick_attributes <- function(curve_set, alternative, type) {
         ylab <- "T(r)"
         yexp <- quote(T(r))
         # tack on envelope information
-        einfo <- list(global = TRUE,
-                      ginterval = range(curve_set[['r']]),
-                      alternative = alternative,
-                      scale = NULL,
-                      clamp = NULL,
-                      csr = FALSE,
-                      use.theory = with(curve_set, exists("theo")),
-                      csr.theo = FALSE,
-                      pois = FALSE,
-                      simtype = "other",
-                      constraints = NULL,
-                      nrank = NULL,
-                      VARIANCE = (type == "st"),
-                      nSD = NULL,
-                      valname = NULL,
-                      dual = NULL,
-                      nsim = NULL,
-                      nsim2 = NULL,
-                      Yname = "curve_set[['obs']]",
-                      do.pwrong=FALSE,
-                      use.weights=FALSE)
+        einfo <- list(alternative = alternative)
     }
     list(argu=argu, fname=fname, labl=labl, desc=desc, ylab=ylab, yexp=yexp,
          xlab=argu, xexp=quote(r), einfo=einfo)
