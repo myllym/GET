@@ -27,10 +27,9 @@
 #' }
 #' This grouping is used in examples.
 #'
-#' @format A \code{curve_set} object with components \code{r} and \code{obs}
-#' containing the years of observations and the curves, i.e. the observed values of centred GEC in
-#' those years. Each column of \code{obs} contains the centred GEC for the years for a particular
-#' country (seen as column names). The grouping is given in the attribute \code{group}.
+#' @format A list of two components. The first one is the \code{curve_set} object containing the observed
+#' values of centred GEC observed in year 1995-2016 for the above countries. 
+#' The second component \code{group} gives the grouping.
 #'
 #' @usage data(cgec)
 #' @references
