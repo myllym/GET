@@ -424,10 +424,9 @@ curve_set_funcs <- function(curve_set) {
 
 # A helper function to obtain the mean of functions in curve_set.
 #
-# Calculate the mean of all the functions in the curve_set (obs and sim_m).
+# Calculate the mean of all the functions in the curve_set.
 curve_set_mean <- function(curve_set) {
-  funcs <- data_and_sim_curves(curve_set)
-  colMeans(funcs)
+  rowMeans(curve_set[['funcs']])
 }
 
 # A helper function to obtain the median of functions in curve_set.
