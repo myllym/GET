@@ -429,9 +429,14 @@ curve_set_mean <- function(curve_set) {
   rowMeans(curve_set[['funcs']])
 }
 
-# A helper function to obtain the median of functions in curve_set.
-#
-# Calculate the median of all the functions in the curve_set (obs and sim_m).
+
+# A helper function to apply the function f to the curve_set functions at all argument values
+applyr <- function(curve_set, f) {
+  funcs <- curve_set[['funcs']]
+  sapply(1:nrow(funcs), function(i) { f(funcs[i,]) })
+}
+
+# A helper function to obtain the median of all the functions in curve_set.
 #' @importFrom stats median
 curve_set_median <- function(curve_set) {
   funcs <- data_and_sim_curves(curve_set)
