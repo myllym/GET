@@ -483,10 +483,10 @@ curve_set_isresidual <- function(curve_set) {
 # Check whether there is also one observed function (and many simulated ones), i.e.
 # the case of Monte Carlo and permutation tests.
 curve_set_is1obs <- function(curve_set) {
-  is.vector(curve_set[['obs']])
+  curve_set[['is1obs']]
 }
 
 curve_set_1obs <- function(curve_set) {
-  if(curve_set_is1obs(curve_set)) curve_set[['obs']]
+  if(curve_set_is1obs(curve_set)) curve_set[['funcs']][,1]
   else stop("Internal error.")
 }
