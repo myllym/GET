@@ -45,10 +45,8 @@
 #' @examples
 #' data(cgec)
 #' # Plot data in groups
-#' subs <- function(group, ...) {
-#'   cset <- cgec
-#'   cset$obs <- cgec$obs[, attr(cset, "group") == group]
-#'   plot(cset, ...)
-#' }
-#' for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
+#' for(i in 1:3)
+#'   print(plot(subset(cgec$cgec, cgec$group == i),
+#'              main=paste("Group ", i, sep=""),
+#'              ylab="Centred GEC"))
 NULL

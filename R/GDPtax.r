@@ -39,12 +39,8 @@
 #' @seealso \code{\link{graph.flm}}
 #' @examples
 #' data(GDPtax)
-#' GDPcset <- GDPtax$GDP
 #' # Plot data in groups
-#' subs <- function(group, ...) {
-#'   cset <- GDPcset
-#'   cset$obs <- GDPcset$obs[, GDPtax$Group == group]
-#'   plot(cset, ...)
-#' }
-#' for(i in 1:4) subs(i, main=paste("Group ", i, sep=""), ylab="GDP")
+#' for(i in 1:4)
+#'   print(plot(subset(GDPtax$GDP, GDPtax$Group == i),
+#'              main=paste("Group ", i, sep=""), ylab="GDP"))
 NULL
