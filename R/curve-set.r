@@ -412,25 +412,14 @@ check_curve_set_dimensions <- function(x, equalr=FALSE) {
 }
 
 # A helper function to return all the functions from a curve set in a matrix.
-# If obs is a vector, then the returned matrix will contain the obs vector on its first row.
-# If obs is a matrix, then the returned matrix will be a transpose of obs.
+# Each row corresponds to a function.
 data_and_sim_curves <- function(curve_set) {
-  if(with(curve_set, is.matrix(obs))) t(curve_set[['obs']]) # all rows data (sim_m ignored)
-  else {
-    funcs <- rbind(curve_set[['obs']], t(curve_set[['sim_m']])) # first row data, rest simulations
-    rownames(funcs) <- c('obs', paste("sim", 1:(nrow(funcs)-1), sep=""))
-    funcs
-  }
+  t(curve_set[['funcs']])
 }
-# Return all the functions from a curve set in a matrix.
-# Columns: functions, Rows: values of the functions at an argument value. (same as in curve_set$obs)
+# A helper function to return all the functions from a curve set in a matrix.
+# Each column corresponds to a function.
 curve_set_funcs <- function(curve_set) {
-  if(with(curve_set, is.matrix(obs))) funcs <- curve_set[['obs']]
-  else {
-    funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']])
-    colnames(funcs) <- c('obs', paste("sim", 1:(ncol(funcs)-1), sep=""))
-  }
-  funcs
+  curve_set[['funcs']]
 }
 
 # A helper function to obtain the mean of functions in curve_set.
