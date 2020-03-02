@@ -134,8 +134,7 @@ divisor_to_coeff <- function(x) {
 # @inheritParams st_scaling
 # @param coeff The coefficient vector, often of the length of one curve.
 weigh_curves <- function(curve_set, coeff) {
-    curve_set[['obs']] <- coeff * curve_set[['obs']]
-    if(!is.null(curve_set[['sim_m']])) curve_set[['sim_m']] <- coeff * curve_set[['sim_m']]
+    curve_set[['funcs']] <- coeff * curve_set[['funcs']]
     if(!is.null(curve_set[['theo']])) {
         curve_set[['theo']] <- coeff * curve_set[['theo']]
     }
