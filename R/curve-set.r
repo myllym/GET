@@ -373,40 +373,18 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
 # @param equalr Whether to demand equal lengths of r vectors of the different curve sets
 # @return A curve set that is a combination of the curve sets given in 'x'.
 combine_curve_sets <- function(x, equalr = TRUE) {
-  cset <- NULL
   x <- check_curve_set_dimensions(x, equalr=equalr)
-  name_vec <- lapply(x, FUN=names)
-  if('r' %in% name_vec[[1]]) {
+  cset <- x[[1]]
+  # Combine
+  cset$funcs <- do.call(rbind, lapply(x, FUN=function(curve_set) { curve_set[['funcs']] }))
+  if(!is.null(x[[1]][['r']])) {
     if(is.vector(x[[1]]$r)) cset$r <- do.call(c, lapply(x, FUN=function(curve_set) { curve_set[['r']] }))
     else cset$r <- do.call(rbind, lapply(x, FUN=function(curve_set) { curve_set[['r']] }))
   }
-  if('obs' %in% name_vec[[1]]) {
-    if(is.matrix(x[[1]]$obs)) {
-      cset$obs <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$obs)[1]})), ncol=dim(x[[1]]$obs)[2])
-      for(i in 1:dim(x[[1]]$obs)[2]) {
-        cset$obs[,i] <- c(sapply(x, FUN=function(curve_set) { curve_set$obs[,i] }), recursive=TRUE)
-      }
-    }
-    else {
-      cset$obs <- c(sapply(x, FUN=function(curve_set) { curve_set['obs'] }), recursive=TRUE)
-    }
-  }
-  if('sim_m' %in% name_vec[[1]]) {
-    # check_curve_set_dimensions was used above to check that dimensions match
-    # Combine
-    cset$sim_m <- matrix(nrow=sum(sapply(x, FUN=function(curve_set) {dim(curve_set$sim_m)[1]})), ncol=dim(x[[1]]$sim_m)[2])
-    for(i in 1:dim(x[[1]]$sim_m)[2]) {
-      cset$sim_m[,i] <- c(sapply(x, FUN=function(curve_set) { curve_set$sim_m[,i] }), recursive=TRUE)
-    }
-  }
-  if('theo' %in% name_vec[[1]])
-    cset$theo <- c(sapply(x, FUN=function(curve_set) { curve_set['theo'] }), recursive=TRUE)
-  res <- create_curve_set(cset)
-  # check_curve_set_dimensions has checked that 'is_residual' is the same for all curve sets.
-  if(curve_set_isresidual(x[[1]]))
-    res$is_residual <- TRUE
+  if(!is.null(x[[1]][['theo']]))
+    cset$theo <- do.call(c, lapply(x, FUN=function(curve_set) { curve_set[['theo']] }))
   # Return the combined set of curves
-  res
+  cset
 }
 
 # Check curve set dimensions
