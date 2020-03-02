@@ -46,27 +46,16 @@ q_scaling <- function(curve_set, probs = c(0.025, 0.975), ...) {
 #
 # Used by \code{\link{qdir_scaling}}.
 #
-# @param x The matrix
+# @param x The matrix (or a vector)
 # @param upper_coeff Upper coefficient.
 # @param lower_coeff Lower coefficient.
 weigh_both_sides <- function(x, upper_coeff, lower_coeff) {
-    if (is.matrix(x)) {
-        dims <- dim(x)
-        y <- matrix(0, nrow = dims[1], ncol = dims[2],
-                    dimnames = dimnames(x))
-    } else if (is.vector(x)) {
-        y <- numeric(length(x))
-        names(y) <- names(x)
-    } else {
-        stop('x must be either a matrix or a vector.')
-    }
-
     upper_idx <- x > 0
     lower_or_equal_idx <- !upper_idx
 
-    y[upper_idx] <- (upper_coeff * x)[upper_idx]
-    y[lower_or_equal_idx] <- (lower_coeff * x)[lower_or_equal_idx]
-    y
+    x[upper_idx] <- (upper_coeff * x)[upper_idx]
+    x[lower_or_equal_idx] <- (lower_coeff * x)[lower_or_equal_idx]
+    x
 }
 
 # Directional quantile scaling.
