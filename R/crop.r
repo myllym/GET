@@ -53,23 +53,10 @@ crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
     stop('r_min and r_max cropped everything away.')
   }
 
-  r_cut <- r[cut_idx]
-  if(is.vector(curve_set[['obs']])) obs_cut <- curve_set[['obs']][cut_idx]
-  else obs_cut <- curve_set[['obs']][cut_idx, , drop = FALSE]
-  sim_m_cut <- curve_set[['sim_m']][cut_idx, , drop = FALSE]
+  curve_set[['r']] <- r[cut_idx]
+  curve_set[['funcs']] <- curve_set[['funcs']][cut_idx, , drop = FALSE]
   theo <- curve_set[['theo']]
-  n_theo <- length(theo)
-  if(n_theo > 0L) {
-    theo_cut <- theo[cut_idx]
-  }
-
-  res <- list(r=r_cut, obs=obs_cut)
-  if(!is.null(sim_m_cut)) res[['sim_m']] <- sim_m_cut
-  if(n_theo > 0L) {
-    res[['theo']] <- theo_cut
-  }
-
-  res <- create_curve_set(res, allow_Inf_values = FALSE)
-  if(curve_set_isresidual(curve_set)) res[['is_residual']] <- TRUE
-  res
+  if(!is.null(theo)) curve_set[['theo']] <- theo[cut_idx]
+  check_curve_set_content(curve_set, allow_Inf_values = FALSE)
+  curve_set
 }
