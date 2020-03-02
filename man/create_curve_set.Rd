@@ -10,10 +10,10 @@ create_curve_set(curve_set, ...)
 \item{curve_set}{A list containing the element obs, and optionally
 the elements r, sim_m and theo. See details.}
 
-\item{...}{Do not use. (For internal use only.)}
+\item{...}{For expert use only.}
 }
 \value{
-The given list adorned with the proper class name.
+An object of class \code{curve_set}.
 }
 \description{
 Create a curve set out of a list in the right form.

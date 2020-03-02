@@ -4,10 +4,9 @@
 \name{cgec}
 \alias{cgec}
 \title{Centred government expenditure centralization ratios}
-\format{A \code{curve_set} object with components \code{r} and \code{obs}
-containing the years of observations and the curves, i.e. the observed values of centred GEC in
-those years. Each column of \code{obs} contains the centred GEC for the years for a particular
-country (seen as column names). The grouping is given in the attribute \code{group}.}
+\format{A list of two components. The first one is the \code{curve_set} object containing the observed
+values of centred GEC observed in year 1995-2016 for the above countries. 
+The second component \code{group} gives the grouping.}
 \usage{
 data(cgec)
 }
@@ -42,12 +41,10 @@ This grouping is used in examples.
 \examples{
 data(cgec)
 # Plot data in groups
-subs <- function(group, ...) {
-  cset <- cgec
-  cset$obs <- cgec$obs[, attr(cset, "group") == group]
-  plot(cset, ...)
-}
-for(i in 1:3) subs(i, main=paste("Group ", i, sep=""), ylab="Centred GEC")
+for(i in 1:3)
+  print(plot(subset(cgec$cgec, cgec$group == i),
+             main=paste("Group ", i, sep=""),
+             ylab="Centred GEC"))
 }
 \references{
 Eurostat (2018). "Government revenue, expenditure and main aggregates (gov10amain)”. Retrieved from https://ec.europa.eu/eurostat/data/database(26/10/2018).

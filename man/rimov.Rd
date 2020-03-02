@@ -21,13 +21,10 @@ reservoir in Czech republic every day for the 36 years between 1979 and 2014.
 \examples{
 data(rimov)
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-# Plot data in groups
-subs <- function(group, ...) {
-  cset <- rimov
-  cset$obs <- rimov$obs[, groups == group]
-  plot(cset, ...)
-}
-for(i in 1:3) subs(i, main=paste("group ", i, sep=""), ylab="Temperature")
+for(i in 1:3)
+  print(plot(subset(rimov, groups==i),
+             main=paste("group ", i, sep=""),
+             ylab="Temperature"))
 # See example analysis in ?graph.fanova
 }
 \references{

@@ -37,14 +37,10 @@ countries for which the GDP was available for 1980-2017 and profit tax for 2010:
 }
 \examples{
 data(GDPtax)
-GDPcset <- GDPtax$GDP
 # Plot data in groups
-subs <- function(group, ...) {
-  cset <- GDPcset
-  cset$obs <- GDPcset$obs[, GDPtax$Group == group]
-  plot(cset, ...)
-}
-for(i in 1:4) subs(i, main=paste("Group ", i, sep=""), ylab="GDP")
+for(i in 1:4)
+  print(plot(subset(GDPtax$GDP, GDPtax$Group == i),
+             main=paste("Group ", i, sep=""), ylab="GDP"))
 }
 \references{
 World Bank national accounts data, and OECD National Accounts data files. URL: https://data.worldbank.org/indicator/NY.GDP.PCAP.CD
