@@ -320,11 +320,8 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
                            col_obs = 1, col_sim = grDevices::grey(0.7),
                            base_size = 11, ...) {
   plot_style <- match.arg(plot_style)
-  if(with(x, is.matrix(obs))) {
-    funcs <- x[['obs']]
-    col_sim <- col_obs
-  }
-  else funcs <- cbind(x[['obs']], x[['sim_m']])
+  funcs <- curve_set_funcs(x)
+  if(!curve_set_is1obs(x)) col_sim <- col_obs
   rdata <- combined_global_envelope_rhelper(x)
   if(rdata$retick_xaxis) {
     rvalues <- rdata$new_r_values
