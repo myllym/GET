@@ -490,3 +490,15 @@ curve_set_1obs <- function(curve_set) {
   if(curve_set_is1obs(curve_set)) curve_set[['funcs']][,1]
   else stop("Internal error.")
 }
+
+#' Subsetting curve sets
+#'
+#' Return subsets of curve sets which meet conditions.
+#' @param x A \code{curve_set} object.
+#' @param subset A logical expression indicating curves to keep.
+#' @param ... Ignored.
+#' @export
+subset.curve_set <- function(x, subset, ...) {
+  x[['funcs']] <- x[['funcs']][, subset]
+  x
+}
