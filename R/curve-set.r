@@ -63,7 +63,17 @@ fdata_to_curve_set <- function(fdata, ...) {
 # values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
 # away (in \code{\link{crop_curves}}).
 check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
-  if(inherits(curve_set, "curve_set")) return(curve_set)
+  if(inherits(curve_set, "curve_set")) {
+    if(!allow_Inf_values) {
+      if(!all(is.finite(curve_set[['funcs']]))) {
+        stop('All curves must have only finite values.')
+      }
+      if(!all(is.finite(curve_set[['theo']]))) {
+        stop('The theoretical values should be finite.')
+      }
+    }
+    return(curve_set)
+  }
 
   possible_names <- c('r', 'obs', 'sim_m', 'theo')
 
@@ -245,13 +255,23 @@ check_residualness <- function(curve_set) {
 #' \code{obs}.
 #' @param curve_set A list containing the element obs, and optionally
 #'   the elements r, sim_m and theo. See details.
-#' @param ... Do not use. (For internal use only.)
-#' @return The given list adorned with the proper class name.
+#' @param ... For expert use only.
+#' @return An object of class \code{curve_set}.
 #' @export
 create_curve_set <- function(curve_set, ...) {
   check_curve_set_content(curve_set, ...)
-  class(curve_set) <- 'curve_set'
-  curve_set
+  cset <- list()
+  if(!is.null(curve_set[['r']])) cset$r <- curve_set[['r']]
+  is1obs <- is.vector(curve_set[['obs']])
+  if(is1obs) {
+    cset$funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']])
+    colnames(cset$funcs) <- c('obs', paste("sim", 1:(ncol(cset$funcs)-1), sep=""))
+  }
+  else cset$funcs <- curve_set[['obs']]
+  cset$is1obs <- is1obs
+  if(!is.null(curve_set[['theo']])) cset$theo <- curve_set[['theo']]
+  class(cset) <- 'curve_set'
+  cset
 }
 
 #' Check class.
