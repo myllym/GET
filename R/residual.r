@@ -19,7 +19,7 @@ residual <- function(curve_set, use_theo = TRUE) {
 
     if(curve_set_isresidual(curve_set)) {
         # "The curve_set object contains already residuals T_i(r) - T_0(r), use_theo ignored.
-        res <- curve_set
+        return(curve_set)
     }
     else {
         if(length(use_theo) != 1L || !is.logical(use_theo)) {
@@ -37,13 +37,11 @@ residual <- function(curve_set, use_theo = TRUE) {
         if(use_theo) mid <- theo
         else mid <- curve_set_mean(curve_set)
 
-        res <- list(r = curve_set[['r']], obs = curve_set[['obs']] - mid)
-        if(!is.null(curve_set[['sim_m']])) res[['sim_m']] <- curve_set[['sim_m']] - mid
-
-        res <- create_curve_set(res)
-        res[['is_residual']] <- TRUE
+        curve_set[['funcs']] <- curve_set[['funcs']] - mid
+        curve_set[['is_residual']] <- TRUE
+        curve_set[['theo']] <- NULL
+        return(curve_set)
     }
-    res
 }
 
 # The central function T_0
