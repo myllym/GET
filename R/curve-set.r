@@ -464,8 +464,7 @@ curve_set_narg <- function(curve_set) {
 
 # Number of curves
 curve_set_nfunc <- function(curve_set) {
-  if(is.matrix(curve_set$obs)) ncol(curve_set[['obs']])
-  else ncol(curve_set[['sim_m']]) + 1
+  ncol(curve_set[['funcs']])
 }
 
 # Return curve_set$r as a data.frame
