@@ -439,30 +439,20 @@ applyr <- function(curve_set, f) {
 # A helper function to obtain the median of all the functions in curve_set.
 #' @importFrom stats median
 curve_set_median <- function(curve_set) {
-  funcs <- data_and_sim_curves(curve_set)
-  sapply(1:ncol(funcs), function(i) { median(funcs[,i]) })
+  applyr(curve_set, median)
 }
 
-# A helper function to obtain the sd of functions in curve_set.
-#
-# No matter whether obs is a matrix or a vector, the quantiles are calculated
-# from all the functions in 'obs' and 'sim_m'.
+# A helper function to obtain the sd of all the functions in curve_set.
 #' @importFrom stats sd
 curve_set_sd <- function(curve_set) {
-  funcs <- data_and_sim_curves(curve_set)
-  sapply(1:ncol(funcs), FUN = function(i) { sd(funcs[,i]) })
+  applyr(curve_set, sd)
 }
 
-# A helper function to obtain the quantiles of functions in curve_set.
-#
-# No matter whether obs is a matrix or a vector, the quantiles are calculated
-# from all the functions in 'obs' and 'sim_m'.
+# A helper function to obtain the quantiles of all the functions in curve_set.
 # @param ... Additional parameters passed to \code{\link[stats]{quantile}}.
 #' @importFrom stats quantile
 curve_set_quant <- function(curve_set, probs, ...) {
-  funcs <- data_and_sim_curves(curve_set)
-  # Dimensions: 2, r_idx.
-  sapply(1:ncol(funcs), FUN = function(i) { quantile(funcs[,i], probs=probs, ...) })
+  applyr(curve_set, function(x) { quantile(x, probs=probs, ...) }) # Dimensions: 2, r_idx.
 }
 
 # Number of arguments where the curves have been evaluated
