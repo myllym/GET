@@ -260,15 +260,15 @@ check_residualness <- function(curve_set) {
 #' @export
 create_curve_set <- function(curve_set, ...) {
   check_curve_set_content(curve_set, ...)
-  cset <- list()
-  if(!is.null(curve_set[['r']])) cset$r <- curve_set[['r']]
   is1obs <- is.vector(curve_set[['obs']])
   if(is1obs) {
-    cset$funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']])
-    colnames(cset$funcs) <- c('obs', paste("sim", 1:(ncol(cset$funcs)-1), sep=""))
+    funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']])
+    colnames(funcs) <- c('obs', paste("sim", 1:(ncol(funcs)-1), sep=""))
   }
-  else cset$funcs <- curve_set[['obs']]
-  cset$is1obs <- is1obs
+  else funcs <- curve_set[['obs']]
+  if(!is.null(curve_set[['r']])) r <- curve_set[['r']]
+  else r <- 1:nrow(funcs)
+  cset <- list(r = r, funcs = funcs, is1obs = is1obs)
   if(!is.null(curve_set[['theo']])) cset$theo <- curve_set[['theo']]
   class(cset) <- 'curve_set'
   cset
