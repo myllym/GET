@@ -457,9 +457,7 @@ curve_set_quant <- function(curve_set, probs, ...) {
 
 # Number of arguments where the curves have been evaluated
 curve_set_narg <- function(curve_set) {
-  r <- curve_set[['r']]
-  if(is.vector(r)) length(r)
-  else nrow(r)
+  nrow(curve_set[['funcs']])
 }
 
 # Number of curves
