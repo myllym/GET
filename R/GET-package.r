@@ -209,10 +209,6 @@
 #' Here T_0(r) is the expectation of T(r) under the null hypothesis.
 #' }
 #'
-#' The function \code{\link{envelope_to_curve_set}} can be used to create a curve_set object
-#' from the object returned by \code{\link[spatstat]{envelope}}. An \code{envelope} object can also
-#' directly be given to the functions mentioned above in this section.
-#'
 #' @section Example data (see references on the help pages of each data set):
 #' \itemize{
 #'  \item \code{\link{abide_9002_23}}: see help page
