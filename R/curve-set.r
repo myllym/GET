@@ -1,10 +1,9 @@
-#' Turn an \code{\link[spatstat]{envelope}} object into a curve_set object.
-#'
-#' @param env An \code{\link[spatstat]{envelope}} object. The envelope()
-#'   functions must have been called with savefuns = TRUE.
-#' @return A corresponding curve_set object.
-#' @param ... Do not use. (For internal use only.)
-#' @export
+# Turn an \code{\link[spatstat]{envelope}} object into a curve_set object.
+#
+# @param env An \code{\link[spatstat]{envelope}} object. The envelope()
+#   functions must have been called with savefuns = TRUE.
+# @return A corresponding curve_set object.
+# @param ... Do not use. (For internal use only.)
 envelope_to_curve_set <- function(env, ...) {
   if(!inherits(env, 'envelope')) {
     stop('env is not an envelope object.')
