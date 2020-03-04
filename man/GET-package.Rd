@@ -217,10 +217,6 @@ It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for th
 \item For better visualisation, you can take T(r)-T_0(r) by \code{\link{residual}}.
 Here T_0(r) is the expectation of T(r) under the null hypothesis.
 }
-
-The function \code{\link{envelope_to_curve_set}} can be used to create a curve_set object
-from the object returned by \code{\link[spatstat]{envelope}}. An \code{envelope} object can also
-directly be given to the functions mentioned above in this section.
 }
 
 \section{Example data (see references on the help pages of each data set)}{
