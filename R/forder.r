@@ -98,7 +98,6 @@ individual_forder <- function(curve_set,
       data_and_sim_curves[,i] <- calc_pointwiserank(data_and_sim_curves[,i]) # overwriting curves by their ranks
     }
     allranks <- data_and_sim_curves
-    data_and_sim_curves <- NULL
 
     # Calculate measures from the pointwise ranks
     switch(measure,
