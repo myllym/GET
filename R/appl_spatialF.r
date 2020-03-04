@@ -86,7 +86,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'   fitppm <- function(X, model, covariates) {
 #'     ppm(X, model, covariates=covariates)
 #'   }
-#'   \dontshow{res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, 3, alpha=0.5)}
+#'   \dontshow{res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, 2, alpha=1/3)}
 #'   \donttest{
 #'   nsim <- 19 # Increase nsim for serious analysis!
 #'   res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, nsim)
