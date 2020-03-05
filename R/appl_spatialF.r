@@ -77,6 +77,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' @importFrom spatstat bw.scott
 #' @importFrom stats simulate
 #' @examples
+#' \donttest{
 #' if(require("spatstat", quietly=TRUE)) {
 #'   # Example of tropical rain forest trees
 #'   data(bei)
