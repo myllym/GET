@@ -73,7 +73,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' }
 #' @export
 #' @references
-#' Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Accepted for publication in Spatial Statistics.
+#' Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics. doi: 10.1016/j.spasta.2020.100436
 #' @importFrom spatstat bw.scott
 #' @importFrom stats simulate
 #' @examples

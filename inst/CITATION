@@ -133,3 +133,19 @@ citEntry(
 Monte Carlo testing in spatial statistics, with applications to spatial residuals.
 Spatial Statistics 18, Part A: 40--53. doi: 10.1016/j.spasta.2016.04.005",
 )
+
+citEntry(
+    entry = "Article",
+    title = "Testing global and local dependence of point patterns on covariates in parametric models",
+    author = personList(as.person("M. Myllymäki"),
+                        as.person("M. Kuronen"),
+                        as.person("T. Mrkvička")),
+    journal = "Spatial Statistics",
+    year = "2020",
+    volume = "",
+    pages = "",
+    url = "https://doi.org/10.1016/j.spasta.2020.100436",
+    textVersion = "Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020).
+Testing global and local dependence of point patterns on covariates in parametric models.
+Spatial Statistics. doi: 10.1016/j.spasta.2020.100436",
+)
