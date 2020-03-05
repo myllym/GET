@@ -111,6 +111,7 @@
 #'   \item Global envelope tests for images (2d functions): \code{\link{global_envelope_test2d}}
 #'   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
 #'   \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
+#'   \item Testing global and local dependence of point patterns on covariates: \code{\link{GET.spatialF}}
 #'  }
 #'
 #' \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no gpaphical
