@@ -105,7 +105,7 @@
 #'   \item Global rank envelope based on F-values: \code{\link{frank.flm}}
 #'   \item Image (2d function) counterparts: \code{\link{graph.flm2d}}, \code{\link{frank.flm2d}}
 #'  }
-#' \item Wrapper functions to perform global envelopes for specific purposes:
+#' \item Functions for performing global envelopes for specific purposes:
 #'  \itemize{
 #'   \item Central regions for images (2d functions): \code{\link{central_region2d}}
 #'   \item Global envelope tests for images (2d functions): \code{\link{global_envelope_test2d}}
