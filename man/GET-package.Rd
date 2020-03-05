@@ -110,12 +110,13 @@ Also the adjusted tests can be based on several test functions.
   \item Global rank envelope based on F-values: \code{\link{frank.flm}}
   \item Image (2d function) counterparts: \code{\link{graph.flm2d}}, \code{\link{frank.flm2d}}
  }
-\item Wrapper functions to perform global envelopes for specific purposes:
+\item Functions for performing global envelopes for specific purposes:
  \itemize{
   \item Central regions for images (2d functions): \code{\link{central_region2d}}
   \item Global envelope tests for images (2d functions): \code{\link{global_envelope_test2d}}
   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
   \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
+  \item Testing global and local dependence of point patterns on covariates: \code{\link{GET.spatialF}}
  }
 
 \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no gpaphical
@@ -280,6 +281,8 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015) Deviation test co
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017) Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 
 Myllymäki, M. and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+
+Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics. doi: 10.1016/j.spasta.2020.100436
 }
 \author{
 Mari Myllymäki (mari.myllymaki@luke.fi, mari.j.myllymaki@gmail.com) and
