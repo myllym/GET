@@ -86,15 +86,11 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'   fitppm <- function(X, model, covariates) {
 #'     ppm(X, model, covariates=covariates)
 #'   }
-#'   \dontshow{res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, 2, alpha=1/3)}
-#'   \donttest{
 #'   nsim <- 19 # Increase nsim for serious analysis!
 #'   res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, nsim)
-#'   }
 #'   plot(res$F)
 #'   plot(res$S)
 #'
-#'   \donttest{
 #'   # Example of forest fires
 #'   data("clmfires")
 #'   # Choose the locations of the lightnings in years 2004-2007:
@@ -121,8 +117,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'   fitHardcore <- function(X, model, covariates) {
 #'     ppm(X, model, interaction=Hardcore(0.01), covariates = covariates)
 #'   }
-#'   }
-#' }
+#' }}
 GET.spatialF <- function(X, formula.full, formula.reduced, fitfun, covariates, nsim,
                          bw=spatstat::bw.scott(X), bw.S=bw, ...) {
   if(!is.ppp(X)) stop("X should be a ppp object.")
