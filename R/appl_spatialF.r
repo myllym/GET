@@ -23,13 +23,13 @@ maverage2d <- function(x, R) {
 # @param returncoef Logical. Whether or not to calculate and return also the coefficients
 # of the full model.
 #' @importFrom spatstat Smooth
-compute_statistics <- function(X, formula.full, formula.reduced, fitfun, covariates, bw, bw.S, returncoef=FALSE) {
+compute_statistics <- function(X, formula.full, formula.reduced, fitfun, covariates, bw, bw.S, returncoef=FALSE, dimyx=NULL) {
   M.full <- fitfun(X, formula.full, covariates)
   M.reduced <- fitfun(X, formula.reduced, covariates)
   r0 <- residuals(M.reduced)
   r1 <- residuals(M.full)
-  s0 <- spatstat::Smooth(r0, sigma=bw)
-  s1 <- spatstat::Smooth(r1, sigma=bw)
+  s0 <- spatstat::Smooth(r0, sigma=bw, dimyx=dimyx)
+  s1 <- spatstat::Smooth(r1, sigma=bw, dimyx=dimyx)
   sm0 <- maverage2d(s0, bw.S)
   sq0 <- maverage2d(s0^2, bw.S)
   sm1 <- maverage2d(s1, bw.S)
@@ -64,6 +64,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' @param nsim The number of simulations.
 #' @param bw The bandwidth for smoothed residuals.
 #' @param bw.S The radius for the local S(u)-statistic.
+#' @param dimyx Pixel array dimensions for smoothed residuals. See \code{\link[spatstat]{as.mask}}.
 #' @param ... Additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @return list with three components
 #' \itemize{
@@ -120,13 +121,13 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'   }
 #' }}
 GET.spatialF <- function(X, formula.full, formula.reduced, fitfun, covariates, nsim,
-                         bw=spatstat::bw.scott(X), bw.S=bw, ...) {
+                         bw=spatstat::bw.scott(X), bw.S=bw, dimyx=NULL, ...) {
   if(!is.ppp(X)) stop("X should be a ppp object.")
   check_isnested(formula.full, formula.reduced)
   M.reduced <- fitfun(X, formula.reduced, covariates)
   sim <- simulate(M.reduced, nsim = nsim)
   fun <- function(data, returncoef=FALSE) {
-    compute_statistics(data, formula.full, formula.reduced, fitfun, covariates, bw, bw.S, returncoef=returncoef)
+    compute_statistics(data, formula.full, formula.reduced, fitfun, covariates, bw, bw.S, returncoef=returncoef, dimyx=dimyx)
   }
   obs <- fun(X, TRUE)
   r <- list(x=obs$Fstat[[1]]$xcol, y=obs$Fstat[[1]]$yrow)
