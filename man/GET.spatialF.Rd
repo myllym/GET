@@ -63,7 +63,6 @@ if(require("spatstat", quietly=TRUE)) {
     ppm(X, model, covariates=covariates)
   }
   \dontshow{res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, 3, alpha=0.5, dimyx=32)}
-  \dontshow{res <- GET.spatialF(subset(bei, 1:10), fullmodel, reducedmodel, fitppm, bei.extra, 3, alpha=0.5)}
   \donttest{
   nsim <- 19 # Increase nsim for serious analysis!
   res <- GET.spatialF(bei, fullmodel, reducedmodel, fitppm, bei.extra, nsim)
