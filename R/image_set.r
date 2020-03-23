@@ -100,14 +100,6 @@ image_set_to_curve_set <- function(image_set, ...) {
   curve_set_v
 }
 
-# Check the content validity of a potential image_set object.
-check_image_set_content <- function(image_set) {
-  image_set <- check_image_set_dimensions(image_set)
-  # convert the images to functions and check the values
-  image_set_to_curve_set(image_set)
-  image_set
-}
-
 #' Create an image set out of a list in the right form.
 #'
 #' Create an image set out of a list in the right form containing the values of the 2d functions.
@@ -157,86 +149,4 @@ create_image_set <- function(image_set, ...) {
   image_set <- check_image_set_dimensions(image_set) # Check image_set dimensions and assign r if it does not exist
   image_set <- image_set_to_curve_set(image_set) # convert the images to functions
   image_set
-}
-
-#' Print method for the class 'image_set'
-#'
-#' @param x an 'image_set' object
-#' @param ... Passed to \code{\link[utils]{str}}.
-#'
-#' @export
-#' @importFrom utils str
-print.image_set <- function(x, ...) {
-  str(x, ...)
-}
-
-#' Plot method for the class 'image_set'
-#'
-#' @inheritParams plot.global_envelope2d
-#' @param x an 'image_set' object
-#' @param idx Indices of the images in the image_set to be plotted.
-#' @param obs Logical. TRUE, then idx is understood as an index to \code{image_set$obs},
-#' otherwise to \code{image_set$sim_m}.
-#' @param main The title. Default exists.
-#' @param col Colours to be passed to \code{\link[spatstat]{plot.im}} if
-#' \code{plot_style = "basic"}. A default exists.
-#' @param max_ncols_of_plots The maximum number of columns for the figures. Default 4.
-#' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
-#'
-#' @importFrom spatstat colourmap
-#' @importFrom grDevices gray
-#' @importFrom spatstat as.im
-#' @importFrom spatstat plot.im
-#' @importFrom graphics par
-#' @importFrom ggplot2 ggplot aes .data geom_raster facet_wrap vars
-#' @export
-plot.image_set <- function(x, idx = 1, obs = TRUE, plot_style = c("ggplot2", "basic"),
-                           main, col, max_ncols_of_plots = 4, ...) {
-  plot_style <- match.arg(plot_style)
-  if(obs) {
-    if(length(dim(x$obs))==2) {
-      idx <- 1
-      obs <- array(x$obs, dim=c(dim(x$obs),1))
-    }
-    else {
-      if(!all(idx %in% 1:dim(x$obs)[3])) stop("Unreasonable indices \'idx\'.\n")
-      obs <- x$obs
-    }
-  }
-  else {
-    if(is.null(x$sim_m) || !all(idx %in% 1:dim(x$sim_m)[3])) stop("Unreasonable indices \'idx\'.\n")
-    obs <- x$sim_m
-  }
-  if(missing(main))
-    main <- paste("Image ", idx, sep="")
-  else if(length(main) == 1) main <- rep(main, times=length(idx))
-
-  switch(plot_style,
-         basic = {
-           n_of_plots <- length(idx)
-           ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
-           nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
-           opar <- par(mfrow=c(nrows_of_plots, ncols_of_plots))
-           on.exit(par(opar))
-           if(missing(col))
-             col <- colourmap(grDevices::gray(0:255/255), range=range(obs[,,idx]))
-           for(i in 1:length(idx)) {
-             obs.im <- as.im(list(x=x$r[[1]], y=x$r[[2]], z=obs[,,idx[i]]))
-             plot.im(obs.im, col=col, main=main[i], ...)
-           }
-         },
-         ggplot2 = {
-           max_ncols_of_plots <- min(max_ncols_of_plots, length(idx))
-           xy <- expand.grid(x=x$r[[1]], y=x$r[[2]])
-           dfs <- lapply(1:length(idx), function(i) {
-             xy$z <- c(obs[,,idx[i]])
-             xy$title <- factor(main[i])
-             xy
-           })
-           df <- do.call(rbind, dfs)
-           ggplot(df, aes(x=.data$x, y=.data$y, fill=.data$z)) +
-             geom_raster() +
-             facet_wrap(vars(.data$title), ncol=max_ncols_of_plots) +
-             labs(x="", y="", fill="")
-         })
 }
