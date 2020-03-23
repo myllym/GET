@@ -19,14 +19,18 @@ check_image_set_dimensions <- function(image_set) {
       allequal <- function(x) all(abs(x - x[1]) < 1e-10*x[1])
       if(!allequal(w) || !allequal(h)) stop("Unequal gridsize detected, please specify width and height of cells.")
       if(length(r$x)!=obs_d[1] | length(r$y)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']].\n")
-    } else if(identical(sort(names(r)), c("height", "width", "x", "y"))
-              || identical(sort(names(r)), c("xmax", "xmin", "ymax", "ymin"))) {
+    } else if(identical(sort(names(r)), c("height", "width", "x", "y"))) {
       if(length(r$width) == 1) image_set$r$width <- rep(r$width, times=length(r$x))
       else if(length(r$width)!=length(r$x)) stop("Unsuitable image_set[[\'r\']]: width should have the same length as x.\n")
       if(length(r$height) == 1) image_set$r$height <- rep(r$height, times=length(r$y))
       else if(length(r$height)!=length(r$x)) stop("Unsuitable image_set[[\'r\']]: height should have the same length as y.\n")
       if(length(r$x)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of x does not match the dimension of obs matrix.\n")
       if(length(r$y)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of y does not match the dimension of obs matrix.\n")
+    } else if(identical(sort(names(r)), c("xmax", "xmin", "ymax", "ymin"))) {
+      if(length(r$xmin)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of xmin does not match the dimension of obs matrix.\n")
+      if(length(r$ymin)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of ymin does not match the dimension of obs matrix.\n")
+      if(length(r$xmax)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of xmax does not match the dimension of obs matrix.\n")
+      if(length(r$ymax)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of ymax does not match the dimension of obs matrix.\n")
     } else {
       stop("Unsuitable image_set[[\'r\']].\n")
     }
