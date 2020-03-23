@@ -30,6 +30,6 @@
 #' @examples
 #' \donttest{
 #' data(imageset2)
-#' plot(imageset2$image_set, idx=c(1:5, 11:15), max_ncols_of_plots=5)
+#' plot(create_image_set(imageset2$image_set), idx=c(1:5, 11:15), max_ncols_of_plots=5)
 #' }
 NULL
