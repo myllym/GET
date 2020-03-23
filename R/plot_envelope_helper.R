@@ -721,19 +721,42 @@ env2d_basic_plot <- function(x, var = c('obs', 'lo', 'hi', 'lo.sign', 'hi.sign')
 #----------------------
 globalVariables(c("main", "label"))
 
-# A helper function for env2d_ggplot2
-#' @importFrom ggplot2 ggplot geom_tile geom_rect aes geom_contour coord_fixed .data labs
-env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) {
-  if(!is.null(df$xmin)) {
-    aesxy <- aes(xmin=.data$xmin, ymin=.data$ymin, xmax=.data$xmax, ymax=.data$ymax)
-    geom <- geom_rect
+# Choose ggplot2 geom based on variables found in df
+# @param varfill (Optional) Name of the variable used for 'fill' aesthetic.
+#' @importFrom ggplot2 geom_tile geom_rect aes .data
+choose_geom <- function(df, varfill, ...) {
+  if(!is.null(df$width)) {
+    if(all(df$width[1] == df$width) && all(df$height[1] == df$height)) {
+      w <- df$width[1]
+      h <- df$height[1]
+      if(!missing(varfill))
+        geom_raster_fixed(data=df, aes(x=.data$x, y=.data$y, fill=.data[[varfill]]), width=w, height=h, ...)
+      else
+        geom_raster_fixed(data=df, aes(x=.data$x, y=.data$y), width=w, height=h, ...)
+    } else {
+      if(!missing(varfill))
+        geom_tile(data=df, aes(x=.data$x, y=.data$y, width=.data$width,
+                               height=.data$height, fill=.data[[varfill]]), ...)
+      else
+        geom_tile(data=df, aes(x=.data$x, y=.data$y, width=.data$width,
+                               height=.data$height), ...)
+    }
   } else {
-    aesxy <- aes(x=.data$x, y=.data$y, width=.data$width, height=.data$height)
-    geom <- geom_tile
+    if(!missing(varfill))
+      geom_rect(data=df, aes(xmin=.data$xmin, ymin=.data$ymin, xmax=.data$xmax,
+                             ymax=.data$ymax, fill=.data[[varfill]]), ...)
+    else
+      geom_rect(data=df, aes(xmin=.data$xmin, ymin=.data$ymin, xmax=.data$xmax,
+                             ymax=.data$ymax), ...)
   }
-  g <- ggplot(df, aesxy)
-  g <- g + geom(aes(fill=.data$z))
-  g <- g + geom(data=df[df$signif,], aesxy, fill=sign.col, alpha=transparency)
+}
+
+# A helper function for env2d_ggplot2
+#' @importFrom ggplot2 ggplot aes geom_contour coord_fixed .data labs
+env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) {
+  g <- ggplot() + choose_geom(df, varfill='z')
+  if(any(df$signif))
+    g <- g + choose_geom(df[df$signif,], fill=sign.col, alpha=transparency)
   if(contours && !is.null(df$x)) g <- g + geom_contour(data=df[df$contour,], aes(x=.data$x, y=.data$y, z=.data$z))
   g <- g + coord_fixed(ratio=1)
   g <- g + labs(x="", y="", fill="")
