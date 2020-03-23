@@ -49,8 +49,23 @@ check_image_set_dimensions <- function(image_set) {
   image_set
 }
 
+expand_image_set_r <- function(r) {
+  if(identical(sort(names(r)), c("x", "y"))) {
+    xy <- expand.grid(x=r[['x']], y=r[['y']])
+    xy$width <- min(diff(r[['x']]))
+    xy$height <- min(diff(r[['y']]))
+    xy
+  } else if(identical(sort(names(r)), c("height", "width", "x", "y"))) {
+    cbind(expand.grid(x=r[['x']], y=r[['y']]), expand.grid(width=r[['width']], height=r[['height']]))
+  } else if(identical(sort(names(r)), c("xmax", "xmin", "ymax", "ymin"))) {
+    cbind(expand.grid(xmin=r[['xmin']], ymin=r[['ymin']]), expand.grid(xmax=r[['xmax']], ymax=r[['ymax']]))
+  } else {
+    stop("Invalid image_set r")
+  }
+}
+
 # Turn an image set object into a curve_set object vectorizing the matrices.
-# The r-values are taken to be just from 1 to number of values of an observed function.
+# The r-values are expanded to the format expected by create_curve_set.
 # Should be preceeded by a call of check_image_set_dimensions.
 image_set_to_curve_set <- function(image_set, ...) {
   obs_d <- dim(image_set$obs)
@@ -60,7 +75,7 @@ image_set_to_curve_set <- function(image_set, ...) {
   if(length(obs_d) == 3) {
     obs_v <- matrix(nrow=obs_d[1]*obs_d[2], ncol=obs_d[3])
     for(i in 1:obs_d[3]) obs_v[,i] <- as.vector(image_set$obs[,,i])
-    curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
+    curve_set_v <- create_curve_set(list(r=expand_image_set_r(image_set[['r']]),
                                          obs=obs_v))
   }
   else {
@@ -75,7 +90,7 @@ image_set_to_curve_set <- function(image_set, ...) {
     if(!all(obs_d == sim_d[1:2])) stop("Something wrong with the dimensions of obs and sim_m.\n")
     sim_v <- matrix(nrow=sim_d[1]*sim_d[2], ncol=sim_d[3])
     for(i in 1:sim_d[3]) sim_v[,i] <- as.vector(image_set$sim_m[,,i])
-    curve_set_v <- create_curve_set(list(r=1:(obs_d[1]*obs_d[2]),
+    curve_set_v <- create_curve_set(list(r=expand_image_set_r(image_set[['r']]),
                                          obs=as.vector(image_set$obs),
                                          sim_m=sim_v))
     curve_set_v$theo <- theo_v
@@ -97,11 +112,11 @@ check_image_set_content <- function(image_set) {
 #'
 #' Create an image set out of a list in the right form containing the values of the 2d functions.
 #' Only 2d functions in a rectangular windows are currently supported; the values are provided
-#' in matrices (arrays).
+#' in matrices (arrays). For more general 2d functions see \code{\link{create_curve_set}}.
 #'
 #' @param image_set A list containing elements \code{r}, \code{obs}, \code{sim_m} and \code{theo}.
 #'   \code{r}, \code{sim_m} and \code{theo} are optional, \code{obs} needs to be provided always.
-#'   If provided, \code{r} must be a \code{\link{data.frame}} describing the argument values
+#'   If provided, \code{r} must be a \code{list} describing the argument values
 #'   where the images have been observed (or simulated). It must consist of the following two or
 #'   four components:
 #'   a) "x" and "y" giving the equally spaced argument values for the x- and y-coordinates
@@ -122,12 +137,11 @@ check_image_set_content <- function(image_set) {
 #'   (e.g., under the null hypothesis) and its dimensions must either match the dimensions
 #'   of 2d functions in \code{obs} or it must be a constant.
 #' @param ... Do not use. (For internal use only.)
-#' @return The given list adorned with the proper class name.
+#' @return The given list as a \code{curve_set}.
 #' @export
 create_image_set <- function(image_set, ...) {
   image_set <- check_image_set_dimensions(image_set) # Check image_set dimensions and assign r if it does not exist
-  image_set_to_curve_set(image_set) # convert the images to functions to check the values
-  class(image_set) <- 'image_set'
+  image_set <- image_set_to_curve_set(image_set) # convert the images to functions
   image_set
 }
 
