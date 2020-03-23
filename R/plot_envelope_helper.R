@@ -624,7 +624,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
 }
 
 # A helper function for plotting 2d images
-# See plot.global_envelope2d for description of parameters.
+# See plot_global_envelope2d for description of parameters.
 #' @importFrom spatstat as.im
 #' @importFrom spatstat colourmap
 #' @importFrom grDevices gray

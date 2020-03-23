@@ -206,32 +206,25 @@ print.combined_global_envelope2d <- function(x, ...) {
 }
 
 
-#' Plot method for the class 'global_envelope2d'
-#'
-#' Plot method for the class 'global_envelope2d'
-#'
-#'
-#' Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
-#' If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the
-#' minimum and maximum of the function values is used for each image separately.
-#' If \code{col} is provided, the same specification will be used for each produced plot,
-#' which may make it easier to compare the figures with each other.
-#'
-#' @inheritParams plot.global_envelope
-#' @param x an 'global_envelope2d' object
-#' @param plot_style Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)
-#' @param fixedscales Logical. TRUE for the same scales for all images.
-#' @param sign.col The color for the significant regions. Default to "red".
-#' @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
-#' Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
-#' @param contours Logical. Whether to draw contour lines to the observed function and the lower and upper envelope.
-#' @param main The overall main. Default exists.
-#' @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
-#'
-#' @export
+# Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
+# If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the
+# minimum and maximum of the function values is used for each image separately.
+# If \code{col} is provided, the same specification will be used for each produced plot,
+# which may make it easier to compare the figures with each other.
+#
+# @inheritParams plot.global_envelope
+# @param x an 'global_envelope2d' object
+# @param plot_style Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)
+# @param fixedscales Logical. TRUE for the same scales for all images.
+# @param sign.col The color for the significant regions. Default to "red".
+# @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
+# Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
+# @param contours Logical. Whether to draw contour lines to the observed function and the lower and upper envelope.
+# @param main The overall main. Default exists.
+# @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #' @importFrom ggplot2 facet_wrap ggtitle
 #' @importFrom gridExtra grid.arrange
-plot.global_envelope2d <- function(x, plot_style = c("ggplot2", "basic"),
+plot_global_envelope2d <- function(x, plot_style = c("ggplot2", "basic"),
                                     fixedscales = TRUE, sign.col = "red", transparency = 85/255,
                                     contours = FALSE, main = NULL, digits = 3, ...) {
   plot_style <- match.arg(plot_style)
@@ -259,30 +252,21 @@ plot.global_envelope2d <- function(x, plot_style = c("ggplot2", "basic"),
          })
 }
 
-#' Plot method for the class 'combined_global_envelope2d'
-#'
-#' Plot method for the class 'combined_global_envelope2d'
-#'
-#'
-#' Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
-#' If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the
-#' minimum and maximum of the function values is used for each image separately.
-#' If \code{col} is provided, the same specification will be used for each produced plot,
-#' which may make it easier to compare the figures with each other.
-#'
-#' If fixedscales is FALSE (or 0) all images will have separate scale.
-#' If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
-#' If fixedscales is 2 all images will have common scale.
-#'
-#' @param x an 'combined_global_envelope2d' object
-#' @inheritParams plot.global_envelope2d
-#' @param fixedscales 0, 1 or 2. See details.
-#' @method plot combined_global_envelope2d
-#' @export
+# Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
+# If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the
+# minimum and maximum of the function values is used for each image separately.
+# If \code{col} is provided, the same specification will be used for each produced plot,
+# which may make it easier to compare the figures with each other.
+#
+# If fixedscales is FALSE (or 0) all images will have separate scale.
+# If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
+# If fixedscales is 2 all images will have common scale.
+#
+# @param fixedscales 0, 1 or 2. See details.
 #' @importFrom ggplot2 facet_grid vars
 #' @importFrom gridExtra grid.arrange
 #' @importFrom grDevices col2rgb
-plot.combined_global_envelope2d <- function(x, plot_style = c("ggplot2", "basic"),
+plot_combined_global_envelope2d <- function(x, plot_style = c("ggplot2", "basic"),
                                              fixedscales = 2, sign.col = "red", transparency = 85/255,
                                              contours = FALSE, main = NULL, digits = 3, ...) {
   plot_style <- match.arg(plot_style)
