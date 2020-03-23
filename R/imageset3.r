@@ -24,7 +24,7 @@
 #' @keywords curves
 #' @name imageset3
 #' @docType data
-#' @seealso \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}}
+#' @seealso \code{\link{graph.fanova}}, \code{\link{frank.fanova}}
 #' @examples
 #' \donttest{
 #' data(imageset3)

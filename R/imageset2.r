@@ -26,7 +26,7 @@
 #' @keywords curves
 #' @name imageset2
 #' @docType data
-#' @seealso \code{\link{graph.flm2d}}, \code{\link{frank.flm2d}}
+#' @seealso \code{\link{graph.flm}}, \code{\link{frank.flm}}
 #' @examples
 #' \donttest{
 #' data(imageset2)

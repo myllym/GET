@@ -651,7 +651,7 @@ plot.combined_global_envelope <- function(x,
 #'
 #' @export
 #' @seealso \code{\link{global_envelope_test}}
-#' @aliases global_envelope
+#' @aliases global_envelope central_region2d
 #' @examples
 #' ## A central region of a set of functions
 #' #----------------------------------------
@@ -1070,8 +1070,8 @@ plot.combined_fboxplot <- function(x, level = 1,
 #' "level2_ge".
 #' @export
 #' @seealso \code{\link{plot.global_envelope}}, \code{\link{central_region}},
-#' \code{\link{global_envelope_test2d}}, \code{\link{GET.composite}}
-#' @aliases GET
+#' \code{\link{GET.composite}}
+#' @aliases GET global_envelope_test2d
 #' @examples
 #' # Goodness-of-fit testing for simple hypothesis
 #' if(require("spatstat", quietly=TRUE)) {
