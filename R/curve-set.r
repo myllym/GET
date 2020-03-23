@@ -291,6 +291,7 @@ print.curve_set <- function(x, ...) {
   str(x, ...)
 }
 
+globalVariables("idx")
 #' Plot method for the class 'curve_set'
 #'
 #' @param x An \code{curve_set} object
@@ -300,6 +301,7 @@ print.curve_set <- function(x, ...) {
 #' @param ylab The label for the y-axis. Default "obs".
 #' @param col_obs Color for 'obs' in the argument \code{x}.
 #' @param col_sim Color for 'sim_m' in the argument \code{x}.
+#' @param idx Indices of functions to plot for 2d plots.
 #' @param ... Additional parameters to be passed to plot and lines.
 #' @inheritParams plot.global_envelope
 #'
@@ -317,10 +319,17 @@ print.curve_set <- function(x, ...) {
 plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
                            ylim, xlab = "r", ylab = "obs", main = NULL,
                            col_obs = 1, col_sim = grDevices::grey(0.7),
-                           base_size = 11, ...) {
+                           base_size = 11, idx=1, ...) {
   plot_style <- match.arg(plot_style)
   funcs <- curve_set_funcs(x)
   if(!curve_set_is1obs(x)) col_sim <- col_obs
+  if(!curve_set_is1d(x)) {
+    rdf <- curve_set_rdf(x)
+    data <- do.call(rbind, lapply(idx, function(i) data.frame(idx=i, f=funcs[,i])))
+    df <- cbind(rdf, data)
+    return(ggplot() + choose_geom(df, varfill='f') +
+      facet_wrap(vars(idx)) + labs(x="x", y="y", fill=""))
+  }
   rdata <- combined_global_envelope_rhelper(x)
   if(rdata$retick_xaxis) {
     rvalues <- rdata$new_r_values
