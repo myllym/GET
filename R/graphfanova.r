@@ -343,6 +343,20 @@ contrasts.m <- function(x, groups, ...) {
 #' plot(res)
 #' res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = TRUE)
 #' plot(res2)
+#'
+#' # Image set examples
+#' data("imageset1")
+#' res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
+#'                       curve_set = create_image_set(imageset1$image_set),
+#'                       groups = imageset1$Group)
+#' plot(res)
+#' # Contrasts
+#' res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
+#'                         curve_set = create_image_set(imageset1$image_set),
+#'                         groups = imageset1$Group,
+#'                         contrasts = TRUE)
+#' plot(res.c)
+#' plot(res.c, contours=TRUE)
 #' }
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          contrasts = FALSE,
@@ -440,6 +454,13 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' \donttest{res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)}
 #' \dontshow{res <- frank.fanova(nsim=4, curve_set=rimov, groups=groups, alpha=0.2)}
 #' plot(res, ylab="F-statistic")
+#'
+#' data("imageset1")
+#' res2 <- frank.fanova(nsim = 19, # Increase nsim for serious analysis!
+#'                       curve_set = create_image_set(imageset1$image_set),
+#'                       groups = imageset1$Group)
+#' plot(res2)
+#' plot(res2, fixedscales=FALSE, contours=FALSE)
 frank.fanova <- function(nsim, curve_set, groups, variances="equal",
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
@@ -501,21 +522,6 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018)
 #' A one-way ANOVA test for functional data with graphical interpretation.
 #' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
-#' @examples
-#' \donttest{
-#' data("imageset1")
-#' res <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
-#'                       image_set = imageset1$image_set,
-#'                       groups = imageset1$Group)
-#' plot(res)
-#' # Contrasts
-#' res.c <- graph.fanova2d(nsim = 19, # Increase nsim for serious analysis!
-#'                         image_set = imageset1$image_set,
-#'                         groups = imageset1$Group,
-#'                         contrasts = TRUE)
-#' plot(res.c)
-#' plot(res.c, contours=FALSE)
-#' }
 graph.fanova2d <- function(nsim, image_set, groups, ...) {
   if(class(image_set)[1] != "image_set") stop("The image_set does not have a valid class.\n")
   obs_d <- dim(image_set$obs)
@@ -553,15 +559,6 @@ graph.fanova2d <- function(nsim, image_set, groups, ...) {
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018)
 #' A one-way ANOVA test for functional data with graphical interpretation.
 #' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
-#' @examples
-#' \donttest{
-#' data("imageset1")
-#' res <- frank.fanova2d(nsim = 19, # Increase nsim for serious analysis!
-#'                       image_set = imageset1$image_set,
-#'                       groups = imageset1$Group)
-#' plot(res)
-#' plot(res, fixedscales=FALSE, contours=FALSE)
-#' }
 frank.fanova2d <- function(nsim, image_set, groups, ...) {
   if(class(image_set)[1] != "image_set") stop("The image_set does not have a valid class.\n")
   obs_d <- dim(image_set$obs)

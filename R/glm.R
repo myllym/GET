@@ -328,7 +328,42 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'                                   curve_sets = list(Y=GDPtax$GDP),
 #'                                   factors = factors.df)
 #' plot(res.tax_within_group)
+#'
+#' # Image data examples
+#' data("imageset2")
+#' iset <- create_image_set(imageset2$image_set)
+#' \dontshow{
+#' # Cut the data to reduce time
+#' iset$r <- iset$r[1:300,]
+#' iset$funcs <- iset$funcs[1:300, ]
+#' plot(iset)
 #' }
+#' # Testing discrete factor group
+#' res.g <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                      formula.full = Y ~ group + z,
+#'                      formula.reduced = Y ~ z,
+#'                      curve_sets = list(Y = iset),
+#'                      factors = data.frame(group = imageset2$Group,
+#'                                           z = imageset2$z))
+#' plot(res.g)
+#' # Testing discrete factor group with contrasts
+#' res.gc <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                       formula.full = Y ~ group + z,
+#'                       formula.reduced = Y ~ z,
+#'                       curve_sets = list(Y = iset),
+#'                       factors = data.frame(group = imageset2$Group,
+#'                                            z = imageset2$z),
+#'                       contrasts = TRUE)
+#' plot(res.gc)
+#'
+#' # Testing continuous factor z
+#' res.z <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                      formula.full = Y ~ group + z,
+#'                      formula.reduced = Y ~ group,
+#'                      curve_sets = list(Y = iset),
+#'                      factors = data.frame(group = imageset2$Group,
+#'                                           z = imageset2$z))
+#' plot(res.z)
 graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                       contrasts = FALSE, savefuns = FALSE, ..., GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
@@ -491,6 +526,26 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #'                                   GET.args = list(alpha=0.20))
 #' }
 #' plot(res.tax_within_group)
+#'
+#' # Image set examples
+#' data(imageset2)
+#' #' # Testing discrete factor group
+#' res.g <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                      formula.full = Y ~ group + z,
+#'                      formula.reduced = Y ~ z,
+#'                      curve_sets = list(Y = create_image_set(imageset2$image_set)),
+#'                      factors = data.frame(group = imageset2$Group,
+#'                                           z = imageset2$z))
+#' plot(res.g)
+#'
+#' # Testing continuous factor z
+#' res.z <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                      formula.full = Y ~ group + z,
+#'                      formula.reduced = Y ~ group,
+#'                      curve_sets = list(Y = create_image_set(imageset2$image_set)),
+#'                      factors = data.frame(group = imageset2$Group,
+#'                                           z = imageset2$z))
+#' plot(res.z)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 #' @importFrom parallel mclapply
 #' @importFrom parallel parLapply
@@ -585,36 +640,6 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability. doi: 10.1007/s11009-019-09756-y
 #'
 #' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
-#' @examples
-#' \donttest{
-#' data("imageset2")
-#' # Testing discrete factor group
-#' res.g <- graph.flm2d(nsim = 19, # Increase nsim for serious analysis!
-#'                      formula.full = Y ~ group + z,
-#'                      formula.reduced = Y ~ z,
-#'                      image_sets = list(Y = imageset2$image_set),
-#'                      factors = data.frame(group = imageset2$Group,
-#'                                           z = imageset2$z))
-#' plot(res.g)
-#' # Testing discrete factor group with contrasts
-#' res.gc <- graph.flm2d(nsim = 19, # Increase nsim for serious analysis!
-#'                       formula.full = Y ~ group + z,
-#'                       formula.reduced = Y ~ z,
-#'                       image_sets = list(Y = imageset2$image_set),
-#'                       factors = data.frame(group = imageset2$Group,
-#'                                            z = imageset2$z),
-#'                       contrasts = TRUE)
-#' plot(res.gc)
-#'
-#' # Testing continuous factor z
-#' res.z <- graph.flm2d(nsim = 19, # Increase nsim for serious analysis!
-#'                      formula.full = Y ~ group + z,
-#'                      formula.reduced = Y ~ group,
-#'                      image_sets = list(Y = imageset2$image_set),
-#'                      factors = data.frame(group = imageset2$Group,
-#'                                           z = imageset2$z))
-#' plot(res.z)
-#' }
 graph.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
   if(class(image_sets)[1] == "image_set") image_sets <- list(image_sets)
   obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
@@ -652,27 +677,6 @@ graph.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 #' @return A \code{global_envelope2d} object, which can be printed and plotted
 #' directly.
-#' @examples
-#' \donttest{
-#' data("imageset2")
-#' # Testing discrete factor group
-#' res.g <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
-#'                      formula.full = Y ~ group + z,
-#'                      formula.reduced = Y ~ z,
-#'                      image_sets = list(Y = imageset2$image_set),
-#'                      factors = data.frame(group = imageset2$Group,
-#'                                           z = imageset2$z))
-#' plot(res.g)
-#'
-#' # Testing continuous factor z
-#' res.z <- frank.flm2d(nsim = 19, # Increase nsim for serious analysis!
-#'                      formula.full = Y ~ group + z,
-#'                      formula.reduced = Y ~ group,
-#'                      image_sets = list(Y = imageset2$image_set),
-#'                      factors = data.frame(group = imageset2$Group,
-#'                                           z = imageset2$z))
-#' plot(res.z)
-#' }
 frank.flm2d <- function(nsim, formula.full, formula.reduced, image_sets, factors = NULL, ...) {
   if(class(image_sets)[1] == "image_set") image_sets <- list(image_sets)
   obs_d <- lapply(image_sets, function(x) { dim(x$obs) })
