@@ -139,6 +139,20 @@ check_image_set_content <- function(image_set) {
 #' @param ... Do not use. (For internal use only.)
 #' @return The given list as a \code{curve_set}.
 #' @export
+#' @examples
+#' a <- create_image_set(list(obs=array(runif(4*5*6), c(4,5,6))))
+#' plot(a)
+#' plot(a, idx=1:6)
+#'
+#' a <- create_image_set(list(r=list(x=c(10,20,30,40), y=1:5*0.1),
+#'                            obs=array(runif(4*5*6), c(4,5,6))))
+#' plot(a)
+#'
+#' a <- create_image_set(list(r=list(xmin=c(1, 2, 4, 7), xmax=c(2, 4, 7, 11),
+#'                                   ymin=c(1,1.1,2,2.1,3), ymax=c(1.1,2,2.1,3,3.1)),
+#'                            obs=array(runif(4*5*6), c(4,5,6))))
+#' plot(a)
+#' plot(a, idx=1:5)
 create_image_set <- function(image_set, ...) {
   image_set <- check_image_set_dimensions(image_set) # Check image_set dimensions and assign r if it does not exist
   image_set <- image_set_to_curve_set(image_set) # convert the images to functions
