@@ -471,6 +471,10 @@ curve_set_rdf <- function(curve_set) {
   else r
 }
 
+curve_set_is1d <- function(curve_set) {
+  is.vector(curve_set[['r']])
+}
+
 curve_set_isresidual <- function(curve_set) {
   x <- curve_set[['is_residual']]
   if(is.null(x)) FALSE

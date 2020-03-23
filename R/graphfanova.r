@@ -358,8 +358,11 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
     groups <- as.factor(groups)
   }
-  r <- curve_set[['r']]
   test.equality <- match.arg(test.equality)
+  if(test.equality=="cov" && !curve_set_is1d(curve_set)) {
+    stop("test.equality='cov' is only available for 1 dimensional functions")
+  }
+  r <- curve_set[['r']]
   switch(test.equality,
          "mean" = {
            if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
@@ -449,8 +452,11 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
     groups <- as.factor(groups)
   }
-  r <- curve_set[['r']]
   test.equality <- match.arg(test.equality)
+  if(test.equality=="cov" && !curve_set_is1d(curve_set)) {
+    stop("test.equality='cov' is only available for 1 dimensional functions")
+  }
+  r <- curve_set[['r']]
   switch(test.equality,
          "mean" = {
            if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")

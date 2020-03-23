@@ -771,8 +771,8 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   plot(res, xlab = "Age (years)", ylab = "")
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
-  if(class(curve_sets)[1] != "list") { if(!is.vector(curve_sets$r)) stop("curve_sets$r should be a vector.\n") }
-  else if(!all(sapply(curve_sets, FUN=function(x) is.vector(x$r)))) stop("r of the curve_sets should be a vector.\n")
+  if(class(curve_sets)[1] != "list") { if(!curve_set_is1d(curve_sets)) stop("curve_sets$r should be a vector.\n") }
+  else if(!all(sapply(curve_sets, FUN=curve_set_is1d))) stop("r of the curve_sets should be a vector.\n")
   res <- central_region(curve_sets, ...)
   if(inherits(res, "combined_global_envelope")) {
     dist <- factor * (attr(res, "level2_ge")$hi - attr(res, "level2_ge")$lo)
