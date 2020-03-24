@@ -348,12 +348,12 @@ contrasts.m <- function(x, groups, ...) {
 #' # Image set examples
 #' data("imageset1")
 #' res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                       curve_set = create_image_set(imageset1$image_set),
+#'                       curve_set = imageset1$image_set,
 #'                       groups = imageset1$Group)
 #' plot(res)
 #' # Contrasts
 #' res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                         curve_set = create_image_set(imageset1$image_set),
+#'                         curve_set = imageset1$image_set,
 #'                         groups = imageset1$Group,
 #'                         contrasts = TRUE)
 #' plot(res.c)
@@ -459,7 +459,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #'
 #' data("imageset1")
 #' res2 <- frank.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                       curve_set = create_image_set(imageset1$image_set),
+#'                       curve_set = imageset1$image_set,
 #'                       groups = imageset1$Group)
 #' plot(res2)
 #' plot(res2, fixedscales=FALSE, contours=FALSE)

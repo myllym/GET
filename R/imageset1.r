@@ -27,10 +27,10 @@
 #' @seealso \code{\link{graph.fanova}}, \code{\link{frank.fanova}}
 #' @examples
 #' data(imageset1)
-#' plot(create_image_set(imageset1$image_set), idx=c(1:5, 11:15), max_ncols_of_plots = 5)
+#' plot(imageset1$image_set, idx=c(1:5, 11:15), max_ncols_of_plots = 5)
 #' \donttest{
 #' # Colors can be changed as follows:
-#' plot(create_image_set(imageset1$image_set), idx=c(1:5, 11:15), max_ncols_of_plots = 5) +
+#' plot(imageset1$image_set, idx=c(1:5, 11:15), max_ncols_of_plots = 5) +
 #'   ggplot2::scale_fill_gradient(low="black", high="white")
 #' }
 NULL
