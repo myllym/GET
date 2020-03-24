@@ -51,14 +51,16 @@ check_image_set_dimensions <- function(image_set) {
 
 expand_image_set_r <- function(r) {
   if(identical(sort(names(r)), c("x", "y"))) {
-    xy <- expand.grid(x=r[['x']], y=r[['y']])
+    xy <- expand.grid(x=r[['x']], y=r[['y']], KEEP.OUT.ATTRS = FALSE)
     xy$width <- min(diff(r[['x']]))
     xy$height <- min(diff(r[['y']]))
     xy
   } else if(identical(sort(names(r)), c("height", "width", "x", "y"))) {
-    cbind(expand.grid(x=r[['x']], y=r[['y']]), expand.grid(width=r[['width']], height=r[['height']]))
+    cbind(expand.grid(x=r[['x']], y=r[['y']], KEEP.OUT.ATTRS = FALSE),
+          expand.grid(width=r[['width']], height=r[['height']], KEEP.OUT.ATTRS = FALSE))
   } else if(identical(sort(names(r)), c("xmax", "xmin", "ymax", "ymin"))) {
-    cbind(expand.grid(xmin=r[['xmin']], ymin=r[['ymin']]), expand.grid(xmax=r[['xmax']], ymax=r[['ymax']]))
+    cbind(expand.grid(xmin=r[['xmin']], ymin=r[['ymin']], KEEP.OUT.ATTRS = FALSE),
+          expand.grid(xmax=r[['xmax']], ymax=r[['ymax']], KEEP.OUT.ATTRS = FALSE))
   } else {
     stop("Invalid image_set r")
   }
