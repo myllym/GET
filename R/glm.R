@@ -329,6 +329,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'                                   curve_sets = list(Y=GDPtax$GDP),
 #'                                   factors = factors.df)
 #' plot(res.tax_within_group)
+#' }
 #'
 #' # Image data examples
 #' data("imageset2")
