@@ -14,6 +14,7 @@
   col_obs = 1,
   col_sim = grDevices::grey(0.7),
   base_size = 11,
+  idx = 1,
   ...
 )
 }
@@ -35,6 +36,8 @@
 \item{col_sim}{Color for 'sim_m' in the argument \code{x}.}
 
 \item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
+
+\item{idx}{Indices of functions to plot for 2d plots.}
 
 \item{...}{Additional parameters to be passed to plot and lines.}
 }

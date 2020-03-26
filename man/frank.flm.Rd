@@ -2,6 +2,7 @@
 % Please edit documentation in R/glm.R
 \name{frank.flm}
 \alias{frank.flm}
+\alias{frank.flm2d}
 \title{F rank functional GLM}
 \usage{
 frank.flm(
@@ -123,6 +124,26 @@ res.tax_within_group <- frank.flm(nsim = 4,
                                   GET.args = list(alpha=0.20))
 }
 plot(res.tax_within_group)
+
+# Image set examples
+data(imageset2)
+#' # Testing discrete factor group
+res.g <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
+                     formula.full = Y ~ group + z,
+                     formula.reduced = Y ~ z,
+                     curve_sets = list(Y = imageset2$image_set),
+                     factors = data.frame(group = imageset2$Group,
+                                          z = imageset2$z))
+plot(res.g)
+
+# Testing continuous factor z
+res.z <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
+                     formula.full = Y ~ group + z,
+                     formula.reduced = Y ~ group,
+                     curve_sets = list(Y = imageset2$image_set),
+                     factors = data.frame(group = imageset2$Group,
+                                          z = imageset2$z))
+plot(res.z)
 }
 \references{
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]

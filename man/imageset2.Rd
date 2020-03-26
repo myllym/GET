@@ -4,9 +4,11 @@
 \name{imageset2}
 \alias{imageset2}
 \title{A simulated set of images}
-\format{A list of the \code{image_set} containing the simulated images,
+\format{
+A list of the \code{image_set} containing the simulated images,
 the discrete group factor in the list component \code{Group},
-and the continuous factor z in the list component \code{z}.}
+and the continuous factor z in the list component \code{z}.
+}
 \usage{
 data(imageset2)
 }
@@ -37,7 +39,7 @@ plot(imageset2$image_set, idx=c(1:5, 11:15), max_ncols_of_plots=5)
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 }
 \seealso{
-\code{\link{graph.flm2d}}, \code{\link{frank.flm2d}}
+\code{\link{graph.flm}}, \code{\link{frank.flm}}
 }
 \keyword{curves}
 \keyword{datasets}

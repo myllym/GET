@@ -9,7 +9,7 @@ create_image_set(image_set, ...)
 \arguments{
 \item{image_set}{A list containing elements \code{r}, \code{obs}, \code{sim_m} and \code{theo}.
 \code{r}, \code{sim_m} and \code{theo} are optional, \code{obs} needs to be provided always.
-If provided, \code{r} must be a \code{\link{data.frame}} describing the argument values
+If provided, \code{r} must be a \code{list} describing the argument values
 where the images have been observed (or simulated). It must consist of the following two or
 four components:
 a) "x" and "y" giving the equally spaced argument values for the x- and y-coordinates
@@ -33,10 +33,25 @@ of 2d functions in \code{obs} or it must be a constant.}
 \item{...}{Do not use. (For internal use only.)}
 }
 \value{
-The given list adorned with the proper class name.
+The given list as a \code{curve_set}.
 }
 \description{
 Create an image set out of a list in the right form containing the values of the 2d functions.
 Only 2d functions in a rectangular windows are currently supported; the values are provided
-in matrices (arrays).
+in matrices (arrays). For more general 2d functions see \code{\link{create_curve_set}}.
+}
+\examples{
+a <- create_image_set(list(obs=array(runif(4*5*6), c(4,5,6))))
+plot(a)
+plot(a, idx=1:6)
+
+a <- create_image_set(list(r=list(x=c(10,20,30,40), y=1:5*0.1),
+                           obs=array(runif(4*5*6), c(4,5,6))))
+plot(a)
+
+a <- create_image_set(list(r=list(xmin=c(1, 2, 4, 7), xmax=c(2, 4, 7, 11),
+                                  ymin=c(1,1.1,2,2.1,3), ymax=c(1.1,2,2.1,3,3.1)),
+                           obs=array(runif(4*5*6), c(4,5,6))))
+plot(a)
+plot(a, idx=1:5)
 }

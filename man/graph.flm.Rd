@@ -2,6 +2,7 @@
 % Please edit documentation in R/glm.R
 \name{graph.flm}
 \alias{graph.flm}
+\alias{graph.flm2d}
 \title{Graphical functional GLM}
 \usage{
 graph.flm(
@@ -144,6 +145,42 @@ res.tax_within_group <- graph.flm(nsim = 999,
                                   factors = factors.df)
 plot(res.tax_within_group)
 }
+
+# Image data examples
+data("imageset2")
+iset <- imageset2$image_set
+\dontshow{
+# Cut the data to reduce time
+iset$r <- iset$r[1:300,]
+iset$funcs <- iset$funcs[1:300, ]
+plot(iset)
+}
+# Testing discrete factor group
+res.g <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+                     formula.full = Y ~ group + z,
+                     formula.reduced = Y ~ z,
+                     curve_sets = list(Y = iset),
+                     factors = data.frame(group = imageset2$Group,
+                                          z = imageset2$z))
+plot(res.g)
+# Testing discrete factor group with contrasts
+res.gc <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+                      formula.full = Y ~ group + z,
+                      formula.reduced = Y ~ z,
+                      curve_sets = list(Y = iset),
+                      factors = data.frame(group = imageset2$Group,
+                                           z = imageset2$z),
+                      contrasts = TRUE)
+plot(res.gc)
+
+# Testing continuous factor z
+res.z <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+                     formula.full = Y ~ group + z,
+                     formula.reduced = Y ~ group,
+                     curve_sets = list(Y = iset),
+                     factors = data.frame(group = imageset2$Group,
+                                          z = imageset2$z))
+plot(res.z)
 }
 \references{
 Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability. doi: 10.1007/s11009-019-09756-y

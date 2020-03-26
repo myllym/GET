@@ -4,8 +4,10 @@
 \name{saplings}
 \alias{saplings}
 \title{Saplings data set}
-\format{An object of class \code{\link[spatstat]{ppp.object}} representing the point
-pattern of tree locations.}
+\format{
+An object of class \code{\link[spatstat]{ppp.object}} representing the point
+pattern of tree locations.
+}
 \usage{
 data(saplings)
 }

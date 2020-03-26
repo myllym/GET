@@ -3,6 +3,7 @@
 \name{global_envelope_test}
 \alias{global_envelope_test}
 \alias{GET}
+\alias{global_envelope_test2d}
 \title{Global envelope test}
 \usage{
 global_envelope_test(
@@ -394,6 +395,57 @@ if(requireNamespace("mvtnorm", quietly=TRUE)) {
   plot(res2)
 }
 
+# Examples with image sets
+
+# Example of spatial point pattern residuals
+#===========================================
+if(require("spatstat", quietly=TRUE)) {
+  data(cells)
+  X <- cells
+  # Fit the hard-core process
+  model <- ppm(X, interaction=Hardcore())
+  summary(model)
+  HD <- 0.08168525 # Hard-core process
+  # Choose a bandwitdh by Scott's rule of thumb
+  ds <- bw.scott(X); ds
+  # Calculate raw residuals of the fitted model
+  u <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth",
+                    sigma=ds, plot.it=FALSE)
+  obs <- u$smooth$Z$v
+  # Generate simulations from the hard-core null model
+  \donttest{nsim <- 499 # Number of simulations; increase for serious analysis!}
+  \dontshow{nsim <- 9}
+  simulations <- NULL
+  ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
+                    X$window$yrange[2]-X$window$yrange[1]) / 10
+  win.extend <- owin(c(X$window$xrange[1]-ext.factor, X$window$xrange[2]+ext.factor),
+                     c(X$window$yrange[1]-ext.factor, X$window$yrange[2]+ext.factor))
+  mod02 <- list(cif="hardcore", par=list(beta=exp(model$fitin$coefs[1]),hc=HD), w=win.extend)
+  # starting point pattern in an extended window
+  x.start <- runifpoint(X$n, win=win.extend)
+  # simulations
+  for(sss in 1:nsim){
+    uppp <- rmh(model=mod02, start=list(x.start=x.start), control=list(p=1,nrep=1e5,nverb=5000))
+    f <- uppp$x > X$window$xrange[1] & uppp$x < X$window$xrange[2] &
+         uppp$y > X$window$yrange[1] & uppp$y < X$window$yrange[2]
+    simulations[[sss]] <- ppp(uppp$x[f], uppp$y[f], window=X$window)
+  }
+  # Calculate the raw residuals for simulations
+  sim <- array(0, c(u$smooth$Z$dim, nsim))
+  for(i in 1:length(simulations)) {
+    model=ppm(simulations[[i]],interaction=Hardcore(HD));
+    u_sim <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth", sigma=ds, plot.it=FALSE)
+    sim[,,i] <- u_sim$smooth$Z$v
+    if((i \%\% 100)==0) cat(i, ' ')
+  }
+  # Constract the global envelope test for the (2D) raw residuals
+  iset <- create_image_set(list(obs=obs, sim_m=sim))
+  \dontshow{res <- global_envelope_test(iset, type="area", alpha=0.25)}
+  \donttest{res <- global_envelope_test(iset, type="area")}
+  plot(res)
+  plot(res, contours=FALSE) + ggplot2::scale_fill_gradient(low="black", high="white")
+  plot(res, fixedscales=FALSE)
+}
 }
 \references{
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
@@ -412,5 +464,5 @@ Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
 \seealso{
 \code{\link{plot.global_envelope}}, \code{\link{central_region}},
-\code{\link{global_envelope_test2d}}, \code{\link{GET.composite}}
+\code{\link{GET.composite}}
 }

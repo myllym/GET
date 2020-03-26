@@ -4,8 +4,10 @@
 \name{fallen_trees}
 \alias{fallen_trees}
 \title{Fallen trees}
-\format{A \code{\link[spatstat]{ppp.object}} object with locations and heights (=marks)
-of 232 trees in a window with polygonal boundary.}
+\format{
+A \code{\link[spatstat]{ppp.object}} object with locations and heights (=marks)
+of 232 trees in a window with polygonal boundary.
+}
 \usage{
 data(fallen_trees)
 }

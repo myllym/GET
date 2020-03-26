@@ -4,11 +4,13 @@
 \name{abide_9002_23}
 \alias{abide_9002_23}
 \title{Local brain activity at resting state}
-\format{A list of the \code{curve_set} containing the data,
+\format{
+A list of the \code{curve_set} containing the data,
 coordinates (x,y) where the data have been observed (third dimension is 23),
 the discrete factor \code{Group} (1=Autism; 2=Control),
 the discrete factor \code{Sex} (1=Male; 2=Female),
-and the continuous factor \code{Age}.}
+and the continuous factor \code{Age}.
+}
 \usage{
 data(abide_9002_23)
 }

@@ -2,6 +2,7 @@
 % Please edit documentation in R/graphfanova.r
 \name{graph.fanova}
 \alias{graph.fanova}
+\alias{graph.fanova2d}
 \title{One-way graphical functional ANOVA}
 \usage{
 graph.fanova(
@@ -213,6 +214,20 @@ res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE
 plot(res)
 res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = TRUE)
 plot(res2)
+
+# Image set examples
+data("imageset1")
+res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
+                      curve_set = imageset1$image_set,
+                      groups = imageset1$Group)
+plot(res)
+# Contrasts
+res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
+                        curve_set = imageset1$image_set,
+                        groups = imageset1$Group,
+                        contrasts = TRUE)
+plot(res.c)
+plot(res.c, contours=TRUE)
 }
 }
 \references{
@@ -227,5 +242,5 @@ Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
 Myllymäki, M and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 }
 \seealso{
-\code{\link{graph.fanova2d}}, \code{\link{frank.fanova}}
+\code{\link{frank.fanova}}
 }

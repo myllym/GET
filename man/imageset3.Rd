@@ -4,8 +4,10 @@
 \name{imageset3}
 \alias{imageset3}
 \title{A simulated set of images}
-\format{A list of the \code{image_set} containing the simulated images, and
-the discrete group factor in the list component \code{Group}.}
+\format{
+A list of the \code{image_set} containing the simulated images, and
+the discrete group factor in the list component \code{Group}.
+}
 \usage{
 data(imageset3)
 }
@@ -35,7 +37,7 @@ plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), max_ncols_of_plots = 5)
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 }
 \seealso{
-\code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}}
+\code{\link{graph.fanova}}, \code{\link{frank.fanova}}
 }
 \keyword{curves}
 \keyword{datasets}

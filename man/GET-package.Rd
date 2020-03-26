@@ -102,18 +102,14 @@ Also the adjusted tests can be based on several test functions.
  \itemize{
   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
   \item Global rank envelope based on F-values: \code{\link{frank.fanova}}
-  \item Image (2d function) counterparts: \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}}
  }
 \item \emph{Functional general linear model (GLM)}:
  \itemize{
   \item \emph{Graphical} functional GLM: \code{\link{graph.flm}}
   \item Global rank envelope based on F-values: \code{\link{frank.flm}}
-  \item Image (2d function) counterparts: \code{\link{graph.flm2d}}, \code{\link{frank.flm2d}}
  }
 \item Functions for performing global envelopes for specific purposes:
  \itemize{
-  \item Central regions for images (2d functions): \code{\link{central_region2d}}
-  \item Global envelope tests for images (2d functions): \code{\link{global_envelope_test2d}}
   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
   \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
   \item Testing global and local dependence of point patterns on covariates: \code{\link{GET.spatialF}}
@@ -121,10 +117,9 @@ Also the adjusted tests can be based on several test functions.
 
 \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no gpaphical
 interpretation)
-\item Most functions accept the curves provided in a \code{curve_set} (or
-\code{image_set}) object.
+\item Most functions accept the curves provided in a \code{curve_set} object.
 Use \code{\link{create_curve_set}} (or \code{\link{create_image_set}}) to create a
-\code{curve_set} (or \code{image_set}) object from the functions T_i(r), i=1,...,s+1.
+\code{curve_set} object from the functions T_i(r), i=1,...,s+1.
 Other formats to provide the curves to the above functions are also accepted,
 see the information on the help pages.
 }
@@ -228,8 +223,8 @@ Here T_0(r) is the expectation of T(r) under the null hypothesis.
  \item \code{\link{cgec}}: centred government expenditure centralization (GEC) ratios (see \code{\link{graph.fanova}})
  \item \code{\link{fallen_trees}}: a point pattern of fallen trees
  \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
- \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fanova2d}}, \code{\link{frank.fanova2d}})
- \item \code{\link{imageset2}}: a simulated set of images (see \code{\link{graph.flm2d}}, \code{\link{frank.flm2d}})
+ \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fanova}}, \code{\link{frank.fanova}})
+ \item \code{\link{imageset2}}: a simulated set of images (see \code{\link{graph.flm}}, \code{\link{frank.flm}})
  \item \code{\link{imageset3}}: a simulated set of images
  \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{GET.composite}})

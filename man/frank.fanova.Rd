@@ -2,6 +2,7 @@
 % Please edit documentation in R/graphfanova.r
 \name{frank.fanova}
 \alias{frank.fanova}
+\alias{frank.fanova2d}
 \title{Rank envelope F-test}
 \usage{
 frank.fanova(
@@ -73,6 +74,13 @@ groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 \donttest{res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)}
 \dontshow{res <- frank.fanova(nsim=4, curve_set=rimov, groups=groups, alpha=0.2)}
 plot(res, ylab="F-statistic")
+
+data("imageset1")
+res2 <- frank.fanova(nsim = 19, # Increase nsim for serious analysis!
+                      curve_set = imageset1$image_set,
+                      groups = imageset1$Group)
+plot(res2)
+plot(res2, fixedscales=FALSE, contours=FALSE)
 }
 \references{
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018)
