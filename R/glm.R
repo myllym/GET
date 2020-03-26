@@ -333,7 +333,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'
 #' # Image data examples
 #' data("imageset2")
-#' iset <- create_image_set(imageset2$image_set)
+#' iset <- imageset2$image_set
 #' \dontshow{
 #' # Cut the data to reduce time
 #' iset$r <- iset$r[1:300,]
@@ -536,7 +536,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' res.g <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
 #'                      formula.full = Y ~ group + z,
 #'                      formula.reduced = Y ~ z,
-#'                      curve_sets = list(Y = create_image_set(imageset2$image_set)),
+#'                      curve_sets = list(Y = imageset2$image_set),
 #'                      factors = data.frame(group = imageset2$Group,
 #'                                           z = imageset2$z))
 #' plot(res.g)
@@ -545,7 +545,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' res.z <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
 #'                      formula.full = Y ~ group + z,
 #'                      formula.reduced = Y ~ group,
-#'                      curve_sets = list(Y = create_image_set(imageset2$image_set)),
+#'                      curve_sets = list(Y = imageset2$image_set),
 #'                      factors = data.frame(group = imageset2$Group,
 #'                                           z = imageset2$z))
 #' plot(res.z)
