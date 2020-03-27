@@ -1305,7 +1305,7 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   \dontshow{res <- global_envelope_test(iset, type="area", alpha=0.25)}
 #'   \donttest{res <- global_envelope_test(iset, type="area")}
 #'   plot(res)
-#'   plot(res, contours=FALSE) + ggplot2::scale_fill_gradient(low="black", high="white")
+#'   plot(res) + ggplot2::scale_fill_gradient(low="black", high="white")
 #'   plot(res, fixedscales=FALSE)
 #' }
 global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
