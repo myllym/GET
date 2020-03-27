@@ -102,10 +102,11 @@ image_set_to_curve_set <- function(image_set, ...) {
   curve_set_v
 }
 
-#' Create an image set out of a list in the right form.
+#' Create a curve set of images
 #'
-#' Create an image set out of a list in the right form containing the values of the 2d functions.
-#' Only 2d functions in a rectangular windows are currently supported; the values are provided
+#' Create a curve set consisting of a set of images, given a list containing
+#' the values of the 2d functions in the right form.
+#' Only 2d functions in a rectangular windows are supported; the values are provided
 #' in matrices (arrays). For more general 2d functions see \code{\link{create_curve_set}}.
 #'
 #' @param image_set A list containing elements \code{r}, \code{obs}, \code{sim_m} and \code{theo}.
