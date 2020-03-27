@@ -443,7 +443,7 @@ if(require("spatstat", quietly=TRUE)) {
   \dontshow{res <- global_envelope_test(iset, type="area", alpha=0.25)}
   \donttest{res <- global_envelope_test(iset, type="area")}
   plot(res)
-  plot(res, contours=FALSE) + ggplot2::scale_fill_gradient(low="black", high="white")
+  plot(res) + ggplot2::scale_fill_gradient(low="black", high="white")
   plot(res, fixedscales=FALSE)
 }
 }

@@ -35,9 +35,9 @@
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{color_outside}{Logical. Whether to color the places where the data function goes
-outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.}
+outside the envelope. Relevant only for 1d functions.}
 
-\item{env.col}{The color for the envelope lines (or dotplot arrows). Default 1 (black).}
+\item{env.col}{The color for the envelope lines (or dotplot arrows) for 1d functions. Default 1 (black).}
 
 \item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 

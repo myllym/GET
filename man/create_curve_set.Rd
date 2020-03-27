@@ -44,3 +44,12 @@ If \code{obs} is a vector, \code{theo} can be given and it should then correspon
 to a theoretical function (e.g., under the null hypothesis). If present, its length must match the length of
 \code{obs}.
 }
+\examples{
+# 1d
+cset <- create_curve_set(list(r=1:10, obs=matrix(runif(10*5), ncol=5)))
+plot(cset)
+# 2d
+cset <- create_curve_set(list(r=data.frame(x=c(rep(1:3, 3), 4), y=c(rep(1:3, each=3), 1), width=1, height=1),
+                              obs=matrix(runif(10*5), ncol=5)))
+plot(cset)
+}

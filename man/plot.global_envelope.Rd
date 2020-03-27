@@ -12,8 +12,10 @@
   ylim,
   xlab,
   ylab,
-  color_outside = TRUE,
   env.col = 1,
+  color_outside = TRUE,
+  sign.col = "red",
+  transparency = 85/255,
   base_size = 11,
   labels = NULL,
   add = FALSE,
@@ -44,10 +46,16 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
 
-\item{color_outside}{Logical. Whether to color the places where the data function goes
-outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.}
+\item{env.col}{The color for the envelope lines (or dotplot arrows) for 1d functions. Default 1 (black).}
 
-\item{env.col}{The color for the envelope lines (or dotplot arrows). Default 1 (black).}
+\item{color_outside}{Logical. Whether to color the places where the data function goes
+outside the envelope. Relevant only for 1d functions.}
+
+\item{sign.col}{The color for the significant regions. Default to "red".}
+
+\item{transparency}{A number between 0 and 1 (default 85/255, 33% transparency).
+Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
+functions.}
 
 \item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 

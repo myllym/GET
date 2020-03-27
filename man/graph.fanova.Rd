@@ -65,7 +65,7 @@ One-way ANOVA tests for functional data with graphical interpretation
 }
 \details{
 This functions can be used to perform one-way graphical functional ANOVA tests described
-in Mrkvička et al. (2016).
+in Mrkvička et al. (2016). Both 1d and 2d functions are allowed in curve sets.
 
 The tests assume that there are \eqn{J}{J} groups which contain
 \eqn{n_1,\dots,n_J}{n1, ..., nJ} functions

@@ -2,7 +2,7 @@
 % Please edit documentation in R/image_set.r
 \name{create_image_set}
 \alias{create_image_set}
-\title{Create an image set out of a list in the right form.}
+\title{Create a curve set of images}
 \usage{
 create_image_set(image_set, ...)
 }
@@ -36,8 +36,9 @@ of 2d functions in \code{obs} or it must be a constant.}
 The given list as a \code{curve_set}.
 }
 \description{
-Create an image set out of a list in the right form containing the values of the 2d functions.
-Only 2d functions in a rectangular windows are currently supported; the values are provided
+Create a curve set consisting of a set of images, given a list containing
+the values of the 2d functions in the right form.
+Only 2d functions in a rectangular windows are supported; the values are provided
 in matrices (arrays). For more general 2d functions see \code{\link{create_curve_set}}.
 }
 \examples{
