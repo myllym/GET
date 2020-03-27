@@ -372,9 +372,13 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param ylim See \code{\link{plot.default}}. A sensible default exists.
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylab See \code{\link{plot.default}}. A sensible default exists.
+#' @param env.col The color for the envelope lines (or dotplot arrows) for 1d functions. Default 1 (black).
 #' @param color_outside Logical. Whether to color the places where the data function goes
-#' outside the envelope. Currently red color is used. Relevant only for \code{plot_style = "basic"}.
-#' @param env.col The color for the envelope lines (or dotplot arrows). Default 1 (black).
+#' outside the envelope. Relevant only for 1d functions.
+#' @param sign.col The color for the significant regions. Default to "red".
+#' @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
+#' Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
+#' functions.
 #' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
@@ -390,7 +394,9 @@ print.combined_global_envelope <- function(x, ...) {
 plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
-                                 color_outside = TRUE, env.col = 1, base_size = 11,
+                                 env.col = 1, color_outside = TRUE, sign.col = "red",
+                                 transparency = 85/255,
+                                 base_size = 11,
                                  labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...) {
   plot_style <- match.arg(plot_style)
   # main
@@ -399,7 +405,8 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   }
   # Two-dimensional plot:
   #----------------------
-  if(is.null(x$r)) return(plot_global_envelope2d(x, plot_style = plot_style, main = main, digits = digits, ...))
+  if(is.null(x$r)) return(plot_global_envelope2d(x, plot_style = plot_style, main = main, digits = digits,
+                                                 sign.col = sign.col, transparency = transparency, ...))
   # One-dimensional plot:
   #----------------------
   if(dotplot) plot_style <- "basic"
