@@ -417,7 +417,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                        max_ncols_of_plots = 2,
                        labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL,
-                       legend = TRUE, color_outside=TRUE) {
+                       legend = TRUE, color_outside=TRUE, sign.col="red") {
     if(!inherits(x, "list")) x <- list(x)
     Nfunc <- length(x)
     if(!is.null(x2)) {
@@ -616,7 +616,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       if(color_outside) {
         df.outside <- df[df$type == "Data function",]
         df.outside <- df.outside[df.outside$curves < df.outside$lower | df.outside$curves > df.outside$upper,]
-        p <- p + geom_point(data=df.outside, ggplot2::aes_(x = ~r, y = ~curves), color="red", size=1)
+        p <- p + geom_point(data=df.outside, ggplot2::aes_(x = ~r, y = ~curves), color=sign.col, size=1)
       }
     }
     # Return
