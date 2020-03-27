@@ -405,7 +405,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   }
   # Two-dimensional plot:
   #----------------------
-  if(is.null(x$r)) return(plot_global_envelope2d(x, plot_style = plot_style, main = main, digits = digits,
+  if(is.null(x$r)) return(plot_global_envelope2d(x, main = main, digits = digits,
                                                  sign.col = sign.col, transparency = transparency, ...))
   # One-dimensional plot:
   #----------------------
