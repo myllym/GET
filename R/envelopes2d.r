@@ -5,7 +5,7 @@
 # which may make it easier to compare the figures with each other.
 #
 # @inheritParams plot.global_envelope
-# @param x an 'global_envelope2d' object
+# @param x A 'global_envelope' object for two-dimensional functions
 # @param plot_style Either "ggplot2" or "basic". (Similar to the argument in \code{\link{plot.global_envelope}}.)
 # @param fixedscales Logical. TRUE for the same scales for all images.
 # @param sign.col The color for the significant regions. Default to "red".
