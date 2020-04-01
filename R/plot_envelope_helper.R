@@ -657,7 +657,7 @@ choose_geom <- function(df, varfill, ...) {
   }
 }
 
-# A helper function for env2d_ggplot2
+# A helper function for env2d_ggplot2. Produces a ggplot with the significant region
 #' @importFrom ggplot2 ggplot aes geom_contour coord_fixed .data labs
 env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) {
   g <- ggplot() + choose_geom(df, varfill='z')
