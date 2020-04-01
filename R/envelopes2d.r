@@ -4,6 +4,7 @@ globalVariables(c("main", "label"))
 
 # Choose ggplot2 geom based on variables found in df
 # @param varfill (Optional) Name of the variable used for 'fill' aesthetic.
+# (fill is always specified, but for a fixed color it is given in ...)
 #' @importFrom ggplot2 geom_tile geom_rect aes .data
 choose_geom <- function(df, varfill, ...) {
   if(!is.null(df$width)) {

@@ -357,7 +357,6 @@ contrasts.m <- function(x, groups, ...) {
 #'                         groups = imageset1$Group,
 #'                         contrasts = TRUE)
 #' plot(res.c)
-#' plot(res.c, contours=TRUE)
 #' }
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          contrasts = FALSE,
@@ -462,7 +461,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #'                       curve_set = imageset1$image_set,
 #'                       groups = imageset1$Group)
 #' plot(res2)
-#' plot(res2, fixedscales=FALSE, contours=FALSE)
+#' plot(res2, fixedscales=FALSE)
 frank.fanova <- function(nsim, curve_set, groups, variances="equal",
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
