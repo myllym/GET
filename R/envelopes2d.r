@@ -34,12 +34,11 @@ choose_geom <- function(df, varfill, ...) {
 }
 
 # A helper function for env2d_ggplot2. Produces a ggplot with the significant region
-#' @importFrom ggplot2 ggplot aes geom_contour coord_fixed .data labs
-env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) {
+#' @importFrom ggplot2 ggplot aes coord_fixed .data labs
+env2d_ggplot2_helper_1 <- function(df, sign.col, transparency) {
   g <- ggplot() + choose_geom(df, varfill='z')
   if(any(df$signif))
     g <- g + choose_geom(df[df$signif,], fill=sign.col, alpha=transparency)
-  if(contours && !is.null(df$x)) g <- g + geom_contour(data=df[df$contour,], aes(x=.data$x, y=.data$y, z=.data$z))
   g <- g + coord_fixed(ratio=1)
   g <- g + labs(x="", y="", fill="")
   g
@@ -47,7 +46,7 @@ env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) 
 
 #' @importFrom gridExtra grid.arrange
 #' @importFrom ggplot2 facet_wrap ggtitle theme element_blank vars
-env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", insertmain=TRUE) {
+env2d_ggplot2_helper <- function(x, fixedscales, main="", insertmain=TRUE) {
   namelist <- list(obs = "Observed",
                    lo = "Lower envelope" ,
                    hi = "Upper envelope" ,
@@ -64,11 +63,10 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
   else if(!is.null(x[['xmin']])) df <- x[, c("xmax", "xmin", "ymax", "ymin")]
   else stop("Cannot detect curve_set r")
 
-  adddf <- function(df, z, name, label=namelist[[name]], contour=FALSE, signif=FALSE) {
+  adddf <- function(df, z, name, label=namelist[[name]], signif=FALSE) {
     df$z <- c(z)
     df$name <- name
     df$label <- factor(label)
-    df$contour <- contour
     df$signif <- c(signif)
     df$main <- main
     df
@@ -76,13 +74,13 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
   alt <- get_alternative(x)
   dfs <- list()
   if(!is.null(x$obs)) {
-    dfs <- c(dfs, list(adddf(df, x$obs, "obs", contour=contours)))
+    dfs <- c(dfs, list(adddf(df, x$obs, "obs")))
   }
   if(alt != "greater") {
-    dfs <- c(dfs, list(adddf(df, x$lo, "lo", contour=contours)))
+    dfs <- c(dfs, list(adddf(df, x$lo, "lo")))
   }
   if(alt != "less") {
-    dfs <- c(dfs, list(adddf(df, x$hi, "hi", contour=contours)))
+    dfs <- c(dfs, list(adddf(df, x$hi, "hi")))
   }
   if(!is.null(x$obs) && alt != "greater") {
     dfs <- c(dfs, list(adddf(df, x$obs, "lo.sign", signif=x$obs < x$lo)))
@@ -100,7 +98,7 @@ env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", inser
 # @param transparency A number between 0 and 1.
 # Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
 #' @importFrom ggplot2 theme element_blank facet_wrap vars
-env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, contours = TRUE) {
+env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency) {
   remove_axes_theme <- theme(axis.title.x=element_blank(),
                              axis.text.x=element_blank(),
                              axis.ticks.x=element_blank(),
@@ -108,7 +106,7 @@ env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, 
                              axis.text.y=element_blank(),
                              axis.ticks.y=element_blank())
   lapply(dfs, function(df) {
-    g <- env2d_ggplot2_helper_1(df, sign.col, transparency, contours)
+    g <- env2d_ggplot2_helper_1(df, sign.col, transparency)
     g <- g + facet_wrap(vars(label))
     g + remove_axes_theme
   })
@@ -122,21 +120,20 @@ env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, 
 # @param sign.col The color for the significant regions. Default to "red".
 # @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
 # Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
-# @param contours Logical. Whether to draw contour lines to the observed function and the lower and upper envelope.
 # @param main The overall main. Default exists.
 # @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
 #' @importFrom ggplot2 facet_wrap ggtitle
 #' @importFrom gridExtra grid.arrange
 plot_global_envelope2d <- function(x, fixedscales = TRUE, sign.col = "red", transparency = 85/255,
-                                   contours = FALSE, main = NULL, digits = 3, ...) {
+                                   main = NULL, digits = 3, ...) {
   if(is.null(main)) main <- env_main_default(x, digits=digits)
   dfs <- env2d_ggplot2_helper(x, fixedscales=fixedscales)
   if(fixedscales) {
-    g <- env2d_ggplot2_helper_1(dfs, sign.col, transparency, contours)
+    g <- env2d_ggplot2_helper_1(dfs, sign.col, transparency)
     g <- g + facet_wrap(vars(label))
     g + ggtitle(main)
   } else {
-    gs = env2d_ggplot2_helper_many_single_plots(dfs, sign.col, transparency, contours)
+    gs = env2d_ggplot2_helper_many_single_plots(dfs, sign.col, transparency)
     p1 = grid.arrange(grobs=gs, nrow=ceiling(length(gs)/3), top=main)
   }
 }
@@ -152,25 +149,25 @@ plot_global_envelope2d <- function(x, fixedscales = TRUE, sign.col = "red", tran
 #' @importFrom gridExtra grid.arrange
 #' @importFrom grDevices col2rgb
 plot_combined_global_envelope2d <- function(x, fixedscales = 2, sign.col = "red", transparency = 85/255,
-                                            contours = FALSE, main = NULL, digits = 3, ...) {
+                                            main = NULL, digits = 3, ...) {
   if(is.null(names(x))) names(x) <- paste(1:length(x))
   if(is.null(main)) fullmain <- env_main_default(attr(x, "level2_ge"), digits=digits)
   else fullmain <- NULL
   dfs <- mapply(x, names(x), SIMPLIFY=FALSE, FUN=function(x, main) {
-    env2d_ggplot2_helper(x, fixedscales=fixedscales, contours=contours, main=main, insertmain=!fixedscales)
+    env2d_ggplot2_helper(x, fixedscales=fixedscales, main=main, insertmain=!fixedscales)
   })
   if(fixedscales==2) {
     df <- do.call(rbind, dfs)
-    g <- env2d_ggplot2_helper_1(df, sign.col, transparency, contours) + facet_grid(rows=vars(main), cols=vars(label))
+    g <- env2d_ggplot2_helper_1(df, sign.col, transparency) + facet_grid(rows=vars(main), cols=vars(label))
     g + ggtitle(fullmain)
   } else if(fixedscales==1) {
     gs <- lapply(dfs, function(df) {
-      env2d_ggplot2_helper_1(df, sign.col, transparency, contours) + facet_grid(rows=vars(main), cols=vars(label))
+      env2d_ggplot2_helper_1(df, sign.col, transparency) + facet_grid(rows=vars(main), cols=vars(label))
     })
     grid.arrange(grobs=gs, ncol=1, top=fullmain)
   } else if(fixedscales==0) {
     gs <- lapply(dfs, function(dfs2) {
-      gs = env2d_ggplot2_helper_many_single_plots(dfs2, sign.col, transparency, contours)
+      gs = env2d_ggplot2_helper_many_single_plots(dfs2, sign.col, transparency)
       grid.arrange(grobs=gs, nrow=1)
     })
     grid.arrange(grobs=gs, ncol=1, top=fullmain)
