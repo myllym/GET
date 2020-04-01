@@ -1,4 +1,4 @@
-# A modified ggplot2::geom_raster to allow setting pixel size
+# A modified ggplot2::geom_raster to allow setting pixel size using the arguments width and height
 #' @importFrom ggplot2 layer
 geom_raster_fixed <- function(mapping = NULL, data = NULL,
                         stat = "identity", position = "identity",
@@ -37,6 +37,7 @@ geom_raster_fixed <- function(mapping = NULL, data = NULL,
   )
 }
 
+# This function is similar to GeomRaster, but uses the given w and h
 #' @importFrom ggplot2 ggproto draw_key_rect Geom alpha
 #' @importFrom grid rasterGrob
 GeomRasterFixed <- ggproto("GeomRasterFixed", Geom,
