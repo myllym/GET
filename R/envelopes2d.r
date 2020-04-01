@@ -1,3 +1,118 @@
+# 2d plots with ggplot2
+#----------------------
+globalVariables(c("main", "label"))
+
+# Choose ggplot2 geom based on variables found in df
+# @param varfill (Optional) Name of the variable used for 'fill' aesthetic.
+#' @importFrom ggplot2 geom_tile geom_rect aes .data
+choose_geom <- function(df, varfill, ...) {
+  if(!is.null(df$width)) {
+    if(all(df$width[1] == df$width) && all(df$height[1] == df$height)) {
+      w <- df$width[1]
+      h <- df$height[1]
+      if(!missing(varfill))
+        geom_raster_fixed(data=df, aes(x=.data$x, y=.data$y, fill=.data[[varfill]]), width=w, height=h, ...)
+      else
+        geom_raster_fixed(data=df, aes(x=.data$x, y=.data$y), width=w, height=h, ...)
+    } else {
+      if(!missing(varfill))
+        geom_tile(data=df, aes(x=.data$x, y=.data$y, width=.data$width,
+                               height=.data$height, fill=.data[[varfill]]), ...)
+      else
+        geom_tile(data=df, aes(x=.data$x, y=.data$y, width=.data$width,
+                               height=.data$height), ...)
+    }
+  } else {
+    if(!missing(varfill))
+      geom_rect(data=df, aes(xmin=.data$xmin, ymin=.data$ymin, xmax=.data$xmax,
+                             ymax=.data$ymax, fill=.data[[varfill]]), ...)
+    else
+      geom_rect(data=df, aes(xmin=.data$xmin, ymin=.data$ymin, xmax=.data$xmax,
+                             ymax=.data$ymax), ...)
+  }
+}
+
+# A helper function for env2d_ggplot2. Produces a ggplot with the significant region
+#' @importFrom ggplot2 ggplot aes geom_contour coord_fixed .data labs
+env2d_ggplot2_helper_1 <- function(df, sign.col, transparency, contours = TRUE) {
+  g <- ggplot() + choose_geom(df, varfill='z')
+  if(any(df$signif))
+    g <- g + choose_geom(df[df$signif,], fill=sign.col, alpha=transparency)
+  if(contours && !is.null(df$x)) g <- g + geom_contour(data=df[df$contour,], aes(x=.data$x, y=.data$y, z=.data$z))
+  g <- g + coord_fixed(ratio=1)
+  g <- g + labs(x="", y="", fill="")
+  g
+}
+
+#' @importFrom gridExtra grid.arrange
+#' @importFrom ggplot2 facet_wrap ggtitle theme element_blank vars
+env2d_ggplot2_helper <- function(x, fixedscales, contours = TRUE, main="", insertmain=TRUE) {
+  namelist <- list(obs = "Observed",
+                   lo = "Lower envelope" ,
+                   hi = "Upper envelope" ,
+                   lo.sign = "Sign.: below" ,
+                   hi.sign = "Sign.: above" )
+  if(!missing(main) && !is.null(main) && insertmain) {
+    for (i in seq_along(namelist)) {
+      namelist[[i]] <- paste(main, ": ", namelist[[i]])
+    }
+  }
+
+  # If curve_set$r was created using a data.frame
+  if(!is.null(x[['x']])) df <- x[, c("height", "width", "x", "y")]
+  else if(!is.null(x[['xmin']])) df <- x[, c("xmax", "xmin", "ymax", "ymin")]
+  else stop("Cannot detect curve_set r")
+
+  adddf <- function(df, z, name, label=namelist[[name]], contour=FALSE, signif=FALSE) {
+    df$z <- c(z)
+    df$name <- name
+    df$label <- factor(label)
+    df$contour <- contour
+    df$signif <- c(signif)
+    df$main <- main
+    df
+  }
+  alt <- get_alternative(x)
+  dfs <- list()
+  if(!is.null(x$obs)) {
+    dfs <- c(dfs, list(adddf(df, x$obs, "obs", contour=contours)))
+  }
+  if(alt != "greater") {
+    dfs <- c(dfs, list(adddf(df, x$lo, "lo", contour=contours)))
+  }
+  if(alt != "less") {
+    dfs <- c(dfs, list(adddf(df, x$hi, "hi", contour=contours)))
+  }
+  if(!is.null(x$obs) && alt != "greater") {
+    dfs <- c(dfs, list(adddf(df, x$obs, "lo.sign", signif=x$obs < x$lo)))
+  }
+  if(!is.null(x$obs) && alt != "less") {
+    dfs <- c(dfs, list(adddf(df, x$obs, "hi.sign", signif=x$obs > x$hi)))
+  }
+  if(fixedscales)
+    do.call(rbind, dfs)
+  else
+    dfs
+}
+
+# @param sign.col The color for the significant regions.
+# @param transparency A number between 0 and 1.
+# Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
+#' @importFrom ggplot2 theme element_blank facet_wrap vars
+env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency, contours = TRUE) {
+  remove_axes_theme <- theme(axis.title.x=element_blank(),
+                             axis.text.x=element_blank(),
+                             axis.ticks.x=element_blank(),
+                             axis.title.y=element_blank(),
+                             axis.text.y=element_blank(),
+                             axis.ticks.y=element_blank())
+  lapply(dfs, function(df) {
+    g <- env2d_ggplot2_helper_1(df, sign.col, transparency, contours)
+    g <- g + facet_wrap(vars(label))
+    g + remove_axes_theme
+  })
+}
+
 # Plotting function for 2d global envelopes
 #
 # @inheritParams plot.global_envelope
