@@ -227,7 +227,6 @@ res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
                         groups = imageset1$Group,
                         contrasts = TRUE)
 plot(res.c)
-plot(res.c, contours=TRUE)
 }
 }
 \references{
