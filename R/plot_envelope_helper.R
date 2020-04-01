@@ -251,6 +251,17 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
     }
 }
 
+# Turn an envelope into a 'dotplot' with ggplot2.
+#' @importFrom ggplot2 ggplot geom_segment aes .data geom_point scale_color_identity arrow
+env_dotplot2 <- function(x) {
+  df <- as.data.frame(x)
+  arrow = arrow(angle=75)
+  ggplot(df) + geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data$hi), arrow=arrow) +
+    geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data$lo), arrow=arrow) +
+    geom_point(aes(x=.data$r, y=.data$obs, col=ifelse(.data$obs > .data$hi | .data$obs < .data$lo, "red", "black")), shape="x", size=5) +
+    geom_point(aes(x=.data$r, y=.data$central)) +
+    scale_color_identity()
+}
 
 # An internal GET function for making a basic "global envelope plot".
 #
