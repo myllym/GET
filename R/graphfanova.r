@@ -5,9 +5,9 @@
 
 # x: array(ndata x nt), each row is one functional data vector
 
-vmean <- function(x) if (is.matrix(x)) apply(x, 2, mean) else x
+vmean <- function(x) if (is.matrix(x)) colMeans(x) else x
 
-vsum <- function(x) if (is.matrix(x)) apply(x, 2, sum) else x
+vsum <- function(x) if (is.matrix(x)) colSums(x) else x
 
 #' @importFrom stats var
 vvar <- function(x) if (is.matrix(x)) apply(x, 2, stats::var) else 0*x
@@ -257,16 +257,11 @@ contrasts.m <- function(x, groups, ...) {
 #'   # Graphical functional ANOVA
 #'   cset <- create_curve_set(list(r=0:23,
 #'              obs=t(log(poblenou[['nox']][['data']]))))
-#' \donttest{
-#'   res.c <- graph.fanova(nsim = 2999, curve_set = cset,
+#' \dontshow{nsim <- 19}
+#' \donttest{nsim <- 2999}
+#'   res.c <- graph.fanova(nsim = nsim, curve_set = cset,
 #'                         groups = Type, variances = "unequal",
 #'                         contrasts = TRUE)
-#' }
-#' \dontshow{
-#'   res.c <- graph.fanova(nsim = 4, curve_set = cset,
-#'                         groups = Type, variances = "unequal",
-#'                         contrasts = TRUE, alpha = 0.2)
-#' }
 #'   plot(res.c, xlab = "Hour", ylab = "Diff.")
 #' }
 #'
@@ -275,8 +270,8 @@ contrasts.m <- function(x, groups, ...) {
 #' data(cgec)
 #'
 #' # Number of simulations
-#' \donttest{
-#' nsim <- 2499 # increase to reduce Monte Carlo error
+#' \dontshow{nsim <- 19}
+#' \donttest{nsim <- 2499 # increase to reduce Monte Carlo error}
 #'
 #' # Test for unequal lag 1 covariances
 #' res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
@@ -310,25 +305,17 @@ contrasts.m <- function(x, groups, ...) {
 #'                     groups = cgec$group,
 #'                     variances = "equal",
 #'                     contrasts = TRUE)
-#' }
-#' \dontshow{
-#' res2 <- graph.fanova(nsim = 4, curve_set = cgec$cgec,
-#'                     groups = cgec$group,
-#'                     variances = "equal",
-#'                     contrasts = TRUE,
-#'                     alpha = 0.2)
-#' }
 #' plot(res2, ncol=3,
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
 #'
-#' \donttest{
 #' #-- Rimov water temperatures example
 #' # This is an example analysis of the water temperature data set
 #' # in Mrkvicka et al. (arXiv:1612.03608v2).
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' nsim <- 999
+#' \dontshow{nsim <- 19}
+#' \donttest{nsim <- 999}
 #'
 #' # Test for equality of variances in the groups
 #' resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE,
@@ -357,7 +344,6 @@ contrasts.m <- function(x, groups, ...) {
 #'                         groups = imageset1$Group,
 #'                         contrasts = TRUE)
 #' plot(res.c)
-#' }
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          contrasts = FALSE,
                          n.aver = 1L, mirror = FALSE, savefuns=FALSE,
