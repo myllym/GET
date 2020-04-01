@@ -1,8 +1,4 @@
-# Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
-# If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the
-# minimum and maximum of the function values is used for each image separately.
-# If \code{col} is provided, the same specification will be used for each produced plot,
-# which may make it easier to compare the figures with each other.
+# Plotting function for 2d global envelopes
 #
 # @inheritParams plot.global_envelope
 # @param x A 'global_envelope' object for two-dimensional functions
@@ -44,11 +40,7 @@ plot_global_envelope2d <- function(x, plot_style = c("ggplot2", "basic"),
          })
 }
 
-# Additional parameter \code{col} can be passed in \code{...} to \code{\link[spatstat]{plot.im}}.
-# If \code{col} not given, a \code{\link[spatstat]{colourmap}} of 255 grey values between the
-# minimum and maximum of the function values is used for each image separately.
-# If \code{col} is provided, the same specification will be used for each produced plot,
-# which may make it easier to compare the figures with each other.
+# Plotting function for combined 2d global envelopes
 #
 # If fixedscales is FALSE (or 0) all images will have separate scale.
 # If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
