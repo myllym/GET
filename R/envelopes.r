@@ -1271,11 +1271,12 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   # Choose a bandwitdh by Scott's rule of thumb
 #'   ds <- bw.scott(X); ds
 #'   # Calculate raw residuals of the fitted model
+#'   # (To use the default pixel array dimensions remove dimyx, see ?as.mask)
 #'   u <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth",
-#'                     sigma=ds, plot.it=FALSE)
+#'                     sigma=ds, plot.it=FALSE, dimyx=32)
 #'   obs <- u$smooth$Z$v
 #'   # Generate simulations from the hard-core null model
-#'   \dontshow{nsim <- 9}
+#'   \dontshow{nsim <- 19}
 #'   \donttest{nsim <- 499 # Number of simulations; increase for serious analysis!}
 #'   simulations <- NULL
 #'   ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
@@ -1295,18 +1296,17 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   # Calculate the raw residuals for simulations
 #'   sim <- array(0, c(u$smooth$Z$dim, nsim))
 #'   for(i in 1:length(simulations)) {
-#'     model=ppm(simulations[[i]],interaction=Hardcore(HD));
-#'     u_sim <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth", sigma=ds, plot.it=FALSE)
+#'     model <- ppm(simulations[[i]],interaction=Hardcore(HD));
+#'     u_sim <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth",
+#'                           sigma=ds, plot.it=FALSE, dimyx=32)
 #'     sim[,,i] <- u_sim$smooth$Z$v
 #'     if((i %% 100)==0) cat(i, ' ')
 #'   }
 #'   # Constract the global envelope test for the (2D) raw residuals
 #'   iset <- create_image_set(list(obs=obs, sim_m=sim))
-#'   \dontshow{res <- global_envelope_test(iset, type="area", alpha=0.25)}
-#'   \donttest{res <- global_envelope_test(iset, type="area")}
+#'   res <- global_envelope_test(iset, type="area")
 #'   plot(res)
 #'   plot(res) + ggplot2::scale_fill_gradient(low="black", high="white")
-#'   plot(res, fixedscales=FALSE)
 #' }
 global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
                           alternative = c("two.sided", "less", "greater"),
