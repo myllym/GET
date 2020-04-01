@@ -17,7 +17,7 @@
 \arguments{
 \item{x}{an 'fboxplot' object}
 
-\item{plot_style}{One of the following "basic", "fv" or "ggplot2".
+\item{plot_style}{One of the following "basic", "fv" or "ggplot2" for 1-dimensional functions.
 The option "basic" (default) offers a very basic global envelope plot.
 The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
 For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
