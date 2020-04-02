@@ -172,9 +172,9 @@ plot(res, ncol=3,
      ylab=expression(italic(bar(T)[i](r))))
 # b) using 'contrasts'
 res2 <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
-                    groups = cgec$group,
-                    variances = "equal",
-                    contrasts = TRUE)
+                     groups = cgec$group,
+                     variances = "equal",
+                     contrasts = TRUE)
 plot(res2, ncol=3,
      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
@@ -205,14 +205,14 @@ plot(res2)
 # Image set examples
 data("imageset1")
 res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-                      curve_set = imageset1$image_set,
-                      groups = imageset1$Group)
+                    curve_set = imageset1$image_set,
+                    groups = imageset1$Group)
 plot(res)
 # Contrasts
 res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-                        curve_set = imageset1$image_set,
-                        groups = imageset1$Group,
-                        contrasts = TRUE)
+                      curve_set = imageset1$image_set,
+                      groups = imageset1$Group,
+                      contrasts = TRUE)
 plot(res.c)
 }
 \references{

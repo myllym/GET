@@ -302,9 +302,9 @@ contrasts.m <- function(x, groups, ...) {
 #'      ylab=expression(italic(bar(T)[i](r))))
 #' # b) using 'contrasts'
 #' res2 <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
-#'                     groups = cgec$group,
-#'                     variances = "equal",
-#'                     contrasts = TRUE)
+#'                      groups = cgec$group,
+#'                      variances = "equal",
+#'                      contrasts = TRUE)
 #' plot(res2, ncol=3,
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
@@ -335,14 +335,14 @@ contrasts.m <- function(x, groups, ...) {
 #' # Image set examples
 #' data("imageset1")
 #' res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                       curve_set = imageset1$image_set,
-#'                       groups = imageset1$Group)
+#'                     curve_set = imageset1$image_set,
+#'                     groups = imageset1$Group)
 #' plot(res)
 #' # Contrasts
 #' res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                         curve_set = imageset1$image_set,
-#'                         groups = imageset1$Group,
-#'                         contrasts = TRUE)
+#'                       curve_set = imageset1$image_set,
+#'                       groups = imageset1$Group,
+#'                       contrasts = TRUE)
 #' plot(res.c)
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          contrasts = FALSE,
@@ -444,8 +444,8 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #'
 #' data("imageset1")
 #' res2 <- frank.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                       curve_set = imageset1$image_set,
-#'                       groups = imageset1$Group)
+#'                      curve_set = imageset1$image_set,
+#'                      groups = imageset1$Group)
 #' plot(res2)
 #' plot(res2, fixedscales=FALSE)
 frank.fanova <- function(nsim, curve_set, groups, variances="equal",

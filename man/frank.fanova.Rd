@@ -77,8 +77,8 @@ plot(res, ylab="F-statistic")
 
 data("imageset1")
 res2 <- frank.fanova(nsim = 19, # Increase nsim for serious analysis!
-                      curve_set = imageset1$image_set,
-                      groups = imageset1$Group)
+                     curve_set = imageset1$image_set,
+                     groups = imageset1$Group)
 plot(res2)
 plot(res2, fixedscales=FALSE)
 }
