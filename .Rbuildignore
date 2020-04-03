@@ -1,2 +1,6 @@
 .git
 .gitignore
+^.*\.Rproj$
+^\.Rproj\.user$
+^doc$
+^Meta$
