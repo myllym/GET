@@ -300,7 +300,6 @@ print.curve_set <- function(x, ...) {
   str(x, ...)
 }
 
-globalVariables("idx")
 #' Plot method for the class 'curve_set'
 #'
 #' @param x An \code{curve_set} object
@@ -337,7 +336,7 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
     data <- do.call(rbind, lapply(idx, function(i) data.frame(idx=i, f=funcs[,i])))
     df <- cbind(rdf, data)
     return(ggplot() + choose_geom(df, varfill='f') +
-      facet_wrap(vars(idx)) + labs(x="x", y="y", fill=""))
+      facet_wrap("idx") + labs(x="x", y="y", fill=""))
   }
   rdata <- combined_global_envelope_rhelper(x)
   if(rdata$retick_xaxis) {

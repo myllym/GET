@@ -1,7 +1,5 @@
 # 2d plots with ggplot2
 #----------------------
-globalVariables(c("main", "label"))
-
 # Choose ggplot2 geom based on variables found in df
 # @param varfill (Optional) Name of the variable used for 'fill' aesthetic.
 # (fill is always specified, but for a fixed color it is given in ...)
@@ -107,7 +105,7 @@ env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency) 
                              axis.ticks.y=element_blank())
   lapply(dfs, function(df) {
     g <- env2d_ggplot2_helper_1(df, sign.col, transparency)
-    g <- g + facet_wrap(vars(label))
+    g <- g + facet_wrap("label")
     g + remove_axes_theme
   })
 }
@@ -130,7 +128,7 @@ plot_global_envelope2d <- function(x, fixedscales = TRUE, sign.col = "red", tran
   dfs <- env2d_ggplot2_helper(x, fixedscales=fixedscales)
   if(fixedscales) {
     g <- env2d_ggplot2_helper_1(dfs, sign.col, transparency)
-    g <- g + facet_wrap(vars(label))
+    g <- g + facet_wrap("label")
     g + ggtitle(main)
   } else {
     gs = env2d_ggplot2_helper_many_single_plots(dfs, sign.col, transparency)
@@ -158,11 +156,11 @@ plot_combined_global_envelope2d <- function(x, fixedscales = 2, sign.col = "red"
   })
   if(fixedscales==2) {
     df <- do.call(rbind, dfs)
-    g <- env2d_ggplot2_helper_1(df, sign.col, transparency) + facet_grid(rows=vars(main), cols=vars(label))
+    g <- env2d_ggplot2_helper_1(df, sign.col, transparency) + facet_grid(main ~ label)
     g + ggtitle(fullmain)
   } else if(fixedscales==1) {
     gs <- lapply(dfs, function(df) {
-      env2d_ggplot2_helper_1(df, sign.col, transparency) + facet_grid(rows=vars(main), cols=vars(label))
+      env2d_ggplot2_helper_1(df, sign.col, transparency) + facet_grid(main ~ label)
     })
     grid.arrange(grobs=gs, ncol=1, top=fullmain)
   } else if(fixedscales==0) {
