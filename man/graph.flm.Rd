@@ -147,40 +147,37 @@ plot(res.tax_within_group)
 }
 
 # Image data examples
-data("imageset2")
-iset <- imageset2$image_set
+
+data(abide_9002_23)
+iset <- abide_9002_23$curve_set
 \dontshow{
 # Cut the data to reduce time
-iset$r <- iset$r[1:300,]
-iset$funcs <- iset$funcs[1:300, ]
-plot(iset)
+iset$r <- iset$r[1:29,]
+iset$funcs <- iset$funcs[1:29, ]
 }
-# Testing discrete factor group
-res.g <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-                     formula.full = Y ~ group + z,
-                     formula.reduced = Y ~ z,
-                     curve_sets = list(Y = iset),
-                     factors = data.frame(group = imageset2$Group,
-                                          z = imageset2$z))
-plot(res.g)
-# Testing discrete factor group with contrasts
-res.gc <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-                      formula.full = Y ~ group + z,
-                      formula.reduced = Y ~ z,
-                      curve_sets = list(Y = iset),
-                      factors = data.frame(group = imageset2$Group,
-                                           z = imageset2$z),
-                      contrasts = TRUE)
-plot(res.gc)
 
-# Testing continuous factor z
-res.z <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-                     formula.full = Y ~ group + z,
-                     formula.reduced = Y ~ group,
-                     curve_sets = list(Y = iset),
-                     factors = data.frame(group = imageset2$Group,
-                                          z = imageset2$z))
-plot(res.z)
+# Figure of an image in the group 1 and group 2
+plot(iset, idx=c(1, 27))
+
+# Testing the discrete factor 'group' with contrasts
+# (Try contrasts = FALSE for 'means')
+res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+                 formula.full = Y ~ Group + Sex + Age,
+                 formula.reduced = Y ~ Sex + Age,
+                 curve_sets = list(Y = iset),
+                 factors = abide_9002_23[['factors']],
+                 contrasts = TRUE,
+                 GET.args = list(type = "area"))
+plot(res)
+
+# Testing the continuous factor 'age'
+res.a <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+                 formula.full = Y ~ Group + Sex + Age,
+                 formula.reduced = Y ~ Group + Sex,
+                 curve_sets = list(Y = iset),
+                 factors = abide_9002_23[['factors']],
+                 GET.args = list(type = "area"))
+plot(res.a)
 }
 \references{
 Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability. doi: 10.1007/s11009-019-09756-y
