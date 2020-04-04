@@ -76,9 +76,14 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
            #-- the 100(1-alpha)% global envelope
            distancesorted <- sort(distance, decreasing=TRUE)
            kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
-           curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
-           LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
-           UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
+           j <- distance >= kalpha
+           LB <- array(0, nr)
+           UB <- array(0, nr)
+           for(i in 1:nr){
+             lu <- range(data_and_sim_curves[j,i])
+             LB[i]<- lu[1]
+             UB[i]<- lu[2]
+           }
          },
          qdir = {
            curve_set_res <- residual(curve_set, use_theo=TRUE)
