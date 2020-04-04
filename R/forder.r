@@ -100,25 +100,28 @@ individual_forder <- function(curve_set,
     allranks <- data_and_sim_curves
 
     # Calculate measures from the pointwise ranks
+    applyfuncs <- function(f) {
+      sapply(1:nrow(allranks), function(i) { f(allranks[i,]) })
+    }
     switch(measure,
            rank = {
-             distance <- apply(allranks, MARGIN=1, FUN=min) # extreme ranks R_i
+             distance <- applyfuncs(min) # extreme ranks R_i
            },
            erl = {
-             sortranks <- apply(allranks, 1, sort) # curves now represented as columns
+             sortranks <- applyfuncs(sort)
              lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
              newranks <- 1:Nfunc
              distance <- newranks[order(lexo_values)] / Nfunc # ordering of the functions by the extreme rank lengths
            },
            cont = {
-             distance <- apply(allranks, MARGIN=1, FUN=min)
+             distance <- applyfuncs(min)
              if(alternative == "two.sided")
                distance <- distance / ceiling(Nfunc/2)
              else
                distance <- distance / (Nfunc-1)
            },
            area = {
-             distance <- apply(allranks, MARGIN=1, FUN=function(x) { sum(pmin(ceiling(min(x)), x)) })
+             distance <- applyfuncs(function(x) { sum(pmin(ceiling(min(x)), x)) })
              if(alternative == "two.sided")
                distance <- distance / (ceiling(Nfunc/2)*nr)
              else
