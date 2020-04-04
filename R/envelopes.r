@@ -24,9 +24,13 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
     stop("No such type for global envelope.\n")
   alternative <- match.arg(alternative)
-  if(type %in% c("qdir", "st", "unscaled") && alternative != "two.sided") {
-    warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.\n")
-    alternative <- "two.sided"
+  small_significant <- TRUE
+  if(type %in% c("qdir", "st", "unscaled")) {
+    small_significant <- FALSE
+    if(alternative != "two.sided") {
+      warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.\n")
+      alternative <- "two.sided"
+    }
   }
   check_probs(probs)
   if(!(central %in% c("mean", "median"))) {
@@ -64,12 +68,12 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   # Check reasonability of Nfunc vs alpha
   if(Nfunc*alpha < 1-.Machine$double.eps^0.5) stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha, ". So, s*alpha is ", Nfunc*alpha, ".\n", sep="")
 
-  #-- Global envelopes
+  # The critical value
+  kalpha <- critical(distance, alpha, Nfunc, small_significant)
+
+  #-- 100(1-alpha)% global envelope
   switch(type,
          rank = {
-           #-- the 100(1-alpha)% global rank envelope
-           distancesorted <- sort(distance, decreasing=TRUE)
-           kalpha <- distancesorted[floor((1-alpha)*(Nfunc))]
            LB <- array(0, nr)
            UB <- array(0, nr)
            for(i in 1:nr){
@@ -81,9 +85,6 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          erl =,
          cont =,
          area = {
-           #-- the 100(1-alpha)% global envelope
-           distancesorted <- sort(distance, decreasing=TRUE)
-           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            curves_for_envelope <- data_and_sim_curves[which(distance >= kalpha),]
            LB <- apply(curves_for_envelope, MARGIN=2, FUN=min)
            UB <- apply(curves_for_envelope, MARGIN=2, FUN=max)
@@ -91,24 +92,15 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          qdir = {
            curve_set_res <- residual(curve_set, use_theo=TRUE)
            quant_m <- curve_set_quant(curve_set_res, probs=probs, type=quantile.type)
-           #-- the 100(1-alpha)% global directional quantile envelope
-           distancesorted <- sort(distance)
-           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            LB <- T_0 - kalpha*abs(quant_m[1,])
            UB <- T_0 + kalpha*abs(quant_m[2,])
          },
          st = {
            sdX <- curve_set_sd(curve_set)
-           #-- calculate the 100(1-alpha)% global studentized envelope
-           distancesorted <- sort(distance)
-           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            LB <- T_0 - kalpha*sdX
            UB <- T_0 + kalpha*sdX
          },
          unscaled = {
-           #-- calculate the 100(1-alpha)% global unscaled envelope
-           distancesorted <- sort(distance)
-           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            LB <- T_0 - kalpha
            UB <- T_0 + kalpha
          })
