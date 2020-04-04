@@ -2,6 +2,14 @@ get_alternative <- function(global_envelope) {
   attr(global_envelope, "einfo")$alternative
 }
 
+# It should be:
+# small_significant=TRUE for 'rank', 'erl', 'cont' and 'area' -> ordering decreasing
+# small_significant=FALSE for 'qdir', 'st', 'unscaled' -> ordering increasing (decreasing=FALSE)
+critical <- function(distance, alpha, Nfunc, small_significant) {
+  distancesorted <- sort(distance, decreasing=small_significant)
+  distancesorted[floor((1-alpha)*Nfunc)]
+}
+
 # Functionality for central regions based on a curve set
 # @param ... Ignored.
 #' @importFrom spatstat fv
