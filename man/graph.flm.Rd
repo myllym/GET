@@ -160,7 +160,7 @@ iset$funcs <- iset$funcs[1:29, ]
 plot(iset, idx=c(1, 27))
 
 # Testing the discrete factor 'group' with contrasts
-# (Try contrasts = FALSE for 'means')
+# (Use contrasts = FALSE for 'means')
 res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
                  formula.full = Y ~ Group + Sex + Age,
                  formula.reduced = Y ~ Sex + Age,
