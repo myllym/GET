@@ -85,7 +85,7 @@ The Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the 
 consequently, the test approximately achieves the desired significance level.
 
 The specification of the full and reduced formulas is important. The reduced model should be
-nested within the reduced model. The full model should include in addition to the reduced
+nested within the full model. The full model should include in addition to the reduced
 model the interesting factors whose effects are under investigation.
 The implementation to find the coefficients of the interesting factors is based on dummy.coef and
 the restrictions there apply.
@@ -108,19 +108,10 @@ By setting \code{fast = FALSE}, it is possible to use the slow version for any c
 }
 \examples{
 data(rimov)
-\donttest{
 res <- graph.flm(nsim=19, # Increase the number of simulations for serious analysis!
                  formula.full = Y~Year,
                  formula.reduced = Y~1,
                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
-}
-\dontshow{
-res <- graph.flm(nsim = 3,
-                 formula.full = Y~Year,
-                 formula.reduced = Y~1,
-                 curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
-                 GET.args = list(alpha=0.25))
-}
 plot(res)
 
 # Test if there is a change in the slope in 1994,
@@ -135,16 +126,16 @@ res <- graph.flm(nsim = 19, # Increase the number of simulations for serious ana
                  contrasts = FALSE)
 plot(res)
 
-\donttest{
+\donttest{nsim <- 999}
+\dontshow{nsim <- 19}
 data(GDPtax)
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-res.tax_within_group <- graph.flm(nsim = 999,
+res.tax_within_group <- graph.flm(nsim = nsim,
                                   formula.full = Y~Group+Tax+Group:Tax,
                                   formula.reduced = Y~Group+Tax,
                                   curve_sets = list(Y=GDPtax$GDP),
                                   factors = factors.df)
 plot(res.tax_within_group)
-}
 
 # Image data examples
 data("imageset2")
