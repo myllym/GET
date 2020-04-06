@@ -17,7 +17,7 @@ frank.flm(
   mc.cores = 1,
   mc.args = NULL,
   cl = NULL,
-  fast = TRUE
+  method = c("best", "Fvalue2", "mlm", "Fvalue1", "lm")
 )
 }
 \arguments{
@@ -57,7 +57,7 @@ Only relevant if \code{mc.cores} is more than 1.}
 \item{cl}{Allows parallelization through the use of \code{\link{parLapply}} (works also
 in Windows), see the argument \code{cl} there, and examples.}
 
-\item{fast}{Logical. See details.}
+\item{method}{For advanced use.}
 }
 \value{
 A \code{global_envelope} object, which can be printed and plotted directly.
@@ -79,16 +79,16 @@ The test is able to find if the factor of interest is significant and also which
 argument values of the functional domain are responsible for the potential rejection.
 
 The specification of the full and reduced formulas is important. The reduced model should be
-nested within the reduced model. The full model should include in addition to the reduced
-model the interesting factors whose effects are under investigation. Please avoid use of
-'*' when specifying interactions, e.g. factor1*factor2; instead explicitly specify all
-components of the model.
+nested within the full model. The full model should include in addition to the reduced
+model the interesting factors whose effects are under investigation.
 
 There are different versions of the implementation depending on the application.
-Given that the argument \code{fast} is TRUE, then
 \itemize{
 \item If all the covariates are constant across the functions, i.e. they can be provided in the
-argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
+argument \code{factors}, and there are no extra arguments given by the user in \code{...}, then a
+fast implementation is used to directly compute the F-statistics.
+\item If all the covariates are constant across the functions, but there are some extra arguments,
+then a linear model is fitted separately by least-squares estimation to
 the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
 The possible extra arguments passed in \code{...} to \code{\link[stats]{lm}} must be of the form that
 \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
@@ -102,27 +102,20 @@ use \code{\link[stats]{lm}}).
 \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{...} are passed to \code{\link[stats]{lm}}
 for fitting each linear model.
 }
-By setting \code{fast = FALSE}, the latter version is used even in a case where faster implementation would be
-available. Usually this is not desired.
+By default the fastest applicable method is used. This can be changed by setting \code{method} argument.
+The cases above correspond to "Fvalue2", "mlm", "Fvalue1" and "lm". Changing the default can be useful for
+checking the validity of the implementation.
 }
 \examples{
 data(GDPtax)
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-\donttest{
-res.tax_within_group <- frank.flm(nsim = 999,
+\dontshow{nsim <- 19}
+\donttest{nsim <- 999}
+res.tax_within_group <- frank.flm(nsim = nsim,
                                   formula.full = Y~Group+Tax+Group:Tax,
                                   formula.reduced = Y~Group+Tax,
                                   curve_sets = list(Y=GDPtax$GDP),
                                   factors = factors.df)
-}
-\dontshow{
-res.tax_within_group <- frank.flm(nsim = 4,
-                                  formula.full = Y~Group+Tax+Group:Tax,
-                                  formula.reduced = Y~Group+Tax,
-                                  curve_sets = list(Y=GDPtax$GDP),
-                                  factors = factors.df,
-                                  GET.args = list(alpha=0.20))
-}
 plot(res.tax_within_group)
 
 # Image set examples
