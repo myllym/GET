@@ -103,12 +103,28 @@ individual_forder <- function(curve_set,
     applyfuncs <- function(f) {
       sapply(1:nrow(allranks), function(i) { f(allranks[i,]) })
     }
+    # Compute highest ranks (r) and their counts (c) for the n highest ranks
+    # return r_1,-c_1,r_2,-c_2,r_3,-c_3,...,r_n,-c_n
+    # ordering by the return value gives the same order as sorting by the ranks themselves
+    # when there are no ties in the return values
+    erlrle <- function(x, n=6) {
+      y <- rle(sort(x))
+      c(matrix(c(y$values[1:n], -y$lengths[1:n]), byrow=TRUE, nrow=2))
+    }
     switch(measure,
            rank = {
              distance <- applyfuncs(min) # extreme ranks R_i
            },
            erl = {
-             sortranks <- applyfuncs(sort)
+             # If the curve_set is larger than 80 MB
+             # and nr > 2*n (in erlrle)
+             # then use erlrle, otherwise sort
+             if(length(data_and_sim_curves) > 10*2^20 && nr > 12)
+               sortranks <- applyfuncs(erlrle)
+             else
+               sortranks <- applyfuncs(sort)
+             # Compute rank of functions by calling order twice
+             # Ties will be in original order
              lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
              newranks <- 1:Nfunc
              distance <- newranks[order(lexo_values)] / Nfunc # ordering of the functions by the extreme rank lengths
