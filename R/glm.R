@@ -275,7 +275,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' consequently, the test approximately achieves the desired significance level.
 #'
 #' The specification of the full and reduced formulas is important. The reduced model should be
-#' nested within the reduced model. The full model should include in addition to the reduced
+#' nested within the full model. The full model should include in addition to the reduced
 #' model the interesting factors whose effects are under investigation.
 #' The implementation to find the coefficients of the interesting factors is based on dummy.coef and
 #' the restrictions there apply.
@@ -517,10 +517,8 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' argument values of the functional domain are responsible for the potential rejection.
 #'
 #' The specification of the full and reduced formulas is important. The reduced model should be
-#' nested within the reduced model. The full model should include in addition to the reduced
-#' model the interesting factors whose effects are under investigation. Please avoid use of
-#' '*' when specifying interactions, e.g. factor1*factor2; instead explicitly specify all
-#' components of the model.
+#' nested within the full model. The full model should include in addition to the reduced
+#' model the interesting factors whose effects are under investigation.
 #'
 #' There are different versions of the implementation depending on the application.
 #' \itemize{
