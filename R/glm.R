@@ -150,17 +150,31 @@ genFvaluesLM <- function(Y, dfs, formula.full, formula.reduced, ...) {
   Fvalues
 }
 
+# Compute large multiple linear models in parts to save memory
+#' @importFrom stats lm deviance df.residual
+gendevianceMLM <- function(Y, df, formula, partsize=200, ...) {
+  nr <- ncol(Y)
+  nparts <- ceiling(nr/partsize)
+  i0 <- round(seq(1, nr+1, length=nparts+1))
+  dev <- numeric(nr)
+  for(i in 1:nparts) {
+    ii <- i0[i]:i0[i+1]-1
+    df$Y <- Y[,ii]
+    M.full <- lm(formula = formula, data = df, model = FALSE, ...)
+    dev[ii] <- deviance(M.full)
+    dof <- df.residual(M.full)
+  }
+  list(dev=dev, df=dof)
+}
+
 # If covariates are constant with respect to location,
 # use a multiple linear model (instead of multiple linear models)
-#' @importFrom stats lm
-#' @importFrom stats deviance
-#' @importFrom stats df.residual
 genFvaluesMLM <- function(Y, df, formula.full, formula.reduced, ...) {
-  df$Y <- Y
-  M.full <- lm(formula = formula.full, data = df, ...)
-  M.reduced <- lm(formula = formula.reduced, data = df, ...)
+  full <- gendevianceMLM(Y, df, formula.full, ...)
+  red <- gendevianceMLM(Y, df, formula.reduced, ...)
   # F-statistic
-  (deviance(M.full)-deviance(M.reduced))/(df.residual(M.full)-df.residual(M.reduced))/(deviance(M.full)/df.residual(M.full))
+  (full$dev - red$dev)/(full$df - red$df)/(full$dev/full$df)
+}
 }
 
 # Parameter estimate b for lm
