@@ -175,6 +175,32 @@ genFvaluesMLM <- function(Y, df, formula.full, formula.reduced, ...) {
   # F-statistic
   (full$dev - red$dev)/(full$df - red$df)/(full$dev/full$df)
 }
+
+# Compute F-statistics for several pixels at a time
+#' @importFrom stats lm df.residual
+genFvalues2 <- function(Y, df, formula.full, formula.reduced, partsize=200, ...) {
+  df$Y <- Y[,1]
+  fx <- function(fit) {
+    X <- fit$x
+    list(X1 = X %*% solve(t(X)%*%X), X2 = t(X), dof=df.residual(fit))
+  }
+  x.full <- fx(lm(formula.full, df, model=FALSE, x=TRUE))
+  x.red <- fx(lm(formula.reduced, df, model=FALSE, x=TRUE))
+
+  nr <- ncol(Y)
+  Fstat <- numeric(nr)
+
+  nparts <- ceiling(nr/partsize)
+  i0 <- round(seq(1, nr+1, length=nparts+1))
+  for(i in 1:nparts) {
+    ii <- i0[i]:(i0[i+1]-1)
+    y <- Y[,ii]
+    rssf <- colSums((y - x.full[[1]] %*% (x.full[[2]] %*% y))^2)
+    rssr <- colSums((y - x.red[[1]] %*% (x.red[[2]] %*% y))^2)
+
+    Fstat[ii] <- (rssf - rssr)/(x.full[[3]] - x.red[[3]])/(rssf/x.full[[3]])
+  }
+  Fstat
 }
 
 # Parameter estimate b for lm
