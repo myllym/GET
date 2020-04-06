@@ -429,19 +429,23 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 
   #-- Freedman-Lane procedure
   # Fit the reduced model at each argument value to get the fitted values and residuals
-  loopfun1 <- function(i, ...) {
-    if(length(X$dfs) == 1) {
-      df <- X$dfs[[1]]
-      df$Y <- X$Y[,i]
-    } else df <- X$dfs[[i]]
-    mod.red <- lm(formula.reduced, data=df, ...)
-    list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
+  if(length(X$dfs) == 1) {
+    df <- X$dfs[[1]]
+    df$Y <- X$Y
+    fit <- lm(formula.reduced, data=df, model=FALSE, ...)
+    fitted.m <- fit$fitted.values
+    res.m <- fit$residuals
+    fit <- NULL
+  } else {
+    loopfun1 <- function(i, ...) {
+      mod.red <- lm(formula.reduced, data=X$dfs[[i]], ...)
+      list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
+    }
+    if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
+    else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1, ...)
+    fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
+    res.m <- sapply(mclapply_res, function(x) x$res.m)
   }
-  if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
-  else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1, ...)
-  fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
-  res.m <- sapply(mclapply_res, function(x) x$res.m)
-
   # Simulations by permuting the residuals + calculate the coefficients
   Yperm <- function() { # Permutation
     permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
