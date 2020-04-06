@@ -333,19 +333,10 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @importFrom parallel clusterEvalQ
 #' @examples
 #' data(rimov)
-#' \donttest{
 #' res <- graph.flm(nsim=19, # Increase the number of simulations for serious analysis!
 #'                  formula.full = Y~Year,
 #'                  formula.reduced = Y~1,
 #'                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
-#' }
-#' \dontshow{
-#' res <- graph.flm(nsim = 3,
-#'                  formula.full = Y~Year,
-#'                  formula.reduced = Y~1,
-#'                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
-#'                  GET.args = list(alpha=0.25))
-#' }
 #' plot(res)
 #'
 #' # Test if there is a change in the slope in 1994,
@@ -360,16 +351,16 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'                  contrasts = FALSE)
 #' plot(res)
 #'
-#' \donttest{
+#' \donttest{nsim <- 999}
+#' \dontshow{nsim <- 19}
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-#' res.tax_within_group <- graph.flm(nsim = 999,
+#' res.tax_within_group <- graph.flm(nsim = nsim,
 #'                                   formula.full = Y~Group+Tax+Group:Tax,
 #'                                   formula.reduced = Y~Group+Tax,
 #'                                   curve_sets = list(Y=GDPtax$GDP),
 #'                                   factors = factors.df)
 #' plot(res.tax_within_group)
-#' }
 #'
 #' # Image data examples
 #' data("imageset2")
@@ -559,21 +550,13 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' @examples
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-#' \donttest{
-#' res.tax_within_group <- frank.flm(nsim = 999,
+#' \dontshow{nsim <- 19}
+#' \donttest{nsim <- 999}
+#' res.tax_within_group <- frank.flm(nsim = nsim,
 #'                                   formula.full = Y~Group+Tax+Group:Tax,
 #'                                   formula.reduced = Y~Group+Tax,
 #'                                   curve_sets = list(Y=GDPtax$GDP),
 #'                                   factors = factors.df)
-#' }
-#' \dontshow{
-#' res.tax_within_group <- frank.flm(nsim = 4,
-#'                                   formula.full = Y~Group+Tax+Group:Tax,
-#'                                   formula.reduced = Y~Group+Tax,
-#'                                   curve_sets = list(Y=GDPtax$GDP),
-#'                                   factors = factors.df,
-#'                                   GET.args = list(alpha=0.20))
-#' }
 #' plot(res.tax_within_group)
 #'
 #' # Image set examples
