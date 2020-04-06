@@ -522,10 +522,12 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' components of the model.
 #'
 #' There are different versions of the implementation depending on the application.
-#' Given that the argument \code{fast} is TRUE, then
 #' \itemize{
 #' \item If all the covariates are constant across the functions, i.e. they can be provided in the
-#' argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
+#' argument \code{factors}, and there are no extra arguments given by the user in \code{...}, then a
+#' fast implementation is used to directly compute the F-statistics.
+#' \item If all the covariates are constant across the functions, but there are some extra arguments,
+#' then a linear model is fitted separately by least-squares estimation to
 #' the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
 #' The possible extra arguments passed in \code{...} to \code{\link[stats]{lm}} must be of the form that
 #' \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
@@ -539,10 +541,12 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{...} are passed to \code{\link[stats]{lm}}
 #' for fitting each linear model.
 #' }
-#' By setting \code{fast = FALSE}, the latter version is used even in a case where faster implementation would be
-#' available. Usually this is not desired.
+#' By default the fastest applicable method is used. This can be changed by setting \code{method} argument.
+#' The cases above correspond to "Fvalue2", "mlm", "Fvalue1" and "lm". Changing the default can be useful for
+#' checking the validity of the implementation.
 #'
 #' @inheritParams graph.flm
+#' @param method For advanced use.
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export
 #' @aliases frank.flm2d
@@ -596,42 +600,63 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                       savefuns = TRUE, ..., GET.args = NULL,
                       mc.cores = 1, mc.args = NULL, cl = NULL,
-                      fast = TRUE) {
+                      method = c("best", "Fvalue2", "mlm", "Fvalue1", "lm")) {
   # Preliminary checks and formulation of the data to suitable form for further processing
+  method = match.arg(method)
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
-                   curve_sets=curve_sets, factors=factors, fast=fast)
+                   curve_sets=curve_sets, factors=factors, fast=method %in% c("mlm", "Fvalue2", "best"))
 
   extraargs <- list(...)
-  if(length(extraargs) > 0) fast <- FALSE
-  # The fast version is meant for the case where there are covariates that vary across the function.
-  # Then length(X$dfs) > 1.
-  if(length(X$dfs) == 1) fast <- FALSE
-  # Calculate the F-statistic for the data, and, if fast, obtain also the design matrices
-  if(fast) obs <- genFvaluesObs(X$dfs, formula.full, formula.reduced)
+  if(method == "best") {
+    method <- if(length(extraargs) > 0) {
+      if(length(X$dfs) > 1) "lm"
+      else "mlm"
+    } else {
+      if(length(X$dfs) > 1) "Fvalue1"
+      else "Fvalue2"
+    }
+  }
+  if(length(extraargs) > 0) {
+    # This is only a warning because the user might know that the extra args are ok.
+    if(method %in% c("Fvalue1", "Fvalue2")) warning("Method ", method, " doesn't work with extra arguments.")
+  }
+  if(length(X$dfs) > 1 && method %in% c("mlm", "Fvalue2")) {
+    stop("Curvesets in factors not allowed with method='", method, "'")
+  }
+  # Calculate the F-statistic for the data, and, if method="Fvalue1", obtain also the design matrices
+  if(method == "Fvalue1") obs <- genFvaluesObs(X$dfs, formula.full, formula.reduced)
+  else if(method == "Fvalue2") obs <- genFvalues2(X$Y, X$dfs[[1]], formula.full, formula.reduced)
   else obs <- genFvaluesLM(X$Y, X$dfs, formula.full, formula.reduced, ...)
   # Freedman-Lane procedure
   # Fit the reduced model at each argument value to get fitted values and residuals
-  if(fast) {
-    loopfun1 <- function(i, ...) { # ... ignored
-      b <- bcoef(Y = X$dfs[[i]]$Y, X = obs$reduced.X[[i]])
-      fit <- obs$reduced.X[[i]]%*%b
-      list(fitted.m = fit, res.m = X$dfs[[i]]$Y - fit)
+  if(method %in% c("mlm", "Fvalue2")) {
+    df <- X$dfs[[1]]
+    df$Y <- X$Y
+    fit <- lm(formula.reduced, data=df, model=FALSE, ...)
+    fitted.m <- fit$fitted.values
+    res.m <- fit$residuals
+    fit <- NULL
+  } else {
+    if(method == "Fvalue1") {
+      loopfun1 <- function(i, ...) { # ... ignored
+        b <- bcoef(Y = X$dfs[[i]]$Y, X = obs$reduced.X[[i]])
+        fit <- obs$reduced.X[[i]]%*%b
+        list(fitted.m = fit, res.m = X$dfs[[i]]$Y - fit)
+      }
     }
-  }
-  else {
-    loopfun1 <- function(i, ...) {
-      if(length(X$dfs) == 1) {
-        df <- X$dfs[[1]]
-        df$Y <- X$Y[,i]
-      } else df <- X$dfs[[i]]
-      mod.red <- lm(formula.reduced, data=df, ...)
-      list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
+    else {
+      loopfun1 <- function(i, ...) {
+        mod.red <- lm(formula.reduced, data=X$dfs[[i]], ...)
+        list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
+      }
     }
+    if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
+    else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1, ...)
+    fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
+    res.m <- sapply(mclapply_res, function(x) x$res.m)
   }
-  if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
-  else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1, ...)
-  fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
-  res.m <- sapply(mclapply_res, function(x) x$res.m)
+  # Original data is not needed anymore
+  X$Y <- NULL
   # Simulations by permuting the residuals + F-values for each permutation
   Yperm <- function() { # Permutation
     permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
@@ -639,20 +664,16 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
     fitted.m + res.m[permutation, ]
   }
   # Regress the permuted data against the full model and get a new effect of interest
-  if(fast) {
-    loopfun2 <- function(i, ...) {
-      genFvaluesSim(Yperm(), obs$full.X, obs$reduced.X)
-    }
-  }
-  else {
-    loopfun2 <- function(i, ...) {
-      genFvaluesLM(Yperm(), X$dfs, formula.full, formula.reduced, ...)
-    }
-  }
+  loopfun2 <- switch(method,
+                     lm=,
+                     mlm=function(i, ...) genFvaluesLM(Yperm(), X$dfs, formula.full, formula.reduced, ...),
+                     Fvalue1=function(i, ...) genFvaluesSim(Yperm(), obs$full.X, obs$reduced.X),
+                     Fvalue2=function(i, ...) genFvalues2(Yperm(), X$dfs[[1]], formula.full, formula.reduced))
+
   if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
   else sim <- parLapply(cl, 1:nsim, loopfun2)
   sim <- simplify2array(sim)
-  if(fast) obs <- obs$Fvalues
+  if(method == "Fvalue1") obs <- obs$Fvalues
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
   res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
