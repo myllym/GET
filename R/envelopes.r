@@ -436,7 +436,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
          },
          ggplot2 = {
            if(dotplot) {
-             env_dotplot2(x) + labs(title=main, x=xlab, y=ylab) + theme_minimal()
+             env_dotplot_ggplot(x) + labs(title=main, x=xlab, y=ylab) + ThemePlain(base_size=base_size)
            } else {
              env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                         labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
