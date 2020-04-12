@@ -421,7 +421,6 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                                  sign.col = sign.col, transparency = transparency, ...))
   # One-dimensional plot:
   #----------------------
-  if(dotplot) plot_style <- "basic"
   # ylim
   if(missing('ylim')) {
     ylim <- env_ylim_default(x, plot_style == "ggplot2")
@@ -455,8 +454,12 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
            spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
          },
          ggplot2 = {
-           env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                      labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
+           if(dotplot) {
+             env_dotplot_ggplot(x) + labs(title=main, x=xlab, y=ylab) + ThemePlain(base_size=base_size)
+           } else {
+             env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                        labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
+           }
          })
 }
 
