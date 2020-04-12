@@ -4,9 +4,11 @@
 \name{imageset2}
 \alias{imageset2}
 \title{A simulated set of images}
-\format{A list of the \code{image_set} containing the simulated images,
+\format{
+A list of the \code{image_set} containing the simulated images,
 the discrete group factor in the list component \code{Group},
-and the continuous factor z in the list component \code{z}.}
+and the continuous factor z in the list component \code{z}.
+}
 \usage{
 data(imageset2)
 }

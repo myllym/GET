@@ -4,10 +4,12 @@
 \name{rimov}
 \alias{rimov}
 \title{Year temperature curves}
-\format{A \code{curve_set} object with water temperatures in 365 days of the 36 years.
+\format{
+A \code{curve_set} object with water temperatures in 365 days of the 36 years.
 The component \code{curve_set[['r']]} is a vector of days (from 1 to 365),
 whereas \code{curve_set[['obs']]} contains the water temperatures such that
-each column gives year temperatures in a year.}
+each column gives year temperatures in a year.
+}
 \usage{
 data(rimov)
 }

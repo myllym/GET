@@ -4,9 +4,11 @@
 \name{cgec}
 \alias{cgec}
 \title{Centred government expenditure centralization ratios}
-\format{A list of two components. The first one is the \code{curve_set} object containing the observed
+\format{
+A list of two components. The first one is the \code{curve_set} object containing the observed
 values of centred GEC observed in year 1995-2016 for the above countries. 
-The second component \code{group} gives the grouping.}
+The second component \code{group} gives the grouping.
+}
 \usage{
 data(cgec)
 }

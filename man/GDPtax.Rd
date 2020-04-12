@@ -4,10 +4,12 @@
 \name{GDPtax}
 \alias{GDPtax}
 \title{GDP per capita with country groups and profit tax}
-\format{A list of a three components. The first one (\code{GDP}) is a \code{curve_set} object with components \code{r} and \code{obs}
+\format{
+A list of a three components. The first one (\code{GDP}) is a \code{curve_set} object with components \code{r} and \code{obs}
 containing the years of observations and the GDP curves, i.e. the observed values of GDP in those years.
 Each column of \code{obs} contains the GDP for the years for a particular country (seen as column names).
-The country grouping is given in the list component \code{Group} and the profit tax in \code{Profittax}.}
+The country grouping is given in the list component \code{Group} and the profit tax in \code{Profittax}.
+}
 \usage{
 data(GDPtax)
 }

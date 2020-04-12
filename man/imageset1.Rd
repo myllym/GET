@@ -4,8 +4,10 @@
 \name{imageset1}
 \alias{imageset1}
 \title{A simulated set of images}
-\format{A list of the \code{image_set} containing the simulated images, and
-the discrete group factor in the list component \code{Group}.}
+\format{
+A list of the \code{image_set} containing the simulated images, and
+the discrete group factor in the list component \code{Group}.
+}
 \usage{
 data(imageset1)
 }
