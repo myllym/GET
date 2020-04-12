@@ -378,7 +378,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' The option "fv" is currently only available for tests with one test function, whereas the other true allow
 #' also tests with several tests functions.
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
-#' Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
+#' Suitable for low dimensional test vectors.
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
 #' @param main See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylim See \code{\link{plot.default}}. A sensible default exists.
