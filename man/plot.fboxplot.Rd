@@ -25,7 +25,7 @@ The option "fv" is currently only available for tests with one test function, wh
 also tests with several tests functions.}
 
 \item{dotplot}{Logical. If TRUE, then instead of envelopes a dot plot is done.
-Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
+Suitable for low dimensional test vectors.
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
 \item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn.}
