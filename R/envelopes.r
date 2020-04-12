@@ -402,6 +402,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
 #' @export
+#' @importFrom ggplot2 theme_minimal
 #' @seealso \code{\link{central_region}}
 plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
@@ -455,7 +456,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
          },
          ggplot2 = {
            if(dotplot) {
-             env_dotplot_ggplot(x) + labs(title=main, x=xlab, y=ylab) + ThemePlain(base_size=base_size)
+             env_dotplot_ggplot(x, labels=labels) + labs(title=main, x=xlab, y=ylab) + theme_minimal(base_size=base_size)
            } else {
              env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
                         labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
