@@ -2,6 +2,53 @@ get_alternative <- function(global_envelope) {
   attr(global_envelope, "einfo")$alternative
 }
 
+# It should be:
+# small_significant=TRUE for 'rank', 'erl', 'cont' and 'area' -> ordering decreasing
+# small_significant=FALSE for 'qdir', 'st', 'unscaled' -> ordering increasing (decreasing=FALSE)
+critical <- function(distance, alpha, Nfunc, small_significant) {
+  distancesorted <- sort(distance, decreasing=small_significant)
+  distancesorted[floor((1-alpha)*Nfunc)]
+}
+
+#' @importFrom spatstat fv
+make_envelope_object <- function(type, curve_set, LB, UB, T_0,
+                                 picked_attr, isenvelope,
+                                 kalpha, alpha, distance) {
+  Nfunc <- curve_set_nfunc(curve_set)
+  if(curve_set_is1obs(curve_set)) {
+    df <- data.frame(curve_set_rdf(curve_set), obs=curve_set_1obs(curve_set),
+                     central=T_0, lo=LB, hi=UB)
+    picked_attr$einfo$nsim <- Nfunc-1
+  }
+  else {
+    df <- data.frame(curve_set_rdf(curve_set), central=T_0, lo=LB, hi=UB)
+    picked_attr$einfo$nsim <- Nfunc
+  }
+  if(isenvelope) {
+    res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
+                        ylab = picked_attr[['ylab']], valu = "central", fmla = ". ~ r",
+                        alim = c(min(curve_set[['r']]), max(curve_set[['r']])),
+                        labl = picked_attr[['labl']], desc = picked_attr[['desc']],
+                        unitname = NULL, fname = picked_attr[['fname']], yexp = picked_attr[['yexp']])
+    attr(res, "shade") <- c("lo", "hi")
+  }
+  else res <- df
+  attr(res, "argu") <- picked_attr[['argu']]
+  attr(res, "xlab") <- picked_attr[['xlab']]
+  attr(res, "xexp") <- picked_attr[['xexp']]
+  if(type == "st") picked_attr$einfo$nSD <- kalpha
+  if(type == "rank") picked_attr$einfo$nrank <- kalpha
+  attr(res, "einfo") <- picked_attr[['einfo']]
+  # Extra for global envelopes
+  class(res) <- c("global_envelope", class(res))
+  attr(res, "method") <- "Global envelope"
+  attr(res, "type") <- type
+  attr(res, "k_alpha") <- kalpha
+  attr(res, "alpha") <- alpha
+  attr(res, "k") <- distance
+  res
+}
+
 # Functionality for central regions based on a curve set
 # @param ... Ignored.
 #' @importFrom spatstat fv
@@ -16,9 +63,13 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
     stop("No such type for global envelope.\n")
   alternative <- match.arg(alternative)
-  if(type %in% c("qdir", "st", "unscaled") && alternative != "two.sided") {
-    warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.\n")
-    alternative <- "two.sided"
+  small_significant <- TRUE
+  if(type %in% c("qdir", "st", "unscaled")) {
+    small_significant <- FALSE
+    if(alternative != "two.sided") {
+      warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.\n")
+      alternative <- "two.sided"
+    }
   }
   check_probs(probs)
   if(!(central %in% c("mean", "median"))) {
@@ -56,12 +107,12 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   # Check reasonability of Nfunc vs alpha
   if(Nfunc*alpha < 1-.Machine$double.eps^0.5) stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha, ". So, s*alpha is ", Nfunc*alpha, ".\n", sep="")
 
-  #-- Global envelopes
+  # The critical value
+  kalpha <- critical(distance, alpha, Nfunc, small_significant)
+
+  #-- 100(1-alpha)% global envelope
   switch(type,
          rank = {
-           #-- the 100(1-alpha)% global rank envelope
-           distancesorted <- sort(distance, decreasing=TRUE)
-           kalpha <- distancesorted[floor((1-alpha)*(Nfunc))]
            LB <- array(0, nr)
            UB <- array(0, nr)
            for(i in 1:nr){
@@ -73,9 +124,6 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          erl =,
          cont =,
          area = {
-           #-- the 100(1-alpha)% global envelope
-           distancesorted <- sort(distance, decreasing=TRUE)
-           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            j <- distance >= kalpha
            LB <- array(0, nr)
            UB <- array(0, nr)
@@ -88,24 +136,15 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          qdir = {
            curve_set_res <- residual(curve_set, use_theo=TRUE)
            quant_m <- curve_set_quant(curve_set_res, probs=probs, type=quantile.type)
-           #-- the 100(1-alpha)% global directional quantile envelope
-           distancesorted <- sort(distance)
-           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            LB <- T_0 - kalpha*abs(quant_m[1,])
            UB <- T_0 + kalpha*abs(quant_m[2,])
          },
          st = {
            sdX <- curve_set_sd(curve_set)
-           #-- calculate the 100(1-alpha)% global studentized envelope
-           distancesorted <- sort(distance)
-           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            LB <- T_0 - kalpha*sdX
            UB <- T_0 + kalpha*sdX
          },
          unscaled = {
-           #-- calculate the 100(1-alpha)% global unscaled envelope
-           distancesorted <- sort(distance)
-           kalpha <- distancesorted[floor((1-alpha)*Nfunc)]
            LB <- T_0 - kalpha
            UB <- T_0 + kalpha
          })
@@ -115,36 +154,9 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          "less" = { UB <- Inf },
          "greater" = { LB <- -Inf })
 
-  if(curve_set_is1obs(curve_set)) {
-    df <- data.frame(curve_set_rdf(curve_set), obs=curve_set_1obs(curve_set), central=T_0, lo=LB, hi=UB)
-    picked_attr$einfo$nsim <- Nfunc-1
-  }
-  else {
-    df <- data.frame(curve_set_rdf(curve_set), central=T_0, lo=LB, hi=UB)
-    picked_attr$einfo$nsim <- Nfunc
-  }
-  if(isenvelope) {
-    res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
-                        ylab = picked_attr[['ylab']], valu = "central", fmla = ". ~ r",
-                        alim = c(min(curve_set[['r']]), max(curve_set[['r']])),
-                        labl = picked_attr[['labl']], desc = picked_attr[['desc']],
-                        unitname = NULL, fname = picked_attr[['fname']], yexp = picked_attr[['yexp']])
-    attr(res, "shade") <- c("lo", "hi")
-  }
-  else res <- df
-  attr(res, "argu") <- picked_attr[['argu']]
-  attr(res, "xlab") <- picked_attr[['xlab']]
-  attr(res, "xexp") <- picked_attr[['xexp']]
-  if(type == "st") picked_attr$einfo$nSD <- kalpha
-  if(type == "rank") picked_attr$einfo$nrank <- kalpha
-  attr(res, "einfo") <- picked_attr[['einfo']]
-  # Extra for global envelopes
-  class(res) <- c("global_envelope", class(res))
-  attr(res, "method") <- "Global envelope"
-  attr(res, "type") <- type
-  attr(res, "k_alpha") <- kalpha
-  attr(res, "alpha") <- 1 - coverage
-  attr(res, "k") <- distance
+  res <- make_envelope_object(type, curve_set, LB, UB, T_0,
+                              picked_attr, isenvelope,
+                              kalpha, alpha, distance)
   attr(res, "call") <- match.call()
   res
 }
@@ -371,7 +383,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' The option "fv" is currently only available for tests with one test function, whereas the other true allow
 #' also tests with several tests functions.
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
-#' Suitable for low dimensional test vectors. Only applicable if \code{plot_style} is "basic".
+#' Suitable for low dimensional test vectors.
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
 #' @param main See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylim See \code{\link{plot.default}}. A sensible default exists.
@@ -395,6 +407,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
 #'
 #' @export
+#' @importFrom ggplot2 theme_minimal
 #' @seealso \code{\link{central_region}}
 plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
@@ -414,7 +427,6 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                                  sign.col = sign.col, transparency = transparency, ...))
   # One-dimensional plot:
   #----------------------
-  if(dotplot) plot_style <- "basic"
   # ylim
   if(missing('ylim')) {
     ylim <- env_ylim_default(x, plot_style == "ggplot2")
@@ -448,8 +460,12 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
            spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
          },
          ggplot2 = {
-           env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                      labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
+           if(dotplot) {
+             env_dotplot_ggplot(x, labels=labels) + labs(title=main, x=xlab, y=ylab) + theme_minimal(base_size=base_size)
+           } else {
+             env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                        labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
+           }
          })
 }
 

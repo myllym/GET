@@ -158,7 +158,7 @@ gendevianceMLM <- function(Y, df, formula, partsize=200, ...) {
   i0 <- round(seq(1, nr+1, length=nparts+1))
   dev <- numeric(nr)
   for(i in 1:nparts) {
-    ii <- i0[i]:i0[i+1]-1
+    ii <- i0[i]:(i0[i+1]-1)
     df$Y <- Y[,ii]
     M.full <- lm(formula = formula, data = df, model = FALSE, ...)
     dev[ii] <- deviance(M.full)
@@ -176,9 +176,10 @@ genFvaluesMLM <- function(Y, df, formula.full, formula.reduced, ...) {
   (full$dev - red$dev)/(full$df - red$df)/(full$dev/full$df)
 }
 
-# Compute F-statistics for several pixels at a time
+# Compute F-statistics for several pixels at a time in the simplest case of no extra arguments
+# and no curve sets in factors.
 #' @importFrom stats lm df.residual
-genFvalues2 <- function(Y, df, formula.full, formula.reduced, partsize=200, ...) {
+genFvaluesSimple <- function(Y, df, formula.full, formula.reduced, partsize=200, ...) {
   df$Y <- Y[,1]
   fx <- function(fit) {
     X <- fit$x
@@ -351,8 +352,8 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'                  contrasts = FALSE)
 #' plot(res)
 #'
-#' \donttest{nsim <- 999}
 #' \dontshow{nsim <- 19}
+#' \donttest{nsim <- 999}
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' res.tax_within_group <- graph.flm(nsim = nsim,
@@ -363,40 +364,37 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' plot(res.tax_within_group)
 #'
 #' # Image data examples
-#' data("imageset2")
-#' iset <- imageset2$image_set
+#'
+#' data(abide_9002_23)
+#' iset <- abide_9002_23$curve_set
 #' \dontshow{
 #' # Cut the data to reduce time
-#' iset$r <- iset$r[1:300,]
-#' iset$funcs <- iset$funcs[1:300, ]
-#' plot(iset)
+#' iset$r <- iset$r[1:29,]
+#' iset$funcs <- iset$funcs[1:29, ]
 #' }
-#' # Testing discrete factor group
-#' res.g <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-#'                      formula.full = Y ~ group + z,
-#'                      formula.reduced = Y ~ z,
-#'                      curve_sets = list(Y = iset),
-#'                      factors = data.frame(group = imageset2$Group,
-#'                                           z = imageset2$z))
-#' plot(res.g)
-#' # Testing discrete factor group with contrasts
-#' res.gc <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-#'                       formula.full = Y ~ group + z,
-#'                       formula.reduced = Y ~ z,
-#'                       curve_sets = list(Y = iset),
-#'                       factors = data.frame(group = imageset2$Group,
-#'                                            z = imageset2$z),
-#'                       contrasts = TRUE)
-#' plot(res.gc)
 #'
-#' # Testing continuous factor z
-#' res.z <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-#'                      formula.full = Y ~ group + z,
-#'                      formula.reduced = Y ~ group,
-#'                      curve_sets = list(Y = iset),
-#'                      factors = data.frame(group = imageset2$Group,
-#'                                           z = imageset2$z))
-#' plot(res.z)
+#' # Figure of an image in the group 1 and group 2
+#' plot(iset, idx=c(1, 27))
+#'
+#' # Testing the discrete factor 'group' with contrasts
+#' # (Use contrasts = FALSE for 'means')
+#' res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                  formula.full = Y ~ Group + Sex + Age,
+#'                  formula.reduced = Y ~ Sex + Age,
+#'                  curve_sets = list(Y = iset),
+#'                  factors = abide_9002_23[['factors']],
+#'                  contrasts = TRUE,
+#'                  GET.args = list(type = "area"))
+#' plot(res)
+#'
+#' # Testing the continuous factor 'age'
+#' res.a <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                  formula.full = Y ~ Group + Sex + Age,
+#'                  formula.reduced = Y ~ Group + Sex,
+#'                  curve_sets = list(Y = iset),
+#'                  factors = abide_9002_23[['factors']],
+#'                  GET.args = list(type = "area"))
+#' plot(res.a)
 graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                       contrasts = FALSE, savefuns = FALSE, ..., GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
@@ -535,7 +533,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' for fitting each linear model.
 #' }
 #' By default the fastest applicable method is used. This can be changed by setting \code{method} argument.
-#' The cases above correspond to "Fvalue2", "mlm", "Fvalue1" and "lm". Changing the default can be useful for
+#' The cases above correspond to "simple", "mlm", "complex" and "lm". Changing the default can be useful for
 #' checking the validity of the implementation.
 #'
 #' @inheritParams graph.flm
@@ -585,11 +583,11 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                       savefuns = TRUE, ..., GET.args = NULL,
                       mc.cores = 1, mc.args = NULL, cl = NULL,
-                      method = c("best", "Fvalue2", "mlm", "Fvalue1", "lm")) {
+                      method = c("best", "simple", "mlm", "complex", "lm")) {
   # Preliminary checks and formulation of the data to suitable form for further processing
-  method = match.arg(method)
+  method <- match.arg(method)
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
-                   curve_sets=curve_sets, factors=factors, fast=method %in% c("mlm", "Fvalue2", "best"))
+                   curve_sets=curve_sets, factors=factors, fast=method %in% c("mlm", "simple", "best"))
 
   extraargs <- list(...)
   if(method == "best") {
@@ -597,24 +595,26 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
       if(length(X$dfs) > 1) "lm"
       else "mlm"
     } else {
-      if(length(X$dfs) > 1) "Fvalue1"
-      else "Fvalue2"
+      if(length(X$dfs) > 1) "complex"
+      else "simple"
     }
   }
   if(length(extraargs) > 0) {
     # This is only a warning because the user might know that the extra args are ok.
-    if(method %in% c("Fvalue1", "Fvalue2")) warning("Method ", method, " doesn't work with extra arguments.")
+    if(method %in% c("simple", "complex")) warning("Method ", method, " doesn't work with extra arguments.")
   }
-  if(length(X$dfs) > 1 && method %in% c("mlm", "Fvalue2")) {
+  if(length(X$dfs) > 1 && method %in% c("mlm", "simple")) {
     stop("Curvesets in factors not allowed with method='", method, "'")
   }
-  # Calculate the F-statistic for the data, and, if method="Fvalue1", obtain also the design matrices
-  if(method == "Fvalue1") obs <- genFvaluesObs(X$dfs, formula.full, formula.reduced)
-  else if(method == "Fvalue2") obs <- genFvalues2(X$Y, X$dfs[[1]], formula.full, formula.reduced)
-  else obs <- genFvaluesLM(X$Y, X$dfs, formula.full, formula.reduced, ...)
+  # Calculate the F-statistic for the data, and, if method="complex", obtain also the design matrices
+  obs <- switch(method,
+                complex=genFvaluesObs(X$dfs, formula.full, formula.reduced),
+                simple=genFvaluesSimple(X$Y, X$dfs[[1]], formula.full, formula.reduced),
+                lm=,
+                mlm=genFvaluesLM(X$Y, X$dfs, formula.full, formula.reduced, ...))
   # Freedman-Lane procedure
   # Fit the reduced model at each argument value to get fitted values and residuals
-  if(method %in% c("mlm", "Fvalue2")) {
+  if(method %in% c("mlm", "simple")) {
     df <- X$dfs[[1]]
     df$Y <- X$Y
     fit <- lm(formula.reduced, data=df, model=FALSE, ...)
@@ -622,14 +622,13 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
     res.m <- fit$residuals
     fit <- NULL
   } else {
-    if(method == "Fvalue1") {
+    if(method == "complex") {
       loopfun1 <- function(i, ...) { # ... ignored
         b <- bcoef(Y = X$dfs[[i]]$Y, X = obs$reduced.X[[i]])
         fit <- obs$reduced.X[[i]]%*%b
         list(fitted.m = fit, res.m = X$dfs[[i]]$Y - fit)
       }
-    }
-    else {
+    } else { # method == "lm"
       loopfun1 <- function(i, ...) {
         mod.red <- lm(formula.reduced, data=X$dfs[[i]], ...)
         list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
@@ -652,13 +651,13 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   loopfun2 <- switch(method,
                      lm=,
                      mlm=function(i, ...) genFvaluesLM(Yperm(), X$dfs, formula.full, formula.reduced, ...),
-                     Fvalue1=function(i, ...) genFvaluesSim(Yperm(), obs$full.X, obs$reduced.X),
-                     Fvalue2=function(i, ...) genFvalues2(Yperm(), X$dfs[[1]], formula.full, formula.reduced))
+                     complex=function(i, ...) genFvaluesSim(Yperm(), obs$full.X, obs$reduced.X),
+                     simple=function(i, ...) genFvaluesSimple(Yperm(), X$dfs[[1]], formula.full, formula.reduced))
 
   if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
   else sim <- parLapply(cl, 1:nsim, loopfun2)
   sim <- simplify2array(sim)
-  if(method == "Fvalue1") obs <- obs$Fvalues
+  if(method == "complex") obs <- obs$Fvalues
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
   res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
