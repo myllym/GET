@@ -158,7 +158,7 @@ gendevianceMLM <- function(Y, df, formula, partsize=200, ...) {
   i0 <- round(seq(1, nr+1, length=nparts+1))
   dev <- numeric(nr)
   for(i in 1:nparts) {
-    ii <- i0[i]:i0[i+1]-1
+    ii <- i0[i]:(i0[i+1]-1)
     df$Y <- Y[,ii]
     M.full <- lm(formula = formula, data = df, model = FALSE, ...)
     dev[ii] <- deviance(M.full)
@@ -351,8 +351,8 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'                  contrasts = FALSE)
 #' plot(res)
 #'
-#' \donttest{nsim <- 999}
 #' \dontshow{nsim <- 19}
+#' \donttest{nsim <- 999}
 #' data(GDPtax)
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' res.tax_within_group <- graph.flm(nsim = nsim,
@@ -584,7 +584,7 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
                       mc.cores = 1, mc.args = NULL, cl = NULL,
                       method = c("best", "Fvalue2", "mlm", "Fvalue1", "lm")) {
   # Preliminary checks and formulation of the data to suitable form for further processing
-  method = match.arg(method)
+  method <- match.arg(method)
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors, fast=method %in% c("mlm", "Fvalue2", "best"))
 
