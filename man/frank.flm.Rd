@@ -17,7 +17,7 @@ frank.flm(
   mc.cores = 1,
   mc.args = NULL,
   cl = NULL,
-  method = c("best", "Fvalue2", "mlm", "Fvalue1", "lm")
+  method = c("best", "simple", "mlm", "complex", "lm")
 )
 }
 \arguments{
@@ -103,7 +103,7 @@ use \code{\link[stats]{lm}}).
 for fitting each linear model.
 }
 By default the fastest applicable method is used. This can be changed by setting \code{method} argument.
-The cases above correspond to "Fvalue2", "mlm", "Fvalue1" and "lm". Changing the default can be useful for
+The cases above correspond to "simple", "mlm", "complex" and "lm". Changing the default can be useful for
 checking the validity of the implementation.
 }
 \examples{
