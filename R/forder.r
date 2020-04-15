@@ -70,6 +70,30 @@ find_calc_pointwiserank <- function(measure, alternative) {
   } else { stop("Internal error in GET.")}
 }
 
+# Compute rank(x, ties.method="average") where x is the columns of a matrix.
+rank_matrix_cols <- function(x) {
+  n <- dim(x)[2]
+  ranks <- numeric(n)
+  perm <- do.call("order", split(x, row(x))) # indices! of the functions from the most extreme to least extreme one
+  v <- x[,perm[1]]
+
+  s <- 1
+  for(e in 2:n) {
+    cx <- x[,perm[e]]
+    if(!identical(cx, v)) {
+      averagerank <- (s + e - 1) / 2
+      ranks[perm[s:(e-1)]] <- averagerank
+
+      s <- e
+      v <- cx
+    }
+  }
+
+  averagerank <- (s + n) / 2
+  ranks[perm[s:n]] <- averagerank
+  ranks
+}
+
 # Functionality for functional ordering based on a curve set
 individual_forder <- function(curve_set,
                               measure = 'erl', scaling = 'qdir',
@@ -123,11 +147,7 @@ individual_forder <- function(curve_set,
                sortranks <- applyfuncs(erlrle)
              else
                sortranks <- applyfuncs(sort)
-             # Compute rank of functions by calling order twice
-             # Ties will be in original order
-             lexo_values <- do.call("order", split(sortranks, row(sortranks))) # indices! of the functions from the most extreme to least extreme one
-             newranks <- 1:Nfunc
-             distance <- newranks[order(lexo_values)] / Nfunc # ordering of the functions by the extreme rank lengths
+             distance <- rank_matrix_cols(sortranks) / Nfunc
            },
            cont = {
              distance <- applyfuncs(min)
