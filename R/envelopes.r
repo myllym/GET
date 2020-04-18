@@ -481,6 +481,32 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @param nticks The number of ticks on the xaxis.
 #' @export
 #' @seealso \code{\link{central_region}}
+#' @examples
+#' data(abide_9002_23)
+#'
+#' res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                  formula.full = Y ~ Group + Sex + Age,
+#'                  formula.reduced = Y ~ Sex + Age,
+#'                  curve_sets = list(Y = subset(abide_9002_23[['curve_set']], 1:50)),
+#'                  factors = abide_9002_23[['factors']][1:50,],
+#'                  contrasts = FALSE,
+#'                  GET.args = list(type = "area"))
+#' plot(res)
+#' plot(res, what=c("obs", "hi"))
+#'
+#' plot(res, what=c("hi", "lo"), fixedscales=1)
+#'
+#' plot(res, fixedscales=FALSE)
+#'
+#' if(require(gridExtra) && require(ggplot2)) {
+#'   gs <- lapply(res, plot, what=c("obs", "hi"), main="")
+#'   grid.arrange(grobs=gs, ncol=1, top="asdf")
+#'
+#'   gs <- outer(res, c("obs", "hi"), FUN=Vectorize(function(res, what)
+#'     list(plot(res, what=what, main="") + theme(axis.ticks=element_blank(),
+#'       axis.text=element_blank(), axis.title=element_blank()))))
+#'   grid.arrange(grobs=t(gs))
+#' }
 plot.combined_global_envelope <- function(x,
                                  main, ylim = NULL, xlab, ylab,
                                  color_outside = TRUE, env.col = 1, base_size = 12,
