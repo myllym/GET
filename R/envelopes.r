@@ -418,7 +418,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   }
   # Two-dimensional plot:
   #----------------------
-  if(is.null(x$r)) return(plot_global_envelope2d(x, main = main, digits = digits,
+  if(is.null(x$r)) return(plot_global_envelope2d(x, main = main,
                                                  sign.col = sign.col, transparency = transparency, ...))
   # One-dimensional plot:
   #----------------------
@@ -495,7 +495,7 @@ plot.combined_global_envelope <- function(x,
   }
   # Two-dimensional plot:
   #----------------------
-  if(is.null(x[[1]]$r)) return(plot_combined_global_envelope2d(x, main = main, digits = digits, ...))
+  if(is.null(x[[1]]$r)) return(plot_combined_global_envelope2d(x, main = main, ...))
   # One-dimensional plot:
   #----------------------
   # ylab, ylab, labels
