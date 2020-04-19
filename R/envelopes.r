@@ -497,6 +497,7 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @export
 #' @seealso \code{\link{central_region}}
 #' @examples
+#' # Example of 2d envelope plots
 #' data(abide_9002_23)
 #'
 #' res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
@@ -513,14 +514,14 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #'
 #' plot(res, fixedscales=FALSE)
 #'
-#' if(require(gridExtra) && require(ggplot2)) {
+#' if(requireNamespace("gridExtra", quietly=TRUE) && require("ggplot2", quietly=TRUE)) {
 #'   gs <- lapply(res, plot, what=c("obs", "hi"), main="")
-#'   grid.arrange(grobs=gs, ncol=1, top="asdf")
+#'   gridExtra::grid.arrange(grobs=gs, ncol=1, top="asdf")
 #'
 #'   gs <- outer(res, c("obs", "hi"), FUN=Vectorize(function(res, what)
 #'     list(plot(res, what=what, main="") + theme(axis.ticks=element_blank(),
 #'       axis.text=element_blank(), axis.title=element_blank()))))
-#'   grid.arrange(grobs=t(gs))
+#'   gridExtra::grid.arrange(grobs=t(gs))
 #' }
 plot.combined_global_envelope <- function(x,
                                  main, ylim = NULL, xlab, ylab,
