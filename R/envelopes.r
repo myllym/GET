@@ -391,6 +391,12 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
 #' Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
 #' functions.
+#' @param fixedscales Logical. TRUE for the same scales for all images.
+#' @param what Character vector specifying what information should be plotted for 2d functions.
+#' A combination of:
+#' Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo"}),
+#' observed with significantly higher values highlighted (\code{"hi.sign"}),
+#' observed with significantly lower values highlighted (\code{"lo.sign"}).
 #' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
@@ -408,7 +414,8 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
                                  env.col = 1, color_outside = TRUE, sign.col = "red",
-                                 transparency = 85/255,
+                                 transparency = 85/255, fixedscales = TRUE,
+                                 what = c("obs", "hi", "lo", "hi.sign", "lo.sign"),
                                  base_size = 11,
                                  labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...) {
   plot_style <- match.arg(plot_style)
@@ -418,8 +425,8 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   }
   # Two-dimensional plot:
   #----------------------
-  if(is.null(x$r)) return(plot_global_envelope2d(x, main = main,
-                                                 sign.col = sign.col, transparency = transparency, ...))
+  if(is.null(x$r)) return(plot_global_envelope2d(x, fixedscales=fixedscales, main = main, what=what,
+                                                 sign.col = sign.col, transparency = transparency))
   # One-dimensional plot:
   #----------------------
   # ylim
@@ -466,9 +473,17 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 
 #' Plot method for the class 'combined_global_envelope'
 #'
+#' Plotting method for the class 'combined_global_envelope' including combined envelopes both for
+#' 1d and 2d functions.
+#'
+#'
+#' If fixedscales is FALSE (or 0) all images will have separate scale.
+#' If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
+#' If fixedscales is 2 all images will have common scale.
 #' @description This function provides plots for combined global envelopes.
 #' @param x An 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
+#' @param fixedscales 0, 1 or 2. See details.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
 #' Otherwise labels for the separate plots.
@@ -509,7 +524,10 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' }
 plot.combined_global_envelope <- function(x,
                                  main, ylim = NULL, xlab, ylab,
-                                 color_outside = TRUE, env.col = 1, base_size = 12,
+                                 env.col = 1, color_outside = TRUE, sign.col = "red",
+                                 transparency = 85/255, fixedscales = 2,
+                                 what = c("obs", "hi", "lo", "hi.sign", "lo.sign"),
+                                 base_size = 12,
                                  labels = NULL, add = FALSE, digits = 3,
                                  level = 1, ncol = 2 + 1*(length(x)==3), nticks = 5,
                                  legend = TRUE, ...) {
@@ -521,7 +539,9 @@ plot.combined_global_envelope <- function(x,
   }
   # Two-dimensional plot:
   #----------------------
-  if(is.null(x[[1]]$r)) return(plot_combined_global_envelope2d(x, main = main, ...))
+  if(is.null(x[[1]]$r)) return(plot_combined_global_envelope2d(x, fixedscales=fixedscales, main,
+                                                               what=what, sign.col=sign.col,
+                                                               transparency=transparency))
   # One-dimensional plot:
   #----------------------
   # ylab, ylab, labels
