@@ -107,7 +107,7 @@ plot_global_envelope2d <- function(x, fixedscales = TRUE, main,
     g <- plot_global_envelope2d_fixedscales(x, what, ...)
     g + ggtitle(main)
   } else {
-    gs = lapply(what, function(w) plot_global_envelope2d_fixedscales(x, w, ...))
+    gs <- lapply(what, function(w) plot_global_envelope2d_fixedscales(x, w, ...))
     grid.arrange(grobs=gs, nrow=ceiling(length(gs)/3), top=main)
   }
 }
