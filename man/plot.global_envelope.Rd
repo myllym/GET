@@ -15,9 +15,6 @@
   env.col = 1,
   color_outside = TRUE,
   sign.col = "red",
-  transparency = 85/255,
-  fixedscales = TRUE,
-  what = c("obs", "hi", "lo", "hi.sign", "lo.sign"),
   base_size = 11,
   labels = NULL,
   add = FALSE,
@@ -54,18 +51,6 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 outside the envelope. Relevant only for 1d functions.}
 
 \item{sign.col}{The color for the significant regions. Default to "red".}
-
-\item{transparency}{A number between 0 and 1 (default 85/255, 33% transparency).
-Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
-functions.}
-
-\item{fixedscales}{Logical. TRUE for the same scales for all images.}
-
-\item{what}{Character vector specifying what information should be plotted for 2d functions.
-A combination of:
-Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo"}),
-observed with significantly higher values highlighted (\code{"hi.sign"}),
-observed with significantly lower values highlighted (\code{"lo.sign"}).}
 
 \item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 

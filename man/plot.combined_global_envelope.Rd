@@ -13,9 +13,6 @@
   env.col = 1,
   color_outside = TRUE,
   sign.col = "red",
-  transparency = 85/255,
-  fixedscales = 2,
-  what = c("obs", "hi", "lo", "hi.sign", "lo.sign"),
   base_size = 12,
   labels = NULL,
   add = FALSE,
@@ -44,18 +41,6 @@
 outside the envelope. Relevant only for 1d functions.}
 
 \item{sign.col}{The color for the significant regions. Default to "red".}
-
-\item{transparency}{A number between 0 and 1 (default 85/255, 33% transparency).
-Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
-functions.}
-
-\item{fixedscales}{0, 1 or 2. See details.}
-
-\item{what}{Character vector specifying what information should be plotted for 2d functions.
-A combination of:
-Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo"}),
-observed with significantly higher values highlighted (\code{"hi.sign"}),
-observed with significantly lower values highlighted (\code{"lo.sign"}).}
 
 \item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
@@ -87,41 +72,8 @@ Default 2 or 3, if the length of x equals 3.
 This function provides plots for combined global envelopes.
 }
 \details{
-Plotting method for the class 'combined_global_envelope' including combined envelopes both for
-1d and 2d functions.
-
-
-If fixedscales is FALSE (or 0) all images will have separate scale.
-If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
-If fixedscales is 2 all images will have common scale.
-}
-\examples{
-# Example of 2d envelope plots
-data(abide_9002_23)
-
-res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-                 formula.full = Y ~ Group + Sex + Age,
-                 formula.reduced = Y ~ Sex + Age,
-                 curve_sets = list(Y = subset(abide_9002_23[['curve_set']], 1:50)),
-                 factors = abide_9002_23[['factors']][1:50,],
-                 contrasts = FALSE,
-                 GET.args = list(type = "area"))
-plot(res)
-plot(res, what=c("obs", "hi"))
-
-plot(res, what=c("hi", "lo"), fixedscales=1)
-
-plot(res, fixedscales=FALSE)
-
-if(requireNamespace("gridExtra", quietly=TRUE) && require("ggplot2", quietly=TRUE)) {
-  gs <- lapply(res, plot, what=c("obs", "hi"), main="")
-  gridExtra::grid.arrange(grobs=gs, ncol=1, top="asdf")
-
-  gs <- outer(res, c("obs", "hi"), FUN=Vectorize(function(res, what)
-    list(plot(res, what=what, main="") + theme(axis.ticks=element_blank(),
-      axis.text=element_blank(), axis.title=element_blank()))))
-  gridExtra::grid.arrange(grobs=t(gs))
-}
+Plotting method for the class 'combined_global_envelope', i.e. combined envelopes for
+1d functions.
 }
 \seealso{
 \code{\link{central_region}}
