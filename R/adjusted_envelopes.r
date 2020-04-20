@@ -38,7 +38,7 @@ funcs_from_X_and_funs <- function(X, nsim, testfuns=NULL, ...,
 # A helper function to perform simulations for the GET.composite
 #' @importFrom spatstat is.ppm is.kppm is.lppm is.slrm
 #' @importFrom spatstat is.ppp
-#' @importFrom spatstat update.ppm update.kppm update.lppm update.slrm
+#' @importFrom stats update
 #' @importFrom parallel mclapply
 adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
                          simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
@@ -94,20 +94,7 @@ adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
     loopfun <- function(rep) {
       # Create a simulation
       Xsim <- simpatterns[[rep]]
-      if(Xispppmodel)
-        switch(class(X)[1],
-               ppm = {
-                 Xsim <- update.ppm(X, Xsim)
-               },
-               kppm = {
-                 Xsim <- update.kppm(X, Xsim)
-               },
-               lppm = {
-                 Xsim <- update.lppm(X, Xsim)
-               },
-               slrm = {
-                 Xsim <- update.slrm(X, Xsim)
-               })
+      if(Xispppmodel) Xsim <- update(X, Xsim)
       # Create simulations from the given model and calculate the test functions
       funcs_from_X_and_funs(Xsim, nsim=nsimsub, testfuns=testfuns, ...,
                             savepatterns=FALSE, verbose=verbose, calc_funcs=TRUE)
