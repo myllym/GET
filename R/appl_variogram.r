@@ -4,8 +4,6 @@
 
 # A helper function for permuting the data variables
 # @inheritParams GET.variogram
-#' @importFrom sp coordinates
-#' @importFrom gstat variogram
 #' @importFrom stats residuals
 #' @importFrom stats lm
 #' @importFrom stats na.exclude
