@@ -349,7 +349,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          n.aver = 1L, mirror = FALSE, savefuns=FALSE,
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
-  if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
+  if(!inherits(curve_set, c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
   curve_set <- convert_fdata(curve_set)
   if(curve_set_is1obs(curve_set)) stop("All (data) functions of the curve_set must be equal.\n")
   x <- data_and_sim_curves(curve_set)
@@ -451,7 +451,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 frank.fanova <- function(nsim, curve_set, groups, variances="equal",
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.\n")
-  if(!(class(curve_set) %in% c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
+  if(!inherits(curve_set, c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
   curve_set <- convert_fdata(curve_set)
   if(curve_set_is1obs(curve_set)) stop("All (data) functions of the curve_set must be equal.\n")
   x <- data_and_sim_curves(curve_set)
