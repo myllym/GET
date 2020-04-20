@@ -304,7 +304,6 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   idx <- lapply(1:nfuns, FUN = function(i) ((i-1)*nr+1):(i*nr))
   # Split the envelopes to the original groups
   res_ls <- split(res, f = rep(1:nfuns, each=nr))
-  res_ls <- lapply(res_ls, FUN = function(x) { class(x) <- c("global_envelope", class(x)); x })
   # Create empty "level2_ge" attribute containing the test information
   attr(res_ls, "level2_ge") <- data.frame(r=1, obs=attr(res, "k")[1],
                                           central=mean(attr(res, "k")))
