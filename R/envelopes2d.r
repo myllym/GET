@@ -151,9 +151,9 @@ plot_combined_global_envelope2d <- function(x, fixedscales = 2, main,
       g + facet_wrap(c("main", "label"), labeller=function(l) label_value(l, multi_line = FALSE))
       g + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())
     }
-    gs <- outer(seq_along(x), c("obs", "hi"), FUN=Vectorize(function(i, w) {
+    gs <- outer(what, seq_along(x), FUN=Vectorize(function(w, i) {
       list(f(x[[i]], names(x)[i], w))
     }))
-    grid.arrange(grobs=t(gs), top=main)
+    grid.arrange(grobs=gs, top=main, nrow=ncol(gs))
   } else { stop("Invalid fixedscales argument.") }
 }
