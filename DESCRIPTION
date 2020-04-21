@@ -23,7 +23,6 @@ Maintainer: Mari Myllymäki <mari.myllymaki@luke.fi>
 Imports:
     ggplot2,
     graphics,
-    grDevices,
     gridExtra,
     methods,
     parallel,

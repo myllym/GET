@@ -58,7 +58,7 @@ if(require(fda, quietly=TRUE)) {
   m.a <- growth$hgtm["10",] # boys at age 10
   # Empirical cumulative distribution functions
   plot(ecdf(f.a))
-  plot(ecdf(m.a), col=grey(0.7), add=TRUE)
+  plot(ecdf(m.a), col='grey70', add=TRUE)
   # Create a list of the data
   fm.list <- list(Girls=f.a, Boys=m.a)
   \donttest{
@@ -80,7 +80,7 @@ if(require(fda, quietly=TRUE)) {
   m.a <- growth$hgtm["14",] # boys at age 14
   # Empirical cumulative distribution functions
   plot(ecdf(f.a))
-  plot(ecdf(m.a), col=grey(0.7), add=TRUE)
+  plot(ecdf(m.a), col='grey70', add=TRUE)
   # Create a list of the data
   fm.list <- list(Girls=f.a, Boys=m.a)
   \donttest{

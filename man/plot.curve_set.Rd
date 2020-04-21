@@ -12,7 +12,7 @@
   ylab = "obs",
   main = NULL,
   col_obs = 1,
-  col_sim = grDevices::grey(0.7),
+  col_sim = "grey70",
   base_size = 11,
   ...
 )

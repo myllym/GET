@@ -256,8 +256,9 @@ Type citation("GET") to get a full list of references.
 \section{Acknowledgements}{
 
 
-Pavel Grabarnik, Ute Hahn, Mikko Kuronen, Michael Rost and Henri Seijo have made contributions
-and suggestions of code.
+Mikko Kuronen has made substantial contributions of code.
+Additional contributions and suggestions from Pavel Grabarnik, Ute Hahn, Michael Rost and
+Henri Seijo.
 }
 
 \references{
