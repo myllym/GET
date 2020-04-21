@@ -326,7 +326,7 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
     for(i in 1:length(res_ls)) attr(res_ls[[i]], name) <- NULL
   }
   for(i in 1:nfuns) attr(res_ls[[i]], "alpha") <- NA
-  if(!is.null(curve_sets)) names(res_ls) <- names(curve_sets)
+  if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
   attr(res_ls, "method") <- "Combined global envelope (one-step)"
   class(res_ls) <- c("combined_global_envelope", class(res_ls))
   if(curve_set_is2d(curve_sets[[1]])) class(res_ls) <- c("combined_global_envelope2d", class(res))
