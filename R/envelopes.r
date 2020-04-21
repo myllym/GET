@@ -867,7 +867,7 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
            funcs <- curve_set_funcs(curve_sets)
            for(i in 1:ncol(funcs)) {
              if(any(funcs[,i] < x$lo | funcs[,i] > x$hi))
-               lines(curve_sets$r, funcs[,i], col=grey(0.5))
+               lines(curve_sets$r, funcs[,i], col='grey50')
            }
            # Central region
            lines(cr$r, cr$lo, lty=2, col=cr.col)

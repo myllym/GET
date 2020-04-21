@@ -316,7 +316,6 @@ print.curve_set <- function(x, ...) {
 #' @export
 #' @importFrom graphics plot
 #' @importFrom graphics lines
-#' @importFrom grDevices grey
 #' @importFrom graphics axis
 #' @importFrom graphics abline
 #' @importFrom ggplot2 ggplot
@@ -327,7 +326,7 @@ print.curve_set <- function(x, ...) {
 #' @importFrom ggplot2 geom_vline
 plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
                            ylim, xlab = "r", ylab = "obs", main = NULL,
-                           col_obs = 1, col_sim = grDevices::grey(0.7),
+                           col_obs = 1, col_sim = 'grey70',
                            base_size = 11, ...) {
   plot_style <- match.arg(plot_style)
   funcs <- curve_set_funcs(x)

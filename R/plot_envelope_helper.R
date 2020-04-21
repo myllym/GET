@@ -228,11 +228,11 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
     if(get_alternative(x)!="greater")
         graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=arrows.col)
     else
-        graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
+        graphics::arrows(1:nr, x[['lo']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col='grey80')
     if(get_alternative(x)!="less")
         graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=arrows.col)
     else
-        graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col=grey(0.8))
+        graphics::arrows(1:nr, x[['hi']], 1:nr, x[['central']], code = 1, angle = 75, length = .1, col='grey80')
     graphics::axis(1, 1:nr, labels=labels)
     if(!is.null(x[['obs']])) {
       graphics::points(1:nr, x[['obs']], pch='x')
@@ -245,7 +245,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
       funcs <- curve_set_funcs(curve_sets)
       for(i in 1:ncol(funcs)) {
         if(any(funcs[,i] < x[['lo']] | funcs[,i] > x[['hi']])) {
-          graphics::points(1:nr, funcs[,i], pch='x', col=grey(0.7), type="b")
+          graphics::points(1:nr, funcs[,i], pch='x', col='grey70', type="b")
         }
       }
     }
@@ -307,8 +307,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
           else lines(x[['r']], x[['central']], lty=3, lwd=2, xaxt="n", ...)
           if(!is.null(curve_sets) && class(curve_sets)[1] == "list") curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
         }
-        if(alt != "greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col=grey(0.8))
-        if(alt != "less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col=grey(0.8))
+        if(alt != "greater") lines(x[['r']], x[['lo']], lty=2, col=env.col) else lines(x[['r']], x[['lo']], lty=2, col='grey80')
+        if(alt != "less") lines(x[['r']], x[['hi']], lty=2, col=env.col) else lines(x[['r']], x[['hi']], lty=2, col='grey80')
         if(!is.null(x[['obs']])) {
           lines(x[['r']], x[['obs']], lty=1, type=obs.type)
           if(color_outside) {
@@ -321,7 +321,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
           funcs <- curve_set_funcs(curve_sets)
           for(i in 1:ncol(funcs)) {
             if(any(funcs[,i] < x[['lo']] | funcs[,i] > x[['hi']]))
-              lines(x[['r']], funcs[,i], col=grey(0.7))
+              lines(x[['r']], funcs[,i], col='grey70')
           }
         }
         if(rdata$retick_xaxis) {
@@ -369,11 +369,11 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
             if(alt != "greater")
               lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
             else
-              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['lo']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col='grey80')
             if(alt != "less")
               lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2)
             else
-              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col=grey(0.8))
+              lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=2, col='grey80')
             if(!is.null(x[['obs']])) {
               lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], x[['obs']][tmp_indeces[i]:(tmp_indeces[i+1]-1)], lty=1, type=obs.type)
               if(color_outside) {
@@ -387,7 +387,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
               for(j in 1:ncol(funcs)) {
                 if(any(funcs[,j] < x[['lo']] | funcs[,j] > x[['hi']]))
                   lines(x[['r']][tmp_indeces[i]:(tmp_indeces[i+1]-1)],
-                        funcs[tmp_indeces[i]:(tmp_indeces[i+1]-1),j], col=grey(0.7))
+                        funcs[tmp_indeces[i]:(tmp_indeces[i+1]-1),j], col='grey70')
               }
             }
         }
