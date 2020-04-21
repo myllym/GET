@@ -509,11 +509,11 @@ curve_set_rdf <- function(curve_set) {
 }
 
 curve_set_is1d <- function(curve_set) {
-  is.vector(curve_set[['r']])
+  !inherits(curve_set, 'curve_set2d')
 }
 
 curve_set_is2d <- function(curve_set) {
-  !is.vector(curve_set[['r']])
+  inherits(curve_set, 'curve_set2d')
 }
 
 curve_set_isresidual <- function(curve_set) {
