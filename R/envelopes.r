@@ -41,6 +41,7 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
   attr(res, "einfo") <- picked_attr[['einfo']]
   # Extra for global envelopes
   class(res) <- c("global_envelope", class(res))
+  if(curve_set_is2d(curve_set)) class(res) <- c("global_envelope2d", class(res))
   attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
   attr(res, "k_alpha") <- kalpha
@@ -288,6 +289,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   attr(res, "level2_curve_set") <- curve_set_u
   attr(res, "method") <- "Combined global envelope (two-step)"
   class(res) <- c("combined_global_envelope", class(res))
+  if(curve_set_is2d(curve_sets[[1]])) class(res) <- c("combined_global_envelope2d", class(res))
   res
 }
 
@@ -307,7 +309,6 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   idx <- lapply(1:nfuns, FUN = function(i) ((i-1)*nr+1):(i*nr))
   # Split the envelopes to the original groups
   res_ls <- split(res, f = rep(1:nfuns, each=nr))
-  res_ls <- lapply(res_ls, FUN = function(x) { class(x) <- c("global_envelope", class(x)); x })
   # Create empty "level2_ge" attribute containing the test information
   attr(res_ls, "level2_ge") <- data.frame(r=1, obs=attr(res, "k")[1],
                                           central=mean(attr(res, "k")))
@@ -330,9 +331,10 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
     for(i in 1:length(res_ls)) attr(res_ls[[i]], name) <- NULL
   }
   for(i in 1:nfuns) attr(res_ls[[i]], "alpha") <- NA
-  if(!is.null(curve_sets)) names(res_ls) <- names(curve_sets)
+  if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
   attr(res_ls, "method") <- "Combined global envelope (one-step)"
   class(res_ls) <- c("combined_global_envelope", class(res_ls))
+  if(curve_set_is2d(curve_sets[[1]])) class(res_ls) <- c("combined_global_envelope2d", class(res))
   res_ls
 }
 
@@ -393,9 +395,6 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param color_outside Logical. Whether to color the places where the data function goes
 #' outside the envelope. Relevant only for 1d functions.
 #' @param sign.col The color for the significant regions. Default to "red".
-#' @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
-#' Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
-#' functions.
 #' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
@@ -413,20 +412,11 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
                                  env.col = 1, color_outside = TRUE, sign.col = "red",
-                                 transparency = 85/255,
                                  base_size = 11,
                                  labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...) {
   plot_style <- match.arg(plot_style)
   # main
-  if(missing('main')) {
-    main <- env_main_default(x, digits=digits)
-  }
-  # Two-dimensional plot:
-  #----------------------
-  if(is.null(x$r)) return(plot_global_envelope2d(x, main = main, digits = digits,
-                                                 sign.col = sign.col, transparency = transparency, ...))
-  # One-dimensional plot:
-  #----------------------
+  if(missing('main')) main <- env_main_default(x, digits=digits)
   # ylim
   if(missing('ylim')) {
     ylim <- env_ylim_default(x, plot_style == "ggplot2")
@@ -471,6 +461,9 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 
 #' Plot method for the class 'combined_global_envelope'
 #'
+#' Plotting method for the class 'combined_global_envelope', i.e. combined envelopes for
+#' 1d functions.
+#'
 #' @description This function provides plots for combined global envelopes.
 #' @param x An 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
@@ -488,7 +481,8 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
 #' @seealso \code{\link{central_region}}
 plot.combined_global_envelope <- function(x,
                                  main, ylim = NULL, xlab, ylab,
-                                 color_outside = TRUE, env.col = 1, base_size = 12,
+                                 env.col = 1, color_outside = TRUE, sign.col = "red",
+                                 base_size = 12,
                                  labels = NULL, add = FALSE, digits = 3,
                                  level = 1, ncol = 2 + 1*(length(x)==3), nticks = 5,
                                  legend = TRUE, ...) {
@@ -498,11 +492,6 @@ plot.combined_global_envelope <- function(x,
     alt <- get_alternative(x[[1]])
     main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
   }
-  # Two-dimensional plot:
-  #----------------------
-  if(is.null(x[[1]]$r)) return(plot_combined_global_envelope2d(x, main = main, digits = digits, ...))
-  # One-dimensional plot:
-  #----------------------
   # ylab, ylab, labels
   if(missing('xlab'))
     if(is.expression(attr(attr(x, "level2_ge"), "xexp"))) xlab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "xexp")))

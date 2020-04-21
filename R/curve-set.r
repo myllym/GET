@@ -279,6 +279,7 @@ create_curve_set <- function(curve_set, ...) {
   cset <- list(r = r, funcs = funcs, is1obs = is1obs)
   if(!is.null(curve_set[['theo']])) cset$theo <- curve_set[['theo']]
   class(cset) <- 'curve_set'
+  if(!is.vector(r)) class(cset) <- c('curve_set2d', class(cset))
   cset
 }
 
@@ -309,7 +310,6 @@ print.curve_set <- function(x, ...) {
 #' @param ylab The label for the y-axis. Default "obs".
 #' @param col_obs Color for 'obs' in the argument \code{x}.
 #' @param col_sim Color for 'sim_m' in the argument \code{x}.
-#' @param idx Indices of functions to plot for 2d plots.
 #' @param ... Additional parameters to be passed to plot and lines.
 #' @inheritParams plot.global_envelope
 #'
@@ -324,20 +324,14 @@ print.curve_set <- function(x, ...) {
 #' @importFrom ggplot2 scale_x_continuous
 #' @importFrom ggplot2 scale_y_continuous
 #' @importFrom ggplot2 labs
+#' @importFrom ggplot2 geom_vline
 plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
                            ylim, xlab = "r", ylab = "obs", main = NULL,
                            col_obs = 1, col_sim = grDevices::grey(0.7),
-                           base_size = 11, idx=1, ...) {
+                           base_size = 11, ...) {
   plot_style <- match.arg(plot_style)
   funcs <- curve_set_funcs(x)
   if(!curve_set_is1obs(x)) col_sim <- col_obs
-  if(!curve_set_is1d(x)) {
-    rdf <- curve_set_rdf(x)
-    data <- do.call(rbind, lapply(idx, function(i) data.frame(idx=i, f=funcs[,i])))
-    df <- cbind(rdf, data)
-    return(ggplot() + choose_geom(df, varfill='f') +
-      facet_wrap("idx") + labs(x="x", y="y", fill=""))
-  }
   rdata <- combined_global_envelope_rhelper(x)
   if(rdata$retick_xaxis) {
     rvalues <- rdata$new_r_values
@@ -380,6 +374,32 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
                  graphics::abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
              }
          })
+}
+
+#' Plot method for the class 'curve_set2d'
+#'
+#' Plot method for the class 'curve_set2d', i.e. two-dimensional functions
+#'
+#' @param x An \code{curve_set2d} object
+#' @inheritParams plot.curve_set
+#' @param idx Indices of functions to plot for 2d plots.
+#' @param ... Additional parameters to be passed to plot and lines.
+#' @inheritParams plot.global_envelope
+#'
+#' @export
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 labs
+#' @examples
+#' data(abide_9002_23)
+#' plot(abide_9002_23$curve_set, idx=c(1, 27))
+plot.curve_set2d <- function(x, idx=1, base_size = 11, ...) {
+  funcs <- curve_set_funcs(x)
+  rdf <- curve_set_rdf(x)
+  data <- do.call(rbind, lapply(idx, function(i) data.frame(idx=i, f=funcs[,i])))
+  df <- cbind(rdf, data)
+  return(ggplot() + choose_geom(df, varfill='f') +
+           facet_wrap("idx") + labs(x="x", y="y", fill=""))
 }
 
 # Combine curve sets.
@@ -489,7 +509,11 @@ curve_set_rdf <- function(curve_set) {
 }
 
 curve_set_is1d <- function(curve_set) {
-  is.vector(curve_set[['r']])
+  !inherits(curve_set, 'curve_set2d')
+}
+
+curve_set_is2d <- function(curve_set) {
+  inherits(curve_set, 'curve_set2d')
 }
 
 curve_set_isresidual <- function(curve_set) {

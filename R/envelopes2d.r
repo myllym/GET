@@ -31,143 +31,174 @@ choose_geom <- function(df, varfill, ...) {
   }
 }
 
-# A helper function for env2d_ggplot2. Produces a ggplot with the significant region
-#' @importFrom ggplot2 ggplot aes coord_fixed .data labs
-env2d_ggplot2_helper_1 <- function(df, sign.col, transparency) {
-  g <- ggplot() + choose_geom(df, varfill='z')
-  if(any(df$signif))
-    g <- g + choose_geom(df[df$signif,], fill=sign.col, alpha=transparency)
-  g <- g + coord_fixed(ratio=1)
-  g <- g + labs(x="", y="", fill="")
-  g
-}
-
-#' @importFrom gridExtra grid.arrange
-#' @importFrom ggplot2 facet_wrap ggtitle theme element_blank vars
-env2d_ggplot2_helper <- function(x, fixedscales, main="", insertmain=TRUE) {
+# Add a part "what" of the envelope2d plot to the given ggplot object g.
+# The ggplot object will have faceting variable "label".
+addplot_global_envelope2d <- function(g, x, what, sign.col, transparency) {
   namelist <- list(obs = "Observed",
                    lo = "Lower envelope" ,
                    hi = "Upper envelope" ,
                    lo.sign = "Sign.: below" ,
                    hi.sign = "Sign.: above" )
-  if(!missing(main) && !is.null(main) && insertmain) {
-    for (i in seq_along(namelist)) {
-      namelist[[i]] <- paste(main, ": ", namelist[[i]])
+  for(w in what) {
+    df <- x
+    df$label <- factor(namelist[w])
+    if(w == "lo.sign") {
+      w <- "obs"
+      df$signif <- df$obs < df$lo
+    } else if(w == "hi.sign") {
+      w <- "obs"
+      df$signif <- df$obs > df$hi
     }
+    g <- g + choose_geom(df, varfill=w)
+    if(any(df$signif))
+      g <- g + choose_geom(df[df$signif,], fill=sign.col, alpha=transparency)
   }
+  g
+}
 
-  # If curve_set$r was created using a data.frame
-  if(!is.null(x[['x']])) df <- x[, c("height", "width", "x", "y")]
-  else if(!is.null(x[['xmin']])) df <- x[, c("xmax", "xmin", "ymax", "ymin")]
-  else stop("Cannot detect curve_set r")
-
-  adddf <- function(df, z, name, label=namelist[[name]], signif=FALSE) {
-    df$z <- c(z)
-    df$name <- name
-    df$label <- factor(label)
-    df$signif <- c(signif)
-    df$main <- main
-    df
-  }
+# Drop options that are not relevant to the alternative hypothesis.
+checkarg_envelope2d_what <- function(x, what) {
   alt <- get_alternative(x)
-  dfs <- list()
-  if(!is.null(x$obs)) {
-    dfs <- c(dfs, list(adddf(df, x$obs, "obs")))
-  }
-  if(alt != "greater") {
-    dfs <- c(dfs, list(adddf(df, x$lo, "lo")))
-  }
-  if(alt != "less") {
-    dfs <- c(dfs, list(adddf(df, x$hi, "hi")))
-  }
-  if(!is.null(x$obs) && alt != "greater") {
-    dfs <- c(dfs, list(adddf(df, x$obs, "lo.sign", signif=x$obs < x$lo)))
-  }
-  if(!is.null(x$obs) && alt != "less") {
-    dfs <- c(dfs, list(adddf(df, x$obs, "hi.sign", signif=x$obs > x$hi)))
-  }
-  if(fixedscales)
-    do.call(rbind, dfs)
-  else
-    dfs
+  if(alt == "greater") what <- setdiff(what, c("lo", "lo.sign"))
+  else if(alt == "less") what <- setdiff(what, c("hi", "hi.sign"))
+  what
 }
 
-# @param sign.col The color for the significant regions.
-# @param transparency A number between 0 and 1.
-# Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
-#' @importFrom ggplot2 theme element_blank facet_wrap vars
-env2d_ggplot2_helper_many_single_plots <- function(dfs, sign.col, transparency) {
-  remove_axes_theme <- theme(axis.title.x=element_blank(),
-                             axis.text.x=element_blank(),
-                             axis.ticks.x=element_blank(),
-                             axis.title.y=element_blank(),
-                             axis.text.y=element_blank(),
-                             axis.ticks.y=element_blank())
-  lapply(dfs, function(df) {
-    g <- env2d_ggplot2_helper_1(df, sign.col, transparency)
-    g <- g + facet_wrap("label")
-    g + remove_axes_theme
-  })
+# Used also when creating a plot without fixedscales.
+#' @importFrom ggplot2 ggplot facet_wrap labs coord_fixed
+plot_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "lo", "hi.sign", "lo.sign"),
+                                   sign.col = "red", transparency = 85/255) {
+  g <- ggplot()
+  g <- addplot_global_envelope2d(g, x, what, sign.col, transparency)
+  g + facet_wrap("label") + labs(x="", y="", fill="") + coord_fixed()
 }
 
-# Plotting function for 2d global envelopes
-#
-# @inheritParams plot.global_envelope
-# @param x A 'global_envelope' object for two-dimensional functions
-# @param fixedscales Logical. TRUE for the same scales for all images.
+# Used also when creating a plot without fixedscales.
 # @param sign.col The color for the significant regions. Default to "red".
-# @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
-# Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions.
-# @param main The overall main. Default exists.
-# @param ... Additional parameters to be passed to \code{\link[spatstat]{plot.im}}.
-#' @importFrom ggplot2 facet_wrap ggtitle
+# @param transparency The transparency of the significant regions.
+# A number between 0 and 1 (default 85/255, 33% transparency).
+#' @importFrom ggplot2 ggplot facet_grid labs coord_fixed
+plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "lo", "hi.sign", "lo.sign"),
+                                            sign.col = "red", transparency = 85/255) {
+  g <- ggplot()
+  for(i in seq_along(x)) {
+    df <- x[[i]]
+    df$main <- names(x)[i]
+    g <- addplot_global_envelope2d(g, df, what, sign.col, transparency)
+  }
+  g + facet_grid(main ~ label) + labs(x="", y="", fill="") + coord_fixed()
+}
+
+#' Plotting function for 2d global envelopes
+#'
+#' @param x A 'global_envelope' object for two-dimensional functions
+#' @param fixedscales Logical. TRUE for the same scales for all images.
+#' @param main The overall main.
+#' @param what Character vector specifying what information should be plotted for 2d functions.
+#' A combination of:
+#' Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo"}),
+#' observed with significantly higher values highlighted (\code{"hi.sign"}),
+#' observed with significantly lower values highlighted (\code{"lo.sign"}).
+#' @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
+#' Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
+#' functions.
+#' @param ... Ignored.
+#' @inheritParams plot.global_envelope
+#' @importFrom ggplot2 ggtitle
 #' @importFrom gridExtra grid.arrange
-plot_global_envelope2d <- function(x, fixedscales = TRUE, sign.col = "red", transparency = 85/255,
-                                   main = NULL, digits = 3, ...) {
-  if(is.null(main)) main <- env_main_default(x, digits=digits)
-  dfs <- env2d_ggplot2_helper(x, fixedscales=fixedscales)
+#' @export
+plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
+                                   what=c("obs", "hi", "lo", "hi.sign", "lo.sign"),
+                                   sign.col = "red", transparency = 85/255,
+                                   digits = 3, ...) {
+  what <- match.arg(what, several.ok = TRUE)
+  what <- checkarg_envelope2d_what(x, what)
+  if(missing('main')) main <- env_main_default(x, digits=digits)
+
   if(fixedscales) {
-    g <- env2d_ggplot2_helper_1(dfs, sign.col, transparency)
-    g <- g + facet_wrap("label")
+    g <- plot_global_envelope2d_fixedscales(x, what, sign.col, transparency)
     g + ggtitle(main)
   } else {
-    gs = env2d_ggplot2_helper_many_single_plots(dfs, sign.col, transparency)
-    p1 = grid.arrange(grobs=gs, nrow=ceiling(length(gs)/3), top=main)
+    gs <- lapply(what, function(w) plot_global_envelope2d_fixedscales(x, w, sign.col, transparency))
+    grid.arrange(grobs=gs, nrow=ceiling(length(gs)/3), top=main)
   }
 }
 
-# Plotting function for combined 2d global envelopes
-#
-# If fixedscales is FALSE (or 0) all images will have separate scale.
-# If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
-# If fixedscales is 2 all images will have common scale.
-#
-# @param fixedscales 0, 1 or 2. See details.
-#' @importFrom ggplot2 facet_grid vars
+#' Plotting function for combined 2d global envelopes
+#'
+#' @description
+#' If fixedscales is FALSE (or 0) all images will have separate scale.
+#' If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
+#' If fixedscales is 2 all images will have common scale.
+#'
+#' @inheritParams plot.global_envelope2d
+#' @param fixedscales 0, 1 or 2. See details.
+#' @importFrom ggplot2 facet_grid facet_wrap ggtitle
+#' @importFrom ggplot2 label_value theme element_blank
 #' @importFrom gridExtra grid.arrange
-#' @importFrom grDevices col2rgb
-plot_combined_global_envelope2d <- function(x, fixedscales = 2, sign.col = "red", transparency = 85/255,
-                                            main = NULL, digits = 3, ...) {
-  if(is.null(names(x))) names(x) <- paste(1:length(x))
-  if(is.null(main)) fullmain <- env_main_default(attr(x, "level2_ge"), digits=digits)
-  else fullmain <- NULL
-  dfs <- mapply(x, names(x), SIMPLIFY=FALSE, FUN=function(x, main) {
-    env2d_ggplot2_helper(x, fixedscales=fixedscales, main=main, insertmain=!fixedscales)
-  })
+#' @export
+#' @examples
+#' data(abide_9002_23)
+#'
+#' res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
+#'                  formula.full = Y ~ Group + Sex + Age,
+#'                  formula.reduced = Y ~ Sex + Age,
+#'                  curve_sets = list(Y = subset(abide_9002_23[['curve_set']], 1:50)),
+#'                  factors = abide_9002_23[['factors']][1:50,],
+#'                  contrasts = FALSE,
+#'                  GET.args = list(type = "area"))
+#' plot(res)
+#' plot(res, what=c("obs", "hi"))
+#'
+#' plot(res, what=c("hi", "lo"), fixedscales=1)
+#'
+#' plot(res, what=c("obs", "lo", "hi"), fixedscales=FALSE)
+#'
+#' if(requireNamespace("gridExtra", quietly=TRUE) && require("ggplot2", quietly=TRUE)) {
+#'   # Edit style of "fixedscales = 2" plots
+#'   plot(res, what=c("obs", "hi")) + theme_minimal()
+#'
+#'   # Edit style (e.g. theme) of "fixedscales = 1 or 0" plots
+#'   gs <- lapply(res, plot, what=c("obs", "hi"), main="")
+#'   gridExtra::grid.arrange(grobs=gs, ncol=1, top="My main")
+#'
+#'   gs <- outer(res, c("obs", "hi"), FUN=Vectorize(function(res, what)
+#'     list(plot(res, what=what, main="") + theme(axis.ticks=element_blank(),
+#'       axis.text=element_blank(), axis.title=element_blank()))))
+#'   gridExtra::grid.arrange(grobs=t(gs))
+#' }
+plot.combined_global_envelope2d <- function(x, fixedscales = 2, main,
+                                            what=c("obs", "hi", "lo", "hi.sign", "lo.sign"),
+                                            sign.col = "red", transparency = 85/255,
+                                            digits = 3, ...) {
+  what <- match.arg(what, several.ok = TRUE)
+  what <- checkarg_envelope2d_what(x[[1]], what)
+  if(missing('main')) {
+    alt <- get_alternative(x[[1]])
+    main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
+  }
+
   if(fixedscales==2) {
-    df <- do.call(rbind, dfs)
-    g <- env2d_ggplot2_helper_1(df, sign.col, transparency) + facet_grid(main ~ label)
-    g + ggtitle(fullmain)
+    g <- plot_combined_global_envelope2d_fixedscales(x, what, sign.col, transparency)
+    g + ggtitle(main)
   } else if(fixedscales==1) {
-    gs <- lapply(dfs, function(df) {
-      env2d_ggplot2_helper_1(df, sign.col, transparency) + facet_grid(main ~ label)
+    gs <- lapply(seq_along(x), function(i) {
+      env <- x[[i]]
+      env$main <- names(x)[i]
+      g <- plot_global_envelope2d_fixedscales(env, what, sign.col, transparency)
+      g + facet_grid(main~label)
     })
-    grid.arrange(grobs=gs, ncol=1, top=fullmain)
+    grid.arrange(grobs=gs, ncol=1, top=main)
   } else if(fixedscales==0) {
-    gs <- lapply(dfs, function(dfs2) {
-      gs = env2d_ggplot2_helper_many_single_plots(dfs2, sign.col, transparency)
-      grid.arrange(grobs=gs, nrow=1)
-    })
-    grid.arrange(grobs=gs, ncol=1, top=fullmain)
+    f <- function(env, main, what) {
+      env$main <- main
+      g <- plot_global_envelope2d_fixedscales(env, what, sign.col, transparency)
+      g + facet_wrap(c("main", "label"), labeller=function(l) label_value(l, multi_line = FALSE))
+      g + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())
+    }
+    gs <- outer(what, seq_along(x), FUN=Vectorize(function(w, i) {
+      list(f(x[[i]], names(x)[i], w))
+    }))
+    grid.arrange(grobs=gs, top=main, nrow=ncol(gs))
   } else { stop("Invalid fixedscales argument.") }
 }

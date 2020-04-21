@@ -166,50 +166,51 @@ See examples also in \code{\link{saplings}}.
 \examples{
 # Graphical normality test (Myllymaki and Mrkvicka, 2020, Section 3.3.)
 #=========================
-library("fda.usc")
-data("poblenou")
-dat <- poblenou[['nox']][['data']][,'H10']
-n <- length(dat)
+if(require("fda.usc", quietly=TRUE)) {
+  data("poblenou")
+  dat <- poblenou[['nox']][['data']][,'H10']
+  n <- length(dat)
 
-# The number of simulations
-\donttest{nsim <- nsimsub <- 199}
-\dontshow{nsim <- nsimsub <- 19}
+  # The number of simulations
+  \donttest{nsim <- nsimsub <- 199}
+  \dontshow{nsim <- nsimsub <- 19}
 
-set.seed(200127)
-# General setup
-#==============
-# 1. Fit the model
-mu <- mean(dat)
-sigma <- sd(dat)
-# 2. Simulate a sample from the fitted null model and
-#    compute the test vectors for data (obs) and each simulation (sim)
-r <- seq(min(dat), max(dat), length=100)
-obs <- stats::ecdf(dat)(r)
-sim <- sapply(1:nsimsub, function(i) {
-  x <- rnorm(n, mean = mu, sd = sigma)
-  stats::ecdf(x)(r)
-})
-cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
-
-# 3. Simulate another sample from the fitted null model.
-# 4. Fit the null model to each of the patterns,
-#    simulate a sample from the null model,
-#    and compute the test vectors for all.
-cset.ls <- list()
-for(rep in 1:nsim) {
-  x <- rnorm(n, mean = mu, sd = sigma)
-  mu2 <- mean(x)
-  sigma2 <- sd(x)
-  obs2 <- stats::ecdf(x)(r)
-  sim2 <- sapply(1:nsimsub, function(i) {
-    x2 <- rnorm(n, mean = mu2, sd = sigma2)
-    stats::ecdf(x2)(r)
+  set.seed(200127)
+  # General setup
+  #==============
+  # 1. Fit the model
+  mu <- mean(dat)
+  sigma <- sd(dat)
+  # 2. Simulate a sample from the fitted null model and
+  #    compute the test vectors for data (obs) and each simulation (sim)
+  r <- seq(min(dat), max(dat), length=100)
+  obs <- stats::ecdf(dat)(r)
+  sim <- sapply(1:nsimsub, function(i) {
+    x <- rnorm(n, mean = mu, sd = sigma)
+    stats::ecdf(x)(r)
   })
-  cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
+  cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
+
+  # 3. Simulate another sample from the fitted null model.
+  # 4. Fit the null model to each of the patterns,
+  #    simulate a sample from the null model,
+  #    and compute the test vectors for all.
+  cset.ls <- list()
+  for(rep in 1:nsim) {
+    x <- rnorm(n, mean = mu, sd = sigma)
+    mu2 <- mean(x)
+    sigma2 <- sd(x)
+    obs2 <- stats::ecdf(x)(r)
+    sim2 <- sapply(1:nsimsub, function(i) {
+      x2 <- rnorm(n, mean = mu2, sd = sigma2)
+      stats::ecdf(x2)(r)
+    })
+    cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
+  }
+  # Perform the adjusted test
+  res <- GET.composite(X=cset, X.ls=cset.ls, type='erl')
+  plot(res, xlab="NOx", ylab="Ecdf")
 }
-# Perform the adjusted test
-res <- GET.composite(X=cset, X.ls=cset.ls, type='erl')
-plot(res, xlab="NOx", ylab="Ecdf")
 
 # Example of a point pattern data
 #================================

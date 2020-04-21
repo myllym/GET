@@ -4,8 +4,6 @@
 
 # A helper function for permuting the data variables
 # @inheritParams GET.variogram
-#' @importFrom sp coordinates
-#' @importFrom gstat variogram
 #' @importFrom stats residuals
 #' @importFrom stats lm
 #' @importFrom stats na.exclude
@@ -53,7 +51,6 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #' @param ... Additional parameters to be passed to \code{\link[gstat]{variogram}}.
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @inheritParams graph.fanova
-#' @importFrom plyr is.formula
 #' @importFrom stats formula
 #' @export
 #' @examples

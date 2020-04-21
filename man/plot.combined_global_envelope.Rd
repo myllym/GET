@@ -10,8 +10,9 @@
   ylim = NULL,
   xlab,
   ylab,
-  color_outside = TRUE,
   env.col = 1,
+  color_outside = TRUE,
+  sign.col = "red",
   base_size = 12,
   labels = NULL,
   add = FALSE,
@@ -34,10 +35,12 @@
 
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
 
+\item{env.col}{The color for the envelope lines (or dotplot arrows) for 1d functions. Default 1 (black).}
+
 \item{color_outside}{Logical. Whether to color the places where the data function goes
 outside the envelope. Relevant only for 1d functions.}
 
-\item{env.col}{The color for the envelope lines (or dotplot arrows) for 1d functions. Default 1 (black).}
+\item{sign.col}{The color for the significant regions. Default to "red".}
 
 \item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
@@ -67,6 +70,10 @@ Default 2 or 3, if the length of x equals 3.
 }
 \description{
 This function provides plots for combined global envelopes.
+}
+\details{
+Plotting method for the class 'combined_global_envelope', i.e. combined envelopes for
+1d functions.
 }
 \seealso{
 \code{\link{central_region}}
