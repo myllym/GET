@@ -27,7 +27,6 @@ Imports:
     gridExtra,
     methods,
     parallel,
-    plyr,
     spatstat,
     stats,
     utils
