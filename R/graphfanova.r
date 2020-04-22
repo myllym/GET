@@ -309,29 +309,6 @@ contrasts.m <- function(x, groups, ...) {
 #'      xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Year", j="r")),
 #'      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
 #'
-#' #-- Rimov water temperatures example
-#' # This is an example analysis of the water temperature data set
-#' # in Mrkvicka et al. (arXiv:1612.03608v2).
-#' data(rimov)
-#' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' \dontshow{nsim <- 19}
-#' \donttest{nsim <- 999}
-#'
-#' # Test for equality of variances in the groups
-#' resV <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE,
-#'                      test.equality="var")
-#' plot(resV)
-#' # Test for equality of lag 1 covariances in the groups
-#' resC <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE,
-#'                      test.equality="cov", cov.lag=1)
-#' plot(resC)
-#'
-#' # Test the equality of means in the groups (fANOVA), assuming equality of variances
-#' res <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = FALSE)
-#' plot(res)
-#' res2 <- graph.fanova(nsim=nsim, curve_set=rimov, groups=groups, contrasts = TRUE)
-#' plot(res2)
-#'
 #' # Image set examples
 #' data("imageset1")
 #' res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
