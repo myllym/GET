@@ -119,24 +119,20 @@ res.tax_within_group <- frank.flm(nsim = nsim,
 plot(res.tax_within_group)
 
 # Image set examples
-data(imageset2)
-#' # Testing discrete factor group
-res.g <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
-                     formula.full = Y ~ group + z,
-                     formula.reduced = Y ~ z,
-                     curve_sets = list(Y = imageset2$image_set),
-                     factors = data.frame(group = imageset2$Group,
-                                          z = imageset2$z))
-plot(res.g)
-
-# Testing continuous factor z
-res.z <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
-                     formula.full = Y ~ group + z,
-                     formula.reduced = Y ~ group,
-                     curve_sets = list(Y = imageset2$image_set),
-                     factors = data.frame(group = imageset2$Group,
-                                          z = imageset2$z))
-plot(res.z)
+data(abide_9002_23)
+iset <- abide_9002_23$curve_set
+\dontshow{
+# Cut the data to reduce time
+iset$r <- iset$r[1:29,]
+iset$funcs <- iset$funcs[1:29, ]
+}
+res.F <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
+                   formula.full = Y ~ Group + Age + Sex,
+                   formula.reduced = Y ~ Age + Sex,
+                   curve_sets = list(Y = iset),
+                   factors = abide_9002_23[['factors']],
+                   GET.args = list(type = "area"))
+plot(res.F)
 }
 \references{
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
