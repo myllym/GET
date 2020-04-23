@@ -257,10 +257,10 @@ env_dotplot_ggplot <- function(x, labels=NULL) {
   if(is.null(labels) && !is.null(x[['r']])) labels <- paste(round(x[['r']], digits=2))
   df <- as.data.frame(x)
   arrow <- arrow(angle=75)
-  ggplot(df) + geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data$hi), arrow=arrow) +
-    geom_segment(aes(x=factor(.data$r), y=.data$central, xend=.data$r, yend=.data$lo), arrow=arrow) +
-    geom_point(aes(x=factor(.data$r), y=.data$obs, col=ifelse(.data$obs > .data$hi | .data$obs < .data$lo, "red", "black")), shape="x", size=5) +
-    geom_point(aes(x=factor(.data$r), y=.data$central)) +
+  g <- ggplot(df) + geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data$hi), arrow=arrow) +
+    geom_segment(aes(x=factor(.data$r), y=.data$central, xend=.data$r, yend=.data$lo), arrow=arrow)
+  if(!is.null(x[['obs']])) g <- g + geom_point(aes(x=factor(.data$r), y=.data$obs, col=ifelse(.data$obs > .data$hi | .data$obs < .data$lo, "red", "black")), shape="x", size=5)
+  g <- g + geom_point(aes(x=factor(.data$r), y=.data$central)) +
     scale_color_identity() +
     scale_x_discrete(breaks=paste(x[['r']]), labels=labels)
 }
