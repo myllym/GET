@@ -458,15 +458,14 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     linetype.values <- c('dashed', 'solid')
     size.values <- c(0.2, 0.2)
 
-    counter <- 0
-    outliers <- NULL
+    outliers <- outliers_id <- NULL
     if(!is.null(curve_sets)) {
       if(inherits(curve_sets, "list")) curve_sets <- combine_curve_sets(curve_sets, equalr=FALSE)
       funcs <- curve_set_funcs(curve_sets)
       for(j in 1:ncol(funcs)) {
         if(any(funcs[,j] < x[['lo']] | funcs[,j] > x[['hi']])) {
           outliers <- c(outliers, funcs[,j])
-          counter <- counter + 1
+          outliers_id <- c(outliers_id, j)
         }
       }
     }
@@ -523,9 +522,9 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       )
       if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
       if(!is.null(outliers)) {
-        outliers.df <- data.frame(r = rep(x[['r']], times=counter),
+        outliers.df <- data.frame(r = rep(x[['r']], times=length(outliers_id)),
                                   curves = outliers,
-                                  id = rep(1:counter, each=length(x[['r']])))
+                                  id = rep(outliers_id, each=length(x[['r']])))
         p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
       }
       if(rdata$retick_xaxis) {
@@ -616,9 +615,9 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       )
       if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
       if(!is.null(outliers)) {
-        outliers.df <- data.frame(r = rep(x[['r']], times=counter),
+        outliers.df <- data.frame(r = rep(x[['r']], times=length(outliers_id)),
                                   curves = outliers,
-                                  id = rep(1:counter, each=length(x[['r']])),
+                                  id = rep(outliers_id, each=length(x[['r']])),
                                   test_function = factor(func_labels, levels=labels))
         p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
       }
