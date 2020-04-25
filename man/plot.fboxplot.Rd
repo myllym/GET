@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{fboxplot}(
   x,
-  plot_style = c("ggplot2", "fv", "basic"),
+  plot_style = c("ggplot2", "basic"),
   dotplot = length(x$r) < 10,
   outliers = TRUE,
   bp.col = 2,
@@ -28,7 +28,8 @@ also tests with several tests functions.}
 Suitable for low dimensional test vectors.
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
-\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn.}
+\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn together
+with a label (= index in the set of functions or its name given).}
 
 \item{bp.col}{The color for the boxplot bounds. Default 2 (red).}
 

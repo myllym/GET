@@ -13,7 +13,8 @@
 1 for plotting the combined global envelopes (default and most often wanted) or
 2 for plotting the second level test result.}
 
-\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn.}
+\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn together
+with a label (= index in the set of functions or its name given).}
 
 \item{bp.col}{The color for the boxplot bounds. Default 2 (red).}
 
