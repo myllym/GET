@@ -832,7 +832,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
 #' @param cr.col The color for the central region bounds.
 #' @param ... Additional arguments to be passed to \code{\link{plot.global_envelope}}.
 #' @export
-plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
+plot.fboxplot <- function(x, plot_style = c("ggplot2", "basic"),
                           dotplot = length(x$r)<10,
                           outliers = TRUE, bp.col = 2, cr.col = 1, ...) {
   plot_style <- match.arg(plot_style)
@@ -840,12 +840,6 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   cr <- x
   x$lo <- attr(x, "whisker.lo"); x$hi <- attr(x, "whisker.hi") # Functional boxplot
 
-  if(retick_xaxis(x)$retick_xaxis) {
-    if(plot_style == "fv") {
-      warning("The plot style fv not available for the case where r distances are not increasing.\n Setting plot_style to basic.\n")
-      plot_style <- "basic"
-    }
-  }
   switch(plot_style,
          basic = {
            if(dotplot) {
@@ -860,18 +854,6 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "fv", "basic"),
              lines(cr$r, cr$lo, lty=2, col=cr.col)
              lines(cr$r, cr$hi, lty=2, col=cr.col)
            }
-         },
-         fv = {
-           plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=NULL)
-           # Outliers
-           funcs <- curve_set_funcs(curve_sets)
-           for(i in 1:ncol(funcs)) {
-             if(any(funcs[,i] < x$lo | funcs[,i] > x$hi))
-               lines(curve_sets$r, funcs[,i], col='grey50')
-           }
-           # Central region
-           lines(cr$r, cr$lo, lty=2, col=cr.col)
-           lines(cr$r, cr$hi, lty=2, col=cr.col)
          },
          ggplot2 = {
            plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
