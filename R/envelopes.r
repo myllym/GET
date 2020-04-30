@@ -827,7 +827,8 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
 #'
 #' @param x an 'fboxplot' object
 #' @inheritParams plot.global_envelope
-#' @param outliers Logical. If TRUE, then the functions outside the functional boxplot are drawn.
+#' @param outliers Logical. If TRUE, then the functions outside the functional boxplot are drawn,
+#'  together with a label (= index in the set of functions).
 #' @param bp.col The color for the boxplot bounds. Default 2 (red).
 #' @param cr.col The color for the central region bounds.
 #' @param ... Additional arguments to be passed to \code{\link{plot.global_envelope}}.

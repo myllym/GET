@@ -427,6 +427,8 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
 #' @importFrom ggplot2 guides
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 geom_text
+#' @importFrom utils tail
 env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                        max_ncols_of_plots = 2,
                        labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL,
@@ -525,7 +527,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
         outliers.df <- data.frame(r = rep(x[['r']], times=length(outliers_id)),
                                   curves = outliers,
                                   id = rep(outliers_id, each=length(x[['r']])))
-        p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
+        last_points <- outliers.df[outliers.df$r==max(outliers.df$r),]
+        extrasp <- (max(outliers.df$r)-min(outliers.df$r))/50
+        p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id)) +
+          ggplot2::geom_text(data = last_points, ggplot2::aes_(x=~r+extrasp, y=~curves, label = ~id))
       }
       if(rdata$retick_xaxis) {
         p <- p + ggplot2::scale_x_continuous(name = xlab,
@@ -619,7 +624,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
                                   curves = outliers,
                                   id = rep(outliers_id, each=length(x[['r']])),
                                   test_function = factor(func_labels, levels=labels))
-        p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id))
+        last_points <- outliers.df[outliers.df$r==max(outliers.df$r),]
+        extrasp <- (max(outliers.df$r)-min(outliers.df$r))/50
+        p <- p + ggplot2::geom_line(data = outliers.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id)) +
+          ggplot2::geom_text(data = last_points, ggplot2::aes_(x=~r+extrasp, y=~curves, label = ~id))
       }
       p <- p + ggplot2::scale_x_continuous(name = xlab)
     }

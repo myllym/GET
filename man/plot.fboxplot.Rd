@@ -28,8 +28,8 @@ also tests with several tests functions.}
 Suitable for low dimensional test vectors.
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
-\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn together
-with a label (= index in the set of functions or its name given).}
+\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn,
+together with a label (= index in the set of functions).}
 
 \item{bp.col}{The color for the boxplot bounds. Default 2 (red).}
 
