@@ -98,8 +98,8 @@ Fvalues <- function(x, groups) {
   ni <- groupn(groups)
   n <- sum(ni)
   k <- nlevels(groups)
-  total <- apply(x^2, 2, sum) - apply(x, 2, sum)^2 / n
-  within <- apply( groupSXX(x, groups) - groupSX(x, groups)^2/ni, 2, sum)
+  total <- colSums(x^2) - colSums(x)^2 / n
+  within <- colSums( groupSXX(x, groups) - groupSX(x, groups)^2/ni )
   (total / within - 1) / (k - 1) * (n-k)
 }
 
