@@ -545,3 +545,13 @@ subset.curve_set <- function(x, subset, ...) {
   x[['funcs']] <- x[['funcs']][, subset]
   x
 }
+
+#' @export
+`[.curve_set` <- function(x, i, j) {
+  x$r <- if(is.data.frame(x$r)) x$r[i,]
+    else x$r[i]
+  x$funcs <- x$funcs[i,j,drop=FALSE]
+  if(!missing(j) && !(1 %in% j))
+    x$is1obs <- FALSE
+  x
+}
