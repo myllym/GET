@@ -99,13 +99,15 @@ individual_forder <- function(curve_set,
                               measure = 'erl', scaling = 'qdir',
                               alternative=c("two.sided", "less", "greater"),
                               use_theo = TRUE,
-                              probs = c(0.025, 0.975), quantile.type = 7) {
+                              probs = c(0.025, 0.975), quantile.type = 7,
+                              partial = FALSE) {
   possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!\n")
 
   curve_set <- convert_envelope(curve_set)
 
   if(measure %in% c('max', 'int', 'int2')) {
+    if(partial) stop("partial not supported with deviation tests.")
     curve_set <- residual(curve_set, use_theo = use_theo)
     curve_set <- scale_curves(curve_set, scaling = scaling, probs = probs, type = quantile.type)
     distance <- deviation(curve_set, measure = measure)
@@ -143,11 +145,12 @@ individual_forder <- function(curve_set,
              # If the curve_set is larger than 80 MB
              # and nr > 2*n (in erlrle)
              # then use erlrle, otherwise sort
-             if(length(data_and_sim_curves) > 10*2^20 && nr > 12)
+             if((length(data_and_sim_curves) > 10*2^20 && nr > 12) || partial)
                sortranks <- applyfuncs(erlrle)
              else
                sortranks <- applyfuncs(sort)
-             distance <- rank_matrix_cols(sortranks) / Nfunc
+             distance <- if(partial) sortranks
+               else rank_matrix_cols(sortranks) / Nfunc
            },
            cont = {
              distance <- applyfuncs(min)
@@ -157,15 +160,122 @@ individual_forder <- function(curve_set,
                distance <- distance / (Nfunc-1)
            },
            area = {
-             distance <- applyfuncs(function(x) { sum(pmin(ceiling(min(x)), x)) })
-             if(alternative == "two.sided")
-               distance <- distance / (ceiling(Nfunc/2)*nr)
-             else
-               distance <- distance / ((Nfunc-1)*nr)
+             if(partial) {
+               partialarea <- function(cont) {
+                  rank <- ceiling(min(cont))
+                  area <- sum(rank - cont[cont <= rank])
+                  c(rank, area, nr)
+               }
+               distance <- applyfuncs(partialarea)
+             } else {
+               distance <- applyfuncs(function(x) { sum(pmin(ceiling(min(x)), x)) })
+               if(alternative == "two.sided")
+                 distance <- distance / (ceiling(Nfunc/2)*nr)
+               else
+                 distance <- distance / ((Nfunc-1)*nr)
+             }
            })
   }
-  names(distance) <- rownames(data_and_sim_curves)
+  # When partial=TRUE, distance can be a matrix.
+  if(is.matrix(distance)) colnames(distance) <- rownames(data_and_sim_curves)
+  else names(distance) <- rownames(data_and_sim_curves)
   list(distance = distance, measure = measure)
+}
+
+combine_area_forder1 <- function(x) {
+  ranks <- x[1,]
+  areas <- x[2,]
+  nrs <- x[3,]
+  rank <- min(ranks)
+  area <- sum(areas[ranks==rank])
+  rank - area / sum(nrs)
+}
+combine_area_forder <- function(parts) {
+  simnames <- colnames(parts[[1]])
+  Nfunc <- dim(parts[[1]])[2]
+  a <- array(unlist(parts), dim=c(dim(parts[[1]]), length(parts)))
+  area <- sapply(1:Nfunc, function(i) combine_area_forder1(a[,i,]))
+  names(area) <- simnames
+  area
+}
+
+# x <- c(1,-3, 2,-1, 4,-1, NA, NA, 1,-2, 3,-1, 4,-3, NA,NA)
+# n <- 5
+# stopifnot(all.equal(GET:::combine_erl_forder1(x, n), c(1,-5, 2,-1, 3,-1, 4,-4, NA,NA)))
+combine_erl_forder1 <- function(x, n) {
+  values <- x[c(TRUE, FALSE)]
+  counts <- x[c(FALSE, TRUE)]
+  newvalues <- sort(unique(values))[1:n]
+  newcounts <- unsplit(lapply(split(counts, values), sum), newvalues)
+  c(rbind(newvalues, newcounts))
+}
+#' @importFrom stats setNames
+combine_erl_forder <- function(parts) {
+  simnames <- colnames(parts[[1]])
+  Nfunc <- dim(parts[[1]])[2]
+  erln <- dim(parts[[1]])[1]/2
+  a <- array(unlist(parts), dim=c(dim(parts[[1]]), length(parts)))
+  erlrle <- sapply(1:Nfunc, function(i) combine_erl_forder1(c(a[,i,]), erln))
+  setNames(rank_matrix_cols(erlrle), simnames)
+}
+
+#' Functional ordering in parts
+#'
+#' If the functional data doesn't comfortably fit in memory it is possible to
+#' compute functional ordering by splitting the domain of the data (voxels in
+#' a brain image), using \code{partial_forder} on each part and finally
+#' combining the results with \code{combine_forder}.
+#'
+#' @param curve_set A \code{curve_set} object, usually a part of a larger \code{curve_set}.
+#' @seealso \code{\link{forder}}
+#' @return
+#' @inheritParams forder
+#' @examples
+#' data("abide_9002_23")
+#' \dontshow{
+#' ## Check that partial_forder gives the same result as forder
+#' cset <- frank.flm(nsim=99, formula.full = Y ~ Group + Sex + Age,
+#'                   formula.reduced = Y ~ Group + Sex,
+#'                   curve_sets = list(Y = abide_9002_23$curve_set),
+#'                   factors = abide_9002_23$factors, savefuns = "return")
+#' p1 <- partial_forder(cset[1:100,], measure="area")
+#' p2 <- partial_forder(cset[-(1:100),], measure="area")
+#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="area")*50))
+#' p1 <- partial_forder(cset[1:100,], measure="cont")
+#' p2 <- partial_forder(cset[-(1:100),], measure="cont")
+#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="cont")))
+#' p1 <- partial_forder(cset[1:100,], measure="erl")
+#' p2 <- partial_forder(cset[-(1:100),], measure="erl")
+#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="erl")*100))
+#' }
+#' res <- lapply(list(1:100, 101:200, 201:261), function(part) {
+#'   set.seed(123) # When using partial_forder, all parts must use the same seed.
+#'   fset <- frank.flm(nsim=99, formula.full = Y ~ Group + Sex + Age,
+#'                   formula.reduced = Y ~ Group + Sex,
+#'                   curve_sets = list(Y = abide_9002_23$curve_set[part,]),
+#'                   factors = abide_9002_23$factors, savefuns = "return")
+#'   partial_forder(fset, measure="erl")
+#' })
+#' combine_forder(res)
+#' @export
+partial_forder <- function(curve_set,
+                           measure = c('rank', 'cont', 'area', 'erl'),
+                           alternative = c("two.sided", "less", "greater")) {
+  individual_forder(curve_set, measure = measure, alternative = alternative, partial = TRUE)
+}
+
+#' @param ls List of objects returned by partial_forder
+#' @return See \code{\link{forder}}
+#' @rdname partial_forder
+#' @export
+combine_forder <- function(ls) {
+  partialforders <- lapply(ls, getElement, name="distance")
+  measure <- ls[[1]]$measure
+  switch(measure,
+         rank=,
+         cont=do.call(pmin, partialforders),
+         erl=combine_erl_forder(partialforders),
+         area=combine_area_forder(partialforders))
 }
 
 # Functionality for functional ordering based on several curve sets
