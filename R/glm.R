@@ -656,6 +656,7 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   if(method == "complex") obs <- obs$Fvalues
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
+  if(savefuns=="return") return(cset)
   res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
   attr(res, "ylab") <- "F(r)"
   attr(res, "yexp") <- quote(F(r))
