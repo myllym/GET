@@ -382,6 +382,7 @@ combined_forder <- function(curve_sets, ...) {
 #' @param quantile.type As type argument of \code{\link[stats]{quantile}}, how to
 #' calculate quantiles for 'q' or 'qdir'.
 #' @export
+#' @seealso \code{\link{partial_forder}}
 #' @references
 #' Hahn U (2015). “A note on simultaneous Monte Carlo tests.” Technical report, Centre for Stochastic Geometry and advanced Bioimaging, Aarhus University.
 #'
