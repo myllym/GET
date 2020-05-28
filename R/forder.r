@@ -148,7 +148,7 @@ individual_forder <- function(curve_set,
                               use_theo = TRUE,
                               probs = c(0.025, 0.975), quantile.type = 7) {
   possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
-  if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!\n")
+  if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!")
 
   curve_set <- convert_envelope(curve_set)
 
@@ -270,10 +270,10 @@ combine_erl_forder <- function(parts) {
 #' combine_forder(res)
 #' @export
 partial_forder <- function(curve_set,
-                           measure = c('rank', 'cont', 'area', 'erl'),
+                           measure = c('erl', 'rank', 'cont', 'area'),
                            alternative = c("two.sided", "less", "greater")) {
-  alternative <- match.arg(alternative)
   measure <- match.arg(measure)
+  alternative <- match.arg(alternative)
   res <- individual_partial_forder(curve_set, measure = measure, alternative = alternative, erlhistn = 6)
   list(data=res, measure=measure, nr=curve_set_narg(curve_set))
 }
