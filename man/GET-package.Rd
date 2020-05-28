@@ -107,6 +107,7 @@ Also the adjusted tests can be based on several test functions.
  \itemize{
   \item \emph{Graphical} functional GLM: \code{\link{graph.flm}}
   \item Global rank envelope based on F-values: \code{\link{frank.flm}}
+  \item For large data (not fitting comfortably in memory): \code{\link{partial_forder}}
  }
 \item Functions for performing global envelopes for specific purposes:
  \itemize{
