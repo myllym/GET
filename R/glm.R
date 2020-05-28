@@ -537,6 +537,9 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' checking the validity of the implementation.
 #'
 #' @inheritParams graph.flm
+#' @param savefuns Logical or "return". If TRUE, then the functions from permutations are saved to the attribute simfuns.
+#' If "return", then the function returnns the permutations in a curve_set (instead of making the envelope test on those);
+#' this can be used by \code{\link{partial_forder}}.
 #' @param method For advanced use.
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export

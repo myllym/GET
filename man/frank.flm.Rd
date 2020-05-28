@@ -39,8 +39,9 @@ the curve set representing Y. Also \code{\link[fda.usc]{fdata}} objects allowed.
 are constant for all argument values. The number of rows of the data frame should be equal
 to the number of curves. Each column should specify the values of a factor.}
 
-\item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
-simfuns.}
+\item{savefuns}{Logical or "return". If TRUE, then the functions from permutations are saved to the attribute simfuns.
+If "return", then the function returnns the permutations in a curve_set (instead of making the envelope test on those);
+this can be used by \code{\link{partial_forder}}.}
 
 \item{...}{Additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
 
