@@ -8,12 +8,12 @@
 #' @importFrom stats lm
 #' @importFrom stats na.exclude
 permvariogram <- function(object, data, vars, perm=TRUE, ...) {
-  if(length(vars)>1) stop("Only one variable allowed. No test for correlation between variables implemented.\n")
+  if(length(vars)>1) stop("Only one variable allowed. No test for correlation between variables implemented.")
   args <- list(...)
   # Treat coordinates/locations in order to do permutations of the data
   if(class(data)[1] == "SpatialPointsDataFrame") locations <- sp::coordinates(data)
   else {
-    if(!("locations" %in% args)) stop("Either data must be provided with coordinates or locations must be given separately. See ?variogram.\n")
+    if(!("locations" %in% args)) stop("Either data must be provided with coordinates or locations must be given separately. See ?variogram.")
   }
   if(!is.data.frame(data)) data <- as.data.frame(data)
 
@@ -102,18 +102,18 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #'   plot(g.GET)
 #' }
 GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL, savefuns = TRUE) {
-  if(!inherits(object, "formula") & !inherits(object, "gstat")) stop("object does not have the formula or gstat class.\n")
+  if(!inherits(object, "formula") & !inherits(object, "gstat")) stop("object does not have the formula or gstat class.")
   # Check data w.r.t. formula
   if(inherits(object, "formula")) {
-    if(is.null(data)) stop("The argument \'data\' must be provided as \'object\' is a formula.\n")
+    if(is.null(data)) stop("The argument \'data\' must be provided as \'object\' is a formula.")
     vars <- all.vars(object)
   }
   if(inherits(object, "gstat")) {
-    if(length(object$data) > 1) stop("Only one dependent variable allowed.\n")
+    if(length(object$data) > 1) stop("Only one dependent variable allowed.")
     if(is.null(data)) data <- object$data[[1]]$data
     vars <- all.vars(object$data[[1]]$formula)
   }
-  if(!all(vars %in% names(data))) stop("The variables found in the given gstat object do not exist in the first \"data\" component.\n")
+  if(!all(vars %in% names(data))) stop("The variables found in the given gstat object do not exist in the first \"data\" component.")
   # The case of regression model(s):
   if(inherits(object, "formula") & object[[3]] != 1) { # there is a regression model:
     data$resid <- stats::residuals(stats::lm(formula=object, data=data, na.action = stats::na.exclude))

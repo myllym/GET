@@ -31,7 +31,7 @@ combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, type = c("qdir
 combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_f, upper_f) {
   ntests <- length(central_curves_ls)
   if(length(max_u) != ntests | length(lower_f) != ntests | length(upper_f) != ntests)
-    stop("The lengths of different arguments do not match.\n")
+    stop("The lengths of different arguments do not match.")
   # The global 100(1-alpha)% envelope
   # Find the k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test
   # Typically max_u <- res_rank$hi, where res_rank is the combined rank envelope test done.
@@ -113,7 +113,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alpha = 0.05,
                                          probs = c(0.025, 0.975), central = "mean", ...) {
     ntests <- length(curve_sets)
-    if(ntests <= 1) stop("Number of functions should be at least two.\n")
+    if(ntests <= 1) stop("Number of functions should be at least two.")
     type <- match.arg(type)
     curve_sets <- check_curve_set_dimensions(curve_sets)
     # Make the individual tests saving the deviations

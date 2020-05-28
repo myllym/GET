@@ -1,10 +1,10 @@
 # Check that formula.reduced is nested within formula.full and includes something extra.
 check_isnested <- function(formula.full, formula.reduced) {
   # Check that the reduced model is nested within the full model
-  if(!all(labels(terms(formula.reduced)) %in% labels(terms(formula.full)))) stop("The reduced model includes some extra variables, not in the full model.\n")
-  if(attr(terms(formula.full), "intercept") < attr(terms(formula.reduced), "intercept")) stop("The reduced model includes intercept, but the full model does not.\n")
+  if(!all(labels(terms(formula.reduced)) %in% labels(terms(formula.full)))) stop("The reduced model includes some extra variables, not in the full model.")
+  if(attr(terms(formula.full), "intercept") < attr(terms(formula.reduced), "intercept")) stop("The reduced model includes intercept, but the full model does not.")
   # Check that the full model includes something in addition to the reduced model
-  if(all(labels(terms(formula.full)) %in% labels(terms(formula.reduced)))) stop("The full model should not be equal to the reduced model.\n")
+  if(all(labels(terms(formula.full)) %in% labels(terms(formula.reduced)))) stop("The full model should not be equal to the reduced model.")
 }
 
 # Preliminary checks for the graph.flm and frank.flm
@@ -14,19 +14,19 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   vars <- all.vars(formula.full)
   vars.reduced <- all.vars(formula.reduced)
   check_isnested(formula.full, formula.reduced)
-  if(nsim < 1) stop("Not a reasonable value of nsim.\n")
-  if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.\n")
+  if(nsim < 1) stop("Not a reasonable value of nsim.")
+  if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.")
   if(class(curve_sets)[1] != "list") {
     curve_sets <- list(Y=curve_sets)
   }
   available <- unique(c(names(curve_sets), names(factors)))
-  if(!all(vars %in% available)) stop("The variables in the formula not found in the given data (curve_sets and factors).\n")
-  if(!all(sapply(curve_sets, function(x) inherits(x, c("curve_set", "fdata"))))) stop("The components of curve_sets do not have a valid class.\n")
+  if(!all(vars %in% available)) stop("The variables in the formula not found in the given data (curve_sets and factors).")
+  if(!all(sapply(curve_sets, function(x) inherits(x, c("curve_set", "fdata"))))) stop("The components of curve_sets do not have a valid class.")
   if(inherits(curve_sets[['Y']], "fdata")) {
     einfo <- curve_sets[['Y']]$names
   } else einfo <- NULL
   curve_sets <- lapply(curve_sets, convert_fdata)
-  if(any(sapply(curve_sets, function(x) curve_set_is1obs(x)))) stop("All (data) functions of the curve_set must be equal.\n")
+  if(any(sapply(curve_sets, function(x) curve_set_is1obs(x)))) stop("All (data) functions of the curve_set must be equal.")
   curve_sets <- check_curve_set_dimensions(curve_sets)
   # Put Y and factors into data.l
   data.l <- list()
@@ -43,8 +43,8 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   }
   vars.factors <- vars[vars %in% names(factors)]
   if(!is.null(factors) & length(vars.factors) > 0) {
-    if(class(factors)[1] != "data.frame") stop("Invalid factors argument.\n")
-    if(nrow(factors) != Nfunc) stop("The dimensions of Y and factors do not match.\n")
+    if(class(factors)[1] != "data.frame") stop("Invalid factors argument.")
+    if(nrow(factors) != Nfunc) stop("The dimensions of Y and factors do not match.")
     # Expand the factors to each argument value
     for(i in 1:length(vars.factors)) {
       data.l[[vars.factors[i]]] <- if(factors_in_curvesets) {
@@ -115,7 +115,7 @@ genCoefcontrasts.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
   effect.a <- genCoefmeans.m(Y=Y, dfs=dfs, formula.full=formula.full, nameinteresting=nameinteresting, ...)
   nameinteresting <- colnames(effect.a) # including levels of factors
   k <- length(nameinteresting)
-  if(k == 1) stop("The option \'contrasts\' only valid for discrete factors with at least two levels.\n")
+  if(k == 1) stop("The option \'contrasts\' only valid for discrete factors with at least two levels.")
   # contrasts
   cont <- matrix(0, nrow=nr, ncol=k*(k-1)/2)
   cont.names <- vector(length=k*(k-1)/2)

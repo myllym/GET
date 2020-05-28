@@ -55,7 +55,7 @@ pick_attributes <- function(curve_set, alternative, type) {
 retick_xaxis <- function(x) {
   if(!inherits(x, "list")) x <- list(x)
   if(any(sapply(x, FUN=function(x) { !(inherits(x, c("global_envelope", "fboxplot", "curve_set"))) })))
-    stop("x should consist of global_envelope objects.\n")
+    stop("x should consist of global_envelope objects.")
   r_values_ls <- lapply(x, FUN=function(x) x$r)
   r_values <- do.call(c, r_values_ls, quote=FALSE)
   nr <- length(r_values)
@@ -222,7 +222,7 @@ env_dotplot <- function(x, main, ylim, xlab, ylab, color_outside = TRUE,
     nr <- length(x[['r']])
     if(is.null(labels)) labels <- paste(round(x[['r']], digits=2))
     if(missing(arrows.col)) arrows.col <- 1
-    if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.\n")
+    if(nr > 10) warning("Dotplot style meant for low dimensional test vectors.")
     if(!add) graphics::plot(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
     else graphics::points(1:nr, x[['central']], main=main, ylim=ylim, xlab=xlab, ylab=ylab, cex=0.5, pch=16, xaxt="n", ...)
     if(get_alternative(x)!="greater")
@@ -330,7 +330,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
         }
     }
     else {
-        if(Nfunc == 1) warning("The r-values are non-increasing in the given object. Splitting to several plots.\n")
+        if(Nfunc == 1) warning("The r-values are non-increasing in the given object. Splitting to several plots.")
         n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
         ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
         nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
@@ -350,7 +350,7 @@ env_basic_plot <- function(x, main, ylim, xlab, ylab, color_outside=TRUE,
                                  x[['hi']][tmp_indeces[i]:(tmp_indeces[i+1]-1)]))
           }
         }
-        if(length(main) != n_of_plots) { main <- NULL; cat("Note: \"main\" Ignored.\n") }
+        if(length(main) != n_of_plots) { main <- NULL; message("Note: \"main\" Ignored.") }
         if(!inherits(xlab, "list") && length(xlab) == 1) xlab <- rep(list(xlab), times=n_of_plots)
         if(!inherits(ylab, "list") && length(ylab) == 1) ylab <- rep(list(ylab), times=n_of_plots)
         if(!is.null(curve_sets)) {
@@ -438,13 +438,13 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
     if(!is.null(x2)) {
       if(!inherits(x2, "list")) x2 <- list(x2)
       if(length(x) != length(x2)) {
-        warning("Unsuitable x2. Setting it to NULL.\n")
+        warning("Unsuitable x2. Setting it to NULL.")
         x2 <- NULL
       }
       else {
         for(i in 1:length(x)) {
-          if(!all(x[[i]][['r']] == x2[[i]][['r']])) stop("The two envelopes are for different r-values.\n")
-          if(!all(x[[i]][['central']] == x2[[i]][['central']])) warning("The two envelopes have different central functions!\n")
+          if(!all(x[[i]][['r']] == x2[[i]][['r']])) stop("The two envelopes are for different r-values.")
+          if(!all(x[[i]][['central']] == x2[[i]][['central']])) warning("The two envelopes have different central functions!")
         }
       }
       rdata <- combined_global_envelope_rhelper(x2, nticks=nticks)
@@ -543,7 +543,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
       else p <- p + ggplot2::scale_x_continuous(name = xlab)
     }
     else {
-      if(Nfunc == 1) warning("The r-values are non-increasing in the given object. Splitting to several plots.\n")
+      if(Nfunc == 1) warning("The r-values are non-increasing in the given object. Splitting to several plots.")
       n_of_plots <- as.integer(1 + length(rdata$r_values_newstart_id))
       ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
       nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
@@ -552,10 +552,10 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
         if(length(labels)==1) {
           labels <- paste(labels, " - ", 1:n_of_plots, sep="")
           warning(paste("Consider giving labels as a vector of length ", n_of_plots,
-                        " containing the label for each test function/vector used.\n", sep=""))
+                        " containing the label for each test function/vector used.", sep=""))
         }
         else {
-          warning("The length of the vector labels is unreasonable. Setting labels to empty.\n")
+          warning("The length of the vector labels is unreasonable. Setting labels to empty.")
           labels <- rep("", times=n_of_plots)
         }
       }

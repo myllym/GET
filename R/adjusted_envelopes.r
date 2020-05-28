@@ -13,7 +13,7 @@ funcs_from_X_and_funs <- function(X, nsim, testfuns=NULL, ...,
   if(nfuns < 1) nfuns <- 1
   for(i in 1:nfuns)
     if(any(names(extraargs) %in% names(testfuns[[i]])))
-      stop(paste("formal argument(s) \"", names(extraargs)[which(names(extraargs) %in% names(testfuns[[i]]))], "\" matched by multiple actual arguments\n", sep=""))
+      stop(paste("formal argument(s) \"", names(extraargs)[which(names(extraargs) %in% names(testfuns[[i]]))], "\" matched by multiple actual arguments.", sep=""))
 
   X.ls <- NULL
   # Simulations
@@ -51,7 +51,7 @@ adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
   if(!is.null(fitfun) & !is.null(simfun)) {
     message("Note: Model to be fitted by fitfun(X), simulations by simfun and calcfun;\n",
         "simfun should accept the object returned by fitfun as its argument.\n",
-        "calcfun should accept the object returned by simfun as its argument.\n")
+        "calcfun should accept the object returned by simfun as its argument.")
     # Fit the model to X
     simfun.arg <- fitfun(X) # fitted model to be passed to simfun
     # Generate nsim simulations by the given function using the fitted model
@@ -75,12 +75,12 @@ adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
   # a) If X is a ppp object, the tested model is CSR
   # b) If X is a model object of spatstat, then spatstat is used for fitting and simulation.
   else {
-    if(!is.ppp(X) & !Xispppmodel) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.\n")
-    if(Xispppmodel) message("X is a fitted model object of spatstat;\n using spatstat to simulate the model and calculate the test functions.\n")
+    if(!is.ppp(X) & !Xispppmodel) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.")
+    if(Xispppmodel) message("X is a fitted model object of spatstat;\n using spatstat to simulate the model and calculate the test functions.")
     else
       message("Note: \'simfun\' and/or \'fitfun\' not provided and \'X\' is a ppp object of spatstat.\n",
           "The spatstat's function \'envelope\' is used for simulations and model fitting, \n",
-          "and CSR is tested (with intensity parameter).\n")
+          "and CSR is tested (with intensity parameter).")
     # Create simulated functions from the given model
     stage1_cset_ls <- funcs_from_X_and_funs(X, nsim=nsimsub, testfuns=testfuns, ...,
                                             savepatterns=FALSE, verbose=verbose, calc_funcs=TRUE)
@@ -381,17 +381,17 @@ GET.composite <- function(X, X.ls = NULL,
     X <- check_curve_set_dimensions(X)
     X.ls <- lapply(X.ls, FUN = check_curve_set_dimensions)
     # Check equality of dimensions over repetitions
-    if(!all(sapply(X.ls, FUN=function(curve_set) { identical(curve_set[[1]]$r, y=X[[1]]$r) }))) stop("The number of argument values in the observed and simulated sets of curves differ.\n")
-    if(!all(sapply(X.ls, FUN=function(curve_set) { curve_set_nfunc(curve_set[[1]]) == curve_set_nfunc(X[[1]]) }))) stop("The number of simulations in the observed and simulated sets of curves differ.\n")
+    if(!all(sapply(X.ls, FUN=function(curve_set) { identical(curve_set[[1]]$r, y=X[[1]]$r) }))) stop("The number of argument values in the observed and simulated sets of curves differ.")
+    if(!all(sapply(X.ls, FUN=function(curve_set) { curve_set_nfunc(curve_set[[1]]) == curve_set_nfunc(X[[1]]) }))) stop("The number of simulations in the observed and simulated sets of curves differ.")
     # Checking r_min, r_max
-    if(!is.null(r_min) & length(r_min) != length(X)) stop("r_min should give the minimum distances for each of the test functions.\n")
-    if(!is.null(r_max) & length(r_max) != length(X)) stop("r_max should give the maximum distances for each of the test functions.\n")
-    message("Using the simulations provided in X and X.ls.\n")
+    if(!is.null(r_min) & length(r_min) != length(X)) stop("r_min should give the minimum distances for each of the test functions.")
+    if(!is.null(r_max) & length(r_max) != length(X)) stop("r_max should give the maximum distances for each of the test functions.")
+    message("Using the simulations provided in X and X.ls.")
   }
   # 2) Simulations if X.ls not provided
   #------------------------------------
   else { # Perform simulations
-    if(verbose) message("Performing simulations, ...\n")
+    if(verbose) message("Performing simulations, ...")
     tmp <- adj.simulate(X=X, nsim=nsim, nsimsub=nsimsub,
                        simfun=simfun, fitfun=fitfun, calcfun=calcfun, testfuns=testfuns, ...,
                        verbose=verbose, mc.cores=mc.cores)

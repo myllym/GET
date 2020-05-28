@@ -109,7 +109,7 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #' }
 GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x, max)))), length=100),
                       contrasts = FALSE, nsim, ...) {
-  if(!is.list(x) && length(x)<2) stop("At least two groups should be provided.\n")
+  if(!is.list(x) && length(x)<2) stop("At least two groups should be provided.")
   x.lengths <- as.numeric(lapply(x, FUN = length))
   if(!is.null(names(x))) groups <- rep(names(x), times=x.lengths)
   else groups <- rep(1:length(x), times=x.lengths)

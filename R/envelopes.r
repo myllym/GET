@@ -59,23 +59,23 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       quantile.type = 7,
                                       central = "median") {
   isenvelope <- inherits(curve_set, "envelope")
-  if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.\n")
+  if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.")
   alpha <- 1 - coverage
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
-    stop("No such type for global envelope.\n")
+    stop("No such type for global envelope.")
   alternative <- match.arg(alternative)
   small_significant <- TRUE
   if(type %in% c("qdir", "st", "unscaled")) {
     small_significant <- FALSE
     if(alternative != "two.sided") {
-      warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.\n")
+      warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.")
       alternative <- "two.sided"
     }
   }
   check_probs(probs)
   if(!(central %in% c("mean", "median"))) {
     central <- "median"
-    warning("Invalid option fiven for central. Using central = median.\n")
+    warning("Invalid option fiven for central. Using central = median.")
   }
   picked_attr <- pick_attributes(curve_set, alternative=alternative, type=type) # saving for attributes / plotting purposes
   curve_set <- convert_envelope(curve_set)
@@ -106,7 +106,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   T_0 <- get_T_0(curve_set)
 
   # Check reasonability of Nfunc vs alpha
-  if(Nfunc*alpha < 1-.Machine$double.eps^0.5) stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha, ". So, s*alpha is ", Nfunc*alpha, ".\n", sep="")
+  if(Nfunc*alpha < 1-.Machine$double.eps^0.5) stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha, ". So, s*alpha is ", Nfunc*alpha, ".", sep="")
 
   # The critical value
   kalpha <- critical(distance, alpha, Nfunc, small_significant)
@@ -169,14 +169,14 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
                                             probs = c(0.025, 0.975), quantile.type = 7,
                                             central = "mean") {
   alternative <- match.arg(alternative)
-  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.\n")
+  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.")
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
                                    alternative=alternative,
                                    probs=probs, quantile.type=quantile.type,
                                    central=central)
   # The type of the p-value
   possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
-  if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!\n")
+  if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!")
 
   # Measures for functional ordering
   distance <- attr(res, "k")
@@ -234,7 +234,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
 # Functionality for combined_central_region and combined_global_envelope_test (two-step procedure)
 combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
   ntests <- length(curve_sets)
-  if(ntests < 1) stop("Only one curve_set, no combining to be done.\n")
+  if(ntests < 1) stop("Only one curve_set, no combining to be done.")
   check_curve_set_dimensions(curve_sets)
   CR_or_GET <- match.arg(CR_or_GET)
 
@@ -486,7 +486,7 @@ plot.combined_global_envelope <- function(x,
                                  labels = NULL, add = FALSE, digits = 3,
                                  level = 1, ncol = 2 + 1*(length(x)==3), nticks = 5,
                                  legend = TRUE, ...) {
-  if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
+  if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
   # main
   if(missing('main')) {
     alt <- get_alternative(x[[1]])
@@ -788,8 +788,8 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   plot(res, xlab = "Age (years)", ylab = "")
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
-  if(class(curve_sets)[1] != "list") { if(!curve_set_is1d(curve_sets)) stop("curve_sets$r should be a vector.\n") }
-  else if(!all(sapply(curve_sets, FUN=curve_set_is1d))) stop("r of the curve_sets should be a vector.\n")
+  if(class(curve_sets)[1] != "list") { if(!curve_set_is1d(curve_sets)) stop("curve_sets$r should be a vector.") }
+  else if(!all(sapply(curve_sets, FUN=curve_set_is1d))) stop("r of the curve_sets should be a vector.")
   res <- central_region(curve_sets, ...)
   if(inherits(res, "combined_global_envelope")) {
     dist <- factor * (attr(res, "level2_ge")$hi - attr(res, "level2_ge")$lo)
@@ -871,7 +871,7 @@ plot.fboxplot <- function(x, plot_style = c("ggplot2", "basic"),
 #' @export
 plot.combined_fboxplot <- function(x, level = 1,
                           outliers = TRUE, bp.col = 2, cr.col = 1, ...) {
-  if(!(level %in% c(1,2))) stop("Unreasonable value for level.\n")
+  if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
   if(outliers) curve_sets <- attr(x, "curve_sets") else curve_sets <- NULL
   cr <- x
   attr(x, "level2_ge")$lo <- attr(attr(x, "level2_ge"), "whisker.lo")
@@ -1409,7 +1409,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #'   res <- rank_envelope(curve_set); plot(res)
 #' }
 rank_envelope <- function(curve_set, type = "rank", ...) {
-  if(!(type %in% c("rank", "erl", "cont", "area"))) stop("No such type for the global rank envelope.\n")
+  if(!(type %in% c("rank", "erl", "cont", "area"))) stop("No such type for the global rank envelope.")
   global_envelope_test(curve_set, type=type, ...)
 }
 
@@ -1466,7 +1466,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' }
 qdir_envelope <- function(curve_set, ...) {
   args <- list(...)
-  if("type" %in% names(args)) warning("type is hardcoded to be qdir here. No other options.\n")
+  if("type" %in% names(args)) warning("type is hardcoded to be qdir here. No other options.")
   global_envelope_test(curve_set, type="qdir", ...)
 }
 
@@ -1480,7 +1480,7 @@ qdir_envelope <- function(curve_set, ...) {
 #' @rdname qdir_envelope
 st_envelope <- function(curve_set, ...) {
   args <- list(...)
-  if("type" %in% names(args)) warning("type is hardcoded to be st here. No other options.\n")
+  if("type" %in% names(args)) warning("type is hardcoded to be st here. No other options.")
   global_envelope_test(curve_set, type="st", ...)
 }
 
@@ -1498,6 +1498,6 @@ st_envelope <- function(curve_set, ...) {
 #' @rdname qdir_envelope
 unscaled_envelope <- function(curve_set, ...) {
   args <- list(...)
-  if("type" %in% names(args)) warning("type is hardcoded to be unscaled here. No other options.\n")
+  if("type" %in% names(args)) warning("type is hardcoded to be unscaled here. No other options.")
   global_envelope_test(curve_set, type="unscaled", ...)
 }

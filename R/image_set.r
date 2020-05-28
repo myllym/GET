@@ -6,7 +6,7 @@ check_image_set_dimensions <- function(image_set) {
   # Check r
   r <- image_set[['r']]
   if(length(r) > 0L) {
-    if(!all(unlist(lapply(r, FUN=is.vector))) || !all(unlist(lapply(r, FUN=is.numeric))) || !all(unlist(lapply(r, FUN=is.finite)))) stop("Error in image_set[[\'r\']].\n")
+    if(!all(unlist(lapply(r, FUN=is.vector))) || !all(unlist(lapply(r, FUN=is.numeric))) || !all(unlist(lapply(r, FUN=is.finite)))) stop("Error in image_set[[\'r\']].")
     nr <- unlist(lapply(r, FUN=length))
     if(length(r) == 2L) {
       if(!all(names(r) %in% c("x", "y"))) stop("Dimension names should be x and y")
@@ -18,21 +18,21 @@ check_image_set_dimensions <- function(image_set) {
       h <- diff(r$y)
       allequal <- function(x) all(abs(x - x[1]) < 1e-10*x[1])
       if(!allequal(w) || !allequal(h)) stop("Unequal gridsize detected, please specify width and height of cells.")
-      if(length(r$x)!=obs_d[1] | length(r$y)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']].\n")
+      if(length(r$x)!=obs_d[1] | length(r$y)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']].")
     } else if(identical(sort(names(r)), c("height", "width", "x", "y"))) {
       if(length(r$width) == 1) image_set$r$width <- rep(r$width, times=length(r$x))
-      else if(length(r$width)!=length(r$x)) stop("Unsuitable image_set[[\'r\']]: width should have the same length as x.\n")
+      else if(length(r$width)!=length(r$x)) stop("Unsuitable image_set[[\'r\']]: width should have the same length as x.")
       if(length(r$height) == 1) image_set$r$height <- rep(r$height, times=length(r$y))
-      else if(length(r$height)!=length(r$x)) stop("Unsuitable image_set[[\'r\']]: height should have the same length as y.\n")
-      if(length(r$x)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of x does not match the dimension of obs matrix.\n")
-      if(length(r$y)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of y does not match the dimension of obs matrix.\n")
+      else if(length(r$height)!=length(r$x)) stop("Unsuitable image_set[[\'r\']]: height should have the same length as y.")
+      if(length(r$x)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of x does not match the dimension of obs matrix.")
+      if(length(r$y)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of y does not match the dimension of obs matrix.")
     } else if(identical(sort(names(r)), c("xmax", "xmin", "ymax", "ymin"))) {
-      if(length(r$xmin)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of xmin does not match the dimension of obs matrix.\n")
-      if(length(r$ymin)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of ymin does not match the dimension of obs matrix.\n")
-      if(length(r$xmax)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of xmax does not match the dimension of obs matrix.\n")
-      if(length(r$ymax)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of ymax does not match the dimension of obs matrix.\n")
+      if(length(r$xmin)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of xmin does not match the dimension of obs matrix.")
+      if(length(r$ymin)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of ymin does not match the dimension of obs matrix.")
+      if(length(r$xmax)!=obs_d[1]) stop("Unsuitable image_set[[\'r\']]: the length of xmax does not match the dimension of obs matrix.")
+      if(length(r$ymax)!=obs_d[2]) stop("Unsuitable image_set[[\'r\']]: the length of ymax does not match the dimension of obs matrix.")
     } else {
-      stop("Unsuitable image_set[[\'r\']].\n")
+      stop("Unsuitable image_set[[\'r\']].")
     }
   }
   else {
@@ -41,7 +41,7 @@ check_image_set_dimensions <- function(image_set) {
   # If obs_d is 3, then set sim_m and theo to NULL
   if(length(obs_d) == 3) {
     if(!is.null(image_set$sim_m) | !is.null(image_set$theo)) {
-      warning("As dim(obs) is three, sim_m (and theo) set to NULL and all the data assumed to be in obs.\n")
+      warning("As dim(obs) is three, sim_m (and theo) set to NULL and all the data assumed to be in obs.")
       image_set$sim_m <- NULL
       image_set$theo <- NULL
     }
@@ -72,7 +72,7 @@ expand_image_set_r <- function(r) {
 image_set_to_curve_set <- function(image_set, ...) {
   obs_d <- dim(image_set$obs)
   sim_d <- dim(image_set$sim_m)
-  if(!(length(obs_d) %in% c(2,3))) stop("Error in the dimension of image_set[['r']].\n")
+  if(!(length(obs_d) %in% c(2,3))) stop("Error in the dimension of image_set[['r']].")
   # Create curve_set transforming the 2d functions to vectors
   if(length(obs_d) == 3) {
     obs_v <- matrix(nrow=obs_d[1]*obs_d[2], ncol=obs_d[3])
@@ -87,9 +87,9 @@ image_set_to_curve_set <- function(image_set, ...) {
         if(length(theo) == 1) theo <- array(theo, dim=obs_d)
         theo_v <- as.vector(theo)
       }
-      else stop("Unsuitable theo\n")
+      else stop("Unsuitable theo.")
     } else theo_v <- NULL
-    if(!all(obs_d == sim_d[1:2])) stop("Something wrong with the dimensions of obs and sim_m.\n")
+    if(!all(obs_d == sim_d[1:2])) stop("Something wrong with the dimensions of obs and sim_m.")
     sim_v <- matrix(nrow=sim_d[1]*sim_d[2], ncol=sim_d[3])
     for(i in 1:sim_d[3]) sim_v[,i] <- as.vector(image_set$sim_m[,,i])
     curve_set_v <- create_curve_set(list(r=expand_image_set_r(image_set[['r']]),

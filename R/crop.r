@@ -15,7 +15,7 @@
 #'   the cropped radius vector.
 #' @export
 crop_curves <- function(curve_set, r_min = NULL, r_max = NULL) {
-  if(!is.null(r_min) | !is.null(r_max)) if(!is.vector(curve_set$r)) stop("curve_set$r is not a vector: r_min and r_max cannot be used.\n")
+  if(!is.null(r_min) | !is.null(r_max)) if(!is.vector(curve_set$r)) stop("curve_set$r is not a vector: r_min and r_max cannot be used.")
   curve_set <- convert_envelope(curve_set, allow_Inf_values = TRUE)
 
   n_r_min <- length(r_min)

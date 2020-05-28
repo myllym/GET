@@ -108,7 +108,7 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
   else if(is.data.frame(r)) {
     if(!(identical(sort(names(r)), c("height", "width", "x", "y"))
        || identical(sort(names(r)), c("xmax", "xmin", "ymax", "ymin"))))
-      stop('The names of curve_set[[\'r\']] must be either c("height", "width", "x", "y") or c("xmax", "xmin", "ymax", "ymin").\n')
+      stop('The names of curve_set[[\'r\']] must be either c("height", "width", "x", "y") or c("xmax", "xmin", "ymax", "ymin").')
     n_r <- nrow(r)
     if(!all(sapply(r, is.numeric)) || !all(sapply(r, is.finite))) {
       stop('curve_set[["r"]] must have only finite numeric values.')

@@ -325,14 +325,14 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                          contrasts = FALSE,
                          n.aver = 1L, mirror = FALSE, savefuns=FALSE,
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
-  if(nsim < 1) stop("Not a reasonable value of nsim.\n")
-  if(!inherits(curve_set, c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
+  if(nsim < 1) stop("Not a reasonable value of nsim.")
+  if(!inherits(curve_set, c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.")
   curve_set <- convert_fdata(curve_set)
-  if(curve_set_is1obs(curve_set)) stop("All (data) functions of the curve_set must be equal.\n")
+  if(curve_set_is1obs(curve_set)) stop("All (data) functions of the curve_set must be equal.")
   x <- data_and_sim_curves(curve_set)
-  if(nrow(x) != length(groups)) stop("The length of groups should be equal with the number of functions.\n")
+  if(nrow(x) != length(groups)) stop("The length of groups should be equal with the number of functions.")
   if(!is.factor(groups)) {
-    warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
+    warning("The argument groups is not a factor. Transforming it to a factor by as.factor.")
     groups <- as.factor(groups)
   }
   test.equality <- match.arg(test.equality)
@@ -342,7 +342,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   r <- curve_set[['r']]
   switch(test.equality,
          "mean" = {
-           if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
+           if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.")
            if(variances == "unequal") x <- corrUnequalVar(x, groups, n.aver, mirror)
          },
          "var" = {
@@ -427,14 +427,14 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' plot(res2, fixedscales=FALSE)
 frank.fanova <- function(nsim, curve_set, groups, variances="equal",
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
-  if(nsim < 1) stop("Not a reasonable value of nsim.\n")
-  if(!inherits(curve_set, c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.\n")
+  if(nsim < 1) stop("Not a reasonable value of nsim.")
+  if(!inherits(curve_set, c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.")
   curve_set <- convert_fdata(curve_set)
-  if(curve_set_is1obs(curve_set)) stop("All (data) functions of the curve_set must be equal.\n")
+  if(curve_set_is1obs(curve_set)) stop("All (data) functions of the curve_set must be equal.")
   x <- data_and_sim_curves(curve_set)
-  if(nrow(x) != length(groups)) stop("The length of groups should be equal with the number of functions.\n")
+  if(nrow(x) != length(groups)) stop("The length of groups should be equal with the number of functions.")
   if(!is.factor(groups)) {
-    warning("The argument groups is not a factor. Transforming it to a factor by as.factor.\n")
+    warning("The argument groups is not a factor. Transforming it to a factor by as.factor.")
     groups <- as.factor(groups)
   }
   test.equality <- match.arg(test.equality)
@@ -444,7 +444,7 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
   r <- curve_set[['r']]
   switch(test.equality,
          "mean" = {
-           if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.\n")
+           if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.")
            if(variances == "equal") fun <- Fvalues
            else fun <- corrFvalues
          },
