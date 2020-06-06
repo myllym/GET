@@ -1071,7 +1071,7 @@ plot.combined_fboxplot <- function(x, level = 1,
 #' @export
 #' @seealso \code{\link{plot.global_envelope}}, \code{\link{central_region}},
 #' \code{\link{GET.composite}}
-#' @aliases GET global_envelope_test2d
+#' @aliases global_envelope_test2d
 #' @examples
 #' # Goodness-of-fit testing for simple hypothesis
 #' if(require("spatstat", quietly=TRUE)) {
