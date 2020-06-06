@@ -3,10 +3,16 @@
 \docType{package}
 \name{GET-package}
 \alias{GET-package}
+\alias{GET}
 \title{Global Envelopes}
 \description{
-The \pkg{GET} package provides global envelopes which
-can be used for central regions of functional or
+The \pkg{GET} package provides implementation of global envelopes
+for a set of general d-dimensional vectors T in various applications.
+A 100(1-alpha)% global envelope is a band bounded by two vectors such that
+the probability that T falls outside this envelope in any of the d points is
+equal to alpha. Global means that the probability is controlled simultaneously
+for all the d elements of the vectors.
+The global envelopes can be used for central regions of functional or
 multivariate data (e.g. outlier detection, functional boxplot),
 for graphical Monte Carlo and permutation tests where the test statistic
 is a multivariate vector or function (e.g. goodness-of-fit testing for point
@@ -237,11 +243,13 @@ The data sets are used to show examples of the functions of the library.
 
 
 Note that the recommended minimum number of simulations for the rank
-envelope test based on a single function is nsim=2499, while for the
-"erl", "cont", "area", "qdir" and "st" global envelope tests and deviation tests,
-a lower number of simulations can be used, although the Monte Carlo error is obviously larger
+envelope test based on a single function in spatial statistics is nsim=2499.
+When the number of argument values is large, also larger number simulations is needed in order to
+have a narrow p-interval.
+The "erl", "cont", "area", "qdir" and "st" global envelope tests and deviation tests can be
+used with a lower number of simulations, although the Monte Carlo error is obviously larger
 with a small number of simulations.
-For increasing number of simulations, all the global rank envelopes approach the same curves.
+For increasing the number of simulations, all the global rank envelopes approach the same curves.
 
 Mrkvička et al. (2017) discussed the number of simulations for tests based on many functions.
 }
@@ -265,7 +273,7 @@ Henri Seijo.
 \references{
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 
-Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018) A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kynernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 
