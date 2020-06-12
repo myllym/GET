@@ -29,15 +29,17 @@ contrank <- function(y) {
 find_calc_pointwiserank <- function(measure, alternative) {
   if(measure %in% c('rank', 'erl')) {
     avrank <- function(x) { rank(x, ties.method = "average") }
+    minrank <- 1
   }
   else if(measure %in% c('cont', 'area')) {
     avrank <- function(x) { contrank(x) }
+    minrank <- 0
   } else { stop("Internal error in GET.")}
   switch(alternative,
          "two.sided" = {
            function(x) {
              loranks <- avrank(x)
-             hiranks <- length(x)+1-loranks
+             hiranks <- length(x)+minrank-loranks
              pmin(loranks, hiranks)
            }
          },
@@ -45,7 +47,7 @@ find_calc_pointwiserank <- function(measure, alternative) {
            function(x) { avrank(x) }
          },
          "greater" = {
-           function(x) { length(x)+1-avrank(x) }
+           function(x) { length(x)+minrank-avrank(x) }
          })
 }
 
