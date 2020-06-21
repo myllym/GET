@@ -99,7 +99,7 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 #' Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo"}),
 #' observed with significantly higher values highlighted (\code{"hi.sign"}),
 #' observed with significantly lower values highlighted (\code{"lo.sign"}).
-#' @param transparency A number between 0 and 1 (default 85/255, 33% transparency).
+#' @param transparency A number between 0 and 1 (default 155/255, 60% transparency).
 #' Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
 #' functions.
 #' @param ... Ignored.
@@ -109,7 +109,7 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 #' @export
 plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
                                    what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
-                                   sign.col = "red", transparency = 85/255,
+                                   sign.col = "red", transparency = 155/255,
                                    digits = 3, base_size = 11, ...) {
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x, what)
@@ -169,7 +169,7 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
 #' }
 plot.combined_global_envelope2d <- function(x, fixedscales = 2, main,
                                             what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
-                                            sign.col = "red", transparency = 85/255,
+                                            sign.col = "red", transparency = 155/255,
                                             digits = 3, base_size = 11, ...) {
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x[[1]], what)
