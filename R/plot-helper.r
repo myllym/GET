@@ -31,3 +31,14 @@ ThemePlain <- function(base_size=11, base_family='') {
                     plot.margin=grid::unit(c(0.01,0.01,0,0), "inches")
             ))
 }
+
+# A plain ggplot2 theme for 2d plots.
+ThemePlain2d <- function(base_size=11, base_family='') {
+  # Starts with theme_bw and then modify some parts
+  ggplot2::"%+replace%"(ggplot2::theme_grey(base_size=base_size, base_family=base_family),
+                        ggplot2::theme(
+                          panel.background=ggplot2::element_blank(),
+                          panel.grid.major=ggplot2::element_line(colour='grey90', size=ggplot2::rel(0.2)),
+                          panel.grid.minor=ggplot2::element_line(colour='grey95', size=ggplot2::rel(0.5))
+                        ))
+}
