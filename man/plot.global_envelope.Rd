@@ -26,12 +26,11 @@
 \arguments{
 \item{x}{An 'global_envelope' object}
 
-\item{plot_style}{One of the following "basic", "fv" or "ggplot2" for 1-dimensional functions.
-The option "basic" (default) offers a very basic global envelope plot.
-The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}}.
+\item{plot_style}{One of the following "ggplot2" or "basic" or "fv".
 For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
-The option "fv" is currently only available for tests with one test function, whereas the other true allow
-also tests with several tests functions.}
+The option "basic" (default) offers a very basic plot.
+The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}},
+available only for \pkg{\link{spatstat}}-specific cases.}
 
 \item{dotplot}{Logical. If TRUE, then instead of envelopes a dot plot is done.
 Suitable for low dimensional test vectors.

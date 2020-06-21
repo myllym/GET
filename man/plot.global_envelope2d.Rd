@@ -8,10 +8,11 @@
   x,
   fixedscales = TRUE,
   main,
-  what = c("obs", "hi", "lo", "hi.sign", "lo.sign"),
+  what = c("obs", "lo", "hi", "lo.sign", "hi.sign"),
   sign.col = "red",
-  transparency = 85/255,
+  transparency = 155/255,
   digits = 3,
+  base_size = 11,
   ...
 )
 }
@@ -30,12 +31,14 @@ observed with significantly lower values highlighted (\code{"lo.sign"}).}
 
 \item{sign.col}{The color for the significant regions. Default to "red".}
 
-\item{transparency}{A number between 0 and 1 (default 85/255, 33% transparency).
+\item{transparency}{A number between 0 and 1 (default 155/255, 60% transparency).
 Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
 functions.}
 
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}
+
+\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
 \item{...}{Ignored.}
 }
