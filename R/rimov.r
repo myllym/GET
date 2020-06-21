@@ -27,7 +27,7 @@
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #' for(i in 1:3)
 #'   print(plot(subset(rimov, groups==i),
-#'              main=paste("group ", i, sep=""),
+#'              main=paste("Group ", i, sep=""),
 #'              ylab="Temperature"))
 #' # See example analysis in ?graph.fanova
 NULL
