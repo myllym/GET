@@ -108,7 +108,7 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 #' @importFrom gridExtra grid.arrange
 #' @export
 plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
-                                   what=c("obs", "hi", "lo", "hi.sign", "lo.sign"),
+                                   what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                    sign.col = "red", transparency = 85/255,
                                    digits = 3, ...) {
   what <- match.arg(what, several.ok = TRUE)
@@ -168,7 +168,7 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
 #'   gridExtra::grid.arrange(grobs=t(gs))
 #' }
 plot.combined_global_envelope2d <- function(x, fixedscales = 2, main,
-                                            what=c("obs", "hi", "lo", "hi.sign", "lo.sign"),
+                                            what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                             sign.col = "red", transparency = 85/255,
                                             digits = 3, ...) {
   what <- match.arg(what, several.ok = TRUE)
