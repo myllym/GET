@@ -400,7 +400,7 @@ plot.curve_set2d <- function(x, idx=1, base_size = 11, ...) {
   data <- do.call(rbind, lapply(idx, function(i) data.frame(idx=i, f=funcs[,i])))
   df <- cbind(rdf, data)
   return(ggplot() + choose_geom(df, varfill='f') +
-           facet_wrap("idx") + labs(x="x", y="y", fill=""))
+           facet_wrap("idx") + labs(x="x", y="y", fill="") + ThemePlain2d())
 }
 
 # Combine curve sets.
