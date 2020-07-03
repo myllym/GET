@@ -1,27 +1,91 @@
 ---
-title: "Point patterns"
+title: "GET: Point patterns"
 author: "Mari Myllymäki"
-output: rmarkdown::html_vignette
+date: "`r Sys.Date()`"
+output:
+  html_vignette:
+    toc: TRUE
 bibliography: GETbibfile.bib
 vignette: >
-  %\VignetteIndexEntry{Point patterns}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{GET: Point patterns}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+  collapse = TRUE
 )
 ```
 
-
-These examples utilize the R [@R2020] package spatstat [@spatstat2015] in addition to the GET package [@MyllymakiMrkvicka2019].
+This vignette gives examples of the use of global envelopes for the analysis of spatial point patterns.
+The examples utilize the R [@R2020] package spatstat [@spatstat2015] in addition to the GET package [@MyllymakiMrkvicka2019]. The envelope plots are produced by the use of the ggplot2 package [@Wickham2016]
 ```{r setup}
 library("GET")
 library("spatstat")
 ```
+
+# General workflow of the tests
+
+## Utilizing the spatstat package
+
+In general, it is useful in the point pattern analysis utilize the spatstat package. The workflow utilizing spatstat with the GET package is typically the following:
+
+Say we have a point pattern, for which we would like to test a hypothesis, as a ppp object of spatstat. E.g.
+```{r wf1}
+X <- spruces
+X
+```
+
+1. To test complete spatial randomness (CSR):
+
+* Use the function envelope of spatstat to create nsim simulations
+under CSR and to calculate the functions you want.
+Important: use the option 'savefuns=TRUE' and
+specify the number of simulations nsim.
+See the help documentation in the spatstat package
+for possible test functions (if the argument fun is not given, the function Kest is used,
+i.e. an estimator of the K function).
+
+Making 999 simulations of CSR and estimating K-function for each of them and data
+(the argument simulate specifies how to perform simulations under CSR):
+```{r wf2}
+env <- envelope(X, nsim=999, savefuns=TRUE,
+                simulate=expression(runifpoint(ex=X)))
+```
+
+* Perform the test
+
+```{r wf3}
+res <- global_envelope_test(env)
+```
+
+* Plot the result
+
+```{r wf4}
+plot(res)
+```
+
+2. To test a goodness-of-fit of a parametric model (composite hypothesis case):
+
+* Fit the model to your data by means of the function ppm or kppm of spatstat.
+See the help documentation for possible models.
+* Use the function GET.composite to create nsim simulations
+from the fitted model, to calculate the functions you want,
+and to make an adjusted global envelope test.
+See the example below.
+* Plot the result.
+
+More detailed examples are given below.
+
+## The workflow when using your own programs for simulations
+
+* (Fit the model and) Create nsim simulations from the (fitted) null model.
+* Calculate the functions T_1(r), T_2(r), ..., T_{nsim+1}(r).
+* Use \code{\link{create_curve_set}} to create a curve_set object from the functions T_i(r), i=1,...,s+1.
+* Perform the test and plot the result
+
+See example in the help file of the global_envelope_test function.
 
 # Testing simple hypotheses for point patterns and marked point patterns
 
@@ -143,8 +207,7 @@ res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
 plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 ```
 
-
-## Goodness-of-fit test (typically conservative)
+# A one-stage goodness-of-fit test (typically conservative!)
 
 It is possible to perform a one-stage goodness-of-fit test for point process models as follows, accepting that the test may be conservative (or liberal). In literature, it has been recommended that the tests may be used if the test function is not closely related to the estimation procedure that was used to fit the model. However, GET.composite can be used for adjusted tests, see the help file of this function and an example below.
 
@@ -174,10 +237,18 @@ curve_set <- crop_curves(env, r_min=1, r_max=3.5)
 res <- global_envelope_test(curve_set, type="erl"); plot(res, ylab=expression(italic(J(r))))
 ```
 
+Note: Conditioning the Gibbs hard-core model on the number of points, the only parameter in
+the hard-core model is the hard-core distance. It is possible to fix the hard-core distance, e.g.
+to the minimum distance between two points in the data, and then the test of
+the hard-core model with fixed hard-core distance is simple (no parameters involved), and thus exact.
+This example is given in @MyllymakiEtal2017 and it is possible to prepare simulations for this case utilizing
+the function rmh of the spatstat package.
+In the above example conditioning on the number of points was not employed.
 
-## Adjusted global envelope test
+# Adjusted global envelope test for composite hypotheses
 
 Let us test the fit of a Matern cluster process for the sapling data as an example of a composite hypothesis test.
+The adjusted test of the GET package is described in Section 2.3 of @MyllymakiMrkvicka2019. The procedure was suggested by @BaddeleyEtal2017 and extended for global envelopes in GET [@MyllymakiMrkvicka2019].
 
 ```{r saplings}
 data(saplings)
@@ -206,7 +277,7 @@ adjenvL <- GET.composite(X = M1, nsim = nsim,
 plot(adjenvL)
 ```
 
-## Testing global and local dependence of point patterns on covariates
+# Testing global and local dependence of point patterns on covariates
 
 The function GET.spatialF performs the one-stage global envelope tests based on spatial F- and S-statistics [@MyllymakiEtal2020] to explore the effects of covariates in parametric point process models.
 
@@ -262,7 +333,7 @@ fitHardcore <- function(X, model, covariates) {
 }
 ```
 
-## An example analysis of the saplings data set
+# An example analysis of the saplings data set
 
 This is the example of @MyllymakiEtal2017 [Supplement S4].
 
@@ -283,7 +354,7 @@ r <- seq(0, rmax, by=rstep)
 rJ <- seq(0, rmaxJ, by=rstepJ)
 ```
 
-### The CSR test based on the L(r)-r function
+## The CSR test based on the L(r)-r function
 
 Note: CSR is simulated by fixing the number of points and generating nsim simulations
 from the binomial process, i.e. we deal with a simple hypothesis.
@@ -313,10 +384,11 @@ The CSR hypothesis is clearly rejected and the rank envelope indicates clear
 clustering of saplings. As a next step, we explore the Matern cluster process as a null model.
 This is a composite hypothesis.
 
+## Testing the fit of a Matern cluster process
+
 First we fit the Matern cluster process to the pattern. Here we use the minimum contrast estimation with the K-funcion (the pair correction function can be chosen by setting `statistic="pcf`).
 ```{r saplings_matclust}
 fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="K")
-summary(fitted_model)
 ```
 
 Next step is to perform the adjusted directional quantile global envelope test using the centred L function.
@@ -364,4 +436,4 @@ adjenvLJ <- GET.composite(X = fitted_model,
 plot(adjenvLJ)
 ```
 
-## References
+# References
