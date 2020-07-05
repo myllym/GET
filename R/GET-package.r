@@ -28,6 +28,8 @@
 #' the use of the R library \pkg{\link{spatstat}} for generating simulations and calculating
 #' estimators of the chosen summary function, but alternatively these can be done by
 #' any other way, thus allowing for any models/functions.
+#' To see examples of global envelopes for analysing point pattern data,
+#' start R, type \code{library(GET)} and \code{vignette("pointpatterns")}.
 #'
 #'
 #' @section Key functions in \pkg{GET}:
