@@ -1150,33 +1150,6 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   # 4) Plot the test result
 #'   plot(res, ylab=expression(italic(L[mm](r)-L(r))))
 #'
-#'   # Goodness-of-fit test (typically conservative, see ?GET.composite for adjusted tests)
-#'   #=====================
-#'   X <- unmark(spruces)
-#'   # Minimum distance between points in the pattern
-#'   min(nndist(X))
-#'   # Fit a model
-#'   fittedmodel <- ppm(X, interaction=Hardcore(hc=1)) # Hardcore process
-#'
-#'   # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
-#'   #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
-#'   #                correction="none", r=seq(0, 4, length=500))
-#'
-#'   # Using direct algorihm can be faster, because the perfect simulation is used here.
-#'   simulations <- NULL
-#'   nsim <- 999 # Number of simulations
-#'   for(j in 1:nsim) {
-#'      simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-#'                                    R=fittedmodel$interaction$par$hc,
-#'                                    W=X$window)
-#'      if(j%%10==0) cat(j, "...", sep="")
-#'   }
-#'   env <- envelope(X, simulate=simulations, fun="Jest", nsim=length(simulations),
-#'                   savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
-#'   curve_set <- crop_curves(env, r_min=1, r_max=3.5)
-#'   res <- global_envelope_test(curve_set, type="erl"); plot(res, ylab=expression(italic(J(r))))
-#'   }
-#'
 #'   # A combined global envelope test
 #'   #================================
 #'   # As an example test CSR of the saplings point pattern by means of
