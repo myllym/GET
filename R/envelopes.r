@@ -1199,6 +1199,7 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
 #'                                               curve_set_G, curve_set_J))
 #'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
+#'   }
 #' }
 #'
 #' # A test based on a low dimensional random vector
