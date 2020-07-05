@@ -293,33 +293,6 @@ if(require("spatstat", quietly=TRUE)) {
   # 4) Plot the test result
   plot(res, ylab=expression(italic(L[mm](r)-L(r))))
 
-  # Goodness-of-fit test (typically conservative, see ?GET.composite for adjusted tests)
-  #=====================
-  X <- unmark(spruces)
-  # Minimum distance between points in the pattern
-  min(nndist(X))
-  # Fit a model
-  fittedmodel <- ppm(X, interaction=Hardcore(hc=1)) # Hardcore process
-
-  # Simulating Gibbs process by 'envelope' is slow, because it uses the MCMC algorithm
-  #env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
-  #                correction="none", r=seq(0, 4, length=500))
-
-  # Using direct algorihm can be faster, because the perfect simulation is used here.
-  simulations <- NULL
-  nsim <- 999 # Number of simulations
-  for(j in 1:nsim) {
-     simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-                                   R=fittedmodel$interaction$par$hc,
-                                   W=X$window)
-     if(j\%\%10==0) cat(j, "...", sep="")
-  }
-  env <- envelope(X, simulate=simulations, fun="Jest", nsim=length(simulations),
-                  savefuns=TRUE, correction="none", r=seq(0, 4, length=500))
-  curve_set <- crop_curves(env, r_min=1, r_max=3.5)
-  res <- global_envelope_test(curve_set, type="erl"); plot(res, ylab=expression(italic(J(r))))
-  }
-
   # A combined global envelope test
   #================================
   # As an example test CSR of the saplings point pattern by means of
@@ -370,6 +343,7 @@ if(require("spatstat", quietly=TRUE)) {
                                               curve_set_G, curve_set_J))
   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 }
+}
 
 # A test based on a low dimensional random vector
 #================================================
@@ -392,58 +366,6 @@ if(requireNamespace("mvtnorm", quietly=TRUE)) {
   cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
   res2 <- global_envelope_test(cset2)
   plot(res2)
-}
-
-# Examples with image sets
-
-# Example of spatial point pattern residuals
-#===========================================
-if(require("spatstat", quietly=TRUE)) {
-  data(cells)
-  X <- cells
-  # Fit the hard-core process
-  model <- ppm(X, interaction=Hardcore())
-  summary(model)
-  HD <- 0.08168525 # Hard-core process
-  # Choose a bandwitdh by Scott's rule of thumb
-  ds <- bw.scott(X); ds
-  # Calculate raw residuals of the fitted model
-  # (To use the default pixel array dimensions remove dimyx, see ?as.mask)
-  u <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth",
-                    sigma=ds, plot.it=FALSE, dimyx=32)
-  obs <- u$smooth$Z$v
-  # Generate simulations from the hard-core null model
-  \dontshow{nsim <- 19}
-  \donttest{nsim <- 499 # Number of simulations; increase for serious analysis!}
-  simulations <- NULL
-  ext.factor <- max(X$window$xrange[2]-X$window$xrange[1],
-                    X$window$yrange[2]-X$window$yrange[1]) / 10
-  win.extend <- owin(c(X$window$xrange[1]-ext.factor, X$window$xrange[2]+ext.factor),
-                     c(X$window$yrange[1]-ext.factor, X$window$yrange[2]+ext.factor))
-  mod02 <- list(cif="hardcore", par=list(beta=exp(model$fitin$coefs[1]),hc=HD), w=win.extend)
-  # starting point pattern in an extended window
-  x.start <- runifpoint(X$n, win=win.extend)
-  # simulations
-  for(sss in 1:nsim){
-    uppp <- rmh(model=mod02, start=list(x.start=x.start), control=list(p=1,nrep=1e5,nverb=5000))
-    f <- uppp$x > X$window$xrange[1] & uppp$x < X$window$xrange[2] &
-         uppp$y > X$window$yrange[1] & uppp$y < X$window$yrange[2]
-    simulations[[sss]] <- ppp(uppp$x[f], uppp$y[f], window=X$window)
-  }
-  # Calculate the raw residuals for simulations
-  sim <- array(0, c(u$smooth$Z$dim, nsim))
-  for(i in 1:length(simulations)) {
-    model <- ppm(simulations[[i]],interaction=Hardcore(HD));
-    u_sim <- diagnose.ppm(model, type="raw", rbord = HD, which ="smooth",
-                          sigma=ds, plot.it=FALSE, dimyx=32)
-    sim[,,i] <- u_sim$smooth$Z$v
-    if((i \%\% 100)==0) cat(i, ' ')
-  }
-  # Constract the global envelope test for the (2D) raw residuals
-  iset <- create_image_set(list(obs=obs, sim_m=sim))
-  res <- global_envelope_test(iset, type="area")
-  plot(res)
-  plot(res) + ggplot2::scale_fill_gradient(low="black", high="white")
 }
 }
 \references{
