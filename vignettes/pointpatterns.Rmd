@@ -3,7 +3,7 @@ title: "GET: Point patterns"
 author: "Mari Myllymäki"
 date: "`r Sys.Date()`"
 output:
-  html_vignette:
+  pdf_document:
     toc: TRUE
 bibliography: GETbibfile.bib
 vignette: >
@@ -62,7 +62,7 @@ res <- global_envelope_test(env)
 
 * Plot the result
 
-```{r wf4}
+```{r wf4, fig.width=4, fig.height=4}
 plot(res)
 ```
 
@@ -82,7 +82,7 @@ More detailed examples are given below.
 
 * (Fit the model and) Create nsim simulations from the (fitted) null model.
 * Calculate the functions T_1(r), T_2(r), ..., T_{nsim+1}(r).
-* Use \code{\link{create_curve_set}} to create a curve_set object from the functions T_i(r), i=1,...,s+1.
+* Use create_curve_set to create a curve_set object from the functions T_i(r), i=1,...,s+1.
 * Perform the test and plot the result
 
 See example in the help file of the global_envelope_test function.
@@ -114,7 +114,7 @@ plot(res)
 ```
 
 It is possible to cut the functions to an interval of distances $[r_{min}, r_{max}]$ (at the same time creating a curve_set from 'env') and perform the test on the functions on this interval only:
-```{r csr_cont}
+```{r csr_cont, fig.width=4, fig.height=4}
 cset <- crop_curves(env, r_min=1, r_max=7)
 # Do the rank envelope test (erl)
 res <- global_envelope_test(cset, type="erl")
@@ -140,7 +140,7 @@ env <- envelope(mpp, fun=Kmark, nsim = nsim, f=function(m1, m2) { m1*m2 },
                 verbose=FALSE)
 ```
 Thereafter, the curves can be cropped to the desired r-interval and centered by the mean of the simulated functions for better visualization, before making the test.
-```{r randomlabeling_cont}
+```{r randomlabeling_cont, fig.width=4, fig.height=4}
 # Crop curves to desired r-interval
 curve_set <- crop_curves(env, r_min=1.5, r_max=9.5)
 # Center the functions, i.e. take \hat{L}_mm(r)-the mean of simulated functions.
@@ -211,7 +211,7 @@ plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 
 It is possible to perform a one-stage goodness-of-fit test for point process models as follows, accepting that the test may be conservative (or liberal). In literature, it has been recommended that the tests may be used if the test function is not closely related to the estimation procedure that was used to fit the model. However, GET.composite can be used for adjusted tests, see the help file of this function and an example below.
 
-```{r gof}
+```{r gof, fig.width=4, fig.height=4}
 X <- unmark(spruces)
 # Minimum distance between points in the pattern
 min(nndist(X))
@@ -269,7 +269,7 @@ M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
 M1
 ```
 Then the adjusted global area rank envelope test can be performed using the function GET.composite. Below we use the centred L(r) function as the test function. The argument 'type' specifies the global envelope test, see the help file of the global_envelope_test function.
-```{r adjusted_test}
+```{r adjusted_test, fig.width=4, fig.height=4}
 adjenvL <- GET.composite(X = M1, nsim = nsim,
             testfuns = list(L = list(fun="Lest", correction="translate",
                            transform = expression(.-r), r=r)), # passed to envelope
