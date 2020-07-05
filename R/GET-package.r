@@ -149,60 +149,8 @@
 #'       \code{plot(res)}
 #' }
 #'
-#' 2) The workflow utilizing \pkg{\link{spatstat}}:
-#'
-#' E.g. Say we have a point pattern, for which we would like to test a hypothesis, as a \code{\link[spatstat]{ppp}} object.
-#'
-#' \code{X <- spruces # an example pattern from spatstat}
-#'
-#' \itemize{
-#'    \item Test complete spatial randomness (CSR):
-#'          \itemize{
-#'            \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
-#'                  under CSR and to calculate the functions you want.
-#'                  Important: use the option 'savefuns=TRUE' and
-#'                  specify the number of simulations \code{nsim}.
-#'                  See the help documentation in \pkg{\link{spatstat}}
-#'                  for possible test functions (if \code{fun} not given, \code{Kest} is used,
-#'                  i.e. an estimator of the K function).
-#'
-#'                  Making 999 simulations of CSR
-#'                  and estimating K-function for each of them and data
-#'                  (the argument \code{simulate} specifies for \code{envelope} how to perform
-#'                  simulations under CSR):
-#'
-#'                  \code{
-#'                    env <- envelope(X, nsim=999, savefuns=TRUE,
-#'                                    simulate=expression(runifpoint(ex=X)))
-#'                  }
-#'            \item Perform the test
-#'
-#'                  \code{
-#'                    res <- global_envelope_test(env)
-#'                  }
-#'            \item Plot the result
-#'
-#'                  \code{
-#'                    plot(res)
-#'                  }
-#'          }
-#'    \item A goodness-of-fit of a parametric model (composite hypothesis case)
-#'          \itemize{
-#'            \item Fit the model to your data by means of the function
-#'                  \code{\link[spatstat]{ppm}} or \code{\link[spatstat]{kppm}}.
-#'                  See the help documentation for possible models.
-#'            \item Use \code{\link{GET.composite}} to create nsim simulations
-#'                  from the fitted model, to calculate the functions you want,
-#'                  and to make an adjusted global envelope test.
-#'                  See the example also in \code{\link{saplings}}.
-#'            \item Plot the result
-#'
-#'                  \code{
-#'                    plot(res)
-#'                  }
-#'          }
-#'
-#' }
+#' 2) The workflow utilizing \pkg{\link{spatstat}}: start R, type \code{library(GET)} and \code{vignette("pointpatterns")},
+#' which explains the workflow and gives many examples of point pattern analysis
 #'
 #' @section Functions for modifying sets of functions:
 #' It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for the test.
