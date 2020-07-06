@@ -95,9 +95,6 @@ Examples of different uses of global envelopes and their implementation in the \
 
 \begin{document}
 
-
-%% -- Introduction -------------------------------------------------------------
-
 %% -- Introduction -------------------------------------------------------------
 
 \section{Introduction}\label{sec:intro}
