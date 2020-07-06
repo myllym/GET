@@ -336,7 +336,7 @@ The ERL measure of $\TT_i$ is defined as
 where
 %
 \[
-\mathbf{R}_i^\prime \prec \mathbf{R}_{i} \quad \Longleftrightarrow\quad
+\mathbf{R}_{i^\prime} \prec \mathbf{R}_{i} \quad \Longleftrightarrow\quad
   \exists\, n\leq d: R_{i^\prime[k]} = R_{i[k]} \forall\, k < n,\  R_{i^\prime[n]} < R_{i[n]}.
 \]
 %
@@ -361,7 +361,7 @@ The ties can alternatively be broken by the continuous rank measure \citep{Hahn2
 
 Formally, the continuous rank measure is
 %
-$$C_i = \frac{1}{s_C}\min_{k=1,\ldots d} C_{ik},$$
+$$C_i = \frac{1}{s_C}\min_{k=1,\ldots, d} C_{ik},$$
 %
 where $s$ is the number of functions and $s_C = \lceil s/2 \rceil$ serves as scaling in the two-sided case, while in the one-sided case $s_C=s$.  
 The definition of pointwise continuous ranks $C_{ik}$ depends again on whether a one-sided or two-sided global envelope (test) is to be constructed.
@@ -513,10 +513,11 @@ This adjusted test is implemented in the \fct{GET.composite} function of the \pk
 In a typical application one needs to choose one of the measures with IGI (see Table~\ref{tab:GEoverview}).
 In general, the first five types of Table~\ref{tab:GEoverview} instead of the last two, \code{'st'} and \code{'unscaled'}, can be recommended based on previous studies \citep{MyllymakiEtal2015, MyllymakiEtal2017}.
 Regarding the choice between the first five types, when one can afford a large number of simulations in cases (ii)-(iv) of Section~\ref{sec:intro}, one can very well use the type \code{'erl'} that is based only on the ranks, thus also suiting particularly well for combined tests (see Section~\ref{sec:combinedGE}). 
-On the other hand, any other choice is also fine, because the \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'} measures lead to an equivalent outcome for a large number of simulations or permutations. However, the definition of {\em large} depends on the situation. The study in Appendix of the first version of this paper available at \url{https://arxiv.org/abs/1911.06583v1} and to be published elsewhere gives some guidance on the required number of simulations under different scenarios \citep[see also the supplement S2 of][]{MyllymakiEtal2017}.
+On the other hand, any other choice is also fine, because the \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'} measures lead to an equivalent outcome for a large number of simulations or permutations. However, the definition of {\em large} depends on the situation.
+A simulation study that will be published as a separate study "Comparison of non-parametric global envelopes" gives guidance on the required number of simulations under different scenarios \citep[see also the supplement S2 of][]{MyllymakiEtal2017}.
 
 Another situation arises in case (i) with a low number of vectors or functions, or in cases (ii)-(iv) where the simulations or permutations are too time consuming to have large number of them.
-Then the choice of the measure plays a role. Based on our experience supported by the simulation studies, the \code{'erl'} and \code{'area'} measures are typically good choices for the integral type of extremeness where vector $\TT_i$ is extreme in the set of vectors for a large range of its components. On the other hand, for a maximum type of extremeness, i.e., the case where $\TT_i$ is extreme only for a few of its components, the \code{'cont'} and \code{'qdir'} measures are typically the best choices, but also the \code{'area'} measure performs well. Thus, if no particular type of extremeness is expected a priori, the \code{'area'} measure is often a good compromise, since it is sensitive to the amount of outlyingness (similarly as \code{'erl'}) and to the value of outlyingness (similarly as \code{'cont'} and \code{'qdir'}) \citep[see also][]{MrkvickaEtal2019b}.
+Then the choice of the measure plays a role. Based on our experience supported by the simulation study "Comparison of non-parametric global envelopes", the \code{'erl'} and \code{'area'} measures are typically good choices for the integral type of extremeness where vector $\TT_i$ is extreme in the set of vectors for a large range of its components. On the other hand, for a maximum type of extremeness, i.e., the case where $\TT_i$ is extreme only for a few of its components, the \code{'cont'} and \code{'qdir'} measures are typically the best choices, but also the \code{'area'} measure performs well. Thus, if no particular type of extremeness is expected a priori, the \code{'area'} measure is often a good compromise, since it is sensitive to the amount of outlyingness (similarly as \code{'erl'}) and to the value of outlyingness (similarly as \code{'cont'} and \code{'qdir'}).
 
 
 %% -- Illustrations ------------------------------------------------------------
