@@ -1,5 +1,9 @@
 \documentclass[nojss]{jss}
 
+% \VignetteIndexEntry{GET: Global envelopes in R}
+% \VignetteKeywords{functional linear model, central region, goodness-of-fit, graphical normality test, Monte Carlo test, multiple testing, permutation test, R, spatial point pattern}
+% \VignettePackage{GET}
+
 %% -- LaTeX packages and custom commands ---------------------------------------
 
 %% recommended packages
