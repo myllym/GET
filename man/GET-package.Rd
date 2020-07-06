@@ -29,6 +29,10 @@ The tests are Monte Carlo or permutation tests, which demand simulations
 from the tested null model. The methods are applicable for any multivariate
 vector data and functional data (after discretization).
 
+The package is described in detail in Myllymäki and Mrkvička (2019).
+The material can also be found in the corresponding vignette, which is available by
+starting R and typing \code{library(GET)} and \code{vignette("GET")}.
+
 In the special case of spatial processes (spatial point processes, random sets),
 the functions are typically estimators of summary functions. The package supports
 the use of the R library \pkg{\link{spatstat}} for generating simulations and calculating
