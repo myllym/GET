@@ -340,7 +340,7 @@ where
   \exists\, n\leq d: R_{i^\prime[k]} = R_{i[k]} \forall\, k < n,\  R_{i^\prime[n]} < R_{i[n]}.
 \]
 %
-The division by $s$ scales the values to interval from 0 to 1.
+The division by $s$ leads to normalized ranks that obtain values between 0 and 1. Consequently, the ERL measure corresponds to the extremal depth of \citet{NarisettyNair2016}.
 
 The probability of having a tie in the ERL measure is rather small, thus practically the ERL solves the ties problem. The final $p$~value of a Monte Carlo test is $p_\text{erl}=  \sum_{i=1}^{s} \1 (E_i \leq E_1)  \big/ s$.
 
@@ -361,9 +361,9 @@ The ties can alternatively be broken by the continuous rank measure \citep{Hahn2
 
 Formally, the continuous rank measure is
 %
-$$C_i = \frac{1}{s_C}\min_{k=1,\ldots, d} C_{ik},$$
+$$C_i = \frac{1}{s}\min_{k=1,\ldots, d} C_{ik},$$
 %
-where $s$ is the number of functions and $s_C = \lceil s/2 \rceil$ serves as scaling in the two-sided case, while in the one-sided case $s_C=s$.  
+where $s$ scales the values to interval from 0 to 1.
 The definition of pointwise continuous ranks $C_{ik}$ depends again on whether a one-sided or two-sided global envelope (test) is to be constructed.
 The pointwise continuous ranks can be calculated as
 %
@@ -394,12 +394,12 @@ The $p$~value of the univariate Monte Carlo test is $p_\text{cont}= \sum_{i=1}^{
 The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constructed in the same way as global ERL envelope (see Equation~\ref{erl_envelope}), i.e., as a hull of $\TT_i$ which have measured $C_i\geq c_\alpha$, where $c_\alpha$ is defined according to the point 1.\ of IGI.
 
 \subsubsection{Global area rank envelope}
+
 Another refinement of rank envelope is the area rank measure \citep{MrkvickaEtal2019b},  
 %
 %$$A_i = \frac{1}{s_A} \sum_k \min(R_i, c_{ik}).$$
-$$A_i = \frac{1}{s_A}\left(R_i - \sum_k (R_i-C_{ik}) \1(C_{ik} < R_i)\right),$$
+$$A_i = \frac{1}{s}\left(R_i - \frac{1}{d}\sum_{k=1}^d (R_i-C_{ik}) \1(C_{ik} < R_i)\right).$$
 %
-where the scaling factor $s_A = \lceil s/2 \rceil d$ in the two-sided case, and $s_A=s\cdot d$ in the one-sided case.
 Thus, the area measure breaks the ties in the extreme ranks by the sum (area) of the differences between the extreme rank $R_i$ and the pointwise continuous rank $C_{ik}$ from those $k=1,\dots,d$ where the continuous rank is smaller than the extreme rank.
 The univariate Monte Carlo test is performed based on $A_i$ with $p_\text{area}= \sum_{i=1}^{s} \1 (A_i \leq A_1)  \big/ s$.
 The $100(1-\alpha)$\% global area rank envelope induced by $A_i$ is constructed similarly as the global ERL and continuous rank envelopes (see Equation~\ref{erl_envelope}).
