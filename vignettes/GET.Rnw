@@ -142,7 +142,7 @@ In cases (ii) and (iii), the probability is taken under the null hypothesis $H_0
 and, in case (iv), the probability is taken under the distribution of the random vector $\TT_i$ generated under the given bootstrap or Bayesian scheme.
 It should be noted that in a {\em pointwise} (or local) envelope the probability to fall out of the envelope is controlled instead individually for every element of the vector $\TT_i$.
 
-Given the set of vectors $\TT_1, \TT_2, \dots, \TT_{s}$, the task in all the above mentioned examples in (i)-(iv) is to order the $d$-dimensional vectors $\TT_i$ (or functions) from the most extreme to the least extreme. For this purpose, many different measures exist. However, the \pkg{GET} package focuses on such measures for which it is possible to construct the global envelope with a practically interesting graphical interpretation, which we call {\it intrinsic graphical interpretation}. 
+Given the set of vectors $\TT_1, \TT_2, \dots, \TT_{s}$, the task in all the above mentioned examples in (i)-(iv) is to order the $d$-dimensional vectors $\TT_i$ (or functions) from the most extreme to the least extreme. For this purpose, many different measures exist. However, the \pkg{GET} package focuses on such measures for which it is possible to construct the global envelope with a practically interesting graphical interpretation, which we call {\it intrinsic graphical interpretation}.
 
 \begin{definition}\label{IGI} 
 Let it be assumed that a general ordering $\prec$ of the vectors $\TT_i, i=1, \ldots , s$, is induced by a univariate measure $M_i$. That is,
@@ -156,16 +156,16 @@ iff $M_i<m_{(\alpha)}$ for every $i=1, \ldots , s$;
  \item $\TT_{\lo\,j}^{(\alpha)} \leq T_{ij} \leq \TT_{\up\,j}^{(\alpha)}$ for all $j = 1, \ldots , d$ iff $M_i\geq m_{(\alpha)}$ for every $i=1, \ldots , s$.
 \end{enumerate}
 \end{definition}
-The global envelope with IGI provides a solution to the tasks (i)-(iv) in a graphical manner. In other words, the IGI property means that the vector $\TT_i$ is outside the global envelope in any of its components if and only if the vector is considered to be extreme by the measure $M$ at the level $\alpha$, and the vector $\TT_i$ is completely inside the global envelope if and only if the vector is not extreme at the level $\alpha$. 
+The global envelope with IGI provides a solution to the tasks (i)-(iv) in a graphical manner. In other words, the IGI property means that the vector $\TT_i$ is outside the global envelope in any of its components if and only if the vector is considered to be extreme by the measure $M$ at the level $\alpha$, and the vector $\TT_i$ is completely inside the global envelope if and only if the vector is not extreme at the level $\alpha$.
 
 For tasks (ii) and (iii), the data vector $\TT_1$ is compared with a global envelope constructed from the data vector $\TT_1$ and vectors $\TT_2, \ldots ,\TT_s$ simulated under a null hypothesis $H_0$, 
 in order to decide if the data vector is extreme ($H_0$ is rejected) or not extreme ($H_0$ is not rejected). 
 For these tasks, in addition to a global envelope, a Monte Carlo $p$~value is computed according to the measure $M_i$: $p =  \sum_{i=1}^{s} \1 (M_i \leq M_1)  \big/ s$  \citep[see, e.g.,][]{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2018, MrkvickaEtal2019b, MrkvickaEtal2019a}.
 
-In order to obtain an exact Monte Carlo test, i.e., a test that achieves the prescribed family-wise error rate, the exchangeability of the test vectors $\TT_i$ is required. All the examples in Section \ref{sec:illustrations} satisfy exchangeability, except the functional GLM where the permutation of the residuals from the null model \citep{FreedmanLane1983} is used. This permutation scheme is commonly used in univariate permutation GLMs and widely accepted as the best available solution \citep{AndersonRobinson2001, AndersonTerBraak2003, WinklerEtal2014}. 
+In order to obtain an exact Monte Carlo test, i.e., a test that achieves the prescribed family-wise error rate, the exchangeability of the test vectors $\TT_i$ is required. All the examples in Section \ref{sec:illustrations} satisfy exchangeability, except the functional GLM where the permutation of the residuals from the null model \citep{FreedmanLane1983} is used. This permutation scheme is commonly used in univariate permutation GLMs and widely accepted as the best available solution \citep{AndersonRobinson2001, AndersonTerBraak2003, WinklerEtal2014}.
 
 The second part of this introductory section describes the competing and complementary methods and software. 
-Thereafter, in Section~\ref{sec:theory}, seven global envelopes with IGI are described and their usage in \pkg{GET} is discussed. The section is complemented by Appendix~\ref{app:simstudy}, which presents a simulation study to help to choose which of the global envelopes should be used in which cases. 
+Thereafter, in Section~\ref{sec:theory}, seven global envelopes with IGI are described and their usage in \pkg{GET} is discussed. %The section is complemented by Appendix~\ref{app:simstudy}, which presents a simulation study to help to choose which of the global envelopes should be used in which cases.
 In Section~\ref{sec:illustrations}, several examples of applications of global envelopes are shown, namely 1) the computation of central regions and functional boxplots for a set of functions or jointly for several sets of functions (Section \ref{sec:cr}); 2) the Monte Carlo goodness-of-fit test for simple hypotheses with application to spatial statistics (Section \ref{sec:GOT}); 3) the Monte Carlo goodness-of-fit test for composite hypotheses with application to graphical normality testing (Section \ref{sec:GOTcomposite}); 4) the graphical $n$-sample test of correspondence of distribution functions, $n\geq 2$ (Section \ref{sec:CDF}); 5) the graphical functional one-way ANOVA (Section \ref{sec:fANOVA}); 6) the functional GLM for images (Section \ref{sec:fGLM}); and 7) the computation of the confidence band in polynomial regression (Section \ref{sec:confband}).
 The final section, Section~\ref{sec:summary}, is left for discussion.
 
@@ -660,7 +660,7 @@ plot(res, ylab = expression(italic(hat(L)(r)-r)))
 %
 In this manner, the global envelope test can be constructed for any simple hypothesis and any test vector, as long as one can generate the simulations and calculate the test vectors.
 
-The test output is shown in Figure~\ref{fig:adulttrees_CSR} (left), which shows no evidence against CSR \citep[see more detailed description in][Section S4]{MyllymakiEtal2017}. 
+The test output is shown in Figure~\ref{fig:trees_CSR} (left), which shows no evidence against CSR \citep[see more detailed description in][Section S4]{MyllymakiEtal2017}.
 
 \subsubsection[Simple hypothesis for a point pattern utilizing the R package spatstat]{Simple hypothesis for a point pattern utilizing the \proglang{R} package \pkg{spatstat}}
 
@@ -809,9 +809,7 @@ grid.arrange(p1, p2, nrow = 1)
 \subsection{Graphical $n$-sample test of correspondence of distribution functions}\label{sec:CDF}
 
 The graphical $n$-sample test of correspondence of distribution functions serves as a simple example of permutation tests.
-Figure~\ref{fig:ecdfs} shows the empirical cumulative distribution functions obtained by the \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020} for the heights of the 54 girls and 39 boys of the \code{growth} data 
-\citep[see above, and][]{RamsaySilverman2006} 
-at ages 10 (left) and 14 (right). 
+Figure~\ref{fig:necdfs} shows the empirical cumulative distribution functions obtained by the \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020} for the heights of the 54 girls and 39 boys of the \code{growth} data \citep[see above, and][]{RamsaySilverman2006} at ages 10 (left) and 14 (right).
 A global envelope test can be performed to investigate whether the two (or more generally $n$) distribution functions differ from each other significantly and how they differ. This test is a generalization of the two-sample Kolmogorov-Smirnov test with a graphical interpretation. 
 Here it is assumed that the heights in the group $i$ are an i.i.d.\ sample from the distribution $F_i(r)$, $i=1, \dots, n$, and the hypothesis $F_1(r)=\dots = F_n(r)$ needs to be tested.
 The simulations under the null hypothesis that the distributions are the same can be obtained by permuting the individuals of the groups. The \pkg{GET} package provides the wrapper function \fct{GET.necdf} that can be used to compare $n$ distribution functions graphically, $n=2,3,\dots$. The (default) test vector is
@@ -838,7 +836,7 @@ fm14.l <- list(Girls=growth$hgtf["14",], Boys=growth$hgtm["14",])
 res14 <- GET.necdf(fm14.l, nsim=1999)
 @
 %
-and plot the object returned by \fct{GET.necdf}. Figure~\ref{fig:ecdfs_means_GET} shows the test output of the comparison of girls and boys at ages 10 (left) and 14 (right).
+and plot the object returned by \fct{GET.necdf}. Figure~\ref{fig:necdfs_means_GET} shows the test output of the comparison of girls and boys at ages 10 (left) and 14 (right).
 The height distributions at age 10 do not differ from each other significantly, but at age 14 the boys are taller, particularly with a difference that the proportion of girls reaching a height of around 175 cm is much lower.
 
 \begin{figure}[ht!]
@@ -869,7 +867,7 @@ p2 <- plot(res14,
      ylab=expression(italic(hat(F)[i](x))), base_size=10)
 grid.arrange(p1, p2, nrow=1)
 @
-	\caption{Global envelope tests for comparison of the empirical cumulative distribution functions of heights of the girls and boys (see Figure~\ref{fig:ecdfs}). Left: Age 10; Right: Age 14.}
+	\caption{Global envelope tests for comparison of the empirical cumulative distribution functions of heights of the girls and boys (see Figure~\ref{fig:necdfs}). Left: Age 10; Right: Age 14.}
 	\label{fig:necdfs_means_GET}
 \end{figure}
 
@@ -967,7 +965,7 @@ res.c <- graph.fanova(nsim = 2999, curve_set = cset,
 plot(res.c, xlab = "Hour", ylab = "Diff.")
 @
 %
-The \code{fdata} object \code{poblenou[['nox']]} is automatically converted to the required format in \pkg{GET}. The observed differences together with the global envelope are shown in Figure~\ref{fig:logNOx_graphfanova}. 
+The \code{fdata} object \code{poblenou[['nox']]} is automatically converted to the required format in \pkg{GET}. The observed differences together with the global envelope are shown in Figure~\ref{fig:graphfanova_logNOx}.
 Thus, the test rejects the null hypothesis $H'_0$ that the differences between the groups would be zero and shows that on Monday-Thursday and Friday the (log) NO$_x$ levels are significantly larger than on free days basically during the whole day with peaks around 8 am and 4 pm. The difference between Monday-Thursday and Friday was not significant.
 
 The graphical functional ANOVA allows one to detect either a) which groups deviate from the mean (option \code{contrasts = FALSE}) or b) which specific groups are different (option \code{contrasts = TRUE}). The example above was for the latter. Note that this test directly has the nature of a post hoc test. Furthermore, both versions of the test allow one to identify which $r$ values lead to the potential rejection of the null hypothesis.
@@ -1050,15 +1048,14 @@ The \code{r} component of the \code{abide_9002_23[['curve_set']]} object is a da
 plot(res)
 @
 %
-are two-dimensional as well (Figure~\ref{fig:abide_graphflm}).
-Here only two groups were compared, and the plot shows that the brain measurements were lower in the autism group than in the control group in a part of the small example region (red locations in Figure~\ref{fig:abide_graphflm}).
+are two-dimensional as well (Figure~\ref{fig:flm_graph_abide}).
+Here only two groups were compared, and the plot shows that the brain measurements were lower in the autism group than in the control group in a part of the small example region (red locations in Figure~\ref{fig:flm_graph_abide}).
 
 \begin{figure}[ht!]
 \centering
 <<flm_graph_abide, echo=FALSE, fig=TRUE, height=4, width=6.125>>==
 plot(res)
 @
-%	\includegraphics[width=\textwidth]{pictures/abide_graphflm.pdf}
 	\caption{Graphical functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed difference (autism-control), the lower and upper bounds of the 95\% global rank (ERL) envelope, and the significant regions (red) where the observed coefficient goes below or above the envelope.}
 	\label{fig:flm_graph_abide}
 \end{figure}
@@ -1084,7 +1081,7 @@ res.F <- frank.flm(nsim = 999,
 plot(res.F)
 @
 %
-Figure~\ref{fig:abide_frankflm} shows the test result of the $F$-rank GLM, which found significant differences between the groups approximately at the same pixels $r\in\{1,\ldots,d\}$ of the brain image as the graphical functional GLM above.
+Figure~\ref{fig:flm_frank_abide} shows the test result of the $F$-rank GLM, which found significant differences between the groups approximately at the same pixels $r\in\{1,\ldots,d\}$ of the brain image as the graphical functional GLM above.
 In general, for a factor with more than two groups, the $F$-rank GLM is however not able to tell between which specific groups of a discrete factor the differences occur (or which of the groups deviates from the mean).
 
 \begin{figure}[ht!]
