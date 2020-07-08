@@ -160,21 +160,15 @@ individual_forder <- function(curve_set,
              distance <- partial_forder
            },
            erl = {
-             distance <- rank_matrix_cols(partial_forder) / Nfunc
+             distance <- rank_matrix_cols(partial_forder)
            },
            cont = {
-             if(alternative == "two.sided")
-               distance <- partial_forder / ceiling(Nfunc/2)
-             else
-               distance <- partial_forder / (Nfunc-1)
+             distance <- partial_forder
            },
            area = {
              distance <- partial_forder[1,] - partial_forder[2,] / nr
-             if(alternative == "two.sided")
-               distance <- distance / (ceiling(Nfunc/2))
-             else
-               distance <- distance / ((Nfunc-1))
            })
+    distance <- scale_ranks(distance, measure)
   }
   names(distance) <- rownames(data_and_sim_curves)
   list(distance = distance, measure = measure)
