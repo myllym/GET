@@ -122,6 +122,11 @@ individual_partial_forder <- function(curve_set, measure = c('erl', 'rank', 'con
          )
 }
 
+scale_ranks <- function(distance, measure) {
+  if(measure=="rank") distance
+  else distance/length(distance)
+}
+
 # Functionality for functional ordering based on a curve set
 individual_forder <- function(curve_set,
                               measure = 'erl', scaling = 'qdir',
