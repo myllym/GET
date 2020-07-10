@@ -374,6 +374,7 @@ combined_forder <- function(curve_sets, ...) {
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+#' Narisetty, N. N. and Nair, V. J. (2016) Extremal depth for functional data and applications. Journal of the American Statistical Association, 111, 1705–1714.
 #' @examples
 #' if(requireNamespace("fda", quietly = TRUE)) {
 #'   # Consider ordering of the girls in the Berkeley Growth Study data
