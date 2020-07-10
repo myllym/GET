@@ -231,13 +231,13 @@ combine_erl_forder <- function(parts) {
 #'                   factors = abide_9002_23$factors, savefuns = "return")
 #' p1 <- partial_forder(cset[1:100,], measure="area")
 #' p2 <- partial_forder(cset[-(1:100),], measure="area")
-#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="area")*100))
+#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="area")))
 #' p1 <- partial_forder(cset[1:100,], measure="cont")
 #' p2 <- partial_forder(cset[-(1:100),], measure="cont")
-#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="cont")*100))
+#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="cont")))
 #' p1 <- partial_forder(cset[1:100,], measure="erl")
 #' p2 <- partial_forder(cset[-(1:100),], measure="erl")
-#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="erl")*100))
+#' stopifnot(all.equal(combine_forder(list(p1, p2)), forder(cset, measure="erl")))
 #' }
 #' res <- lapply(list(1:100, 101:200, 201:261), function(part) {
 #'   set.seed(123) # When using partial_forder, all parts must use the same seed.
@@ -267,11 +267,12 @@ combine_forder <- function(ls) {
   nr <- sum(sapply(ls, getElement, name="nr"))
   measures <- sapply(ls, getElement, name="measure")
   if(!all(measures[1] == measures)) stop("All parts must have been produced using the same measure.")
-  switch(measures[1],
-         rank=,
-         cont=do.call(pmin, partialforders),
-         erl=combine_erl_forder(partialforders),
-         area=combine_area_forder(partialforders, nr))
+  distance <- switch(measures[1],
+                     rank=,
+                     cont=do.call(pmin, partialforders),
+                     erl=combine_erl_forder(partialforders),
+                     area=combine_area_forder(partialforders, nr))
+  scale_ranks(distance, measures[1])
 }
 
 # Functionality for functional ordering based on several curve sets
