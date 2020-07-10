@@ -79,7 +79,7 @@ Attributes of an object \code{res} can be obtained using the function
 
 The "combined_global_envelope" is a list of "global_envelope" objects
 corresponding to the components of \code{curve_sets}. The second level envelope
-on which the envelope construction is based on is saved in the attribute
+on which the envelope construction is based is saved in the attribute
 "level2_ge".
 }
 \description{
@@ -89,20 +89,6 @@ Provides central regions or global envelopes or confidence bands
 Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
 or an \code{\link[spatstat]{envelope}} object, the function \code{central_region}
 construcst a central region, i.e. a global envelope, from the given set of functions (or vectors).
-There are two options for the functions that the \code{curve_set} can contain:
-\itemize{
- \item If the component \code{obs} of the \code{curve_set} is a matrix,
-then it is assumed that all the functions are data/observed. In this case,
-the component \code{sim_m} of the \code{curve_set} (which can be then NULL)
-is ignored and the central region constructed from the functions given in \code{obs}.
- \item If the component \code{obs} is a vector, then \code{sim_m} should be provided as well
-and it is assumed to contain simulated functions (obtained, e.g., from some model or by permutation).
-The central region is calculated from all the functions.
-}
-Thus the \code{curve_set} contains functions (or vectors)
-\eqn{T_1(r),\dots,T_s(r)}{T_1(r),...,T_s(r)}.
-In the case of one observed function only,
-the data function is considered to be \eqn{T_1(r)}{T_1(r)}.
 
 Generally an envelope is a band bounded by the vectors (or functions)
 \eqn{T_{low}}{T_lo} and \eqn{T_{hi}}{T_hi}.
@@ -118,7 +104,7 @@ with intrinsic graphical interpretation.
 The type of the global envelope can be chosen with the argument \code{type} and
 the options are given in the following.
 Further information about the measures, on which the global envelopes are based,
-can be found in \code{\link{forder}}.
+can be found in Myllymäki and Mrkvička (2020, Section 2.).
 \itemize{
  \item \code{'rank'}: The global rank envelope
 proposed by Myllymäki et al. (2017) based on the extreme rank defined as the minimum of pointwise
@@ -151,8 +137,8 @@ We recommend to use the other alternatives instead. This unscaled global envelop
 provided for reference.
 }
 
-For each curve in the curve_set, both the data curve and the simulations,
-an above mention measure k is determined. The measure values
+The values of the chosen measure k are determined for each curve in the \code{curve_set}, and
+the values
 \eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s}
 are returned in the attribute 'k' (in a case of one observed curve only, k[1] is its value).
 Based on the chosen measure, the central region, i.e. the global envelope, is constructed
@@ -161,10 +147,10 @@ to be given on this interval only).
 
 If a list of (suitable) objects are provided in the argument \code{curve_sets},
 then by default (\code{nstep = 2}) the two-step combining procedure is used to
-construct the combined global envelope as described in Myllymäki and Mrkvička (2019).
+construct the combined global envelope as described in Myllymäki and Mrkvička (2020, Section 2.2.).
 If \code{nstep = 1} and the lengths of the multivariate vectors in each component
 of the list are equal, then the one-step combining procedure is used where the
-functions are concatenated together into a one long vector.
+functions are concatenated together into a one long vector (see again Myllymäki and Mrkvička, 2020, Section 2.2.).
 }
 \examples{
 ## A central region of a set of functions
@@ -227,7 +213,7 @@ lines(CB.lo, lty=2)
 lines(CB.hi, lty=2)
 }
 \references{
-Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 
@@ -235,10 +221,10 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test c
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 
-Myllymäki, M. and Mrkvička, T. Global envelopes in R.
+Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
 \seealso{
-\code{\link{global_envelope_test}}
+\code{\link{forder}}, \code{\link{global_envelope_test}}
 }

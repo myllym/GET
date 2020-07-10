@@ -63,20 +63,16 @@ is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
 \item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
 }
 \value{
-Either an object of class "global_envelope" and "fv"
-(see \code{\link[spatstat]{fv.object}}) or "combined_global_envelope" for
-combined tests. The objects can be printed and plotted directly.
+Either an object of class "global_envelope" or "combined_global_envelope"
+(the latter for combined tests). The objects can be printed and plotted directly.
 
 The "global_envelope" is essentially a data frame containing columns
 \itemize{
-\item r = the vector of values of the argument r at which the test was made
-\item obs = values of the data function
-\item lo = the lower envelope based on the simulated functions
-\item hi = the upper envelope based on the simulated functions
-\item central = If the curve_set (or envelope object) contains a component 'theo',
-      then this function is used as the central curve and returned in this component.
-      Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-      Used for visualization only.
+\item the values of the argument r at which the test was made, copied from the argument \code{curve_sets} with the corresponding names
+\item obs = values of the data function, copied from the argument \code{curve_sets}; missing if more than one observed function
+\item lo = the lower envelope
+\item hi = the upper envelope
+\item central = a central curve as specified in the argument \code{central}.
 }
 Moreover, the return value has the same attributes as the object returned by
 \code{\link{central_region}} and in addition
@@ -137,8 +133,8 @@ envelopes with intrinsic graphical interpretation.
   \item "unscaled", the unscaled envelope (providing a baseline) that has a contant width and
   that corresponds to the classical maximum deviation test (Ripley, 1981).
 }
-See \code{\link{forder}} and \code{\link{central_region}} and the references
-for more detailed description of the measures and the corresponding envelopes.
+See Myllymäki and Mrkvička (2020, Section 2.) for more detailed description of the measures and
+the corresponding envelopes.
 
 The first four types are global rank envelopes.
 The \code{'rank'} envelope test is a completely non-parametric test,
@@ -167,8 +163,7 @@ The options are
 \item 'st': the studentized MAD measure (Myllymäki et al., 2015, 2017)
 \item 'unscaled': the unscaled MAD measure (Ripley, 1981)
 }
-See more detailed description of the envelopes and measures in \code{\link{central_region}}
-and \code{\link{forder}}.
+See more detailed description of the envelopes and measures in Myllymäki and Mrkvička (2020, Section 2.).
 }
 
 \section{Global envelope}{
@@ -195,7 +190,8 @@ The same is done for other measures, the p-value always being correspondent to t
 
 For the global \code{"rank"} envelope test, Myllymäki et al. (2017) recommended to use
 at least 2500 simulations for testing at the significance level alpha = 0.05 for single
-function tests, based on experiments with summary functions for point processes.
+function tests, based on experiments with summary functions for point processes evaluated
+approximately at 500 argument values.
 In this case, the width of the p-interval associated with the extreme rank measure tended
 to be smaller than 0.01.
 The tests \code{'erl'}, \code{'cont'} and \code{'area'}, similarly as
@@ -371,7 +367,7 @@ if(requireNamespace("mvtnorm", quietly=TRUE)) {
 \references{
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 
-Mrkvička, T., Myllymäki, M., Jilek, M., and Hahn, U. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
+Mrkvička, T., Myllymäki, M., Jilek, M., and Hahn, U. (2020). A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 
@@ -379,7 +375,7 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test c
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 
-Myllymäki, M., Mrkvička, T. Global envelopes in R.
+Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }

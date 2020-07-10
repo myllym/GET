@@ -70,5 +70,5 @@ if using the default main.}
 Plot method for the class 'global_envelope'
 }
 \seealso{
-\code{\link{central_region}}
+\code{\link{central_region}}, \code{\link{global_envelope_test}}
 }

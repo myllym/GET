@@ -51,8 +51,7 @@ from the most extreme to least extreme one
 \details{
 Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
 or an \code{\link[spatstat]{envelope}} object,
-which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)} and
-the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)},
+which contains curves \eqn{T_1(r),\dots,T_s(r)}{T_1(r),...,T_s(r)},
 the functions are ordered from the most extreme one to the least extreme one
 by one of the following measures (specified by the argument \code{measure}).
 Note that \code{'erl'}, \code{'cont'} and \code{'area'} were proposed as a refinement to
@@ -68,16 +67,18 @@ The extreme rank \eqn{R_i}{R_i} is defined as the minimum of pointwise ranks of 
 specific r-value among the corresponding values of the s other curves such that the lowest
 ranks correspond to the most extreme values of the curves. How the pointwise ranks are determined
 exactly depends on the whether a one-sided (\code{alternative} is "less" or "greater") or the
-two-sided test (\code{alternative="two.sided"}) is chosen, for details see
-Mrkvička et al. (2017, page 1241) or Mrkvička et al. (2018, page 6).
+two-sided test (\code{alternative="two.sided"}) is chosen.
  \item \code{'erl'}: extreme rank length (Myllymäki et al., 2017).
  Considering the vector of pointwise ordered ranks \eqn{\mathbf{R}_i}{RP_i} of the ith curve,
  the extreme rank length measure \eqn{R_i^{erl}}{Rerl_i} is equal to
-\deqn{R_i^{erl} = \frac{1}{s+1}\sum_{j=1}^{s+1} \mathbf{1}(\mathbf{R}_j "<" \mathbf{R}_i)}{Rerl_i = \sum_{j=1}^{s} 1(RP_j "<" RP_i) / (s + 1)}
+\deqn{R_i^{erl} = \frac{1}{s}\sum_{j=1}^{s} \mathbf{1}(\mathbf{R}_j "<" \mathbf{R}_i)}{Rerl_i = \sum_{j=1}^{s} 1(RP_j "<" RP_i) / s}
 where \eqn{\mathbf{R}_j "<" \mathbf{R}_i}{RP_j "<" RP_i} if and only if
 there exists \eqn{n\leq d}{n<=d} such that for the first k, \eqn{k<n}{k<n}, pointwise ordered
 ranks of \eqn{\mathbf{R}_j}{RP_j} and \eqn{\mathbf{R}_i}{RP_i} are equal and the n'th rank of
 \eqn{\mathbf{R}_j}{RP_j} is smaller than that of \eqn{\mathbf{R}_i}{RP_i}.
+The scaling by \deqn{s}{s} is applied to normalize the ranks following Mrkvička et al. (2019)
+and Narisetty and Nair (2016).
+
  \item \code{'cont'}: continuous rank (Hahn, 2015; Mrkvička et al., 2019)
 based on minimum of continuous pointwise ranks
  \item \code{'area'}: area rank (Mrkvička et al., 2019) based on area between continuous
@@ -89,6 +90,7 @@ See the help in \code{\link{deviation_test}} for these options of \code{measure}
 These measures are largest for the most extreme functions and smallest for the least extreme ones.
 The arguments \code{use_theo} and \code{probs} are relevant for these measures only (otherwise ignored).
 }
+For details see Myllymäki and Mrkvička et al. (2020, Section 2)
 }
 \examples{
 if(requireNamespace("fda", quietly = TRUE)) {
@@ -121,13 +123,15 @@ if(requireNamespace("fda", quietly = TRUE)) {
 \references{
 Hahn U (2015). “A note on simultaneous Monte Carlo tests.” Technical report, Centre for Stochastic Geometry and advanced Bioimaging, Aarhus University.
 
-Mrkvička, T., Hahn, U. and Myllymäki, M. (2018). A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME]
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
+
+Narisetty, N. N. and Nair, V. J. (2016) Extremal depth for functional data and applications. Journal of the American Statistical Association, 111, 1705–1714.
 }
 \seealso{
 \code{\link{partial_forder}}

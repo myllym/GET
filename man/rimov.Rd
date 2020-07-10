@@ -30,9 +30,7 @@ for(i in 1:3)
 # See example analysis in ?graph.fanova
 }
 \references{
-Mrkvička, T., Hahn, U. and Myllymäki, M. (2018)
-A one-way ANOVA test for functional data with graphical interpretation.
-arXiv:1612.03608v2 [stat.ME] (http://arxiv.org/abs/1612.03608v2)
+Mrkvička, T., Hahn, U. and Myllymäki, M. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 }
 \seealso{
 graph.fanova

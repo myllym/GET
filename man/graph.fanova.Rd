@@ -193,15 +193,11 @@ res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
 plot(res.c)
 }
 \references{
-Mrkvička, T., Hahn, U. and Myllymäki, M.
-A one-way ANOVA test for functional data with graphical interpretation.
-arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 
-Mrkvička, T., Myllymäki, M., and Hahn, U. (2017).
-Multiple Monte Carlo testing, with applications in spatial point processes.
-Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
+Mrkvička, T., Myllymäki, M., and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
 
-Myllymäki, M and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+Myllymäki, M and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 }
 \seealso{
 \code{\link{frank.fanova}}

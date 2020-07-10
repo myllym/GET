@@ -83,7 +83,5 @@ plot(res2)
 plot(res2, fixedscales=FALSE)
 }
 \references{
-Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018)
-A one-way ANOVA test for functional data with graphical interpretation.
-arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 }
