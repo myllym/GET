@@ -126,7 +126,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' }
 GET.spatialF <- function(X, formula.full, formula.reduced, fitfun, covariates, nsim,
                          bw=spatstat::bw.scott(X), bw.S=bw, dimyx=NULL, ...) {
-  if(!is.ppp(X)) stop("X should be a ppp object.")
+  if(!spatstat::is.ppp(X)) stop("X should be a ppp object.")
   check_isnested(formula.full, formula.reduced)
   M.reduced <- fitfun(X, formula.reduced, covariates)
   sim <- simulate(M.reduced, nsim = nsim)

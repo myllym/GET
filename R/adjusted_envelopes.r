@@ -18,7 +18,7 @@ funcs_from_X_and_funs <- function(X, nsim, testfuns=NULL, ...,
   X.ls <- NULL
   # Simulations
   # Calculate the first test functions and generate simulations
-  X.ls[[1]] <- do.call(envelope, c(list(Y=X, nsim=nsim, simulate=NULL),
+  X.ls[[1]] <- do.call(spatstat::envelope, c(list(Y=X, nsim=nsim, simulate=NULL),
                                         testfuns[[1]],
                                         list(savefuns=TRUE, savepatterns=savepatterns, verbose=verbose),
                                         extraargs))
@@ -26,7 +26,7 @@ funcs_from_X_and_funs <- function(X, nsim, testfuns=NULL, ...,
   if(calc_funcs & nfuns > 1) {
     simpatterns <- attr(X.ls[[1]], "simpatterns")
     for(i in 2:nfuns) {
-      X.ls[[i]] <- do.call(envelope, c(list(Y=X, nsim=nsim, simulate=simpatterns),
+      X.ls[[i]] <- do.call(spatstat::envelope, c(list(Y=X, nsim=nsim, simulate=simpatterns),
                                             testfuns[[i]],
                                             list(savefuns=TRUE, savepatterns=FALSE, verbose=verbose),
                                             extraargs))
