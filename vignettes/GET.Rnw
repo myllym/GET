@@ -95,6 +95,11 @@ Examples of different uses of global envelopes and their implementation in the \
 
 \begin{document}
 
+\section*{Preface}
+
+This vignette corresponds to Myllym{\"a}ki and Mrkvi\v cka (2020, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME]) available at \url{https://arxiv.org/abs/1911.06583}.
+When citing the vignette and package please cite Myllym{\"a}ki and Mrkvi\v cka (2020) and references given by typing \code{citation("GET")} in \proglang{R}.
+
 %% -- Introduction -------------------------------------------------------------
 
 \section{Introduction}\label{sec:intro}
