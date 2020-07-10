@@ -532,20 +532,6 @@ plot.combined_global_envelope <- function(x,
 #' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
 #' or an \code{\link[spatstat]{envelope}} object, the function \code{central_region}
 #' construcst a central region, i.e. a global envelope, from the given set of functions (or vectors).
-#' There are two options for the functions that the \code{curve_set} can contain:
-#' \itemize{
-#'  \item If the component \code{obs} of the \code{curve_set} is a matrix,
-#' then it is assumed that all the functions are data/observed. In this case,
-#' the component \code{sim_m} of the \code{curve_set} (which can be then NULL)
-#' is ignored and the central region constructed from the functions given in \code{obs}.
-#'  \item If the component \code{obs} is a vector, then \code{sim_m} should be provided as well
-#' and it is assumed to contain simulated functions (obtained, e.g., from some model or by permutation).
-#' The central region is calculated from all the functions.
-#' }
-#' Thus the \code{curve_set} contains functions (or vectors)
-#' \eqn{T_1(r),\dots,T_s(r)}{T_1(r),...,T_s(r)}.
-#' In the case of one observed function only,
-#' the data function is considered to be \eqn{T_1(r)}{T_1(r)}.
 #'
 #' Generally an envelope is a band bounded by the vectors (or functions)
 #' \eqn{T_{low}}{T_lo} and \eqn{T_{hi}}{T_hi}.
@@ -561,7 +547,7 @@ plot.combined_global_envelope <- function(x,
 #' The type of the global envelope can be chosen with the argument \code{type} and
 #' the options are given in the following.
 #' Further information about the measures, on which the global envelopes are based,
-#' can be found in \code{\link{forder}}.
+#' can be found in Myllymäki and Mrkvička (2020, Section 2.).
 #' \itemize{
 #'  \item \code{'rank'}: The global rank envelope
 #' proposed by Myllymäki et al. (2017) based on the extreme rank defined as the minimum of pointwise
@@ -594,8 +580,8 @@ plot.combined_global_envelope <- function(x,
 #' provided for reference.
 #' }
 #'
-#' For each curve in the curve_set, both the data curve and the simulations,
-#' an above mention measure k is determined. The measure values
+#' The values of the chosen measure k are determined for each curve in the \code{curve_set}, and
+#' the values
 #' \eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s}
 #' are returned in the attribute 'k' (in a case of one observed curve only, k[1] is its value).
 #' Based on the chosen measure, the central region, i.e. the global envelope, is constructed
@@ -604,10 +590,10 @@ plot.combined_global_envelope <- function(x,
 #'
 #' If a list of (suitable) objects are provided in the argument \code{curve_sets},
 #' then by default (\code{nstep = 2}) the two-step combining procedure is used to
-#' construct the combined global envelope as described in Myllymäki and Mrkvička (2019).
+#' construct the combined global envelope as described in Myllymäki and Mrkvička (2020, Section 2.2.).
 #' If \code{nstep = 1} and the lengths of the multivariate vectors in each component
 #' of the list are equal, then the one-step combining procedure is used where the
-#' functions are concatenated together into a one long vector.
+#' functions are concatenated together into a one long vector (see again Myllymäki and Mrkvička, 2020, Section 2.2.).
 #'
 #' @references
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
@@ -663,11 +649,11 @@ plot.combined_global_envelope <- function(x,
 #'
 #' The "combined_global_envelope" is a list of "global_envelope" objects
 #' corresponding to the components of \code{curve_sets}. The second level envelope
-#' on which the envelope construction is based on is saved in the attribute
+#' on which the envelope construction is based is saved in the attribute
 #' "level2_ge".
 #'
 #' @export
-#' @seealso \code{\link{global_envelope_test}}
+#' @seealso \code{\link{forder}}, \code{\link{global_envelope_test}}
 #' @aliases global_envelope central_region2d
 #' @examples
 #' ## A central region of a set of functions
@@ -936,8 +922,8 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   \item "unscaled", the unscaled envelope (providing a baseline) that has a contant width and
 #'   that corresponds to the classical maximum deviation test (Ripley, 1981).
 #' }
-#' See \code{\link{forder}} and \code{\link{central_region}} and the references
-#' for more detailed description of the measures and the corresponding envelopes.
+#' See Myllymäki and Mrkvička (2020, Section 2.) for more detailed description of the measures and
+#' the corresponding envelopes.
 #'
 #' The first four types are global rank envelopes.
 #' The \code{'rank'} envelope test is a completely non-parametric test,
@@ -965,8 +951,7 @@ plot.combined_fboxplot <- function(x, level = 1,
 #' \item 'st': the studentized MAD measure (Myllymäki et al., 2015, 2017)
 #' \item 'unscaled': the unscaled MAD measure (Ripley, 1981)
 #' }
-#' See more detailed description of the envelopes and measures in \code{\link{central_region}}
-#' and \code{\link{forder}}.
+#' See more detailed description of the envelopes and measures in Myllymäki and Mrkvička (2020, Section 2.).
 #'
 #' @section Global envelope:
 #' Based on the measures used to rank the functions, the 100(1-alpha)\% global envelope is provided.
@@ -987,7 +972,8 @@ plot.combined_fboxplot <- function(x, level = 1,
 #' @section Number of simulations:
 #' For the global \code{"rank"} envelope test, Myllymäki et al. (2017) recommended to use
 #' at least 2500 simulations for testing at the significance level alpha = 0.05 for single
-#' function tests, based on experiments with summary functions for point processes.
+#' function tests, based on experiments with summary functions for point processes evaluated
+#' approximately at 500 argument values.
 #' In this case, the width of the p-interval associated with the extreme rank measure tended
 #' to be smaller than 0.01.
 #' The tests \code{'erl'}, \code{'cont'} and \code{'area'}, similarly as

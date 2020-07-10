@@ -122,7 +122,7 @@
 #'   \item Testing global and local dependence of point patterns on covariates: \code{\link{GET.spatialF}}
 #'  }
 #'
-#' \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no gpaphical
+#' \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no graphical
 #' interpretation)
 #' \item Most functions accept the curves provided in a \code{curve_set} object.
 #' Use \code{\link{create_curve_set}} (or \code{\link{create_image_set}}) to create a

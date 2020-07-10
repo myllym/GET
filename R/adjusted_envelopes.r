@@ -222,7 +222,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' @param MrkvickaEtal2017 Logical. If TRUE, type is "st" or "qdir" and several test functions are used,
 #' then the combined scaled MAD envelope presented in Mrkvička et al. (2017) is calculated. Otherwise,
 #' the two-step procedure described in \code{\link{global_envelope_test}} is used for combining the tests.
-#' Default to FALSE. The option kept for historical reasons.
+#' Default to FALSE. The option is kept for historical reasons.
 #' @param mc.cores The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 #' Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
 #' (no parallelization). For details, see \code{\link{mclapply}}, for which the argument is passed.
