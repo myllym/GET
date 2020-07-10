@@ -43,9 +43,6 @@ funcs_from_X_and_funs <- function(X, nsim, testfuns=NULL, ...,
 adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
                          simfun=NULL, fitfun=NULL, calcfun=function(X) { X },
                          testfuns=NULL, ..., verbose=TRUE, mc.cores=1L) {
-  # Check if X is a (ppp) model object of spatstat
-  Xispppmodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
-
   # Case 1: fitfun, simfun, calcfun provided
   # Model fitted by fitfun, simulated by simfun; X can be general
   if(!is.null(fitfun) & !is.null(simfun)) {
@@ -75,7 +72,9 @@ adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
   # a) If X is a ppp object, the tested model is CSR
   # b) If X is a model object of spatstat, then spatstat is used for fitting and simulation.
   else {
-    if(!is.ppp(X) & !Xispppmodel) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.")
+    # Check if X is a (ppp) model object of spatstat
+    Xispppmodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
+    if(!spatstat::is.ppp(X) & !Xispppmodel) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.")
     if(Xispppmodel) message("X is a fitted model object of spatstat;\n using spatstat to simulate the model and calculate the test functions.")
     else
       message("Note: \'simfun\' and/or \'fitfun\' not provided and \'X\' is a ppp object of spatstat.\n",
