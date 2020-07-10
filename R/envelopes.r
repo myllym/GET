@@ -405,7 +405,7 @@ print.combined_global_envelope <- function(x, ...) {
 #'
 #' @export
 #' @importFrom ggplot2 theme_minimal
-#' @seealso \code{\link{central_region}}
+#' @seealso \code{\link{central_region}}, \code{\link{global_envelope_test}}
 plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
                                  dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
