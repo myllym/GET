@@ -220,15 +220,11 @@ contrasts.m <- function(x, groups, ...) {
 #' @aliases graph.fanova2d
 #' @seealso \code{\link{frank.fanova}}
 #' @references
-#' Mrkvička, T., Hahn, U. and Myllymäki, M.
-#' A one-way ANOVA test for functional data with graphical interpretation.
-#' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 #'
-#' Mrkvička, T., Myllymäki, M., and Hahn, U. (2017).
-#' Multiple Monte Carlo testing, with applications in spatial point processes.
-#' Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
+#' Mrkvička, T., Myllymäki, M., and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
 #'
-#' Myllymäki, M and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+#' Myllymäki, M and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #' @examples
 #' #-- NOx levels example (see for details Myllymaki and Mrkvicka, 2019)
 #' if(require("fda.usc", quietly=TRUE)) {
@@ -409,9 +405,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' @aliases frank.fanova2d
 #' @export
 #' @references
-#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018)
-#' A one-way ANOVA test for functional data with graphical interpretation.
-#' arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 #' @examples
 #' data(rimov)
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))

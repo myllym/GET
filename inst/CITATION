@@ -6,12 +6,12 @@ citEntry(
     author = personList(as.person("M. Myllymäki"),
                         as.person("T. Mrkvička")),
     journal = "arXiv:1911.06583 [stat.ME]",
-    year = "2019",
+    year = "2020",
     volume = "",
     pages = "",
     url = "https://arxiv.org/abs/1911.06583",
     textVersion  =
-    paste("Myllymäki, M. and Mrkvička, T. (2019).",
+    paste("Myllymäki, M. and Mrkvička, T. (2020).",
           "GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]")
 )
 
@@ -59,14 +59,13 @@ citEntry(
                         as.person("M. Myllymäki"),
                         as.person("M. Jilek"),
                         as.person("U. Hahn")),
-    journal = "arXiv:1612.03608 [stat.ME]",
-    year = "2018",
+    journal = "Kybernetika, to appear",
+    year = "2020",
     volume = "",
     pages = "",
     url = "https://arxiv.org/abs/1612.03608",
-    textVersion = "Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018).
-A one-way ANOVA test for functional data with graphical interpretation.
-arXiv:1612.03608 [stat.ME]"
+    textVersion = "Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020).
+A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear."
 )
 
 citEntry(
@@ -90,13 +89,13 @@ citEntry(
     author = personList(as.person("T. Mrkvička"),
                         as.person("T. Roskovec"),
                         as.person("M. Rost")),
-    journal = "arXiv:1902.04926 [stat.ME]",
+    journal = "Methodology and Computing in Applied Probability",
     year = "2019",
     volume = "",
     pages = "",
-    url = "https://arxiv.org/abs/1902.04926",
+    url = "https://doi.org/10.1007/s11009-019-09756-y",
     textVersion = "Mrkvička, T., Roskovec, T. and Rost, M. (2019).
-A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]"
+A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability. https://doi.org/10.1007/s11009-019-09756-y"
 )
 
 citEntry(

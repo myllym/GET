@@ -23,7 +23,7 @@
 #' from the tested null model. The methods are applicable for any multivariate
 #' vector data and functional data (after discretization).
 #'
-#' The package is described in detail in Myllymäki and Mrkvička (2019).
+#' The package is described in detail in Myllymäki and Mrkvička (2020).
 #' The material can also be found in the corresponding vignette, which is available by
 #' starting R and typing \code{library(GET)} and \code{vignette("GET")}.
 #'
@@ -194,7 +194,7 @@
 #' Mrkvička et al. (2017) discussed the number of simulations for tests based on many functions.
 #'
 #' @section Documentation:
-#' Myllymäki and Mrkvička (2019, GET: Global envelopes in R) provides description
+#' Myllymäki and Mrkvička (2020, GET: Global envelopes in R) provides description
 #' of the package.
 #'
 #' Type citation("GET") to get a full list of references.
@@ -212,7 +212,7 @@
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 #'
-#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kynernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
+#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
 #'
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 #'
@@ -224,7 +224,7 @@
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017) Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
-#' Myllymäki, M. and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+#' Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #'
 #' Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics. doi: 10.1016/j.spasta.2020.100436
 #' @name GET-package
