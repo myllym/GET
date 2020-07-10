@@ -52,7 +52,6 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
 
 # Functionality for central regions based on a curve set
 # @param ... Ignored.
-#' @importFrom spatstat fv
 individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       alternative = c("two.sided", "less", "greater"),
                                       probs = c((1-coverage)/2, 1-(1-coverage)/2),
