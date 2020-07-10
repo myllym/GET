@@ -1024,20 +1024,16 @@ plot.combined_fboxplot <- function(x, level = 1,
 #' For 'erl' the extreme rank length p-value is calculated.
 #' The default is 'erl'.
 #' @param ... Additional parameters to be passed to \code{\link{central_region}}.
-#' @return Either an object of class "global_envelope" and "fv"
-#' (see \code{\link[spatstat]{fv.object}}) or "combined_global_envelope" for
-#' combined tests. The objects can be printed and plotted directly.
+#' @return Either an object of class "global_envelope" or "combined_global_envelope"
+#' (the latter for combined tests). The objects can be printed and plotted directly.
 #'
 #' The "global_envelope" is essentially a data frame containing columns
 #' \itemize{
-#' \item r = the vector of values of the argument r at which the test was made
-#' \item obs = values of the data function
-#' \item lo = the lower envelope based on the simulated functions
-#' \item hi = the upper envelope based on the simulated functions
-#' \item central = If the curve_set (or envelope object) contains a component 'theo',
-#'       then this function is used as the central curve and returned in this component.
-#'       Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-#'       Used for visualization only.
+#' \item the values of the argument r at which the test was made, copied from the argument \code{curve_sets} with the corresponding names
+#' \item obs = values of the data function, copied from the argument \code{curve_sets}; missing if more than one observed function
+#' \item lo = the lower envelope
+#' \item hi = the upper envelope
+#' \item central = a central curve as specified in the argument \code{central}.
 #' }
 #' Moreover, the return value has the same attributes as the object returned by
 #' \code{\link{central_region}} and in addition
