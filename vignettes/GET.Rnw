@@ -51,9 +51,9 @@ library("gridExtra")
 %% - \title{} in title case
 %% - \Plaintitle{} without LaTeX markup (if any)
 %% - \Shorttitle{} with LaTeX markup (if any), used as running title
-\title{GET: Global Envelopes in \proglang{R}}
+\title{\pkg{GET}: Global Envelopes in \proglang{R}}
 \Plaintitle{GET: Global envelopes in R}
-\Shorttitle{Global envelopes in \proglang{R}}
+\Shorttitle{\pkg{GET}: Global Envelopes in \proglang{R}}
 
 %% - \Abstract{} almost as usual
 \Abstract{
@@ -547,7 +547,6 @@ p1 <- plot(cset1, xlab = "Age (years)", ylab = "Height")
 p2 <- plot(cset2, xlab = "Age (years)", ylab = "Change")
 grid.arrange(p1, p2, nrow = 1)
 @
-%	\includegraphics[width=\textwidth]{pictures/girls_heights_and_der.pdf}
 	\caption{The heights (left) and height differences (right) of the 54 girls of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages from 1 to 18.}
 	\label{fig:girls_curves}
 \end{figure}
@@ -601,7 +600,6 @@ X <- adult_trees
 par(mfrow=c(1,1), mgp=c(0, 0, 0), mar=c(0, 0, 0, 0))
 plot(X, main="")
 @
-%	\includegraphics[width=0.5\textwidth]{pictures/adulttrees.pdf}
 	\caption{Locations of 67 trees with height $> 25$ m observed in an area of $75\text{ m}\times 75\text{ m}$.}
 	\label{fig:adulttrees}
 \end{figure}
@@ -619,11 +617,11 @@ In the case of a composite null hypothesis, the level of the test needs to be ad
 The first step of a Monte Carlo test is to generate \code{nsim} simulations under the null hypothesis and to calculate the chosen test function (vector) for the data and simulations. 
 Here the functions \fct{runifpoint} and \fct{Lest} of \pkg{spatstat} are used to generate a simulation from the binomial process (CSR with the number of points fixed to the observed number of points in the pattern \code{X}) and to estimate the centred $L$-function for a pattern, respectively:
 %
-<<trees_seed, echo=FALSE>>==
+<<adulttrees_seed, echo=FALSE>>==
 set.seed(190503)
 @
 %
-<<trees_sims>>==
+<<adulttrees_sims>>==
 library("spatstat")
 data("adult_trees")
 X <- adult_trees
@@ -640,7 +638,7 @@ for(i in 1:nsim) {
 %
 Thereafter, a \code{curve_set} object can be constructed by the function \fct{create\_curve\_set} providing a list of the argument values where the test vectors were evaluated (\code{r}), the observed vector (\code{obs}) and the simulated vectors (\code{sim_m}):
 %
-<<trees_curve_set>>==
+<<adulttrees_curve_set>>==
 cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
 @
 %
@@ -649,28 +647,28 @@ The final step is to make the global envelope test on the given set of vectors:
 \begin{figure}[htb]
 \centering
 %
-<<trees_CSR, echo=TRUE, fig=TRUE, height=3.0625, width=3.0625>>==
+<<adulttrees_CSR, echo=TRUE, fig=TRUE, height=3.0625, width=3.0625>>==
 res <- global_envelope_test(cset, type = "erl")
 plot(res, ylab = expression(italic(hat(L)(r)-r)))
 @
 %
 	\caption{The global envelope test for the CSR of the tree pattern of Figure~\ref{fig:adulttrees} using the centred $L$-function. The grey area represents the 95\% global (\code{'erl'}) rank envelope.}
-	\label{fig:trees_CSR}
+	\label{fig:adulttrees_CSR}
 \end{figure}
 %
 In this manner, the global envelope test can be constructed for any simple hypothesis and any test vector, as long as one can generate the simulations and calculate the test vectors.
 
-The test output is shown in Figure~\ref{fig:trees_CSR} (left), which shows no evidence against CSR \citep[see more detailed description in][Section S4]{MyllymakiEtal2017}.
+The test output is shown in Figure~\ref{fig:adulttrees_CSR} (left), which shows no evidence against CSR \citep[see more detailed description in][Section S4]{MyllymakiEtal2017}.
 
 \subsubsection[Simple hypothesis for a point pattern utilizing the R package spatstat]{Simple hypothesis for a point pattern utilizing the \proglang{R} package \pkg{spatstat}}
 
 For point process testing, the \pkg{GET} package and \fct{global\_envelope\_test} support the use of the \proglang{R} package \pkg{spatstat} \citep{spatstat2015} for the simulations and calculations of the summary functions by the function \fct{envelope}: the object returned by \fct{envelope} can simply be given to the function \fct{global\_envelope\_test} in the argument \code{curve_sets}. Importantly, the functions must be saved setting \code{savefuns = TRUE} in the \fct{envelope} call:
 %
-<<trees_seed2, echo=FALSE>>==
+<<adulttrees_seed2, echo=FALSE>>==
 set.seed(190503)
 @
 %
-<<trees_envelope>>==
+<<adulttrees_envelope>>==
 env <- envelope(X, nsim = 999,
         fun = "Lest", correction = "translate",
         transform = expression(.-r),
@@ -874,7 +872,7 @@ grid.arrange(p1, p2, nrow=1)
 
 \subsection{Graphical functional one-way ANOVA}\label{sec:fANOVA}
 %
-<<graphfanova_data>>==
+<<graphfanova_data, echo=FALSE>>==
 # Prepare data
 library("fda.usc", quietly =TRUE)
 data("poblenou")
@@ -995,7 +993,6 @@ In the examples below, the effect of the group on the images is studied in the p
 data(abide_9002_23)
 plot(abide_9002_23$curve_set, idx=c(1, 27))
 @
-%	\includegraphics[width=0.75\textwidth]{pictures/abide_9002_23_subj1and27.pdf}
 	\caption{The example brain image data in the right Crus Cerebellum 1 region at a slice for one subject from the autism group (subject number 1) and one from the control group (subject number 27).}
 	\label{fig:abide_9002_23_subj1and27}
 \end{figure}
