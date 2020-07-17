@@ -163,6 +163,7 @@ env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {
         main <- paste(attr(x, "method"), " based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
       else if(inherits(x, c("global_envelope")))
          main <- paste(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
+      else main <- NULL
     }
   }
   main
