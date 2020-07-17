@@ -596,7 +596,7 @@ plot.combined_global_envelope <- function(x,
 #' functions are concatenated together into a one long vector (see again Myllymäki and Mrkvička, 2020, Section 2.2.).
 #'
 #' @references
-#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
+#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #'
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 #'
@@ -994,7 +994,7 @@ plot.combined_fboxplot <- function(x, level = 1,
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 #'
-#' Mrkvička, T., Myllymäki, M., Jilek, M., and Hahn, U. (2020). A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
+#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #'
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 #'
@@ -1271,7 +1271,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #'
 #' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27 (5): 1239-1255. doi: 10.1007/s11222-016-9683-9
 #'
-#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020). A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
+#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #'
 #' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
 #'  object. If an envelope object is given, it must contain the summary
