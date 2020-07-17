@@ -211,7 +211,7 @@ The few packages mentioned below have a link to the methods of \pkg{GET}:
 The global envelope tests can also be used for functional GLM using a permutation strategy to generate samples under the null hypothesis. There are several other methods and software to the functional GLM problem: 
 %
 \begin{itemize}
-\item The PALM software \citep{WinklerEtal2014} allows for the computation of various functional GLM designs using permutation tests. The multiple testing problem is solved by an unscaled envelope constructed for the test statistic (e.g., $F$-statistic). 
+\item The PALM software \citep{WinklerEtal2014} allows for the computation of various functional GLM designs using permutation tests. The multiple testing problem is solved by an unscaled envelope constructed for the test statistic (e.g., $F$~statistic).
 \item The \proglang{R} packages \pkg{fda.usc} \citep{fdausc2012} and \pkg{fdANOVA} \citep{fdANOVA2017} allow for the computation of functional ANOVA designs by several methods together with the computation of factor's significances. Similarly the package \pkg{fda} \citep{fda2017} allows for computations in functional regression designs. However, to the best of our knowledge, these do not provide the IGI of tests of a factor significance.
 \end{itemize}
 
@@ -275,9 +275,9 @@ Function name              & Description \\ \hline
 \fct{forder} & Different measures for ordering the multivariate statistics from the most extreme to least extreme one \\
 \fct{fBoxplot} & Functional boxplot based on a central region with IGI \\
 \fct{graph.fanova}  & One-way ANOVA tests for functional data with graphical interpretation \citep{MrkvickaEtal2018} \\
-\fct{frank.fanova}  & One-way functional ANOVA tests based on the global envelopes applied to $F$-values \citep{MrkvickaEtal2018} \\
+\fct{frank.fanova}  & One-way functional ANOVA tests based on the global envelopes applied to $F$~values \citep{MrkvickaEtal2018} \\
 \fct{graph.flm}  &  Non-parametric graphical tests of significance in functional general linear model (GLM) \citep{MrkvickaEtal2019a} \\
-\fct{frank.flm} & $F$-rank functional GLM, i.e., global envelope tests applied to $F$-values in permutation inference for the GLM \citep{MrkvickaEtal2019b} \\ 
+\fct{frank.flm} & $F$-rank functional GLM, i.e., global envelope tests applied to $F$~values in permutation inference for the GLM \citep{MrkvickaEtal2019b} \\
 \fct{GET.composite}           & Adjusted global envelope tests for composite null hypotheses \\ 
 \fct{GET.necdf} & Graphical $n$ sample test of correspondence of distribution functions  \\ 
 \fct{GET.spatialF} & Testing global and local covariate effects in point process models \citep{MyllymakiEtal2020} \\
@@ -982,7 +982,7 @@ plot(res.c, xlab = "Hour", ylab = "Diff.", base_size=10)
 	\label{fig:graphfanova_logNOx}
 \end{figure}
 
-When a graphical interpretation for group specific differences is not of interest but the area of rejection is, instead of \fct{graph.fanova} it is possible to apply the one-way functional ANOVA based on the $r$-wise $F$-statistics, $r\in R$. This test is implemented in the function \fct{frank.fanova}. For the log NO$_x$ data, the test result was that there are differences between the groups for the whole day time (figure omitted).
+When a graphical interpretation for group specific differences is not of interest but the area of rejection is, instead of \fct{graph.fanova} it is possible to apply the one-way functional ANOVA based on the $r$-wise $F$~statistics, $r\in R$. This test is implemented in the function \fct{frank.fanova}. For the log NO$_x$ data, the test result was that there are differences between the groups for the whole day time (figure omitted).
 
 
 \subsection{Functional GLM}\label{sec:fGLM}
@@ -1024,7 +1024,7 @@ Note that this also holds for interaction terms.
 Furthermore, all the options allow one to identify which of the components of the vector, $r\in\{1,\ldots,d\}$, lead to the potential rejection of the null hypothesis.
 Permutations under the null hypothesis are obtained using the Freedman-Lane procedure \citep{FreedmanLane1983, MrkvickaEtal2019b, MrkvickaEtal2019a}.
 
-Often factors are given for the whole function, i.e.\ they do not depend on argument $r$, and so the matrices $\mathbf X(r)$ and $\mathbf Z(r)$ are identical for every $r$. These kind of constant factors (such as $z$ and group in the considered example) can be provided in the argument \code{factors} of the \fct{graph.flm} function. However, this simplification is not necessary and factors varying in space can be provided in the argument \code{curve_sets}, along with the data curves in a named list.
+Often factors are given for the whole function, i.e., they do not depend on argument $r$, and so the matrices $\mathbf X(r)$ and $\mathbf Z(r)$ are identical for every $r$. These kind of constant factors (such as $z$ and group in the considered example) can be provided in the argument \code{factors} of the \fct{graph.flm} function. However, this simplification is not necessary and factors varying in space can be provided in the argument \code{curve_sets}, along with the data curves in a named list.
 
 The functional GLM is performed by the function \fct{graph.flm}:
 %
@@ -1066,7 +1066,7 @@ plot(res)
 \subsubsection{$F$-rank GLM}
 
 In the $F$-rank GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2019b}. 
-However, the test statistic is the classical $F$~statistic \citep[see ,e.g.,][]{WinklerEtal2014} which is calculated for the hypothesis that the data follows the simpler reduced model of the two proposed linear models that are nested within each other (given in \code{formula.full} and \code{formula.reduced}).
+However, the test statistic is the classical $F$~statistic \citep[see, e.g.,][]{WinklerEtal2014} which is calculated for the hypothesis that the data follows the simpler reduced model of the two proposed linear models that are nested within each other (given in \code{formula.full} and \code{formula.reduced}).
 The use of the function \fct{frank.flm} is similar to that of \fct{graph.flm}:
 %
 <<flm_frank_seed, echo=FALSE>>==
@@ -1091,10 +1091,9 @@ In general, for a factor with more than two groups, the $F$-rank GLM is however 
 <<flm_frank_abide, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
 plot(res.F)
 @
-	\caption{$F$-rank functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed $F$~statistic, the upper bound of the one-sided 95\% global rank (ERL) envelope, and the significant region (red) where the observed $F$-statistic exceeds the envelope.}
+	\caption{$F$-rank functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed $F$~statistic, the upper bound of the one-sided 95\% global rank (ERL) envelope, and the significant region (red) where the observed $F$~statistic exceeds the envelope.}
 	\label{fig:flm_frank_abide}
 \end{figure}
-
 
 
 \subsection{Confidence band in polynomial regression}\label{sec:confband}
