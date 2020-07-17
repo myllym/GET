@@ -64,8 +64,8 @@ see \code{test.equality}.}
 One-way ANOVA tests for functional data with graphical interpretation
 }
 \details{
-This functions can be used to perform one-way graphical functional ANOVA tests described
-in Mrkvička et al. (2016). Both 1d and 2d functions are allowed in curve sets.
+This function can be used to perform one-way graphical functional ANOVA tests described
+in Mrkvička et al. (2020). Both 1d and 2d functions are allowed in curve sets.
 
 The tests assume that there are \eqn{J}{J} groups which contain
 \eqn{n_1,\dots,n_J}{n1, ..., nJ} functions
@@ -193,7 +193,7 @@ res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
 plot(res.c)
 }
 \references{
-Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika, to appear. (Preprint arXiv:1612.03608 [stat.ME], http://arxiv.org/abs/1612.03608)
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 
 Mrkvička, T., Myllymäki, M., and Hahn, U. (2017). Multiple Monte Carlo testing, with applications in spatial point processes. Statistics and Computing 27 (5): 1239-1255. doi:10.1007/s11222-016-9683-9
 

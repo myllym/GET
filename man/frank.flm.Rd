@@ -72,7 +72,7 @@ a nonparametric test of significance of a covariate in the functional GLM.
 Similarly as in the graphical functional GLM (\code{\link{graph.flm}}),
 the Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the functions
 (to obtain the simulations under the null hypothesis of "no effects");
-consequently, the test approximately achieves the desired significance level.
+consequently, the test achieves the desired significance level only approximately.
 In contrast to the graphical functional GLM, the F rank functional GLM is based on the
 F-statistics that are calculated at each argument value of the functions.
 The global envelope test is applied to the observed and simulated F-statistics.
