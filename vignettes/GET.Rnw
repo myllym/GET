@@ -104,19 +104,18 @@ When citing the vignette and package please cite Myllym{\"a}ki and Mrkvi\v cka (
 
 \section{Introduction}\label{sec:intro}
 
-Global envelopes are useful for the graphical interpretation of results from tests based on functional or multivariate statistics, for determining central regions of functional or multivariate data, and also for determining confidence or prediction bands. Global envelopes have shown their usefulness already in many areas, e.g., spatial statistics \citep{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2016, MollerWaagepetersen2017, MyllymakiEtal2020, PollingtonEtal2020}, functional data analysis \citep{NarisettyNair2016, MrkvickaEtal2018, DaiGenton2018, DaiEtal2018, MrkvickaEtal2019a}, image analysis \citep{MrkvickaEtal2019b, GotovacEtal2016, KoubekEtal2016} and point pattern analysis \citep{MollerEtal2016a, MollerEtal2016b, RajalaEtal2018} with applications to 
+Global envelopes are useful for the graphical interpretation of results from tests based on functional or multivariate statistics, for determining central regions of functional or multivariate data, and also for determining confidence or prediction bands. Global envelopes have shown their usefulness already in many areas, e.g., spatial statistics \citep{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2016, MollerWaagepetersen2017, MyllymakiEtal2020, PollingtonEtal2020}, functional data analysis \citep{NarisettyNair2016, MrkvickaEtal2020, DaiGenton2018, DaiEtal2018, MrkvickaEtal2019a}, image analysis \citep{MrkvickaEtal2019b, GotovacEtal2016, KoubekEtal2016} and point pattern analysis \citep{MollerEtal2016a, MollerEtal2016b, RajalaEtal2018} with applications to 
 agriculture \citep{MrkvickaEtal2016, ChaibanEtal2019}, 
-architecture and art \citep{Stoyan2016},
-astronomy and astrophysics \citep{KruuseEtal2019, RetterEtal2019},
+architecture and art \citep{Stoyan2016}, 
+astronomy and astrophysics \citep{KruuseEtal2019, RetterEtal2019}, 
 ecology \citep{VelazquezEtal2016, DespresEtal2017,  WangEtal2018, GusmanMEtal2018} and evolution \citep{Murrell2018}, 
-economics \citep{MrkvickaEtal2018}, 
+economics \citep{MrkvickaEtal2020}, 
 eye movement research \citep{YlitaloEtal2016}, 
-fisheries \citep{SmejkalEtal2017},
+fisheries \citep{SmejkalEtal2017}, 
 forestry \citep{ErfanifardEtal2019}, 
 geography \citep{ClarkEtal2018}, 
 material science \citep{HabelEtal2017}, and
-medicine and 
-neuroscience \citep{RafatiEtal2016, LeeEtal2017, MollerEtal2019, BiscioMoller2019, MrkvickaEtal2019b}.
+medicine and neuroscience \citep{RafatiEtal2016, LeeEtal2017, MollerEtal2019, BiscioMoller2019, MrkvickaEtal2019b}.
 To make these methods easily accessible, the R \citep{R2020} package \pkg{GET} has been developed that is available from the Comprehensive R Archive Network (CRAN) at \url{https://cran.r-project.org/package=GET}. A development version of the package is available via the repository \url{https://github.com/myllym/GET}. The package provides an implementation of global envelopes in various settings.
 
 To be more specific, global envelopes can be used for producing
@@ -165,7 +164,7 @@ The global envelope with IGI provides a solution to the tasks (i)-(iv) in a grap
 
 For tasks (ii) and (iii), the data vector $\TT_1$ is compared with a global envelope constructed from the data vector $\TT_1$ and vectors $\TT_2, \ldots ,\TT_s$ simulated under a null hypothesis $H_0$, 
 in order to decide if the data vector is extreme ($H_0$ is rejected) or not extreme ($H_0$ is not rejected). 
-For these tasks, in addition to a global envelope, a Monte Carlo $p$~value is computed according to the measure $M_i$: $p =  \sum_{i=1}^{s} \1 (M_i \leq M_1)  \big/ s$  \citep[see, e.g.,][]{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2018, MrkvickaEtal2019b, MrkvickaEtal2019a}.
+For these tasks, in addition to a global envelope, a Monte Carlo $p$~value is computed according to the measure $M_i$: $p =  \sum_{i=1}^{s} \1 (M_i \leq M_1)  \big/ s$  \citep[see, e.g.,][]{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2020, MrkvickaEtal2019b, MrkvickaEtal2019a}.
 
 In order to obtain an exact Monte Carlo test, i.e., a test that achieves the prescribed family-wise error rate, the exchangeability of the test vectors $\TT_i$ is required. All the examples in Section \ref{sec:illustrations} satisfy exchangeability, except the functional GLM where the permutation of the residuals from the null model \citep{FreedmanLane1983} is used. This permutation scheme is commonly used in univariate permutation GLMs and widely accepted as the best available solution \citep{AndersonRobinson2001, AndersonTerBraak2003, WinklerEtal2014}.
 
@@ -253,7 +252,7 @@ After defining the different types of global envelopes in Section \ref{sec:GEdef
 \hline
 Type           & Introduced in   & Description \\ \hline
 \code{'rank'}         & \citet{MyllymakiEtal2017}  & Global rank envelope  corresponding to the extreme rank measure (with ties); unique ordering (or $p$~value) provided additionally as specified in the argument \code{ties}, e.g., \code{'erl'} for extreme rank lengths \\
-\code{'erl'}          & \citet{MyllymakiEtal2017, NarisettyNair2016, MrkvickaEtal2018}    & Global rank envelope corresponding to extreme rank length (ERL) measure \\ 
+\code{'erl'}          & \citet{MyllymakiEtal2017, NarisettyNair2016, MrkvickaEtal2020}    & Global rank envelope corresponding to extreme rank length (ERL) measure \\ 
 \code{'cont'}         & \citet{Hahn2015, MrkvickaEtal2019b} & Global rank envelope corresponding to the continuous rank measure \\
 \code{'area'}         & \citet{MrkvickaEtal2019b}    &  Global rank envelope corresponding to the area measure \\
 \code{'qdir'}         & \citet{MyllymakiEtal2017,MyllymakiEtal2015}       & Directional quantile envelope test corresponding to the directional quantile maximum absolute deviation (MAD) measure \\
@@ -274,8 +273,8 @@ Function name              & Description \\ \hline
 \fct{global\_envelope\_test} & Global envelope tests (see types in Table~\ref{tab:GEoverview}) \\
 \fct{forder} & Different measures for ordering the multivariate statistics from the most extreme to least extreme one \\
 \fct{fBoxplot} & Functional boxplot based on a central region with IGI \\
-\fct{graph.fanova}  & One-way ANOVA tests for functional data with graphical interpretation \citep{MrkvickaEtal2018} \\
-\fct{frank.fanova}  & One-way functional ANOVA tests based on the global envelopes applied to $F$~values \citep{MrkvickaEtal2018} \\
+\fct{graph.fanova}  & One-way ANOVA tests for functional data with graphical interpretation \citep{MrkvickaEtal2020} \\
+\fct{frank.fanova}  & One-way functional ANOVA tests based on the global envelopes applied to $F$~values \citep{MrkvickaEtal2020} \\
 \fct{graph.flm}  &  Non-parametric graphical tests of significance in functional general linear model (GLM) \citep{MrkvickaEtal2019a} \\
 \fct{frank.flm} & $F$-rank functional GLM, i.e., global envelope tests applied to $F$~values in permutation inference for the GLM \citep{MrkvickaEtal2019b} \\
 \fct{GET.composite}           & Adjusted global envelope tests for composite null hypotheses \\ 
@@ -358,7 +357,7 @@ Then the $100(1-\alpha)$\% global ERL envelope induced by $E_i$ is
 \TT^{(\alpha)}_{\up \, k}= \underset{i \in I_\alpha}{{\max}}\ T_{i k} \quad \text{for } k = 1, \ldots , d,
 \end{equation}
 %
-see \citet{NarisettyNair2016} and \citet{MrkvickaEtal2018}.
+see \citet{NarisettyNair2016} and \citet{MrkvickaEtal2020}.
 
 \subsubsection{Global continuous rank envelope}
 
@@ -400,7 +399,7 @@ The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constr
 
 \subsubsection{Global area rank envelope}
 
-Another refinement of rank envelope is the area rank measure \citep{MrkvickaEtal2019b},  
+Another refinement of rank envelope is the area rank measure \citep{MrkvickaEtal2019b},
 %
 %$$A_i = \frac{1}{s_A} \sum_k \min(R_i, c_{ik}).$$
 $$A_i = \frac{1}{s}\left(R_i - \frac{1}{d}\sum_{k=1}^d (R_i-C_{ik}) \1(C_{ik} < R_i)\right).$$
@@ -492,7 +491,7 @@ An example of using the one-step combining is when $\TT_i = (T_{i1}, \ldots , T_
 $(t_{i1}^1,\ldots , t_{id}^{1}), \ldots , (t_{i1}^J,\ldots , t_{id}^{J})$,
 and apply the one-step combining procedure. Further, it is possible to add other vectors expressing the correlation between the elements of the vectors,\ e.g., $(t_{i1}^1 t_{i1}^2 - t_{01}^1t_{01}^2,\ldots , t_{id}^1 t_{id}^2-t_{0d}^1t_{0d}^2)$. Here $t_{0k}^j$ denotes the expectation of $t_{\cdot k}^j$.
 
-The graphical functional ANOVA and GLM (see the functions in Table~\ref{tab:FUNCTIONSoverview}) use the one-step combining procedure to merge the mean or contrast vectors under inspection, because in this case all the vectors have the same structure \citep[see Sections~\ref{sec:fANOVA} and \ref{sec:fGLM} and][]{MrkvickaEtal2018, MrkvickaEtal2019a}. On the other hand, for generality, the default combining procedure of global envelope construction functions in \pkg{GET} is the two-step procedure, which is presented for the first time here as an improvement of the combined tests of \citet{MrkvickaEtal2017} (see an example in Section~\ref{sec:cr}). The combined envelopes are implemented in the \fct{central\_region} and \fct{global\_envelope\_test} functions as mentioned above, and the one- or two-step procedure can be specified in the argument \code{nstep} (either 1 or 2).
+The graphical functional ANOVA and GLM (see the functions in Table~\ref{tab:FUNCTIONSoverview}) use the one-step combining procedure to merge the mean or contrast vectors under inspection, because in this case all the vectors have the same structure \citep[see Sections~\ref{sec:fANOVA} and \ref{sec:fGLM} and][]{MrkvickaEtal2020, MrkvickaEtal2019a}. On the other hand, for generality, the default combining procedure of global envelope construction functions in \pkg{GET} is the two-step procedure, which is presented for the first time here as an improvement of the combined tests of \citet{MrkvickaEtal2017} (see an example in Section~\ref{sec:cr}). The combined envelopes are implemented in the \fct{central\_region} and \fct{global\_envelope\_test} functions as mentioned above, and the one- or two-step procedure can be specified in the argument \code{nstep} (either 1 or 2).
 
 \subsection{Adjusted global envelopes for composite null hypotheses}\label{sec:adjustedGE}
 
@@ -910,7 +909,7 @@ ggplot(df) + geom_line(aes(x = Hour, y = NOx, group = Date)) +
 	\label{fig:NOx_data}
 \end{figure}
 
-Assuming that the NO$_x$ levels $T_{ij}(r)$ at times $r \in R = [0,24]$ are i.i.d.\ samples from stochastic processes $SP(\mu_j, \gamma_j)$ with mean functions $\mu_j(r)$, $r\in R$, and covariance functions $\gamma_j(s, t)$, $s, t \in R$, for $j=1, \ldots , J$, the groups of NO$_x$ levels can be compared by means of the graphical functional ANOVA \citep{MrkvickaEtal2018}. The hypothesis 
+Assuming that the NO$_x$ levels $T_{ij}(r)$ at times $r \in R = [0,24]$ are i.i.d.\ samples from stochastic processes $SP(\mu_j, \gamma_j)$ with mean functions $\mu_j(r)$, $r\in R$, and covariance functions $\gamma_j(s, t)$, $s, t \in R$, for $j=1, \ldots , J$, the groups of NO$_x$ levels can be compared by means of the graphical functional ANOVA \citep{MrkvickaEtal2020}. The hypothesis 
 %
 \begin{equation*}
 H_0 : \mu_1(r) = \ldots = \mu_J(r), r \in R,
@@ -947,7 +946,7 @@ Y_{ij}(r) = \frac{T_{ij}(r) - \overline{T_j}(r)}{\sqrt{\text{Var}(T_j(r))}}\cdot
 where the group sample mean $\overline{T_j}(r)$ and overall sample variance $\text{Var}(T(r))$ are involved
 to keep the mean and variability of the functions at the original scale. The group sample variance $\text{Var}(T_j(r))$ corrects the unequal variances. 
 This scaling is applied to the set of curves given to the function \fct{graph.fanova} if the user specifies \code{variances = "unequal"} (the default is no correction, \code{variances = "equal"}).
-Because these test vectors (Equations~\ref{eq:graphfanova_means} and \ref{eq:graphfanova_contrasts}) are asymptotically exchangeable for permutations for the case of unequal variances and the null hypothesis of equal means only under the assumption of normality of stochastic processes $SP(\mu_j,\gamma_j)$ \citep{MrkvickaEtal2018}, the log transformation was applied to the NO$_x$ values prior to the transformation (Equation~\ref{eq:scaling}):
+Because these test vectors (Equations~\ref{eq:graphfanova_means} and \ref{eq:graphfanova_contrasts}) are asymptotically exchangeable for permutations for the case of unequal variances and the null hypothesis of equal means only under the assumption of normality of stochastic processes $SP(\mu_j,\gamma_j)$ \citep{MrkvickaEtal2020}, the log transformation was applied to the NO$_x$ values prior to the transformation (Equation~\ref{eq:scaling}):
 %
 <<graphfanova_cset>>==
 cset <- create_curve_set(list(r=0:23,
