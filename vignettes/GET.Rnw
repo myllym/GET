@@ -597,7 +597,7 @@ Figure~\ref{fig:adulttrees} shows the locations of 67 large trees (with height $
 
 \begin{figure}[htb]
 \centering
-<<trees, echo=FALSE, fig=TRUE, height=3.0625, width=3.0625>>==
+<<adulttrees, echo=FALSE, fig=TRUE, height=3.0625, width=3.0625>>==
 library("spatstat")
 data("adult_trees")
 X <- adult_trees
