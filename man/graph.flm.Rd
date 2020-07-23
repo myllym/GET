@@ -13,7 +13,7 @@ graph.flm(
   factors = NULL,
   contrasts = FALSE,
   savefuns = FALSE,
-  ...,
+  lm.args = NULL,
   GET.args = NULL,
   mc.cores = 1L,
   mc.args = NULL,
@@ -46,7 +46,7 @@ description part of this help file.}
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
 
-\item{...}{Additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
+\item{lm.args}{A names list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
 
 \item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.}
 
@@ -96,12 +96,12 @@ Given that the argument \code{fast} is TRUE, then
 \item If all the covariates are constant across the functions, i.e. they can be provided in the
 argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
 the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
-The possible extra arguments passed in \code{...} to \code{\link[stats]{lm}} must be of the form that
+The possible extra arguments passed in \code{lm.args} to \code{\link[stats]{lm}} must be of the form that
 \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
 needed.
 \item If some of the covariates vary across the space and there are user specified extra arguments given in
-\code{...}, then the implementation fits a linear model at each argument value of the functions using
-\code{\link[stats]{lm}}, which can be rather slow. The arguments \code{...} are passed to \code{\link[stats]{lm}}
+\code{lm.args}, then the implementation fits a linear model at each argument value of the functions using
+\code{\link[stats]{lm}}, which can be rather slow. The arguments \code{lm.args} are passed to \code{\link[stats]{lm}}
 for fitting each linear model.
 }
 By setting \code{fast = FALSE}, it is possible to use the slow version for any case. Usually this is not desired.

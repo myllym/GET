@@ -287,12 +287,12 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' \item If all the covariates are constant across the functions, i.e. they can be provided in the
 #' argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
 #' the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
-#' The possible extra arguments passed in \code{...} to \code{\link[stats]{lm}} must be of the form that
+#' The possible extra arguments passed in \code{lm.args} to \code{\link[stats]{lm}} must be of the form that
 #' \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
 #' needed.
 #' \item If some of the covariates vary across the space and there are user specified extra arguments given in
-#' \code{...}, then the implementation fits a linear model at each argument value of the functions using
-#' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{...} are passed to \code{\link[stats]{lm}}
+#' \code{lm.args}, then the implementation fits a linear model at each argument value of the functions using
+#' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{lm.args} are passed to \code{\link[stats]{lm}}
 #' for fitting each linear model.
 #' }
 #' By setting \code{fast = FALSE}, it is possible to use the slow version for any case. Usually this is not desired.
@@ -311,7 +311,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @param factors A data frame of factors. An alternative way to specify factors when they
 #' are constant for all argument values. The number of rows of the data frame should be equal
 #' to the number of curves. Each column should specify the values of a factor.
-#' @param ... Additional arguments to be passed to \code{\link[stats]{lm}}. See details.
+#' @param lm.args A names list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @param mc.args A named list of additional arguments to be passed to \code{\link{mclapply}}.
 #' Only relevant if \code{mc.cores} is more than 1.
@@ -396,7 +396,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'                  GET.args = list(type = "area"))
 #' plot(res.a)
 graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
-                      contrasts = FALSE, savefuns = FALSE, ..., GET.args = NULL,
+                      contrasts = FALSE, savefuns = FALSE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
                       fast = TRUE) {
   # Set up the contrasts
@@ -417,24 +417,24 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   else genCoef <- genCoefcontrasts.m
 
   # Fit the full model to the data and obtain the coefficients
-  obs <- genCoef(X$Y, X$dfs, formula.full, nameinteresting, ...)
+  obs <- do.call(genCoef, c(list(X$Y, X$dfs, formula.full, nameinteresting), lm.args))
 
   #-- Freedman-Lane procedure
   # Fit the reduced model at each argument value to get the fitted values and residuals
   if(length(X$dfs) == 1) {
     df <- X$dfs[[1]]
     df$Y <- X$Y
-    fit <- lm(formula.reduced, data=df, model=FALSE, ...)
+    fit <- do.call(lm, c(list(formula.reduced, data=df, model=FALSE), lm.args))
     fitted.m <- fit$fitted.values
     res.m <- fit$residuals
     fit <- NULL
   } else {
-    loopfun1 <- function(i, ...) {
-      mod.red <- lm(formula.reduced, data=X$dfs[[i]], ...)
+    loopfun1 <- function(i) {
+      mod.red <- do.call(lm, c(list(formula.reduced, data=X$dfs[[i]]), lm.args))
       list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
     }
-    if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
-    else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1, ...)
+    if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args))
+    else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1)
     fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
     res.m <- sapply(mclapply_res, function(x) x$res.m)
   }
@@ -444,12 +444,12 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
     # Permute the residuals (rows in res.m) and create new 'y'
     fitted.m + res.m[permutation, ]
   }
-  loopfun2 <- function(i, ...) {
+  loopfun2 <- function(i) {
     # Regress the permuted data against the full model and get a new effect of interest
-    genCoef(Yperm(), X$dfs, formula.full, nameinteresting, ...)
+    do.call(genCoef, c(list(Yperm(), X$dfs, formula.full, nameinteresting), lm.args))
   }
-  if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
-  else sim <- parLapply(cl, 1:nsim, loopfun2, ...)
+  if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args))
+  else sim <- parLapply(cl, 1:nsim, loopfun2)
   sim <- simplify2array(sim)
   complabels <- colnames(obs)
 
@@ -515,21 +515,21 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' There are different versions of the implementation depending on the application.
 #' \itemize{
 #' \item If all the covariates are constant across the functions, i.e. they can be provided in the
-#' argument \code{factors}, and there are no extra arguments given by the user in \code{...}, then a
+#' argument \code{factors}, and there are no extra arguments given by the user in \code{lm.args}, then a
 #' fast implementation is used to directly compute the F-statistics.
 #' \item If all the covariates are constant across the functions, but there are some extra arguments,
 #' then a linear model is fitted separately by least-squares estimation to
 #' the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
-#' The possible extra arguments passed in \code{...} to \code{\link[stats]{lm}} must be of the form that
+#' The possible extra arguments passed in \code{lm.args} to \code{\link[stats]{lm}} must be of the form that
 #' \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
 #' needed.
 #' \item If some of the covariates vary across the space, i.e. they are provided in the list of curve sets in
 #' the argument \code{curve_sets} together with the dependent functions, but there are no extra arguments given
-#' by the user in \code{...}, there is a rather fast implementation of the F-value calculation (which does not
+#' by the user in \code{lm.args}, there is a rather fast implementation of the F-value calculation (which does not
 #' use \code{\link[stats]{lm}}).
 #' \item If some of the covariates vary across the space and there are user specified extra arguments given in
-#' \code{...}, then the implementation fits a linear model at each argument value of the functions using
-#' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{...} are passed to \code{\link[stats]{lm}}
+#' \code{lm.args}, then the implementation fits a linear model at each argument value of the functions using
+#' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{lm.args} are passed to \code{\link[stats]{lm}}
 #' for fitting each linear model.
 #' }
 #' By default the fastest applicable method is used. This can be changed by setting \code{method} argument.
@@ -580,7 +580,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' @importFrom parallel parLapply
 #' @importFrom stats lm
 frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
-                      savefuns = TRUE, ..., GET.args = NULL,
+                      savefuns = TRUE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1, mc.args = NULL, cl = NULL,
                       method = c("best", "simple", "mlm", "complex", "lm")) {
   # Preliminary checks and formulation of the data to suitable form for further processing
@@ -588,9 +588,8 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors, fast=method %in% c("mlm", "simple", "best"))
 
-  extraargs <- list(...)
   if(method == "best") {
-    method <- if(length(extraargs) > 0) {
+    method <- if(length(lm.args) > 0) {
       if(length(X$dfs) > 1) "lm"
       else "mlm"
     } else {
@@ -598,9 +597,9 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
       else "simple"
     }
   }
-  if(length(extraargs) > 0) {
-    # This is only a warning because the user might know that the extra args are ok.
-    if(method %in% c("simple", "complex")) warning("Method ", method, " doesn't work with extra arguments.")
+  if(length(lm.args) > 0) {
+    # This is only a warning because the user might know that the extra args in lm.args are ok.
+    if(method %in% c("simple", "complex")) warning("Method ", method, " doesn't work with extra arguments (lm.args).")
   }
   if(length(X$dfs) > 1 && method %in% c("mlm", "simple")) {
     stop("Curvesets in factors not allowed with method='", method, "'")
@@ -610,31 +609,31 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
                 complex=genFvaluesObs(X$dfs, formula.full, formula.reduced),
                 simple=genFvaluesSimple(X$Y, X$dfs[[1]], formula.full, formula.reduced),
                 lm=,
-                mlm=genFvaluesLM(X$Y, X$dfs, formula.full, formula.reduced, ...))
+                mlm=do.call(genFvaluesLM, c(list(X$Y, X$dfs, formula.full, formula.reduced), lm.args)))
   # Freedman-Lane procedure
   # Fit the reduced model at each argument value to get fitted values and residuals
   if(method %in% c("mlm", "simple")) {
     df <- X$dfs[[1]]
     df$Y <- X$Y
-    fit <- lm(formula.reduced, data=df, model=FALSE, ...)
+    fit <- do.call(lm, c(list(formula.reduced, data=df, model=FALSE), lm.args))
     fitted.m <- fit$fitted.values
     res.m <- fit$residuals
     fit <- NULL
   } else {
     if(method == "complex") {
-      loopfun1 <- function(i, ...) { # ... ignored
+      loopfun1 <- function(i) {
         b <- bcoef(Y = X$dfs[[i]]$Y, X = obs$reduced.X[[i]])
         fit <- obs$reduced.X[[i]]%*%b
         list(fitted.m = fit, res.m = X$dfs[[i]]$Y - fit)
       }
     } else { # method == "lm"
-      loopfun1 <- function(i, ...) {
-        mod.red <- lm(formula.reduced, data=X$dfs[[i]], ...)
+      loopfun1 <- function(i) {
+        mod.red <- do.call(lm, c(list(formula.reduced, data=X$dfs[[i]]), lm.args))
         list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
       }
     }
-    if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args, ...))
-    else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1, ...)
+    if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args))
+    else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1)
     fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
     res.m <- sapply(mclapply_res, function(x) x$res.m)
   }
@@ -649,11 +648,11 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   # Regress the permuted data against the full model and get a new effect of interest
   loopfun2 <- switch(method,
                      lm=,
-                     mlm=function(i, ...) genFvaluesLM(Yperm(), X$dfs, formula.full, formula.reduced, ...),
-                     complex=function(i, ...) genFvaluesSim(Yperm(), obs$full.X, obs$reduced.X),
-                     simple=function(i, ...) genFvaluesSimple(Yperm(), X$dfs[[1]], formula.full, formula.reduced))
+                     mlm=function(i) do.call(genFvaluesLM, c(list(Yperm(), X$dfs, formula.full, formula.reduced), lm.args)),
+                     complex=function(i) genFvaluesSim(Yperm(), obs$full.X, obs$reduced.X),
+                     simple=function(i) genFvaluesSimple(Yperm(), X$dfs[[1]], formula.full, formula.reduced))
 
-  if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args, ...))
+  if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args))
   else sim <- parLapply(cl, 1:nsim, loopfun2)
   sim <- simplify2array(sim)
   if(method == "complex") obs <- obs$Fvalues
