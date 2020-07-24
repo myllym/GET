@@ -5,6 +5,7 @@ date: "`r Sys.Date()`"
 output:
   pdf_document:
     toc: TRUE
+    number_sections: true
 bibliography: GETbibfile.bib
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -19,7 +20,7 @@ knitr::opts_chunk$set(
 ```
 
 This vignette gives examples of the use of global envelopes for the analysis of spatial point patterns.
-The examples utilize the R [@R2020] package spatstat [@spatstat2015] in addition to the GET package [@MyllymakiMrkvicka2019]. The envelope plots are produced by the use of the ggplot2 package [@Wickham2016]
+The examples utilize the R [@R2020] package spatstat [@spatstat2015] in addition to the GET package [@MyllymakiMrkvicka2020]. The envelope plots are produced by the use of the ggplot2 package [@Wickham2016]
 ```{r setup}
 library("GET")
 library("spatstat")
@@ -99,7 +100,7 @@ plot(X)
 
 Below the function envelope of the spatstat package is used to generate point patterns under CSR (specified in the argument 'simulate') and to calculate the centred L-functions (specified below by the arguments fun, correction and transform), which are used here as the test functions.
 
-```{r csr}
+```{r csr, fig.width=4, fig.height=4}
 nsim <- 1999 # Number of simulations
 env <- envelope(X, fun="Lest", nsim=nsim,
                 savefuns=TRUE, # save the functions
@@ -248,7 +249,7 @@ In the above example conditioning on the number of points was not employed.
 # Adjusted global envelope test for composite hypotheses
 
 Let us test the fit of a Matern cluster process for the sapling data as an example of a composite hypothesis test.
-The adjusted test of the GET package is described in Section 2.3 of @MyllymakiMrkvicka2019. The procedure was suggested by @BaddeleyEtal2017 and extended for global envelopes in GET [@MyllymakiMrkvicka2019].
+The adjusted test of the GET package is described in Section 2.3 of @MyllymakiMrkvicka2020. The procedure was suggested by @BaddeleyEtal2017 and extended for global envelopes in GET [@MyllymakiMrkvicka2020].
 
 ```{r saplings}
 data(saplings)
@@ -375,7 +376,7 @@ Then the curves can be cropped to the desired interval of distances $[r_{min}, r
 curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
 ```
 And a global envelope test done by means of the global_envelope_test function (`type="rank"` and larger `nsim` was used in @MyllymakiEtal2017 [S4]:
-```{r saplings_csr_L3}
+```{r saplings_csr_L3, fig.width=4, fig.height=4}
 res <- global_envelope_test(curve_set, type="erl")
 plot(res, ylab=expression(italic(hat(L)(r)-r)))
 ```
@@ -393,7 +394,7 @@ fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="K")
 
 Next step is to perform the adjusted directional quantile global envelope test using the centred L function.
 (For the rank envelope test, choose `type = "rank"` instead and increase `nsim`.)
-```{r saplings_matclust2}
+```{r saplings_matclust2, fig.width=4, fig.height=4}
 nsim <- 19 # 19 just for experimenting with the code!!
 #nsim <- 499 # 499 is ok for type = 'qdir' (takes > 1 h)
 adjenvL <- GET.composite(X = fitted_model,
@@ -410,7 +411,7 @@ a reasonable model for the saplings pattern.
 To further explore the goodness-of-fit of the Matern cluster process, test the
 model with the J function:
 This takes quite some time if nsim is reasonably large.
-```{r saplings_matclust3}
+```{r saplings_matclust3, fig.width=4, fig.height=4}
 adjenvJ <- GET.composite(X = fitted_model,
                         fun="Jest", correction="none", r=rJ,
                         type = "qdir", nsim = nsim, nsimsub = nsim,
