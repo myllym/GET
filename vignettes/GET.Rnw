@@ -60,8 +60,7 @@ library("gridExtra")
 This work describes the \proglang{R} package \pkg{GET} that implements global envelopes
 for a general set of $d$-dimensional vectors $T$ in various applications. A $100(1-\alpha)$\% global envelope is a band bounded by two vectors such that the probability that $T$ falls outside this envelope in any of the $d$ points is equal to $\alpha$. Global means that the probability is controlled simultaneously for all the $d$ elements of the vectors. The global envelopes
 can be employed for central regions of functional or multivariate data, for graphical Monte Carlo and permutation tests where the test statistic is multivariate or functional, and for global confidence and prediction bands.
-Intrinsic graphical interpretation property is introduced for global envelopes, and the global envelopes included in the \pkg{GET} package that have the property are described and compared.
-Examples of different uses of global envelopes and their implementation in the \pkg{GET} package are presented, including global envelopes for single and several one- or two-dimensional functions, Monte Carlo goodness-of-fit tests for simple and composite hypotheses, comparison of distributions, graphical functional analysis of variance (ANOVA), and general linear model (GLM), and confidence bands in polynomial regression.
+Intrinsic graphical interpretation property is introduced for global envelopes, and the global envelopes included in the \pkg{GET} package that have the property are described. Examples of different uses of global envelopes and their implementation in the \pkg{GET} package are presented, including global envelopes for single and several one- or two-dimensional functions, Monte Carlo goodness-of-fit tests for simple and composite hypotheses, comparison of distributions, graphical functional analysis of variance (ANOVA), and general linear model (GLM), and confidence bands in polynomial regression.
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
@@ -104,7 +103,7 @@ When citing the vignette and package please cite Myllym{\"a}ki and Mrkvi\v cka (
 
 \section{Introduction}\label{sec:intro}
 
-Global envelopes are useful for the graphical interpretation of results from tests based on functional or multivariate statistics, for determining central regions of functional or multivariate data, and also for determining confidence or prediction bands. Global envelopes have shown their usefulness already in many areas, e.g., spatial statistics \citep{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2016, MollerWaagepetersen2017, MyllymakiEtal2020, PollingtonEtal2020}, functional data analysis \citep{NarisettyNair2016, MrkvickaEtal2020, DaiGenton2018, DaiEtal2018, MrkvickaEtal2019a}, image analysis \citep{MrkvickaEtal2019b, GotovacEtal2016, KoubekEtal2016} and point pattern analysis \citep{MollerEtal2016a, MollerEtal2016b, RajalaEtal2018} with applications to 
+Global envelopes are useful for the graphical interpretation of results from tests based on functional or multivariate statistics, for determining central regions of functional or multivariate data, and also for determining confidence or prediction bands. Global envelopes have shown their usefulness already in many areas, e.g., spatial statistics \citep{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2016, MollerWaagepetersen2017, MyllymakiEtal2020, PollingtonEtal2020}, functional data analysis \citep{NarisettyNair2016, MrkvickaEtal2020, DaiGenton2018, DaiEtal2020, MrkvickaEtal2019a}, image analysis \citep{MrkvickaEtal2019b, GotovacEtal2016, KoubekEtal2016} and point pattern analysis \citep{MollerEtal2016a, MollerEtal2016b, RajalaEtal2018} with applications to 
 agriculture \citep{MrkvickaEtal2016, ChaibanEtal2019}, 
 architecture and art \citep{Stoyan2016}, 
 astronomy and astrophysics \citep{KruuseEtal2019, RetterEtal2019}, 
@@ -169,8 +168,7 @@ For these tasks, in addition to a global envelope, a Monte Carlo $p$~value is co
 In order to obtain an exact Monte Carlo test, i.e., a test that achieves the prescribed family-wise error rate, the exchangeability of the test vectors $\TT_i$ is required. All the examples in Section \ref{sec:illustrations} satisfy exchangeability, except the functional GLM where the permutation of the residuals from the null model \citep{FreedmanLane1983} is used. This permutation scheme is commonly used in univariate permutation GLMs and widely accepted as the best available solution \citep{AndersonRobinson2001, AndersonTerBraak2003, WinklerEtal2014}.
 
 The second part of this introductory section describes the competing and complementary methods and software. 
-Thereafter, in Section~\ref{sec:theory}, seven global envelopes with IGI are described and their usage in \pkg{GET} is discussed. %The section is complemented by Appendix~\ref{app:simstudy}, which presents a simulation study to help to choose which of the global envelopes should be used in which cases.
-In Section~\ref{sec:illustrations}, several examples of applications of global envelopes are shown, namely 1) the computation of central regions and functional boxplots for a set of functions or jointly for several sets of functions (Section \ref{sec:cr}); 2) the Monte Carlo goodness-of-fit test for simple hypotheses with application to spatial statistics (Section \ref{sec:GOT}); 3) the Monte Carlo goodness-of-fit test for composite hypotheses with application to graphical normality testing (Section \ref{sec:GOTcomposite}); 4) the graphical $n$-sample test of correspondence of distribution functions, $n\geq 2$ (Section \ref{sec:CDF}); 5) the graphical functional one-way ANOVA (Section \ref{sec:fANOVA}); 6) the functional GLM for images (Section \ref{sec:fGLM}); and 7) the computation of the confidence band in polynomial regression (Section \ref{sec:confband}).
+Thereafter, in Section~\ref{sec:theory}, seven global envelopes with IGI are described and their usage in \pkg{GET} is discussed. In Section~\ref{sec:illustrations}, several examples of applications of global envelopes are shown, namely 1) the computation of central regions and functional boxplots for a set of functions or jointly for several sets of functions (Section \ref{sec:cr}); 2) the Monte Carlo goodness-of-fit test for simple hypotheses with application to spatial statistics (Section \ref{sec:GOT}); 3) the Monte Carlo goodness-of-fit test for composite hypotheses with application to graphical normality testing (Section \ref{sec:GOTcomposite}); 4) the graphical $n$-sample test of correspondence of distribution functions, $n\geq 2$ (Section \ref{sec:CDF}); 5) the graphical functional one-way ANOVA (Section \ref{sec:fANOVA}); 6) the functional GLM for images (Section \ref{sec:fGLM}); and 7) the computation of the confidence band in polynomial regression (Section \ref{sec:confband}).
 The final section, Section~\ref{sec:summary}, is left for discussion.
 
 
@@ -801,7 +799,6 @@ Figure~\ref{fig:normalitytest} (left) shows the test result for the NO$_x$ level
 <<normalitytest, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
 grid.arrange(p1, p2, nrow = 1)
 @
-%	\includegraphics[width=0.5\textwidth]{pictures/NOx_normalitytest.pdf}\includegraphics[width=0.5\textwidth]{pictures/logNOx_normalitytest.pdf}
 	\caption{Graphical normality test for the NO$_x$ (left) and logarithm of the NO$_x$ (right) levels at 10 am.}
 	\label{fig:normalitytest}
 \end{figure}
@@ -853,7 +850,6 @@ plot(ecdf(fm10.l$Boys), col=grey(0.7), add=TRUE)
 plot(ecdf(fm14.l$Girls), main="Age 14", xlab="Height", ylab="Ecdf", xlim=xlim2)
 plot(ecdf(fm14.l$Boys), col=grey(0.7), add=TRUE)
 @
-%	\includegraphics[width=\textwidth]{pictures/ecdfs.pdf}
 	\caption{The empirical cumulative distribution functions heights of the 54 girls (black) and 39 boys (grey) of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages 10 (left) and 14 (right).}
 	\label{fig:necdfs}
 \end{figure}
@@ -904,7 +900,6 @@ df <- do.call(rbind, lapply(1:24, FUN = function(x) {
 ggplot(df) + geom_line(aes(x = Hour, y = NOx, group = Date)) +
   facet_wrap(vars(Type)) + GET:::ThemePlain()
 @
-%	\includegraphics[width=\textwidth]{pictures/NOx.pdf}
 \caption{The NO$_x$ levels for Monday-Thursday (Mon-Thu), Friday (Fri) and non-working days (Free) including weekend and festive days in Poblenou for 115 days from 23 February to 26 June, 2005.}
 	\label{fig:NOx_data}
 \end{figure}
@@ -1167,7 +1162,7 @@ Because the global envelopes can be used for so many different purposes specifie
 Besides the graphical interpretation, another advantage of the proposed global rank envelopes is their non-parametric (rank-based) nature, which ensures that the functional or multivariate data coming into the analysis can be inhomogeneous across the domain of their arguments and this phenomenon does not influence the result of the analysis. For example, before the methods presented in this paper appeared, formal goodness-of-fit testing in spatial statistic was commonly based on the unscaled MAD test \citep{Ripley1981} or its non-graphical integrated counterpart \citep{Diggle1979}. However, the result of these tests is influenced by unequal variability of the test function across its domain leading in general to loss of power \citep{MyllymakiEtal2015, MyllymakiEtal2017}. 
 A similar situation appears in the permutation GLM tests which, in the functional data analysis or neuroimage analysis \citep[see, e.g.,][]{WinklerEtal2014}, are commonly based on the $F$~statistic that standardizes the first and second moments of the data but not the high quantiles. Thus, when the data are inhomogeneous across the domain and non-normal, the commonly used $F$-max test (which is similar to the unscaled MAD test) is influenced by the inhomogeneous quantiles. The rank-based tests discussed here can then lead to higher power \citep[for details see][]{MrkvickaEtal2019a}. Similarly, the rank based methods can adjust the shape of the central region to inhomogeneous distribution of the studied functions. Therefore, the global rank envelopes are a valuable tool in all these situations.
 
-A further advantage of the rank tests is that it allows one to give equal weights to the components fed in. Thus, the method is particularly well suited also for multiple testing with several univariate or functional test statistics \citep{MrkvickaEtal2017}, for constructing central regions jointly for various transformations of the functions \citep[for details see][]{DaiEtal2018}, and for combining various dimensions of multidimensional functions or various functional elements of multivariate functions. 
+A further advantage of the rank tests is that it allows one to give equal weights to the components fed in. Thus, the method is particularly well suited also for multiple testing with several univariate or functional test statistics \citep{MrkvickaEtal2017}, for constructing central regions jointly for various transformations of the functions \citep[for details see][]{DaiEtal2020}, and for combining various dimensions of multidimensional functions or various functional elements of multivariate functions.
 
 Finally, the good properties of the methods presented here are retained also in the case of testing a composite hypothesis: the two-stage Monte Carlo test is applicable to these graphical methods. 
 
