@@ -1052,6 +1052,8 @@ plot(res)
 are two-dimensional as well (Figure~\ref{fig:flm_graph_abide}).
 Here only two groups were compared, and the plot shows that the brain measurements were lower in the autism group than in the control group in a part of the small example region (red locations in Figure~\ref{fig:flm_graph_abide}).
 
+When the basic assumption of the homoscedasticity in the linear model \eqref{eq:GLM} for every argument $r$ is violated, it is important to handle it. One possibility is to apply transformations to the functions a priori as suggested by \citet{MrkvickaEtal2020} and \citet{MrkvickaEtal2019a} (see Equation~\eqref{eq:scaling}). Alternatively weighted least squares might be used for estimation of regression coefficients.
+
 \begin{figure}[ht!]
 \centering
 <<flm_graph_abide, echo=FALSE, fig=TRUE, height=4, width=6.125>>==
@@ -1084,6 +1086,7 @@ plot(res.F)
 %
 Figure~\ref{fig:flm_frank_abide} shows the test result of the $F$-rank GLM, which found significant differences between the groups approximately at the same pixels $r\in\{1,\ldots,d\}$ of the brain image as the graphical functional GLM above.
 In general, for a factor with more than two groups, the $F$-rank GLM is however not able to tell between which specific groups of a discrete factor the differences occur (or which of the groups deviates from the mean).
+In the case of heteroscedasticy, the weighted least squares test statistics can be used instead \citep{Christensen2002}.
 
 \begin{figure}[ht!]
 \centering
