@@ -46,7 +46,7 @@ description part of this help file.}
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
 
-\item{lm.args}{A names list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
+\item{lm.args}{A named list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
 
 \item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.}
 

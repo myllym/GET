@@ -13,7 +13,7 @@
   env.col = 1,
   color_outside = TRUE,
   sign.col = "red",
-  base_size = 12,
+  base_size = 11,
   labels = NULL,
   add = FALSE,
   digits = 3,

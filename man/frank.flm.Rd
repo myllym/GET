@@ -40,10 +40,10 @@ are constant for all argument values. The number of rows of the data frame shoul
 to the number of curves. Each column should specify the values of a factor.}
 
 \item{savefuns}{Logical or "return". If TRUE, then the functions from permutations are saved to the attribute simfuns.
-If "return", then the function returnns the permutations in a curve_set (instead of making the envelope test on those);
+If "return", then the function returns the permutations in a curve_set, instead of the result of the envelope test on those;
 this can be used by \code{\link{partial_forder}}.}
 
-\item{lm.args}{A names list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
+\item{lm.args}{A named list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
 
 \item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.}
 

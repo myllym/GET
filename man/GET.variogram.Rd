@@ -74,7 +74,7 @@ if(require("sp", quietly=TRUE) & require("gstat", quietly=TRUE)) {
   # with global envelopes
   \donttest{lzn.dir.GET <- GET.variogram(object=log(zinc)~1, data=meuse, alpha=c(0, 45, 90, 135))}
   \dontshow{lzn.dir.GET <- GET.variogram(object=log(zinc)~1, data=meuse, nsim=4, alpha=c(0, 45, 90, 135), GET.args=list(alpha=0.2))}
-  plot(lzn.dir.GET, base_size=10)
+  plot(lzn.dir.GET)
 
   # Use instead gstat objects
   g <- gstat(id="ln.zinc", formula=log(zinc)~1, data=meuse)
