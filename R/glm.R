@@ -311,7 +311,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @param factors A data frame of factors. An alternative way to specify factors when they
 #' are constant for all argument values. The number of rows of the data frame should be equal
 #' to the number of curves. Each column should specify the values of a factor.
-#' @param lm.args A names list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.
+#' @param lm.args A named list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @param mc.args A named list of additional arguments to be passed to \code{\link{mclapply}}.
 #' Only relevant if \code{mc.cores} is more than 1.
@@ -538,7 +538,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #'
 #' @inheritParams graph.flm
 #' @param savefuns Logical or "return". If TRUE, then the functions from permutations are saved to the attribute simfuns.
-#' If "return", then the function returnns the permutations in a curve_set (instead of making the envelope test on those);
+#' If "return", then the function returns the permutations in a curve_set, instead of the result of the envelope test on those;
 #' this can be used by \code{\link{partial_forder}}.
 #' @param method For advanced use.
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.

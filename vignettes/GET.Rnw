@@ -391,7 +391,7 @@ and
  c_{[s]k} =  s - \exp\left(-\frac{T_{[s]k}-T_{[s-1]k}}{T_{[s-1]k}-T_{[1]k}}\right).
 \end{align*}
 %
-If the probability to have ties among $T_{ik}, i=1, \ldots s$, is zero, then the probability of ties among $C_i$ is zero as well. If ties appear among $T_{ik}, i=1, \ldots s$, $T_{[i-1]k} < T_{[i]k} = \dots = T_{[j]k} < T_{[j+1]k}$, then the continuous rank is defined as $c_{[l]k} = \frac{i+j}{2} - \frac{1}{2}$ for $l = i, i+1, \dots, j$. 
+If the probability to have ties among $T_{ik}, i=1, \ldots s$, is zero, then the probability of ties among $C_i$ is zero as well. If ties appear among $T_{ik}, i=1, \ldots s$, $T_{[i-1]k} < T_{[i]k} = \dots = T_{[j]k} < T_{[j+1]k}$, then the continuous rank is defined as $c_{[l]k} = \frac{i+j}{2} - \frac{1}{2}$ for $l = i, \dots, j$.
 The $p$~value of the univariate Monte Carlo test is $p_\text{cont}= \sum_{i=1}^{s} \1 (C_i \leq C_1)  \big/ s$.
 The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constructed in the same way as global ERL envelope (see Equation~\ref{erl_envelope}), i.e., as a hull of $\TT_i$ which have measured $C_i\geq c_\alpha$, where $c_\alpha$ is defined according to the point 1.\ of IGI.
 
@@ -955,26 +955,22 @@ To sample from the null hypotheses, the simple permutation of raw functions amon
 set.seed(190503)
 @
 %
-<<graphfanova_test, fig=FALSE>>==
+\begin{figure}[ht!]
+	\centering
+<<graphfanova_logNOx, echo=TRUE, fig=TRUE, height=2.722, width=6.125>>==
 res.c <- graph.fanova(nsim = 2999, curve_set = cset,
                       groups = Type, variances = "unequal",
                       contrasts = TRUE)
 plot(res.c, xlab = "Hour", ylab = "Diff.")
 @
+	\caption{The output of the graphical functional ANOVA to test the difference between the type of the day on the log NO$_x$ levels in the Poblenou data. The observed differences between the group means and the 95\% global envelope.}
+	\label{fig:graphfanova_logNOx}
+\end{figure}
 %
 The \code{fdata} object \code{poblenou[['nox']]} is automatically converted to the required format in \pkg{GET}. The observed differences together with the global envelope are shown in Figure~\ref{fig:graphfanova_logNOx}.
 Thus, the test rejects the null hypothesis $H'_0$ that the differences between the groups would be zero and shows that on Monday-Thursday and Friday the (log) NO$_x$ levels are significantly larger than on free days basically during the whole day with peaks around 8 am and 4 pm. The difference between Monday-Thursday and Friday was not significant.
 
 The graphical functional ANOVA allows one to detect either a) which groups deviate from the mean (option \code{contrasts = FALSE}) or b) which specific groups are different (option \code{contrasts = TRUE}). The example above was for the latter. Note that this test directly has the nature of a post hoc test. Furthermore, both versions of the test allow one to identify which $r$ values lead to the potential rejection of the null hypothesis.
-
-\begin{figure}[ht!]
-	\centering
-<<graphfanova_logNOx, echo=FALSE, fig=TRUE, height=2.722, width=6.125>>==
-plot(res.c, xlab = "Hour", ylab = "Diff.", base_size=10)
-@
-	\caption{The output of the graphical functional ANOVA to test the difference between the type of the day on the log NO$_x$ levels in the Poblenou data. The observed differences between the group means and the 95\% global envelope.}
-	\label{fig:graphfanova_logNOx}
-\end{figure}
 
 When a graphical interpretation for group specific differences is not of interest but the area of rejection is, instead of \fct{graph.fanova} it is possible to apply the one-way functional ANOVA based on the $r$-wise $F$~statistics, $r\in R$. This test is implemented in the function \fct{frank.fanova}. For the log NO$_x$ data, the test result was that there are differences between the groups for the whole day time (figure omitted).
 
