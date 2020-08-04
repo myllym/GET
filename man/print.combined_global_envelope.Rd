@@ -7,7 +7,7 @@
 \method{print}{combined_global_envelope}(x, ...)
 }
 \arguments{
-\item{x}{an 'combined_global_envelope' object}
+\item{x}{A 'combined_global_envelope' object}
 
 \item{...}{Ignored.}
 }
