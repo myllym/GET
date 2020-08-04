@@ -502,6 +502,8 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' the Freedman-Lane algorithm (Freedman and Lane, 1983) is applied to permute the functions
 #' (to obtain the simulations under the null hypothesis of "no effects");
 #' consequently, the test achieves the desired significance level only approximately.
+#' If the reduced model contains only a constant, then the algorithm corresponds to
+#' simple permutation of raw data.
 #' In contrast to the graphical functional GLM, the F rank functional GLM is based on the
 #' F-statistics that are calculated at each argument value of the functions.
 #' The global envelope test is applied to the observed and simulated F-statistics.
