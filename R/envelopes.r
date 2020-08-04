@@ -98,7 +98,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   distance <- forder(curve_set, measure=measure, scaling=scaling,
                      alternative=alternative, probs=probs, quantile.type=quantile.type)
 
-  data_and_sim_curves <- data_and_sim_curves(curve_set) # all the functions
+  all_curves <- data_and_sim_curves(curve_set) # all the functions
   Nfunc <- length(distance) # Number of functions
   nr <- curve_set_narg(curve_set)
   # Define the central curve T_0
@@ -116,7 +116,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
            LB <- array(0, nr)
            UB <- array(0, nr)
            for(i in 1:nr){
-             Hod <- sort(data_and_sim_curves[,i])
+             Hod <- sort(all_curves[,i])
              LB[i]<- Hod[kalpha]
              UB[i]<- Hod[Nfunc-kalpha+1]
            }
@@ -128,7 +128,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
            LB <- array(0, nr)
            UB <- array(0, nr)
            for(i in 1:nr){
-             lu <- range(data_and_sim_curves[j,i])
+             lu <- range(all_curves[j,i])
              LB[i]<- lu[1]
              UB[i]<- lu[2]
            }
@@ -267,9 +267,9 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   curves_for_envelope_ind <- which(attr(res_erl, "k") >= kalpha)
   # Curves
   curve_sets <- lapply(curve_sets, FUN=convert_envelope)
-  data_and_sim_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
+  all_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
   # Curves from which to calculate the convex hull
-  curves_for_envelope_l <- lapply(data_and_sim_curves_l, function(x) { x[curves_for_envelope_ind,] })
+  curves_for_envelope_l <- lapply(all_curves_l, function(x) { x[curves_for_envelope_ind,] })
   # Bounding curves
   LB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=min) })
   UB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
@@ -358,7 +358,7 @@ GEprinthelper <- function(x, ...) {
 
 #' Print method for the class 'global_envelope'
 #'
-#' @param x an 'global_envelope' object
+#' @param x A 'global_envelope' object
 #' @param ... Ignored.
 #' @export
 print.global_envelope <- function(x, ...) {
@@ -367,7 +367,7 @@ print.global_envelope <- function(x, ...) {
 
 #' Print method for the class 'global_envelope'
 #'
-#' @param x an 'combined_global_envelope' object
+#' @param x A 'combined_global_envelope' object
 #' @param ... Ignored.
 #' @export
 print.combined_global_envelope <- function(x, ...) {

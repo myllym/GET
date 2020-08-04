@@ -83,16 +83,16 @@ individual_partial_forder <- function(curve_set, measure = c('erl', 'rank', 'con
 
   curve_set <- convert_envelope(curve_set)
 
-  data_and_sim_curves <- data_and_sim_curves(curve_set)
-  Nfunc <- dim(data_and_sim_curves)[1]
+  all_curves <- data_and_sim_curves(curve_set)
+  Nfunc <- dim(all_curves)[1]
   nr <- curve_set_narg(curve_set)
 
   # Calculate pointwise ranks for each argument value (r)
   calc_pointwiserank <- find_calc_pointwiserank(measure, alternative)
   for(i in 1:nr) {
-    data_and_sim_curves[,i] <- calc_pointwiserank(data_and_sim_curves[,i]) # overwriting curves by their ranks
+    all_curves[,i] <- calc_pointwiserank(all_curves[,i]) # overwriting curves by their ranks
   }
-  allranks <- data_and_sim_curves
+  allranks <- all_curves
 
   # Calculate measures from the pointwise ranks
   applyfuncs <- function(f) {

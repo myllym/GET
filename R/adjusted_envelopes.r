@@ -439,13 +439,13 @@ GET.composite <- function(X, X.ls = NULL,
     #-- The rank test at the second level
     # Calculate the critical rank / alpha
     kalpha_star <- quantile(stats, probs=alpha, type=1)
-    data_and_sim_curves <- data_and_sim_curves(attr(res, "level2_curve_set")) # the second step "curves"
-    nr <- ncol(data_and_sim_curves)
-    Nfunc <- nrow(data_and_sim_curves)
+    all_curves <- data_and_sim_curves(attr(res, "level2_curve_set")) # the second step "curves"
+    nr <- ncol(all_curves)
+    Nfunc <- nrow(all_curves)
     LB <- array(0, nr)
     UB <- array(0, nr)
     for(i in 1:nr){
-      Hod <- sort(data_and_sim_curves[,i])
+      Hod <- sort(all_curves[,i])
       LB[i]<- Hod[kalpha_star]
       UB[i]<- Hod[Nfunc-kalpha_star+1]
     }
@@ -469,13 +469,13 @@ GET.composite <- function(X, X.ls = NULL,
     if(type == "rank" & nfuns == 1) {
       # Calculate the critical rank (instead of alpha) and the adjusted envelope following Myllymäki et al. (2017)
       kalpha_star <- quantile(stats, probs=alpha, type=1)
-      data_and_sim_curves <- data_and_sim_curves(X[[1]]) # all the functions
+      all_curves <- data_and_sim_curves(X[[1]]) # all the functions
       nr <- length(X[[1]]$r)
-      Nfunc <- nrow(data_and_sim_curves)
+      Nfunc <- nrow(all_curves)
       LB <- array(0, nr)
       UB <- array(0, nr)
       for(i in 1:nr){
-        Hod <- sort(data_and_sim_curves[,i])
+        Hod <- sort(all_curves[,i])
         LB[i]<- Hod[kalpha_star]
         UB[i]<- Hod[Nfunc-kalpha_star+1]
       }
