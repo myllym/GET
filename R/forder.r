@@ -255,6 +255,8 @@ partial_forder <- function(curve_set,
   measure <- match.arg(measure)
   alternative <- match.arg(alternative)
   res <- individual_partial_forder(curve_set, measure = measure, alternative = alternative, erlhistn = 6)
+  if(is.vector(res)) names(res) <- curve_set_funcnames(curve_set)
+  else colnames(res) <- curve_set_funcnames(curve_set)
   list(data=res, measure=measure, nr=curve_set_narg(curve_set))
 }
 
