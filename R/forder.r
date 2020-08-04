@@ -151,7 +151,7 @@ individual_forder <- function(curve_set,
     # and nr > 2*6
     # then use histogram approximation for erl
     erlhistn <- 0
-    if(measure == "erl" && length(data_and_sim_curves) > 10*2^20 && nr > 12) {
+    if(measure == "erl" && Nfunc*nr > 10*2^20 && nr > 12) {
       erlhistn <- 6
     }
     partial_forder <- individual_partial_forder(curve_set, measure, alternative, erlhistn)
@@ -170,7 +170,7 @@ individual_forder <- function(curve_set,
            })
     distance <- scale_ranks(distance, measure)
   }
-  names(distance) <- rownames(data_and_sim_curves)
+  names(distance) <- curve_set_funcnames(curve_set)
   list(distance = distance, measure = measure)
 }
 
