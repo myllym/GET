@@ -459,6 +459,10 @@ data_and_sim_curves <- function(curve_set) {
 curve_set_funcs <- function(curve_set) {
   curve_set[['funcs']]
 }
+# A helper function to give the names of the functions
+curve_set_funcnames <- function(curve_set) {
+  colnames(curve_set[['funcs']])
+}
 
 # A helper function to obtain the mean of functions in curve_set.
 #
