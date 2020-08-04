@@ -346,8 +346,8 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
          ggplot2 = {
              df <- data.frame(r = rvalues, f = c(funcs), id = rep(1:ncol(funcs), each=nrow(funcs)))
              p <- ( ggplot()
-                   + geom_line(data=df[df$id==1,], aes_(x = ~r, y = ~f, group = ~id), col=col_obs)
                    + geom_line(data=df[df$id!=1,], aes_(x = ~r, y = ~f, group = ~id), col=col_sim)
+                   + geom_line(data=df[df$id==1,], aes_(x = ~r, y = ~f, group = ~id), col=col_obs)
                    + scale_y_continuous(name = ylab, limits = ylim)
                    + labs(title=main)
                    + ThemePlain(base_size=base_size))
