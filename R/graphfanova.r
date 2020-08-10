@@ -192,7 +192,7 @@ contrasts.m <- function(x, groups, ...) {
 #' the observed functions in the component \code{obs}.
 #' @param groups The original groups (a factor vector representing the assignment to groups).
 #' @param variances Either "equal" or "unequal". If "unequal", then correction for unequal variances
-#' as explained in details will be done.
+#' as explained in details will be done. Only relevant for the case \code{test.equality = "means"} (default).
 #' @param contrasts Logical. FALSE and TRUE specify the two test functions as described in
 #' description part of this help file.
 # Note: Possibly add a some arguments to specify which contrasts should be used.
@@ -392,9 +392,9 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' where \eqn{F(r_i)}{F(r_i)} stands for the F-statistic. The simulations are performed by
 #' permuting the test functions. Further details can be found in Mrkvička et al. (2016).
 #'
-#' The argument \code{equalvar=TRUE} means that equal variances across groups are assumed.
+#' The argument \code{variances="equal"} means that equal variances across groups are assumed.
 #' The correction for unequal variances can be done by using the corrected F-statistic
-#' (option \code{equalvar=FALSE}).
+#' (option \code{variances="unequal"}).
 #'
 #' Unfortunately this test is not able to detect which groups are different from each other.
 #'

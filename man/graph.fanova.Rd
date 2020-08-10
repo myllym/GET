@@ -30,7 +30,7 @@ the observed functions in the component \code{obs}.}
 \item{groups}{The original groups (a factor vector representing the assignment to groups).}
 
 \item{variances}{Either "equal" or "unequal". If "unequal", then correction for unequal variances
-as explained in details will be done.}
+as explained in details will be done. Only relevant for the case \code{test.equality = "means"} (default).}
 
 \item{contrasts}{Logical. FALSE and TRUE specify the two test functions as described in
 description part of this help file.}
