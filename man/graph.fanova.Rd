@@ -39,7 +39,8 @@ description part of this help file.}
 by appying moving average to the estimated sample variances. n.aver determines
 how many values on each side do contribute (incl. value itself).}
 
-\item{mirror}{The complement of the argument circular of \code{\link[stats]{filter}}.}
+\item{mirror}{The complement of the argument circular of \code{\link[stats]{filter}}. Another parameter
+for the moving average to estimate sample variances (see \code{n.aver}).}
 
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}

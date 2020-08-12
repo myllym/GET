@@ -200,7 +200,8 @@ contrasts.m <- function(x, groups, ...) {
 #' @param n.aver If variances = "unequal", there is a possibility to use variances smoothed
 #' by appying moving average to the estimated sample variances. n.aver determines
 #' how many values on each side do contribute (incl. value itself).
-#' @param mirror The complement of the argument circular of \code{\link[stats]{filter}}.
+#' @param mirror The complement of the argument circular of \code{\link[stats]{filter}}. Another parameter
+#' for the moving average to estimate sample variances (see \code{n.aver}).
 #' @param savefuns Logical. If TRUE, then the functions from permutations are saved to the attribute
 #' simfuns.
 #' @param test.equality A character with possible values \code{mean} (default), \code{var} and
