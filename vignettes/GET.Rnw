@@ -391,7 +391,10 @@ and
  c_{[s]k} =  s - \exp\left(-\frac{T_{[s]k}-T_{[s-1]k}}{T_{[s-1]k}-T_{[1]k}}\right).
 \end{align*}
 %
-If the probability to have ties among $T_{ik}, i=1, \ldots s$, is zero, then the probability of ties among $C_i$ is zero as well. If ties appear among $T_{ik}, i=1, \ldots s$, $T_{[i-1]k} < T_{[i]k} = \dots = T_{[j]k} < T_{[j+1]k}$, then the continuous rank is defined as $c_{[l]k} = \frac{i+j}{2} - \frac{1}{2}$ for $l = i, \dots, j$.
+If the probability to have ties among $T_{ik}, i=1, \ldots s$, is zero, then the probability of ties among $C_{ik}$ is zero as well. If ties appear among $T_{ik}, i=1, \ldots s$, such that $T_{[i-1]k} < T_{[i]k} = \dots = T_{[j]k} < T_{[j+1]k}$, then the continuous rank is defined as $c_{[l]k} = \frac{i+j}{2} - \frac{1}{2}$ for $l = i, \dots, j$.
+If there are no ties, then $ceil(c_{[i]k}) = i$, which is the ordinary rank of $T_{[i]k}$.
+For the ties $c_{[i]k} = r_{[i]k} - \frac{1}{2}$, where $r_{[i]k}$ is the ordinary rank of $T_{[i]k}$.
+
 The $p$~value of the univariate Monte Carlo test is $p_\text{cont}= \sum_{i=1}^{s} \1 (C_i \leq C_1)  \big/ s$.
 The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constructed in the same way as global ERL envelope (see Equation~\ref{erl_envelope}), i.e., as a hull of $\TT_i$ which have measured $C_i\geq c_\alpha$, where $c_\alpha$ is defined according to the point 1.\ of IGI.
 
@@ -516,10 +519,10 @@ In a typical application one needs to choose one of the measures with IGI (see T
 In general, the first five types of Table~\ref{tab:GEoverview} instead of the last two, \code{'st'} and \code{'unscaled'}, can be recommended based on previous studies \citep{MyllymakiEtal2015, MyllymakiEtal2017}.
 Regarding the choice between the first five types, when one can afford a large number of simulations in cases (ii)-(iv) of Section~\ref{sec:intro}, one can very well use the type \code{'erl'} that is based only on the ranks, thus also suiting particularly well for combined tests (see Section~\ref{sec:combinedGE}). 
 On the other hand, any other choice is also fine, because the \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'} measures lead to an equivalent outcome for a large number of simulations or permutations. However, the definition of {\em large} depends on the situation.
-A simulation study that will be published as a separate study "Comparison of non-parametric global envelopes" gives guidance on the required number of simulations under different scenarios \citep[see also the supplement S2 of][]{MyllymakiEtal2017}.
+A simulation study presented in \citet{MyllymakiMrkvicka2020b} gives guidance on the required number of simulations under different scenarios \citep[see also the supplement S2 of][]{MyllymakiEtal2017}.
 
 Another situation arises in case (i) with a low number of vectors or functions, or in cases (ii)-(iv) where the simulations or permutations are too time consuming to have large number of them.
-Then the choice of the measure plays a role. Based on our experience supported by the simulation study "Comparison of non-parametric global envelopes", the \code{'erl'} and \code{'area'} measures are typically good choices for the integral type of extremeness where vector $\TT_i$ is extreme in the set of vectors for a large range of its components. On the other hand, for a maximum type of extremeness, i.e., the case where $\TT_i$ is extreme only for a few of its components, the \code{'cont'} and \code{'qdir'} measures are typically the best choices, but also the \code{'area'} measure performs well. Thus, if no particular type of extremeness is expected a priori, the \code{'area'} measure is often a good compromise, since it is sensitive to the amount of outlyingness (similarly as \code{'erl'}) and to the value of outlyingness (similarly as \code{'cont'} and \code{'qdir'}).
+Then the choice of the measure plays a role. Based on our experience supported by the simulation study of \citet{MyllymakiMrkvicka2020b}, the \code{'erl'} and \code{'area'} measures are typically good choices for the integral type of extremeness where the vector $\TT_i$ is extreme in the set of vectors for a large range of its components. On the other hand, the \code{'cont'} and \code{'qdir'} measures are most sensitive to the maximum type of extremeness, i.e., the case where $\TT_i$ is extreme only for a few of its components, but also the \code{'area'} measure performs well. Thus, if no particular type of extremeness is expected a priori, the \code{'area'} measure is often a good compromise, since it is sensitive to the amount of outlyingness (similarly as \code{'erl'}) and to the value of outlyingness (similarly as \code{'cont'} and \code{'qdir'}).
 
 
 %% -- Illustrations ------------------------------------------------------------
