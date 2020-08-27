@@ -133,7 +133,7 @@ res <- global_envelope_test(env)
 
 \item Plot the result
 %
-<<workflow1, fig=TRUE, width=3, height=3>>=
+<<workflow4, fig=TRUE, width=3, height=3>>=
 plot(res)
 @
 %
@@ -563,7 +563,7 @@ circular, thereby leading to the rejection of the model by the $J$-function.
 
 It is also possible to test the fit of the Matern cluster process simultaneously by the two test functions:
 %
-<<saplings_matclust4, fig=TRUE, width=6, height=3>>=
+<<saplings_matclust4, fig=TRUE, width=5, height=3>>=
 adjenvLJ <- GET.composite(X = fitted_model,
       testfuns = list(L = list(fun="Lest", correction="translate",
                           transform = expression(.-r), r=r),
