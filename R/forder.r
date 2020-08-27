@@ -225,7 +225,7 @@ combine_erl_forder <- function(parts) {
 #' data("abide_9002_23")
 #' \dontshow{
 #' ## Check that partial_forder gives the same result as forder
-#' cset <- frank.flm(nsim=99, formula.full = Y ~ Group + Sex + Age,
+#' cset <- frank.flm(nsim=19, formula.full = Y ~ Group + Sex + Age,
 #'                   formula.reduced = Y ~ Group + Sex,
 #'                   curve_sets = list(Y = abide_9002_23$curve_set),
 #'                   factors = abide_9002_23$factors, savefuns = "return")
