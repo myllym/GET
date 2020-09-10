@@ -48,7 +48,9 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
     # Expand the factors to each argument value
     for(i in 1:length(vars.factors)) {
       data.l[[vars.factors[i]]] <- if(factors_in_curvesets) {
-        matrix(factors[,vars.factors[i]], nrow=nrow(factors), ncol=nr)
+        A <- rep(factors[,vars.factors[i]], times=nr)
+        dim(A) <- c(nrow(factors), nr)
+        A
       } else { factors[,vars.factors[i]] }
     }
   }
