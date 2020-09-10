@@ -30,13 +30,13 @@ see \code{formula} in \code{\link[stats]{lm}}.}
 should be nested within the full model.}
 
 \item{curve_sets}{A named list of sets of curves giving the dependent variable (Y), and
-possibly additionally all the factors. The dimensions of the elements should
-match with each other, i.e. the factor values should be given for each argument value
-and each function. If factors are given in the argument \code{factors}, then can also be just
-the curve set representing Y. Also \code{\link[fda.usc]{fdata}} objects allowed.}
+possibly additionally factors whose values vary across the argument values of the functions.
+The dimensions of the elements should match with each other.
+Note that factors that are fixed across the functions can be given in the argument \code{factors}.
+Also \code{\link[fda.usc]{fdata}} objects allowed.}
 
 \item{factors}{A data frame of factors. An alternative way to specify factors when they
-are constant for all argument values. The number of rows of the data frame should be equal
+are constant for all argument values of the functions. The number of rows of the data frame should be equal
 to the number of curves. Each column should specify the values of a factor.}
 
 \item{savefuns}{Logical or "return". If TRUE, then the functions from permutations are saved to the attribute simfuns.

@@ -31,13 +31,13 @@ see \code{formula} in \code{\link[stats]{lm}}.}
 should be nested within the full model.}
 
 \item{curve_sets}{A named list of sets of curves giving the dependent variable (Y), and
-possibly additionally all the factors. The dimensions of the elements should
-match with each other, i.e. the factor values should be given for each argument value
-and each function. If factors are given in the argument \code{factors}, then can also be just
-the curve set representing Y. Also \code{\link[fda.usc]{fdata}} objects allowed.}
+possibly additionally factors whose values vary across the argument values of the functions.
+The dimensions of the elements should match with each other.
+Note that factors that are fixed across the functions can be given in the argument \code{factors}.
+Also \code{\link[fda.usc]{fdata}} objects allowed.}
 
 \item{factors}{A data frame of factors. An alternative way to specify factors when they
-are constant for all argument values. The number of rows of the data frame should be equal
+are constant for all argument values of the functions. The number of rows of the data frame should be equal
 to the number of curves. Each column should specify the values of a factor.}
 
 \item{contrasts}{Logical. FALSE and TRUE specify the two test functions as described in
@@ -71,7 +71,8 @@ which can be printed and plotted directly.
 Non-parametric graphical tests of significance in functional general linear model (GLM)
 }
 \details{
-The function \code{graph.flm} performs the graphical functional GLM of Mrkvička et al. (2019).
+The function \code{graph.flm} performs the graphical functional GLM of Mrkvička et al. (2019),
+described also in Section 3.6 of Myllymäki and Mrkvička (2020) (type \code{vignette("GET")} in R).
 This is a nonparametric graphical test of significance of a covariate in functional GLM.
 The test is able to find not only if the factor of interest is significant, but also which
 functional domain is responsible for the potential rejection.
@@ -87,8 +88,18 @@ consequently, the test approximately achieves the desired significance level.
 The specification of the full and reduced formulas is important. The reduced model should be
 nested within the full model. The full model should include in addition to the reduced
 model the interesting factors whose effects are under investigation.
-The implementation to find the coefficients of the interesting factors is based on dummy.coef and
-the restrictions there apply.
+The implementation to find the coefficients of the interesting factors is based on
+\code{\link{dummy.coef}} and the restrictions there apply.
+
+The regression coefficients serve as test functions in the graphical functional GLM.
+For a continuous interesting factor, the test function is its regression coefficient across the
+functional domain. For a discrete factor, there are two possibilities that are controlled by
+the arguments \code{contrasts}. If \code{contrasts = FALSE}, then the test statistic is
+the function/long vector where the coefficients related to all levels of the factor are joined
+together. If \code{contrasts = TRUE}, then the differences between the same coefficients are
+considered instead. Given the coefficients in a specific order that is obtained through the use
+of \code{\link{lm}} and \code{\link{dummy.coef}}, the differences are taken for couples i and j
+where i < j and reducing j from i (e.g. for three groups 1,2,3, the constrasts are 1-2, 1-3, 2-3).
 
 There are different versions of the implementation depending on the application.
 Given that the argument \code{fast} is TRUE, then
@@ -172,6 +183,8 @@ plot(res.a)
 }
 \references{
 Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability. doi: 10.1007/s11009-019-09756-y
+
+Myllymäki, M and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 
 Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 }
