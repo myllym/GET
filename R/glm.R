@@ -1,3 +1,32 @@
+# Return the part of labels(terms(formula.full)) that is not included in formula.reduced
+# Doesn't care if formula.reduced contains something not in formula.full
+labels_interesting <- function(formula.full, formula.reduced) {
+  mf <- attr(terms(formula.full), "factors")
+  mr <- attr(terms(formula.reduced), "factors")
+  labs <- character()
+  if(attr(terms(formula.full), "intercept") > attr(terms(formula.reduced), "intercept"))
+    labs <- c("(Intercept)", labs)
+
+  if(length(mf) > 0) {
+    varorder <- match(row.names(mr), row.names(mf))
+
+    newvars <- setdiff(1:nrow(mf), varorder)
+    # What do terms >= 2 mean?
+    interesting <- sapply(1:ncol(mf), function(i) {
+      term <- mf[,i,drop=FALSE]
+      if(any(term[newvars] != 0)) return(TRUE)
+      term <- term[varorder]
+      term[is.na(term)] <- 0 # Variables only in formula.reduced
+      for(j in 1:ncol(mr)) {
+        if(all((term!=0) == (mr[,j]!=0))) return(FALSE)
+      }
+      return(TRUE)
+    })
+    labs <- c(labs, labels(terms(formula.full))[interesting])
+  }
+  labs
+}
+
 # Check that formula.reduced is nested within formula.full and includes something extra.
 check_isnested <- function(formula.full, formula.reduced) {
   # Check that the reduced model is nested within the full model
@@ -13,7 +42,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   # Preliminary checks
   vars <- all.vars(formula.full)
   vars.reduced <- all.vars(formula.reduced)
-  check_isnested(formula.full, formula.reduced)
+  # check_isnested(formula.full, formula.reduced)
   if(nsim < 1) stop("Not a reasonable value of nsim.")
   if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.")
   if(class(curve_sets)[1] != "list") {
@@ -425,7 +454,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                    curve_sets=curve_sets, factors=factors, fast=fast)
 
-  nameinteresting <- setdiff(labels(terms(formula.full)), labels(terms(formula.reduced)))
+  nameinteresting <- labels_interesting(formula.full, formula.reduced)
 
   # setting that 'fun' is a function
   if(!contrasts) genCoef <- genCoefmeans.m
