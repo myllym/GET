@@ -27,11 +27,10 @@ labels_interesting <- function(formula.full, formula.reduced) {
   labs
 }
 
-# Check that formula.reduced is nested within formula.full and includes something extra.
+# Check that formula.reduced is nested within formula.full and that formula.full includes something extra.
 check_isnested <- function(formula.full, formula.reduced) {
   # Check that the reduced model is nested within the full model
-  if(!all(labels(terms(formula.reduced)) %in% labels(terms(formula.full)))) stop("The reduced model includes some extra variables, not in the full model.")
-  if(attr(terms(formula.full), "intercept") < attr(terms(formula.reduced), "intercept")) stop("The reduced model includes intercept, but the full model does not.")
+  if(length(labels_interesting(formula.reduced, formula.full))>0) stop("The reduced model includes something not in the full model.")
   # Check that the full model includes something in addition to the reduced model
-  if(all(labels(terms(formula.full)) %in% labels(terms(formula.reduced)))) stop("The full model should not be equal to the reduced model.")
+  if(length(labels_interesting(formula.full, formula.reduced)) == 0) stop("The full model is equal to the reduced model.")
 }

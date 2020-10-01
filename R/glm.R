@@ -5,8 +5,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   vars <- all.vars(formula.full)
   vars.reduced <- all.vars(formula.reduced)
   # Check that formula.reduced is nested within formula.full
-  if(length(labels_interesting(formula.reduced, formula.full))>0) stop("The reduced model includes something not in the full model.")
-  if(length(labels_interesting(formula.full, formula.reduced)) == 0) stop("The full model is equal to the reduced model.")
+  check_isnested(formula.full, formula.reduced)
   if(nsim < 1) stop("Not a reasonable value of nsim.")
   if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.")
   if(class(curve_sets)[1] != "list") {
