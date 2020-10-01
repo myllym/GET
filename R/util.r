@@ -6,10 +6,10 @@ labels_interesting <- function(formula.full, formula.reduced) {
   labs <- character()
   if(attr(terms(formula.full), "intercept") > attr(terms(formula.reduced), "intercept"))
     labs <- c("(Intercept)", labs)
-  
+
   if(length(mf) > 0) {
     varorder <- match(row.names(mr), row.names(mf))
-    
+
     newvars <- setdiff(1:nrow(mf), varorder)
     # What do terms >= 2 mean?
     interesting <- sapply(1:ncol(mf), function(i) {
