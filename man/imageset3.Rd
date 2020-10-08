@@ -12,7 +12,7 @@ the discrete group factor in the list component \code{Group}.
 data(imageset3)
 }
 \description{
-A simulated set of images with a categorical factor
+A simulated set of images with a categorical factor (with three levels)
 }
 \details{
 We considered a categorical factor \code{Group} obtaining the values 0, 1 or 2
@@ -26,11 +26,12 @@ bimodal errors in the middle and periphery of the image:
 \deqn{\epsilon(r) = \mathbf{1}(\|r\| \leq 0.5) G(r) + \mathbf{1}(\|r\| > 0.5) \frac{1}{2}G(r)^{1/5},}{e(r) = 1(||r|| <= 0.5) G(r) + 1(||r|| > 0.5) 0.5 G(r)^{1/5},}
 where G(r) is a Gaussian random field with the exponential correlation structure
 with scale parameter 0.15 and standard deviation 0.2.
+Consequently, the first two groups (0,1) have the same mean, while a bigger bump appears in the third group (2) in the middle of the image.
 }
 \examples{
 \donttest{
 data(imageset3)
-plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), max_ncols_of_plots = 5)
+plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5)
 }
 }
 \references{

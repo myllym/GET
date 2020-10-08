@@ -54,7 +54,7 @@ If \code{cov}, then the equality of lag \code{cov.lag} covariance is tested by p
 \deqn{W_{ij}(r) = \sqrt{|V_{ij}(r)|\cdot sign(V_{ij}(r))},}{|V_{ij}(r)| sign(V_{ij}(r)),}
 where
 \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
-See Mrkvicka et al. (2018) for more details.}
+See Mrkvicka et al. (2020) for more details.}
 
 \item{cov.lag}{The lag of the covariance for testing the equality of covariances,
 see \code{test.equality}.}
@@ -181,15 +181,15 @@ plot(res2, ncol=3,
      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
 
 # Image set examples
-data("imageset1")
+data("imageset3")
 res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-                    curve_set = imageset1$image_set,
-                    groups = imageset1$Group)
+                    curve_set = imageset3$image_set,
+                    groups = imageset3$Group)
 plot(res)
 # Contrasts
 res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-                      curve_set = imageset1$image_set,
-                      groups = imageset1$Group,
+                      curve_set = imageset3$image_set,
+                      groups = imageset3$Group,
                       contrasts = TRUE)
 plot(res.c)
 }

@@ -81,7 +81,7 @@ Moreover, the return value has the same attributes as the object returned by
 }
 and in the case that \code{type = 'rank'} also
 \itemize{
-  \item p_interval = The p-value interval [p_liberal, p_conservative].
+  \item p_interval = The p-value interval \eqn{[p_{liberal}, p_{conservative}]}{[p_liberal, p_conservative]}.
   \item ties = As the argument \code{ties}.
 }
 
@@ -133,7 +133,7 @@ envelopes with intrinsic graphical interpretation.
   \item "unscaled", the unscaled envelope (providing a baseline) that has a contant width and
   that corresponds to the classical maximum deviation test (Ripley, 1981).
 }
-See Myllymäki and Mrkvička (2020, Section 2.) for more detailed description of the measures and
+See Myllymäki and Mrkvička (2020, Section 2.), i.e. \code{vignette("GET")}, for more detailed description of the measures and
 the corresponding envelopes.
 
 The first four types are global rank envelopes.
@@ -174,7 +174,7 @@ It corresponds to the 100*coverage\% central region.
 
 \section{P-values}{
 
-In the case \code{type="rank"}, based on the extreme ranks k_i, i=1, ..., s+1,
+In the case \code{type="rank"}, based on the extreme ranks \eqn{k_i, i=1, ..., s+1}{k_i, i=1, ..., s+1},
 the p-interval is calculated. Because the extreme ranks contain ties, there is not just
 one p-value. The p-interval is given by the most liberal and the most conservative p-value
 estimate. Also a single p-value is calculated.
@@ -200,13 +200,15 @@ allow in principle a lower number of simulations to be used than the test based 
 extreme ranks (\code{'rank'}), because no ties occur for these measures.
 If affordable, we recommend in any case some thousands of simulations for all the measures
 to achieve a good power and repeatability of the test.
+If the dimension of the test functions is higher, also the number of simulations should
+preferably be higher.
 }
 
 \section{Tests based on several functions}{
 
 If a list of (suitable) objects are provided in the argument \code{curve_sets},
 then by default (\code{nstep = 2}) the two-step combining procedure is used to
-perform the combined global test as described in Myllymäki and Mrkvička (2019).
+perform the combined global test as described in Myllymäki and Mrkvička (2020).
 If \code{nstep = 1} and the lengths of the multivariate vectors in each component
 of the list are equal, then the one-step combining procedure is used where the
 functions are concatenated together into a one long vector.

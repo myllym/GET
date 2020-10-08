@@ -38,7 +38,7 @@ If \code{cov}, then the equality of lag \code{cov.lag} covariance is tested by p
 \deqn{W_{ij}(r) = \sqrt{|V_{ij}(r)|\cdot sign(V_{ij}(r))},}{|V_{ij}(r)| sign(V_{ij}(r)),}
 where
 \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
-See Mrkvicka et al. (2018) for more details.}
+See Mrkvicka et al. (2020) for more details.}
 
 \item{cov.lag}{The lag of the covariance for testing the equality of covariances,
 see \code{test.equality}.}
@@ -58,9 +58,9 @@ The test assumes that there exists non random functions \eqn{\mu(r)}{\mu(r)} and
 \deqn{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, \dots, J, j=1, \dots , n_j}{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, ..., J, j=1, ..., nj}
 where \eqn{e_{ij}(r)}{e_{ij}(r)} are independent and normally distributed.
 The test vector is
-\deqn{\mathbf{T} = (F(r_1), F(r_2), \dots , F(r_K))}{T = (F(r_1), F(r_2), \dots , F(r_K))},
+\deqn{\mathbf{T} = (F(r_1), F(r_2), \dots , F(r_K)),}{T = (F(r_1), F(r_2), \dots , F(r_K)),}
 where \eqn{F(r_i)}{F(r_i)} stands for the F-statistic. The simulations are performed by
-permuting the test functions. Further details can be found in Mrkvička et al. (2016).
+permuting the test functions. Further details can be found in Mrkvička et al. (2020).
 
 The argument \code{variances="equal"} means that equal variances across groups are assumed.
 The correction for unequal variances can be done by using the corrected F-statistic
@@ -75,13 +75,16 @@ groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 \dontshow{res <- frank.fanova(nsim=4, curve_set=rimov, groups=groups, alpha=0.2)}
 plot(res, ylab="F-statistic")
 
-data("imageset1")
+data("imageset3")
 res2 <- frank.fanova(nsim = 19, # Increase nsim for serious analysis!
-                     curve_set = imageset1$image_set,
-                     groups = imageset1$Group)
+                     curve_set = imageset3$image_set,
+                     groups = imageset3$Group)
 plot(res2)
 plot(res2, fixedscales=FALSE)
 }
 \references{
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
+}
+\seealso{
+graph.fanova
 }

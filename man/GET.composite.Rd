@@ -159,7 +159,7 @@ is used for simulations and model fitting and the complete spatial randomness (C
 For the rank envelope test, the global envelope test is the test described in
 Myllymäki et al. (2017) with the adjustment of Baddeley et al. (2017).
 For other test types, the test (also) uses the two-stage procedure of Dao and Genton (2014) with
-the adjustment of Baddeley et al. (2017) as descripbed in Myllymäki and Mrkvička (2019).
+the adjustment of Baddeley et al. (2017) as descripbed in Myllymäki and Mrkvička (2020).
 
 See examples also in \code{\link{saplings}}.
 }

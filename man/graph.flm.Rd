@@ -137,6 +137,7 @@ res <- graph.flm(nsim = 19, # Increase the number of simulations for serious ana
                  contrasts = FALSE)
 plot(res)
 
+# An example of testing the joint effect of a discrete and a continuous variable
 \dontshow{nsim <- 19}
 \donttest{nsim <- 999}
 data(GDPtax)
