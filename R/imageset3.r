@@ -1,6 +1,6 @@
 #' A simulated set of images
 #'
-#' A simulated set of images with a categorical factor
+#' A simulated set of images with a categorical factor (with three levels)
 #'
 #'
 #' We considered a categorical factor \code{Group} obtaining the values 0, 1 or 2
@@ -29,6 +29,6 @@
 #' @examples
 #' \donttest{
 #' data(imageset3)
-#' plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), max_ncols_of_plots = 5)
+#' plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5)
 #' }
 NULL
