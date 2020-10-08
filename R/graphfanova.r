@@ -213,7 +213,7 @@ contrasts.m <- function(x, groups, ...) {
 #' \deqn{W_{ij}(r) = \sqrt{|V_{ij}(r)|\cdot sign(V_{ij}(r))},}{|V_{ij}(r)| sign(V_{ij}(r)),}
 #' where
 #' \deqn{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}{V_{ij}(r) = (T_{ij}(r) - \bar{T}_j(r))((T_{ij}(r+s) - \bar{T}_j(r+s))).}
-#' See Mrkvicka et al. (2018) for more details.
+#' See Mrkvicka et al. (2020) for more details.
 #' @param cov.lag The lag of the covariance for testing the equality of covariances,
 #' see \code{test.equality}.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
@@ -307,15 +307,15 @@ contrasts.m <- function(x, groups, ...) {
 #'      ylab=expression(italic(bar(T)[i](r)-bar(T)[j](r))))
 #'
 #' # Image set examples
-#' data("imageset1")
+#' data("imageset3")
 #' res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                     curve_set = imageset1$image_set,
-#'                     groups = imageset1$Group)
+#'                     curve_set = imageset3$image_set,
+#'                     groups = imageset3$Group)
 #' plot(res)
 #' # Contrasts
 #' res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                       curve_set = imageset1$image_set,
-#'                       groups = imageset1$Group,
+#'                       curve_set = imageset3$image_set,
+#'                       groups = imageset3$Group,
 #'                       contrasts = TRUE)
 #' plot(res.c)
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
@@ -415,10 +415,10 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' \dontshow{res <- frank.fanova(nsim=4, curve_set=rimov, groups=groups, alpha=0.2)}
 #' plot(res, ylab="F-statistic")
 #'
-#' data("imageset1")
+#' data("imageset3")
 #' res2 <- frank.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                      curve_set = imageset1$image_set,
-#'                      groups = imageset1$Group)
+#'                      curve_set = imageset3$image_set,
+#'                      groups = imageset3$Group)
 #' plot(res2)
 #' plot(res2, fixedscales=FALSE)
 frank.fanova <- function(nsim, curve_set, groups, variances="equal",
