@@ -14,6 +14,7 @@
 #' \deqn{\epsilon(r) = \mathbf{1}(\|r\| \leq 0.5) G(r) + \mathbf{1}(\|r\| > 0.5) \frac{1}{2}G(r)^{1/5},}{e(r) = 1(||r|| <= 0.5) G(r) + 1(||r|| > 0.5) 0.5 G(r)^{1/5},}
 #' where G(r) is a Gaussian random field with the exponential correlation structure
 #' with scale parameter 0.15 and standard deviation 0.2.
+#' Consequently, the first two groups (0,1) have the same mean, while a bigger bump appears in the third group (2) in the middle of the image.
 #' @format A list of the \code{image_set} containing the simulated images, and
 #' the discrete group factor in the list component \code{Group}.
 #'

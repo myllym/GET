@@ -389,9 +389,9 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' \deqn{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, \dots, J, j=1, \dots , n_j}{T_{ij}(r) =\mu(r) + \mu_i(r) + e_{ij}(r), i=1, ..., J, j=1, ..., nj}
 #' where \eqn{e_{ij}(r)}{e_{ij}(r)} are independent and normally distributed.
 #' The test vector is
-#' \deqn{\mathbf{T} = (F(r_1), F(r_2), \dots , F(r_K))}{T = (F(r_1), F(r_2), \dots , F(r_K))},
+#' \deqn{\mathbf{T} = (F(r_1), F(r_2), \dots , F(r_K)),}{T = (F(r_1), F(r_2), \dots , F(r_K)),}
 #' where \eqn{F(r_i)}{F(r_i)} stands for the F-statistic. The simulations are performed by
-#' permuting the test functions. Further details can be found in Mrkvička et al. (2016).
+#' permuting the test functions. Further details can be found in Mrkvička et al. (2020).
 #'
 #' The argument \code{variances="equal"} means that equal variances across groups are assumed.
 #' The correction for unequal variances can be done by using the corrected F-statistic
@@ -403,6 +403,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' @param variances Either "equal" or "unequal". If "equal", then the traditional F-values are used.
 #' If "unequal", then the corrected F-values are used. The current implementation uses
 #' \code{\link[stats]{lm}} to get the corrected F-values.
+#' @seealso graph.fanova
 #' @aliases frank.fanova2d
 #' @export
 #' @references

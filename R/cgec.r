@@ -28,14 +28,14 @@
 #' This grouping is used in examples.
 #'
 #' @format A list of two components. The first one is the \code{curve_set} object containing the observed
-#' values of centred GEC observed in year 1995-2016 for the above countries. 
+#' values of centred GEC observed in year 1995-2016 for the above countries.
 #' The second component \code{group} gives the grouping.
 #'
 #' @usage data(cgec)
 #' @references
 #' Eurostat (2018). "Government revenue, expenditure and main aggregates (gov10amain)”. Retrieved from https://ec.europa.eu/eurostat/data/database(26/10/2018).
 #'
-#' Mrkvička, T., Hahn, U. and Myllymäki, M. A one-way ANOVA test for functional data with graphical interpretation. arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+#' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #' @keywords datasets
 #' @keywords curves
 #' @name cgec

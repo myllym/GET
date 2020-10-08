@@ -23,19 +23,6 @@
 #' from the tested null model. The methods are applicable for any multivariate
 #' vector data and functional data (after discretization).
 #'
-#' The package is described in detail in Myllymäki and Mrkvička (2020).
-#' The material can also be found in the corresponding vignette, which is available by
-#' starting R and typing \code{library(GET)} and \code{vignette("GET")}.
-#'
-#' In the special case of spatial processes (spatial point processes, random sets),
-#' the functions are typically estimators of summary functions. The package supports
-#' the use of the R library \pkg{\link{spatstat}} for generating simulations and calculating
-#' estimators of the chosen summary function, but alternatively these can be done by
-#' any other way, thus allowing for any models/functions.
-#' To see examples of global envelopes for analysing point pattern data,
-#' start R, type \code{library(GET)} and \code{vignette("pointpatterns")}.
-#'
-#'
 #' @section Key functions in \pkg{GET}:
 #' \itemize{
 #' \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
@@ -125,27 +112,27 @@
 #' \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no graphical
 #' interpretation)
 #' \item Most functions accept the curves provided in a \code{curve_set} object.
-#' Use \code{\link{create_curve_set}} (or \code{\link{create_image_set}}) to create a
-#' \code{curve_set} object from the functions T_i(r), i=1,...,s+1.
-#' Other formats to provide the curves to the above functions are also accepted,
+#' Use \code{\link{create_curve_set}} to create a \code{curve_set} object from the
+#' functions. Other formats to provide the curves to the above functions are also accepted,
 #' see the information on the help pages.
 #' }
 #' See the help files of the functions for examples.
 #'
 #' @section Workflow for (single hypothesis) tests based on single functions:
 #'
-#' To perform a test you always first need to obtain the test function T(r)
-#' for your data (T_1(r)) and for each simulation (T_2(r), ..., T_{nsim+1}(r)) in one way or another.
-#' Given the set of the functions T_i(r), i=1,...,nsim+1, you can perform a test
-#' by \code{\link{global_envelope_test}}.
+#' To perform a test you always first need to obtain the test function \eqn{T(r)}{T(r)}
+#' for your data (\eqn{T_1(r)}{T_1(r)}) and for each simulation
+#' (\eqn{T_2(r), \dots, T_{s+1}(r)}{T_2(r), ..., T_{s+1}(r)}) in one way or another.
+#' Given the set of the functions \eqn{T_i(r), i=1, \dots, s+1}{T_i(r), i=1,...,s+1},
+#' you can perform a test by \code{\link{global_envelope_test}}.
 #'
 #' 1) The workflow when using your own programs for simulations:
 #'
 #' \itemize{
-#' \item (Fit the model and) Create nsim simulations from the (fitted) null model.
-#' \item Calculate the functions T_1(r), T_2(r), ..., T_{nsim+1}(r).
+#' \item (Fit the model and) Create \eqn{s}{s} simulations from the (fitted) null model.
+#' \item Calculate the functions \eqn{T_1(r), T_2(r), \dots, T_{s+1}(r)}{T_1(r), T_2(r), ..., T_{s+1}(r)}.
 #' \item Use \code{\link{create_curve_set}} to create a curve_set object
-#'       from the functions T_i(r), i=1,...,s+1.
+#'       from the functions \eqn{T_i(r), i=1, \dots, s+1}{T_i(r), i=1,...,s+1}.
 #' \item Perform the test and plot the result
 #'
 #'       \code{res <- global_envelope_test(curve_set) # curve_set is the 'curve_set'-object you created}
@@ -157,12 +144,12 @@
 #' which explains the workflow and gives many examples of point pattern analysis
 #'
 #' @section Functions for modifying sets of functions:
-#' It is possible to modify the curve set T_1(r), T_2(r), ..., T_{nsim+1}(r) for the test.
+#' It is possible to modify the curve set \eqn{T_1(r), T_2(r), \dots, T_{s+1}(r)}{T_1(r), T_2(r), ..., T_{s+1}(r)} for the test.
 #'
 #' \itemize{
-#' \item You can choose the interval of distances [r_min, r_max] by \code{\link{crop_curves}}.
-#' \item For better visualisation, you can take T(r)-T_0(r) by \code{\link{residual}}.
-#' Here T_0(r) is the expectation of T(r) under the null hypothesis.
+#' \item You can choose the interval of distances \eqn{[r_\min, r_\max]}{[r_min, r_max]} by \code{\link{crop_curves}}.
+#' \item For better visualisation, you can take \eqn{T(r)-T_0(r)}{T(r)-T_0(r)} by \code{\link{residual}}.
+#' Here \eqn{T_0(r)}{T_0(r)} is the expectation of \eqn{T(r)}{T(r)} under the null hypothesis.
 #' }
 #'
 #' @section Example data (see references on the help pages of each data set):
@@ -172,8 +159,6 @@
 #'  \item \code{\link{cgec}}: centred government expenditure centralization (GEC) ratios (see \code{\link{graph.fanova}})
 #'  \item \code{\link{fallen_trees}}: a point pattern of fallen trees
 #'  \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
-#'  \item \code{\link{imageset1}}: a simulated set of images (see \code{\link{graph.fanova}}, \code{\link{frank.fanova}})
-#'  \item \code{\link{imageset2}}: a simulated set of images (see \code{\link{graph.flm}}, \code{\link{frank.flm}})
 #'  \item \code{\link{imageset3}}: a simulated set of images
 #'  \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
 #'  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{GET.composite}})
@@ -194,8 +179,17 @@
 #' Mrkvička et al. (2017) discussed the number of simulations for tests based on many functions.
 #'
 #' @section Documentation:
-#' Myllymäki and Mrkvička (2020, GET: Global envelopes in R) provides description
-#' of the package.
+#' Myllymäki and Mrkvička (2020) provides description of the package.
+#' The material can also be found in the corresponding vignette, which is available by
+#' starting R and typing \code{library(GET)} and \code{vignette("GET")}.
+#'
+#' In the special case of spatial processes (spatial point processes, random sets),
+#' the functions are typically estimators of summary functions. The package supports
+#' the use of the R library \pkg{\link{spatstat}} for generating simulations and calculating
+#' estimators of the chosen summary function, but alternatively these can be done by
+#' any other way, thus allowing for any models/functions.
+#' To see examples of global envelopes for analysing point pattern data,
+#' start R, type \code{library(GET)} and \code{vignette("pointpatterns")}.
 #'
 #' Type citation("GET") to get a full list of references.
 #'
