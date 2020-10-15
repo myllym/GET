@@ -13,9 +13,9 @@ GET.necdf(
 )
 }
 \arguments{
-\item{x}{A list (of length n) of values in the n groups.}
+\item{x}{A list of numeric vectors, one for each sample.}
 
-\item{r}{The sequence of argument values at which the distribution functions are compared.
+\item{r}{The sequence of argument values at which the distribution functions are to be compared.
 The default is 100 equally spaced values between the minimum and maximum over all groups.}
 
 \item{contrasts}{Logical. FALSE and TRUE specify the two test functions as described in
@@ -26,14 +26,14 @@ description part of this help file.}
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \description{
-Compare the distributions of two (or more) groups.
+Compare the distributions of two (or more) samples.
 }
 \details{
 A global envelope test can be performed to investigate whether the n distribution functions
-differ from each other significally and how do they differ. This test is a generalization of
+differ from each other and how do they differ. This test is a generalization of
 the two-sample Kolmogorov-Smirnov test with a graphical interpretation.
-We assume that the curves in the different groups are an i.i.d. samples from the distribution
-\deqn{F_i(r), i=1, \dots, n,}{F_i(r), i=1, ..., n,}
+We assume that the observations in the sample \eqn{i}{i} are an i.i.d. sample from the distribution
+\eqn{F_i(r), i=1, \dots, n,}{F_i(r), i=1, ..., n,}
 and we want to test the hypothesis
 \deqn{F_1(r)= \dots = F_n(r).}{F_1(r)= ... = F_n(r).}
 If \code{contrasts = FALSE} (default), then the test statistic is taken to be
@@ -42,10 +42,11 @@ where \eqn{\hat{F}_i(r) = (\hat{F}_i(r_1), \dots, \hat{F}_i(r_k))}{\hat{F}_i(r) 
 is the ecdf of the \eqn{i}{i}th sample evaluated at argument values
 \eqn{r = (r_1,\dots,r_k)}{r = (r_1, ...,r_k)}.
 This is our recommended test function for the test.
-Another possibility is given by \code{contrasts = TRUE}, and then the test statistic is
-\deqn{\mathbf{T} = (\hat{F}_1(r)-\hat{F}_2(r), \dots, \hat{F}_{n-1}(r)-\hat{F}_n(r))}{T = (\hat{F}_1(r)-\hat{F}_2(r), ..., \hat{F}_{n-1}(r)-\hat{F}_n(r))}
+Another possibility is given by \code{contrasts = TRUE}, and then the test statistic is contructed from
+all pairwise differences,
+\deqn{\mathbf{T} = (\hat{F}_1(r)-\hat{F}_2(r), \hat{F}_1(r)-\hat{F}_3(r), \dots, \hat{F}_{n-1}(r)-\hat{F}_n(r))}{T = (\hat{F}_1(r)-\hat{F}_2(r), ..., \hat{F}_{n-1}(r)-\hat{F}_n(r))}
 
-The simulations under the null hypothesis that the distributions are the same can be obtained
+The simulations under the null hypothesis that the distributions are the same are obtained
 by permuting the individuals of the groups. The default number of permutation, if nsim is not specified,
 is n*1000 - 1 for the case \code{contrasts = FALSE} and
 (n*(n-1)/2)*1000 - 1 for the case \code{contrasts = TRUE},
