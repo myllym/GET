@@ -68,21 +68,26 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
 Statistics and Computing 27 (5): 1239-1255. https://doi.org/10.1007/s11222-016-9683-9
 
-Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2018).
+Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020).
 A one-way ANOVA test for functional data with graphical interpretation.
-arXiv:1612.03608 [stat.ME] (http://arxiv.org/abs/1612.03608)
+Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019).
 New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 
 Mrkvička, T., Roskovec, T. and Rost, M. (2019).
-A nonparametric graphical tests of significance in functional GLM. arXiv:1902.04926 [stat.ME]
+A nonparametric graphical tests of significance in functional GLM.
+Methodology and Computing in Applied Probability, https://doi.org/10.1007/s11009-019-09756-y
+
+Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016).
+Monte Carlo testing in spatial statistics, with applications to spatial residuals.
+Spatial Statistics 18, Part A: 40--53. https://doi.org/10.1016/j.spasta.2016.04.005
 
 Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
 Deviation test construction and power comparison for marked spatial point
 patterns. Spatial Statistics 11: 19-34. https://doi.org/10.1016/j.spasta.2014.11.004
 (You can find the preprint of the article here: http://arxiv.org/abs/1306.1028)
 
-Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016).
-Monte Carlo testing in spatial statistics, with applications to spatial residuals.
-Spatial Statistics 18, Part A: 40--53. https://doi.org/10.1016/j.spasta.2016.04.005
+Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020).
+Testing global and local dependence of point patterns on covariates in parametric models.
+Spatial Statistics, https://doi.org/10.1016/j.spasta.2020.100436
