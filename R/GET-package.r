@@ -23,6 +23,8 @@
 #' from the tested null model. The methods are applicable for any multivariate
 #' vector data and functional data (after discretization).
 #'
+#' To get an overview of the package, start R and type \code{library(GET)} and \code{vignette("GET")}.
+#'
 #' @section Key functions in \pkg{GET}:
 #' \itemize{
 #' \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:

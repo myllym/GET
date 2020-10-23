@@ -28,6 +28,8 @@ The central regions can be constructed from (functional) data.
 The tests are Monte Carlo or permutation tests, which demand simulations
 from the tested null model. The methods are applicable for any multivariate
 vector data and functional data (after discretization).
+
+To get an overview of the package, start R and type \code{library(GET)} and \code{vignette("GET")}.
 }
 \section{Key functions in \pkg{GET}}{
 
