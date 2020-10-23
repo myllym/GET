@@ -46,6 +46,12 @@ require(GET)
 help('GET-package')
 ```
 
+If you want to have also vignettes working, you should also install packages from the 'suggests' field (`fda` and `fda.usc`),
+have MiKTeX on your computer, and install the library with
+```R
+install_github('myllym/GET', build_vignettes = TRUE)
+```
+
 ## Branches
 
 The branch for public use is called `master`. There are no other public branches at the moment.
