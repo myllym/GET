@@ -35,5 +35,4 @@ Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA tes
 \seealso{
 graph.fanova
 }
-\keyword{curves}
 \keyword{datasets}

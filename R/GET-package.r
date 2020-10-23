@@ -149,7 +149,7 @@
 #' It is possible to modify the curve set \eqn{T_1(r), T_2(r), \dots, T_{s+1}(r)}{T_1(r), T_2(r), ..., T_{s+1}(r)} for the test.
 #'
 #' \itemize{
-#' \item You can choose the interval of distances \eqn{[r_\min, r_\max]}{[r_min, r_max]} by \code{\link{crop_curves}}.
+#' \item You can choose the interval of distances \eqn{[r_{\min}, r_{\max}]}{[r_min, r_max]} by \code{\link{crop_curves}}.
 #' \item For better visualisation, you can take \eqn{T(r)-T_0(r)}{T(r)-T_0(r)} by \code{\link{residual}}.
 #' Here \eqn{T_0(r)}{T_0(r)} is the expectation of \eqn{T(r)}{T(r)} under the null hypothesis.
 #' }

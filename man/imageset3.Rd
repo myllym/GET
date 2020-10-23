@@ -40,5 +40,4 @@ Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multip
 \seealso{
 \code{\link{graph.fanova}}, \code{\link{frank.fanova}}
 }
-\keyword{curves}
 \keyword{datasets}

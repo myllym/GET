@@ -22,7 +22,6 @@
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 #' @keywords datasets
-#' @keywords curves
 #' @name imageset3
 #' @docType data
 #' @seealso \code{\link{graph.fanova}}, \code{\link{frank.fanova}}

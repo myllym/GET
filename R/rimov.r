@@ -16,7 +16,6 @@
 #' @references
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #' @keywords datasets
-#' @keywords curves
 #' @name rimov
 #' @docType data
 #' @seealso graph.fanova

@@ -33,7 +33,6 @@
 #' World Bank national accounts data, and OECD National Accounts data files. URL: https://data.worldbank.org/indicator/NY.GDP.PCAP.CD
 #' World Bank, Doing Business Project (http://www.doingbusiness.org/ExploreTopics/PayingTaxes/). URL: https://data.worldbank.org/indicator/IC.TAX.PRFT.CP.ZS
 #' @keywords datasets
-#' @keywords curves
 #' @name GDPtax
 #' @docType data
 #' @seealso \code{\link{graph.flm}}

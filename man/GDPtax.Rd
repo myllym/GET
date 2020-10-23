@@ -51,5 +51,4 @@ World Bank, Doing Business Project (http://www.doingbusiness.org/ExploreTopics/P
 \seealso{
 \code{\link{graph.flm}}
 }
-\keyword{curves}
 \keyword{datasets}

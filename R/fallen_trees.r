@@ -22,7 +22,7 @@
 #' 
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #' @keywords datasets
-#' @keywords point pattern
+#' @keywords spatial
 #' @name fallen_trees
 #' @docType data
 #' @examples

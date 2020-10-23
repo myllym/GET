@@ -35,5 +35,4 @@ Pontailler, J.-Y., Faille, A. and Lemée, G. (1997) Storms drive successional dy
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 }
 \keyword{datasets}
-\keyword{pattern}
-\keyword{point}
+\keyword{spatial}
