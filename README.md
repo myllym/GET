@@ -70,7 +70,7 @@ Statistics and Computing 27 (5): 1239-1255. https://doi.org/10.1007/s11222-016-9
 
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020).
 A one-way ANOVA test for functional data with graphical interpretation.
-Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
+Kybernetika 56 (3), 432-458. http://doi.org/10.14736/kyb-2020-3-0432
 
 Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019).
 New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
