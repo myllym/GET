@@ -2,7 +2,6 @@
 % Please edit documentation in R/glm.R
 \name{graph.flm}
 \alias{graph.flm}
-\alias{graph.flm2d}
 \title{Graphical functional GLM}
 \usage{
 graph.flm(

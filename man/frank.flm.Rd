@@ -2,7 +2,6 @@
 % Please edit documentation in R/glm.R
 \name{frank.flm}
 \alias{frank.flm}
-\alias{frank.flm2d}
 \title{F rank functional GLM}
 \usage{
 frank.flm(

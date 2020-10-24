@@ -2,7 +2,6 @@
 % Please edit documentation in R/graphfanova.r
 \name{graph.fanova}
 \alias{graph.fanova}
-\alias{graph.fanova2d}
 \title{One-way graphical functional ANOVA}
 \usage{
 graph.fanova(

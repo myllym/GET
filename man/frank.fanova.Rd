@@ -2,7 +2,6 @@
 % Please edit documentation in R/graphfanova.r
 \name{frank.fanova}
 \alias{frank.fanova}
-\alias{frank.fanova2d}
 \title{Rank envelope F-test}
 \usage{
 frank.fanova(

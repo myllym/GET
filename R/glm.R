@@ -326,7 +326,6 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @return A \code{global_envelope} or \code{combined_global_envelope} object,
 #' which can be printed and plotted directly.
 #' @export
-#' @aliases graph.flm2d
 #' @references
 #' Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability. doi: 10.1007/s11009-019-09756-y
 #'
@@ -553,7 +552,6 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' @param method For advanced use.
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export
-#' @aliases frank.flm2d
 #' @references
 #' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 #'

@@ -2,7 +2,6 @@
 % Please edit documentation in R/envelopes.r
 \name{global_envelope_test}
 \alias{global_envelope_test}
-\alias{global_envelope_test2d}
 \title{Global envelope test}
 \usage{
 global_envelope_test(

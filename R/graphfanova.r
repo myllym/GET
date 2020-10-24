@@ -219,7 +219,6 @@ contrasts.m <- function(x, groups, ...) {
 #' see \code{test.equality}.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
 #' @export
-#' @aliases graph.fanova2d
 #' @seealso \code{\link{frank.fanova}}
 #' @references
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
@@ -405,7 +404,6 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' If "unequal", then the corrected F-values are used. The current implementation uses
 #' \code{\link[stats]{lm}} to get the corrected F-values.
 #' @seealso graph.fanova
-#' @aliases frank.fanova2d
 #' @export
 #' @references
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432

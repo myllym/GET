@@ -3,7 +3,6 @@
 \name{central_region}
 \alias{central_region}
 \alias{global_envelope}
-\alias{central_region2d}
 \title{Central region / Global envelope}
 \usage{
 central_region(
