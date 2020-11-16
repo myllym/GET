@@ -20,7 +20,7 @@
 #'
 #' @usage data(imageset3)
 #' @references
-#' Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 #' @keywords datasets
 #' @name imageset3
 #' @docType data

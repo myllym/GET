@@ -60,7 +60,7 @@ library("gridExtra")
 This work describes the \proglang{R} package \pkg{GET} that implements global envelopes
 for a general set of $d$-dimensional vectors $T$ in various applications. A $100(1-\alpha)$\% global envelope is a band bounded by two vectors such that the probability that $T$ falls outside this envelope in any of the $d$ points is equal to $\alpha$. Global means that the probability is controlled simultaneously for all the $d$ elements of the vectors. The global envelopes
 can be employed for central regions of functional or multivariate data, for graphical Monte Carlo and permutation tests where the test statistic is multivariate or functional, and for global confidence and prediction bands.
-Intrinsic graphical interpretation property is introduced for global envelopes, and the global envelopes included in the \pkg{GET} package that have the property are described. Examples of different uses of global envelopes and their implementation in the \pkg{GET} package are presented, including global envelopes for single and several one- or two-dimensional functions, Monte Carlo goodness-of-fit tests for simple and composite hypotheses, comparison of distributions, graphical functional analysis of variance (ANOVA), and general linear model (GLM), and confidence bands in polynomial regression.
+Intrinsic graphical interpretation property is introduced for global envelopes, and the global envelopes included in the \pkg{GET} package that have the property are described. Examples of different uses of global envelopes and their implementation in the \pkg{GET} package are presented, including global envelopes for single and several one- or two-dimensional functions, Monte Carlo goodness-of-fit tests for simple and composite hypotheses, comparison of distributions, graphical functional analysis of variance, and general linear model, and confidence bands in polynomial regression.
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
@@ -103,7 +103,7 @@ When citing the vignette and package please cite Myllym{\"a}ki and Mrkvi\v cka (
 
 \section{Introduction}\label{sec:intro}
 
-Global envelopes are useful for the graphical interpretation of results from tests based on functional or multivariate statistics, for determining central regions of functional or multivariate data, and also for determining confidence or prediction bands. Global envelopes have shown their usefulness already in many areas, e.g., spatial statistics \citep{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2016, MollerWaagepetersen2017, MyllymakiEtal2020, PollingtonEtal2020}, functional data analysis \citep{NarisettyNair2016, MrkvickaEtal2020, DaiGenton2018, DaiEtal2020, MrkvickaEtal2019a}, image analysis \citep{MrkvickaEtal2019b, GotovacEtal2016, KoubekEtal2016} and point pattern analysis \citep{MollerEtal2016a, MollerEtal2016b, RajalaEtal2018} with applications to 
+Global envelopes are useful for the graphical interpretation of results from tests based on functional or multivariate statistics, for determining central regions of functional or multivariate data, and also for determining confidence or prediction bands. Global envelopes have shown their usefulness already in many areas, e.g., spatial statistics \citep{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2016, MollerWaagepetersen2017, MyllymakiEtal2020, PollingtonEtal2020}, functional data analysis \citep{NarisettyNair2016, MrkvickaEtal2020, DaiGenton2018, DaiEtal2020, MrkvickaEtal2019a}, image analysis \citep{MrkvickaEtal2020b, GotovacEtal2016, KoubekEtal2016} and point pattern analysis \citep{MollerEtal2016a, MollerEtal2016b, RajalaEtal2018} with applications to
 agriculture \citep{MrkvickaEtal2016, ChaibanEtal2019}, 
 architecture and art \citep{Stoyan2016}, 
 astronomy and astrophysics \citep{KruuseEtal2019, RetterEtal2019}, 
@@ -114,7 +114,7 @@ fisheries \citep{SmejkalEtal2017},
 forestry \citep{ErfanifardEtal2019}, 
 geography \citep{ClarkEtal2018}, 
 material science \citep{HabelEtal2017}, and
-medicine, health and neurosciences \citep{RafatiEtal2016, LeeEtal2017, MollerEtal2019, BiscioMoller2019, MrkvickaEtal2019b, BrownEtal2020}.
+medicine, health and neurosciences \citep{RafatiEtal2016, LeeEtal2017, MollerEtal2019, BiscioMoller2019, MrkvickaEtal2020b, BrownEtal2020}.
 To make these methods easily accessible, the R \citep{R2020} package \pkg{GET} has been developed that is available from the Comprehensive R Archive Network (CRAN) at \url{https://cran.r-project.org/package=GET}. A development version of the package is available via the repository \url{https://github.com/myllym/GET}. The package provides an implementation of global envelopes in various settings.
 
 To be more specific, global envelopes can be used for producing
@@ -163,7 +163,7 @@ The global envelope with IGI provides a solution to the tasks (i)-(iv) in a grap
 
 For tasks (ii) and (iii), the data vector $\TT_1$ is compared with a global envelope constructed from the data vector $\TT_1$ and vectors $\TT_2, \ldots ,\TT_s$ simulated under a null hypothesis $H_0$, 
 in order to decide if the data vector is extreme ($H_0$ is rejected) or not extreme ($H_0$ is not rejected). 
-For these tasks, in addition to a global envelope, a Monte Carlo $p$~value is computed according to the measure $M_i$: $p =  \sum_{i=1}^{s} \1 (M_i \leq M_1)  \big/ s$  \citep[see, e.g.,][]{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2020, MrkvickaEtal2019b, MrkvickaEtal2019a}.
+For these tasks, in addition to a global envelope, a Monte Carlo $p$~value is computed according to the measure $M_i$: $p =  \sum_{i=1}^{s} \1 (M_i \leq M_1)  \big/ s$  \citep[see, e.g.,][]{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2020, MrkvickaEtal2020b, MrkvickaEtal2019a}.
 
 In order to obtain an exact Monte Carlo test, i.e., a test that achieves the prescribed family-wise error rate, the exchangeability of the test vectors $\TT_i$ is required. All the examples in Section \ref{sec:illustrations} satisfy exchangeability, except the functional GLM where the permutation of the residuals from the null model \citep{FreedmanLane1983} is used. This permutation scheme is commonly used in univariate permutation GLMs and widely accepted as the best available solution \citep{AndersonRobinson2001, AndersonTerBraak2003, WinklerEtal2014}.
 
@@ -250,8 +250,8 @@ After defining the different types of global envelopes in Section \ref{sec:GEdef
 Type           & Introduced in   & Description \\ \hline
 \code{'rank'}         & \citet{MyllymakiEtal2017}  & Global rank envelope  corresponding to the extreme rank measure (with ties); unique ordering (or $p$~value) provided additionally as specified in the argument \code{ties}, e.g., \code{'erl'} for extreme rank lengths \\
 \code{'erl'}          & \citet{MyllymakiEtal2017, NarisettyNair2016, MrkvickaEtal2020}    & Global rank envelope corresponding to extreme rank length (ERL) measure \\ 
-\code{'cont'}         & \citet{Hahn2015, MrkvickaEtal2019b} & Global rank envelope corresponding to the continuous rank measure \\
-\code{'area'}         & \citet{MrkvickaEtal2019b}    &  Global rank envelope corresponding to the area measure \\
+\code{'cont'}         & \citet{Hahn2015, MrkvickaEtal2020b} & Global rank envelope corresponding to the continuous rank measure \\
+\code{'area'}         & \citet{MrkvickaEtal2020b}    &  Global rank envelope corresponding to the area measure \\
 \code{'qdir'}         & \citet{MyllymakiEtal2017,MyllymakiEtal2015}       & Directional quantile envelope test corresponding to the directional quantile maximum absolute deviation (MAD) measure \\
 \code{'st'}           & \citet{MyllymakiEtal2017, MyllymakiEtal2015}       & Studentized envelope test corresponding to the studentized MAD measure \\
 \code{'unscaled'}     & \citet{Ripley1981}       & Unscaled envelope test corresponding to the classical, unscaled MAD measure. The envelope has a constant width. \\ \hline
@@ -273,7 +273,7 @@ Function name              & Description \\ \hline
 \fct{graph.fanova}  & One-way ANOVA tests for functional data with graphical interpretation \citep{MrkvickaEtal2020} \\
 \fct{frank.fanova}  & One-way functional ANOVA tests based on the global envelopes applied to $F$~values \citep{MrkvickaEtal2020} \\
 \fct{graph.flm}  &  Non-parametric graphical tests of significance in functional general linear model (GLM) \citep{MrkvickaEtal2019a} \\
-\fct{frank.flm} & $F$-rank functional GLM, i.e., global envelope tests applied to $F$~values in permutation inference for the GLM \citep{MrkvickaEtal2019b} \\
+\fct{frank.flm} & $F$-rank functional GLM, i.e., global envelope tests applied to $F$~values in permutation inference for the GLM \citep{MrkvickaEtal2020b} \\
 \fct{GET.composite}           & Adjusted global envelope tests for composite null hypotheses \\ 
 \fct{GET.necdf} & Graphical $n$ sample test of correspondence of distribution functions  \\ 
 \fct{GET.spatialF} & Testing global and local covariate effects in point process models \citep{MyllymakiEtal2020}
@@ -357,7 +357,7 @@ see \citet{NarisettyNair2016} and \citet{MrkvickaEtal2020}.
 
 \subsubsection{Global continuous rank envelope}
 
-The ties can alternatively be broken by the continuous rank measure \citep{Hahn2015, MrkvickaEtal2019b} which refines the extreme rank measure by considering instead of the (discrete) pointwise ranks $R_{ik}$ continuous pointwise ranks $C_{ik}$ defined by the ratios of $T_{ik}$ to the closest other $T_{jk}$, $j=1,\dots,s$, $j\neq i$.
+The ties can alternatively be broken by the continuous rank measure \citep{Hahn2015, MrkvickaEtal2020b} which refines the extreme rank measure by considering instead of the (discrete) pointwise ranks $R_{ik}$ continuous pointwise ranks $C_{ik}$ defined by the ratios of $T_{ik}$ to the closest other $T_{jk}$, $j=1,\dots,s$, $j\neq i$.
 
 Formally, the continuous rank measure is
 %
@@ -398,7 +398,7 @@ The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constr
 
 \subsubsection{Global area rank envelope}
 
-Another refinement of rank envelope is the area rank measure \citep{MrkvickaEtal2019b},
+Another refinement of rank envelope is the area rank measure \citep{MrkvickaEtal2020b},
 %
 %$$A_i = \frac{1}{s_A} \sum_k \min(R_i, c_{ik}).$$
 $$A_i = \frac{1}{s}\left(R_i - \frac{1}{d}\sum_{k=1}^d (R_i-C_{ik}) \1(C_{ik} < R_i)\right).$$
@@ -529,7 +529,7 @@ Then the choice of the measure plays a role. Based on our experience supported b
 
 \subsection{Central regions for sets of functions}\label{sec:cr}
 
-The \proglang{R} package \pkg{fda} contains Berkeley Growth Study data \citep{RamsaySilverman2006} of the heights of 39 boys and 54 girls from ages 1 to 18 and the ages at which the data were collected.
+The \proglang{R} package \pkg{fda} contains Berkeley Growth Study data \citep{RamsaySilverman2005} of the heights of 39 boys and 54 girls from ages 1 to 18 and the ages at which the data were collected.
 As an example, we investigated whether there are any outliers in the girls regarding their annual heights and changes within years.
 First two \code{curve_set} objects were created containing the raw heights and the differences within the years (see Figure~\ref{fig:girls_curves}):
 %
@@ -805,11 +805,10 @@ grid.arrange(p1, p2, nrow = 1)
 \end{figure}
 
 
-
 \subsection{Graphical $n$-sample test of correspondence of distribution functions}\label{sec:CDF}
 
 The graphical $n$-sample test of correspondence of distribution functions serves as a simple example of permutation tests.
-Figure~\ref{fig:necdfs} shows the empirical cumulative distribution functions (ECDFs) obtained by the \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020} for the heights of the 54 girls and 39 boys of the \code{growth} data \citep[see above, and][]{RamsaySilverman2006} at ages 10 (left) and 14 (right).
+Figure~\ref{fig:necdfs} shows the empirical cumulative distribution functions (ECDFs) obtained by the \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020} for the heights of the 54 girls and 39 boys of the \code{growth} data \citep[see above, and][]{RamsaySilverman2005} at ages 10 (left) and 14 (right).
 A global envelope test can be performed to investigate whether the two (or more generally $n$) distribution functions differ from each other significantly and how they differ. This test is a generalization of the two-sample Kolmogorov-Smirnov test with a graphical interpretation. 
 Here it is assumed that the heights in the sample $i$ are an i.i.d.\ sample from the distribution $F_i(r)$, $i=1, \dots, n$, and the hypothesis $F_1(r)=\dots = F_n(r)$ is to be tested.
 The simulations under the null hypothesis that the distributions are the same can be obtained by permuting the individuals of the groups. The \pkg{GET} package provides the wrapper function \fct{GET.necdf} that can be used to compare $n$ distribution functions graphically, $n=2,3,\dots$. The (default) test vector is
@@ -979,7 +978,7 @@ When a graphical interpretation for group specific differences is not of interes
 
 Similar type of methods as in the functional one-way ANOVA above can be used in a more general setup of functional general linear models (GLMs).
 The global envelopes for functional GLMs are illustrated here by an example of a small subset of the autism brain imaging data collected by resting state functional magnetic resonance imaging (R-fMRI) \citep{DiMartinoEtal2014}. The preprocessed fMRI data contains measurements from 514 individuals with the autism spectrum disorder (ASD) and 557 typical controls (TC), where subjects with low quality on imaging data or having a large proportion of the missing values were removed. The imaging measurement for local brain activity at resting state was fractional amplitude of low frequency fluctuations \citep{ZouEtal2008}.
-The data considered here and available as the data object \code{abide_9002_23} in the \pkg{GET} package contains data from one of the 116 different anatomical regions in the brain partitioning being based on the anotomical automatic labeling system of \citet{Tzourio-MazoyerEtal2002}. The studied region is the right Crus Cerebellum 1 region of the brain at one slice (23) accompanied with three subject-specific factors, i.e.\ group (autism and control), sex and age.
+The data considered here and available as the data object \code{abide_9002_23} in the \pkg{GET} package contains data from one of the 116 different anatomical regions in the brain partitioning being based on the anotomical automatic labeling system of \citet{Tzourio-MazoyerEtal2002}. The studied region is the right Crus Cerebellum 1 region of the brain at one slice (23) accompanied with three subject-specific factors, i.e., group (autism and control), sex and age.
 In the examples below, the effect of the group on the images is studied in the presence of nuisance factors sex and age. Figure~\ref{fig:abide_9002_23_subj1and27} shows the data for two subjects, illustrating the small region used as the example.
 
 \begin{figure}[ht!]
@@ -1011,7 +1010,7 @@ $$
 where $\beta_i(r)$ are the elements of the $\beta(r)$. For a continuous factor of interest $k=1$ and $\beta(r)$ serves as the test statistic. For a discrete factor of interest, in the default setup, $k$ is equal to the number of groups of the discrete factor, adding the additional condition that $\sum_i \beta_{i}(r)=0$ for all $r\in\{1, \ldots d\}$. Similarly, for interaction of a continuous and a discrete factor, $k$ is also equal to the number of groups of the categorical factor, adding the same additional condition. For the interaction of two discrete factors, $k$ is equal to the product of the numbers of groups of the discrete factors, adding the same additional condition.
 The default test statistic for a discrete factor consist of $\beta_i(r)$ for all $r=1,\ldots,d$ and $i=1,\ldots,k$. This test allows to detect which groups deviate from the zero (mean).
 An alternative test statistic is obtained by the setting the argument \code{contrasts} of the function \fct{graph.flm} to \code{TRUE}: then the test statistic is formed by all the pairwise differences between the group effects, $\beta_i(r) - \beta_j(r)$ for all $r$ and $i\neq j$, $1\leq i < j \leq k$. This test specifies which specific groups are different in the post hoc nature. Note that this also holds for interaction terms.
-Furthermore, all the options allow one to identify which of the components of the vector, $r\in\{1,\ldots,d\}$, lead to the potential rejection of the null hypothesis. Permutations under the null hypothesis are obtained using the Freedman-Lane procedure \citep{FreedmanLane1983, MrkvickaEtal2019b, MrkvickaEtal2019a}.
+Furthermore, all the options allow one to identify which of the components of the vector, $r\in\{1,\ldots,d\}$, lead to the potential rejection of the null hypothesis. Permutations under the null hypothesis are obtained using the Freedman-Lane procedure \citep{FreedmanLane1983, MrkvickaEtal2020b, MrkvickaEtal2019a}.
 
 Often factors are given for the whole function, i.e., they do not depend on argument $r$, and so the matrices $\mathbf X(r)$ and $\mathbf Z(r)$ are identical for every $r$. These kind of constant factors (such as $z$ and group in the considered example) can be provided in the argument \code{factors} of the \fct{graph.flm} function. However, this simplification is not necessary and factors varying in space can be provided in the argument \code{curve_sets}, along with the data curves in a named list.
 
@@ -1056,7 +1055,7 @@ plot(res)
 
 \subsubsection{$F$-rank GLM}
 
-In the $F$-rank GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2019b}. 
+In the $F$-rank GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2020b}.
 However, the test statistic is the classical $F$~statistic \citep[see, e.g.,][]{WinklerEtal2014} which is calculated for the hypothesis that the data follows the simpler reduced model of the two proposed linear models that are nested within each other (given in \code{formula.full} and \code{formula.reduced}).
 The use of the function \fct{frank.flm} is similar to that of \fct{graph.flm}:
 %
