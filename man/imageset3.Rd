@@ -29,13 +29,16 @@ with scale parameter 0.15 and standard deviation 0.2.
 Consequently, the first two groups (0,1) have the same mean, while a bigger bump appears in the third group (2) in the middle of the image.
 }
 \examples{
-\donttest{
 data(imageset3)
 plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5)
+\donttest{
+# Colors can be changed as follows:
+plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5) +
+  ggplot2::scale_fill_gradient(low="black", high="white")
 }
 }
 \references{
-Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 }
 \seealso{
 \code{\link{graph.fanova}}, \code{\link{frank.fanova}}
