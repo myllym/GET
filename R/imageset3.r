@@ -26,8 +26,11 @@
 #' @docType data
 #' @seealso \code{\link{graph.fanova}}, \code{\link{frank.fanova}}
 #' @examples
-#' \donttest{
 #' data(imageset3)
 #' plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5)
+#' \donttest{
+#' # Colors can be changed as follows:
+#' plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5) +
+#'   ggplot2::scale_fill_gradient(low="black", high="white")
 #' }
 NULL
