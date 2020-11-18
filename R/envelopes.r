@@ -726,13 +726,14 @@ plot.combined_global_envelope <- function(x,
 #' lines(ftheta)
 #' lines(CB.lo, lty=2)
 #' lines(CB.hi, lty=2)
+#' @importFrom methods is
 central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),
                            quantile.type = 7,
                            central = "median", nstep = 2, ...) {
-  if(class(curve_sets)[1] == "list" & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
-  if(class(curve_sets)[1] == "list") {
+  if(is(curve_sets, "list") & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
+  if(is(curve_sets, "list")) {
     if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
     if(nstep == 2) {
       res <- combined_CR_or_GET(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
@@ -1218,12 +1219,13 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   res2 <- global_envelope_test(cset2)
 #'   plot(res2)
 #' }
+#' @importFrom methods is
 global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
                           alternative = c("two.sided", "less", "greater"),
                           ties = "erl", probs = c(0.025, 0.975), quantile.type=7,
                           central = "mean", nstep = 2, ...) {
-  if(class(curve_sets)[1] == "list" & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
-  if(class(curve_sets)[1] == "list") {
+  if(is(curve_sets, "list") & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
+  if(is(curve_sets, "list")) {
     if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
     if(nstep == 2) {
       res <- combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
