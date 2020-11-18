@@ -333,7 +333,8 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
   attr(res_ls, "method") <- "Combined global envelope (one-step)"
   class(res_ls) <- c("combined_global_envelope", class(res_ls))
-  if(curve_set_is2d(curve_sets[[1]])) class(res_ls) <- c("combined_global_envelope2d", class(res))
+  if(curve_set_is2d(curve_sets[[1]]))
+    class(res_ls) <- c("combined_global_envelope2d", class(res))
   res_ls
 }
 
@@ -349,10 +350,12 @@ GEprinthelper <- function(x, ...) {
   else { # The case of a global envelope test
     cat(attr(x, "method"), " (", attr(x, "type"), ")\n",
         " p-value of the test: ", attr(x, "p"), sep="")
-    if(!is.null(attr(x, "ties"))) cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
+    if(!is.null(attr(x, "ties")))
+      cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
     else cat("\n")
     if(!is.null(attr(x, "p_interval")))
-      cat(" p-interval         : (", attr(x, "p_interval")[1], ", ", attr(x, "p_interval")[2],")\n", sep="")
+      cat(" p-interval         : (", attr(x, "p_interval")[1], ", ",
+          attr(x, "p_interval")[2],")\n", sep="")
   }
 }
 
@@ -423,14 +426,18 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   }
   # ylab, ylab, labels
   if(missing('xlab')) {
-    if(attr(x, "xlab") == attr(x, "argu")) xlab <- substitute(italic(i), list(i=attr(x, "xexp")))
-    else xlab <- substitute(paste(i, " (", italic(j), ")", sep=""), list(i=attr(x, "xexp"), j=attr(x, "argu")))
+    if(attr(x, "xlab") == attr(x, "argu"))
+      xlab <- substitute(italic(i), list(i=attr(x, "xexp")))
+    else xlab <- substitute(paste(i, " (", italic(j), ")", sep=""),
+                            list(i=attr(x, "xexp"), j=attr(x, "argu")))
   }
   if(missing('ylab')) {
-    if(inherits(attr(x, "yexp"), "character")) ylab <- attr(x, "yexp")
+    if(inherits(attr(x, "yexp"), "character"))
+      ylab <- attr(x, "yexp")
     else ylab <- substitute(italic(i), list(i=attr(x, "yexp")))
   }
-  if(is.null(labels)) if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
+  if(is.null(labels)) if(!is.null(attr(x, "labels")))
+    labels <- attr(x, "labels")
 
   switch(plot_style,
          basic = {
@@ -494,18 +501,23 @@ plot.combined_global_envelope <- function(x,
   }
   # ylab, ylab, labels
   if(missing('xlab'))
-    if(is.expression(attr(attr(x, "level2_ge"), "xexp"))) xlab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "xexp")))
+    if(is.expression(attr(attr(x, "level2_ge"), "xexp")))
+      xlab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "xexp")))
     else xlab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "xexp")))
   if(missing('ylab'))
-    if(is.expression(attr(attr(x, "level2_ge"), "yexp"))) ylab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "yexp")))
+    if(is.expression(attr(attr(x, "level2_ge"), "yexp")))
+      ylab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "yexp")))
     else ylab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "yexp")))
   if(is.null(labels)) {
-    if(!is.null(attr(x, "labels"))) labels <- attr(x, "labels")
+    if(!is.null(attr(x, "labels")))
+      labels <- attr(x, "labels")
     else {
-      if(!is.null(names(x))) labels <- names(x)
+      if(!is.null(names(x)))
+        labels <- names(x)
       else {
         labels <- sapply(x, function(y) attr(y, "ylab"), simplify=TRUE)
-        if(all(sapply(labels, FUN=identical, y=labels[[1]]))) labels <- NULL
+        if(all(sapply(labels, FUN=identical, y=labels[[1]])))
+          labels <- NULL
       }
     }
   }
