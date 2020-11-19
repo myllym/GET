@@ -521,7 +521,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
              + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
              + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
              + ggplot2::scale_size_manual(values = size.values, name = '')
-             + ThemePlain(base_size=base_size)
+             + set_envelope_legend_position()
       )
       if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
       if(!is.null(outliers)) {
@@ -616,7 +616,7 @@ env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
             + ggplot2::scale_y_continuous(name = ylab, limits = ylim)
             + ggplot2::scale_linetype_manual(values = linetype.values, name = '')
             + ggplot2::scale_size_manual(values = size.values, name = '')
-            + ThemePlain(base_size=base_size)
+            + set_envelope_legend_position()
             + ggplot2::labs(title=main)
       )
       if(is.null(x[['obs']])) p <- p + ggplot2::guides(linetype = "none", size = "none")
