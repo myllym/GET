@@ -24,7 +24,7 @@
 #' the discrete factor \code{Sex} (1=Male; 2=Female),
 #' and the continuous factor \code{Age}.
 #'
-#' @usage data(abide_9002_23)
+#' @usage data("abide_9002_23")
 #' @references
 #' Di Martino, A., Yan, C., Li, Q., Denio, E., Castellanos, F., Alaerts, K., Anderson, J., Assaf, M., Bookheimer, S., Dapretto, M., et al. (2013) The autism brain imaging data exchange: towards a large-scale evaluation of the intrinsic brain architecture in autism. Molecular psychiatry.
 #'

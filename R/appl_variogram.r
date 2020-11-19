@@ -57,7 +57,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #' if(require("sp", quietly=TRUE) & require("gstat", quietly=TRUE)) {
 #'   # Examples from gstat complemented with global envelopes
 #'   #-------------------------------------------------------
-#'   data(meuse)
+#'   data("meuse")
 #'   coordinates(meuse) <- ~x+y
 #'   # topsoil zinc concentration, mg kg-1 soil ("ppm")
 #'   bubble(meuse, "zinc",

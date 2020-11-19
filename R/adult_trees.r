@@ -12,7 +12,7 @@
 #' @format An object of class \code{\link[spatstat]{ppp.object}} representing the point
 #' pattern of tree locations.
 #'
-#' @usage data(adult_trees)
+#' @usage data("adult_trees")
 #' @references
 #' Grabarnik, P. and Chiu, S. N. (2002) Goodness-of-fit test for complete spatial randomness against
 #' mixtures of regular and clustered spatial point processes. Biometrika, 89, 411–421.

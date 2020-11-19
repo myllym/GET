@@ -31,7 +31,7 @@
 #' values of centred GEC observed in year 1995-2016 for the above countries.
 #' The second component \code{group} gives the grouping.
 #'
-#' @usage data(cgec)
+#' @usage data("cgec")
 #' @references
 #' Eurostat (2018). "Government revenue, expenditure and main aggregates (gov10amain)”. Retrieved from https://ec.europa.eu/eurostat/data/database(26/10/2018).
 #'
@@ -41,7 +41,7 @@
 #' @docType data
 #' @seealso \code{\link{graph.fanova}}
 #' @examples
-#' data(cgec)
+#' data("cgec")
 #' # Plot data in groups
 #' for(i in 1:3)
 #'   print(plot(subset(cgec$cgec, cgec$group == i),

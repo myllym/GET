@@ -80,7 +80,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' @examples
 #' if(require("spatstat", quietly=TRUE)) {
 #'   # Example of tropical rain forest trees
-#'   data(bei)
+#'   data("bei")
 #'
 #'   fullmodel <- ~ grad
 #'   reducedmodel <- ~ 1
