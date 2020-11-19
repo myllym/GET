@@ -368,7 +368,7 @@ print.global_envelope <- function(x, ...) {
   GEprinthelper(x)
 }
 
-#' Print method for the class 'global_envelope'
+#' Print method for the class 'combined_global_envelope'
 #'
 #' @param x A 'combined_global_envelope' object
 #' @param ... Ignored.
