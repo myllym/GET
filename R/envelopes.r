@@ -380,11 +380,6 @@ print.combined_global_envelope <- function(x, ...) {
 #' Plot method for the class 'global_envelope'
 #'
 #' @param x An 'global_envelope' object
-#' @param plot_style One of the following "ggplot2" or "basic" or "fv".
-#' For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
-#' The option "basic" (default) offers a very basic plot.
-#' The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}},
-#' available only for \pkg{\link{spatstat}}-specific cases.
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors.
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
@@ -396,11 +391,8 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param color_outside Logical. Whether to color the places where the data function goes
 #' outside the envelope. Relevant only for 1d functions.
 #' @param sign.col The color for the significant regions. Default to "red".
-#' @param base_size Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
-#' @param add Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
-#' Not available for \code{plot_style = "ggplot2"}.
 #' @param digits The number of digits used for printing the p-value or p-interval in the main,
 #' if using the default main.
 #' @param legend Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
@@ -409,22 +401,13 @@ print.combined_global_envelope <- function(x, ...) {
 #' @export
 #' @importFrom ggplot2 theme_minimal
 #' @seealso \code{\link{central_region}}, \code{\link{global_envelope_test}}
-plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
-                                 dotplot = length(x$r)<10,
+#' @examples
+plot.global_envelope <- function(x, dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
                                  env.col = 1, color_outside = TRUE, sign.col = "red",
-                                 base_size = 11,
-                                 labels = NULL, add = FALSE, digits = 3, legend = TRUE, ...) {
-  plot_style <- match.arg(plot_style)
-  if(plot_style == "fv" && !inherits(x, "fv"))
-    stop("The fv style supported only when the global envelope has been made for an envelope object of spatstat.")
-  # main
+                                 labels = NULL, digits = 3, legend = TRUE, ...) {
   if(missing('main')) main <- env_main_default(x, digits=digits)
-  # ylim
-  if(missing('ylim')) {
-    ylim <- env_ylim_default(x, plot_style == "ggplot2")
-  }
-  # ylab, ylab, labels
+  if(missing('ylim')) ylim <- NULL
   if(missing('xlab')) {
     if(attr(x, "xlab") == attr(x, "argu"))
       xlab <- substitute(italic(i), list(i=attr(x, "xexp")))
@@ -439,31 +422,12 @@ plot.global_envelope <- function(x, plot_style = c("ggplot2", "fv", "basic"),
   if(is.null(labels)) if(!is.null(attr(x, "labels")))
     labels <- attr(x, "labels")
 
-  switch(plot_style,
-         basic = {
-           if(dotplot) {
-             if(length(labels) != length(x$r)) labels <- NULL
-             env_dotplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                         color_outside=color_outside, labels=labels,
-                         add=add, arrows.col=env.col, ...)
-           }
-           else {
-             env_basic_plot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                            color_outside=color_outside,
-                            add=add, env.col=env.col, ...)
-           }
-         },
-         fv = {
-           spatstat::plot.fv(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab, add=add, ...)
-         },
-         ggplot2 = {
-           if(dotplot) {
-             env_dotplot_ggplot(x, labels=labels) + labs(title=main, x=xlab, y=ylab) + theme_minimal(base_size=base_size)
-           } else {
-             env_ggplot(x, base_size=base_size, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                        labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
-           }
-         })
+   if(dotplot) {
+     env_dotplot_ggplot(x, labels=labels) + labs(title=main, x=xlab, y=ylab)
+   } else {
+     env_ggplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+                labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
+   }
 }
 
 #' Plot method for the class 'combined_global_envelope'
