@@ -106,8 +106,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'   res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
 #'                                                       curve_set_G, curve_set_J),
 #'                                       type = "qdir")
-#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
-#'        base_size=12)
+#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 #' }
 #'
 combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alpha = 0.05,
