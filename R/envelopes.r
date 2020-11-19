@@ -402,6 +402,24 @@ print.combined_global_envelope <- function(x, ...) {
 #' @importFrom ggplot2 theme_minimal
 #' @seealso \code{\link{central_region}}, \code{\link{global_envelope_test}}
 #' @examples
+#' if(require("spatstat", quietly=TRUE)) {
+#'   X <- unmark(spruces)
+#'   \donttest{nsim <- 1999 # Number of simulations}
+#'   \dontshow{nsim <- 19 # Number of simulations}
+#'   env <- envelope(X, fun="Kest", nsim=nsim,
+#'                   savefuns=TRUE, # save the functions
+#'                   correction="translate", # edge correction for K
+#'                   simulate=expression(runifpoint(ex=X))) # Simulate CSR
+#'   res <- global_envelope_test(env, type="erl")
+#'
+#'   # Default plot
+#'   plot(res)
+#'   # Prior to the plot, you can set your preferred ggplot theme by theme_set
+#'
+#'   # If you are working with the R package spatstat and its envelope-function,
+#'   # you can obtain global envelope plots in the style of spatstat using plot.fv:
+#'   plot.fv(res)
+#' }
 plot.global_envelope <- function(x, dotplot = length(x$r)<10,
                                  main, ylim, xlab, ylab,
                                  env.col = 1, color_outside = TRUE, sign.col = "red",
