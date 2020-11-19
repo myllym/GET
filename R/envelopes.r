@@ -471,8 +471,7 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10,
 plot.combined_global_envelope <- function(x,
                                  main, ylim = NULL, xlab, ylab,
                                  env.col = 1, color_outside = TRUE, sign.col = "red",
-                                 base_size = 11,
-                                 labels = NULL, add = FALSE, digits = 3,
+                                 labels = NULL, digits = 3,
                                  level = 1, ncol = 2 + 1*(length(x)==3), nticks = 5,
                                  legend = TRUE, ...) {
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
@@ -505,16 +504,15 @@ plot.combined_global_envelope <- function(x,
   }
 
   if(level == 1) {
-    env_ggplot(x, base_size=base_size,
-              main=main, ylim=ylim, xlab=xlab, ylab=ylab,
+    env_ggplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
               max_ncols_of_plots=ncol,
               labels=labels, nticks=nticks, legend=legend, ...)
   }
   else {
      plot.global_envelope(attr(x, "level2_ge"), dotplot = TRUE,
                           main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                          color_outside=color_outside, env.col=env.col, base_size=base_size,
-                          labels=labels, add=add, digits=digits, ...)
+                          color_outside=color_outside, env.col=env.col,
+                          labels=labels, digits=digits, ...)
   }
 }
 
