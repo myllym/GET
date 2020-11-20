@@ -381,7 +381,7 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
 #'
 #' @param x An \code{curve_set2d} object
 #' @inheritParams plot.curve_set
-#' @param idx Indices of functions to plot for 2d plots.
+#' @param idx Indices of 2d functions to plot.
 #' @param ... Additional parameters to be passed to plot and lines.
 #' @inheritParams plot.global_envelope
 #' @inheritParams plot.combined_global_envelope
@@ -391,15 +391,15 @@ plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
 #' @importFrom ggplot2 facet_wrap
 #' @importFrom ggplot2 labs
 #' @examples
-#' data(abide_9002_23)
+#' data("abide_9002_23")
 #' plot(abide_9002_23$curve_set, idx=c(1, 27))
-plot.curve_set2d <- function(x, idx=1, base_size = 11, ncol = 2 + 1*(length(idx)==3), ...) {
+plot.curve_set2d <- function(x, idx=1, ncol = 2 + 1*(length(idx)==3), ...) {
   funcs <- curve_set_funcs(x)
   rdf <- curve_set_rdf(x)
   data <- do.call(rbind, lapply(idx, function(i) data.frame(idx=i, f=funcs[,i])))
   df <- cbind(rdf, data)
   return(ggplot() + choose_geom(df, varfill='f') +
-           facet_wrap("idx", ncol=ncol) + labs(x="x", y="y", fill="") + ThemePlain2d())
+           facet_wrap("idx", ncol=ncol) + labs(x="x", y="y", fill=""))
 }
 
 # Combine curve sets.
