@@ -228,19 +228,19 @@ check_residualness <- function(curve_set) {
 #'
 #' \code{obs} must be either
 #' \itemize{
-#' \item a vector containing the data function, or
-#' \item a matrix containing the s data functions, in which case it is assumed that
-#' each column corresponds to a data function.
+#' \item a vector containing the data function/vector, or
+#' \item a matrix containing the s data functions/vectors, in which case it is assumed that
+#' each column corresponds to a data function/vector.
 #' }
 #'
-#' If given, \code{r} describes the 1- or 2-dimensional argument values where the curves have been observed (or
-#' simulated). It must be either
+#' If given, \code{r} describes the 1- or 2-dimensional argument values where the functions/vectors
+#' have been observed (or simulated). It must be either
 #' \itemize{
 #' \item a vector,
 #' \item a data.frame with columns "x", "y", "width" and "height",
 #' where the width and height give the width and height of the pixels placed at x and y, or
-#' \item a data.frame with columns "xmin", "xmax", "ymin" and "ymax" giving the corner coordinates of the pixels
-#' where the data have been observed.
+#' \item a data.frame with columns "xmin", "xmax", "ymin" and "ymax" giving the corner
+#' coordinates of the pixels where the data have been observed.
 #' }
 #'
 #' If \code{obs} is a vector, \code{sim_m} must be a matrix containing the simulated functions.
@@ -253,8 +253,17 @@ check_residualness <- function(curve_set) {
 #' @param curve_set A list containing the element obs, and optionally
 #'   the elements r, sim_m and theo. See details.
 #' @param ... For expert use only.
-#' @return An object of class \code{curve_set}.
+#' @return An object of class \code{curve_set} containing the compontents
+#' \itemize{
+#' \item r = the argument values
+#' \item funcs = the functions/vectors
+#' \item is1obs = Locical for inner use. TRUE indicates that the first function is a special
+#' (observed) one. FALSE indicates that all functions are equal (observed).
+#' }
+#' If the argument values are two-dimensional, then the \code{curve_set} is additionally
+#' a \code{curve_set2d} object.
 #' @export
+#' @seealso \code{\link{plot.curve_set}}, \code{\link{plot.curve_set2d}}
 #' @examples
 #' # 1d
 #' cset <- create_curve_set(list(r=1:10, obs=matrix(runif(10*5), ncol=5)))
