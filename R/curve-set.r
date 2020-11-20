@@ -544,6 +544,22 @@ curve_set_1obs <- function(curve_set) {
 #' @param subset A logical expression indicating curves to keep.
 #' @param ... Ignored.
 #' @export
+#' @examples
+#' if(require("fda.usc", quietly=TRUE)) {
+#'   # Prepare data
+#'   data("poblenou")
+#'   Free <- poblenou$df$day.festive == 1 |
+#'     as.integer(poblenou$df$day.week) >= 6
+#'   MonThu <- poblenou$df$day.festive == 0 & poblenou$df$day.week %in% 1:4
+#'   Friday <- poblenou$df$day.festive == 0 & poblenou$df$day.week == 5
+#'
+#'   # Data as a curve_set
+#'   cset <- create_curve_set(list(r=0:23,
+#'              obs=t(poblenou[['nox']][['data']])))
+#'   plot(subset(cset, MonThu))
+#'   plot(subset(cset, Friday))
+#'   plot(subset(cset, Free))
+#' }
 subset.curve_set <- function(x, subset, ...) {
   x[['funcs']] <- x[['funcs']][, subset]
   x
