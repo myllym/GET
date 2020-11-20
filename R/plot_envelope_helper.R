@@ -188,7 +188,6 @@ env_dotplot_ggplot <- function(x, labels=NULL) {
 # An internal GET function for making a ggplot2 style "global envelope plot".
 #
 # @param x An 'global_envelope' object or a list of them.
-# @param base_size Base font size, to be passed to theme style when \code{plot_type="ggplot2"}.
 # @param main See \code{\link{plot.default}}.
 # @param ylim See \code{\link{plot.default}}.
 # @param xlab See \code{\link{plot.default}}.
@@ -217,8 +216,7 @@ env_dotplot_ggplot <- function(x, labels=NULL) {
 #' @importFrom ggplot2 geom_point
 #' @importFrom ggplot2 geom_text
 #' @importFrom utils tail
-env_ggplot <- function(x, base_size, main, ylim, xlab, ylab,
-                       max_ncols_of_plots = 2,
+env_ggplot <- function(x, main, ylim, xlab, ylab, max_ncols_of_plots = 2,
                        labels = NULL, nticks = 5, curve_sets = NULL, x2 = NULL,
                        legend = TRUE, color_outside=TRUE, sign.col="red") {
     if(!inherits(x, "list")) x <- list(x)
