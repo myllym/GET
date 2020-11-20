@@ -296,7 +296,16 @@ is.curve_set <- function(x) inherits(x, 'curve_set')
 #' @export
 #' @importFrom utils str
 print.curve_set <- function(x, ...) {
-  str(x, ...)
+  dtext <- paste0("(", ifelse(curve_set_is1d(x), 1, 2), "d)")
+  cat("A curve_set", dtext, " object with ", curve_set_nfunc(x), " curves observed at ",
+      curve_set_narg(x), " argument values", sep="")
+  if(curve_set_is1obs(x)) cat("\n(1 observed,", curve_set_nfunc(x)-1, "simulated)")
+  cat(".\n")
+  cat("Contains: \n")
+  cat("$ r     : ")
+  str(x$r)
+  cat("$ funcs : ")
+  str(x$funcs)
 }
 
 #' Plot method for the class 'curve_set'
