@@ -7,13 +7,12 @@
 # @param ... Arguments to be passed to the measure function, if applicable.
 # @return A deviation_set object. The list has two elements: obs and sim.
 #   obs is scalar while sim is a vector with at least one element.
-#' @importFrom methods is
 deviation <- function(curve_set, measure = 'max', ...) {
   possible_measures <- c('max', 'int', 'int2')
 
   # deviation() should not accept envelope objects as they are not in
   # residual form.
-  if(!methods::is(curve_set, 'curve_set')) {
+  if(!inherits(curve_set, 'curve_set')) {
     stop('curve_set must have class "curve_set".')
   }
   check_curve_set_content(curve_set)

@@ -706,35 +706,35 @@ plot.combined_global_envelope <- function(x,
 #' lines(ftheta)
 #' lines(CB.lo, lty=2)
 #' lines(CB.hi, lty=2)
-#' @importFrom methods is
 central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),
                            quantile.type = 7,
                            central = "median", nstep = 2, ...) {
-  if(is(curve_sets, "list") & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
-  if(is(curve_sets, "list")) {
-    if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
-    if(nstep == 2) {
-      res <- combined_CR_or_GET(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
-                                alternative=alternative,
-                                probs=probs, quantile.type=quantile.type,
-                                central=central, ...)
+  if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
+    if(length(curve_sets) > 1) { # Combined test
+      if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
+      if(nstep == 2) # Two-step combining procedure
+        return(combined_CR_or_GET(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
+                                  alternative=alternative,
+                                  probs=probs, quantile.type=quantile.type,
+                                  central=central, ...))
+      else # One-step combining procedure
+        return(combined_CR_or_GET_1step(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
+                                        alternative=alternative,
+                                        probs=probs, quantile.type=quantile.type,
+                                        central=central, ...))
     }
-    else { # One-step combining procedure
-      res <- combined_CR_or_GET_1step(curve_sets, CR_or_GET="CR", type=type, coverage=coverage,
-                                      alternative=alternative,
-                                      probs=probs, quantile.type=quantile.type,
-                                      central=central, ...)
-    }
+    else if(length(curve_sets) == 1)
+      curve_sets <- curve_sets[[1]]
+    else
+      stop("The given list of curve_sets is empty.")
   }
-  else {
-    res <- individual_central_region(curve_sets, type=type, coverage=coverage,
-                                     alternative=alternative,
-                                     probs=probs, quantile.type=quantile.type,
-                                     central=central, ...)
-  }
-  res
+  # Individual test
+  return(individual_central_region(curve_sets, type=type, coverage=coverage,
+                                   alternative=alternative,
+                                   probs=probs, quantile.type=quantile.type,
+                                   central=central, ...))
 }
 
 #' Functional boxplot
@@ -767,8 +767,11 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   plot(res, xlab = "Age (years)", ylab = "")
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
-  if(class(curve_sets)[1] != "list") { if(!curve_set_is1d(curve_sets)) stop("curve_sets$r should be a vector.") }
-  else if(!all(sapply(curve_sets, FUN=curve_set_is1d))) stop("r of the curve_sets should be a vector.")
+  if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
+    if(!all(sapply(curve_sets, FUN=curve_set_is1d)))
+      stop("r in curve_sets should be vectors.")
+  }
+  else { if(!curve_set_is1d(curve_sets)) stop("r in curve_sets should be a vector.") }
   res <- central_region(curve_sets, ...)
   if(inherits(res, "combined_global_envelope")) {
     dist <- factor * (attr(res, "level2_ge")$hi - attr(res, "level2_ge")$lo)
@@ -1199,34 +1202,33 @@ plot.combined_fboxplot <- function(x, level = 1,
 #'   res2 <- global_envelope_test(cset2)
 #'   plot(res2)
 #' }
-#' @importFrom methods is
 global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
                           alternative = c("two.sided", "less", "greater"),
                           ties = "erl", probs = c(0.025, 0.975), quantile.type=7,
                           central = "mean", nstep = 2, ...) {
-  if(is(curve_sets, "list") & length(curve_sets) == 1) curve_sets <- curve_sets[[1]]
-  if(is(curve_sets, "list")) {
-    if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
-    if(nstep == 2) {
-      res <- combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
-                                alternative=alternative,
-                                probs=probs, quantile.type=quantile.type,
-                                central=central, ...)
+  if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
+    if(length(curve_sets) > 1) { # Combined test
+      if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
+      if(nstep == 2) # Two-step combining procedure
+        return(combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
+                                  alternative=alternative,
+                                  probs=probs, quantile.type=quantile.type,
+                                  central=central, ...))
+      else # One-step combining procedure
+        return(combined_CR_or_GET_1step(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
+                                        alternative=alternative,
+                                        probs=probs, quantile.type=quantile.type,
+                                        central=central, ...))
     }
-    else { # One-step combining procedure
-      res <- combined_CR_or_GET_1step(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
-                                alternative=alternative,
-                                probs=probs, quantile.type=quantile.type,
-                                central=central, ...)
-    }
+    else if(length(curve_sets) == 1)
+      curve_sets <- curve_sets[[1]]
+    else
+      stop("The given list of curve_sets is empty.")
   }
-  else {
-    res <- individual_global_envelope_test(curve_sets, type=type, alpha=alpha,
+    return(individual_global_envelope_test(curve_sets, type=type, alpha=alpha,
                                            alternative=alternative, ties=ties,
                                            probs=probs, quantile.type=quantile.type,
-                                           central=central, ...)
-  }
-  res
+                                           central=central, ...))
 }
 
 #' The rank envelope test

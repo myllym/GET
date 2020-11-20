@@ -177,12 +177,11 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
 # @return If an \code{\link[spatstat]{envelope}} object was given, return a
 #   corresponding curve_set object. If a curve_set object was given, return
 #   it unharmed.
-#' @importFrom methods is
 convert_envelope <- function(curve_set, ...) {
   if(inherits(curve_set, 'envelope')) {
     curve_set <- envelope_to_curve_set(curve_set, ...)
   }
-  else if(!methods::is(curve_set, 'curve_set')) {
+  else if(!inherits(curve_set, 'curve_set')) {
     stop('curve_set must either have class "envelope" (from spatstat) ',
          'or class "curve_set".')
   }
@@ -202,11 +201,10 @@ convert_envelope <- function(curve_set, ...) {
 # @return If an \code{\link[fda.usc]{fdata}} object was given, return a
 #   corresponding curve_set object. If a curve_set object was given, return
 #   it unharmed.
-#' @importFrom methods is
 convert_fdata <- function(curve_set, ...) {
   if(inherits(curve_set, 'fdata')) {
     curve_set <- fdata_to_curve_set(curve_set, ...)
-  } else if(!methods::is(curve_set, 'curve_set')) {
+  } else if(!inherits(curve_set, 'curve_set')) {
     stop('curve_set must either have class "fdata" (from fda.usc) ',
          'or class "curve_set".')
   }

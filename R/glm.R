@@ -8,7 +8,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   check_isnested(formula.full, formula.reduced)
   if(nsim < 1) stop("Not a reasonable value of nsim.")
   if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.")
-  if(class(curve_sets)[1] != "list") {
+  if(!(length(class(curve_sets)) == 1 && class(curve_sets) == "list")) {
     curve_sets <- list(Y=curve_sets)
   }
   available <- unique(c(names(curve_sets), names(factors)))
@@ -35,7 +35,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   }
   vars.factors <- vars[vars %in% names(factors)]
   if(!is.null(factors) & length(vars.factors) > 0) {
-    if(class(factors)[1] != "data.frame") stop("Invalid factors argument.")
+    if(!inherits(factors, "data.frame")) stop("Invalid factors argument.")
     if(nrow(factors) != Nfunc) stop("The dimensions of Y and factors do not match.")
     # Expand the factors to each argument value
     for(i in 1:length(vars.factors)) {

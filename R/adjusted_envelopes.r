@@ -372,7 +372,7 @@ GET.composite <- function(X, X.ls = NULL,
   #----------------------------
   if(!is.null(X.ls)) {
     # Check dimensions of each curve_set and transform to curve_sets
-    if(class(X)[1] != "list") {
+    if(!(length(class(X)) == 1 && class(X) == "list")) {
       X <- list(X) # The observed curves (a list of curve_set objects)
       X.ls <- lapply(X.ls, FUN=list) # The simulated curves (a list of lists of curve_set objects)
     }

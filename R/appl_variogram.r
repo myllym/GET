@@ -11,7 +11,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
   if(length(vars)>1) stop("Only one variable allowed. No test for correlation between variables implemented.")
   args <- list(...)
   # Treat coordinates/locations in order to do permutations of the data
-  if(class(data)[1] == "SpatialPointsDataFrame") locations <- sp::coordinates(data)
+  if(inherits(data, "SpatialPointsDataFrame")) locations <- sp::coordinates(data)
   else {
     if(!("locations" %in% args)) stop("Either data must be provided with coordinates or locations must be given separately. See ?variogram.")
   }
