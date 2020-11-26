@@ -319,78 +319,106 @@ print.curve_set <- function(x, ...) {
 
 #' Plot method for the class 'curve_set'
 #'
-#' @param x An \code{curve_set} object
-#' @param plot_style Either "ggplot2" or "basic".
-#' @param ylim The y limits of the plot with the default being the minimum and maximum over all curves.
+#' @param x An \code{curve_set} object.
 #' @param xlab The label for the x-axis. Default "r".
 #' @param ylab The label for the y-axis. Default "obs".
-#' @param col_obs Color for 'obs' in the argument \code{x}.
-#' @param col_sim Color for 'sim_m' in the argument \code{x}.
+#' @param ylim The y limits of the plot with the default being the default of \code{\link{ggplot}}.
+#' @param idx Indices of functions to highlight with color \code{col_idx}.
+#' Default to the observed function, if there is just one.
+#' The legend of curves' colours is shown if indices are given or \code{x} contains one observed function.
+#' See examples to remove the legend if desired.
+#' @param col_idx A color for the curves to highlight, or a vector of the same length as \code{idx}
+#' containing the colors for the highlighted functions. Default exists.
+#' @param idx_name A variable name to be printed with the highlighted functions' idx. Default to empty.
+#' @param col The basic color for the curves (which are not highlighted).
 #' @param ... Additional parameters to be passed to plot and lines.
 #' @inheritParams plot.global_envelope
+#' @seealso \code{\link{create_curve_set}}
 #'
 #' @export
-#' @importFrom graphics plot
-#' @importFrom graphics lines
-#' @importFrom graphics axis
-#' @importFrom graphics abline
-#' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 geom_line
-#' @importFrom ggplot2 scale_x_continuous
-#' @importFrom ggplot2 scale_y_continuous
-#' @importFrom ggplot2 labs
-#' @importFrom ggplot2 geom_vline
-plot.curve_set <- function(x, plot_style = c("ggplot2", "basic"),
-                           ylim, xlab = "r", ylab = "obs", main = NULL,
-                           col_obs = 1, col_sim = 'grey70',
-                           base_size = 11, ...) {
-  plot_style <- match.arg(plot_style)
-  funcs <- curve_set_funcs(x)
-  if(!curve_set_is1obs(x)) col_sim <- col_obs
-  rdata <- combined_global_envelope_rhelper(x)
-  if(rdata$retick_xaxis) {
-    rvalues <- rdata$new_r_values
+#' @importFrom ggplot2 ggplot geom_line aes_ scale_color_manual labs
+#' @importFrom ggplot2 scale_x_continuous scale_y_continuous
+#' @importFrom viridisLite viridis
+#' @examples
+#' cset <- create_curve_set(list(r=1:10, obs=matrix(runif(10*5), ncol=5)))
+#' plot(cset)
+#' plot(cset, idx=c(1,3))
+#' plot(cset, idx=c(1,3), col_idx=c("black", "red"))
+#' plot(cset, idx=c(1,3), col_idx=c("black", "red"), idx_name="Special functions")
+#' if(require("ggplot2", quietly=TRUE)) {
+#'   plot(cset, idx=c(1,3)) + theme(legend.position = "bottom")
+#' }
+#' plot(cset) + ggtitle("Example curves")
+#' # A curve_set with one observed function (other simulated)
+#' if(requireNamespace("mvtnorm", quietly=TRUE)) {
+#'   cset <- create_curve_set(list(obs=c(-1.6, 1.6),
+#'               sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
+#'   plot(cset)
+#'   # Remove legend
+#'   plot(cset) + guides(col = "none")
+#' }
+plot.curve_set <- function(x, xlab = "r", ylab = "obs", ylim,
+                           idx, col_idx, idx_name = "", col = 'grey70', ...) {
+  if(missing('ylim')) ylim <- NULL
+  if(missing(idx)) {
+    if(curve_set_is1obs(x))
+      idx <- 1
+    else
+      idx <- NULL
   }
-  else rvalues <- x$r
-  nr <- length(rvalues)
-  if(missing('ylim')) {
-    if(plot_style == "basic") ylim <- with(x, c(min(funcs), max(funcs)))
-    else ylim <- NULL
+  if(missing(col_idx)) {
+    if(length(idx) == 1)
+      col_idx <- 1
+    else if(length(idx) > 1)
+      col_idx <- viridis(length(idx))
+    else
+      col_idx <- NULL
+  }
+  funcs <- curve_set_funcs(x)
+  nfunc <- curve_set_nfunc(x)
+  if(!is.null(idx)) {
+    if(length(col_idx) == 1) col_idx <- rep(col_idx, times=length(idx))
+    else if(length(col_idx) != length(idx))
+      stop("If given, the length of col_idx should be 1 or equal to the length of idx.")
+    # Labels for the highlighted functions
+    if(!is.null(colnames(funcs))) idx_labs <- colnames(funcs)[idx]
+    else idx_labs <- idx
+    # Arrange the function such that the highlighted functions are the last ones
+    # (ggplot plots them to the top)
+    id_v <- idx_v <- 1:ncol(funcs)
+    idx_v[idx] <- idx_labs
+    if(length(idx) <= nfunc) {
+      if(curve_set_is1obs(x) & length(idx) == 1) othername <- "sim"
+      else othername <- "Other"
+      idx_labs <- c(idx_labs, othername)
+      idx_v[-idx] <- othername
+    }
+    id_v_levels <- c(id_v[-idx], idx)
+  }
+  else {
+    id_v <- 1:ncol(funcs)
+    id_v_levels <- id_v
   }
 
-  switch(plot_style,
-         ggplot2 = {
-             df <- data.frame(r = rvalues, f = c(funcs), id = rep(1:ncol(funcs), each=nrow(funcs)))
-             p <- ( ggplot()
-                   + geom_line(data=df[df$id!=1,], aes_(x = ~r, y = ~f, group = ~id), col=col_sim)
-                   + geom_line(data=df[df$id==1,], aes_(x = ~r, y = ~f, group = ~id), col=col_obs)
-                   + scale_y_continuous(name = ylab, limits = ylim)
-                   + labs(title=main)
-                   + ThemePlain(base_size=base_size))
-             if(rdata$retick_xaxis) {
-               p <- p + scale_x_continuous(name = xlab,
-                                           breaks = rdata$loc_break_values,
-                                           labels = paste(round(rdata$r_break_values, digits=2)),
-                                           limits = range(rdata$new_r_values))
-               p <- p + geom_vline(xintercept = rdata$new_r_values[rdata$r_values_newstart_id],
-                                  linetype = "dotted")
-             }
-             else p <- p + scale_x_continuous(name = xlab)
-             p
-         },
-         basic = {
-             # Plot
-             if(!rdata$retick_xaxis)
-                 graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, col=col_obs, xlab=xlab, ylab=ylab, main=main, ...)
-             else
-                 graphics::plot(rvalues, funcs[,1], type="l", ylim=ylim, xaxt="n", col=col_obs, xlab=xlab, ylab=ylab, main=main, ...)
-             for(i in 2:ncol(funcs)) graphics::lines(rvalues, funcs[,i], col=col_sim)
-             graphics::lines(rvalues, funcs[,1], type="l", col=col_obs, ...)
-             if(rdata$retick_xaxis) {
-                 graphics::axis(1, rdata$loc_break_values, labels=paste(round(rdata$r_break_values, digits=2)))
-                 graphics::abline(v = rdata$new_r_values[rdata$r_values_newstart_id], lty=3)
-             }
-         })
+  if(retick_xaxis(x)$retick_xaxis)
+    warning("r values non-increasing. Plot not valid.")
+
+  df <- data.frame(r = x$r, f = c(funcs),
+                   id =  factor(rep(id_v, each=nrow(funcs)), levels = id_v_levels))
+  if(!is.null(idx)) df$idx = factor(rep(idx_v, each=nrow(funcs)), levels = idx_labs)
+
+  p <- ( ggplot() )
+  if(!is.null(idx)) {
+    col_values <- c(col_idx, col)
+    names(col_values) <- idx_labs
+    p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~f, group = ~id, col = ~idx))
+           + scale_color_manual(values = col_values)
+           + labs(col = idx_name) )
+  }
+  else {
+    p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~f, group = ~id), col = col) )
+  }
+  p + scale_x_continuous(name = xlab) + scale_y_continuous(name = ylab, limits = ylim)
 }
 
 #' Plot method for the class 'curve_set2d'
