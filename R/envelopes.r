@@ -283,13 +283,17 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
 
   # Return
-  res <- res_ls
-  attr(res, "level2_ge") <- res_erl
-  attr(res, "level2_curve_set") <- curve_set_u
-  attr(res, "method") <- "Combined global envelope (two-step)"
-  class(res) <- c("combined_global_envelope", class(res))
-  if(curve_set_is2d(curve_sets[[1]])) class(res) <- c("combined_global_envelope2d", class(res))
-  res
+  attr(res_ls, "level2_ge") <- res_erl
+  attr(res_ls, "level2_curve_set") <- curve_set_u
+  attr(res_ls, "method") <- "Combined global envelope (two-step)"
+  class(res_ls) <- c("combined_global_envelope", class(res_ls))
+  if(curve_set_is2d(curve_sets[[1]])) class(res_ls) <- c("combined_global_envelope2d", class(res_ls))
+  res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
+                              argu=attr(res_ls[[1]], "argu"),
+                              xexp=attr(res_ls[[1]], "xexp"),
+                              ylab=paste0("T(", attr(res_ls[[1]], "argu"), ")"),
+                              yexp=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
+  res_ls
 }
 
 # Functionality for combined_central_region and combined_global_envelope_test (one-step procedure)
@@ -335,6 +339,11 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   class(res_ls) <- c("combined_global_envelope", class(res_ls))
   if(curve_set_is2d(curve_sets[[1]]))
     class(res_ls) <- c("combined_global_envelope2d", class(res))
+  res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
+                              argu=attr(res_ls[[1]], "argu"),
+                              xexp=attr(res_ls[[1]], "xexp"),
+                              ylab=paste0("T(", attr(res_ls[[1]], "argu"), ")"),
+                              yexp=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
   res_ls
 }
 
@@ -384,19 +393,18 @@ print.combined_global_envelope <- function(x, ...) {
 #' Suitable for low dimensional test vectors.
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
 #' @param main See \code{\link{plot.default}}. A sensible default exists.
-#' @param ylim See \code{\link{plot.default}}. A sensible default exists.
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylab See \code{\link{plot.default}}. A sensible default exists.
-#' @param env.col The color for the envelope lines (or dotplot arrows) for 1d functions. Default 1 (black).
-#' @param color_outside Logical. Whether to color the places where the data function goes
-#' outside the envelope. Relevant only for 1d functions.
-#' @param sign.col The color for the significant regions. Default to "red".
+#' @param sign.col The color for the observed curve when outside the global envelope
+#' (significant regions). Default to "red". Setting the color to "black" corresponds
+#' to no coloring.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
 #' @param digits The number of digits used for printing the p-value or p-interval in the main,
 #' if using the default main.
 #' @param legend Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
-#' @param ... Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.
+#' Case specific default exists.
+#' @param ... Ignored.
 #'
 #' @export
 #' @importFrom ggplot2 theme_minimal
@@ -414,38 +422,39 @@ print.combined_global_envelope <- function(x, ...) {
 #'
 #'   # Default plot
 #'   plot(res)
-#'   # Prior to the plot, you can set your preferred ggplot theme by theme_set
+#'   # Plots can be edited, e.g.
+#'   if(require("ggplot2", quietly=TRUE)) {
+#'     # Remove legend
+#'     plot(res) + guides(linetype = "none")
+#'
+#'     # Prior to the plot, you can set your preferred ggplot theme by theme_set
+#'     old <- theme_set(theme_bw())
+#'     plot(res)
+#'
+#'     # Do other edits, e.g. turn off expansion with the default limits
+#'     plot(res) + coord_cartesian(expand=FALSE)
+#'
+#'     # Go back to the old theme
+#'     theme_set(old)
+#'   }
 #'
 #'   # If you are working with the R package spatstat and its envelope-function,
 #'   # you can obtain global envelope plots in the style of spatstat using plot.fv:
 #'   plot.fv(res)
 #' }
 plot.global_envelope <- function(x, dotplot = length(x$r)<10,
-                                 main, ylim, xlab, ylab,
-                                 env.col = 1, color_outside = TRUE, sign.col = "red",
+                                 main, xlab, ylab, sign.col = "red",
                                  labels = NULL, digits = 3, legend = TRUE, ...) {
-  if(missing('main')) main <- env_main_default(x, digits=digits)
-  if(missing('ylim')) ylim <- NULL
-  if(missing('xlab')) {
-    if(attr(x, "xlab") == attr(x, "argu"))
-      xlab <- substitute(italic(i), list(i=attr(x, "xexp")))
-    else xlab <- substitute(paste(i, " (", italic(j), ")", sep=""),
-                            list(i=attr(x, "xexp"), j=attr(x, "argu")))
+  if(missing(labels)) labels <- default_labels(x, labels)
+  if(missing(main)) main <- env_main_default(x, digits=digits)
+  d <- plotdefaultlabs(x, xlab, ylab)
+  if(dotplot) {
+    env_dotplot_ggplot(x, labels=labels, sign.col=sign.col) +
+      labs(title=main, x=d$xlab, y=d$ylab)
+  } else {
+    env_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
+               legend=legend, sign.col=sign.col)
   }
-  if(missing('ylab')) {
-    if(inherits(attr(x, "yexp"), "character"))
-      ylab <- attr(x, "yexp")
-    else ylab <- substitute(italic(i), list(i=attr(x, "yexp")))
-  }
-  if(is.null(labels)) if(!is.null(attr(x, "labels")))
-    labels <- attr(x, "labels")
-
-   if(dotplot) {
-     env_dotplot_ggplot(x, labels=labels) + labs(title=main, x=xlab, y=ylab)
-   } else {
-     env_ggplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                labels=labels, legend=legend, color_outside=color_outside, sign.col=sign.col, ...)
-   }
 }
 
 #' Plot method for the class 'combined_global_envelope'
@@ -459,60 +468,36 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10,
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
 #' Otherwise labels for the separate plots.
+#' @param scales See \code{\link[ggplot2]{facet_wrap}}. Default to "free".
 #' @param level 1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
 #' @param ncol The maximum number of columns for the figures.
 #' Default 2 or 3, if the length of x equals 3.
 #' (Relates to the number of curve_sets that have been combined.)
-#' @param nticks The number of ticks on the xaxis.
 #' @export
 #' @seealso \code{\link{central_region}}
-plot.combined_global_envelope <- function(x,
-                                 main, ylim = NULL, xlab, ylab,
-                                 env.col = 1, color_outside = TRUE, sign.col = "red",
-                                 labels = NULL, digits = 3,
-                                 level = 1, ncol = 2 + 1*(length(x)==3), nticks = 5,
+plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
+                                 scales = "free", sign.col = "red",
+                                 digits = 3, level = 1,
+                                 ncol = 2 + 1*(length(x)==3),
                                  legend = TRUE, ...) {
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
-  # main
-  if(missing('main')) {
-    alt <- get_alternative(x[[1]])
-    main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
-  }
-  # ylab, ylab, labels
-  if(missing('xlab'))
-    if(is.expression(attr(attr(x, "level2_ge"), "xexp")))
-      xlab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "xexp")))
-    else xlab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "xexp")))
-  if(missing('ylab'))
-    if(is.expression(attr(attr(x, "level2_ge"), "yexp")))
-      ylab <- substitute(i, list(i=attr(attr(x, "level2_ge"), "yexp")))
-    else ylab <- substitute(italic(i), list(i=attr(attr(x, "level2_ge"), "yexp")))
-  if(is.null(labels)) {
-    if(!is.null(attr(x, "labels")))
-      labels <- attr(x, "labels")
-    else {
-      if(!is.null(names(x)))
-        labels <- names(x)
-      else {
-        labels <- sapply(x, function(y) attr(y, "ylab"), simplify=TRUE)
-        if(all(sapply(labels, FUN=identical, y=labels[[1]])))
-          labels <- NULL
-      }
-    }
-  }
+
+  alt <- get_alternative(x[[1]])
+  if(missing(main)) main <- env_main_default(x, digits=digits, alternative=alt)
+  d <- plotdefaultlabs(x, xlab, ylab)
+  if(missing(labels)) labels <- default_labels(x, labels)
 
   if(level == 1) {
-    env_ggplot(x, main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-              max_ncols_of_plots=ncol,
-              labels=labels, nticks=nticks, legend=legend, ...)
+    env_combined_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
+                        labels=labels, scales=scales,
+                        max_ncols_of_plots=ncol, legend=legend,
+                        sign.col=sign.col)
   }
   else {
-     plot.global_envelope(attr(x, "level2_ge"), dotplot = TRUE,
-                          main=main, ylim=ylim, xlab=xlab, ylab=ylab,
-                          color_outside=color_outside, env.col=env.col,
-                          labels=labels, digits=digits, ...)
+    if(length(attr(x, "level2_ge")[['r']]) < 2) stop("Invalid plot for level = 2.")
+    env_dotplot_ggplot(attr(x, "level2_ge"), labels=labels)
   }
 }
 
@@ -735,142 +720,6 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                                    alternative=alternative,
                                    probs=probs, quantile.type=quantile.type,
                                    central=central, ...))
-}
-
-#' Functional boxplot
-#'
-#' Functional boxplot based on central region computed by a specified measure.
-#' The options of the measures can be found in \code{\link{central_region}}.
-#' @inheritParams central_region
-#' @param factor The constant factor to inflate the central region to produce a functional boxplot and
-#' determine fences for outliers. Default is 1.5 as in a classical boxplot.
-#' @param ... Additional parameters to be passed to \code{\link{central_region}},
-#' which is responsible for calculating the central region (global envelope) on which
-#' the functional boxplot is based.
-#' @export
-#' @examples
-#' if(requireNamespace("fda", quietly=TRUE)) {
-#'   years <- paste(1:18)
-#'   curves <- fda::growth[['hgtf']][years,]
-#'   # Heights
-#'   cset1 <- create_curve_set(list(r = as.numeric(years),
-#'                                  obs = curves))
-#'   plot(cset1, ylab="Height")
-#'   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
-#'   plot(bp)
-#'
-#'   # Considering simultaneously heights and height differences
-#'   cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
-#'              obs = curves[-1,] - curves[-nrow(curves),]))
-#'   csets <- list(Height = cset1, Change = cset2)
-#'   res <- fBoxplot(csets, type = 'area', factor = 1.5)
-#'   plot(res, xlab = "Age (years)", ylab = "")
-#' }
-fBoxplot <- function(curve_sets, factor = 1.5, ...) {
-  if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
-    if(!all(sapply(curve_sets, FUN=curve_set_is1d)))
-      stop("r in curve_sets should be vectors.")
-  }
-  else { if(!curve_set_is1d(curve_sets)) stop("r in curve_sets should be a vector.") }
-  res <- central_region(curve_sets, ...)
-  if(inherits(res, "combined_global_envelope")) {
-    dist <- factor * (attr(res, "level2_ge")$hi - attr(res, "level2_ge")$lo)
-    attr(attr(res, "level2_ge"), "whisker.lo") <- attr(res, "level2_ge")$lo - dist
-    attr(attr(res, "level2_ge"), "whisker.hi") <- attr(res, "level2_ge")$hi + dist
-    attr(attr(res, "level2_ge"), "method") <- "Functional boxplot"
-    class(attr(res, "level2_ge")) <- c("fboxplot", class(attr(res, "level2_ge")))
-    for(i in 1:length(res)) {
-      dist <- factor * (res[[i]]$hi - res[[i]]$lo)
-      attr(res[[i]], "whisker.lo") <- res[[i]]$lo - dist
-      attr(res[[i]], "whisker.hi") <- res[[i]]$hi + dist
-      attr(res[[i]], "method") <- "Functional boxplot"
-      class(res[[i]]) <- c("fboxplot", class(res[[i]]))
-    }
-    attr(res, "curve_sets") <- curve_sets
-    attr(res, "factor") <- factor
-    attr(res, "method") <- "Combined functional boxplot"
-    attr(res, "call") <- match.call()
-    class(res) <- c("combined_fboxplot", class(res))
-  }
-  else {
-    dist <- factor * (res$hi - res$lo)
-    attr(res, "whisker.lo") <- res$lo - dist
-    attr(res, "whisker.hi") <- res$hi + dist
-    attr(res, "method") <- "Functional boxplot"
-    attr(res, "curve_sets") <- curve_sets
-    attr(res, "factor") <- factor
-    attr(res, "call") <- match.call()
-    class(res) <- c("fboxplot", class(res))
-  }
-  res
-}
-
-#' Plot method for the class 'fboxplot'
-#'
-#' @param x an 'fboxplot' object
-#' @inheritParams plot.global_envelope
-#' @param outliers Logical. If TRUE, then the functions outside the functional boxplot are drawn,
-#'  together with a label (= index in the set of functions).
-#' @param bp.col The color for the boxplot bounds. Default 2 (red).
-#' @param cr.col The color for the central region bounds.
-#' @param ... Additional arguments to be passed to \code{\link{plot.global_envelope}}.
-#' @export
-plot.fboxplot <- function(x, plot_style = c("ggplot2", "basic"),
-                          dotplot = length(x$r)<10,
-                          outliers = TRUE, bp.col = 2, cr.col = 1, ...) {
-  plot_style <- match.arg(plot_style)
-  if(outliers) curve_sets <- attr(x, "curve_sets") else curve_sets <- NULL
-  cr <- x
-  x$lo <- attr(x, "whisker.lo"); x$hi <- attr(x, "whisker.hi") # Functional boxplot
-
-  switch(plot_style,
-         basic = {
-           if(dotplot) {
-             # Functional boxplot
-             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=TRUE, ..., curve_sets=curve_sets)
-             # Central region
-             plot.global_envelope(cr, plot_style=plot_style, env.col=cr.col, dotplot=TRUE, add=TRUE, ..., curve_sets=NULL)
-           }
-           else {
-             plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, dotplot=FALSE, ..., curve_sets=curve_sets)
-             # Central region
-             lines(cr$r, cr$lo, lty=2, col=cr.col)
-             lines(cr$r, cr$hi, lty=2, col=cr.col)
-           }
-         },
-         ggplot2 = {
-           plot.global_envelope(x, plot_style=plot_style, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
-         })
-}
-
-#' Plot method for the class 'combined_fboxplot'
-#'
-#' @param x an 'combined_fboxplot' object
-#' @inheritParams plot.combined_global_envelope
-#' @inheritParams plot.fboxplot
-#' @param ... Additional arguments to be passed to \code{\link{plot.combined_global_envelope}}.
-#'
-#' @export
-plot.combined_fboxplot <- function(x, level = 1,
-                          outliers = TRUE, bp.col = 2, cr.col = 1, ...) {
-  if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
-  if(outliers) curve_sets <- attr(x, "curve_sets") else curve_sets <- NULL
-  cr <- x
-  attr(x, "level2_ge")$lo <- attr(attr(x, "level2_ge"), "whisker.lo")
-  attr(x, "level2_ge")$hi <- attr(attr(x, "level2_ge"), "whisker.hi") # Functional boxplot
-
-  # Combined test, level 1 plots
-  if(level == 1) {
-    # Set also first level bounds of x to whiskers
-    for(i in 1:length(x)) {
-      x[[i]]$lo <- attr(x[[i]], "whisker.lo")
-      x[[i]]$hi <- attr(x[[i]], "whisker.hi")
-    }
-    plot.combined_global_envelope(x, env.col=bp.col, ..., curve_sets=curve_sets, x2=cr)
-  }
-  else {
-    plot.fboxplot(x, outliers=outliers, bp.col=bp.col, cr.col=cr.col, ...)
-  }
 }
 
 
