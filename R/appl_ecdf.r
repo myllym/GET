@@ -145,16 +145,12 @@ GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapp
   names(csets) <- complabels
   # GET
   res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
-  attr(res, "xlab") <- "x"
-  attr(res, "xexp") <- quote(x)
-  if(!contrasts) {
-    attr(res, "ylab") <- "F(x)"
-    attr(res, "yexp") <- quote(hat(F)(x))
-  }
-  else {
-    attr(res, "ylab") <- "diff. F(x)"
-    attr(res, "yexp") <- quote(hat(F)[i](x)-hat(F)[j](x))
-  }
+  if(!contrasts)
+    res <- envelope_set_labs(res, xlab = "x", argu = "x", xexp = quote(x),
+                             ylab = "F(x)", yexp = quote(hat(F)(x)))
+  else
+    res <- envelope_set_labs(res, xlab = "x", argu = "x", xexp = quote(x),
+                             ylab = "diff. F(x)", yexp = quote(hat(F)[i](x)-hat(F)[j](x)))
   attr(res, "contrasts") <- contrasts
   attr(res, "labels") <- complabels
   attr(res, "call") <- match.call()
