@@ -16,3 +16,20 @@
 \description{
 Return subsets of curve sets which meet conditions.
 }
+\examples{
+if(require("fda.usc", quietly=TRUE)) {
+  # Prepare data
+  data("poblenou")
+  Free <- poblenou$df$day.festive == 1 |
+    as.integer(poblenou$df$day.week) >= 6
+  MonThu <- poblenou$df$day.festive == 0 & poblenou$df$day.week \%in\% 1:4
+  Friday <- poblenou$df$day.festive == 0 & poblenou$df$day.week == 5
+
+  # Data as a curve_set
+  cset <- create_curve_set(list(r=0:23,
+             obs=t(poblenou[['nox']][['data']])))
+  plot(subset(cset, MonThu))
+  plot(subset(cset, Friday))
+  plot(subset(cset, Free))
+}
+}

@@ -6,38 +6,61 @@
 \usage{
 \method{plot}{curve_set}(
   x,
-  plot_style = c("ggplot2", "basic"),
-  ylim,
   xlab = "r",
   ylab = "obs",
-  main = NULL,
-  col_obs = 1,
-  col_sim = "grey70",
-  base_size = 11,
+  ylim,
+  idx,
+  col_idx,
+  idx_name = "",
+  col = "grey70",
   ...
 )
 }
 \arguments{
-\item{x}{An \code{curve_set} object}
-
-\item{plot_style}{Either "ggplot2" or "basic".}
-
-\item{ylim}{The y limits of the plot with the default being the minimum and maximum over all curves.}
+\item{x}{An \code{curve_set} object.}
 
 \item{xlab}{The label for the x-axis. Default "r".}
 
 \item{ylab}{The label for the y-axis. Default "obs".}
 
-\item{main}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{ylim}{The y limits of the plot with the default being the default of \code{\link{ggplot}}.}
 
-\item{col_obs}{Color for 'obs' in the argument \code{x}.}
+\item{idx}{Indices of functions to highlight with color \code{col_idx}.
+Default to the observed function, if there is just one.
+The legend of curves' colours is shown if indices are given or \code{x} contains one observed function.
+See examples to remove the legend if desired.}
 
-\item{col_sim}{Color for 'sim_m' in the argument \code{x}.}
+\item{col_idx}{A color for the curves to highlight, or a vector of the same length as \code{idx}
+containing the colors for the highlighted functions. Default exists.}
 
-\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
+\item{idx_name}{A variable name to be printed with the highlighted functions' idx. Default to empty.}
+
+\item{col}{The basic color for the curves (which are not highlighted).}
 
 \item{...}{Additional parameters to be passed to plot and lines.}
 }
 \description{
 Plot method for the class 'curve_set'
+}
+\examples{
+cset <- create_curve_set(list(r=1:10, obs=matrix(runif(10*5), ncol=5)))
+plot(cset)
+plot(cset, idx=c(1,3))
+plot(cset, idx=c(1,3), col_idx=c("black", "red"))
+plot(cset, idx=c(1,3), col_idx=c("black", "red"), idx_name="Special functions")
+if(require("ggplot2", quietly=TRUE)) {
+  plot(cset, idx=c(1,3)) + theme(legend.position = "bottom")
+}
+plot(cset) + ggtitle("Example curves")
+# A curve_set with one observed function (other simulated)
+if(requireNamespace("mvtnorm", quietly=TRUE)) {
+  cset <- create_curve_set(list(obs=c(-1.6, 1.6),
+              sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
+  plot(cset)
+  # Remove legend
+  plot(cset) + guides(col = "none")
+}
+}
+\seealso{
+\code{\link{create_curve_set}}
 }

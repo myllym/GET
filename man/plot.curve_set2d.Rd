@@ -4,25 +4,23 @@
 \alias{plot.curve_set2d}
 \title{Plot method for the class 'curve_set2d'}
 \usage{
-\method{plot}{curve_set2d}(x, idx = 1, base_size = 11, ncol = 2 + 1 * (length(idx) == 3), ...)
+\method{plot}{curve_set2d}(x, idx = 1, ncol = 2 + 1 * (length(idx) == 3), ...)
 }
 \arguments{
 \item{x}{An \code{curve_set2d} object}
 
-\item{idx}{Indices of functions to plot for 2d plots.}
-
-\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
+\item{idx}{Indices of 2d functions to plot.}
 
 \item{ncol}{The maximum number of columns for the figures.
 Default 2 or 3, if the length of x equals 3.
 (Relates to the number of curve_sets that have been combined.)}
 
-\item{...}{Additional parameters to be passed to plot and lines.}
+\item{...}{Ignored.}
 }
 \description{
 Plot method for the class 'curve_set2d', i.e. two-dimensional functions
 }
 \examples{
-data(abide_9002_23)
+data("abide_9002_23")
 plot(abide_9002_23$curve_set, idx=c(1, 27))
 }

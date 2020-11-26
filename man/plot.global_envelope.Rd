@@ -6,18 +6,12 @@
 \usage{
 \method{plot}{global_envelope}(
   x,
-  plot_style = c("ggplot2", "fv", "basic"),
   dotplot = length(x$r) < 10,
   main,
-  ylim,
   xlab,
   ylab,
-  env.col = 1,
-  color_outside = TRUE,
   sign.col = "red",
-  base_size = 11,
   labels = NULL,
-  add = FALSE,
   digits = 3,
   legend = TRUE,
   ...
@@ -26,48 +20,67 @@
 \arguments{
 \item{x}{An 'global_envelope' object}
 
-\item{plot_style}{One of the following "ggplot2" or "basic" or "fv".
-For "ggplot2", a plot with a coloured envelope ribbon is provided. Requires R library ggplot2.
-The option "basic" (default) offers a very basic plot.
-The option "fv" utilizes the plot routines of the function value table \code{\link[spatstat]{fv.object}},
-available only for \pkg{\link{spatstat}}-specific cases.}
-
 \item{dotplot}{Logical. If TRUE, then instead of envelopes a dot plot is done.
 Suitable for low dimensional test vectors.
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
 \item{main}{See \code{\link{plot.default}}. A sensible default exists.}
 
-\item{ylim}{See \code{\link{plot.default}}. A sensible default exists.}
-
 \item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
 
-\item{env.col}{The color for the envelope lines (or dotplot arrows) for 1d functions. Default 1 (black).}
-
-\item{color_outside}{Logical. Whether to color the places where the data function goes
-outside the envelope. Relevant only for 1d functions.}
-
-\item{sign.col}{The color for the significant regions. Default to "red".}
-
-\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
+\item{sign.col}{The color for the observed curve when outside the global envelope
+(significant regions). Default to "red". Setting the color to "black" corresponds
+to no coloring.}
 
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE}, then labels for the tests at x-axis.}
 
-\item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
-Not available for \code{plot_style = "ggplot2"}.}
-
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}
 
-\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.}
+\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
+Case specific default exists.}
 
-\item{...}{Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.}
+\item{...}{Ignored.}
 }
 \description{
 Plot method for the class 'global_envelope'
+}
+\examples{
+if(require("spatstat", quietly=TRUE)) {
+  X <- unmark(spruces)
+  \donttest{nsim <- 1999 # Number of simulations}
+  \dontshow{nsim <- 19 # Number of simulations}
+  env <- envelope(X, fun="Kest", nsim=nsim,
+                  savefuns=TRUE, # save the functions
+                  correction="translate", # edge correction for K
+                  simulate=expression(runifpoint(ex=X))) # Simulate CSR
+  res <- global_envelope_test(env, type="erl")
+
+  # Default plot
+  plot(res)
+  # Plots can be edited, e.g.
+  if(require("ggplot2", quietly=TRUE)) {
+    # Remove legend
+    plot(res) + guides(linetype = "none")
+
+    # Prior to the plot, you can set your preferred ggplot theme by theme_set
+    old <- theme_set(theme_bw())
+    plot(res)
+
+    # Do other edits, e.g. turn off expansion with the default limits
+    plot(res) + coord_cartesian(expand=FALSE)
+
+    # Go back to the old theme
+    theme_set(old)
+  }
+
+  # If you are working with the R package spatstat and its envelope-function,
+  # you can obtain global envelope plots in the style of spatstat using plot.fv:
+  plot.fv(res)
+}
 }
 \seealso{
 \code{\link{central_region}}, \code{\link{global_envelope_test}}

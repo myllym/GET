@@ -101,7 +101,7 @@ where \eqn{\overline{T}({\bf r})}{\bar{T}(r)} is the overall sample mean and
 This scaling of the test functions can be obtained by giving the argument \code{variances = "unequal"}.
 }
 \examples{
-#-- NOx levels example (see for details Myllymaki and Mrkvicka, 2019)
+#-- NOx levels example (see for details Myllymaki and Mrkvicka, 2020)
 if(require("fda.usc", quietly=TRUE)) {
   # Prepare data
   data(poblenou)
@@ -114,22 +114,13 @@ if(require("fda.usc", quietly=TRUE)) {
   Type[MonThu] <- "MonThu"
   Type[Friday] <- "Fri"
   Type <- factor(Type, levels = c("MonThu", "Fri", "Free"))
-\donttest{
-  # Plot of data
-  if(requireNamespace("ggplot2", quietly=TRUE)) {
-    df <- do.call(rbind, lapply(1:24, FUN = function(x) {
-      data.frame(Hour = x, NOx = poblenou[['nox']]$data[,x],
-                 Type = Type, Date = rownames(poblenou[['nox']]$data))
-    }))
-    ggplot2::ggplot(df) + ggplot2::geom_line(ggplot2::aes(x = Hour, y = NOx, group = Date)) +
-      ggplot2::facet_wrap(ggplot2::vars(Type)) + GET:::ThemePlain()
-  }
-}
-  # Graphical functional ANOVA
+
+  # (log) Data as a curve_set
   cset <- create_curve_set(list(r=0:23,
              obs=t(log(poblenou[['nox']][['data']]))))
-\dontshow{nsim <- 19}
-\donttest{nsim <- 2999}
+  # Graphical functional ANOVA
+ \dontshow{nsim <- 19}
+ \donttest{nsim <- 2999}
   res.c <- graph.fanova(nsim = nsim, curve_set = cset,
                         groups = Type, variances = "unequal",
                         contrasts = TRUE)

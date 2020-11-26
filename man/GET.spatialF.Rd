@@ -55,7 +55,7 @@ proposed by Myllymäki et al. (2020).
 \examples{
 if(require("spatstat", quietly=TRUE)) {
   # Example of tropical rain forest trees
-  data(bei)
+  data("bei")
 
   fullmodel <- ~ grad
   reducedmodel <- ~ 1

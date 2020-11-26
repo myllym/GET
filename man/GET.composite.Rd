@@ -217,7 +217,7 @@ if(require("fda.usc", quietly=TRUE)) {
 # Test the fit of a Matern cluster process.
 \donttest{
 if(require("spatstat", quietly=TRUE)) {
-  data(saplings)
+  data("saplings")
 
   # First choose the r-distances
   rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500

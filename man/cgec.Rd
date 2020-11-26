@@ -10,7 +10,7 @@ values of centred GEC observed in year 1995-2016 for the above countries.
 The second component \code{group} gives the grouping.
 }
 \usage{
-data(cgec)
+data("cgec")
 }
 \description{
 Centred government expenditure centralization (GEC) ratios
@@ -41,7 +41,7 @@ incomplete, therefore not included).
 This grouping is used in examples.
 }
 \examples{
-data(cgec)
+data("cgec")
 # Plot data in groups
 for(i in 1:3)
   print(plot(subset(cgec$cgec, cgec$group == i),

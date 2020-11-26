@@ -12,7 +12,7 @@ the discrete factor \code{Sex} (1=Male; 2=Female),
 and the continuous factor \code{Age}.
 }
 \usage{
-data(abide_9002_23)
+data("abide_9002_23")
 }
 \description{
 Imaging measurements for local brain activity at resting state

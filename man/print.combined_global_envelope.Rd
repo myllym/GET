@@ -2,7 +2,7 @@
 % Please edit documentation in R/envelopes.r
 \name{print.combined_global_envelope}
 \alias{print.combined_global_envelope}
-\title{Print method for the class 'global_envelope'}
+\title{Print method for the class 'combined_global_envelope'}
 \usage{
 \method{print}{combined_global_envelope}(x, ...)
 }
@@ -12,5 +12,5 @@
 \item{...}{Ignored.}
 }
 \description{
-Print method for the class 'global_envelope'
+Print method for the class 'combined_global_envelope'
 }

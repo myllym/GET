@@ -475,7 +475,9 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10,
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
 #' Otherwise labels for the separate plots.
-#' @param scales See \code{\link[ggplot2]{facet_wrap}}. Default to "free".
+#' @param scales See \code{\link[ggplot2]{facet_wrap}}. Default to "fixed".
+#' Use \code{scales = "free"} when the scales of the functions in the global envelope
+#' vary.
 #' @param level 1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
@@ -485,7 +487,7 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10,
 #' @export
 #' @seealso \code{\link{central_region}}
 plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
-                                 scales = "free", sign.col = "red",
+                                 scales = "fixed", sign.col = "red",
                                  digits = 3, level = 1,
                                  ncol = 2 + 1*(length(x)==3),
                                  legend = TRUE, ...) {
@@ -1032,7 +1034,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'
 #'   res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
 #'                                               curve_set_G, curve_set_J))
-#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
+#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"), scales = "free")
 #'   }
 #' }
 #'

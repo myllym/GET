@@ -46,7 +46,7 @@ Details of the combined test can be found in Mrkvicka et al. (2017)
 if(require("spatstat", quietly=TRUE)) {
   # As an example test CSR of the saplings point pattern from spatstat by means of
   # L, F, G and J functions.
-  data(saplings)
+  data("saplings")
   X <- saplings
 
   \donttest{nsim <- 499 # Number of simulations for the tests}
@@ -92,8 +92,7 @@ if(require("spatstat", quietly=TRUE)) {
   res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
                                                       curve_set_G, curve_set_J),
                                       type = "qdir")
-  plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"),
-       base_size=12)
+  plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"), scales="free")
 }
 
 }

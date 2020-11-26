@@ -28,13 +28,15 @@ Imports:
     parallel,
     spatstat,
     stats,
-    utils
+    utils,
+    viridisLite
 Suggests:
     gstat,
     sp,
     fda,
     fda.usc,
     mvtnorm,
+    patchwork,
     testthat,
     knitr
 Description: Implementation of global envelopes for a set of general d-dimensional vectors T

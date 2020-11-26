@@ -9,7 +9,7 @@ An object of class \code{\link[spatstat]{ppp.object}} representing the point
 pattern of tree locations.
 }
 \usage{
-data(adult_trees)
+data("adult_trees")
 }
 \description{
 Adult trees data set

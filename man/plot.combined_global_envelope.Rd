@@ -7,19 +7,14 @@
 \method{plot}{combined_global_envelope}(
   x,
   main,
-  ylim = NULL,
   xlab,
   ylab,
-  env.col = 1,
-  color_outside = TRUE,
+  labels,
+  scales = "fixed",
   sign.col = "red",
-  base_size = 11,
-  labels = NULL,
-  add = FALSE,
   digits = 3,
   level = 1,
   ncol = 2 + 1 * (length(x) == 3),
-  nticks = 5,
   legend = TRUE,
   ...
 )
@@ -29,27 +24,21 @@
 
 \item{main}{See \code{\link{plot.default}}. A sensible default exists.}
 
-\item{ylim}{See \code{\link{plot.default}}. A sensible default exists.}
-
 \item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
-
-\item{env.col}{The color for the envelope lines (or dotplot arrows) for 1d functions. Default 1 (black).}
-
-\item{color_outside}{Logical. Whether to color the places where the data function goes
-outside the envelope. Relevant only for 1d functions.}
-
-\item{sign.col}{The color for the significant regions. Default to "red".}
-
-\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
 Otherwise labels for the separate plots.}
 
-\item{add}{Whether to add the plot to an existing plot (TRUE) or to draw a new plot (FALSE).
-Not available for \code{plot_style = "ggplot2"}.}
+\item{scales}{See \code{\link[ggplot2]{facet_wrap}}. Default to "fixed".
+Use \code{scales = "free"} when the scales of the functions in the global envelope
+vary.}
+
+\item{sign.col}{The color for the observed curve when outside the global envelope
+(significant regions). Default to "red". Setting the color to "black" corresponds
+to no coloring.}
 
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}
@@ -62,11 +51,10 @@ if using the default main.}
 Default 2 or 3, if the length of x equals 3.
 (Relates to the number of curve_sets that have been combined.)}
 
-\item{nticks}{The number of ticks on the xaxis.}
+\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
+Case specific default exists.}
 
-\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.}
-
-\item{...}{Additional parameters to be passed to \code{\link{plot}} or \code{\link{lines}}.}
+\item{...}{Ignored.}
 }
 \description{
 This function provides plots for combined global envelopes.

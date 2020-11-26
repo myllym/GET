@@ -12,7 +12,6 @@
   sign.col = "red",
   transparency = 155/255,
   digits = 3,
-  base_size = 11,
   ...
 )
 }
@@ -29,7 +28,9 @@ Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo
 observed with significantly higher values highlighted (\code{"hi.sign"}),
 observed with significantly lower values highlighted (\code{"lo.sign"}).}
 
-\item{sign.col}{The color for the significant regions. Default to "red".}
+\item{sign.col}{The color for the observed curve when outside the global envelope
+(significant regions). Default to "red". Setting the color to "black" corresponds
+to no coloring.}
 
 \item{transparency}{A number between 0 and 1 (default 155/255, 60% transparency).
 Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
@@ -37,8 +38,6 @@ functions.}
 
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}
-
-\item{base_size}{Base font size, to be passed to theme style when \code{plot_style = "ggplot2"}.}
 
 \item{...}{Ignored.}
 }
