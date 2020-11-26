@@ -144,10 +144,14 @@ combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alp
     }
 
     # Return
-    res <- res_ls
-    attr(res, "level2_ge") <- res_rank
-    attr(res, "level2_curve_set") <- curve_set_u
-    attr(res, "method") <- "Combined global envelope (scaled MAD)"
-    class(res) <- c("combined_global_envelope", class(res))
-    res
+    attr(res_ls, "level2_ge") <- res_rank
+    attr(res_ls, "level2_curve_set") <- curve_set_u
+    attr(res_ls, "method") <- "Combined global envelope (scaled MAD)"
+    class(res_ls) <- c("combined_global_envelope", class(res_ls))
+    res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
+                                argu=attr(res_ls[[1]], "argu"),
+                                xexp=attr(res_ls[[1]], "xexp"),
+                                ylab=paste0("T(", attr(res_ls[[1]], "argu"), ")"),
+                                yexp=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
+    res_ls
 }
