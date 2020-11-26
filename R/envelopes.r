@@ -31,13 +31,20 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
                         labl = picked_attr[['labl']], desc = picked_attr[['desc']],
                         unitname = NULL, fname = picked_attr[['fname']], yexp = picked_attr[['yexp']])
     attr(res, "shade") <- c("lo", "hi")
+    if(type == "st") picked_attr$einfo$nSD <- kalpha
+    if(type == "rank") picked_attr$einfo$nrank <- kalpha
   }
-  else res <- df
-  attr(res, "argu") <- picked_attr[['argu']]
+  else {
+    res <- df
+    attr(res, "argu") <- picked_attr[['argu']]
+    attr(res, "fname") <- picked_attr[['fname']]
+    attr(res, "labl") <- picked_attr[['labl']]
+    attr(res, "desc") <- picked_attr[['desc']]
+    attr(res, "ylab") <- picked_attr[['ylab']]
+    attr(res, "yexp") <- picked_attr[['yexp']]
+  }
   attr(res, "xlab") <- picked_attr[['xlab']]
   attr(res, "xexp") <- picked_attr[['xexp']]
-  if(type == "st") picked_attr$einfo$nSD <- kalpha
-  if(type == "rank") picked_attr$einfo$nrank <- kalpha
   attr(res, "einfo") <- picked_attr[['einfo']]
   # Extra for global envelopes
   class(res) <- c("global_envelope", class(res))
