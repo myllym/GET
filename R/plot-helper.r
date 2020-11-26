@@ -6,5 +6,5 @@
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 element_blank
 set_envelope_legend_position <- function() {
-  theme(legend.key = element_blank(), legend.position = 'bottom', legend.key.height = grid::unit(0, "inches"))
+  theme(legend.position = 'bottom', legend.key.height = grid::unit(0, "inches"))
 }
