@@ -426,10 +426,8 @@ plot.curve_set <- function(x, xlab = "r", ylab = "obs", ylim,
 #' Plot method for the class 'curve_set2d', i.e. two-dimensional functions
 #'
 #' @param x An \code{curve_set2d} object
-#' @inheritParams plot.curve_set
 #' @param idx Indices of 2d functions to plot.
-#' @param ... Additional parameters to be passed to plot and lines.
-#' @inheritParams plot.global_envelope
+#' @param ... Ignored.
 #' @inheritParams plot.combined_global_envelope
 #'
 #' @export
