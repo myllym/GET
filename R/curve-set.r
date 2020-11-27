@@ -314,9 +314,6 @@ print.curve_set <- function(x, ...) {
 #' Plot method for the class 'curve_set'
 #'
 #' @param x An \code{curve_set} object.
-#' @param xlab The label for the x-axis. Default "r".
-#' @param ylab The label for the y-axis. Default "obs".
-#' @param ylim The y limits of the plot with the default being the default of \code{\link{ggplot}}.
 #' @param idx Indices of functions to highlight with color \code{col_idx}.
 #' Default to the observed function, if there is just one.
 #' The legend of curves' colours is shown if indices are given or \code{x} contains one observed function.
@@ -325,7 +322,7 @@ print.curve_set <- function(x, ...) {
 #' containing the colors for the highlighted functions. Default exists.
 #' @param idx_name A variable name to be printed with the highlighted functions' idx. Default to empty.
 #' @param col The basic color for the curves (which are not highlighted).
-#' @param ... Additional parameters to be passed to plot and lines.
+#' @param ... Ignored.
 #' @inheritParams plot.global_envelope
 #' @seealso \code{\link{create_curve_set}}
 #'
@@ -351,14 +348,16 @@ print.curve_set <- function(x, ...) {
 #'   # Remove legend
 #'   plot(cset) + guides(col = "none")
 #' }
-plot.curve_set <- function(x, xlab = "r", ylab = "obs", ylim,
+plot.curve_set <- function(x, xlab = "r", ylab = "obs",
                            idx, col_idx, idx_name = "", col = 'grey70', ...) {
-  if(missing('ylim')) ylim <- NULL
   if(missing(idx)) {
     if(curve_set_is1obs(x))
       idx <- 1
     else
       idx <- NULL
+  }
+  else {
+    if(!is.numeric(idx)) stop("idx should be numeric.")
   }
   if(missing(col_idx)) {
     if(length(idx) == 1)
@@ -412,7 +411,7 @@ plot.curve_set <- function(x, xlab = "r", ylab = "obs", ylim,
   else {
     p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~f, group = ~id), col = col) )
   }
-  p + scale_x_continuous(name = xlab) + scale_y_continuous(name = ylab, limits = ylim)
+  p + scale_x_continuous(name = xlab) + scale_y_continuous(name = ylab)
 }
 
 #' Plot method for the class 'curve_set2d'
