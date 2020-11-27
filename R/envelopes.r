@@ -1081,10 +1081,10 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
     else
       stop("The given list of curve_sets is empty.")
   }
-    return(individual_global_envelope_test(curve_sets, type=type, alpha=alpha,
-                                           alternative=alternative, ties=ties,
-                                           probs=probs, quantile.type=quantile.type,
-                                           central=central, ...))
+  return(individual_global_envelope_test(curve_sets, type=type, alpha=alpha,
+                                         alternative=alternative, ties=ties,
+                                         probs=probs, quantile.type=quantile.type,
+                                         central=central, ...))
 }
 
 #' The rank envelope test
