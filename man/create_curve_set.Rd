@@ -13,13 +13,7 @@ the elements r, sim_m and theo. See details.}
 \item{...}{For expert use only.}
 }
 \value{
-An object of class \code{curve_set} containing the compontents
-\itemize{
-\item r = the argument values
-\item funcs = the functions/vectors
-\item is1obs = Locical for inner use. TRUE indicates that the first function is a special
-(observed) one. FALSE indicates that all functions are equal (observed).
-}
+An object of class \code{curve_set} containing the data.
 If the argument values are two-dimensional, then the \code{curve_set} is additionally
 a \code{curve_set2d} object.
 }

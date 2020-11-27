@@ -63,17 +63,17 @@ plot(res, what=c("hi", "lo"), fixedscales=1)
 
 plot(res, what=c("obs", "lo", "hi"), fixedscales=FALSE)
 
-if(requireNamespace("gridExtra", quietly=TRUE) && require("ggplot2", quietly=TRUE)) {
+if(requireNamespace("gridExtra", quietly=TRUE)) {
   # Edit style of "fixedscales = 2" plots
-  plot(res, what=c("obs", "hi")) + theme_minimal()
+  plot(res, what=c("obs", "hi")) + ggplot2::theme_minimal()
 
   # Edit style (e.g. theme) of "fixedscales = 1 or 0" plots
   gs <- lapply(res, plot, what=c("obs", "hi"), main="")
   gridExtra::grid.arrange(grobs=gs, ncol=1, top="My main")
 
   gs <- outer(res, c("obs", "hi"), FUN=Vectorize(function(res, what)
-    list(plot(res, what=what, main="") + theme(axis.ticks=element_blank(),
-      axis.text=element_blank(), axis.title=element_blank()))))
+    list(plot(res, what=what, main="") + ggplot2::theme(axis.ticks=ggplot2::element_blank(),
+      axis.text=ggplot2::element_blank(), axis.title=ggplot2::element_blank()))))
   gridExtra::grid.arrange(grobs=t(gs))
 }
 }

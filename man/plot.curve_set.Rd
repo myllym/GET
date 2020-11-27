@@ -8,7 +8,6 @@
   x,
   xlab = "r",
   ylab = "obs",
-  ylim,
   idx,
   col_idx,
   idx_name = "",
@@ -19,11 +18,9 @@
 \arguments{
 \item{x}{An \code{curve_set} object.}
 
-\item{xlab}{The label for the x-axis. Default "r".}
+\item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
 
-\item{ylab}{The label for the y-axis. Default "obs".}
-
-\item{ylim}{The y limits of the plot with the default being the default of \code{\link{ggplot}}.}
+\item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{idx}{Indices of functions to highlight with color \code{col_idx}.
 Default to the observed function, if there is just one.
@@ -37,7 +34,7 @@ containing the colors for the highlighted functions. Default exists.}
 
 \item{col}{The basic color for the curves (which are not highlighted).}
 
-\item{...}{Additional parameters to be passed to plot and lines.}
+\item{...}{Ignored.}
 }
 \description{
 Plot method for the class 'curve_set'
@@ -48,17 +45,16 @@ plot(cset)
 plot(cset, idx=c(1,3))
 plot(cset, idx=c(1,3), col_idx=c("black", "red"))
 plot(cset, idx=c(1,3), col_idx=c("black", "red"), idx_name="Special functions")
-if(require("ggplot2", quietly=TRUE)) {
-  plot(cset, idx=c(1,3)) + theme(legend.position = "bottom")
-}
-plot(cset) + ggtitle("Example curves")
+plot(cset, idx=c(1,3)) + ggplot2::theme(legend.position = "bottom")
+plot(cset) + ggplot2::ggtitle("Example curves")
+plot(cset) + ggplot2::scale_y_continuous(limits = c(-0.25, 1.25))
 # A curve_set with one observed function (other simulated)
 if(requireNamespace("mvtnorm", quietly=TRUE)) {
   cset <- create_curve_set(list(obs=c(-1.6, 1.6),
               sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
   plot(cset)
   # Remove legend
-  plot(cset) + guides(col = "none")
+  plot(cset) + ggplot2::guides(col = "none")
 }
 }
 \seealso{

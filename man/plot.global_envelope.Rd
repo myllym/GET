@@ -62,20 +62,18 @@ if(require("spatstat", quietly=TRUE)) {
   # Default plot
   plot(res)
   # Plots can be edited, e.g.
-  if(require("ggplot2", quietly=TRUE)) {
-    # Remove legend
-    plot(res) + guides(linetype = "none")
+  # Remove legend
+  plot(res) + ggplot2::guides(linetype = "none")
 
-    # Prior to the plot, you can set your preferred ggplot theme by theme_set
-    old <- theme_set(theme_bw())
-    plot(res)
+  # Prior to the plot, you can set your preferred ggplot theme by theme_set
+  old <- ggplot2::theme_set(ggplot2::theme_bw())
+  plot(res)
 
-    # Do other edits, e.g. turn off expansion with the default limits
-    plot(res) + coord_cartesian(expand=FALSE)
+  # Do other edits, e.g. turn off expansion with the default limits
+  plot(res) + ggplot2::coord_cartesian(expand=FALSE)
 
-    # Go back to the old theme
-    theme_set(old)
-  }
+  # Go back to the old theme
+  ggplot2::theme_set(old)
 
   # If you are working with the R package spatstat and its envelope-function,
   # you can obtain global envelope plots in the style of spatstat using plot.fv:
