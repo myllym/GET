@@ -492,8 +492,8 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
 
   alt <- get_alternative(x[[1]])
-  if(missing(main)) main <- env_main_default(x, digits=digits, alternative=alt)
-  d <- plotdefaultlabs(x, xlab, ylab)
+  if(missing(main)) main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
+  d <- plotdefaultlabs(attr(x, "level2_ge"), xlab, ylab)
   if(missing(labels)) labels <- default_labels(x, labels)
 
   if(level == 1) {

@@ -136,7 +136,7 @@ plot.combined_fboxplot <- function(x, main, xlab, ylab, labels, scales = "free",
                                    digits = 3, ncol = 2 + 1*(length(x)==3),
                                    plot_outliers = TRUE, legend = TRUE, ...) {
   alt <- get_alternative(x[[1]])
-  if(missing(main)) main <- env_main_default(x, digits=digits, alternative=alt)
+  if(missing(main)) main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
   if(missing(labels)) labels <- default_labels(x, labels)
   d <- plotdefaultlabs(attr(x, "level2_ge"), xlab, ylab)
   # Combined plot, level 1 plots
