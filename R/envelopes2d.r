@@ -154,9 +154,9 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
 #'
 #' plot(res, what=c("obs", "lo", "hi"), fixedscales=FALSE)
 #'
-#' if(requireNamespace("gridExtra", quietly=TRUE) && require("ggplot2", quietly=TRUE)) {
+#' if(requireNamespace("gridExtra", quietly=TRUE)) {
 #'   # Edit style of "fixedscales = 2" plots
-#'   plot(res, what=c("obs", "hi")) + theme_minimal()
+#'   plot(res, what=c("obs", "hi")) + ggplot2::theme_minimal()
 #'
 #'   # Edit style (e.g. theme) of "fixedscales = 1 or 0" plots
 #'   gs <- lapply(res, plot, what=c("obs", "hi"), main="")
