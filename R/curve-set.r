@@ -336,17 +336,16 @@ print.curve_set <- function(x, ...) {
 #' plot(cset, idx=c(1,3))
 #' plot(cset, idx=c(1,3), col_idx=c("black", "red"))
 #' plot(cset, idx=c(1,3), col_idx=c("black", "red"), idx_name="Special functions")
-#' if(require("ggplot2", quietly=TRUE)) {
-#'   plot(cset, idx=c(1,3)) + theme(legend.position = "bottom")
-#' }
-#' plot(cset) + ggtitle("Example curves")
+#' plot(cset, idx=c(1,3)) + ggplot2::theme(legend.position = "bottom")
+#' plot(cset) + ggplot2::ggtitle("Example curves")
+#' plot(cset) + ggplot2::scale_y_continuous(limits = c(-0.25, 1.25))
 #' # A curve_set with one observed function (other simulated)
 #' if(requireNamespace("mvtnorm", quietly=TRUE)) {
 #'   cset <- create_curve_set(list(obs=c(-1.6, 1.6),
 #'               sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
 #'   plot(cset)
 #'   # Remove legend
-#'   plot(cset) + guides(col = "none")
+#'   plot(cset) + ggplot2::guides(col = "none")
 #' }
 plot.curve_set <- function(x, xlab = "r", ylab = "obs",
                            idx, col_idx, idx_name = "", col = 'grey70', ...) {
