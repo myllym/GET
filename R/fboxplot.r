@@ -63,8 +63,14 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
     if(!is.null(outliers_id)) {
       outliers <- lapply(curve_sets, FUN = function(x) { curve_set_funcs(x)[,outliers_id] })
       if(is.vector(outliers[[1]])) outliers <- lapply(outliers, FUN = function(x) matrix(x, ncol=1))
-      if(length(outliers_id)>0)
-        for(i in 1:length(outliers)) colnames(outliers[[i]]) <- outliers_id
+      if(is.null(colnames(outliers[[1]])))
+        for(i in 1:length(outliers)) {
+          n <- colnames(curve_set_funcs(curve_sets[[i]]))
+          if(!is.null(n))
+            colnames(outliers[[i]]) <- n[outliers_id]
+          else
+            colnames(outliers[[i]]) <- outliers_id
+        }
     }
     else
       outliers <- NULL
@@ -82,12 +88,11 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
     outliers_id <- NULL
     funcs <- curve_set_funcs(curve_sets)
     for(j in 1:ncol(funcs)) {
-      if(any(funcs[,j] < res$whisker.lo | funcs[,j] > res$whisker.hi)) {
+      if(any(funcs[,j] < res$whisker.lo | funcs[,j] > res$whisker.hi))
         outliers_id <- c(outliers_id, j)
-      }
     }
     if(!is.null(outliers_id)) {
-       outliers <- funcs[,outliers_id]
+      outliers <- funcs[,outliers_id]
       if(is.null(colnames(outliers)))
         colnames(outliers) <- outliers_id
     }
