@@ -163,8 +163,8 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
 #'   gridExtra::grid.arrange(grobs=gs, ncol=1, top="My main")
 #'
 #'   gs <- outer(res, c("obs", "hi"), FUN=Vectorize(function(res, what)
-#'     list(plot(res, what=what, main="") + theme(axis.ticks=element_blank(),
-#'       axis.text=element_blank(), axis.title=element_blank()))))
+#'     list(plot(res, what=what, main="") + ggplot2::theme(axis.ticks=ggplot2::element_blank(),
+#'       axis.text=ggplot2::element_blank(), axis.title=ggplot2::element_blank()))))
 #'   gridExtra::grid.arrange(grobs=t(gs))
 #' }
 plot.combined_global_envelope2d <- function(x, fixedscales = 2, main,
