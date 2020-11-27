@@ -424,12 +424,10 @@ forder <- function(curve_sets, measure = 'erl', scaling = 'qdir',
     else
       stop("The given list of curve_sets is empty.")
   }
-  else {
-    res <- individual_forder(curve_sets,
-                             measure = measure, scaling = scaling,
-                             alternative = alternative,
-                             use_theo = use_theo,
-                             probs = probs, quantile.type = quantile.type)
-    return(res$distance)
-  }
+  res <- individual_forder(curve_sets,
+                           measure = measure, scaling = scaling,
+                           alternative = alternative,
+                           use_theo = use_theo,
+                           probs = probs, quantile.type = quantile.type)
+  return(res$distance)
 }
