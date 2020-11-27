@@ -227,8 +227,7 @@ basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main) {
        scale_x_continuous(name = xlab),
        scale_y_continuous(name = ylab),
        scale_linetype_manual(values = linetype_values(), name = ''),
-       ggtitle(main),
-       set_envelope_legend_position())
+       ggtitle(main))
 }
 
 # An internal function for making a ggplot2 style "global envelope plot"
@@ -247,7 +246,8 @@ env_ggplot <- function(x, main, xlab, ylab,
 
   df <- env_df_construction(x, NULL)
   p <- ( ggplot()
-         + basic_stuff_for_env_ggplot(df, xlab, ylab, main) )
+         + basic_stuff_for_env_ggplot(df, xlab, ylab, main)
+         + set_envelope_legend_position() )
   if(!legend) p <- p + theme(legend.position = "none")
   if(length(levels(df$type)) < 2) p <- p + guides(linetype = "none")
   if("Data function" %in% levels(df$type)) {
@@ -323,7 +323,8 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
   p <- ( ggplot()
          + basic_stuff_for_env_ggplot(df, xlab, ylab, main)
          + facet_wrap(~ plotmain, scales=scales,
-                      nrow=nrows_of_plots, ncol=ncols_of_plots) )
+                      nrow=nrows_of_plots, ncol=ncols_of_plots)
+         + set_envelope_legend_position() )
   if(length(levels(df$type)) < 2)
     p <- p + guides(linetype = "none")
   if("Data function" %in% levels(df$type)) {
