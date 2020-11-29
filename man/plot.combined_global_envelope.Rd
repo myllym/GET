@@ -32,18 +32,19 @@
 If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
 Otherwise labels for the separate plots.}
 
-\item{scales}{See \code{\link[ggplot2]{facet_wrap}}. Default to "fixed".
+\item{scales}{See \code{\link[ggplot2]{facet_wrap}}.
 Use \code{scales = "free"} when the scales of the functions in the global envelope
-vary.}
+vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.}
 
 \item{sign.col}{The color for the observed curve when outside the global envelope
-(significant regions). Default to "red". Setting the color to "black" corresponds
+(significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 to no coloring.}
 
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}
 
-\item{level}{1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
+\item{level}{1 or 2. In the case of two-step combined tests (with several test functions),
+two different plots are available:
 1 for plotting the combined global envelopes (default and most often wanted) or
 2 for plotting the second level test result.}
 

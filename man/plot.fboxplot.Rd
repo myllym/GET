@@ -23,7 +23,7 @@ if using the default main.}
 \item{plot_outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn,
 with legend if \code{legend} is TRUE.}
 
-\item{...}{Additional arguments to be passed to \code{\link{plot.global_envelope}}.}
+\item{...}{Ignored.}
 }
 \description{
 Plot method for the class 'fboxplot'

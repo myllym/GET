@@ -31,7 +31,7 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 \item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
 
 \item{sign.col}{The color for the observed curve when outside the global envelope
-(significant regions). Default to "red". Setting the color to "black" corresponds
+(significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 to no coloring.}
 
 \item{labels}{A character vector of suitable length.
@@ -64,6 +64,11 @@ if(require("spatstat", quietly=TRUE)) {
   # Plots can be edited, e.g.
   # Remove legend
   plot(res) + ggplot2::guides(linetype = "none")
+  # Change its position
+  plot(res) + ggplot2::theme(legend.position = "right")
+  # Change the outside color
+  plot(res, sign.col = "#5DC863FF")
+  plot(res, sign.col = NULL)
 
   # Prior to the plot, you can set your preferred ggplot theme by theme_set
   old <- ggplot2::theme_set(ggplot2::theme_bw())

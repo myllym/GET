@@ -29,7 +29,7 @@ observed with significantly higher values highlighted (\code{"hi.sign"}),
 observed with significantly lower values highlighted (\code{"lo.sign"}).}
 
 \item{sign.col}{The color for the observed curve when outside the global envelope
-(significant regions). Default to "red". Setting the color to "black" corresponds
+(significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 to no coloring.}
 
 \item{transparency}{A number between 0 and 1 (default 155/255, 60% transparency).

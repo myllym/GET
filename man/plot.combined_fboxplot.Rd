@@ -31,9 +31,9 @@
 If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
 Otherwise labels for the separate plots.}
 
-\item{scales}{See \code{\link[ggplot2]{facet_wrap}}. Default to "fixed".
+\item{scales}{See \code{\link[ggplot2]{facet_wrap}}.
 Use \code{scales = "free"} when the scales of the functions in the global envelope
-vary.}
+vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.}
 
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}
@@ -48,7 +48,7 @@ with legend if \code{legend} is TRUE.}
 \item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
 Case specific default exists.}
 
-\item{...}{Additional arguments to be passed to \code{\link{plot.combined_global_envelope}}.}
+\item{...}{Ignored.}
 }
 \description{
 Plot method for the class 'combined_fboxplot'

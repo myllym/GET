@@ -336,8 +336,8 @@ if(require("spatstat", quietly=TRUE)) {
   curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
   curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
 
-  res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
-                                              curve_set_G, curve_set_J))
+  res <- global_envelope_test(curve_sets=list(L = curve_set_L, F = curve_set_F,
+                                              G = curve_set_G, J = curve_set_J))
   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"), scales = "free")
   }
 }
