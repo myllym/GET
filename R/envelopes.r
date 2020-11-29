@@ -354,34 +354,20 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   res_ls
 }
 
-# Helper function for printing object with attributes "alpha", "type", "method"
-# and optionally "p", "p_interval", "ties", "alpha_star"
-GEprinthelper <- function(x, ...) {
-  if(is.null(attr(x, "p"))) { # The case of a central region
-    if(inherits(x, c("fboxplot", "combined_fboxplot")))
-      cat(attr(x, "method"), " based on ", sep="")
-    cat(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), "). \n",
-        " Plot the object instead.\n", sep="")
-  }
-  else { # The case of a global envelope test
-    cat(attr(x, "method"), " (", attr(x, "type"), ")\n",
-        " p-value of the test: ", attr(x, "p"), sep="")
-    if(!is.null(attr(x, "ties")))
-      cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
-    else cat("\n")
-    if(!is.null(attr(x, "p_interval")))
-      cat(" p-interval         : (", attr(x, "p_interval")[1], ", ",
-          attr(x, "p_interval")[2],")\n", sep="")
-  }
-}
-
 #' Print method for the class 'global_envelope'
 #'
 #' @param x A 'global_envelope' object
 #' @param ... Ignored.
 #' @export
 print.global_envelope <- function(x, ...) {
-  GEprinthelper(x)
+  if(is.null(attr(x, "p"))) istest <- FALSE
+  else istest <- TRUE
+  printhelper_method(x, istest)
+  if(istest)
+    cat(" * Number of r with observed function outside the envelope: ", how_many_outside(x), "\n",
+        " * Total number of argument values r: ", length(x[['r']]), "\n", sep="")
+  cat("The object contains: \n")
+  printhelper_contains(x, istest)
 }
 
 #' Print method for the class 'combined_global_envelope'
@@ -390,7 +376,16 @@ print.global_envelope <- function(x, ...) {
 #' @param ... Ignored.
 #' @export
 print.combined_global_envelope <- function(x, ...) {
-  GEprinthelper(attr(x, "level2_ge"))
+  if(is.null(attr(attr(x, "level2_ge"), "p"))) istest <- FALSE
+  else istest <- TRUE
+  printhelper_method(attr(x, "level2_ge"), istest)
+  cat("The object contains a list of ", length(x), " components\n",
+      " * each containing: ", paste0("$", names(x[[1]]), " "), "\n", sep="")
+  if(istest)
+    cat(" * Number of r-values with observed function outside the envelope: ",
+        paste0(sapply(x, function(y) how_many_outside(y), simplify=TRUE), " "), "\n",
+        " * Total number of argument values r                             : ",
+        paste0(sapply(x, function(y) length(y[['r']]), simplify=TRUE), " "), "\n", sep="")
 }
 
 #' Plot method for the class 'global_envelope'
