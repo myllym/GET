@@ -40,11 +40,6 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
   else { if(!curve_set_is1d(curve_sets)) stop("r in curve_sets should be a vector.") }
   res <- central_region(curve_sets, alternative = "two.sided", ...)
   if(inherits(res, "combined_global_envelope")) {
-    dist <- factor * (attr(res, "level2_ge")$hi - attr(res, "level2_ge")$lo)
-    attr(res, "level2_ge")$whisker.lo <- attr(res, "level2_ge")$lo - dist
-    attr(res, "level2_ge")$whisker.hi <- attr(res, "level2_ge")$hi + dist
-    attr(attr(res, "level2_ge"), "method") <- "Functional boxplot"
-    class(attr(res, "level2_ge")) <- c("fboxplot", class(attr(res, "level2_ge")))
     outliers_id <- NULL
     for(i in 1:length(res)) {
       dist <- factor * (res[[i]]$hi - res[[i]]$lo)
