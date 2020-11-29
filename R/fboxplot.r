@@ -31,6 +31,7 @@
 #'   plot(res, xlab = "Age (years)", ylab = "")
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
+  if(factor < 0) stop("factor should be positive.")
   if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
     if(!all(sapply(curve_sets, FUN=curve_set_is1d)))
       stop("r in curve_sets should be vectors.")
@@ -69,10 +70,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
     }
     else
       outliers <- NULL
-    attr(res, "outliers") <- outliers
-    attr(res, "factor") <- factor
     attr(res, "method") <- "Combined functional boxplot"
-    attr(res, "call") <- match.call()
     class(res) <- c("combined_fboxplot", class(res))
   }
   else {
@@ -93,13 +91,13 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
     }
     else
       outliers <- NULL
-    attr(res, "outliers") <- outliers
-    attr(res, "outpoint") <- outliers_id
     attr(res, "method") <- "Functional boxplot"
-    attr(res, "factor") <- factor
-    attr(res, "call") <- match.call()
     class(res) <- c("fboxplot", class(res))
   }
+  attr(res, "outliers") <- outliers
+  attr(res, "outpoint") <- outliers_id
+  attr(res, "factor") <- factor
+  attr(res, "call") <- match.call()
   res
 }
 
@@ -138,7 +136,7 @@ print.combined_fboxplot <- function(x, ...) {
 #' @param plot_outliers Logical. If TRUE, then the functions outside the functional boxplot are drawn,
 #'  with legend if \code{legend} is TRUE.
 #' @param legend Logical. See \code{plot_outliers.}
-#' @param ... Additional arguments to be passed to \code{\link{plot.global_envelope}}.
+#' @param ... Ignored.
 #' @export
 plot.fboxplot <- function(x, main, xlab, ylab, digits = 3,
                           legend = TRUE, plot_outliers = TRUE, ...) {
@@ -152,7 +150,7 @@ plot.fboxplot <- function(x, main, xlab, ylab, digits = 3,
 #' @param x an 'combined_fboxplot' object
 #' @inheritParams plot.combined_global_envelope
 #' @inheritParams plot.fboxplot
-#' @param ... Additional arguments to be passed to \code{\link{plot.combined_global_envelope}}.
+#' @param ... Ignored.
 #'
 #' @export
 plot.combined_fboxplot <- function(x, main, xlab, ylab, labels, scales = "free",
