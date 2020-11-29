@@ -403,7 +403,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param xlab See \code{\link{plot.default}}. A sensible default exists.
 #' @param ylab See \code{\link{plot.default}}. A sensible default exists.
 #' @param sign.col The color for the observed curve when outside the global envelope
-#' (significant regions). Default to "red". Setting the color to "black" corresponds
+#' (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 #' to no coloring.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
@@ -414,7 +414,6 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param ... Ignored.
 #'
 #' @export
-#' @importFrom ggplot2 theme_minimal
 #' @seealso \code{\link{central_region}}, \code{\link{global_envelope_test}}
 #' @examples
 #' if(require("spatstat", quietly=TRUE)) {
@@ -432,6 +431,11 @@ print.combined_global_envelope <- function(x, ...) {
 #'   # Plots can be edited, e.g.
 #'   # Remove legend
 #'   plot(res) + ggplot2::guides(linetype = "none")
+#'   # Change its position
+#'   plot(res) + ggplot2::theme(legend.position = "right")
+#'   # Change the outside color
+#'   plot(res, sign.col = "#5DC863FF")
+#'   plot(res, sign.col = NULL)
 #'
 #'   # Prior to the plot, you can set your preferred ggplot theme by theme_set
 #'   old <- ggplot2::theme_set(ggplot2::theme_bw())
@@ -447,6 +451,7 @@ print.combined_global_envelope <- function(x, ...) {
 #'   # you can obtain global envelope plots in the style of spatstat using plot.fv:
 #'   plot.fv(res)
 #' }
+#' @importFrom ggplot2 labs
 plot.global_envelope <- function(x, dotplot = length(x$r)<10,
                                  main, xlab, ylab, sign.col = "red",
                                  labels = NULL, digits = 3, legend = TRUE, ...) {
@@ -473,10 +478,11 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10,
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
 #' Otherwise labels for the separate plots.
-#' @param scales See \code{\link[ggplot2]{facet_wrap}}. Default to "fixed".
+#' @param scales See \code{\link[ggplot2]{facet_wrap}}.
 #' Use \code{scales = "free"} when the scales of the functions in the global envelope
-#' vary.
-#' @param level 1 or 2. In the case of two-step combined tests (with several test functions), two different plots are available:
+#' vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.
+#' @param level 1 or 2. In the case of two-step combined tests (with several test functions),
+#' two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
 #' @param ncol The maximum number of columns for the figures.
@@ -1030,8 +1036,8 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
 #'   curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
 #'
-#'   res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
-#'                                               curve_set_G, curve_set_J))
+#'   res <- global_envelope_test(curve_sets=list(L = curve_set_L, F = curve_set_F,
+#'                                               G = curve_set_G, J = curve_set_J))
 #'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"), scales = "free")
 #'   }
 #' }

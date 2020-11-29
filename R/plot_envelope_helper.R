@@ -185,8 +185,10 @@ env_dotplot_ggplot <- function(x, labels=NULL, sign.col="red") {
   arrow <- arrow(angle=75)
   g <- ggplot(df) + geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data$hi), arrow=arrow) +
     geom_segment(aes(x=factor(.data$r), y=.data$central, xend=.data$r, yend=.data$lo), arrow=arrow)
-  if(!is.null(x[['obs']]))
+  if(!is.null(x[['obs']])) {
+    if(is.null(sign.col)) sign.col <- "black"
     g <- g + geom_point(aes(x=factor(.data$r), y=.data$obs, col=ifelse(.data$obs > .data$hi | .data$obs < .data$lo, sign.col, "black")), shape="x", size=5)
+  }
   g <- g + geom_point(aes(x=factor(.data$r), y=.data$central)) +
     scale_color_identity() +
     scale_x_discrete(breaks=paste(x[['r']]), labels=labels)
@@ -241,7 +243,7 @@ basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main) {
 # @param sign.col Color for the observed curve outside the envelope.
 #' @importFrom ggplot2 ggplot theme guides geom_point aes_
 env_ggplot <- function(x, main, xlab, ylab,
-                       legend = TRUE, sign.col="red", color_outside=(sign.col=="red")) {
+                       legend = TRUE, sign.col="red") {
   if(!inherits(x, "global_envelope")) stop("Internal error.")
 
   df <- env_df_construction(x, NULL)
@@ -251,7 +253,7 @@ env_ggplot <- function(x, main, xlab, ylab,
   if(!legend) p <- p + theme(legend.position = "none")
   if(length(levels(df$type)) < 2) p <- p + guides(linetype = "none")
   if("Data function" %in% levels(df$type)) {
-    if(color_outside) {
+    if(!is.null(sign.col)) {
       df.outside <- df[df$type == "Data function",]
       df.outside <- df.outside[df.outside$curves < df.outside$lo | df.outside$curves > df.outside$hi,]
       p <- p + geom_point(data=df.outside, ggplot2::aes_(x = ~r, y = ~curves), color=sign.col, size=1)
@@ -311,7 +313,7 @@ combined_df_construction <- function(x, labels) {
 #' @importFrom ggplot2 ggplot facet_wrap guides geom_point aes_ theme
 env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
                        max_ncols_of_plots = 2, legend = TRUE,
-                       sign.col="red", color_outside=(sign.col=="red")) {
+                       sign.col="red") {
   if(!inherits(x, "list")) stop("Internal error. x is not a list.")
   Nfunc <- length(x)
 
@@ -328,7 +330,7 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
   if(length(levels(df$type)) < 2)
     p <- p + guides(linetype = "none")
   if("Data function" %in% levels(df$type)) {
-    if(color_outside) {
+    if(!is.null(sign.col)) {
       df.outside <- df[df$type == "Data function",]
       df.outside <- df.outside[df.outside$curves < df.outside$lo | df.outside$curves > df.outside$hi,]
       p <- p + geom_point(data=df.outside, ggplot2::aes_(x=~r, y=~curves), color=sign.col, size=1)
