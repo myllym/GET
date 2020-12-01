@@ -514,7 +514,7 @@ GET.composite <- function(X, X.ls = NULL,
       for(i in 1:nfuns)
         attr(res[[i]], n) <- picked_attr_ls[[i]][[n]]
   }
-  attr(res, "method") <- "Adjusted global envelope test" # Change method name
+  attr(res, "method") <- "Adjusted global test" # Change method name
   attr(res, "call") <- match.call() # Update "call" attribute
   # Additions
   if(savefuns) {
