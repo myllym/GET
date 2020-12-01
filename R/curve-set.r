@@ -221,10 +221,17 @@ check_residualness <- function(curve_set) {
   }
 }
 
-#' Create a curve set
+#' Create a curve_set object
 #'
-#' Create a curve set out of a list in the right form.
+#' Create a curve_set object out of a list in the right form.
 #'
+#'
+#' The function is used to clump together the functional data in the form
+#' that can be handled by the other \pkg{GET} functions (\code{\link{forder}},
+#' \code{\link{central_region}}, \code{\link{global_envelope_test}} etc.).
+#' The function \code{create_curve_set} takes care of checking the content of
+#' the data, and saves information in the form that be conveniently further
+#' processed.
 #'
 #' \code{obs} must be either
 #' \itemize{
