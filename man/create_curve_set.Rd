@@ -2,7 +2,7 @@
 % Please edit documentation in R/curve-set.r
 \name{create_curve_set}
 \alias{create_curve_set}
-\title{Create a curve set}
+\title{Create a curve_set object}
 \usage{
 create_curve_set(curve_set, ...)
 }
@@ -18,9 +18,17 @@ If the argument values are two-dimensional, then the \code{curve_set} is additio
 a \code{curve_set2d} object.
 }
 \description{
-Create a curve set out of a list in the right form.
+Create a curve_set object out of a list in the right form.
 }
 \details{
+The function is used to clump together the functional data in the form
+that can be handled by the other \pkg{GET} functions (\code{\link{forder}},
+\code{\link{central_region}}, \code{\link{global_envelope_test}} etc.).
+The function \code{create_curve_set} takes care of checking the content of
+the data, and saves relevant information of the curves for global envelope
+methods to be used in particular for plotting the results with graphical
+interpretation.
+
 \code{obs} must be either
 \itemize{
 \item a vector containing the data function/vector, or
