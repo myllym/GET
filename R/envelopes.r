@@ -112,7 +112,9 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   T_0 <- get_T_0(curve_set)
 
   # Check reasonability of Nfunc vs alpha
-  if(Nfunc*alpha < 1-.Machine$double.eps^0.5) stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha, ". So, s*alpha is ", Nfunc*alpha, ".", sep="")
+  if(Nfunc*alpha < 1-.Machine$double.eps^0.5)
+    stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha,
+         ". So, s*alpha is ", Nfunc*alpha, ".", sep="")
 
   # The critical value
   kalpha <- critical(distance, alpha, Nfunc, small_significant)
