@@ -331,7 +331,6 @@ print.curve_set <- function(x, ...) {
 #' @param idx_name A variable name to be printed with the highlighted functions' idx. Default to empty.
 #' @param col The basic color for the curves (which are not highlighted).
 #' @param ... Ignored.
-#' @inheritParams plot.global_envelope
 #' @seealso \code{\link{create_curve_set}}
 #'
 #' @export
@@ -341,11 +340,18 @@ print.curve_set <- function(x, ...) {
 #' @examples
 #' cset <- create_curve_set(list(r=1:10, obs=matrix(runif(10*5), ncol=5)))
 #' plot(cset)
+#' # Highlight some functions
 #' plot(cset, idx=c(1,3))
 #' plot(cset, idx=c(1,3), col_idx=c("black", "red"))
+#' # Change legend
 #' plot(cset, idx=c(1,3), col_idx=c("black", "red"), idx_name="Special functions")
 #' plot(cset, idx=c(1,3)) + ggplot2::theme(legend.position = "bottom")
+#' # Set labels
+#' plot(cset, idx=c(1,3)) + ggplot2::scale_x_continuous(name = "r") +
+#'   ggplot2::scale_y_continuous(name = "T(r)")
+#' # Add title
 #' plot(cset) + ggplot2::ggtitle("Example curves")
+#' # Change ylim
 #' plot(cset) + ggplot2::scale_y_continuous(limits = c(-0.25, 1.25))
 #' # A curve_set with one observed function (other simulated)
 #' if(requireNamespace("mvtnorm", quietly=TRUE)) {
@@ -355,8 +361,7 @@ print.curve_set <- function(x, ...) {
 #'   # Remove legend
 #'   plot(cset) + ggplot2::guides(col = "none")
 #' }
-plot.curve_set <- function(x, xlab = "r", ylab = "obs",
-                           idx, col_idx, idx_name = "", col = 'grey70', ...) {
+plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) {
   if(missing(idx)) {
     if(curve_set_is1obs(x))
       idx <- 1
@@ -403,7 +408,7 @@ plot.curve_set <- function(x, xlab = "r", ylab = "obs",
   if(retick_xaxis(x)$retick_xaxis)
     warning("r values non-increasing. Plot not valid.")
 
-  df <- data.frame(r = x$r, f = c(funcs),
+  df <- data.frame(r = x$r, funcs = c(funcs),
                    id =  factor(rep(id_v, each=nrow(funcs)), levels = id_v_levels))
   if(!is.null(idx)) df$idx = factor(rep(idx_v, each=nrow(funcs)), levels = idx_labs)
 
@@ -411,14 +416,14 @@ plot.curve_set <- function(x, xlab = "r", ylab = "obs",
   if(!is.null(idx)) {
     col_values <- c(col_idx, col)
     names(col_values) <- idx_labs
-    p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~f, group = ~id, col = ~idx))
+    p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~funcs, group = ~id, col = ~idx))
            + scale_color_manual(values = col_values)
            + labs(col = idx_name) )
   }
   else {
-    p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~f, group = ~id), col = col) )
+    p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~funcs, group = ~id), col = col) )
   }
-  p + scale_x_continuous(name = xlab) + scale_y_continuous(name = ylab)
+  p
 }
 
 #' Plot method for the class 'curve_set2d'
