@@ -45,10 +45,30 @@ printhelper_method <- function(x, istest, ...) {
 
 printhelper_contains <- function(x, istest) {
   if(istest) n <- "global envelope"
-  else n <- "central region"
+  else n <- "central region "
   if('r' %in% names(x)) {
     cat("$r - Argument values                       : ")
     str(x[['r']])
+  }
+  if('x' %in% names(x)) {
+    cat("$x - x-coordinates of pixels               : ")
+    str(x[['x']])
+    cat("$y - y-coordinates of pixels               : ")
+    str(x[['y']])
+    cat("$width - Width of pixels at (x, y)         : ")
+    str(x[['width']])
+    cat("$height - Height of pixels at (x, y)       : ")
+    str(x[['height']])
+  }
+  if('xmin' %in% names(x)) {
+    cat("$xmin - Corner coordinates of the pixels   : ")
+    str(x[['xmin']])
+    cat("$xmax - Corner coordinates of the pixels   : ")
+    str(x[['xmax']])
+    cat("$ymin - Corner coordinates of the pixels   : ")
+    str(x[['ymin']])
+    cat("$ymax - Corner coordinates of the pixels   : ")
+    str(x[['ymax']])
   }
   if('obs' %in% names(x)) {
     cat("$obs - Observed function                   : ")
@@ -59,11 +79,11 @@ printhelper_contains <- function(x, istest) {
     str(x[['central']])
   }
   if('lo' %in% names(x)) {
-    cat("$lo - Lower boundary of the", n, ": ")
+    cat("$lo - Lower boundary of the ", n, ": ", sep="")
     str(x[['lo']])
   }
   if('hi' %in% names(x)) {
-    cat("$hi - Upper boundary of the", n, ": ")
+    cat("$hi - Upper boundary of the ", n, ": ", sep="")
     str(x[['hi']])
   }
   if('whisker.lo' %in% names(x)) {
