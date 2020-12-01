@@ -230,8 +230,9 @@ check_residualness <- function(curve_set) {
 #' that can be handled by the other \pkg{GET} functions (\code{\link{forder}},
 #' \code{\link{central_region}}, \code{\link{global_envelope_test}} etc.).
 #' The function \code{create_curve_set} takes care of checking the content of
-#' the data, and saves information in the form that be conveniently further
-#' processed.
+#' the data, and saves relevant information of the curves for global envelope
+#' methods to be used in particular for plotting the results with graphical
+#' interpretation.
 #'
 #' \code{obs} must be either
 #' \itemize{
