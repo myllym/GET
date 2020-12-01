@@ -480,6 +480,7 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10,
 #' @param scales See \code{\link[ggplot2]{facet_wrap}}.
 #' Use \code{scales = "free"} when the scales of the functions in the global envelope
 #' vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.
+#' A sensible default based on r-values exists.
 #' @param level 1 or 2. In the case of two-step combined tests (with several test functions),
 #' two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
@@ -490,11 +491,17 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10,
 #' @export
 #' @seealso \code{\link{central_region}}
 plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
-                                 scales = "fixed", sign.col = "red",
+                                 scales, sign.col = "red",
                                  digits = 3, level = 1,
                                  ncol = 2 + 1*(length(x)==3),
                                  legend = TRUE, ...) {
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
+  if(missing(scales)) {
+    if(all(sapply(x, FUN=function(y) { all(range(y[['r']]) == range(x[[1]][['r']])) })))
+      scales <- "fixed"
+    else
+      scales <- "free"
+  }
 
   alt <- get_alternative(x[[1]])
   if(missing(main)) main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
@@ -1037,7 +1044,8 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'
 #'   res <- global_envelope_test(curve_sets=list(L = curve_set_L, F = curve_set_F,
 #'                                               G = curve_set_G, J = curve_set_J))
-#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"), scales = "free")
+#'   plot(res)
+#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 #'   }
 #' }
 #'
