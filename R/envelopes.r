@@ -177,6 +177,8 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
                                             probs = c(0.025, 0.975), quantile.type = 7,
                                             central = "mean") {
   alternative <- match.arg(alternative)
+  if(!(inherits(curve_set, "envelope") || curve_set_is1obs(curve_set)))
+    stop("The curve_set does not contain one observed function. Testing does not make sense.\n Did you want to construct a central region of your data? See the function central_region.")
   if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.")
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
                                    alternative=alternative,
