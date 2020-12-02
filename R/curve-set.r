@@ -445,7 +445,7 @@ plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) 
 plot.curve_set2d <- function(x, idx=1, ncol = 2 + 1*(length(idx)==3), ...) {
   funcs <- curve_set_funcs(x)
   rdf <- curve_set_rdf(x)
-  data <- do.call(rbind, lapply(idx, function(i) data.frame(rdf, idx=i, f=funcs[,i])))
+  df <- do.call(rbind, lapply(idx, function(i) data.frame(rdf, idx=i, f=funcs[,i])))
   return(ggplot() + choose_geom(df, varfill='f') +
            facet_wrap("idx", ncol=ncol) + labs(x="x", y="y", fill=""))
 }
