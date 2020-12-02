@@ -103,10 +103,11 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'   curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
 #'
 #'   # The combined directional quantile envelope test
-#'   res <- combined_scaled_MAD_envelope(curve_sets=list(curve_set_L, curve_set_F,
-#'                                                       curve_set_G, curve_set_J),
-#'                                       type = "qdir")
-#'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"), scales="free")
+#'   res <- combined_scaled_MAD_envelope(
+#'              curve_sets=list(L=curve_set_L, F=curve_set_F,
+#'                              G=curve_set_G, J=curve_set_J),
+#'              type = "qdir")
+#'   plot(res)
 #' }
 #'
 combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alpha = 0.05,
