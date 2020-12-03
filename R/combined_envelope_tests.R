@@ -45,16 +45,20 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'
 #' Given a list of 'curve_set' objects (see \code{\link{create_curve_set}}), a combined global scaled (directional quantile
 #' or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
-#' Details of the combined test can be found in Mrkvicka et al. (2017)
+#' Details of this combined test can be found in Mrkvicka et al. (2017).
+#' The implementation of this test is provided here for historical reasons:
+#' we recommend now instead the use of \code{\link{global_envelope_test}} also for combined tests;
+#' these combined tests are there implemented as described in Myllymäki and Mrkvička (2020).
 #'
 #' @inheritParams global_envelope_test
-#' @param type Either "qdir" for the direction quantile envelope test (type \code{'qdir'}
-#' in \code{\link{global_envelope_test}}) or "st" for the studentized envelope test
-#' (type \code{'st'} \code{\link{global_envelope_test}}).
+#' @param type Either "qdir" for the direction quantile envelope test or
+#' "st" for the studentized envelope test.
 #' @param ... Additional parameters to be passed to \code{\link{central_region}}.
 #' @references
-#' Mrkvicka, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
+#' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
 #' Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
+#'
+#' Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #' @export
 #' @examples
 #' if(require("spatstat", quietly=TRUE)) {
