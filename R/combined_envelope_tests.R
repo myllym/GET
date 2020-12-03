@@ -3,7 +3,7 @@
 # Quantiles (qdir) or sds (st) for the combined scaled MAD envelope tests, i.e.
 # the quantities are calculated for all the curve sets provided in the list "curve_sets"
 # and the results are returned in corresponding lists.
-# @inheritParams combined_scaled_MAD_envelope
+# @inheritParams combined_scaled_MAD_envelope_test
 #' @importFrom stats quantile
 #' @importFrom stats sd
 combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, type = c("qdir", "st"), probs = c(0.025, 0.975)) {
@@ -107,14 +107,14 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'   curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
 #'
 #'   # The combined directional quantile envelope test
-#'   res <- combined_scaled_MAD_envelope(
+#'   res <- combined_scaled_MAD_envelope_test(
 #'              curve_sets=list(L=curve_set_L, F=curve_set_F,
 #'                              G=curve_set_G, J=curve_set_J),
 #'              type = "qdir")
 #'   plot(res)
 #' }
 #'
-combined_scaled_MAD_envelope <- function(curve_sets, type = c("qdir", "st"), alpha = 0.05,
+combined_scaled_MAD_envelope_test <- function(curve_sets, type = c("qdir", "st"), alpha = 0.05,
                                          probs = c(0.025, 0.975), central = "mean", ...) {
     ntests <- length(curve_sets)
     if(ntests <= 1) stop("Number of functions should be at least two.")

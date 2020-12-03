@@ -114,7 +114,7 @@ GE.attr <- function(x, name = "p", ...) {
 # @inheritParams GET.composite
 adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, MrkvickaEtal2017, ..., save.envelope=FALSE) {
   if(length(curve_sets) > 1 & MrkvickaEtal2017 & type %in% c("st", "qdir")) {
-    global_envtest <- combined_scaled_MAD_envelope(curve_sets, type=type, alpha=alpha, probs=probs, ...)
+    global_envtest <- combined_scaled_MAD_envelope_test(curve_sets, type=type, alpha=alpha, probs=probs, ...)
   }
   else {
     global_envtest <- global_envelope_test(curve_sets, type=type, alpha=alpha,
