@@ -212,6 +212,20 @@ convert_fdata <- function(curve_set, ...) {
   curve_set
 }
 
+# Convert an envelope or fdata object to a curve_set object.
+convert_to_curveset <- function(curve_set, ...) {
+  if(inherits(curve_set, 'envelope')) {
+    curve_set <- envelope_to_curve_set(curve_set, ...)
+  } else if(inherits(curve_set, 'fdata')) {
+    curve_set <- fdata_to_curve_set(curve_set, ...)
+  } else if(!inherits(curve_set, 'curve_set')) {
+    stop('curve_set must either have class "envelope" (from spatstat) ',
+         'or "fdata" (from fda.usc) or "curve_set".')
+  }
+  check_curve_set_content(curve_set, ...)
+  curve_set
+}
+
 # Check that the curve_set object portrays residual curves.
 # @param curve_set A 'curve_set' object
 check_residualness <- function(curve_set) {
