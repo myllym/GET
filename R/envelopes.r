@@ -345,18 +345,11 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
 
 #' Print method for the class 'global_envelope'
 #'
-#' @param x A 'global_envelope' object
+#' @param x A 'global_envelope' object.
 #' @param ... Ignored.
 #' @export
 print.global_envelope <- function(x, ...) {
-  if(is.null(attr(x, "p"))) istest <- FALSE
-  else istest <- TRUE
-  printhelper_method(x, istest)
-  if(istest)
-    cat(" * Number of r with observed function outside the envelope: ", how_many_outside(x), "\n",
-        " * Total number of argument values r: ", length(x[['r']]), "\n", sep="")
-  cat("The object contains: \n")
-  printhelper_contains(x, istest)
+  printhelper_ge_base(x)
 }
 
 #' Print method for the class 'combined_global_envelope'
@@ -365,16 +358,7 @@ print.global_envelope <- function(x, ...) {
 #' @param ... Ignored.
 #' @export
 print.combined_global_envelope <- function(x, ...) {
-  if(is.null(attr(attr(x, "level2_ge"), "p"))) istest <- FALSE
-  else istest <- TRUE
-  printhelper_method(attr(x, "level2_ge"), istest)
-  cat("The object contains a list of ", length(x), " components\n",
-      " * each containing: ", paste0("$", names(x[[1]]), " "), "\n", sep="")
-  if(istest)
-    cat(" * Number of r-values with observed function outside the envelope: ",
-        paste0(sapply(x, function(y) how_many_outside(y), simplify=TRUE), " "), "\n",
-        " * Total number of argument values r                             : ",
-        paste0(sapply(x, function(y) length(y[['r']]), simplify=TRUE), " "), "\n", sep="")
+  printhelper_ge_combined(x)
 }
 
 #' Plot method for the class 'global_envelope'

@@ -108,6 +108,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
 #' @export
 print.fboxplot <- function(x, ...) {
   printhelper_method(x, FALSE)
+  if(!is.null(attr(x, "alpha"))) printhelper_method_fboxplotextra(x, combined=FALSE)
   cat("The object contains: \n")
   printhelper_contains(x, FALSE)
 }
@@ -119,14 +120,9 @@ print.fboxplot <- function(x, ...) {
 #'
 #' @export
 print.combined_fboxplot <- function(x, ...) {
-  y <- attr(x, "level2_ge")
-  cat(attr(x, "method"), ":\n",
-      " * ", 100*(1-attr(y, "alpha")), "% central region based on the measure \"", attr(y, "type"), "\"\n",
-      " * Expansion factor: ", attr(x, "factor"), "\n",
-      " * Outliers: ",
-      ifelse(is.null(attr(x, "outliers")), "none", colnames(attr(x, "outliers")[[1]])), "\n", sep="")
-  cat("The object contains a list of ", length(x), " components\n",
-      " * each containing: ", paste0("$", names(x[[1]]), " "), "\n", sep="")
+  printhelper_method(x, istest=FALSE, adj=FALSE)
+  printhelper_method_fboxplotextra(x, combined=TRUE)
+  printhelper_contains_combined(x)
 }
 
 #' Plot method for the class 'fboxplot'
