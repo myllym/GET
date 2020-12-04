@@ -3,6 +3,10 @@
 #' Crop the curve set to the interval of distances [r_min, r_max],
 #' calculate residuals, scale the residuals and perform a deviation test
 #' with a chosen deviation measure.
+#' The deviation tests are well known in spatial statistics; in \pkg{GET} they are
+#' provided for comparative purposes. Some (maximum type) of the deviation test
+#' have their corresponding envelope tests available, see Myllymäki et al., 2017
+#' (and 'unscaled', 'st' and 'qdir' in \code{\link{global_envelope_test}}).
 #'
 #'
 #' The deviation test is based on a test function \eqn{T(r)}{T(r)} and it works as follows:
@@ -69,6 +73,8 @@
 #' \eqn{u_i}{u_i}, \eqn{i=1,...,nsim+1}{i=1,...,nsim+1} (where \eqn{u_1}{u_1} corresponds to the data pattern) is returned.
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
+#'
+#' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #' @export
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
