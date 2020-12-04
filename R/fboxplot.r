@@ -46,7 +46,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
       dist <- factor * (res[[i]]$hi - res[[i]]$lo)
       res[[i]]$whisker.lo <- res[[i]]$lo - dist
       res[[i]]$whisker.hi <- res[[i]]$hi + dist
-      attr(res[[i]], "method") <- "Functional boxplot"
+      attr(res[[i]], "method") <- paste0("1/", length(res), "th of the combined functional boxplot")
       class(res[[i]]) <- c("fboxplot", class(res[[i]]))
       # Outliers
       funcs <- curve_set_funcs(curve_sets[[i]])

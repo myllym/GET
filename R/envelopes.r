@@ -73,8 +73,8 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
     central <- "median"
     warning("Invalid option fiven for central. Using central = median.")
   }
-  picked_attr <- pick_attributes(curve_set, alternative=alternative, type=type) # saving for attributes / plotting purposes
-  curve_set <- convert_envelope(curve_set)
+  picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
+  curve_set <- convert_to_curveset(curve_set)
 
   # Measures for functional ordering
   measure <- type
@@ -260,6 +260,8 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
            res_erl <- individual_global_envelope_test(curve_set_u, type="erl", alpha=1-coverage, alternative=alt2)
          }
   )
+  res_erl <- envelope_set_labs(res_erl, xlab="Function", ylab="ERL measure")
+  attr(res_erl, "labels") <- names(curve_sets)
 
   # 3) The 100(1-alpha)% global combined ERL envelope
   distance_lexo_sorted <- sort(attr(res_erl, "k"), decreasing=TRUE)
@@ -275,11 +277,11 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   LB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=min) })
   UB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
   # Update the bounding curves (lo, hi) and kalpha to the first level central regions
-  for(i in 1:length(curve_sets)) {
+  for(i in 1:ntests) {
     if(get_alternative(res_ls[[i]]) != "greater") res_ls[[i]]$lo <- LB[[i]]
     if(get_alternative(res_ls[[i]]) != "less") res_ls[[i]]$hi <- UB[[i]]
-    attr(res_ls[[i]], "alpha") <- NA
-    attr(res_ls[[i]], "k_alpha") <- NULL
+    attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "k_alpha") <- NULL
+    attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of the combined global envelope test")
   }
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
 
@@ -287,13 +289,20 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   attr(res_ls, "level2_ge") <- res_erl
   attr(res_ls, "level2_curve_set") <- curve_set_u
   attr(res_ls, "method") <- "Combined global envelope (two-step)"
+  if(!is.null(attr(res_ls[[1]], "argu")))
+    res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
+                                ylab=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
+  else
+    res_ls <- envelope_set_labs(res_ls, xlab=expression(italic(r)),
+                                ylab=expression(italic(T(r))))
+  attr(res_ls, "alternative") <- get_alternative(res_ls[[1]])
+  attr(res_ls, "type") <- type
+  attr(res_ls, "alpha") <- 1-coverage
+  attr(res_ls, "p") <- attr(res_erl, "p")
+  attr(res_ls, "k") <- attr(res_erl, "k")
+  attr(res_ls, "nstep") <- 2
   class(res_ls) <- c("combined_global_envelope", class(res_ls))
   if(curve_set_is2d(curve_sets[[1]])) class(res_ls) <- c("combined_global_envelope2d", class(res_ls))
-  res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
-                              argu=attr(res_ls[[1]], "argu"),
-                              xexp=attr(res_ls[[1]], "xexp"),
-                              ylab=paste0("T(", attr(res_ls[[1]], "argu"), ")"),
-                              yexp=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
   res_ls
 }
 
@@ -313,38 +322,24 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   idx <- lapply(1:nfuns, FUN = function(i) ((i-1)*nr+1):(i*nr))
   # Split the envelopes to the original groups
   res_ls <- split(res, f = rep(1:nfuns, each=nr))
-  # Create empty "level2_ge" attribute containing the test information
-  attr(res_ls, "level2_ge") <- data.frame(r=1, obs=attr(res, "k")[1],
-                                          central=mean(attr(res, "k")))
-  if(attr(res, "type") %in% c("qdir", "st", "unscaled")) {
-    attr(res_ls, "level2_ge")$lo <- NA
-    attr(res_ls, "level2_ge")$hi <- attr(res, "k_alpha")
-    alt2 <- "greater"
-  }
-  else {
-    attr(res_ls, "level2_ge")$lo <- attr(res, "k_alpha")
-    attr(res_ls, "level2_ge")$hi <- NA
-    alt2 <- "less"
-  }
-  mostattributes(attr(res_ls, "level2_ge")) <- attributes(res)
-  attr(attr(res_ls, "level2_ge"), "einfo")$alternative <- alt2
+
   # Set unreasonable attributes of individuals sets of curves to NULL
-  anames <- c("p", "p_interval", "ties", "k", "k_alpha", "method")
+  for(i in 1:nfuns)
+    attr(res_ls[[i]], "method") <- paste0("1/", nfuns, "th of the combined global envelope test")
+  anames <- c("p", "p_interval", "ties", "k", "k_alpha", "alpha")
   anames <- anames[anames %in% names(attributes(res_ls[[1]]))]
   for(name in anames) {
-    for(i in 1:length(res_ls)) attr(res_ls[[i]], name) <- NULL
+    for(i in 1:nfuns) attr(res_ls[[i]], name) <- NULL
   }
-  for(i in 1:nfuns) attr(res_ls[[i]], "alpha") <- NA
+
+  mostattributes(res_ls) <- attributes(res)
+  attr(res_ls, "row.names") <- NULL
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
   attr(res_ls, "method") <- "Combined global envelope (one-step)"
-  class(res_ls) <- c("combined_global_envelope", class(res_ls))
+  attr(res_ls, "nstep") <- 1
+  class(res_ls) <- c("combined_global_envelope", "list")
   if(curve_set_is2d(curve_sets[[1]]))
-    class(res_ls) <- c("combined_global_envelope2d", class(res))
-  res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
-                              argu=attr(res_ls[[1]], "argu"),
-                              xexp=attr(res_ls[[1]], "xexp"),
-                              ylab=paste0("T(", attr(res_ls[[1]], "argu"), ")"),
-                              yexp=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
+    class(res_ls) <- c("combined_global_envelope2d", class(res_ls))
   res_ls
 }
 

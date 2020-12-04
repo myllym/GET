@@ -332,13 +332,19 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
          "mean" = {
            if(!(variances %in% c("equal", "unequal"))) stop("Options for variances are equal and unequal.")
            if(variances == "unequal") x <- corrUnequalVar(x, groups, n.aver, mirror)
+           if(!contrasts) ylab <- expression(italic(bar(T)[i](r)))
+           else ylab <- expression(italic(bar(T)[i](r)-bar(T)[j](r)))
          },
          "var" = {
            x <- testUnequalVarTrans(x, groups)
+           if(!contrasts) ylab <- expression(italic(bar(Z)[i](r)))
+           else ylab <- expression(italic(bar(Z)[i](r)-bar(Z)[j](r)))
          },
          "cov" = {
            x <- testUnequalCovTrans(x, groups, lag=cov.lag)
            r <- r[1:(length(r)-cov.lag)]
+           if(!contrasts) ylab <- expression(italic(bar(W)[i](r)))
+           else ylab <- expression(italic(bar(W)[i](r)-bar(W)[j](r)))
          })
 
   # setting the 'fun', "means" or "constrasts"
@@ -361,6 +367,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
   attr(res, "method") <- "Graphical functional ANOVA" # Change method name
   attr(res, "contrasts") <- contrasts
   attr(res, "labels") <- complabels
+  res <- envelope_set_labs(res, ylab=ylab)
   attr(res, "call") <- match.call()
   if(savefuns) attr(res, "simfuns") <- csets
   res
@@ -450,5 +457,7 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
 
   cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
   # Perform the global envelope test
-  global_envelope_test(cset, alternative="greater", ...)
+  res <- global_envelope_test(cset, alternative="greater", ...)
+  res <- envelope_set_labs(res, ylab = expression(italic(F(r))))
+  res
 }

@@ -123,10 +123,18 @@ combined_scaled_MAD_envelope_test <- function(curve_sets, type = c("qdir", "st")
     # Make the individual tests saving the deviations
     switch(type,
             qdir = {
-                res_ls <- lapply(curve_sets, FUN = function(x) { central_region(x, type="qdir", coverage=1-alpha, probs = probs, central=central, ...) })
+                res_ls <- lapply(curve_sets,
+                                 FUN = function(x) {
+                                   central_region(x, type="qdir", coverage=1-alpha,
+                                                  probs = probs, central=central, ...)
+                                 })
             },
             st = {
-                res_ls <- lapply(curve_sets, FUN = function(x) { central_region(x, type="st", coverage=1-alpha, central=central, ...) })
+                res_ls <- lapply(curve_sets,
+                                 FUN = function(x) {
+                                   central_region(x, type="st", coverage=1-alpha,
+                                                  central=central, ...)
+                                 })
             })
     # Calculate quantiles (qdir) or sds (st)
     envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, type=type, probs=probs)
@@ -153,10 +161,17 @@ combined_scaled_MAD_envelope_test <- function(curve_sets, type = c("qdir", "st")
     attr(res_ls, "level2_curve_set") <- curve_set_u
     attr(res_ls, "method") <- "Combined global envelope (scaled MAD)"
     class(res_ls) <- c("combined_global_envelope", class(res_ls))
-    res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
-                                argu=attr(res_ls[[1]], "argu"),
-                                xexp=attr(res_ls[[1]], "xexp"),
-                                ylab=paste0("T(", attr(res_ls[[1]], "argu"), ")"),
-                                yexp=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
+    if(!is.null(attr(res_ls[[1]], "argu")))
+      res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
+                                  ylab=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
+    else
+      res_ls <- envelope_set_labs(res_ls, xlab=expression(italic(r)),
+                                  ylab=expression(italic(T(r))))
+    attr(res_ls, "alternative") <- get_alternative(res_ls[[1]])
+    attr(res_ls, "type") <- type
+    attr(res_ls, "alpha") <- alpha
+    attr(res_ls, "p") <- attr(res_rank, "p")
+    attr(res_ls, "p_interval") <- attr(res_rank, "p_interval")
+    attr(res_ls, "nstep") <- 2
     res_ls
 }

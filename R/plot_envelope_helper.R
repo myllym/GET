@@ -134,27 +134,29 @@ default_labels <- function(x, labels) {
 }
 
 plotdefaultlabs <- function(x, xlab, ylab) {
+  choice <- function(attrname) {
+    if(is.expression(attr(x, attrname)))
+      substitute(i, list(i=attr(x, attrname)))
+    else
+      substitute(italic(i), list(i=attr(x, attrname)))
+  }
   if(missing('xlab')) {
-    if(attr(x, "xlab") == attr(x, "argu")) {
-      if(is.expression(attr(x, "xexp")))
-        xlab <- substitute(i, list(i=attr(x, "xexp")))
-      else
-        xlab <- substitute(italic(i), list(i=attr(x, "xexp")))
-    }
-    else {
-      if(is.expression(attr(x, "xexp")))
-        xlab <- substitute(paste(i, " (", j, ")", sep=""),
-                           list(i=attr(x, "xexp"), j=attr(x, "argu")))
-      else
-        xlab <- substitute(paste(italic(i), " (", j, ")", sep=""),
-                           list(i=attr(x, "xexp"), j=attr(x, "argu")))
+    if(!is.null(attr(x, "xlab"))) {
+      xlab <- choice("xlab")
+    } else if(!is.null(attr(x, "argu"))) {
+      xlab <- choice("argu")
+    } else {
+      xlab <- expression(italic(r))
     }
   }
   if(missing('ylab')) {
-    if(is.expression(attr(x, "yexp")))
-      ylab <- substitute(i, list(i=attr(x, "yexp")))
-    else
-      ylab <- substitute(italic(i), list(i=attr(x, "yexp")))
+    if(!is.null(attr(x, "yexp"))) {
+      ylab <- choice("yexp")
+    } else if(!is.null(attr(x, "ylab"))) {
+      ylab <- choice("ylab")
+    } else {
+      ylab <- expression(italic(T(r)))
+    }
   }
   list(xlab=xlab, ylab=ylab)
 }

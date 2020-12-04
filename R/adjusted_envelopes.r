@@ -376,7 +376,7 @@ GET.composite <- function(X, X.ls = NULL,
       X <- list(X) # The observed curves (a list of curve_set objects)
       X.ls <- lapply(X.ls, FUN=list) # The simulated curves (a list of lists of curve_set objects)
     }
-    picked_attr_ls <- lapply(X, FUN=pick_attributes, alternative=alt, type=type)
+    picked_attr_ls <- lapply(X, FUN=pick_attributes, alternative=alt)
     X <- check_curve_set_dimensions(X)
     X.ls <- lapply(X.ls, FUN = check_curve_set_dimensions)
     # Check equality of dimensions over repetitions
@@ -394,7 +394,7 @@ GET.composite <- function(X, X.ls = NULL,
     tmp <- adj.simulate(X=X, nsim=nsim, nsimsub=nsimsub,
                        simfun=simfun, fitfun=fitfun, calcfun=calcfun, testfuns=testfuns, ...,
                        verbose=verbose, mc.cores=mc.cores)
-    picked_attr_ls <- lapply(tmp$X, FUN=pick_attributes, alternative=alt, type=type)
+    picked_attr_ls <- lapply(tmp$X, FUN=pick_attributes, alternative=alt)
     X <- check_curve_set_dimensions(tmp$X)
     X.ls <- lapply(tmp$X.ls, FUN = check_curve_set_dimensions)
   }
@@ -499,8 +499,8 @@ GET.composite <- function(X, X.ls = NULL,
         attr(res, "alpha_star") <- alpha_star
       }
       else {
-        attr(attr(res, "level2_ge"), "alpha") <- alpha
-        attr(attr(res, "level2_ge"), "alpha_star") <- alpha_star
+        attr(res, "alpha") <- attr(attr(res, "level2_ge"), "alpha") <- alpha
+        attr(res, "alpha_star") <- attr(attr(res, "level2_ge"), "alpha_star") <- alpha_star
       }
     }
   }
