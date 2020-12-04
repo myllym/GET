@@ -345,6 +345,7 @@ print.curve_set <- function(x, ...) {
 #' @param idx_name A variable name to be printed with the highlighted functions' idx. Default to empty.
 #' @param col The basic color for the curves (which are not highlighted).
 #' @param ... Ignored.
+#' @inheritParams plot.global_envelope
 #' @seealso \code{\link{create_curve_set}}
 #'
 #' @export
@@ -361,8 +362,7 @@ print.curve_set <- function(x, ...) {
 #' plot(cset, idx=c(1,3), col_idx=c("black", "red"), idx_name="Special functions")
 #' plot(cset, idx=c(1,3)) + ggplot2::theme(legend.position = "bottom")
 #' # Set labels
-#' plot(cset, idx=c(1,3)) + ggplot2::scale_x_continuous(name = "r") +
-#'   ggplot2::scale_y_continuous(name = "T(r)")
+#' plot(cset, idx=c(1,3), xlab="x", ylab="Value")
 #' # Add title
 #' plot(cset) + ggplot2::ggtitle("Example curves")
 #' # Change ylim
@@ -375,7 +375,7 @@ print.curve_set <- function(x, ...) {
 #'   # Remove legend
 #'   plot(cset) + ggplot2::guides(col = "none")
 #' }
-plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) {
+plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', xlab, ylab, ...) {
   if(missing(idx)) {
     if(curve_set_is1obs(x))
       idx <- 1
@@ -437,6 +437,8 @@ plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) 
   else {
     p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~funcs, group = ~id), col = col) )
   }
+  if(!missing(xlab)) p <- p + scale_x_continuous(name = xlab)
+  if(!missing(ylab)) p <- p + scale_y_continuous(name = ylab)
   p
 }
 
