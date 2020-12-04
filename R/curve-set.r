@@ -478,8 +478,10 @@ combine_curve_sets <- function(x, equalr = TRUE) {
   # Combine
   cset$funcs <- do.call(rbind, lapply(x, FUN=function(curve_set) { curve_set[['funcs']] }))
   if(!is.null(x[[1]][['r']])) {
-    if(is.vector(x[[1]]$r)) cset$r <- do.call(c, lapply(x, FUN=function(curve_set) { curve_set[['r']] }))
-    else cset$r <- do.call(rbind, lapply(x, FUN=function(curve_set) { curve_set[['r']] }))
+    if(is.vector(x[[1]]$r))
+      cset$r <- do.call(c, lapply(x, FUN=function(curve_set) { curve_set[['r']] }))
+    else
+      cset$r <- do.call(rbind, lapply(x, FUN=function(curve_set) { curve_set[['r']] }))
   }
   if(!is.null(x[[1]][['theo']]))
     cset$theo <- do.call(c, lapply(x, FUN=function(curve_set) { curve_set[['theo']] }))
