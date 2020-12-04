@@ -466,6 +466,7 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
                                  ncol = 2 + 1*(length(x)==3),
                                  legend = TRUE, ...) {
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
+
   if(missing(scales)) {
     if(all(sapply(x, FUN=function(y) { all(range(y[['r']]) == range(x[[1]][['r']])) })))
       scales <- "fixed"
@@ -474,18 +475,20 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
   }
 
   alt <- get_alternative(x[[1]])
-  if(missing(main)) main <- env_main_default(attr(x, "level2_ge"), digits=digits, alternative=alt)
-  d <- plotdefaultlabs(attr(x, "level2_ge"), xlab, ylab)
-  if(missing(labels)) labels <- default_labels(x, labels)
+  if(missing(main)) main <- env_main_default(x, digits=digits, alternative=alt)
+  d <- plotdefaultlabs(x, xlab, ylab)
 
   if(level == 1) {
+    if(missing(labels)) labels <- default_labels(x, labels)
     env_combined_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
                         labels=labels, scales=scales,
                         max_ncols_of_plots=ncol, legend=legend,
                         sign.col=sign.col)
   }
   else {
-    if(length(attr(x, "level2_ge")[['r']]) < 2) stop("Invalid plot for level = 2.")
+    if(attr(x, "nstep") != 2)
+      stop("level = 2 plot not available for one-step combined global envelopes.")
+    if(missing(labels)) labels <- default_labels(attr(x, "level2_ge"), labels)
     env_dotplot_ggplot(attr(x, "level2_ge"), labels=labels)
   }
 }
