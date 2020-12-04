@@ -368,9 +368,9 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors.
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
-#' @param main See \code{\link{plot.default}}. A sensible default exists.
-#' @param xlab See \code{\link{plot.default}}. A sensible default exists.
-#' @param ylab See \code{\link{plot.default}}. A sensible default exists.
+#' @param main The title for the plot. A sensible default exists.
+#' @param xlab The label for the x-axis. A sensible default exists.
+#' @param ylab The label for the y-axis. A sensible default exists.
 #' @param sign.col The color for the observed curve when outside the global envelope
 #' (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 #' to no coloring.
