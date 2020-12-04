@@ -1,5 +1,5 @@
 get_alternative <- function(global_envelope) {
-  attr(global_envelope, "einfo")$alternative
+  attr(global_envelope, "alternative")
 }
 
 # It should be:
@@ -18,11 +18,9 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
   if(curve_set_is1obs(curve_set)) {
     df <- data.frame(curve_set_rdf(curve_set), obs=curve_set_1obs(curve_set),
                      central=T_0, lo=LB, hi=UB)
-    picked_attr$einfo$nsim <- Nfunc-1
   }
   else {
     df <- data.frame(curve_set_rdf(curve_set), central=T_0, lo=LB, hi=UB)
-    picked_attr$einfo$nsim <- Nfunc
   }
   if(isenvelope) {
     res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
@@ -31,26 +29,18 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
                         labl = picked_attr[['labl']], desc = picked_attr[['desc']],
                         unitname = NULL, fname = picked_attr[['fname']], yexp = picked_attr[['yexp']])
     attr(res, "shade") <- c("lo", "hi")
-    if(type == "st") picked_attr$einfo$nSD <- kalpha
-    if(type == "rank") picked_attr$einfo$nrank <- kalpha
+    attr(res, "alternative") <- picked_attr[['alternative']]
   }
   else {
     res <- df
-    attr(res, "argu") <- picked_attr[['argu']]
-    attr(res, "fname") <- picked_attr[['fname']]
-    attr(res, "labl") <- picked_attr[['labl']]
-    attr(res, "desc") <- picked_attr[['desc']]
-    attr(res, "ylab") <- picked_attr[['ylab']]
-    attr(res, "yexp") <- picked_attr[['yexp']]
+    attrnames <- names(picked_attr)
+    for(n in attrnames) attr(res, n) <- picked_attr[[n]]
   }
-  attr(res, "xlab") <- picked_attr[['xlab']]
-  attr(res, "xexp") <- picked_attr[['xexp']]
-  attr(res, "einfo") <- picked_attr[['einfo']]
-  # Extra for global envelopes
   class(res) <- c("global_envelope", class(res))
   if(curve_set_is2d(curve_set)) class(res) <- c("global_envelope2d", class(res))
   attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
+  attr(res, "nfunc") <- Nfunc
   attr(res, "k_alpha") <- kalpha
   attr(res, "alpha") <- alpha
   attr(res, "k") <- distance

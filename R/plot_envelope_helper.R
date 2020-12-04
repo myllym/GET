@@ -1,5 +1,6 @@
-# A helper function for avoiding repetition of code (in envelope tests).
-pick_attributes <- function(curve_set, alternative, type) {
+# A helper function for extracting information from the curve set
+# (envelope, fdata, curve_set) object given for global envelope calculations
+pick_attributes <- function(curve_set, alternative = "two.sided") {
     # saving for attributes / plotting purposes
     lo.name <- "lower critical boundary for %s"
     hi.name <- "upper critical boundary for %s"
@@ -11,53 +12,34 @@ pick_attributes <- function(curve_set, alternative, type) {
             greater = {
                 lo.name <- "infinite lower boundary"
             })
+    res <- NULL
     if(inherits(curve_set, 'envelope')) {
-        names <- c("argu", "fname", "labl", "ylab", "yexp", "einfo")
-        for(i in 1:length(names)) assign(names[i], attr(curve_set, names[i]))
-        desc <- attr(curve_set, "desc")
-        desc[4] <- lo.name
-        desc[5] <- hi.name
-        einfo$global <- TRUE
-        einfo$alternative <- alternative
-        einfo$scale <- NULL
-        einfo$clamp <- NULL
-        einfo$nrank <- NULL
-        einfo$VARIANCE <- (type == "st")
-        einfo$nSD <- NULL
+        names <- c("fname", "argu", "labl", "ylab", "yexp", "desc")
+        for(i in 1:length(names)) res[[names[i]]] <- attr(curve_set, names[i])
+        res[['desc']][4] <- lo.name
+        res[['desc']][5] <- hi.name
+    } else if(inherits(curve_set, 'fdata')) {
+      if(!is.null(curve_set$names[['xlab']]))
+        res[['xlab']] <- curve_set$names[['xlab']]
+      else
+        res[['xlab']] <- expression(italic(r))
+      if(!is.null(curve_set$names[['ylab']]))
+        res[['ylab']] <- curve_set$names[['ylab']]
+      else
+        res[['ylab']] <- expression(italic(T(r)))
+    } else {
+        res[['xlab']] <- expression(italic(r))
+        res[['ylab']] <- expression(italic(T(r)))
     }
-    else {
-        fname <- "T"
-        argu <- "r"
-        if(curve_set_is1obs(curve_set)) {
-          labl <- c("r", "T[obs](r)", "T[0](r)", "T[lo](r)", "T[hi](r)")
-          desc <- c("distance argument r",
-                    "observed value of %s for data pattern",
-                    "central curve under the null hypothesis",
-                    lo.name, hi.name)
-        }
-        else {
-          labl <- c("r", "T[0](r)", "T[lo](r)", "T[hi](r)")
-          desc <- c("distance argument r",
-                    "central curve under the null hypothesis",
-                    lo.name, hi.name)
-        }
-        ylab <- "T(r)"
-        yexp <- quote(T(r))
-        # tack on envelope information
-        einfo <- list(alternative = alternative)
-    }
-    list(argu=argu, fname=fname, labl=labl, desc=desc, ylab=ylab, yexp=yexp,
-         xlab=argu, xexp=quote(r), einfo=einfo)
+    res[['alternative']] <- alternative
+    res
 }
 
 # Reset attributes xlab, argu, xecp, ylab, yexp used for plotting purposes
 # (Used by special functions utilizing global envelope tests.)
-envelope_set_labs <- function(x, xlab, argu, xexp, ylab, yexp) {
+envelope_set_labs <- function(x, xlab, ylab) {
   if(!missing(xlab)) attr(x, "xlab") <- xlab
-  if(!missing(argu)) attr(x, "argu") <- argu
-  if(!missing(xexp)) attr(x, "xexp") <- xexp
   if(!missing(ylab)) attr(x, "ylab") <- ylab
-  if(!missing(yexp)) attr(x, "yexp") <- yexp
   x
 }
 
