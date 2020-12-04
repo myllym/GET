@@ -493,8 +493,8 @@ combine_curve_sets <- function(x, equalr = TRUE) {
 # If the latter, then convert the objects to curve sets.
 # Check that the curve sets have same elements and dimensions of them (numbers of r-values can differ for equalr=FALSE).
 # @inheritParams combine_curve_sets
-check_curve_set_dimensions <- function(x, equalr=FALSE) {
-  x <- lapply(x, FUN=convert_envelope)
+check_curve_set_dimensions_and_return_curveset <- function(x, equalr=FALSE) {
+  x <- lapply(x, FUN=convert_to_curveset)
   checkequal <- function(f) {
     all(sapply(x, FUN=function(curve_set) { f(curve_set) == f(x[[1]]) }))
   }

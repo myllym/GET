@@ -377,8 +377,8 @@ GET.composite <- function(X, X.ls = NULL,
       X.ls <- lapply(X.ls, FUN=list) # The simulated curves (a list of lists of curve_set objects)
     }
     picked_attr_ls <- lapply(X, FUN=pick_attributes, alternative=alt)
-    X <- check_curve_set_dimensions(X)
-    X.ls <- lapply(X.ls, FUN = check_curve_set_dimensions)
+    X <- check_curve_set_dimensions_and_return_curveset(X)
+    X.ls <- lapply(X.ls, FUN = check_curve_set_dimensions_and_return_curveset)
     # Check equality of dimensions over repetitions
     if(!all(sapply(X.ls, FUN=function(curve_set) { identical(curve_set[[1]]$r, y=X[[1]]$r) }))) stop("The number of argument values in the observed and simulated sets of curves differ.")
     if(!all(sapply(X.ls, FUN=function(curve_set) { curve_set_nfunc(curve_set[[1]]) == curve_set_nfunc(X[[1]]) }))) stop("The number of simulations in the observed and simulated sets of curves differ.")
@@ -395,8 +395,8 @@ GET.composite <- function(X, X.ls = NULL,
                        simfun=simfun, fitfun=fitfun, calcfun=calcfun, testfuns=testfuns, ...,
                        verbose=verbose, mc.cores=mc.cores)
     picked_attr_ls <- lapply(tmp$X, FUN=pick_attributes, alternative=alt)
-    X <- check_curve_set_dimensions(tmp$X)
-    X.ls <- lapply(tmp$X.ls, FUN = check_curve_set_dimensions)
+    X <- check_curve_set_dimensions_and_return_curveset(tmp$X)
+    X.ls <- lapply(tmp$X.ls, FUN = check_curve_set_dimensions_and_return_curveset)
   }
 
   # Crop curves (if r_min or r_max given)
