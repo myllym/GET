@@ -269,7 +269,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   # Indices of the curves from which to calculate the convex hull
   curves_for_envelope_ind <- which(attr(res_erl, "k") >= kalpha)
   # Curves
-  curve_sets <- lapply(curve_sets, FUN=convert_envelope)
+  curve_sets <- lapply(curve_sets, FUN=convert_to_curveset)
   all_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
   # Curves from which to calculate the convex hull
   curves_for_envelope_l <- lapply(all_curves_l, function(x) { x[curves_for_envelope_ind,] })

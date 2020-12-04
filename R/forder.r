@@ -136,7 +136,7 @@ individual_forder <- function(curve_set,
   possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!")
 
-  curve_set <- convert_envelope(curve_set)
+  curve_set <- convert_to_curveset(curve_set)
 
   if(measure %in% c('max', 'int', 'int2')) {
     curve_set <- residual(curve_set, use_theo = use_theo)
