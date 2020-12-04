@@ -235,7 +235,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
 combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
   ntests <- length(curve_sets)
   if(ntests < 1) stop("Only one curve_set, no combining to be done.")
-  check_curve_set_dimensions(curve_sets)
+  check_curve_set_dimensions_and_return_curveset(curve_sets) # Do not catch the curve_set here
   CR_or_GET <- match.arg(CR_or_GET)
 
   # 1) First stage: Calculate the functional orderings individually for each curve_set
