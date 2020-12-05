@@ -43,7 +43,6 @@ envelope_set_labs <- function(x, xlab, ylab) {
   x
 }
 
-
 # A helper function to check whether the xaxis needs to be reticked with new values due to
 # combined tests.
 retick_xaxis <- function(x) {
@@ -62,29 +61,33 @@ retick_xaxis <- function(x) {
 env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {
   if(!is.null(attr(x, "p_interval"))) {
     if(alternative == "two.sided")
-      main <- paste(attr(x, "method"), ": p-interval = (",
-                    round(attr(x, "p_interval")[1], digits=digits),", ",
-                    round(attr(x, "p_interval")[2], digits=digits), ")", sep="")
+      main <- paste0(attr(x, "method"), ": p-interval = (",
+                     round(attr(x, "p_interval")[1], digits=digits),", ",
+                     round(attr(x, "p_interval")[2], digits=digits), ")")
     else
-      main <- paste(attr(x, "method"), ": p-interval = (",
-                    round(attr(x, "p_interval")[1], digits=digits),", ",
-                    round(attr(x, "p_interval")[2], digits=digits), ") \n",
-                    "Alternative = \"", alternative, "\"\n", sep="")
+      main <- paste0(attr(x, "method"), ": p-interval = (",
+                     round(attr(x, "p_interval")[1], digits=digits),", ",
+                     round(attr(x, "p_interval")[2], digits=digits), ") \n",
+                     "Alternative = \"", alternative, "\"\n")
   }
   else {
     if(!is.null(attr(x, "p"))) {
       p <- round(attr(x, "p"), digits=digits)
       if(p > 0) main <- paste(attr(x, "method"), ": p = ", p, sep="")
-      else main <- paste(attr(x, "method"), ": p < ", 10^(-digits), sep="")
+      else main <- paste0(attr(x, "method"), ": p < ", 10^(-digits))
       if(alternative != "two.sided")
-        main <- paste(main, "\n",
-                      "Alternative = \"", alternative, "\"\n", sep="")
+        main <- paste0(main, "\n",
+                       "Alternative = \"", alternative, "\"\n")
     }
     else {
       if(inherits(x, c("fboxplot", "combined_fboxplot")))
-        main <- paste(attr(x, "method"), " based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
-      else if(inherits(x, c("global_envelope")))
-         main <- paste(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")", sep="")
+        main <- paste0(attr(x, "method"), " based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
+      else if(inherits(x, c("global_envelope"))) {
+        if(!is.null(attr(x, "alpha")))
+          main <- paste0(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
+        else
+          main <- paste0(attr(x, "method"), " (", attr(x, "type"), ")")
+      }
       else main <- NULL
     }
   }
