@@ -282,7 +282,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
     if(get_alternative(res_ls[[i]]) != "greater") res_ls[[i]]$lo <- LB[[i]]
     if(get_alternative(res_ls[[i]]) != "less") res_ls[[i]]$hi <- UB[[i]]
     attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "k_alpha") <- NULL
-    attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of the combined global envelope test")
+    attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of a combined global envelope test")
   }
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
 
@@ -326,7 +326,7 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
 
   # Set unreasonable attributes of individuals sets of curves to NULL
   for(i in 1:nfuns)
-    attr(res_ls[[i]], "method") <- paste0("1/", nfuns, "th of the combined global envelope test")
+    attr(res_ls[[i]], "method") <- paste0("1/", nfuns, "th of a combined global envelope test")
   anames <- c("p", "p_interval", "ties", "k", "k_alpha", "alpha")
   anames <- anames[anames %in% names(attributes(res_ls[[1]]))]
   for(name in anames) {
