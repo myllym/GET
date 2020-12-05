@@ -8,6 +8,7 @@
   x,
   fixedscales = 2,
   main,
+  labels,
   what = c("obs", "lo", "hi", "lo.sign", "hi.sign"),
   sign.col = "red",
   transparency = 155/255,
@@ -21,6 +22,9 @@
 \item{fixedscales}{0, 1 or 2. See details.}
 
 \item{main}{The overall main.}
+
+\item{labels}{A character vector of suitable length giving the labels for the separate plots.
+Default exists. This parameter allows replacing the default.}
 
 \item{what}{Character vector specifying what information should be plotted for 2d functions.
 A combination of:
@@ -66,6 +70,7 @@ plot(res, what=c("obs", "lo", "hi"), fixedscales=FALSE)
 if(requireNamespace("gridExtra", quietly=TRUE)) {
   # Edit style of "fixedscales = 2" plots
   plot(res, what=c("obs", "hi")) + ggplot2::theme_minimal()
+  plot(res, what=c("obs", "hi")) + ggplot2::theme_bw()
 
   # Edit style (e.g. theme) of "fixedscales = 1 or 0" plots
   gs <- lapply(res, plot, what=c("obs", "hi"), main="")

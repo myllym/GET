@@ -21,11 +21,11 @@
 \arguments{
 \item{x}{an 'combined_fboxplot' object}
 
-\item{main}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{main}{The title for the plot. A sensible default exists.}
 
-\item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{xlab}{The label for the x-axis. A sensible default exists.}
 
-\item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{ylab}{The label for the y-axis. A sensible default exists.}
 
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
@@ -33,7 +33,8 @@ Otherwise labels for the separate plots.}
 
 \item{scales}{See \code{\link[ggplot2]{facet_wrap}}.
 Use \code{scales = "free"} when the scales of the functions in the global envelope
-vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.}
+vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.
+A sensible default based on r-values exists.}
 
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}

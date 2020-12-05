@@ -30,6 +30,8 @@ from the tested null model. The methods are applicable for any multivariate
 vector data and functional data (after discretization).
 
 To get an overview of the package, start R and type \code{library(GET)} and \code{vignette("GET")}.
+
+To get examples of point pattern analysis, start R and type \code{library(GET)} and \code{vignette("pointpatterns")}.
 }
 \section{Key functions in \pkg{GET}}{
 
@@ -70,8 +72,7 @@ E.g. A test of complete spatial randomness (CSR) for a point pattern \code{X}:
                  specify the number of simulations \code{nsim}.
 
                  \code{
-                   env <- envelope(X, nsim=999, savefuns=TRUE, fun=Kest,
-                                   simulate=expression(runifpoint(ex=X)))
+                   env <- envelope(X, nsim=999, savefuns=TRUE, fun=Kest, simulate=expression(runifpoint(ex=X)))
                  }
            \item Perform the test (see \code{\link{global_envelope_test}} for further arguments)
 
@@ -142,11 +143,13 @@ you can perform a test by \code{\link{global_envelope_test}}.
 \itemize{
 \item (Fit the model and) Create \eqn{s}{s} simulations from the (fitted) null model.
 \item Calculate the functions \eqn{T_1(r), T_2(r), \dots, T_{s+1}(r)}{T_1(r), T_2(r), ..., T_{s+1}(r)}.
-\item Use \code{\link{create_curve_set}} to create a curve_set object
+\item Use \code{\link{create_curve_set}} to create a \code{curve_set} object
       from the functions \eqn{T_i(r), i=1, \dots, s+1}{T_i(r), i=1,...,s+1}.
-\item Perform the test and plot the result
+\item Perform the test
 
-      \code{res <- global_envelope_test(curve_set) # curve_set is the 'curve_set'-object you created}
+      \code{res <- global_envelope_test(curve_set)}
+
+where \code{curve_set} is the 'curve_set'-object you created, and plot the result
 
       \code{plot(res)}
 }

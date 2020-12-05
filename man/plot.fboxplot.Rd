@@ -9,11 +9,11 @@
 \arguments{
 \item{x}{an 'fboxplot' object}
 
-\item{main}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{main}{The title for the plot. A sensible default exists.}
 
-\item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{xlab}{The label for the x-axis. A sensible default exists.}
 
-\item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{ylab}{The label for the y-axis. A sensible default exists.}
 
 \item{digits}{The number of digits used for printing the p-value or p-interval in the main,
 if using the default main.}

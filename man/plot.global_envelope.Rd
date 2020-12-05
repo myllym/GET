@@ -24,11 +24,11 @@
 Suitable for low dimensional test vectors.
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
-\item{main}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{main}{The title for the plot. A sensible default exists.}
 
-\item{xlab}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{xlab}{The label for the x-axis. A sensible default exists.}
 
-\item{ylab}{See \code{\link{plot.default}}. A sensible default exists.}
+\item{ylab}{The label for the y-axis. A sensible default exists.}
 
 \item{sign.col}{The color for the observed curve when outside the global envelope
 (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
