@@ -128,7 +128,7 @@ printhelper_ge_base <- function(x, adj=FALSE) {
 }
 
 # A helper function for printing combined global envelopes
-printhelper_ge_combined <- function(x, adj=FALSE) {
+printhelper_ge_combined <- function(x, adj=!is.null(attr(x, "alpha_star"))) {
   if(is.null(attr(x, "p"))) istest <- FALSE
   else istest <- TRUE
   printhelper_method(x, istest, adj)
