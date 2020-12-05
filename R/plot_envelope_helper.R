@@ -43,19 +43,6 @@ envelope_set_labs <- function(x, xlab, ylab) {
   x
 }
 
-# A helper function to check whether the xaxis needs to be reticked with new values due to
-# combined tests.
-retick_xaxis <- function(x) {
-  if(!inherits(x, "list")) x <- list(x)
-  if(any(sapply(x, FUN=function(x) { !(inherits(x, c("global_envelope", "fboxplot", "curve_set"))) })))
-    stop("x should consist of global_envelope objects.")
-  r_values_ls <- lapply(x, FUN=function(x) x$r)
-  r_values <- do.call(c, r_values_ls, quote=FALSE)
-  nr <- length(r_values)
-  list(retick_xaxis = !(length(x) == 1 & all(r_values[-1] - r_values[-nr] > 0)),
-       r_values_ls = r_values_ls, r_values = r_values)
-}
-
 # An internal GET function for setting the default main for a global envelope plot.
 # @param x An 'global_envelope' object.
 env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {

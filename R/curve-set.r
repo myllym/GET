@@ -376,6 +376,9 @@ print.curve_set <- function(x, ...) {
 #'   plot(cset) + ggplot2::guides(col = "none")
 #' }
 plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', xlab, ylab, ...) {
+  if(!all(x$r[-1] - x$r[-curve_set_narg(x)] > 0))
+    warning("r values non-increasing. Plot not valid.")
+
   if(missing(idx)) {
     if(curve_set_is1obs(x))
       idx <- 1
@@ -418,9 +421,6 @@ plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', xlab,
     id_v <- 1:ncol(funcs)
     id_v_levels <- id_v
   }
-
-  if(retick_xaxis(x)$retick_xaxis)
-    warning("r values non-increasing. Plot not valid.")
 
   df <- data.frame(r = x$r, funcs = c(funcs),
                    id =  factor(rep(id_v, each=nrow(funcs)), levels = id_v_levels))
