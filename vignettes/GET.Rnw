@@ -35,7 +35,8 @@
 options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
 library("GET")
 library("ggplot2")
-library("gridExtra")
+library("patchwork")
+theme_set(theme_bw(base_size = 9))
 @
 
 %% -- Article metainformation (author, title, ...) -----------------------------
@@ -227,7 +228,7 @@ Most often, the user however calls either \fct{central\_region} for constructing
 The most important arguments of these functions are
 %
 \begin{Code}
-central_region(curve_sets, type = 'erl', coverage = 0.5, ...)
+central_region(curve_sets, type = 'erl', coverage = 0.50, ...)
 global_envelope_test(curve_sets, type = 'erl', alpha = 0.05, ...)
 \end{Code}
 %
@@ -235,11 +236,14 @@ where the multivariate or functional data are provided in \code{curve_sets}, \co
 Additionally, one can, for example, specify the one or two-sided \code{alternative}, i.e., whether only small or large values of $\TT_i$ or both should be considered extreme.
 These two functions are the core functions for global envelopes in the package \pkg{GET}: given an appropriate set of curves, or, in fact vectors, they can be used for producing global envelopes of Table~\ref{tab:GEoverview} in all tasks (i)-(iv) listed in Section~\ref{sec:intro}. 
 
-Different options are supported for the data in \code{curve_sets} (see help files of the functions and examples below), but the basic form is a \code{curve_set} object that can be constructed by the function \fct{create\_curve\_set} simply providing the argument values and observed and/or simulated curves in a list (see Section~\ref{sec:GOT} for an example).
-In addition, to constructing global envelopes from a set of curves, the \fct{central\_region} and \fct{global\_envelope\_test} functions provide combined central regions or combined global envelope tests (see Section~\ref{sec:combinedGE}) if the user provides in \code{curve_sets} a list consisting of (appropriate) sets of curves.
+Different objects are supported for the data in \code{curve_sets} (see help files of the functions and examples below),
+but the basic form provided by the \pkg{GET} package is a \code{curve_set} object that can be constructed by the function \fct{create\_curve\_set} simply providing a list containing the observed and/or simulated curves, and optionally the (one- or two-dimensional) argument values where the curves have been observed (see Section~\ref{sec:GOT} for an example). The function \fct{create\_curve\_set} takes care of checking the appropriateness of the data, and saving the data in the form that contains the relevant information of the curves for global envelope methods, in particular for plotting the results with graphical interpretation (see examples in Section \ref{sec:illustrations}). The \fct{plot} function is also defined for the \code{curve_set} object and can be used to visualize the data.
+
+In addition to constructing global envelopes from a set of curves, the \fct{central\_region} and \fct{global\_envelope\_test} functions provide combined central regions or combined global envelope tests (see Section~\ref{sec:combinedGE}) if the user provides in \code{curve_sets} a list consisting of (appropriate) sets of curves.
 
 The \pkg{GET} package also provides other functions for specific tasks (see Table~\ref{tab:FUNCTIONSoverview} and the examples in Section \ref{sec:illustrations}). 
-These functions utilize \fct{central\_region} and \fct{global\_envelope\_test} for the global envelope construction. In addition, many of these take care of preparing the simulations or permutations for the specific task.
+These functions utilize \fct{central\_region} and \fct{global\_envelope\_test} for the global envelope construction. In addition, many of these functions take care of preparing the simulations or permutations for the specific task.
+The \fct{print()} and \fct{plot()} methods are available for the objects obtained as the output of the global envelope methods of \pkg{GET}. The latter provides the graphical interpretation of the result.
 
 After defining the different types of global envelopes in Section \ref{sec:GEdef}, combined global envelopes and adjusted global envelope tests for composite null hypothesis are described in Sections \ref{sec:combinedGE} and \ref{sec:adjustedGE}, respectively. Further, guidance is given for choosing the type of the global envelope in Section \ref{sec:whichmeasure}.
 
@@ -538,21 +542,11 @@ library("fda")
 years <- paste(1:18)
 curves <- growth[['hgtf']][years,]
 cset1 <- create_curve_set(list(r = as.numeric(years),
-                               obs = curves))
+    obs = curves))
 cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
-                              obs = curves[-1,] - curves[-nrow(curves),]))
+    obs = curves[-1,] - curves[-nrow(curves),]))
 @
-
-\begin{figure}[ht!]
-\centering
-<<girls_curves, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
-p1 <- plot(cset1, xlab = "Age (years)", ylab = "Height")
-p2 <- plot(cset2, xlab = "Age (years)", ylab = "Change")
-grid.arrange(p1, p2, nrow = 1)
-@
-	\caption{The heights (left) and height differences (right) of the 54 girls of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages from 1 to 18.}
-	\label{fig:girls_curves}
-\end{figure}
+%
 
 Ordering the functions from the most extreme to the least extreme by the \code{'area'} measure, the 8th girl was observed to have the most extreme heights and the 15th girl the most extreme changes (below the first ten most extreme girl indices are printed):
 %
@@ -568,6 +562,23 @@ csets <- list(Height = cset1, Change = cset2)
 order(forder(csets, measure = 'area'))[1:10]
 @
 %
+Figure~\ref{fig:girls_curves} highlights the curves of the three most extreme girls.
+\begin{figure}[ht!]
+\centering
+<<girls_curves, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
+o <- order(forder(csets, measure = 'area'))
+col3 <- c("#21908CFF", "#440154FF", "#5DC863FF")
+p1 <- plot(cset1, idx = o[1:3], col_idx = col3) +
+  scale_x_continuous(name = "Age (years)") +
+  scale_y_continuous(name = "Height")
+p2 <- plot(cset2, idx = o[1:3], col_idx = col3) +
+  scale_x_continuous(name = "Age (years)") +
+  scale_y_continuous(name = "Change")
+p1 + p2 + plot_layout(guides = "collect")
+@
+	\caption{The heights (left) and height differences (right) of the 54 girls of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages from 1 to 18. Three girls having most extreme curves (joint ordering by the area measure) are highlighted with the colors specified in the legend.}
+	\label{fig:girls_curves}
+\end{figure}
 
 By using the functional boxplot \citep{SunGenton2011} with the same measure, an investigation can be made into whether the most extreme girls are outliers with respect to height or its change. Figure~\ref{fig:girls_fboxplot} shows the 50\% central region and the functional boxplot with an inflation factor 1.5 jointly for the heights and their changes obtained by:
 %
@@ -576,7 +587,7 @@ By using the functional boxplot \citep{SunGenton2011} with the same measure, an 
 %
 <<girls_fboxplot, echo=TRUE, fig=TRUE, height=3.0625, width=6.125>>==
 res <- fBoxplot(csets, type = 'area', factor = 1.5)
-plot(res, xlab = "Age (years)", ylab = "")
+plot(res, xlab = "Age (years)", ylab = "Value")
 @
 %
 \caption{The functional boxplot (light grey area) using the 50\% central region (dark grey area) based on the \code{'area'} measure and the expansion factor 1.5 jointly for the heights and changes of heights of the 54 girls in Figure~\ref{fig:girls_curves}. The black line is an observed data function (vector) that goes outside the functional boxplot (the 15th girl in the data).}
@@ -635,7 +646,8 @@ obs <- obs.L[['trans']] - r
 sim <- matrix(nrow = length(r), ncol = nsim)
 for(i in 1:nsim) {
   sim.X <- runifpoint(ex = X)
-  sim[, i] <- Lest(sim.X, correction = "translate", r = r)[['trans']] - r
+  sim[, i] <- Lest(sim.X, correction = "translate",
+                   r = r)[['trans']] - r
 }
 @
 %
@@ -689,7 +701,7 @@ Further examples of use of the \pkg{GET} package for point pattern analysis are 
 
 \cite{AldorNoimanEtal2013} provided a graphical test for normality for simple hypotheses (i.e., known parameters of sample distribution) based on a qq-plot envelope, whose shape was derived from theoretical properties of quantiles of the uniform distribution. They also provided a version of this algorithm for composite hypotheses (i.e., unknown parameters of sample distribution). However, according to our unpublished study, this test does not achieve the required significance level. Therefore, the example of the exact adjustment for the composite hypothesis is provided here, based on the two-stage procedure of \cite{BaddeleyEtal2017} (see Section \ref{sec:adjustedGE}). For simplicity, in this example, this adjustment is applied directly to the empirical distribution functions. Apparently, the adjustment could also be applied to the qq-plot envelopes of \cite{AldorNoimanEtal2013}.
 
-The normality test is illustrated for nitrogen oxides (NO$_x$) emission levels available in the data \code{poblenou} from the \proglang{R} package \pkg{fda.usc} \citep{fdausc2012}. The data contains NO$_x$ emission levels measured every hour by a control station close to an industrial area in Poblenou in Barcelona (Spain) for 115 days from 23 February to 26 June, 2005. NO$_x$ is a pollutant which is caused by combustion processes in sources that burn fuels, e.g., motor vehicles, electric utilities, and industries \citep{FebreroEtal2008}.
+The normality test is illustrated for nitrogen oxides (NO$_x$) emission levels available in the data \code{poblenou} from the \proglang{R} package \pkg{fda.usc} \citep{fdausc2012}. The data contains NO$_x$ emission levels ($\mu$g/m$^3$) measured every hour by a control station close to an industrial area in Poblenou in Barcelona (Spain) for 115 days from 23 February to 26 June, 2005. NO$_x$ is a pollutant which is caused by combustion processes in sources that burn fuels, e.g., motor vehicles, electric utilities, and industries \citep{FebreroEtal2008}.
 In Section \ref{sec:fANOVA}, the whole functional trajectories of 24 h observations are studied, but for illustration purposes, here the attention is restricted to the NO$_x$ levels at 10 am. 
 
 A general solution to make the adjusted test is to prepare all the required simulations and provide them to the function \fct{GET.composite} in arguments \code{X} and \code{X.ls}. 
@@ -741,7 +753,8 @@ for(rep in 1:nsim) {
     x2 <- rnorm(n, mean = mu2, sd = sigma2)
     stats::ecdf(x2)(r)
   })
-  cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
+  cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2,
+                                          sim_m = sim2))
 }
 @
 %
@@ -753,7 +766,7 @@ plot(res, xlab="NOx", ylab="Ecdf")
 @
 %
 % The same test for the log(NOx) values
-<<adjtest_log, echo=FALSE, fig=FALSE, height=4, width=8>>==
+<<adjtest_log, echo=FALSE, fig=FALSE>>==
 p1 <- plot(res, xlab="NOx", ylab="Ecdf")
 # For log(nox) values:
 dat <- log(poblenou[['nox']][['data']][,'H10'])
@@ -785,7 +798,8 @@ for(rep in 1:nsim) {
     x2 <- rnorm(n, mean = mu2, sd = sigma2)
     stats::ecdf(x2)(r)
   })
-  cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
+  cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2,
+                                          sim_m = sim2))
 }
 # Perform the adjusted test
 res <- GET.composite(X=cset, X.ls=cset.ls, type='erl')
@@ -798,7 +812,8 @@ Figure~\ref{fig:normalitytest} (left) shows the test result for the NO$_x$ level
 \begin{figure}[ht!]
 	\centering
 <<normalitytest, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
-grid.arrange(p1, p2, nrow = 1)
+combined <- p1 + p2 & theme(legend.position = "bottom")
+combined + plot_layout(guides = "collect")
 @
 	\caption{Graphical normality test for the NO$_x$ (left) and logarithm of the NO$_x$ (right) levels at 10 am.}
 	\label{fig:normalitytest}
@@ -841,14 +856,15 @@ The height distributions at age 10 do not differ from each other significantly, 
 \begin{figure}[ht!]
     \centering
 <<necdfs, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
-# Empirical cumulative distribution functions
-xlim1 <- c(min(unlist((lapply(fm10.l, min)))), max(unlist((lapply(fm10.l, max)))))
-xlim2 <- c(min(unlist((lapply(fm14.l, min)))), max(unlist((lapply(fm14.l, max)))))
-par(mfrow=c(1,2), mgp=c(2, 1, 0), mar=c(4, 3, 3, 1) + 0.1, cex.main=0.75)
-plot(ecdf(fm10.l$Girls), main="Age 10", xlab="Height", ylab="Ecdf", xlim=xlim1)
-plot(ecdf(fm10.l$Boys), col=grey(0.7), add=TRUE)
-plot(ecdf(fm14.l$Girls), main="Age 14", xlab="Height", ylab="Ecdf", xlim=xlim2)
-plot(ecdf(fm14.l$Boys), col=grey(0.7), add=TRUE)
+nG <- length(fm10.l$Girls); nB <- length(fm10.l$Boys)
+df <- data.frame(Height = c(fm10.l$Girls, fm14.l$Girls, fm10.l$Boys, fm14.l$Boys),
+                 Gender = c(rep("Girls", times=2*nG),
+                            rep("Boys", times=2*nB)),
+                 Age = c(rep("Age 10", times=nG), rep("Age 14", times=nG),
+                         rep("Age 10", times=nB), rep("Age 14", times=nB)))
+ggplot(df, aes(Height, colour = Gender)) +
+  facet_wrap("Age") + stat_ecdf() +
+  scale_color_manual(values = c("#440154FF", "#5DC863FF"))
 @
 	\caption{The empirical cumulative distribution functions heights of the 54 girls (black) and 39 boys (grey) of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages 10 (left) and 14 (right).}
 	\label{fig:necdfs}
@@ -857,13 +873,12 @@ plot(ecdf(fm14.l$Boys), col=grey(0.7), add=TRUE)
 \begin{figure}[ht!]
 	\centering
 <<necdfs_means_GET, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
-p1 <- plot(res10,
-     xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Height", j="x")),
-     ylab=expression(italic(hat(F)[i](x))), base_size=10)
-p2 <- plot(res14,
-     xlab=substitute(paste(i, " (", italic(j), ")", sep=""), list(i="Height", j="x")),
-     ylab=expression(italic(hat(F)[i](x))), base_size=10)
-grid.arrange(p1, p2, nrow=1)
+p1 <- plot(res10, xlab=substitute(paste(i, " (", italic(j), ")", sep=""),
+                                  list(i="Height", j="x")))
+p2 <- plot(res14, xlab=substitute(paste(i, " (", italic(j), ")", sep=""),
+                                  list(i="Height", j="x")))
+combined <- p1 + p2 & theme(legend.position = "bottom")
+combined + plot_layout(guides = "collect")
 @
 	\caption{Global envelope tests for comparison of the empirical cumulative distribution functions of heights of the girls and boys (see Figure~\ref{fig:necdfs}). Left: Age 10; Right: Age 14.}
 	\label{fig:necdfs_means_GET}
@@ -894,13 +909,16 @@ The data are available in \code{poblenou[['nox']]} which is a \code{fdata} objec
 \begin{figure}[ht!]
 	\centering
 <<NOx_data, echo=FALSE, fig=TRUE, height=2.722, width=6.125>>==
+maxs <- apply(poblenou[['nox']]$data, MARGIN = 1, FUN = max)
 df <- do.call(rbind, lapply(1:24, FUN = function(x) {
-  data.frame(Hour = x, NOx = poblenou[['nox']]$data[,x], Type = Type, Date = rownames(poblenou[['nox']]$data))
+  data.frame(Hour = x, NOx = poblenou[['nox']]$data[,x],
+             Type = Type, Date = rownames(poblenou[['nox']]$data),
+             Colour = maxs)
 }))
-ggplot(df) + geom_line(aes(x = Hour, y = NOx, group = Date)) +
-  facet_wrap(vars(Type)) + GET:::ThemePlain()
+ggplot(df) + geom_line(aes(x = Hour, y = NOx, group = Date, col = Colour)) +
+  facet_wrap(vars(Type)) + scale_color_continuous(type = "viridis")
 @
-\caption{The NO$_x$ levels for Monday-Thursday (Mon-Thu), Friday (Fri) and non-working days (Free) including weekend and festive days in Poblenou for 115 days from 23 February to 26 June, 2005.}
+\caption{The NO$_x$ levels for Monday-Thursday (Mon-Thu), Friday (Fri) and non-working days (Free) including weekend and festive days in Poblenou for 115 days from 23 February to 26 June, 2005. The color of the daily curves is according to the maximum NO$_x$ level ($\mu$g/m$^3$) of the day.}
 	\label{fig:NOx_data}
 \end{figure}
 
@@ -958,8 +976,7 @@ set.seed(190503)
 	\centering
 <<graphfanova_logNOx, echo=TRUE, fig=TRUE, height=2.722, width=6.125>>==
 res.c <- graph.fanova(nsim = 2999, curve_set = cset,
-                      groups = Type, variances = "unequal",
-                      contrasts = TRUE)
+    groups = Type, variances = "unequal", contrasts = TRUE)
 plot(res.c, xlab = "Hour", ylab = "Diff.")
 @
 	\caption{The output of the graphical functional ANOVA to test the difference between the type of the day on the log NO$_x$ levels in the Poblenou data. The observed differences between the group means and the 95\% global envelope.}
@@ -984,7 +1001,7 @@ In the examples below, the effect of the group on the images is studied in the p
 \begin{figure}[ht!]
 \centering
 <<abide_9002_23_subj1and27, echo=FALSE, fig=TRUE, height=2.5, width=5>>==
-data(abide_9002_23)
+data("abide_9002_23")
 plot(abide_9002_23$curve_set, idx=c(1, 27))
 @
 	\caption{The example brain image data in the right Crus Cerebellum 1 region at a slice for one subject from the autism group (subject number 1) and one from the control group (subject number 27).}
@@ -1022,12 +1039,12 @@ set.seed(202001)
 %
 <<flm_graph>>==
 res <- graph.flm(nsim = 999,
-                 formula.full = Y ~ Group + Sex + Age,
-                 formula.reduced = Y ~ Sex + Age,
-                 curve_sets = list(Y = abide_9002_23[['curve_set']]),
-                 factors = abide_9002_23[['factors']],
-                 contrasts = TRUE,
-                 GET.args = list(type = "area"))
+    formula.full = Y ~ Group + Sex + Age,
+    formula.reduced = Y ~ Sex + Age,
+    curve_sets = list(Y = abide_9002_23[['curve_set']]),
+    factors = abide_9002_23[['factors']],
+    contrasts = TRUE,
+    GET.args = list(type = "area"))
 @
 %
 Here the arguments \code{formula.full} and \code{formula.reduced} specify the full GLM and the GLM where the interesting factor has been dropped out, and the number of simulations is given in \code{nsim}. Further arguments to \fct{global\_envelope\_test} can be passed in \code{GET.args}, e.g., the type of the global envelope.
@@ -1065,11 +1082,11 @@ set.seed(202001)
 %
 <<flm_frank, fig=FALSE>>==
 res.F <- frank.flm(nsim = 999,
-                 formula.full = Y ~ Group + Age + Sex,
-                 formula.reduced = Y ~ Age + Sex,
-                 curve_sets = list(Y = abide_9002_23[['curve_set']]),
-                 factors = abide_9002_23[['factors']],
-                 GET.args = list(type = "area"))
+    formula.full = Y ~ Group + Age + Sex,
+    formula.reduced = Y ~ Age + Sex,
+    curve_sets = list(Y = abide_9002_23[['curve_set']]),
+    factors = abide_9002_23[['factors']],
+    GET.args = list(type = "area"))
 plot(res.F)
 @
 %
@@ -1166,7 +1183,7 @@ We are committed to developing the \pkg{GET} package further. For example, new t
 \section*{Acknowledgments}
 
 MM was financially supported by the Academy of Finland (project numbers 295100, 306875 and 327211) and TM by the Grant Agency of Czech Republic (Project No.\ 19-04412S).
-The authors thank Pavel Grabarnik, Ute Hahn, Mikko Kuronen, Michael Rost and Henri Seijo for their contributions and suggestions of code, as well as Naveen Naidu Narisetty, Milan J\'ilek and Samuel Soubeyrand for their collaboration on developing global envelope methods. 
+The authors thank Pavel Grabarnik, Ute Hahn, Mikko Kuronen, Michael Rost and Henri Seijo for their contributions and suggestions of code, as well as Naveen Naidu Narisetty, Milan J\'ilek and Samuel Soubeyrand for their collaboration on developing global envelope methods.
 
 
 %% -- Bibliography -------------------------------------------------------------
