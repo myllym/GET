@@ -104,7 +104,7 @@ This scaling of the test functions can be obtained by giving the argument \code{
 #-- NOx levels example (see for details Myllymaki and Mrkvicka, 2020)
 if(require("fda.usc", quietly=TRUE)) {
   # Prepare data
-  data(poblenou)
+  data("poblenou")
   Free <- poblenou$df$day.festive == 1 |
     as.integer(poblenou$df$day.week) >= 6
   MonThu <- poblenou$df$day.festive == 0 & poblenou$df$day.week \%in\% 1:4
@@ -129,7 +129,7 @@ if(require("fda.usc", quietly=TRUE)) {
 
 #-- Centred government expenditure centralization ratios example
 # This is an example analysis of the centred GEC in Mrkvicka et al.
-data(cgec)
+data("cgec")
 
 # Number of simulations
 \dontshow{nsim <- 19}

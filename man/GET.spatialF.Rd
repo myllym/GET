@@ -18,7 +18,7 @@ GET.spatialF(
 )
 }
 \arguments{
-\item{X}{A \code{\link[spatstat]{ppp}} object representing the observed point pattern.}
+\item{X}{A \code{ppp} object of \pkg{spatstat} representing the observed point pattern.}
 
 \item{formula.full}{A formula for the trend of the full model.}
 
@@ -36,7 +36,7 @@ giving a fitted model object that can be used with \code{\link[stats]{simulate}}
 
 \item{bw.S}{The radius for the local S(u)-statistic.}
 
-\item{dimyx}{Pixel array dimensions for smoothed residuals. See \code{\link[spatstat]{as.mask}}.}
+\item{dimyx}{Pixel array dimensions for smoothed residuals. See \code{as.mask} of \pkg{spatstat}.}
 
 \item{...}{Additional arguments to be passed to \code{\link{global_envelope_test}}.}
 }

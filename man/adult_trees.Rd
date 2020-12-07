@@ -5,8 +5,8 @@
 \alias{adult_trees}
 \title{Adult trees data set}
 \format{
-An object of class \code{\link[spatstat]{ppp.object}} representing the point
-pattern of tree locations.
+A \code{data.frame} containing the locations (x- and y-coordinates) of 67 trees
+in an area of 75 m x 75 m.
 }
 \usage{
 data("adult_trees")
@@ -21,6 +21,14 @@ broadleaf nonmanaged forest in Kaluzhskie Zaseki, Russia.
 The pattern is a sample part of data collected over 10 ha plot as a part of a research
 program headed by project leader Prof. O.V. Smirnova.
 }
+\examples{
+if(require("spatstat", quietly=TRUE)) {
+  data("adult_trees")
+  adult_trees <- as.ppp(adult_trees, W=square(75))
+  plot(adult_trees)
+}
+
+}
 \references{
 Grabarnik, P. and Chiu, S. N. (2002) Goodness-of-fit test for complete spatial randomness against
 mixtures of regular and clustered spatial point processes. Biometrika, 89, 411â€“421.
@@ -28,6 +36,9 @@ mixtures of regular and clustered spatial point processes. Biometrika, 89, 411â€
 van Lieshout, M.-C. (2010) Spatial point process theory. In Handbook of Spatial Statistics (eds. A. E.
 Gelfand, P. J. Diggle, M. Fuentes and P. Guttorp), Handbooks of Modern Statistical Methods. Boca
 Raton: CRC Press.
+}
+\seealso{
+\code{\link{saplings}}
 }
 \keyword{datasets}
 \keyword{spatial}

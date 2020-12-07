@@ -109,7 +109,7 @@ The cases above correspond to "simple", "mlm", "complex" and "lm". Changing the 
 checking the validity of the implementation.
 }
 \examples{
-data(GDPtax)
+data("GDPtax")
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 \dontshow{nsim <- 19}
 \donttest{nsim <- 999}
@@ -121,7 +121,7 @@ res.tax_within_group <- frank.flm(nsim = nsim,
 plot(res.tax_within_group)
 
 # Image set examples
-data(abide_9002_23)
+data("abide_9002_23")
 iset <- abide_9002_23$curve_set
 \dontshow{
 # Cut the data to reduce time

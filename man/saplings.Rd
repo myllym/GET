@@ -5,11 +5,11 @@
 \alias{saplings}
 \title{Saplings data set}
 \format{
-An object of class \code{\link[spatstat]{ppp.object}} representing the point
-pattern of tree locations.
+A \code{data.frame} containing the locations (x- and y-coordinates) of 123 trees
+in an area of 75 m x 75 m.
 }
 \usage{
-data(saplings)
+data("saplings")
 }
 \description{
 Saplings data set
@@ -26,7 +26,8 @@ program headed by project leader Prof. O.V. Smirnova.
 #=====================================================
 # Example of Myllymaki et al. (2017, Supplement S4).
 if(require("spatstat", quietly=TRUE)) {
-  data(saplings)
+  data("saplings")
+  saplings <- as.ppp(saplings, W=square(75))
 
   # First choose the r-distances for L (r) and J (rJ) functions, respectively.
   nr <- 500
@@ -115,6 +116,9 @@ Gelfand, P. J. Diggle, M. Fuentes and P. Guttorp), Handbooks of Modern Statistic
 Raton: CRC Press.
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
+}
+\seealso{
+\code{\link{adult_trees}}
 }
 \keyword{datasets}
 \keyword{spatial}

@@ -5,11 +5,12 @@
 \alias{fallen_trees}
 \title{Fallen trees}
 \format{
-A \code{\link[spatstat]{ppp.object}} object with locations and heights (=marks)
-of 232 trees in a window with polygonal boundary.
+A \code{\link{list}} of two data frames, where \code{trees} contains the locations (x and y coordinates)
+and heights (=marks) of 232 trees in a window with polygonal boundary, and \code{window} species the polygonal
+window (see examples).
 }
 \usage{
-data(fallen_trees)
+data("fallen_trees")
 }
 \description{
 Fallen trees
@@ -24,8 +25,11 @@ dynamics. It was an uneven-aged beech stand with a few old oaks.
 The data was analysed in Myllymäki et al. (2017, Supplementary material).
 }
 \examples{
-data(fallen_trees)
-plot(fallen_trees)
+data("fallen_trees")
+if(require("spatstat", quietly=TRUE)) {
+  fallen_trees <- as.ppp(fallen_trees$trees, W = owin(poly=fallen_trees$window))
+  plot(fallen_trees)
+}
 }
 \references{
 Guinier, P. (1950) Foresterie et protection de la nature. l’exemple de fontainebleau. Rev Forestière Fr., II, 703-717.

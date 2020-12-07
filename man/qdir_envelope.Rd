@@ -13,17 +13,16 @@ st_envelope(curve_set, ...)
 unscaled_envelope(curve_set, ...)
 }
 \arguments{
-\item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
-object. If an envelope object is given, it must contain the summary
+\item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or an \code{envelope}
+object of \pkg{spatstat}. If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
-savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.}
+savefuns = TRUE when calling the function of \pkg{spatstat}.}
 
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
 \value{
-An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-which can be printed and plotted directly.
-See \code{\link{global_envelope_test}} for more details.
+An object of class \code{global_envelope} of \code{combined_global_envelope}
+which can be printed and plotted directly. See \code{\link{global_envelope_test}} for more details.
 }
 \description{
 Performs the global scaled MAD envelope tests, either directional quantile or studentised,

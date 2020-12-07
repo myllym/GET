@@ -11,7 +11,7 @@ Each column of \code{obs} contains the GDP for the years for a particular countr
 The country grouping is given in the list component \code{Group} and the profit tax in \code{Profittax}.
 }
 \usage{
-data(GDPtax)
+data("GDPtax")
 }
 \description{
 GDP per capita with country groups and profit tax
@@ -38,7 +38,7 @@ countries for which the GDP was available for 1980-2017 and profit tax for 2010:
 }
 }
 \examples{
-data(GDPtax)
+data("GDPtax")
 # Plot data in groups
 for(i in 1:4)
   print(plot(subset(GDPtax$GDP, GDPtax$Group == i),

@@ -68,7 +68,7 @@ The correction for unequal variances can be done by using the corrected F-statis
 Unfortunately this test is not able to detect which groups are different from each other.
 }
 \examples{
-data(rimov)
+data("rimov")
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 \donttest{res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)}
 \dontshow{res <- frank.fanova(nsim=4, curve_set=rimov, groups=groups, alpha=0.2)}

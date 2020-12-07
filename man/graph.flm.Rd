@@ -117,7 +117,7 @@ for fitting each linear model.
 By setting \code{fast = FALSE}, it is possible to use the slow version for any case. Usually this is not desired.
 }
 \examples{
-data(rimov)
+data("rimov")
 res <- graph.flm(nsim=19, # Increase the number of simulations for serious analysis!
                  formula.full = Y~Year,
                  formula.reduced = Y~1,
@@ -139,7 +139,7 @@ plot(res)
 # An example of testing the joint effect of a discrete and a continuous variable
 \dontshow{nsim <- 19}
 \donttest{nsim <- 999}
-data(GDPtax)
+data("GDPtax")
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 res.tax_within_group <- graph.flm(nsim = nsim,
                                   formula.full = Y~Group+Tax+Group:Tax,
@@ -150,7 +150,7 @@ plot(res.tax_within_group)
 
 # Image data examples
 
-data(abide_9002_23)
+data("abide_9002_23")
 iset <- abide_9002_23$curve_set
 \dontshow{
 # Cut the data to reduce time

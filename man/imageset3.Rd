@@ -9,7 +9,7 @@ A list of the \code{image_set} containing the simulated images, and
 the discrete group factor in the list component \code{Group}.
 }
 \usage{
-data(imageset3)
+data("imageset3")
 }
 \description{
 A simulated set of images with a categorical factor (with three levels)
@@ -29,7 +29,7 @@ with scale parameter 0.15 and standard deviation 0.2.
 Consequently, the first two groups (0,1) have the same mean, while a bigger bump appears in the third group (2) in the middle of the image.
 }
 \examples{
-data(imageset3)
+data("imageset3")
 plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5)
 \donttest{
 # Colors can be changed as follows:

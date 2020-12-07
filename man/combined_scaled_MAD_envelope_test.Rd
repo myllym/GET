@@ -15,11 +15,11 @@ combined_scaled_MAD_envelope_test(
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}})
-or an \code{\link[spatstat]{envelope}} object containing a data function and simulated functions.
+or an \code{envelope} object of \pkg{spatstat} containing a data function and simulated functions.
 If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
-\code{savefuns = TRUE} when calling \code{\link[spatstat]{envelope}}.
-Alternatively, a list of \code{curve_set} or \code{\link[spatstat]{envelope}} objects can be given.}
+\code{savefuns = TRUE} when calling the \code{envelope} function.
+Alternatively, a list of \code{curve_set} or \code{envelope} objects can be given.}
 
 \item{type}{Either "qdir" for the direction quantile envelope test or
 "st" for the studentized envelope test.}
@@ -49,7 +49,7 @@ if(require("spatstat", quietly=TRUE)) {
   # As an example test CSR of the saplings point pattern from spatstat by means of
   # L, F, G and J functions.
   data("saplings")
-  X <- saplings
+  X <- as.ppp(saplings, W=square(75))
 
   \donttest{nsim <- 499 # Number of simulations for the tests}
   \dontshow{nsim <- 19 # Number of simulations for testing}

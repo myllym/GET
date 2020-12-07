@@ -66,7 +66,7 @@ E.g. A test of complete spatial randomness (CSR) for a point pattern \code{X}:
 \code{X <- spruces # an example pattern from spatstat}
 
 \itemize{
-           \item Use \code{\link[spatstat]{envelope}} to create nsim simulations
+           \item Use the function \code{envelope} of \pkg{spatstat} to create nsim simulations
                  under CSR and to calculate the functions you want (below K-functions by Kest).
                  Important: use the option 'savefuns=TRUE' and
                  specify the number of simulations \code{nsim}.
@@ -154,7 +154,7 @@ where \code{curve_set} is the 'curve_set'-object you created, and plot the resul
       \code{plot(res)}
 }
 
-2) The workflow utilizing \pkg{\link{spatstat}}: start R, type \code{library(GET)} and \code{vignette("pointpatterns")},
+2) The workflow utilizing \pkg{spatstat}: start R, type \code{library(GET)} and \code{vignette("pointpatterns")},
 which explains the workflow and gives many examples of point pattern analysis
 }
 
@@ -207,7 +207,7 @@ starting R and typing \code{library(GET)} and \code{vignette("GET")}.
 
 In the special case of spatial processes (spatial point processes, random sets),
 the functions are typically estimators of summary functions. The package supports
-the use of the R library \pkg{\link{spatstat}} for generating simulations and calculating
+the use of the R library \pkg{spatstat} for generating simulations and calculating
 estimators of the chosen summary function, but alternatively these can be done by
 any other way, thus allowing for any models/functions.
 To see examples of global envelopes for analysing point pattern data,

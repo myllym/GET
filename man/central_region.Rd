@@ -47,11 +47,15 @@ is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
 \item{...}{Ignored.}
 }
 \value{
-Either an object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-or an "combined_global_envelope" for the case that \code{curve_sets} is a list of
-objects. The objects can be printed and plotted directly.
+Either an object of class \code{global_envelope} and or an \code{combined_global_envelope} object.
+The former class is obtained when a set of curves is provided, while the latter in the case
+that \code{curve_sets} is a list of objects. The print and plot function are defined for the
+returned objects (see examples).
+If the given set of curves had the class \code{envelope} of \pkg{spatstat}, then the returned
+\code{global_envelope} object has also the class \code{fv} of spatstat, whereby one can utilize
+also the plotting functions of \pkg{spatstat}, see example in \code{\link{plot.global_envelope}}.
 
-The "global_envelope" object is essentially a data frame containing columns
+The \code{global_envelope} object is essentially a data frame containing columns
 \itemize{
 \item r = the vector of values of the argument r at which the test was made
 \item obs = the data function, if there is only one data function. Otherwise not existing.
@@ -62,7 +66,7 @@ The "global_envelope" object is essentially a data frame containing columns
       Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
       Used for visualization only.
 }
-Additionally, the return value has attributes
+Additionally, the returned object has attributes
 \itemize{
   \item method = The name of the envelope test used for plotting purposes ("Global envelope")
   \item alternative = The alternative specified in the function call.
@@ -72,22 +76,23 @@ Additionally, the return value has attributes
   observed function, then k[1] will give the value of the measure for this.
   \item call = The call of the function.
 }
-and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
+For an \code{fv} object, also some further arguments exists as required by \code{fv} of \pkg{spatstat}.
 Attributes of an object \code{res} can be obtained using the function
 \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 
-The "combined_global_envelope" is a list of "global_envelope" objects
-corresponding to the components of \code{curve_sets}. The second level envelope
-on which the envelope construction is based is saved in the attribute
-"level2_ge".
+The \code{combined_global_envelope} is a list of \code{global_envelope} objects, with one-to-one
+correspondence to the components of \code{curve_sets}. The second level envelope
+on which the envelope construction is based (if nstep = 2) is saved in the attribute
+\code{level2_ge}.
 }
 \description{
 Provides central regions or global envelopes or confidence bands
 }
 \details{
 Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
-or an \code{\link[spatstat]{envelope}} object, the function \code{central_region}
-construcst a central region, i.e. a global envelope, from the given set of functions (or vectors).
+or an \code{envelope} object of \pkg{spatstat} or \code{fdata} object of \pkg{fda.usc},
+the function \code{central_region} construcst a central region, i.e. a global envelope,
+from the given set of functions (or vectors).
 
 Generally an envelope is a band bounded by the vectors (or functions)
 \eqn{T_{low}}{T_lo} and \eqn{T_{hi}}{T_hi}.

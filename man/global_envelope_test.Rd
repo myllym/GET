@@ -19,11 +19,11 @@ global_envelope_test(
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}})
-or an \code{\link[spatstat]{envelope}} object containing a data function and simulated functions.
+or an \code{envelope} object of \pkg{spatstat} containing a data function and simulated functions.
 If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
-\code{savefuns = TRUE} when calling \code{\link[spatstat]{envelope}}.
-Alternatively, a list of \code{curve_set} or \code{\link[spatstat]{envelope}} objects can be given.}
+\code{savefuns = TRUE} when calling the \code{envelope} function.
+Alternatively, a list of \code{curve_set} or \code{envelope} objects can be given.}
 
 \item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 'qdir', 'st' and 'unscaled'. See details.}
@@ -94,7 +94,7 @@ Global envelope test, global envelopes and p-values
 }
 \details{
 Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
-or an \code{\link[spatstat]{envelope}} object,
+or an \code{envelope} object of \pkg{spatstat},
 which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)}
 (in the component \code{obs}) and
 the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)}
@@ -295,7 +295,7 @@ if(require("spatstat", quietly=TRUE)) {
   # As an example test CSR of the saplings point pattern by means of
   # L, F, G and J functions.
   data(saplings)
-  X <- saplings
+  X <- as.ppp(saplings, W=square(75))
 
   \donttest{nsim <- 499 # Number of simulations}
   \dontshow{nsim <- 19 # Number of simulations}

@@ -31,11 +31,11 @@ GET.composite(
 }
 \arguments{
 \item{X}{An object containing the data in some form.
-A \code{curve_set} (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
-object, as the \code{curve_sets} argument of \code{\link{global_envelope_test}}
+A \code{curve_set} (see \code{\link{create_curve_set}}) or an \code{envelope}
+object (of the \pkg{spatstat} package), as the \code{curve_sets} argument of \code{\link{global_envelope_test}}
 (need to provide \code{X.ls}), or
-a fitted point process model of \pkg{\link{spatstat}} (e.g. object of class \code{\link[spatstat]{ppm}} or
-\code{\link[spatstat]{kppm}}), or a point pattern object of class \code{\link[spatstat]{ppp}},
+a fitted point process model of \pkg{spatstat} (e.g. object of class \code{ppm} or
+\code{kppm}), or a point pattern object of class \code{ppp} of \pkg{spatstat},
 or another data object (need to provide \code{simfun}, \code{fitfun}, \code{calcfun}).}
 
 \item{X.ls}{A list of objects as \code{curve_sets} argument of \code{\link{global_envelope_test}},
@@ -60,16 +60,16 @@ passed to \code{simfun} as its argument.}
 The default is the identity function, i.e. the simulations from the model are functions themselves.
 The use of \code{calcfun} is still experimental. Preferably provide \code{X} and
 \code{X.ls} instead, if \code{X} is not a point pattern or fitted point process model object
-of \pkg{\link{spatstat}}.}
+of \pkg{spatstat}.}
 
-\item{testfuns}{A list of lists of parameters to be passed to \code{\link[spatstat]{envelope}}
-if \code{X} is a point pattern of a fitted point process model of \pkg{\link{spatstat}}.
+\item{testfuns}{A list of lists of parameters to be passed to the \code{envelope} function of \pkg{spatstat}
+if \code{X} is a point pattern of a fitted point process model of \pkg{spatstat}.
 A list of parameters should be provided for each test function that is to be used in the
 combined test.}
 
-\item{...}{Additional parameters to \code{\link[spatstat]{envelope}} in the case where only one test
-function is used. In that case, this is an alternative to providing the parameters in the argument
-testfuns. If \code{\link[spatstat]{envelope}} is also used to generate simulations under the null
+\item{...}{Additional parameters to the \code{envelope} function of \pkg{spatstat} in the case where
+only one test function is used. In that case, this is an alternative to providing the parameters in the
+argument testfuns. If \code{envelope} is also used to generate simulations under the null
 hypothesis (if simfun not provided), then also recall to specify how to generate the simulations.}
 
 \item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
@@ -89,7 +89,7 @@ The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 20
 \item{r_min}{The minimum argument value to include in the test.}
 
 \item{r_max}{The maximum argument value to include in the test.
-in calculating functions by \code{\link[spatstat]{envelope}}.}
+in calculating functions by the \code{envelope} function of \pkg{spatstat}.}
 
 \item{take_residual}{Logical. If TRUE (needed for visual reasons only) the mean of the simulated
 functions is reduced from the functions in each first and second stage test.}
@@ -97,10 +97,10 @@ functions is reduced from the functions in each first and second stage test.}
 \item{save.cons.envelope}{Logical flag indicating whether to save the unadjusted envelope test results.}
 
 \item{savefuns}{Logical flag indicating whether to save all the simulated function values.
-Similar to the same argument of \code{\link[spatstat]{envelope}}.}
+Similar to the same argument of the \code{envelope} function of \pkg{spatstat}.}
 
 \item{verbose}{Logical flag indicating whether to print progress reports during the simulations.
-Similar to the same argument of \code{\link[spatstat]{envelope}}.}
+Similar to the same argument of \code{envelope} function of \pkg{spatstat}.}
 
 \item{MrkvickaEtal2017}{Logical. If TRUE, type is "st" or "qdir" and several test functions are used,
 then the combined scaled MAD envelope presented in Mrkvička et al. (2017) is calculated. Otherwise,
@@ -124,9 +124,9 @@ The specification of X, X.ls, fitfun, simfun is important:
 \itemize{
 \item If \code{X.ls} is provided, then the global envelope test is calculated based on
 functions in these objects. \code{X} should be a \code{curve_set} (see \code{\link{create_curve_set}})
-or an \code{\link[spatstat]{envelope}} object including the observed function and simulations
+or an \code{envelope} object of \pkg{spatstat} including the observed function and simulations
 from the tested model. \code{X.ls} should be a list of \code{curve_set} or
-\code{\link[spatstat]{envelope}} objects, where each component contains an "observed"
+envelope (of R library \pkg{spatstat}) objects, where each component contains an "observed"
 function f that has been simulated from the model fitted to the data and the simulations
 that have been obtained from the same model that has been fitted to the "observed" f.
 The user has the responsibility that the functions have been generated correctly,
@@ -140,17 +140,17 @@ In the case, that the global envelope should not be calculated directly for \cod
 not a function), \code{calcfun} can be used to specify how to calculate the function from
 \code{X} and from simulations generated by \code{simfun}.
 Special attention is needed in the correct specification of the functions, see examples.
- \item Otherwise, \code{X} should be either a fitted (point process) model object or a \code{\link{ppp}}
-  object of the R library \pkg{\link{spatstat}}.
+ \item Otherwise, \code{X} should be either a fitted (point process) model object or a \code{ppp}
+  object of the R library \pkg{spatstat}.
 \itemize{
-  \item If \code{X} is a fitted (point process) model object of the R library \pkg{\link{spatstat}},
+  \item If \code{X} is a fitted (point process) model object of the R library \pkg{spatstat},
 then the simulations from this model are generated and summary functions for testing calculated
-by \code{\link[spatstat]{envelope}}. Which summary function to use and how to calculate it,
-can be passed to \code{\link[spatstat]{envelope}} either in \code{...} or \code{testfuns}.
-Unless otherwise specified the default function of \code{\link[spatstat]{envelope}},
+by the \code{envelope} function of \pkg{spatstat}. Which summary function to use and how to calculate it,
+can be passed to \code{envelope} either in \code{...} or \code{testfuns}.
+Unless otherwise specified the default function of \code{envelope},
 i.g. the K-function, is used. The argument \code{testfuns} should be used to specify the
 test functions in the case where one wants to base the test on several test functions.
-  \item If \code{X} is a \code{\link[spatstat]{ppp}} object, then \code{\link[spatstat]{envelope}}
+  \item If \code{X} is a \code{ppp} object of \pkg{spatstat}, then the \code{envelope} function
 is used for simulations and model fitting and the complete spatial randomness (CSR) is tested
 (with intensity parameter).
 }
@@ -218,6 +218,7 @@ if(require("fda.usc", quietly=TRUE)) {
 \donttest{
 if(require("spatstat", quietly=TRUE)) {
   data("saplings")
+  saplings <- as.ppp(saplings, W=square(75))
 
   # First choose the r-distances
   rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
