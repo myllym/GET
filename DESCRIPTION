@@ -26,7 +26,6 @@ Imports:
     gridExtra,
     methods,
     parallel,
-    spatstat,
     stats,
     utils,
     viridisLite
@@ -37,6 +36,7 @@ Suggests:
     fda.usc,
     mvtnorm,
     patchwork,
+    spatstat,
     testthat,
     knitr
 Description: Implementation of global envelopes for a set of general d-dimensional vectors T
