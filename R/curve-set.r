@@ -1,6 +1,6 @@
-# Turn an \code{\link[spatstat]{envelope}} object into a curve_set object.
+# Turn an \code{envelope} object of \pkg{spatstat} into a curve_set object.
 #
-# @param env An \code{\link[spatstat]{envelope}} object. The envelope()
+# @param env An \code{envelope} object of \pkg{spatstat}. The envelope()
 #   functions must have been called with savefuns = TRUE.
 # @return A corresponding curve_set object.
 # @param ... Do not use. (For internal use only.)
@@ -59,7 +59,7 @@ fdata_to_curve_set <- function(fdata, ...) {
 #
 # @param curve_set An object to be checked.
 # @param allow_Inf_values Logical. Can be used to allow infinite or nonnumeric
-# values in an \code{\link[spatstat]{envelope}} object at the first place, if those are cropped
+# values in an \code{envelope} object of \pkg{spatstat} at the first place, if those are cropped
 # away (in \code{\link{crop_curves}}).
 check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
   if(inherits(curve_set, "curve_set")) {
@@ -174,7 +174,7 @@ check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
 # @param ... Allows to pass arguments to \code{\link{check_curve_set_content}}
 # and \code{\link{envelope_to_curve_set}} (to be passed further through
 # \code{\link{create_curve_set}} to \code{\link{check_curve_set_content}}).
-# @return If an \code{\link[spatstat]{envelope}} object was given, return a
+# @return If an \code{envelope} object of \pkg{spatstat} was given, return a
 #   corresponding curve_set object. If a curve_set object was given, return
 #   it unharmed.
 convert_envelope <- function(curve_set, ...) {
@@ -469,7 +469,7 @@ plot.curve_set2d <- function(x, idx=1, ncol = 2 + 1*(length(idx)==3), ...) {
 # Combine curve sets.
 #
 # Combine curve sets to a one curve set, e.g. for testing by means of several test functions.
-# @param x A list of curve sets or \code{\link[spatstat]{envelope}} objects.
+# @param x A list of curve sets or \code{envelope} (from \pkg{spatstat}) objects.
 # @param equalr Whether to demand equal lengths of r vectors of the different curve sets
 # @return A curve set that is a combination of the curve sets given in 'x'.
 combine_curve_sets <- function(x, equalr = TRUE) {
@@ -491,7 +491,7 @@ combine_curve_sets <- function(x, equalr = TRUE) {
 
 # Check curve set dimensions
 #
-# Check that x contains list of curve sets or \code{\link[spatstat]{envelope}} objects.
+# Check that x contains list of curve sets or \code{envelope} (from \pkg{spatstat}) objects.
 # If the latter, then convert the objects to curve sets.
 # Check that the curve sets have same elements and dimensions of them (numbers of r-values can differ for equalr=FALSE).
 # @inheritParams combine_curve_sets

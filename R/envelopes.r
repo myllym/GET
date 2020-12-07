@@ -10,7 +10,6 @@ critical <- function(distance, alpha, Nfunc, small_significant) {
   distancesorted[floor((1-alpha)*Nfunc)]
 }
 
-#' @importFrom spatstat fv
 make_envelope_object <- function(type, curve_set, LB, UB, T_0,
                                  picked_attr, isenvelope,
                                  kalpha, alpha, distance) {
@@ -499,8 +498,9 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #'
 #'
 #' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
-#' or an \code{\link[spatstat]{envelope}} object, the function \code{central_region}
-#' construcst a central region, i.e. a global envelope, from the given set of functions (or vectors).
+#' or an \code{envelope} object of \pkg{spatstat} or \code{fdata} object of \pkg{fda.usc},
+#' the function \code{central_region} construcst a central region, i.e. a global envelope,
+#' from the given set of functions (or vectors).
 #'
 #' Generally an envelope is a band bounded by the vectors (or functions)
 #' \eqn{T_{low}}{T_lo} and \eqn{T_{hi}}{T_hi}.
@@ -587,11 +587,15 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #' @param nstep 1 or 2 for how to contruct a combined global envelope if list of curve sets
 #' is provided. 2 (default) for a two-step combining procedure, 1 for one-step.
 #' @param ... Ignored.
-#' @return Either an object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-#' or an "combined_global_envelope" for the case that \code{curve_sets} is a list of
-#' objects. The objects can be printed and plotted directly.
+#' @return Either an object of class \code{global_envelope} and or an \code{combined_global_envelope} object.
+#' The former class is obtained when a set of curves is provided, while the latter in the case
+#' that \code{curve_sets} is a list of objects. The print and plot function are defined for the
+#' returned objects (see examples).
+#' If the given set of curves had the class \code{envelope} of \pkg{spatstat}, then the returned
+#' \code{global_envelope} object has also the class \code{fv} of spatstat, whereby one can utilize
+#' also the plotting functions of \pkg{spatstat}, see example in \code{\link{plot.global_envelope}}.
 #'
-#' The "global_envelope" object is essentially a data frame containing columns
+#' The \code{global_envelope} object is essentially a data frame containing columns
 #' \itemize{
 #' \item r = the vector of values of the argument r at which the test was made
 #' \item obs = the data function, if there is only one data function. Otherwise not existing.
@@ -602,7 +606,7 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #'       Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
 #'       Used for visualization only.
 #' }
-#' Additionally, the return value has attributes
+#' Additionally, the returned object has attributes
 #' \itemize{
 #'   \item method = The name of the envelope test used for plotting purposes ("Global envelope")
 #'   \item alternative = The alternative specified in the function call.
@@ -612,14 +616,14 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #'   observed function, then k[1] will give the value of the measure for this.
 #'   \item call = The call of the function.
 #' }
-#' and a punch of attributes for the "fv" object type, see \code{\link[spatstat]{fv}}.
+#' For an \code{fv} object, also some further arguments exists as required by \code{fv} of \pkg{spatstat}.
 #' Attributes of an object \code{res} can be obtained using the function
 #' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 #'
-#' The "combined_global_envelope" is a list of "global_envelope" objects
-#' corresponding to the components of \code{curve_sets}. The second level envelope
-#' on which the envelope construction is based is saved in the attribute
-#' "level2_ge".
+#' The \code{combined_global_envelope} is a list of \code{global_envelope} objects, with one-to-one
+#' correspondence to the components of \code{curve_sets}. The second level envelope
+#' on which the envelope construction is based (if nstep = 2) is saved in the attribute
+#' \code{level2_ge}.
 #'
 #' @export
 #' @seealso \code{\link{forder}}, \code{\link{global_envelope_test}}
@@ -721,7 +725,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'
 #'
 #' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
-#' or an \code{\link[spatstat]{envelope}} object,
+#' or an \code{envelope} object of \pkg{spatstat},
 #' which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)}
 #' (in the component \code{obs}) and
 #' the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)}
@@ -847,11 +851,11 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'
 #' @inheritParams central_region
 #' @param curve_sets A \code{curve_set} (see \code{\link{create_curve_set}})
-#' or an \code{\link[spatstat]{envelope}} object containing a data function and simulated functions.
+#' or an \code{envelope} object of \pkg{spatstat} containing a data function and simulated functions.
 #' If an envelope object is given, it must contain the summary
 #' functions from the simulated patterns which can be achieved by setting
-#' \code{savefuns = TRUE} when calling \code{\link[spatstat]{envelope}}.
-#' Alternatively, a list of \code{curve_set} or \code{\link[spatstat]{envelope}} objects can be given.
+#' \code{savefuns = TRUE} when calling the \code{envelope} function.
+#' Alternatively, a list of \code{curve_set} or \code{envelope} objects can be given.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
 #' @param ties The method to obtain a unique p-value when  \code{type = 'rank'}.
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
@@ -1112,19 +1116,18 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #'
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #'
-#' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{\link[spatstat]{envelope}}
-#'  object. If an envelope object is given, it must contain the summary
+#' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{envelope}
+#'  object of \pkg{spatstat}. If an envelope object is given, it must contain the summary
 #'  functions from the simulated patterns which can be achieved by setting
-#'  savefuns = TRUE when calling \code{\link[spatstat]{envelope}}.
+#'  savefuns = TRUE when calling the function of \pkg{spatstat}.
 #' @param type The type of the global envelope with current options for "rank", "erl", "cont" and "area".
 #' If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
 #' If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
 #' length p-value is given (Myllymäki et al., 2017, Mrkvička et al., 2018). See details and additional
 #' sections thereafter.
 #' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
-#' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-#' which can be printed and plotted directly.
-#' See \code{\link{global_envelope_test}} for more details.
+#' @return An object of class \code{global_envelope} of \code{combined_global_envelope}
+#' which can be printed and plotted directly. See \code{\link{global_envelope_test}} for more details.
 #' @export
 #' @seealso \code{\link{global_envelope_test}}
 #' @examples
@@ -1175,9 +1178,8 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381–404. doi: 10.1111/rssb.12172
 #'
 #' @inheritParams rank_envelope
-#' @return An object of class "global_envelope" and "fv" (see \code{\link[spatstat]{fv.object}}),
-#' which can be printed and plotted directly.
-#' See \code{\link{global_envelope_test}} for more details.
+#' @return An object of class \code{global_envelope} of \code{combined_global_envelope}
+#' which can be printed and plotted directly. See \code{\link{global_envelope_test}} for more details.
 #' @export
 #' @name qdir_envelope
 #' @seealso \code{\link{global_envelope_test}}

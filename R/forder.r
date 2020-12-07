@@ -303,7 +303,7 @@ combined_forder <- function(curve_sets, ...) {
 #'
 #'
 #' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
-#' or an \code{\link[spatstat]{envelope}} object,
+#' or an \code{envelope} object of \pkg{spatstat},
 #' which contains curves \eqn{T_1(r),\dots,T_s(r)}{T_1(r),...,T_s(r)},
 #' the functions are ordered from the most extreme one to the least extreme one
 #' by one of the following measures (specified by the argument \code{measure}).

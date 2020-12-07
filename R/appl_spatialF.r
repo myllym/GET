@@ -2,9 +2,6 @@
 # At the edge, the mean is the mean of the image values in the image window.
 # @param x An image.
 # @param R The radius of the circle.
-#' @importFrom spatstat second.moment.calc
-#' @importFrom spatstat fillNA
-#' @importFrom spatstat eval.im
 maverage2d <- function(x, R) {
   R <- mean(R) # Note: R can be a vector of length 2 corresponding to bandwidths in x and y directions
   X <- spatstat::fillNA(x, 0)
@@ -22,7 +19,6 @@ maverage2d <- function(x, R) {
 # Compute the spatial statistics F(u) and S(u), and the coefficients of the full model
 # @param returncoef Logical. Whether or not to calculate and return also the coefficients
 # of the full model.
-#' @importFrom spatstat Smooth
 compute_statistics <- function(X, formula.full, formula.reduced, fitfun, covariates, bw, bw.S, returncoef=FALSE, dimyx=NULL) {
   M.full <- fitfun(X, formula.full, covariates)
   M.reduced <- fitfun(X, formula.reduced, covariates)
@@ -54,7 +50,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' Compute the spatial F- and S-statistics and perform the one-stage global envelope tests
 #' proposed by Myllymäki et al. (2020).
 #' 
-#' @param X A \code{\link[spatstat]{ppp}} object representing the observed point pattern.
+#' @param X A \code{ppp} object of \pkg{spatstat} representing the observed point pattern.
 #' @param formula.full A formula for the trend of the full model.
 #' @param formula.reduced A formula for the trend of the reduced model
 #' that is a submodel of the full model.
@@ -64,7 +60,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' @param nsim The number of simulations.
 #' @param bw The bandwidth for smoothed residuals.
 #' @param bw.S The radius for the local S(u)-statistic.
-#' @param dimyx Pixel array dimensions for smoothed residuals. See \code{\link[spatstat]{as.mask}}.
+#' @param dimyx Pixel array dimensions for smoothed residuals. See \code{as.mask} of \pkg{spatstat}.
 #' @param ... Additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @return list with three components
 #' \itemize{
@@ -75,7 +71,6 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' @export
 #' @references
 #' Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics. doi: 10.1016/j.spasta.2020.100436
-#' @importFrom spatstat bw.scott
 #' @importFrom stats simulate
 #' @examples
 #' if(require("spatstat", quietly=TRUE)) {
