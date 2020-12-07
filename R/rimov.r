@@ -12,7 +12,7 @@
 #' whereas \code{curve_set[['obs']]} contains the water temperatures such that
 #' each column gives year temperatures in a year.
 #'
-#' @usage data(rimov)
+#' @usage data("rimov")
 #' @references
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #' @keywords datasets
@@ -20,7 +20,7 @@
 #' @docType data
 #' @seealso graph.fanova
 #' @examples
-#' data(rimov)
+#' data("rimov")
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #' for(i in 1:3)
 #'   print(plot(subset(rimov, groups==i),

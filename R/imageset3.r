@@ -18,7 +18,7 @@
 #' @format A list of the \code{image_set} containing the simulated images, and
 #' the discrete group factor in the list component \code{Group}.
 #'
-#' @usage data(imageset3)
+#' @usage data("imageset3")
 #' @references
 #' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
 #' @keywords datasets
@@ -26,7 +26,7 @@
 #' @docType data
 #' @seealso \code{\link{graph.fanova}}, \code{\link{frank.fanova}}
 #' @examples
-#' data(imageset3)
+#' data("imageset3")
 #' plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5)
 #' \donttest{
 #' # Colors can be changed as follows:

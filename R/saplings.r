@@ -12,7 +12,7 @@
 #' @format An object of class \code{\link[spatstat]{ppp.object}} representing the point
 #' pattern of tree locations.
 #'
-#' @usage data(saplings)
+#' @usage data("saplings")
 #' @references
 #' Grabarnik, P. and Chiu, S. N. (2002) Goodness-of-fit test for complete spatial randomness against
 #' mixtures of regular and clustered spatial point processes. \emph{Biometrika}, \bold{89}, 411–421.
@@ -32,7 +32,7 @@
 #' #=====================================================
 #' # Example of Myllymaki et al. (2017, Supplement S4).
 #' if(require("spatstat", quietly=TRUE)) {
-#'   data(saplings)
+#'   data("saplings")
 #'
 #'   # First choose the r-distances for L (r) and J (rJ) functions, respectively.
 #'   nr <- 500

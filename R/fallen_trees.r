@@ -14,7 +14,7 @@
 #' @format A \code{\link[spatstat]{ppp.object}} object with locations and heights (=marks)
 #' of 232 trees in a window with polygonal boundary.
 #'
-#' @usage data(fallen_trees)
+#' @usage data("fallen_trees")
 #' @references
 #' Guinier, P. (1950) Foresterie et protection de la nature. l’exemple de fontainebleau. Rev Forestière Fr., II, 703-717.
 #'
@@ -26,6 +26,6 @@
 #' @name fallen_trees
 #' @docType data
 #' @examples
-#' data(fallen_trees)
+#' data("fallen_trees")
 #' plot(fallen_trees)
 NULL

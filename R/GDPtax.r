@@ -28,7 +28,7 @@
 #' Each column of \code{obs} contains the GDP for the years for a particular country (seen as column names).
 #' The country grouping is given in the list component \code{Group} and the profit tax in \code{Profittax}.
 #'
-#' @usage data(GDPtax)
+#' @usage data("GDPtax")
 #' @references
 #' World Bank national accounts data, and OECD National Accounts data files. URL: https://data.worldbank.org/indicator/NY.GDP.PCAP.CD
 #' World Bank, Doing Business Project (http://www.doingbusiness.org/ExploreTopics/PayingTaxes/). URL: https://data.worldbank.org/indicator/IC.TAX.PRFT.CP.ZS
@@ -37,7 +37,7 @@
 #' @docType data
 #' @seealso \code{\link{graph.flm}}
 #' @examples
-#' data(GDPtax)
+#' data("GDPtax")
 #' # Plot data in groups
 #' for(i in 1:4)
 #'   print(plot(subset(GDPtax$GDP, GDPtax$Group == i),

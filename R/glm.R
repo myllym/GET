@@ -336,7 +336,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @importFrom parallel parLapply
 #' @importFrom parallel clusterEvalQ
 #' @examples
-#' data(rimov)
+#' data("rimov")
 #' res <- graph.flm(nsim=19, # Increase the number of simulations for serious analysis!
 #'                  formula.full = Y~Year,
 #'                  formula.reduced = Y~1,
@@ -358,7 +358,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' # An example of testing the joint effect of a discrete and a continuous variable
 #' \dontshow{nsim <- 19}
 #' \donttest{nsim <- 999}
-#' data(GDPtax)
+#' data("GDPtax")
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' res.tax_within_group <- graph.flm(nsim = nsim,
 #'                                   formula.full = Y~Group+Tax+Group:Tax,
@@ -369,7 +369,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'
 #' # Image data examples
 #'
-#' data(abide_9002_23)
+#' data("abide_9002_23")
 #' iset <- abide_9002_23$curve_set
 #' \dontshow{
 #' # Cut the data to reduce time
@@ -539,7 +539,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #'
 #' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 #' @examples
-#' data(GDPtax)
+#' data("GDPtax")
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' \dontshow{nsim <- 19}
 #' \donttest{nsim <- 999}
@@ -551,7 +551,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' plot(res.tax_within_group)
 #'
 #' # Image set examples
-#' data(abide_9002_23)
+#' data("abide_9002_23")
 #' iset <- abide_9002_23$curve_set
 #' \dontshow{
 #' # Cut the data to reduce time

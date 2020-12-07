@@ -230,7 +230,7 @@ contrasts.m <- function(x, groups, ...) {
 #' #-- NOx levels example (see for details Myllymaki and Mrkvicka, 2020)
 #' if(require("fda.usc", quietly=TRUE)) {
 #'   # Prepare data
-#'   data(poblenou)
+#'   data("poblenou")
 #'   Free <- poblenou$df$day.festive == 1 |
 #'     as.integer(poblenou$df$day.week) >= 6
 #'   MonThu <- poblenou$df$day.festive == 0 & poblenou$df$day.week %in% 1:4
@@ -255,7 +255,7 @@ contrasts.m <- function(x, groups, ...) {
 #'
 #' #-- Centred government expenditure centralization ratios example
 #' # This is an example analysis of the centred GEC in Mrkvicka et al.
-#' data(cgec)
+#' data("cgec")
 #'
 #' # Number of simulations
 #' \dontshow{nsim <- 19}
@@ -399,7 +399,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' @references
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #' @examples
-#' data(rimov)
+#' data("rimov")
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
 #' \donttest{res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)}
 #' \dontshow{res <- frank.fanova(nsim=4, curve_set=rimov, groups=groups, alpha=0.2)}
