@@ -610,7 +610,7 @@ Figure~\ref{fig:adulttrees} shows the locations of 67 large trees (with height $
 <<adulttrees, echo=FALSE, fig=TRUE, height=3.0625, width=3.0625>>==
 library("spatstat")
 data("adult_trees")
-X <- adult_trees
+X <- as.ppp(adult_trees, W = square(75))
 par(mfrow=c(1,1), mgp=c(0, 0, 0), mar=c(0, 0, 0, 0))
 plot(X, main="")
 @
@@ -638,7 +638,7 @@ set.seed(190503)
 <<adulttrees_sims>>==
 library("spatstat")
 data("adult_trees")
-X <- adult_trees
+X <- as.ppp(adult_trees, W = square(75))
 nsim <- 999
 obs.L <- Lest(X, correction = "translate")
 r <- obs.L[['r']]

@@ -246,7 +246,7 @@ First some setup:
 %
 <<combined1>>=
 data(saplings)
-X <- saplings
+X <- as.ppp(saplings, W = square(75))
 
 nsim <- 499 # Number of simulations
 
@@ -369,6 +369,7 @@ The adjusted test of the \pkg{GET} package is described in Section 2.3 of \citet
 %
 <<saplings>>=
 data(saplings)
+saplings <- as.ppp(saplings, W = square(75))
 plot(saplings)
 @
 %
@@ -471,6 +472,7 @@ The saplings data set is available at the \pkg{GET} package.
 %
 <<saplings_data>>=
 data(saplings)
+saplings <- as.ppp(saplings, W = square(75))
 @
 %
 
