@@ -67,15 +67,16 @@ env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {
                        "Alternative = \"", alternative, "\"\n")
     }
     else {
-      if(inherits(x, c("fboxplot", "combined_fboxplot")))
-        main <- paste0(attr(x, "method"), " based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
-      else if(inherits(x, c("global_envelope"))) {
-        if(!is.null(attr(x, "alpha")))
+      if(!is.null(attr(x, "alpha"))) {
+        if(inherits(x, c("fboxplot", "combined_fboxplot")))
+          main <- paste0(attr(x, "method"), " based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
+        else if(inherits(x, c("global_envelope")))
           main <- paste0(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
         else
-          main <- paste0(attr(x, "method"), " (", attr(x, "type"), ")")
+          main <- NULL
       }
-      else main <- NULL
+      else
+        main <- paste0(attr(x, "method"), " (", attr(x, "type"), ")")
     }
   }
   main
