@@ -974,7 +974,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   # As an example test CSR of the saplings point pattern by means of
 #'   # L, F, G and J functions.
 #'   data(saplings)
-#'   X <- saplings
+#'   X <- as.ppp(saplings, W=square(75))
 #'
 #'   \donttest{nsim <- 499 # Number of simulations}
 #'   \dontshow{nsim <- 19 # Number of simulations}

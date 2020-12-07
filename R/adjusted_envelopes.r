@@ -300,6 +300,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' \donttest{
 #' if(require("spatstat", quietly=TRUE)) {
 #'   data("saplings")
+#'   saplings <- as.ppp(saplings, W=square(75))
 #'
 #'   # First choose the r-distances
 #'   rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
