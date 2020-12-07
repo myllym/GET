@@ -16,7 +16,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   if(!all(sapply(curve_sets, function(x) inherits(x, c("curve_set", "fdata"))))) stop("The components of curve_sets do not have a valid class.")
   curve_sets <- lapply(curve_sets, convert_fdata)
   if(any(sapply(curve_sets, function(x) curve_set_is1obs(x)))) stop("All (data) functions of the curve_set must be equal.")
-  curve_sets <- check_curve_set_dimensions_and_return_curveset(curve_sets)
+  curve_sets <- check_curve_set_dimensions(curve_sets)
   # Put Y and factors into data.l
   data.l <- list()
   data.l[['Y']] <- data_and_sim_curves(curve_sets[['Y']]) # -> each row corresponds to a data function

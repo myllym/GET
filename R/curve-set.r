@@ -473,7 +473,7 @@ plot.curve_set2d <- function(x, idx=1, ncol = 2 + 1*(length(idx)==3), ...) {
 # @param equalr Whether to demand equal lengths of r vectors of the different curve sets
 # @return A curve set that is a combination of the curve sets given in 'x'.
 combine_curve_sets <- function(x, equalr = TRUE) {
-  x <- check_curve_set_dimensions_and_return_curveset(x, equalr=equalr)
+  x <- check_curve_set_dimensions(x, equalr=equalr)
   cset <- x[[1]]
   # Combine
   cset$funcs <- do.call(rbind, lapply(x, FUN=function(curve_set) { curve_set[['funcs']] }))
@@ -495,7 +495,7 @@ combine_curve_sets <- function(x, equalr = TRUE) {
 # If the latter, then convert the objects to curve sets.
 # Check that the curve sets have same elements and dimensions of them (numbers of r-values can differ for equalr=FALSE).
 # @inheritParams combine_curve_sets
-check_curve_set_dimensions_and_return_curveset <- function(x, equalr=FALSE) {
+check_curve_set_dimensions <- function(x, equalr=FALSE) {
   x <- lapply(x, FUN=convert_to_curveset)
   checkequal <- function(f) {
     all(sapply(x, FUN=function(curve_set) { f(curve_set) == f(x[[1]]) }))

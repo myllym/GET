@@ -280,7 +280,7 @@ combine_forder <- function(ls) {
 # Functionality for functional ordering based on several curve sets
 combined_forder <- function(curve_sets, ...) {
   ntests <- length(curve_sets)
-  curve_sets <- check_curve_set_dimensions_and_return_curveset(curve_sets)
+  curve_sets <- check_curve_set_dimensions(curve_sets)
 
   # 1) First stage: Calculate the functional orderings individually for each curve_set
   res_ls <- lapply(curve_sets, FUN = function(x) { individual_forder(x, ...) })

@@ -124,7 +124,7 @@ combined_scaled_MAD_envelope_test <- function(curve_sets, type = c("qdir", "st")
       if(!all(sapply(tmp, curve_set_is1obs)))
         stop("The curve_set does not contain one observed function. Testing does not make sense.\n Did you want to construct a central region of your data? See the function central_region.")
     }
-    curve_sets <- check_curve_set_dimensions_and_return_curveset(curve_sets)
+    curve_sets <- check_curve_set_dimensions(curve_sets)
     # Make the individual tests saving the deviations
     switch(type,
             qdir = {
