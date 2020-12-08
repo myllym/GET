@@ -14,11 +14,15 @@ how_many_outside <- function(x) {
 # Helper function for printing object with attributes "alpha", "type", "method"
 # and optionally "p", "p_interval", "ties", "alpha_star"
 printhelper_method <- function(x, istest, adj) {
+  if(inherits(x, c("global_envelope2d", "combined_global_envelope2d")))
+    xdim <- " (2d)"
+  else
+    xdim <- " (1d)"
   if(is.null(attr(x, "alpha")))
     level <- NULL
   else
     level <- 100*(1-attr(x, "alpha"))
-  cat(attr(x, "method"), ":\n", sep="")
+  cat(attr(x, "method"), xdim, ":\n", sep="")
   if(!istest) { # The case of a central region & fboxplot
     if(!is.null(level)) {
       cat(" * ", level, "% central region based on the measure \"", attr(x, "type"), "\"\n", sep="")
