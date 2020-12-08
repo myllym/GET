@@ -93,7 +93,6 @@
 #' \itemize{
 #'   \item \code{\link{GET.composite}}, see a detailed example in \code{\link{saplings}}
 #' }
-#' Also the adjusted tests can be based on several test functions.
 #' \item \emph{One-way functional ANOVA}:
 #'  \itemize{
 #'   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
@@ -170,15 +169,18 @@
 #' }
 #' The data sets are used to show examples of the functions of the library.
 #'
-#' @section Number of simulations:
+#' @section Number of functions:
+#'
+#' If the number of functions is low, the choice of the measure (or type or depth) playes a role,
+#' as explained in \code{vignette("GET")} (Section 2.4).
 #'
 #' Note that the recommended minimum number of simulations for the rank
-#' envelope test based on a single function in spatial statistics is nsim=2499.
+#' envelope test (Myllymäki et al., 2017) based on a single function in spatial statistics is nsim=2499.
 #' When the number of argument values is large, also larger number simulations is needed in order to
 #' have a narrow p-interval.
 #' The "erl", "cont", "area", "qdir" and "st" global envelope tests and deviation tests can be
 #' used with a lower number of simulations, although the Monte Carlo error is obviously larger
-#' with a small number of simulations.
+#' with a lower number of simulations.
 #' For increasing the number of simulations, all the global rank envelopes approach the same curves.
 #'
 #' Mrkvička et al. (2017) discussed the number of simulations for tests based on many functions.
@@ -192,7 +194,7 @@
 #' the functions are typically estimators of summary functions. The package supports
 #' the use of the R library \pkg{spatstat} for generating simulations and calculating
 #' estimators of the chosen summary function, but alternatively these can be done by
-#' any other way, thus allowing for any models/functions.
+#' any other way, thus allowing for any user-specified models/functions.
 #' To see examples of global envelopes for analysing point pattern data,
 #' start R, type \code{library(GET)} and \code{vignette("pointpatterns")}.
 #'
