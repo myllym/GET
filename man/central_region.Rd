@@ -51,39 +51,60 @@ Either an object of class \code{global_envelope} and or an \code{combined_global
 The former class is obtained when a set of curves is provided, while the latter in the case
 that \code{curve_sets} is a list of objects. The print and plot function are defined for the
 returned objects (see examples).
-If the given set of curves had the class \code{envelope} of \pkg{spatstat}, then the returned
-\code{global_envelope} object has also the class \code{fv} of spatstat, whereby one can utilize
-also the plotting functions of \pkg{spatstat}, see example in \code{\link{plot.global_envelope}}.
 
 The \code{global_envelope} object is essentially a data frame containing columns
 \itemize{
 \item r = the vector of values of the argument r at which the test was made
-\item obs = the data function, if there is only one data function. Otherwise not existing.
 \item lo = the lower envelope based on the simulated functions
 \item hi = the upper envelope based on the simulated functions
-\item central = If the curve_set (or envelope object) contains a component 'theo',
+\item central = If the \code{curve_set} (or \code{envelope} object) contains a theoretical curve,
       then this function is used as the central curve and returned in this component.
-      Otherwise, the central_curve is the mean of the test functions T_i(r), i=2, ..., s+1.
-      Used for visualization only.
+      Otherwise, the central curve is the mean or median (according to the argument \code{central})
+      of the test functions T_i(r), i=2, ..., s+1. Used for visualization only.
 }
+and potentially additionally
+\itemize{
+\item obs = the data function, if there is only one data function in the given \code{curve_sets}.
+Otherwise not existing.
+}
+Most often \code{central_region} is directly applied to functional data where all curves are observed.
 Additionally, the returned object has attributes
 \itemize{
   \item method = The name of the envelope test used for plotting purposes ("Global envelope")
-  \item alternative = The alternative specified in the function call.
-  \item ties = As the argument \code{ties}.
+  \item alternative, type, ties, alpha = Similar to those in the function call.
+  \item xlab, ylab = The default labels for x- and y-axes for plotting purposes.
   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
   \item k = The values of the chosen measure for all the functions. If there is only one
   observed function, then k[1] will give the value of the measure for this.
-  \item call = The call of the function.
+  \item names, class, row.names, call = if existing, as usual
 }
-For an \code{fv} object, also some further arguments exists as required by \code{fv} of \pkg{spatstat}.
 Attributes of an object \code{res} can be obtained using the function
 \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 
-The \code{combined_global_envelope} is a list of \code{global_envelope} objects, with one-to-one
-correspondence to the components of \code{curve_sets}. The second level envelope
-on which the envelope construction is based (if nstep = 2) is saved in the attribute
-\code{level2_ge}.
+If the given set of curves had the class \code{envelope} of \pkg{spatstat}, then the returned
+\code{global_envelope} object has also the class \code{fv} of spatstat, whereby one can utilize
+also the plotting functions of \pkg{spatstat}, see example in \code{\link{plot.global_envelope}}.
+However, the \code{envelope} objects are most often used with \code{\link{global_envelope_test}}
+and not with \code{central_region}.
+For an \code{fv} object, also some further arguments exists as required by \code{fv} of \pkg{spatstat}.
+
+The \code{combined_global_envelope} is a list of \code{global_envelope} objects, where some of
+the attributes have been set to zero, as the objects form a global envelope of the specified level only
+jointly. The components correspond to the components of \code{curve_sets}.
+The \code{combined_global_envelope} object contains the attributes
+\code{method}, \code{alternative}, \code{type}, \code{xlab}, \code{ylab}, \code{alpha},
+\code{k}, \code{k_alpha} (see above) as well as
+\itemize{
+\item nstep = 1 or 2, as the argument \code{nstep}
+\item level2_ge = The second level envelope on which the envelope construction is based (if nstep = 2)
+\item level2_curve_set = The second level \code{curve_set} from which \code{level2_ge} is constructed
+}
+
+In the case that the given curve sets are two-dimensional, i.e., their arguments values are two-dimensional,
+then the returned objects have in addition to the class \code{global_envelope} or \code{combined_global_envelope},
+the class \code{global_envelope2d} or \code{combined_global_envelope2d}, respectively. This class is assigned
+for plotting purposes: For the 2d envelopes, also the default plots are 2d.
+Otherwise the 1d and 2d objects are similar.
 }
 \description{
 Provides central regions or global envelopes or confidence bands

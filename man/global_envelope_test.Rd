@@ -62,18 +62,19 @@ is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
 \item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
 }
 \value{
-Either an object of class "global_envelope" or "combined_global_envelope"
-(the latter for combined tests). The objects can be printed and plotted directly.
+Either an object of class "global_envelope" or "combined_global_envelope",
+similarly as the objects returned by \code{\link{central_region}}.
 
-The "global_envelope" is essentially a data frame containing columns
+The \code{global_envelope} is essentially a data frame containing columns
 \itemize{
 \item the values of the argument r at which the test was made, copied from the argument \code{curve_sets} with the corresponding names
-\item obs = values of the data function, copied from the argument \code{curve_sets}; missing if more than one observed function
+\item obs = values of the data function, copied from the argument \code{curve_sets}
+(unlike for central regions, \code{obs} always exists for a global envelope test)
 \item lo = the lower envelope
 \item hi = the upper envelope
 \item central = a central curve as specified in the argument \code{central}.
 }
-Moreover, the return value has the same attributes as the object returned by
+Moreover, the returned object has the same attributes as the \code{global_envelope} object returned by
 \code{\link{central_region}} and in addition
 \itemize{
   \item p = A point estimate for the p-value (default is the mid-rank p-value).
@@ -84,10 +85,11 @@ and in the case that \code{type = 'rank'} also
   \item ties = As the argument \code{ties}.
 }
 
-The "combined_global_envelope" is a list of "global_envelope" objects
-corresponding to the components of \code{curve_sets}. The second level envelope
-on which the envelope construction is based on is saved in the attribute
-"level2_ge".
+The \code{combined_global_envelope} is a list of \code{global_envelope} objects
+containing the above mentioned columns and which all together form the global envelope.
+It has the same attributes as described in \code{\link{central_region}}, and in addition also
+the p-value \code{p}.
+The 2d classes are attached as described in \code{\link{central_region}}.
 }
 \description{
 Global envelope test, global envelopes and p-values
