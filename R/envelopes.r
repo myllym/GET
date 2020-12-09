@@ -682,9 +682,9 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #' # Plotting the result
 #' plot(cr) + # central region
 #'   ggplot2::geom_point(data = data.frame(id = 1:length(d), points = d),
-#'                       aes(x = id, y = points)) + # data points
+#'                       ggplot2::aes(x = id, y = points)) + # data points
 #'   ggplot2::geom_line(data = data.frame(id = 1:length(d), points = f),
-#'                      aes(x = id, y = points)) # true function
+#'                      ggplot2::aes(x = id, y = points)) # true function
 central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
                            probs = c((1-coverage)/2, 1-(1-coverage)/2),

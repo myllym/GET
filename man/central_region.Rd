@@ -210,9 +210,9 @@ cr <- central_region(boot.cset, coverage=0.95, type="erl")
 # Plotting the result
 plot(cr) + # central region
   ggplot2::geom_point(data = data.frame(id = 1:length(d), points = d),
-                      aes(x = id, y = points)) + # data points
+                      ggplot2::aes(x = id, y = points)) + # data points
   ggplot2::geom_line(data = data.frame(id = 1:length(d), points = f),
-                     aes(x = id, y = points)) # true function
+                     ggplot2::aes(x = id, y = points)) # true function
 }
 \references{
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
