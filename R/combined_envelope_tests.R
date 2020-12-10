@@ -25,7 +25,7 @@ combined_scaled_MAD_bounding_curves_chars <- function(curve_sets, type = c("qdir
 # Calculate the lower and upper bounding curves of a combined global scaled MAD envelope test
 #
 # @param central_curves_ls A list containing the central functions for different test functions.
-# @param max_u The k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test.
+# @param max_u The u_(alpha)'th largest value of the u_i, i=1,...,nsim+1 for each individual test.
 # @param lower_f The first component in the object returned by \code{\link{combined_scaled_MAD_bounding_curves_chars}}.
 # @param upper_f The second component in the object returned by \code{\link{combined_scaled_MAD_bounding_curves_chars}}.
 combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_f, upper_f) {
@@ -33,7 +33,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
   if(length(max_u) != ntests | length(lower_f) != ntests | length(upper_f) != ntests)
     stop("The lengths of different arguments do not match.")
   # The global 100(1-alpha)% envelope
-  # Find the k_alpha'th largest value of the u_i, i=1,...,nsim+1 for each individual test
+  # Find the u_(alpha)'th largest value of the u_i, i=1,...,nsim+1 for each individual test
   # Typically max_u <- res_rank$hi, where res_rank is the combined rank envelope test done.
   # Lower and upper envelope
   lo <- function(i) { as.vector(central_curves_ls[[i]] - max_u[i]*lower_f[[i]]) }
@@ -145,7 +145,7 @@ combined_scaled_MAD_envelope_test <- function(curve_sets, type = c("qdir", "st")
     envchars <- combined_scaled_MAD_bounding_curves_chars(curve_sets, type=type, probs=probs)
 
     # Create a curve_set for the rank test
-    u_ls <- lapply(res_ls, FUN = function(x) attr(x, "k"))
+    u_ls <- lapply(res_ls, FUN = function(x) attr(x, "M"))
     u_mat <- do.call(rbind, u_ls, quote=FALSE)
     curve_set_u <- create_curve_set(list(r=1:ntests, obs=u_mat[,1], sim_m=u_mat[,-1]))
     # Perform the one-sided (greater is significant) rank test
@@ -154,11 +154,11 @@ combined_scaled_MAD_envelope_test <- function(curve_sets, type = c("qdir", "st")
     central_curves_ls <- lapply(res_ls, function(x) x$central)
     bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$hi,
                                                            lower_f=envchars$lower_f, upper_f=envchars$upper_f)
-    # Update the bounding curves (lo, hi) and kalpha to the first level central regions
+    # Update the bounding curves (lo, hi) and Malpha to the first level central regions
     for(i in 1:length(curve_sets)) {
       res_ls[[i]]$lo <- bounding_curves$lower_ls[[i]]
       res_ls[[i]]$hi <- bounding_curves$upper_ls[[i]]
-      attr(res_ls[[i]], "k_alpha") <- NULL
+      attr(res_ls[[i]], "M_alpha") <- NULL
     }
 
     # Return

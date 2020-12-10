@@ -12,7 +12,7 @@ critical <- function(distance, alpha, Nfunc, small_significant) {
 
 make_envelope_object <- function(type, curve_set, LB, UB, T_0,
                                  picked_attr, isenvelope,
-                                 kalpha, alpha, distance) {
+                                 Malpha, alpha, distance) {
   Nfunc <- curve_set_nfunc(curve_set)
   if(curve_set_is1obs(curve_set)) {
     df <- data.frame(curve_set_rdf(curve_set), obs=curve_set_1obs(curve_set),
@@ -40,8 +40,8 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
   attr(res, "method") <- "Global envelope"
   attr(res, "type") <- type
   attr(res, "alpha") <- alpha
-  attr(res, "k") <- distance
-  attr(res, "k_alpha") <- kalpha
+  attr(res, "M") <- distance
+  attr(res, "M_alpha") <- Malpha
   res
 }
 
@@ -105,7 +105,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          ". So, s*alpha is ", Nfunc*alpha, ".", sep="")
 
   # The critical value
-  kalpha <- critical(distance, alpha, Nfunc, small_significant)
+  Malpha <- critical(distance, alpha, Nfunc, small_significant)
 
   #-- 100(1-alpha)% global envelope
   switch(type,
@@ -114,14 +114,14 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
            UB <- array(0, nr)
            for(i in 1:nr){
              Hod <- sort(all_curves[,i])
-             LB[i]<- Hod[kalpha]
-             UB[i]<- Hod[Nfunc-kalpha+1]
+             LB[i]<- Hod[Malpha]
+             UB[i]<- Hod[Nfunc-Malpha+1]
            }
          },
          erl =,
          cont =,
          area = {
-           j <- distance >= kalpha
+           j <- distance >= Malpha
            LB <- array(0, nr)
            UB <- array(0, nr)
            for(i in 1:nr){
@@ -133,17 +133,17 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          qdir = {
            curve_set_res <- residual(curve_set, use_theo=TRUE)
            quant_m <- curve_set_quant(curve_set_res, probs=probs, type=quantile.type)
-           LB <- T_0 - kalpha*abs(quant_m[1,])
-           UB <- T_0 + kalpha*abs(quant_m[2,])
+           LB <- T_0 - Malpha*abs(quant_m[1,])
+           UB <- T_0 + Malpha*abs(quant_m[2,])
          },
          st = {
            sdX <- curve_set_sd(curve_set)
-           LB <- T_0 - kalpha*sdX
-           UB <- T_0 + kalpha*sdX
+           LB <- T_0 - Malpha*sdX
+           UB <- T_0 + Malpha*sdX
          },
          unscaled = {
-           LB <- T_0 - kalpha
-           UB <- T_0 + kalpha
+           LB <- T_0 - Malpha
+           UB <- T_0 + Malpha
          })
 
   switch(alternative,
@@ -153,7 +153,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
 
   res <- make_envelope_object(type, curve_set, LB, UB, T_0,
                               picked_attr, isenvelope,
-                              kalpha, alpha, distance)
+                              Malpha, alpha, distance)
   attr(res, "call") <- match.call()
   res
 }
@@ -178,7 +178,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
   if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!")
 
   # Measures for functional ordering
-  distance <- attr(res, "k")
+  distance <- attr(res, "M")
 
   #-- Calculate the p-values
   switch(type,
@@ -243,7 +243,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
 
   # 2) Second stage: ERL central region/test
   # Create a curve_set for the ERL test
-  k_ls <- lapply(res_ls, FUN = function(x) attr(x, "k"))
+  k_ls <- lapply(res_ls, FUN = function(x) attr(x, "M"))
   k_mat <- do.call(rbind, k_ls, quote=FALSE)
   Nfunc <- ncol(k_mat)
   # Construct the one-sided ERL central region
@@ -263,10 +263,10 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   attr(res_erl, "labels") <- names(curve_sets)
 
   # 3) The 100(1-alpha)% global combined ERL envelope
-  distance_lexo_sorted <- sort(attr(res_erl, "k"), decreasing=TRUE)
-  kalpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
+  distance_lexo_sorted <- sort(attr(res_erl, "M"), decreasing=TRUE)
+  Malpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
   # Indices of the curves from which to calculate the convex hull
-  curves_for_envelope_ind <- which(attr(res_erl, "k") >= kalpha)
+  curves_for_envelope_ind <- which(attr(res_erl, "M") >= Malpha)
   # Curves
   curve_sets <- lapply(curve_sets, FUN=convert_to_curveset)
   all_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
@@ -275,11 +275,11 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   # Bounding curves
   LB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=min) })
   UB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
-  # Update the bounding curves (lo, hi) and kalpha to the first level central regions
+  # Update the bounding curves (lo, hi) and Malpha to the first level central regions
   for(i in 1:ntests) {
     if(get_alternative(res_ls[[i]]) != "greater") res_ls[[i]]$lo <- LB[[i]]
     if(get_alternative(res_ls[[i]]) != "less") res_ls[[i]]$hi <- UB[[i]]
-    attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "k_alpha") <- NULL
+    attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL
     attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of a combined global envelope test")
   }
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
@@ -303,8 +303,8 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   attr(res_ls, "alternative") <- get_alternative(res_ls[[1]])
   attr(res_ls, "type") <- type
   attr(res_ls, "alpha") <- 1-coverage
-  attr(res_ls, "k") <- attr(res_erl, "k")
-  attr(res_ls, "k_alpha") <- attr(res_erl, "k_alpha")
+  attr(res_ls, "M") <- attr(res_erl, "M")
+  attr(res_ls, "M_alpha") <- attr(res_erl, "M_alpha")
   attr(res_ls, "p") <- attr(res_erl, "p")
   attr(res_ls, "nstep") <- 2
   class(res_ls) <- c("combined_global_envelope", class(res_ls))
@@ -333,7 +333,7 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   # Set unreasonable attributes of individuals sets of curves to NULL
   for(i in 1:nfuns)
     attr(res_ls[[i]], "method") <- paste0("1/", nfuns, "th of a combined global envelope test")
-  anames <- c("p", "p_interval", "ties", "k", "k_alpha", "alpha")
+  anames <- c("p", "p_interval", "ties", "M", "M_alpha", "alpha")
   anames <- anames[anames %in% names(attributes(res_ls[[1]]))]
   for(name in anames) {
     for(i in 1:nfuns) attr(res_ls[[i]], name) <- NULL
@@ -562,13 +562,9 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #' provided for reference.
 #' }
 #'
-#' The values of the chosen measure k are determined for each curve in the \code{curve_set}, and
-#' the values
-#' \eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s}
-#' are returned in the attribute 'k' (in a case of one observed curve only, k[1] is its value).
-#' Based on the chosen measure, the central region, i.e. the global envelope, is constructed
-#' on the chosen interval of argument values (the functions in the \code{curve_set} are assumed
-#' to be given on this interval only).
+#' The values of the chosen measure M are determined for each curve in the \code{curve_set}, and
+#' based on the chosen measure, the central region, i.e. the global envelope, is constructed
+#' for the given curves.
 #'
 #' If a list of (suitable) objects are provided in the argument \code{curve_sets},
 #' then by default (\code{nstep = 2}) the two-step combining procedure is used to
@@ -623,15 +619,15 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #' Most often \code{central_region} is directly applied to functional data where all curves are observed.
 #' Additionally, the returned object has some attributes, where
 #' \itemize{
-#'   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
-#'   \item k = The values of the chosen measure for all the functions. If there is only one
-#'   observed function, then k[1] will give the value of the measure for this.
+#'   \item M_alpha = The value of M corresponding to the 100(1-alpha)\% global envelope.
+#'   \item M = A vector of the values of the chosen measure for all the function.
+#'   If there is only one observed function, then M[1] gives the value of the measure for this.
 #' }
 #' Further the object has some attributes for printing and plotting purposes, where
 #' \code{alternative}, \code{type}, \code{ties}, \code{alpha} correspond to those in the function call
 #' and \code{method} gives a name for the method.
 #' Attributes of an object \code{res} can be obtained using the function
-#' \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
+#' \code{\link[base]{attr}}, e.g. \code{attr(res, "M")} for the values of the ordering measure.
 #'
 #' If the given set of curves had the class \code{envelope} of \pkg{spatstat}, then the returned
 #' \code{global_envelope} object has also the class \code{fv} of spatstat, whereby one can utilize
@@ -644,7 +640,7 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #' the components correspond to the components of \code{curve_sets}.
 #' The \code{combined_global_envelope} object constructed with \code{nstep = 2} contains,
 #' in addition to some conventional ones (\code{method}, \code{alternative}, \code{type}, \code{alpha},
-#' \code{k}, \code{k_alpha}, see above), the second level envelope information as the attributes
+#' \code{M}, \code{M_alpha}, see above), the second level envelope information as the attributes
 #' \itemize{
 #' \item level2_ge = The second level envelope on which the envelope construction is based
 #' \item level2_curve_set = The second level \code{curve_set} from which \code{level2_ge} is constructed

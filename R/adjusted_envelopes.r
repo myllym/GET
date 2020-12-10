@@ -117,7 +117,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
     global_envtest <- global_envelope_test(curve_sets, type=type, alpha=alpha,
                                            alternative=alternative, ties=ties, probs=probs, ...)
   }
-  res <- structure(list(stat = as.numeric(GE.attr(global_envtest, "k")[1]), pval = GE.attr(global_envtest, "p")),
+  res <- structure(list(stat = as.numeric(GE.attr(global_envtest, "M")[1]), pval = GE.attr(global_envtest, "p")),
                    class = "adj_GET_helper")
   if(save.envelope) attr(res, "envelope_test") <- global_envtest
   res
@@ -436,7 +436,7 @@ GET.composite <- function(X, X.ls = NULL,
     res <- attr(obs_res, "envelope_test")
     #-- The rank test at the second level
     # Calculate the critical rank / alpha
-    kalpha_star <- quantile(stats, probs=alpha, type=1)
+    Malpha_star <- quantile(stats, probs=alpha, type=1)
     all_curves <- data_and_sim_curves(attr(res, "level2_curve_set")) # the second step "curves"
     nr <- ncol(all_curves)
     Nfunc <- nrow(all_curves)
@@ -444,14 +444,14 @@ GET.composite <- function(X, X.ls = NULL,
     UB <- array(0, nr)
     for(i in 1:nr){
       Hod <- sort(all_curves[,i])
-      LB[i]<- Hod[kalpha_star]
-      UB[i]<- Hod[Nfunc-kalpha_star+1]
+      LB[i]<- Hod[Malpha_star]
+      UB[i]<- Hod[Nfunc-Malpha_star+1]
     }
-    # -> kalpha_star, LB, UB of the (second level) rank test
+    # -> Malpha_star, LB, UB of the (second level) rank test
     # Update res object with adjusted values
     attr(res, "level2_ge")$lo <- LB
     attr(res, "level2_ge")$hi <- UB
-    attr(attr(res, "level2_ge"), "k_alpha_star") <- kalpha_star # Add kalpha_star
+    attr(attr(res, "level2_ge"), "M_alpha_star") <- Malpha_star # Add Malpha_star
     # Re-calculate the new qdir/st envelopes
     envchars <- combined_scaled_MAD_bounding_curves_chars(X, type = type)
     central_curves_ls <- lapply(X, function(x) get_T_0(x))
@@ -466,7 +466,7 @@ GET.composite <- function(X, X.ls = NULL,
   else { # Otherwise, the ERL test is used at the second level of a combined test
     if(type == "rank" & nfuns == 1) {
       # Calculate the critical rank (instead of alpha) and the adjusted envelope following Myllymäki et al. (2017)
-      kalpha_star <- quantile(stats, probs=alpha, type=1)
+      Malpha_star <- quantile(stats, probs=alpha, type=1)
       all_curves <- data_and_sim_curves(X[[1]]) # all the functions
       nr <- length(X[[1]]$r)
       Nfunc <- nrow(all_curves)
@@ -474,15 +474,15 @@ GET.composite <- function(X, X.ls = NULL,
       UB <- array(0, nr)
       for(i in 1:nr){
         Hod <- sort(all_curves[,i])
-        LB[i]<- Hod[kalpha_star]
-        UB[i]<- Hod[Nfunc-kalpha_star+1]
+        LB[i]<- Hod[Malpha_star]
+        UB[i]<- Hod[Nfunc-Malpha_star+1]
       }
       # For getting automatically an global_envelope object, first call central_region
       res <- central_region(X, type=type, coverage=1-alpha, alternative=alt, central="mean")
       # Update res object with adjusted values
       res$lo <- LB
       res$hi <- UB
-      attr(res, "k_alpha_star") <- kalpha_star # Add kalpha_star
+      attr(res, "M_alpha_star") <- Malpha_star # Add Malpha_star
     }
     else {
       alpha_star <- quantile(pvals, probs=alpha, type=1)
