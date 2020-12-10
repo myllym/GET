@@ -18,11 +18,15 @@ printhelper_method <- function(x, istest, adj) {
     xdim <- " (2d)"
   else
     xdim <- " (1d)"
+  if(inherits(x, c("combined_global_envelope", "combined_global_envelope2d")))
+    nstep <- paste0(" (", ifelse(attr(x, "nstep")==1, "one", "two"), "-step)")
+  else
+    nstep <- ""
   if(is.null(attr(x, "alpha")))
     level <- NULL
   else
     level <- 100*(1-attr(x, "alpha"))
-  cat(attr(x, "method"), xdim, ":\n", sep="")
+  cat(attr(x, "method"), nstep, xdim, ":\n", sep="")
   if(!istest) { # The case of a central region & fboxplot
     if(!is.null(level)) {
       cat(" * ", level, "% central region based on the measure \"", attr(x, "type"), "\"\n", sep="")

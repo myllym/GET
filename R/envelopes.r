@@ -287,7 +287,13 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   # Return
   attr(res_ls, "level2_ge") <- res_erl
   attr(res_ls, "level2_curve_set") <- curve_set_u
-  attr(res_ls, "method") <- "Combined global envelope (two-step)"
+  switch(CR_or_GET,
+         CR = {
+           attr(res_ls, "method") <- "Combined global envelope"
+         },
+         GET = {
+           attr(res_ls, "method") <- "Combined global test"
+         })
   if(!is.null(attr(res_ls[[1]], "argu")))
     res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),
                                 ylab=substitute(italic(T(i)), list(i=attr(res_ls[[1]], "argu"))))
@@ -336,7 +342,13 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   mostattributes(res_ls) <- attributes(res)
   attr(res_ls, "row.names") <- NULL
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
-  attr(res_ls, "method") <- "Combined global envelope (one-step)"
+  switch(CR_or_GET,
+         CR = {
+           attr(res_ls, "method") <- "Combined global envelope"
+         },
+         GET = {
+           attr(res_ls, "method") <- "Combined global test"
+         })
   attr(res_ls, "nstep") <- 1
   class(res_ls) <- c("combined_global_envelope", "list")
   if(curve_set_is2d(curve_sets[[1]]))

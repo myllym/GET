@@ -164,7 +164,7 @@ combined_scaled_MAD_envelope_test <- function(curve_sets, type = c("qdir", "st")
     # Return
     attr(res_ls, "level2_ge") <- res_rank
     attr(res_ls, "level2_curve_set") <- curve_set_u
-    attr(res_ls, "method") <- "Combined global envelope (scaled MAD)"
+    attr(res_ls, "method") <- "Combined global test (scaled MAD)"
     class(res_ls) <- c("combined_global_envelope", class(res_ls))
     if(!is.null(attr(res_ls[[1]], "argu")))
       res_ls <- envelope_set_labs(res_ls, xlab=attr(res_ls[[1]], "xlab"),

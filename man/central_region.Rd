@@ -68,16 +68,15 @@ and potentially additionally
 Otherwise not existing.
 }
 Most often \code{central_region} is directly applied to functional data where all curves are observed.
-Additionally, the returned object has attributes
+Additionally, the returned object has some attributes, where
 \itemize{
-  \item method = The name of the envelope test used for plotting purposes ("Global envelope")
-  \item alternative, type, ties, alpha = Similar to those in the function call.
-  \item xlab, ylab = The default labels for x- and y-axes for plotting purposes.
   \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
   \item k = The values of the chosen measure for all the functions. If there is only one
   observed function, then k[1] will give the value of the measure for this.
-  \item names, class, row.names, call = if existing, as usual
 }
+Further the object has some attributes for printing and plotting purposes, where
+\code{alternative}, \code{type}, \code{ties}, \code{alpha} correspond to those in the function call
+and \code{method} gives a name for the method.
 Attributes of an object \code{res} can be obtained using the function
 \code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
 
@@ -88,15 +87,13 @@ However, the \code{envelope} objects are most often used with \code{\link{global
 and not with \code{central_region}.
 For an \code{fv} object, also some further attributes exists as required by \code{fv} of \pkg{spatstat}.
 
-The \code{combined_global_envelope} is a list of \code{global_envelope} objects, where some of
-the attributes have been set to zero, as the objects form a global envelope of the specified level only
-jointly. The components correspond to the components of \code{curve_sets}.
-The \code{combined_global_envelope} object contains the attributes
-\code{method}, \code{alternative}, \code{type}, \code{xlab}, \code{ylab}, \code{alpha},
-\code{k}, \code{k_alpha} (see above) as well as
+The \code{combined_global_envelope} is a list of \code{global_envelope} objects, where
+the components correspond to the components of \code{curve_sets}.
+The \code{combined_global_envelope} object constructed with \code{nstep = 2} contains,
+in addition to some conventional ones (\code{method}, \code{alternative}, \code{type}, \code{alpha},
+\code{k}, \code{k_alpha}, see above), the second level envelope information as the attributes
 \itemize{
-\item nstep = 1 or 2, as the argument \code{nstep}
-\item level2_ge = The second level envelope on which the envelope construction is based (if nstep = 2)
+\item level2_ge = The second level envelope on which the envelope construction is based
 \item level2_curve_set = The second level \code{curve_set} from which \code{level2_ge} is constructed
 }
 
@@ -229,7 +226,7 @@ boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
 cr <- central_region(boot.cset, coverage=0.95, type="erl")
 
 # Plotting the result
-plot(cr) + # central region
+plot(cr, xlab = expression(italic(x)), ylab = expression(italic(f(x))))
   ggplot2::geom_point(data = data.frame(id = 1:length(d), points = d),
                       ggplot2::aes(x = id, y = points)) + # data points
   ggplot2::geom_line(data = data.frame(id = 1:length(d), points = f),
