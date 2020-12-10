@@ -710,7 +710,7 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #' cr <- central_region(boot.cset, coverage=0.95, type="erl")
 #'
 #' # Plotting the result
-#' plot(cr) + # central region
+#' plot(cr, xlab = expression(italic(x)), ylab = expression(italic(f(x)))) +
 #'   ggplot2::geom_point(data = data.frame(id = 1:length(d), points = d),
 #'                       ggplot2::aes(x = id, y = points)) + # data points
 #'   ggplot2::geom_line(data = data.frame(id = 1:length(d), points = f),
