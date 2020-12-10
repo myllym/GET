@@ -86,7 +86,7 @@ If the given set of curves had the class \code{envelope} of \pkg{spatstat}, then
 also the plotting functions of \pkg{spatstat}, see example in \code{\link{plot.global_envelope}}.
 However, the \code{envelope} objects are most often used with \code{\link{global_envelope_test}}
 and not with \code{central_region}.
-For an \code{fv} object, also some further arguments exists as required by \code{fv} of \pkg{spatstat}.
+For an \code{fv} object, also some further attributes exists as required by \code{fv} of \pkg{spatstat}.
 
 The \code{combined_global_envelope} is a list of \code{global_envelope} objects, where some of
 the attributes have been set to zero, as the objects form a global envelope of the specified level only

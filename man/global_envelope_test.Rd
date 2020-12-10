@@ -134,27 +134,25 @@ envelopes with intrinsic graphical interpretation.
   \item "unscaled", the unscaled envelope (providing a baseline) that has a contant width and
   that corresponds to the classical maximum deviation test (Ripley, 1981).
 }
-See Myllymäki and Mrkvička (2020, Section 2.), i.e. \code{vignette("GET")}, for more detailed description of the measures and
-the corresponding envelopes.
-
 The first four types are global rank envelopes.
 The \code{'rank'} envelope test is a completely non-parametric test,
 which provides the 100(1-alpha)% global envelope for the chosen test function
 T(r) on the chosen interval of distances and associated p-values.
 The other three are modifications of \code{'rank'} to treat the ties in
 the extreme rank ordering on which the \code{'rank'} test is based on.
-
 The last three envelopes are global scaled maximum absolute difference (MAD)
 envelope tests. The unscaled envelope test leads to envelopes with constant width over the
 distances r. Thus, it suffers from unequal variance of T(r) over the distances r and
 from the asymmetry of distribution of T(r). We recommend to use the other global
 envelope tests available. The unscaled envelope is provided as a reference.
-}
-\section{Ranking of the curves}{
 
-The options for measures to order the functions from the most extreme one to the least extreme one
-are given by the argument \code{type}: 'rank', 'erl', 'cont', 'area', 'qdir', 'st', 'unscaled'.
-The options are
+See Myllymäki and Mrkvička (2020, Section 2.), i.e. \code{vignette("GET")}, for more detailed description of the measures and
+the corresponding envelopes.
+}
+\section{Procedure}{
+
+1) First the curves are ranked from the most extreme one to the least extreme one
+by a measure that is specified by the argument \code{type}. The options are
 \itemize{
 \item 'rank': extreme ranks (Myllymäki et al., 2017)
 \item 'erl': extreme rank lengths (Myllymäki et al., 2017; Mrkvička et al., 2018)
@@ -164,27 +162,18 @@ The options are
 \item 'st': the studentized MAD measure (Myllymäki et al., 2015, 2017)
 \item 'unscaled': the unscaled MAD measure (Ripley, 1981)
 }
-See more detailed description of the envelopes and measures in Myllymäki and Mrkvička (2020, Section 2.).
-}
 
-\section{Global envelope}{
-
-Based on the measures used to rank the functions, the 100(1-alpha)\% global envelope is provided.
+2) Based on the measures used to rank the functions, the 100(1-alpha)\% global envelope is provided.
 It corresponds to the 100*coverage\% central region.
-}
 
-\section{P-values}{
-
+3) P-values:
 In the case \code{type="rank"}, based on the extreme ranks \eqn{k_i, i=1, ..., s+1}{k_i, i=1, ..., s+1},
 the p-interval is calculated. Because the extreme ranks contain ties, there is not just
 one p-value. The p-interval is given by the most liberal and the most conservative p-value
 estimate. Also a single p-value is calculated.
-By default this single p-value is the extreme rank length p-value ("erl"),
-but another option can be used by specifying \code{ties} argument.
-
-If the case \code{type = "erl"}, the (single) p-value based on the extreme rank length ordering
+By default this single p-value is the extreme rank length p-value ("erl") as specified by the argument \code{ties}.
+If the case of other measures, a (single) p-value based on the given ordering
 of the functions is calculated and returned in the attribute \code{p}.
-The same is done for other measures, the p-value always being correspondent to the chosen measure.
 }
 
 \section{Number of simulations}{
