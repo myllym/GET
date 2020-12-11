@@ -33,9 +33,9 @@
 \SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
 <<preliminaries, echo=FALSE, results=hide>>=
 options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
-library("GET")
 library("ggplot2")
 library("patchwork")
+library("GET")
 theme_set(theme_bw(base_size = 9))
 @
 
@@ -608,11 +608,9 @@ Figure~\ref{fig:adulttrees} shows the locations of 67 large trees (with height $
 \begin{figure}[htb]
 \centering
 <<adulttrees, echo=FALSE, fig=TRUE, height=3.0625, width=3.0625>>==
-library("spatstat")
 data("adult_trees")
-X <- as.ppp(adult_trees, W = square(75))
-par(mfrow=c(1, 1), mgp=c(0, 0, 0), mar=c(0, 0, 0, 0))
-plot(X, main="")
+ggplot(adult_trees) + geom_point(aes(x=x, y=y)) +
+  xlim(c(0, 75)) + ylim(c(0, 75)) + coord_cartesian(expand = FALSE)
 @
   \caption{Locations of 67 trees with height $> 25$ m observed in an area of $75\text{ m}\times 75\text{ m}$.}
   \label{fig:adulttrees}
@@ -865,7 +863,7 @@ df <- data.frame(Height = c(fm10.l$Girls, fm14.l$Girls, fm10.l$Boys, fm14.l$Boys
           rep("Age 10", times=nB), rep("Age 14", times=nB)))
 ggplot(df, aes(Height, colour = Gender)) + facet_wrap("Age") + stat_ecdf() +
   scale_color_manual(values = c("#440154FF", "#5DC863FF")) +
-  scale_x_continuous(name = substitute(paste(italic(i), " (", j, ")", sep=""),
+  xlab(substitute(paste(italic(i), " (", j, ")", sep=""),
     list(i="x", j="Height in cm")))
 @
   \caption{The empirical cumulative distribution functions of the heights of the 54 girls and 39 boys of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages 10 (left) and 14 (right).}
@@ -890,18 +888,14 @@ combined + plot_layout(guides = "collect")
 The use of the function \fct{graph.fanova} of the \pkg{GET} package for the graphical functional one-way ANOVA is illustrated using the data set \code{poblenou} of the \proglang{R} package \pkg{fda.usc} \citep[][see also Section \ref{sec:GOTcomposite} above]{fdausc2012}.
 The trajectories of the 24 h observations of the NO$_x$ levels for Monday-Thursday (MonThu), Friday (Fri) and non-working days (Free) including weekend and festive days (Figure~\ref{fig:NOx_data}) are compared. For the purposes of this example, a factor vector \code{Type} was prepared containing the type of the day for each of the 115 days having levels \code{"MonThu"}, \code{"Fri"} and \code{"Free"}:
 %
-<<graphfanova_data, echo=FALSE>>==
-# Prepare data
+<<graphfanova_data>>==
 library("fda.usc")
 data("poblenou")
-Free <- poblenou$df$day.festive == 1 |
-  as.integer(poblenou$df$day.week) >= 6
-MonThu <- poblenou$df$day.festive == 0 & poblenou$df$day.week %in% 1:4
-Friday <- poblenou$df$day.festive == 0 & poblenou$df$day.week == 5
-Type <- vector(length=length(Free))
-Type[Free] <- "Free"
-Type[MonThu] <- "MonThu"
-Type[Friday] <- "Fri"
+fest <- poblenou$df$day.festive; week <- as.integer(poblenou$df$day.week)
+Type <- vector(length=length(fest))
+Type[fest == 1 | week >= 6] <- "Free"
+Type[fest == 0 & week %in% 1:4] <- "MonThu"
+Type[fest == 0 & week == 5] <- "Fri"
 Type <- factor(Type, levels = c("MonThu", "Fri", "Free"))
 @
 %
@@ -1155,7 +1149,7 @@ plot(cr, xlab = expression(italic(x)), ylab = expression(italic(f(x)))) +
 \end{figure}
 
 \begin{remark}
-Let one consider a theoretical 95\% confidence band under a given bootstrap scheme. Based on a simulation experiment where the theoretical confidence band was computed from 200000 bootstrapped functions, we observed that the 95\% confidence region computed as a convex hull from $s$ functions converged to the theoretical one from inside for increasing $s$. The 95\% confidence band computed as the extreme rank envelope from $s$ functions (see Equation~\ref{eq:kth_envelopes}) converged to the theoretical one from outside instead. Both these envelopes are finite approximations of the theoretical envelope. On the other hand, in the sense of Barnard's Monte Carlo test \citep{Barnard1963}, the global envelope test (convex hull) is exact for the given set of simulated functions. In the same sense, the confidence band reaches the given global level exactly under the given set of functions.
+Let one consider a theoretical 95\% confidence band under the given bootstrap scheme. Based on a simulation experiment where the theoretical confidence band was computed from 200000 bootstrapped functions, we observed that the 95\% confidence region computed as a convex hull from $s$ functions converged to the theoretical one from inside for increasing $s$. The 95\% confidence band computed as the extreme rank envelope from $s$ functions (see Equation~\ref{eq:kth_envelopes}) converged to the theoretical one from outside instead. Both these envelopes are finite approximations of the theoretical envelope. On the other hand, in the sense of Barnard's Monte Carlo test \citep{Barnard1963}, the global envelope test (convex hull) is exact for the given set of simulated functions. In the same sense, the confidence band reaches the given global level exactly under the given set of functions.
 \end{remark}
 
 
