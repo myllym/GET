@@ -350,7 +350,6 @@ print.curve_set <- function(x, ...) {
 #'
 #' @export
 #' @importFrom ggplot2 ggplot geom_line aes_ scale_color_manual labs
-#' @importFrom ggplot2 scale_x_continuous scale_y_continuous
 #' @importFrom viridisLite viridis
 #' @examples
 #' cset <- create_curve_set(list(r=1:10, obs=matrix(runif(10*5), ncol=5)))
@@ -365,12 +364,10 @@ print.curve_set <- function(x, ...) {
 #' plot(cset, idx=c(1,3), xlab="x", ylab="Value")
 #' # Add title
 #' plot(cset) + ggplot2::ggtitle("Example curves")
-#' # Change ylim
-#' plot(cset) + ggplot2::scale_y_continuous(limits = c(-0.25, 1.25))
 #' # A curve_set with one observed function (other simulated)
 #' if(requireNamespace("mvtnorm", quietly=TRUE)) {
 #'   cset <- create_curve_set(list(obs=c(-1.6, 1.6),
-#'               sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
+#'             sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
 #'   plot(cset)
 #'   # Remove legend
 #'   plot(cset) + ggplot2::guides(col = "none")
@@ -437,8 +434,8 @@ plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', xlab,
   else {
     p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~funcs, group = ~id), col = col) )
   }
-  if(!missing(xlab)) p <- p + scale_x_continuous(name = xlab)
-  if(!missing(ylab)) p <- p + scale_y_continuous(name = ylab)
+  if(!missing(xlab)) p <- p + labs(x = xlab)
+  if(!missing(ylab)) p <- p + labs(y = ylab)
   p
 }
 

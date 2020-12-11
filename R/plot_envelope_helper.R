@@ -195,14 +195,13 @@ linetype_values <- function() { c('dashed', 'solid') }
 
 # Basic elements of the envelope (gg)plot
 #' @importFrom ggplot2 geom_ribbon aes_ geom_line
-#' @importFrom ggplot2 scale_x_continuous scale_y_continuous scale_linetype_manual ggtitle
+#' @importFrom ggplot2 labs scale_linetype_manual ggtitle
 basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main) {
   list(geom_ribbon(data = df, aes_(x = ~r, ymin = ~lo, ymax = ~hi),
                    fill = 'grey59', alpha = 1),
        geom_line(data = df, aes_(x = ~r, y = ~curves, group = ~type,
                                  linetype = ~type)), # , size = 0.2
-       scale_x_continuous(name = xlab),
-       scale_y_continuous(name = ylab),
+       labs(x = xlab, y = ylab),
        scale_linetype_manual(values = linetype_values(), name = ''),
        ggtitle(main))
 }
