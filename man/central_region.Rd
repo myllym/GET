@@ -70,15 +70,15 @@ Otherwise not existing.
 Most often \code{central_region} is directly applied to functional data where all curves are observed.
 Additionally, the returned object has some attributes, where
 \itemize{
-  \item k_alpha = The value of k corresponding to the 100(1-alpha)\% global envelope.
-  \item k = The values of the chosen measure for all the functions. If there is only one
-  observed function, then k[1] will give the value of the measure for this.
+  \item M_alpha = The value of M corresponding to the 100(1-alpha)\% global envelope.
+  \item M = A vector of the values of the chosen measure for all the function.
+  If there is only one observed function, then M[1] gives the value of the measure for this.
 }
 Further the object has some attributes for printing and plotting purposes, where
 \code{alternative}, \code{type}, \code{ties}, \code{alpha} correspond to those in the function call
 and \code{method} gives a name for the method.
 Attributes of an object \code{res} can be obtained using the function
-\code{\link[base]{attr}}, e.g. \code{attr(res, "k")} for the values of the ordering measure.
+\code{\link[base]{attr}}, e.g. \code{attr(res, "M")} for the values of the ordering measure.
 
 If the given set of curves had the class \code{envelope} of \pkg{spatstat}, then the returned
 \code{global_envelope} object has also the class \code{fv} of spatstat, whereby one can utilize
@@ -91,7 +91,7 @@ The \code{combined_global_envelope} is a list of \code{global_envelope} objects,
 the components correspond to the components of \code{curve_sets}.
 The \code{combined_global_envelope} object constructed with \code{nstep = 2} contains,
 in addition to some conventional ones (\code{method}, \code{alternative}, \code{type}, \code{alpha},
-\code{k}, \code{k_alpha}, see above), the second level envelope information as the attributes
+\code{M}, \code{M_alpha}, see above), the second level envelope information as the attributes
 \itemize{
 \item level2_ge = The second level envelope on which the envelope construction is based
 \item level2_curve_set = The second level \code{curve_set} from which \code{level2_ge} is constructed
@@ -159,13 +159,9 @@ We recommend to use the other alternatives instead. This unscaled global envelop
 provided for reference.
 }
 
-The values of the chosen measure k are determined for each curve in the \code{curve_set}, and
-the values
-\eqn{k_1, k_2, ..., k_s}{k_1, k_2, ..., k_s}
-are returned in the attribute 'k' (in a case of one observed curve only, k[1] is its value).
-Based on the chosen measure, the central region, i.e. the global envelope, is constructed
-on the chosen interval of argument values (the functions in the \code{curve_set} are assumed
-to be given on this interval only).
+The values of the chosen measure M are determined for each curve in the \code{curve_set}, and
+based on the chosen measure, the central region, i.e. the global envelope, is constructed
+for the given curves.
 
 If a list of (suitable) objects are provided in the argument \code{curve_sets},
 then by default (\code{nstep = 2}) the two-step combining procedure is used to
@@ -226,7 +222,7 @@ boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
 cr <- central_region(boot.cset, coverage=0.95, type="erl")
 
 # Plotting the result
-plot(cr, xlab = expression(italic(x)), ylab = expression(italic(f(x))))
+plot(cr, xlab = expression(italic(x)), ylab = expression(italic(f(x)))) +
   ggplot2::geom_point(data = data.frame(id = 1:length(d), points = d),
                       ggplot2::aes(x = id, y = points)) + # data points
   ggplot2::geom_line(data = data.frame(id = 1:length(d), points = f),
