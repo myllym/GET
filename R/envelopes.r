@@ -432,6 +432,8 @@ print.combined_global_envelope <- function(x, ...) {
 #' @importFrom ggplot2 labs
 plot.global_envelope <- function(x, dotplot = length(x$r)<10, sign.col = "red",
                                  labels = NULL, digits = 3, ...) {
+  if(!is.null(x[['r']]) && !all(x[['r']][-1] - x[['r']][-length(x[['r']])] > 0))
+    warning("r values non-increasing. Plot not valid.")
   if(missing(labels)) labels <- default_labels(x, labels)
   main <- env_main_default(x, digits=digits)
   d <- plotdefaultlabs(x)
