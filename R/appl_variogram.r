@@ -148,8 +148,7 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL,
   }
   res <- do.call(global_envelope_test, c(list(curve_sets=csets, nstep=1), GET.args))
 
-  attr(res, "xlab") <- attr(res, "xexp") <- "distance"
-  attr(res, "ylab") <- attr(res, "yexp") <- attr(obs, "what")
+  res <- envelope_set_labs(res, xlab="distance", ylab=attr(obs, "what"))
   if(length(levels(obs$id)) == 1) labels <- ""
   else labels <- levels(obs$id)
   if(length(unique(obs$dir.hor)) > 1) {

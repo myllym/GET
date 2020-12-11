@@ -664,7 +664,7 @@ plot(res, ylab = expression(italic(hat(L)(r)-r)))
 \begin{figure}[htb]
 \centering
 %
-<<adulttrees_CSR_fig, echo=FALSE, fig=TRUE, height=3.0625, width=3.0625>>==
+<<adulttrees_CSR_plot, echo=FALSE, fig=TRUE, height=3.0625, width=3.0625>>==
 plot(res, ylab = expression(italic(hat(L)(r)-r)))
 @
 %
