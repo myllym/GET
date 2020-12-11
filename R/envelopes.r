@@ -619,9 +619,10 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #' Most often \code{central_region} is directly applied to functional data where all curves are observed.
 #' Additionally, the returned object has some attributes, where
 #' \itemize{
-#'   \item M_alpha = The value of M corresponding to the 100(1-alpha)\% global envelope.
 #'   \item M = A vector of the values of the chosen measure for all the function.
 #'   If there is only one observed function, then M[1] gives the value of the measure for this.
+#'   \item M_alpha = The critical value of M corresponding to the 100(1-alpha)\% global envelope
+#'   (see Myllymäki and Mrkvička, 2020, Definition 1.1. IGI).
 #' }
 #' Further the object has some attributes for printing and plotting purposes, where
 #' \code{alternative}, \code{type}, \code{ties}, \code{alpha} correspond to those in the function call

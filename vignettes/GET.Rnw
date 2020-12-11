@@ -153,11 +153,11 @@ Let it be assumed that a general ordering $\prec$ of the vectors $\TT_i, i=1, \l
 $M_i \geq M_j$ iff  $\TT_i \prec \TT_j$, which means that $\TT_i$ is less extreme or as extreme as $\TT_j$. (The smaller the measure $M_i$, the more extreme the $\TT_i$ is.) 
 The $100(1-\alpha)$\% global envelope $[\TT_{\lo\,j}^{(\alpha)}, \TT_{\up\,j}^{(\alpha)}]$ has {\it intrinsic graphical interpretation} (IGI) with respect to the ordering $\prec$ if 
 \begin{enumerate}
-  \item $m_{(\alpha)} \in \mathbb{R}$ is the largest of the $M_i$ such that the number of those $i$ for which $M_i< m_{(\alpha)}$
+  \item $M_{(\alpha)} \in \mathbb{R}$ is the largest of the $M_i$ such that the number of those $i$ for which $M_i< M_{(\alpha)}$
 is less or equal to $\alpha s$;
  \item $T_{ij} < \TT_{\lo\,j}^{(\alpha)}$ or $T_{ij} > \TT_{\up\,j}^{(\alpha)}$ for some $j = 1, \ldots , d$
-iff $M_i<m_{(\alpha)}$ for every $i=1, \ldots , s$;
- \item $\TT_{\lo\,j}^{(\alpha)} \leq T_{ij} \leq \TT_{\up\,j}^{(\alpha)}$ for all $j = 1, \ldots , d$ iff $M_i\geq m_{(\alpha)}$ for every $i=1, \ldots , s$.
+iff $M_i<M_{(\alpha)}$ for every $i=1, \ldots , s$;
+ \item $\TT_{\lo\,j}^{(\alpha)} \leq T_{ij} \leq \TT_{\up\,j}^{(\alpha)}$ for all $j = 1, \ldots , d$ iff $M_i\geq M_{(\alpha)}$ for every $i=1, \ldots , s$.
 \end{enumerate}
 \end{definition}
 The global envelope with IGI provides a solution to the tasks (i)-(iv) in a graphical manner. In other words, the IGI property means that the vector $\TT_i$ is outside the global envelope in any of its components if and only if the vector is considered to be extreme by the measure $M$ at the level $\alpha$, and the vector $\TT_i$ is completely inside the global envelope if and only if the vector is not extreme at the level $\alpha$.
@@ -243,7 +243,7 @@ The \pkg{GET} package also provides functions for specific tasks (see Table~\ref
 The \fct{print} and \fct{plot} methods are available for the objects obtained as
 the output of the global envelope methods of \pkg{GET}. The plots present the results with IGI.
 They are produced using the \pkg{ggplot2} package \citep{Wickham2016}.
-This document further utilizes the \pkg{patchwork} package \citep{patchwork2020} for plots of data curves.
+This document further utilizes the \pkg{patchwork} package \citep{patchwork2020} for plot compositions.
 
 After defining the different types of global envelopes in Section \ref{sec:GEdef}, combined global envelopes and adjusted global envelope tests for composite null hypothesis are described in Sections \ref{sec:combinedGE} and \ref{sec:adjustedGE}, respectively. Further, guidance is given for choosing the type of the global envelope in Section \ref{sec:whichmeasure}.
 
@@ -320,7 +320,7 @@ The $100(1-\alpha)$\% global rank envelope induced by this measure is defined th
 \TT^{(l)}_{\up \, k}= \underset{i=1,\dots,s}{{\max}^{l}} T_{i k} \quad \text{for } k = 1, \ldots , d,
 \end{equation}
 %
-by taking $l=R_\alpha$, according to the point 1.\ of IGI (see Definition \ref{IGI}). Here $\min^l$ and $\max^l$ denote the $l$-th smallest and largest values, respectively, and $l=1,2,\dots,\lfloor s/2\rfloor$.
+by taking $l=R_{(\alpha)}$, according to the point 1.\ of IGI (see Definition \ref{IGI}). Here $\min^l$ and $\max^l$ denote the $l$-th smallest and largest values, respectively, and $l=1,2,\dots,\lfloor s/2\rfloor$.
 
 Since the extreme rank can achieve many ties, it is necessary to have a large $s$ for the global rank envelope. The following three refinements of the extreme rank solve the ties problem and enable use of a smaller $s$.
 
@@ -348,7 +348,7 @@ The division by $s$ leads to normalized ranks that obtain values between 0 and 1
 
 The probability of having a tie in the ERL measure is rather small, thus practically the ERL solves the ties problem. The final $p$~value of a Monte Carlo test is $p_\text{erl}=  \sum_{i=1}^{s} \1 (E_i \leq E_1)  \big/ s$.
 
-Let $e_\alpha$ be defined according to the point 1.\ of IGI and  $I_\alpha = \{i\in 1,\dots, s: E_i \geq e_{(\alpha)} \}$ be the index set of vectors less or as extreme as $e_\alpha$. 
+Let $E_{(\alpha)}$ be defined according to the point 1.\ of IGI and  $I_\alpha = \{i\in 1,\dots, s: E_i \geq E_{(\alpha)} \}$ be the index set of vectors less or as extreme as $E_{(\alpha)}$.
 Then the $100(1-\alpha)$\% global ERL envelope induced by $E_i$ is
 %
 \begin{equation}\label{erl_envelope}
@@ -398,7 +398,7 @@ If there are no ties, then $ceil(c_{[i]k}) = i$, which is the ordinary rank of $
 For the ties $c_{[i]k} = r_{[i]k} - \frac{1}{2}$, where $r_{[i]k}$ is the ordinary rank of $T_{[i]k}$.
 
 The $p$~value of the univariate Monte Carlo test is $p_\text{cont}= \sum_{i=1}^{s} \1 (C_i \leq C_1)  \big/ s$.
-The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constructed in the same way as global ERL envelope (see Equation~\ref{erl_envelope}), i.e., as a hull of $\TT_i$ which have measured $C_i\geq c_\alpha$, where $c_\alpha$ is defined according to the point 1.\ of IGI.
+The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constructed in the same way as global ERL envelope (see Equation~\ref{erl_envelope}), i.e., as a hull of $\TT_i$ which have measured $C_i\geq C_{(\alpha)}$, where $C_{(\alpha)}$ is defined according to the point 1.\ of IGI.
 
 \subsubsection{Global area rank envelope}
 
@@ -424,12 +424,12 @@ From historical reasons, $D_i$ is defined to be bigger for more extreme vectors.
 The univariate Monte Carlo test is performed based on $D_i$ with $p_\text{qdir}= \sum_{i=1}^{s} \1 (D_i \geq D_1)  \big/ s$, and the $100(1-\alpha)$\% global directional quantile envelope induced by $D_i$ is defined by
 %
 \begin{equation}
-\TT^{(l)}_{\lo \, k}= T_{0k} - d_\alpha |\underline T_{\cdot k}-T_{0k}|
+\TT^{(l)}_{\lo \, k}= T_{0k} - D_{(\alpha)} |\underline T_{\cdot k}-T_{0k}|
 \quad\text{and}\quad
-\TT^{(l)}_{\up \, k}= T_{0k} + d_\alpha |\overline T_{\cdot k}-T_{0k}| \quad \text{for } k = 1, \ldots , d,
+\TT^{(l)}_{\up \, k}= T_{0k} + D_{(\alpha)} |\overline T_{\cdot k}-T_{0k}| \quad \text{for } k = 1, \ldots , d,
 \end{equation}
 %
-where $d_\alpha$ is taken according to the point 1.\ of IGI.
+where $D_{(\alpha)}$ is taken according to the point 1.\ of IGI.
 
 {\em The global studentized envelope}
 approximates the distribution of $T_{\cdot k}, k=1, \ldots , d$, instead by the expectation $T_{0k}$ and the standard deviation $\text{sd}(T_{\cdot k})$.
@@ -443,12 +443,12 @@ and the univariate Monte Carlo test is performed based on $s_i$ with $p_\text{st
 The $100(1-\alpha)$\% global studentized envelope induced by $S_i$ is defined by
 %
 \begin{equation}
-\TT^{(l)}_{\lo \, k}= T_{0k} - s_\alpha \text{sd}(T_{\cdot k}) 
+\TT^{(l)}_{\lo \, k}= T_{0k} - S_{(\alpha)} \text{sd}(T_{\cdot k})
 \quad\text{and}\quad
-\TT^{(l)}_{\up \, k}= T_{0k} + s_\alpha \text{sd}(T_{\cdot k})  \quad \text{for } k = 1, \ldots , d,
+\TT^{(l)}_{\up \, k}= T_{0k} + S_{(\alpha)} \text{sd}(T_{\cdot k})  \quad \text{for } k = 1, \ldots , d,
 \end{equation}
 %
-where $s_\alpha$ is taken according to the point 1.\ of IGI.
+where $S_{(\alpha)}$ is taken according to the point 1.\ of IGI.
 
 
 {\em The global unscaled envelope}
@@ -456,12 +456,12 @@ considered for the sake of completeness has its origin in the classical Kolmogor
 The unscaled measure $U_i$ can be defined as $U_i = \max_{k} |T_{ik} - T_{0k}|$, the univariate Monte Carlo test performed based on $U_i$ has the $p$~value $p_\text{unsc}= \sum_{i=1}^{s} \1 (U_i \geq U_1)  \big/ s$, and the $100(1-\alpha)$\% global unscaled envelope induced by $u_i$ is given by
 %
 \begin{equation}
-\TT^{(l)}_{\lo \, k}= T_{0k} - u_\alpha  
+\TT^{(l)}_{\lo \, k}= T_{0k} - U_{(\alpha)}
 \quad\text{and}\quad
-\TT^{(l)}_{\up \, k}= T_{0k} + u_\alpha   \quad \text{for } k = 1, \ldots , d,
+\TT^{(l)}_{\up \, k}= T_{0k} + U_{(\alpha)} \quad \text{for } k = 1, \ldots , d,
 \end{equation}
 %
-where $u_\alpha$ is taken according to the point 1.\ of IGI.
+where $U_{(\alpha)}$ is taken according to the point 1.\ of IGI.
 A problem of this envelope is that its width is the same along the whole domain, thus it cannot account for the changes in the variability of the distributions $T_{\cdot k}$ across different $k$s \citep{MyllymakiEtal2015, MyllymakiEtal2017}. 
 
 
@@ -473,7 +473,7 @@ In the \emph{two-step combining procedure},
 first, a measure is chosen for each $j=1, \ldots, G$ and computed for the vectors $\TT_i^j$, $i=1,\ldots,s$. Let the resulting measures be $m_i^j$. 
 As the second step, the one-sided extreme rank length is applied to the new vector $\TT_i' = (m_i^1, m_i^2, \dots, m_i^G)$ of the measures. 
 As a result, a joint sorting of vectors $\TT_i^1, \ldots \TT_i^G, i=1, \ldots, s$, is obtained and a joint extreme rank length measure $E_i$ is attached to every $i=1, \ldots , s$.  
-The $p$~value of the combined Monte Carlo test is $p_\text{erl}=  \sum_{i=1}^{s} \1 (E_i \leq E_1)  \big/ s$, and the common $100(1-\alpha)$\% global envelope is constructed similarly as the $100(1-\alpha)$\% global extreme rank length envelope (Equation~\ref{erl_envelope}): Let $e_\alpha$ be defined according to the point 1.\ of IGI and $I_\alpha = \{i\in 1,\dots, s: E_i \geq e_{(\alpha)} \}$ be the index set of vectors less or as extreme as $e_\alpha$. 
+The $p$~value of the combined Monte Carlo test is $p_\text{erl}=  \sum_{i=1}^{s} \1 (E_i \leq E_1)  \big/ s$, and the common $100(1-\alpha)$\% global envelope is constructed similarly as the $100(1-\alpha)$\% global extreme rank length envelope (Equation~\ref{erl_envelope}): Let $E_{(\alpha)}$ be defined according to the point 1.\ of IGI and $I_\alpha = \{i\in 1,\dots, s: E_i \geq E_{(\alpha)} \}$ be the index set of vectors less or as extreme as $E_{(\alpha)}$.
 Then the common $100(1-\alpha)$\% global envelope is
 %
 \begin{equation}
@@ -551,58 +551,59 @@ cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
 Ordering the functions from the most extreme to the least extreme by the \code{'area'} measure, the 8th girl was observed to have the most extreme heights and the 15th girl the most extreme changes (below the first ten most extreme girl indices are printed):
 %
 <<girls_forder>>==
-order(forder(cset1, measure = 'area'))[1:10]
-order(forder(cset2, measure = 'area'))[1:10]
+A1 <- forder(cset1, measure = 'area'); order(A1)[1:10]
+A2 <- forder(cset2, measure = 'area'); order(A2)[1:10]
 @
 %
-Generally, ordering with respect to heights or height differences leads to two different orderings of the girls. Joint ordering can be done by combining these two by the \code{'erl'} measure as described in Section~\ref{sec:combinedGE}. In \proglang{R}, the two sets of curves need to be provided in a list to the function \fct{forder}:
+Generally, ordering with respect to heights or height differences leads to two different orderings of the girls. Joint ordering can be done by combining these two by the ERL measure as described in Section~\ref{sec:combinedGE}. In \proglang{R}, the two sets of curves need to be provided in a list to the function \fct{forder}:
 %
 <<girls_combined_forder>>==
 csets <- list(Height = cset1, Change = cset2)
-order(forder(csets, measure = 'area'))[1:10]
+A <- forder(csets, measure = 'area'); order(A)[1:10]
 @
 %
 Figure~\ref{fig:girls_curves} highlights the curves of the three most extreme girls.
 \begin{figure}[ht!]
 \centering
 <<girls_curves, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
-o <- order(forder(csets, measure = 'area'))
 col3 <- c("#21908CFF", "#440154FF", "#5DC863FF")
-p1 <- plot(cset1, idx = o[1:3], col_idx = col3) +
-  scale_x_continuous(name = "Age (years)") +
-  scale_y_continuous(name = "Height")
-p2 <- plot(cset2, idx = o[1:3], col_idx = col3) +
-  scale_x_continuous(name = "Age (years)") +
-  scale_y_continuous(name = "Change")
+p1 <- plot(cset1, idx = order(A)[1:3], col_idx = col3,
+  xlab = "Age (years)", ylab = "Height")
+p2 <- plot(cset2, idx = order(A)[1:3], col_idx = col3,
+  xlab = "Age (years)", ylab = "Change")
 p1 + p2 + plot_layout(guides = "collect")
 @
-	\caption{The heights (left) and height differences (right) of the 54 girls of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages from 1 to 18. Three girls having the most extreme curves (joint ordering by the area measure) are highlighted with the colors specified in the legend.}
-	\label{fig:girls_curves}
+  \caption{The heights (left) and height differences (right) of the 54 girls of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages from 1 to 18. Three girls having the most extreme curves (joint ordering by the area measure) are highlighted with the colors specified in the legend.}
+  \label{fig:girls_curves}
 \end{figure}
 
-By using the functional boxplot \citep{SunGenton2011} with the same measure, an investigation can be made into whether the most extreme girls are outliers with respect to height or its change. Figure~\ref{fig:girls_fboxplot} shows the 50\% central region and the functional boxplot with an inflation factor 1.5 jointly for the heights and their changes obtained by:
+By using the functional boxplot \citep{SunGenton2011} with the same measure, an investigation can be made into whether the most extreme girls are outliers with respect to height or its change. Figure~\ref{fig:girls_fboxplot} shows the 50\% central region and the functional boxplot with the inflation factor 1.5 jointly for the heights and their changes obtained by:
 %
-\begin{figure}[ht!]
-\centering
-%
-<<girls_fboxplot, echo=TRUE, fig=TRUE, height=3.0625, width=6.125>>==
+<<girls_fboxplot, echo=TRUE, fig=FALSE>>==
 res <- fBoxplot(csets, type = 'area', factor = 1.5)
 plot(res, xlab = "Age (years)", ylab = "Value")
 @
 %
+\begin{figure}[ht!]
+\centering
+%
+<<girls_fboxplot_plot, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
+plot(res, xlab = "Age (years)", ylab = "Value")
+@
+%
 \caption{The functional boxplot (entire gray band) using the 50\% central region (inner dark gray band) and the expansion factor 1.5 jointly for the heights and changes of heights of the 54 girls (see Figure~\ref{fig:girls_curves}). The solid line is an observed data function (vector) that goes outside the functional boxplot (the 15th girl in the data).}
-	\label{fig:girls_fboxplot}
+  \label{fig:girls_fboxplot}
 \end{figure}
 %
 
-One can see that one of the girls (the 15th girl in fact) is an outlier, because she has grown extraordinarily much in her sixth year. However, the highest height curve of Figure~\ref{fig:girls_curves} is not regarded as an outlier with the given specifications.
+One can see that one of the girls (the 15th girl in fact) is an outlier, because she has grown extraordinarily much in her sixth year. However, the highest height curve of Figure~\ref{fig:girls_curves} (left) is not regarded as an outlier with the given specifications.
 
 It is important to note that the combined central region computed using any measure of Table~\ref{tab:GEoverview} has IGI. On the contrary, central regions computed with the use of band depths in the \pkg{fda} package do not satisfy IGI. \citet{NarisettyNair2016} proposed central regions and functional boxplots based on the \code{'erl'} measure (see Table~\ref{tab:GEoverview}) and compared them to those based on band depths.
 
 
 \subsection{Monte Carlo goodness-of-fit testing for simple hypotheses: complete spatial randomness}\label{sec:GOT} 
 
-Figure~\ref{fig:adulttrees} shows the locations of 67 large trees (with height $> 25$ m) in an area of size $75\text{ m}\times 75\text{ m}$ from an uneven aged multi-species broadleaf nonmanaged forest in Kaluzhskie Zaseki, Russia \citep{GrabarnikChiu2002, Lieshout2010}. The $x$- and $y$-coordinates of the locations are available in the \code{adult_trees} data in the \pkg{GET} package.
+Figure~\ref{fig:adulttrees} shows the locations of 67 large trees (with height $> 25$ m) in an area of size $75\text{ m}\times 75\text{ m}$ from an uneven aged multi-species broadleaf nonmanaged forest in Kaluzhskie Zaseki, Russia \citep{GrabarnikChiu2002, Lieshout2010}. The $x$- and $y$-coordinates of the locations are available in the data \code{adult_trees} in the \pkg{GET} package.
 
 \begin{figure}[htb]
 \centering
@@ -613,8 +614,8 @@ X <- as.ppp(adult_trees, W = square(75))
 par(mfrow=c(1, 1), mgp=c(0, 0, 0), mar=c(0, 0, 0, 0))
 plot(X, main="")
 @
-	\caption{Locations of 67 trees with height $> 25$ m observed in an area of $75\text{ m}\times 75\text{ m}$.}
-	\label{fig:adulttrees}
+  \caption{Locations of 67 trees with height $> 25$ m observed in an area of $75\text{ m}\times 75\text{ m}$.}
+  \label{fig:adulttrees}
 \end{figure}
 
 The test of complete spatial randomness (CSR) is a typical first step in analyzing a spatial point pattern such as the tree pattern of Figure~\ref{fig:adulttrees}. CSR along with other hypotheses for spatial point patterns are commonly tested using an estimator of a summary function that is a function of distance $r$, e.g., Ripley's $K$ function or its transformation $L(r)=\sqrt{K(r)/\pi}-r$ for $r\geq 0$ \citep{Ripley1977, Besag1977}. In this context, one typically resorts to the Monte Carlo simulation \citep[see, e.g.,][]{IllianEtal2008, Diggle2013a, MyllymakiEtal2017}.
@@ -657,11 +658,15 @@ cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
 %
 The final step is to make the global envelope test on the given set of vectors:
 %
+<<adulttrees_CSR, fig=FALSE, height=3.0625, width=3.0625>>==
+res <- global_envelope_test(cset, type = "erl")
+plot(res, ylab = expression(italic(hat(L)(r)-r)))
+@
+%
 \begin{figure}[htb]
 \centering
 %
-<<adulttrees_CSR, echo=TRUE, fig=TRUE, height=3.0625, width=3.0625>>==
-res <- global_envelope_test(cset, type = "erl")
+<<adulttrees_CSR_fig, echo=FALSE, fig=TRUE, height=3.0625, width=3.0625>>==
 plot(res, ylab = expression(italic(hat(L)(r)-r)))
 @
 %
@@ -852,7 +857,7 @@ The height distributions at age 10 do not differ from each other significantly, 
 
 \begin{figure}[ht!]
   \centering
-<<necdfs, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
+<<necdfs, echo=FALSE, fig=TRUE, height=2.8625, width=5.125>>==
 nG <- length(fm10.l$Girls); nB <- length(fm10.l$Boys)
 df <- data.frame(Height = c(fm10.l$Girls, fm14.l$Girls, fm10.l$Boys, fm14.l$Boys),
   Gender = c(rep("Girls", times=2*nG), rep("Boys", times=2*nB)),
@@ -868,19 +873,22 @@ ggplot(df, aes(Height, colour = Gender)) + facet_wrap("Age") + stat_ecdf() +
 \end{figure}
 
 \begin{figure}[ht!]
-	\centering
+  \centering
 <<necdfs_means_GET, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
 p1 <- plot(res10)
 p2 <- plot(res14)
 combined <- p1 + p2 & theme(legend.position = "bottom")
 combined + plot_layout(guides = "collect")
 @
-	\caption{Global envelope tests for comparison of the empirical cumulative distribution functions of the heights of the girls and boys (see Figure~\ref{fig:necdfs}). Red color indicates the heights where the observed distribution functions go outside the 95\% global envelope (ERL; gray bands). Left: Age 10; Right: Age 14.}
-	\label{fig:necdfs_means_GET}
+  \caption{Global envelope tests for comparison of the empirical cumulative distribution functions of the heights of the girls and boys (see Figure~\ref{fig:necdfs}). Red color indicates the heights where the observed distribution functions go outside the 95\% global envelope (ERL; gray bands). Left: Age 10; Right: Age 14.}
+  \label{fig:necdfs_means_GET}
 \end{figure}
 
 
 \subsection{Graphical functional one-way ANOVA}\label{sec:fANOVA}
+
+The use of the function \fct{graph.fanova} of the \pkg{GET} package for the graphical functional one-way ANOVA is illustrated using the data set \code{poblenou} of the \proglang{R} package \pkg{fda.usc} \citep[][see also Section \ref{sec:GOTcomposite} above]{fdausc2012}.
+The trajectories of the 24 h observations of the NO$_x$ levels for Monday-Thursday (MonThu), Friday (Fri) and non-working days (Free) including weekend and festive days (Figure~\ref{fig:NOx_data}) are compared. For the purposes of this example, a factor vector \code{Type} was prepared containing the type of the day for each of the 115 days having levels \code{"MonThu"}, \code{"Fri"} and \code{"Free"}:
 %
 <<graphfanova_data, echo=FALSE>>==
 # Prepare data
@@ -897,12 +905,9 @@ Type[Friday] <- "Fri"
 Type <- factor(Type, levels = c("MonThu", "Fri", "Free"))
 @
 %
-The use of the function \fct{graph.fanova} of the \pkg{GET} package for the graphical functional one-way ANOVA is illustrated using the data set \code{poblenou} of the \proglang{R} package \pkg{fda.usc} \citep[][see also Section \ref{sec:GOTcomposite} above]{fdausc2012}. 
-The trajectories of the 24 h observations of the NO$_x$ levels for Monday-Thursday (MonThu), Friday (Fri) and non-working days (Free) including weekend and festive days (Figure~\ref{fig:NOx_data}) are compared. For the purposes of this example, a factor vector \code{Type} was prepared containing the type of the day for each of the 115 days having levels \code{"MonThu"}, \code{"Fri"} and \code{"Free"}.
-The data are available in \code{poblenou[['nox']]} which is a \code{fdata} object of the \proglang{R} package \pkg{fda.usc}.
 
 \begin{figure}[ht!]
-	\centering
+  \centering
 <<NOx_data, echo=FALSE, fig=TRUE, height=2.722, width=6.125>>==
 maxs <- apply(poblenou[['nox']]$data, MARGIN = 1, FUN = max)
 df <- do.call(rbind, lapply(1:24, FUN = function(x) {
@@ -913,7 +918,7 @@ ggplot(df) + geom_line(aes(x = Hour, y = NOx, group = Date, col = Max)) +
   facet_wrap(vars(Type)) + scale_color_continuous(type = "viridis")
 @
 \caption{The NO$_x$ levels for Monday-Thursday (Mon-Thu), Friday (Fri) and non-working days (Free) including weekend and festive days in Poblenou for 115 days from 23 February to 26 June, 2005. The color of the daily curves is according to the maximum NO$_x$ level ($\mu$g/m$^3$) of the day.}
-	\label{fig:NOx_data}
+  \label{fig:NOx_data}
 \end{figure}
 
 Assuming that the NO$_x$ levels $T_{ij}(r)$ at times $r \in R = [0,24]$ are i.i.d.\ samples from stochastic processes $SP(\mu_j, \gamma_j)$ with mean functions $\mu_j(r)$, $r\in R$, and covariance functions $\gamma_j(s, t)$, $s, t \in R$, for $j=1, \ldots , J$, the groups of NO$_x$ levels can be compared by means of the graphical functional ANOVA \citep{MrkvickaEtal2020}. The hypothesis 
@@ -940,7 +945,7 @@ and an alternative test statistic is
 \TT' = (\overline{T}_{1}({\bf r})-\overline{T}_{2}({\bf r}), \overline{T}_{1}({\bf r})-\overline{T}_{3}({\bf r}), \ldots , \overline{T}_{J-1}({\bf r})-\overline{T}_{J}({\bf r})).
 \end{equation}
 %
-The latter test statistic (Equation~\ref{eq:graphfanova_contrasts}) can be obtained by setting \code{contrasts = TRUE}.
+The latter test statistic (Equation~\ref{eq:graphfanova_contrasts}) can be obtained by setting \code{contrasts = TRUE} in the call of \fct{graph.fanova}.
 
 \citet{FebreroEtal2008} assumed heteroscedasticity of working and non-working days, therefore we also applied correction for unequal variances to the three groups by rescaling the functions $T_{ij}(r)$
 of $J$ groups (here $J=3$) containing $n_1, \ldots , n_J$ functions observed on the finite interval $R=[0, 24]$ by the transformation
@@ -960,24 +965,24 @@ cset <- create_curve_set(list(r=0:23,
 @
 %
 
-To sample from the null hypotheses, the simple permutation of raw functions among the groups is performed. The permutations and the global envelope test can be done by the \fct{graph.fanova} function:
+To sample from the null hypotheses, the simple permutation of raw functions among the groups is performed. The permutations and the global envelope test can be done by the \fct{graph.fanova} function (Figure~\ref{fig:graphfanova_logNOx}):
 %
 <<graphfanova_seed, echo=FALSE>>==
 set.seed(190503)
 @
 %
 \begin{figure}[ht!]
-	\centering
+  \centering
 <<graphfanova_logNOx, echo=TRUE, fig=TRUE, height=2.722, width=6.125>>==
 res.c <- graph.fanova(nsim = 2999, curve_set = cset, groups = Type,
   variances = "unequal", contrasts = TRUE)
-plot(res.c, xlab = "Hour", ylab = "Diff.")
+plot(res.c)
 @
-	\caption{The output of the graphical functional ANOVA to test the difference between the type of the day on the log NO$_x$ levels in the Poblenou data. The 95\% global envelope (ERL; gray band) accompanied with the observed differences between the group means (solid line with red dots when outside the envelope).}
-	\label{fig:graphfanova_logNOx}
+  \caption{The output of the graphical functional ANOVA to test the difference between the type of the day on the log NO$_x$ levels observed each hour ($r$) of the day. The 95\% global envelope (ERL; gray band) accompanied with the observed differences between the group means (solid line with red dots when outside the envelope).}
+  \label{fig:graphfanova_logNOx}
 \end{figure}
 %
-The \code{fdata} object \code{poblenou[['nox']]} is automatically converted to the required format in \pkg{GET}. The observed differences together with the global envelope are shown in Figure~\ref{fig:graphfanova_logNOx}.
+
 Thus, the test rejects the null hypothesis $H'_0$ that the differences between the groups would be zero and shows that on Monday-Thursday and Friday the (log) NO$_x$ levels are significantly larger than on free days basically during the whole day with peaks around 8 am and 4 pm. The difference between Monday-Thursday and Friday was not significant.
 
 The graphical functional ANOVA allows one to detect either a) which groups deviate from the mean (default) or b) which specific groups are different (option \code{contrasts = TRUE}). The example above was for the latter. Note that this test directly has the nature of a post hoc test. Furthermore, both versions of the test allow one to identify which $r$ values lead to the potential rejection of the null hypothesis.
@@ -998,8 +1003,8 @@ In the examples below, the effect of the group on the images is studied in the p
 data("abide_9002_23")
 plot(abide_9002_23$curve_set, idx=c(1, 27))
 @
-	\caption{The example brain image data in the right Crus Cerebellum 1 region at a slice for one subject from the autism group (subject number 1) and one from the control group (subject number 27).}
-	\label{fig:abide_9002_23_subj1and27}
+  \caption{The example brain image data in the right Crus Cerebellum 1 region at a slice for one subject from the autism group (subject number 1) and one from the control group (subject number 27).}
+  \label{fig:abide_9002_23_subj1and27}
 \end{figure}
 
 
@@ -1057,8 +1062,8 @@ When the basic assumption of the homoscedasticity in the linear model \eqref{eq:
 <<flm_graph_abide, echo=FALSE, fig=TRUE, height=4, width=6.125>>==
 plot(res)
 @
-	\caption{Graphical functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed difference (autism-control), the lower and upper bounds of the 95\% global envelope (area), and the significant regions (red) where the observed coefficient goes below or above the envelope.}
-	\label{fig:flm_graph_abide}
+  \caption{Graphical functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed difference (autism-control), the lower and upper bounds of the 95\% global envelope (area), and the significant regions (red) where the observed coefficient goes below or above the envelope.}
+  \label{fig:flm_graph_abide}
 \end{figure}
 
 
@@ -1089,15 +1094,15 @@ In the case of heteroscedasticy, the weighted least squares test statistics can 
 <<flm_frank_abide, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
 plot(res.F)
 @
-	\caption{$F$-rank functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed $F$~statistic, the upper bound of the one-sided 95\% global envelope (area), and the significant region (red) where the observed $F$~statistic exceeds the envelope.}
-	\label{fig:flm_frank_abide}
+  \caption{$F$-rank functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed $F$~statistic, the upper bound of the one-sided 95\% global envelope (area), and the significant region (red) where the observed $F$~statistic exceeds the envelope.}
+  \label{fig:flm_frank_abide}
 \end{figure}
 
 
 \subsection{Confidence band in polynomial regression}\label{sec:confband}
 
 The bootstrap procedure described in \citet{NarisettyNair2016} can be used to compute the 95\% global confidence band for the fitted curve in the linear or polynomial regression. In this example, regression data was simulated according to the cubic model $f(x) = 0.8x - 1.8x^2 + 1.05x^3$ for $x\in [0,1]$ with i.i.d.\ random noise (circles in Figure~\ref{fig:polynomial}). Then the data was fitted with cubic regression (black solid line in Figure~\ref{fig:polynomial}) and by permuting the residuals 2000 bootstrap samples were obtained and functions fitted \citep[see more details about the bootstrap procedure in][]{NarisettyNair2016}. Finally a \class{curve\_set} object was constructed of these bootstrapped functions by the \fct{create\_curve\_set} function
-and the \fct{central\_region} function was applied to this set to obtain the 95\% global confidence band (using the type \code{'erl'}).
+and the \fct{central\_region} function was applied to this set to obtain the 95\% global confidence band.
 
 The result of the procedure is shown in Figure~\ref{fig:polynomial}. The code can be found in the help file of the function \fct{central\_region} in \proglang{R}.
 
@@ -1145,8 +1150,8 @@ plot(cr, xlab = expression(italic(x)), ylab = expression(italic(f(x)))) +
   geom_line(data = data.frame(id = 1:length(d), points = f),
     aes(x = id, y = points)) # true function
 @
-	\caption{The global 95\% confidence band for the cubic regression (gray band), the true function (solid line) from which the data points (dots) were simulated and the median calculated from the simulations (dashed line).}
-	\label{fig:polynomial}
+  \caption{The global 95\% confidence band (ERL) for the cubic regression (gray band), the true function (solid line) from which the data points (dots) were simulated and the median calculated from the simulations (dashed line).}
+  \label{fig:polynomial}
 \end{figure}
 
 \begin{remark}
