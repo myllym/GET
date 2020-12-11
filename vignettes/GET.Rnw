@@ -658,7 +658,7 @@ The final step is to make the global envelope test on the given set of vectors:
 %
 <<adulttrees_CSR, fig=FALSE, height=3.0625, width=3.0625>>==
 res <- global_envelope_test(cset, type = "erl")
-plot(res, ylab = expression(italic(hat(L)(r)-r)))
+plot(res) + ylab(expression(italic(hat(L)(r)-r)))
 @
 %
 \begin{figure}[htb]
