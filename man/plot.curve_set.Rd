@@ -43,12 +43,10 @@ plot(cset, idx=c(1,3)) + ggplot2::theme(legend.position = "bottom")
 plot(cset, idx=c(1,3), xlab="x", ylab="Value")
 # Add title
 plot(cset) + ggplot2::ggtitle("Example curves")
-# Change ylim
-plot(cset) + ggplot2::scale_y_continuous(limits = c(-0.25, 1.25))
 # A curve_set with one observed function (other simulated)
 if(requireNamespace("mvtnorm", quietly=TRUE)) {
   cset <- create_curve_set(list(obs=c(-1.6, 1.6),
-              sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
+            sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
   plot(cset)
   # Remove legend
   plot(cset) + ggplot2::guides(col = "none")
