@@ -8,8 +8,8 @@
   x,
   labels,
   scales = "free",
-  digits = 3,
   ncol = 2 + 1 * (length(x) == 3),
+  digits = 3,
   outliers = TRUE,
   ...
 )
@@ -26,12 +26,12 @@ Use \code{scales = "free"} when the scales of the functions in the global envelo
 vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.
 A sensible default based on r-values exists.}
 
-\item{digits}{The number of digits used for printing the p-value or p-interval
-in the default main.}
-
 \item{ncol}{The maximum number of columns for the figures.
 Default 2 or 3, if the length of x equals 3.
 (Relates to the number of curve_sets that have been combined.)}
+
+\item{digits}{The number of digits used for printing the p-value or p-interval
+in the default main.}
 
 \item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn.}
 

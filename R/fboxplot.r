@@ -160,7 +160,7 @@ plot.fboxplot <- function(x, digits = 3, outliers = TRUE, ...) {
 #'
 #' @export
 plot.combined_fboxplot <- function(x, labels, scales = "free",
-                                   digits = 3, ncol = 2 + 1*(length(x)==3),
+                                   ncol = 2 + 1*(length(x)==3), digits = 3,
                                    outliers = TRUE, ...) {
   main <- env_main_default(x, digits=digits, alternative=get_alternative(x[[1]]))
   if(missing(labels)) labels <- default_labels(x, labels)

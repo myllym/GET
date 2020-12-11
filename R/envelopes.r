@@ -460,18 +460,18 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10, sign.col = "red",
 #' Use \code{scales = "free"} when the scales of the functions in the global envelope
 #' vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.
 #' A sensible default based on r-values exists.
+#' @param ncol The maximum number of columns for the figures.
+#' Default 2 or 3, if the length of x equals 3.
+#' (Relates to the number of curve_sets that have been combined.)
 #' @param level 1 or 2. In the case of two-step combined tests (with several test functions),
 #' two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
-#' @param ncol The maximum number of columns for the figures.
-#' Default 2 or 3, if the length of x equals 3.
-#' (Relates to the number of curve_sets that have been combined.)
 #' @export
 #' @seealso \code{\link{central_region}}
 plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
-                                 digits = 3, level = 1,
-                                 ncol = 2 + 1*(length(x)==3), ...) {
+                                          ncol = 2 + 1*(length(x)==3),
+                                          digits = 3, level = 1, ...) {
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
 
   if(missing(scales)) {

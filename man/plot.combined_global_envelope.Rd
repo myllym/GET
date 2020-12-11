@@ -9,9 +9,9 @@
   labels,
   scales,
   sign.col = "red",
+  ncol = 2 + 1 * (length(x) == 3),
   digits = 3,
   level = 1,
-  ncol = 2 + 1 * (length(x) == 3),
   ...
 )
 }
@@ -31,6 +31,10 @@ A sensible default based on r-values exists.}
 (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 to no coloring.}
 
+\item{ncol}{The maximum number of columns for the figures.
+Default 2 or 3, if the length of x equals 3.
+(Relates to the number of curve_sets that have been combined.)}
+
 \item{digits}{The number of digits used for printing the p-value or p-interval
 in the default main.}
 
@@ -38,10 +42,6 @@ in the default main.}
 two different plots are available:
 1 for plotting the combined global envelopes (default and most often wanted) or
 2 for plotting the second level test result.}
-
-\item{ncol}{The maximum number of columns for the figures.
-Default 2 or 3, if the length of x equals 3.
-(Relates to the number of curve_sets that have been combined.)}
 
 \item{...}{Ignored.}
 }
