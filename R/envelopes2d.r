@@ -93,7 +93,6 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 #'
 #' @param x A 'global_envelope' object for two-dimensional functions
 #' @param fixedscales Logical. TRUE for the same scales for all images.
-#' @param main The overall main.
 #' @param what Character vector specifying what information should be plotted for 2d functions.
 #' A combination of:
 #' Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo"}),
@@ -107,13 +106,13 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 #' @importFrom ggplot2 ggtitle
 #' @importFrom gridExtra grid.arrange
 #' @export
-plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
+plot.global_envelope2d <- function(x, fixedscales = TRUE,
                                    what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                    sign.col = "red", transparency = 155/255,
                                    digits = 3, ...) {
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x, what)
-  if(missing('main')) main <- env_main_default(x, digits=digits)
+  main <- env_main_default(x, digits=digits)
 
   if(fixedscales) {
     g <- plot_global_envelope2d_fixedscales(x, what, sign.col, transparency)
@@ -170,13 +169,13 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE, main,
 #'       axis.text=ggplot2::element_blank(), axis.title=ggplot2::element_blank()))))
 #'   gridExtra::grid.arrange(grobs=t(gs))
 #' }
-plot.combined_global_envelope2d <- function(x, fixedscales = 2, main, labels,
+plot.combined_global_envelope2d <- function(x, fixedscales = 2, labels,
                                             what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                             sign.col = "red", transparency = 155/255,
                                             digits = 3, ...) {
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x[[1]], what)
-  if(missing('main')) main <- env_main_default(x, digits=digits)
+  main <- env_main_default(x, digits=digits)
   if(missing('labels')) labels <- default_labels(x, labels)
   names(x) <- labels
 

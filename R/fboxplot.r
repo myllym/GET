@@ -28,7 +28,7 @@
 #'              obs = curves[-1,] - curves[-nrow(curves),]))
 #'   csets <- list(Height = cset1, Change = cset2)
 #'   res <- fBoxplot(csets, type = 'area', factor = 1.5)
-#'   plot(res, xlab = "Age (years)", ylab = "")
+#'   plot(res) + ggplot2::labs(x = "Age (years)", y = "")
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
   if(factor < 0) stop("factor should be positive.")
@@ -129,16 +129,26 @@ print.combined_fboxplot <- function(x, ...) {
 #'
 #' @param x an 'fboxplot' object
 #' @inheritParams plot.global_envelope
-#' @param plot_outliers Logical. If TRUE, then the functions outside the functional boxplot are drawn,
-#'  with legend if \code{legend} is TRUE.
-#' @param legend Logical. See \code{plot_outliers.}
+#' @param outliers Logical. If TRUE, then the functions outside the functional boxplot are drawn.
 #' @param ... Ignored.
 #' @export
-plot.fboxplot <- function(x, main, xlab, ylab, digits = 3,
-                          legend = TRUE, plot_outliers = TRUE, ...) {
-  if(missing(main)) main <- env_main_default(x, digits=digits)
-  d <- plotdefaultlabs(x, xlab, ylab)
-  fboxplot_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab, plot_outliers=plot_outliers, legend=legend)
+#' @examples
+#' if(requireNamespace("fda", quietly=TRUE)) {
+#'   years <- paste(1:18)
+#'   curves <- fda::growth[['hgtf']][years,]
+#'   # Heights
+#'   cset1 <- create_curve_set(list(r = as.numeric(years),
+#'                                  obs = curves))
+#'   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
+#'   plot(bp)
+#'   plot(bp) + ggplot2::theme(legend.position = "bottom")
+#'   plot(bp) + ggplot2::theme(legend.position = "none")
+#'   plot(bp, plot_outliers = FALSE)
+#' }
+plot.fboxplot <- function(x, digits = 3, outliers = TRUE, ...) {
+  main <- env_main_default(x, digits=digits)
+  d <- plotdefaultlabs(x)
+  fboxplot_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab, plot_outliers=outliers)
 }
 
 #' Plot method for the class 'combined_fboxplot'
@@ -149,15 +159,14 @@ plot.fboxplot <- function(x, main, xlab, ylab, digits = 3,
 #' @param ... Ignored.
 #'
 #' @export
-plot.combined_fboxplot <- function(x, main, xlab, ylab, labels, scales = "free",
+plot.combined_fboxplot <- function(x, labels, scales = "free",
                                    digits = 3, ncol = 2 + 1*(length(x)==3),
-                                   plot_outliers = TRUE, legend = TRUE, ...) {
-  alt <- get_alternative(x[[1]])
-  if(missing(main)) main <- env_main_default(x, digits=digits, alternative=alt)
+                                   outliers = TRUE, ...) {
+  main <- env_main_default(x, digits=digits, alternative=get_alternative(x[[1]]))
   if(missing(labels)) labels <- default_labels(x, labels)
-  d <- plotdefaultlabs(x, xlab, ylab)
+  d <- plotdefaultlabs(x)
   # Combined plot, level 1 plots
   fboxplot_combined_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
                            labels=labels, scales=scales,
-                           max_ncols_of_plots=ncol, legend=legend)
+                           max_ncols_of_plots=ncol, plot_outliers=outliers)
 }

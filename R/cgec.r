@@ -44,7 +44,9 @@
 #' data("cgec")
 #' # Plot data in groups
 #' for(i in 1:3)
-#'   print(plot(subset(cgec$cgec, cgec$group == i),
-#'              main=paste("Group ", i, sep=""),
-#'              ylab="Centred GEC"))
+#'   assign(paste0("p", i), plot(subset(cgec$cgec, cgec$group == i)) +
+#'     ggplot2::labs(title=paste("Group ", i, sep=""), y="Centred GEC"))
+#' p3
+#' if(require("patchwork", quietly=TRUE))
+#'   p1 + p2 + p3
 NULL

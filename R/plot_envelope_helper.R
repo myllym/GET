@@ -124,30 +124,26 @@ default_labels <- function(x, labels) {
   labels
 }
 
-plotdefaultlabs <- function(x, xlab, ylab) {
+plotdefaultlabs <- function(x) {
   choice <- function(attrname) {
     if(is.expression(attr(x, attrname)))
       substitute(i, list(i=attr(x, attrname)))
     else
       substitute(italic(i), list(i=attr(x, attrname)))
   }
-  if(missing('xlab')) {
-    if(!is.null(attr(x, "xlab"))) {
-      xlab <- choice("xlab")
-    } else if(!is.null(attr(x, "argu"))) {
-      xlab <- choice("argu")
-    } else {
-      xlab <- expression(italic(r))
-    }
+  if(!is.null(attr(x, "xlab"))) {
+    xlab <- choice("xlab")
+  } else if(!is.null(attr(x, "argu"))) {
+    xlab <- choice("argu")
+  } else {
+    xlab <- expression(italic(r))
   }
-  if(missing('ylab')) {
-    if(!is.null(attr(x, "yexp"))) {
-      ylab <- choice("yexp")
-    } else if(!is.null(attr(x, "ylab"))) {
-      ylab <- choice("ylab")
-    } else {
-      ylab <- expression(italic(T(r)))
-    }
+  if(!is.null(attr(x, "yexp"))) {
+    ylab <- choice("yexp")
+  } else if(!is.null(attr(x, "ylab"))) {
+    ylab <- choice("ylab")
+  } else {
+    ylab <- expression(italic(T(r)))
   }
   list(xlab=xlab, ylab=ylab)
 }
@@ -195,15 +191,14 @@ linetype_values <- function() { c('dashed', 'solid') }
 
 # Basic elements of the envelope (gg)plot
 #' @importFrom ggplot2 geom_ribbon aes_ geom_line
-#' @importFrom ggplot2 labs scale_linetype_manual ggtitle
+#' @importFrom ggplot2 labs scale_linetype_manual
 basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main) {
   list(geom_ribbon(data = df, aes_(x = ~r, ymin = ~lo, ymax = ~hi),
                    fill = 'grey59', alpha = 1),
        geom_line(data = df, aes_(x = ~r, y = ~curves, group = ~type,
                                  linetype = ~type)), # , size = 0.2
-       labs(x = xlab, y = ylab),
-       scale_linetype_manual(values = linetype_values(), name = ''),
-       ggtitle(main))
+       labs(title = main, x = xlab, y = ylab),
+       scale_linetype_manual(values = linetype_values(), name = ''))
 }
 
 # An internal function for making a ggplot2 style "global envelope plot"
@@ -212,19 +207,16 @@ basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main) {
 # @param ylim See \code{\link{plot.default}}.
 # @param xlab See \code{\link{plot.default}}.
 # @param ylab See \code{\link{plot.default}}.
-# @param legend Logical. If FALSE, then legend is removed.
 # @param color_outside Logical, whether to use sign.col.
 # @param sign.col Color for the observed curve outside the envelope.
 #' @importFrom ggplot2 ggplot theme guides geom_point aes_
-env_ggplot <- function(x, main, xlab, ylab,
-                       legend = TRUE, sign.col="red") {
+env_ggplot <- function(x, main, xlab, ylab, sign.col="red") {
   if(!inherits(x, "global_envelope")) stop("Internal error.")
 
   df <- env_df_construction(x, NULL)
   p <- ( ggplot()
          + basic_stuff_for_env_ggplot(df, xlab, ylab, main)
          + set_envelope_legend_position() )
-  if(!legend) p <- p + theme(legend.position = "none")
   if(length(levels(df$type)) < 2) p <- p + guides(linetype = "none")
   if("Data function" %in% levels(df$type)) {
     if(!is.null(sign.col)) {
@@ -239,10 +231,8 @@ env_ggplot <- function(x, main, xlab, ylab,
 # An internal function for making a ggplot2 style "functional boxplot"
 #' @importFrom viridisLite viridis
 #' @importFrom ggplot2 ggplot geom_ribbon aes_ guides geom_line scale_color_identity
-fboxplot_ggplot <- function(x, main, xlab, ylab,
-                            plot_outliers = TRUE, legend = TRUE) {
+fboxplot_ggplot <- function(x, main, xlab, ylab, plot_outliers = TRUE) {
     if(!inherits(x, "fboxplot")) stop("x should have class fboxplot. Possibly internal error.")
-    if(legend) guide <- "legend" else guide <- "none"
 
     # Basic df
     df <- env_df_construction(x, NULL)
@@ -252,7 +242,7 @@ fboxplot_ggplot <- function(x, main, xlab, ylab,
            + basic_stuff_for_env_ggplot(df, xlab, ylab, main)
            + guides(linetype = "none") )
 
-    if(!is.null(attr(x, "outliers"))) {
+    if(plot_outliers & !is.null(attr(x, "outliers"))) {
       out <- attr(x, "outliers")
       col <- viridis(ncol(out))
       out.df <- data.frame(r = rep(x[['r']], times=ncol(out)),
@@ -260,7 +250,7 @@ fboxplot_ggplot <- function(x, main, xlab, ylab,
                            id = rep(colnames(out), each=length(x[['r']])),
                            col = rep(col, each=length(x[['r']])))
       p <- ( p + geom_line(data = out.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id, col=~col))
-               + scale_color_identity("", labels = colnames(out), guide = guide) )
+               + scale_color_identity("", labels = colnames(out), guide = "legend") )
     }
     p
 }
@@ -286,8 +276,7 @@ combined_df_construction <- function(x, labels) {
 # @param max_ncols_of_plots The maximum number of columns for figures. Default 2.
 #' @importFrom ggplot2 ggplot facet_wrap guides geom_point aes_ theme
 env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
-                       max_ncols_of_plots = 2, legend = TRUE,
-                       sign.col="red") {
+                       max_ncols_of_plots = 2, sign.col="red") {
   if(!inherits(x, "list")) stop("Internal error. x is not a list.")
   Nfunc <- length(x)
 
@@ -310,8 +299,6 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
       p <- p + geom_point(data=df.outside, ggplot2::aes_(x=~r, y=~curves), color=sign.col, size=1)
     }
   }
-  if(!legend)
-    p <- p + theme(legend.position="none")
   p
 }
 
@@ -319,9 +306,8 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
 #' @importFrom viridisLite viridis
 #' @importFrom ggplot2 ggplot geom_ribbon aes_ facet_wrap guides geom_line scale_color_identity
 fboxplot_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
-                                max_ncols_of_plots = 2, legend = TRUE) {
+                                max_ncols_of_plots = 2, plot_outliers = TRUE) {
   if(!inherits(x, "list")) stop("Internal error. x is not a list.")
-  if(legend) guide <- "legend" else guide <- "none"
   Nfunc <- length(x)
 
   n_of_plots <- as.integer(Nfunc)
@@ -337,7 +323,7 @@ fboxplot_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free
          + facet_wrap(~ plotmain, scales=scales,
                       nrow=nrows_of_plots, ncol=ncols_of_plots)
          + guides(linetype = "none") )
-  if(!is.null(attr(x, "outliers"))) {
+  if(plot_outliers & !is.null(attr(x, "outliers"))) {
     out <- attr(x, "outliers")
     col_values <- viridis(ncol(out[[1]]))
     names(col_values) <- colnames(out[[1]])
@@ -349,7 +335,7 @@ fboxplot_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free
                  plotmain = factor(rep(labels[i], each=length(x[[i]][['r']])), levels=labels))
     }))
     p <- ( p + ggplot2::geom_line(data = out.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id, col = ~col))
-             + scale_color_identity("Outliers", labels = colnames(out[[1]]), guide = guide) )
+             + scale_color_identity("Outliers", labels = colnames(out[[1]]), guide = "legend") )
   }
   p
 }

@@ -380,18 +380,13 @@ print.combined_global_envelope <- function(x, ...) {
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors.
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
-#' @param main The title for the plot. A sensible default exists.
-#' @param xlab The label for the x-axis. A sensible default exists.
-#' @param ylab The label for the y-axis. A sensible default exists.
 #' @param sign.col The color for the observed curve when outside the global envelope
 #' (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 #' to no coloring.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
-#' @param digits The number of digits used for printing the p-value or p-interval in the main,
-#' if using the default main.
-#' @param legend Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
-#' Case specific default exists.
+#' @param digits The number of digits used for printing the p-value or p-interval
+#' in the default main.
 #' @param ... Ignored.
 #'
 #' @export
@@ -411,12 +406,14 @@ print.combined_global_envelope <- function(x, ...) {
 #'   plot(res)
 #'   # Plots can be edited, e.g.
 #'   # Remove legend
-#'   plot(res) + ggplot2::guides(linetype = "none")
+#'   plot(res) + ggplot2::theme(legend.position = "none")
 #'   # Change its position
 #'   plot(res) + ggplot2::theme(legend.position = "right")
 #'   # Change the outside color
 #'   plot(res, sign.col = "#5DC863FF")
 #'   plot(res, sign.col = NULL)
+#'   # Change default title and x- and y-labels
+#'   plot(res) + ggplot2::labs(title="95% global envelope", x="x", y="f(x)")
 #'
 #'   # Prior to the plot, you can set your preferred ggplot theme by theme_set
 #'   old <- ggplot2::theme_set(ggplot2::theme_bw())
@@ -433,18 +430,16 @@ print.combined_global_envelope <- function(x, ...) {
 #'   plot.fv(res)
 #' }
 #' @importFrom ggplot2 labs
-plot.global_envelope <- function(x, dotplot = length(x$r)<10,
-                                 main, xlab, ylab, sign.col = "red",
-                                 labels = NULL, digits = 3, legend = TRUE, ...) {
+plot.global_envelope <- function(x, dotplot = length(x$r)<10, sign.col = "red",
+                                 labels = NULL, digits = 3, ...) {
   if(missing(labels)) labels <- default_labels(x, labels)
-  if(missing(main)) main <- env_main_default(x, digits=digits)
-  d <- plotdefaultlabs(x, xlab, ylab)
+  main <- env_main_default(x, digits=digits)
+  d <- plotdefaultlabs(x)
   if(dotplot) {
     env_dotplot_ggplot(x, labels=labels, sign.col=sign.col) +
       labs(title=main, x=d$xlab, y=d$ylab)
   } else {
-    env_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
-               legend=legend, sign.col=sign.col)
+    env_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab, sign.col=sign.col)
   }
 }
 
@@ -472,11 +467,9 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10,
 #' (Relates to the number of curve_sets that have been combined.)
 #' @export
 #' @seealso \code{\link{central_region}}
-plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
-                                 scales, sign.col = "red",
+plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
                                  digits = 3, level = 1,
-                                 ncol = 2 + 1*(length(x)==3),
-                                 legend = TRUE, ...) {
+                                 ncol = 2 + 1*(length(x)==3), ...) {
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
 
   if(missing(scales)) {
@@ -487,15 +480,14 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
   }
 
   alt <- get_alternative(x[[1]])
-  if(missing(main)) main <- env_main_default(x, digits=digits, alternative=alt)
-  d <- plotdefaultlabs(x, xlab, ylab)
+  main <- env_main_default(x, digits=digits, alternative=alt)
+  d <- plotdefaultlabs(x)
 
   if(level == 1) {
     if(missing(labels)) labels <- default_labels(x, labels)
     env_combined_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
                         labels=labels, scales=scales,
-                        max_ncols_of_plots=ncol, legend=legend,
-                        sign.col=sign.col)
+                        max_ncols_of_plots=ncol, sign.col=sign.col)
   }
   else {
     if(attr(x, "nstep") != 2)
@@ -707,7 +699,7 @@ plot.combined_global_envelope <- function(x, main, xlab, ylab, labels,
 #' cr <- central_region(boot.cset, coverage=0.95, type="erl")
 #'
 #' # Plotting the result
-#' plot(cr, xlab = expression(italic(x)), ylab = expression(italic(f(x)))) +
+#' plot(cr) + ggplot2::labs(x = expression(italic(x)), y = expression(italic(f(x)))) +
 #'   ggplot2::geom_point(data = data.frame(id = 1:length(d), points = d),
 #'                       ggplot2::aes(x = id, y = points)) + # data points
 #'   ggplot2::geom_line(data = data.frame(id = 1:length(d), points = f),
