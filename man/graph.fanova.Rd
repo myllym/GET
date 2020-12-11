@@ -124,7 +124,7 @@ if(require("fda.usc", quietly=TRUE)) {
   res.c <- graph.fanova(nsim = nsim, curve_set = cset,
                         groups = Type, variances = "unequal",
                         contrasts = TRUE)
-  plot(res.c, xlab = "Hour", ylab = "Diff.")
+  plot(res.c) + ggplot2::labs(x = "Hour", y = "Diff.")
 }
 
 #-- Centred government expenditure centralization ratios example
@@ -139,14 +139,15 @@ data("cgec")
 res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
                          groups = cgec$group,
                          test.equality = "cov", cov.lag = 1)
-plot(res.cov1, labels = paste("Group ", 1:3, sep=""),
-     xlab=substitute(paste(italic(i), " (", j, ")", sep=""), list(i="r", j="Year")))
+plot(res.cov1)
+# Add labels
+plot(res.cov1, labels = paste("Group ", 1:3, sep="")) +
+  ggplot2::xlab(substitute(paste(italic(i), " (", j, ")", sep=""), list(i="r", j="Year")))
 # Test for equality of variances among groups
 res.var <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
                         groups = cgec$group,
                         test.equality = "var")
-plot(res.var, labels = paste("Group ", 1:3, sep=""),
-     xlab=substitute(paste(italic(i), " (", j, ")", sep=""), list(i="r", j="Year")))
+plot(res.var)
 
 # Test for equality of means assuming equality of variances
 # a) using 'means'
@@ -154,15 +155,13 @@ res <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
                     groups = cgec$group,
                     variances = "equal",
                     contrasts = FALSE)
-plot(res, labels = paste("Group ", 1:3, sep=""),
-     xlab=substitute(paste(italic(i), " (", j, ")", sep=""), list(i="r", j="Year")))
+plot(res)
 # b) using 'contrasts'
 res2 <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
                      groups = cgec$group,
                      variances = "equal",
                      contrasts = TRUE)
-plot(res2, ncol=3,
-     xlab=substitute(paste(italic(i), " (", j, ")", sep=""), list(i="r", j="Year")))
+plot(res2)
 
 # Image set examples
 data("imageset3")

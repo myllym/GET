@@ -6,26 +6,16 @@
 \usage{
 \method{plot}{combined_fboxplot}(
   x,
-  main,
-  xlab,
-  ylab,
   labels,
   scales = "free",
   digits = 3,
   ncol = 2 + 1 * (length(x) == 3),
-  plot_outliers = TRUE,
-  legend = TRUE,
+  outliers = TRUE,
   ...
 )
 }
 \arguments{
 \item{x}{an 'combined_fboxplot' object}
-
-\item{main}{The title for the plot. A sensible default exists.}
-
-\item{xlab}{The label for the x-axis. A sensible default exists.}
-
-\item{ylab}{The label for the y-axis. A sensible default exists.}
 
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
@@ -36,18 +26,14 @@ Use \code{scales = "free"} when the scales of the functions in the global envelo
 vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.
 A sensible default based on r-values exists.}
 
-\item{digits}{The number of digits used for printing the p-value or p-interval in the main,
-if using the default main.}
+\item{digits}{The number of digits used for printing the p-value or p-interval
+in the default main.}
 
 \item{ncol}{The maximum number of columns for the figures.
 Default 2 or 3, if the length of x equals 3.
 (Relates to the number of curve_sets that have been combined.)}
 
-\item{plot_outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn,
-with legend if \code{legend} is TRUE.}
-
-\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
-Case specific default exists.}
+\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn.}
 
 \item{...}{Ignored.}
 }

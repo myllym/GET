@@ -44,9 +44,11 @@ This grouping is used in examples.
 data("cgec")
 # Plot data in groups
 for(i in 1:3)
-  print(plot(subset(cgec$cgec, cgec$group == i),
-             main=paste("Group ", i, sep=""),
-             ylab="Centred GEC"))
+  assign(paste0("p", i), plot(subset(cgec$cgec, cgec$group == i)) +
+    ggplot2::labs(title=paste("Group ", i, sep=""), y="Centred GEC"))
+p3
+if(require("patchwork", quietly=TRUE))
+  p1 + p2 + p3
 }
 \references{
 Eurostat (2018). "Government revenue, expenditure and main aggregates (gov10amain)”. Retrieved from https://ec.europa.eu/eurostat/data/database(26/10/2018).

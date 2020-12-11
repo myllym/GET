@@ -4,27 +4,32 @@
 \alias{plot.fboxplot}
 \title{Plot method for the class 'fboxplot'}
 \usage{
-\method{plot}{fboxplot}(x, main, xlab, ylab, digits = 3, legend = TRUE, plot_outliers = TRUE, ...)
+\method{plot}{fboxplot}(x, digits = 3, outliers = TRUE, ...)
 }
 \arguments{
 \item{x}{an 'fboxplot' object}
 
-\item{main}{The title for the plot. A sensible default exists.}
+\item{digits}{The number of digits used for printing the p-value or p-interval
+in the default main.}
 
-\item{xlab}{The label for the x-axis. A sensible default exists.}
-
-\item{ylab}{The label for the y-axis. A sensible default exists.}
-
-\item{digits}{The number of digits used for printing the p-value or p-interval in the main,
-if using the default main.}
-
-\item{legend}{Logical. See \code{plot_outliers.}}
-
-\item{plot_outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn,
-with legend if \code{legend} is TRUE.}
+\item{outliers}{Logical. If TRUE, then the functions outside the functional boxplot are drawn.}
 
 \item{...}{Ignored.}
 }
 \description{
 Plot method for the class 'fboxplot'
+}
+\examples{
+if(requireNamespace("fda", quietly=TRUE)) {
+  years <- paste(1:18)
+  curves <- fda::growth[['hgtf']][years,]
+  # Heights
+  cset1 <- create_curve_set(list(r = as.numeric(years),
+                                 obs = curves))
+  bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
+  plot(bp)
+  plot(bp) + ggplot2::theme(legend.position = "bottom")
+  plot(bp) + ggplot2::theme(legend.position = "none")
+  plot(bp, plot_outliers = FALSE)
+}
 }

@@ -7,13 +7,9 @@
 \method{plot}{global_envelope}(
   x,
   dotplot = length(x$r) < 10,
-  main,
-  xlab,
-  ylab,
   sign.col = "red",
   labels = NULL,
   digits = 3,
-  legend = TRUE,
   ...
 )
 }
@@ -24,12 +20,6 @@
 Suitable for low dimensional test vectors.
 Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
-\item{main}{The title for the plot. A sensible default exists.}
-
-\item{xlab}{The label for the x-axis. A sensible default exists.}
-
-\item{ylab}{The label for the y-axis. A sensible default exists.}
-
 \item{sign.col}{The color for the observed curve when outside the global envelope
 (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 to no coloring.}
@@ -37,11 +27,8 @@ to no coloring.}
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE}, then labels for the tests at x-axis.}
 
-\item{digits}{The number of digits used for printing the p-value or p-interval in the main,
-if using the default main.}
-
-\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
-Case specific default exists.}
+\item{digits}{The number of digits used for printing the p-value or p-interval
+in the default main.}
 
 \item{...}{Ignored.}
 }
@@ -63,12 +50,14 @@ if(require("spatstat", quietly=TRUE)) {
   plot(res)
   # Plots can be edited, e.g.
   # Remove legend
-  plot(res) + ggplot2::guides(linetype = "none")
+  plot(res) + ggplot2::theme(legend.position = "none")
   # Change its position
   plot(res) + ggplot2::theme(legend.position = "right")
   # Change the outside color
   plot(res, sign.col = "#5DC863FF")
   plot(res, sign.col = NULL)
+  # Change default title and x- and y-labels
+  plot(res) + ggplot2::labs(title="95\% global envelope", x="x", y="f(x)")
 
   # Prior to the plot, you can set your preferred ggplot theme by theme_set
   old <- ggplot2::theme_set(ggplot2::theme_bw())

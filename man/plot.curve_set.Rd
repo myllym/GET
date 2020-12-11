@@ -4,7 +4,7 @@
 \alias{plot.curve_set}
 \title{Plot method for the class 'curve_set'}
 \usage{
-\method{plot}{curve_set}(x, idx, col_idx, idx_name = "", col = "grey70", xlab, ylab, ...)
+\method{plot}{curve_set}(x, idx, col_idx, idx_name = "", col = "grey70", ...)
 }
 \arguments{
 \item{x}{An \code{curve_set} object.}
@@ -21,10 +21,6 @@ containing the colors for the highlighted functions. Default exists.}
 
 \item{col}{The basic color for the curves (which are not highlighted).}
 
-\item{xlab}{The label for the x-axis. A sensible default exists.}
-
-\item{ylab}{The label for the y-axis. A sensible default exists.}
-
 \item{...}{Ignored.}
 }
 \description{
@@ -39,17 +35,17 @@ plot(cset, idx=c(1,3), col_idx=c("black", "red"))
 # Change legend
 plot(cset, idx=c(1,3), col_idx=c("black", "red"), idx_name="Special functions")
 plot(cset, idx=c(1,3)) + ggplot2::theme(legend.position = "bottom")
-# Set labels
-plot(cset, idx=c(1,3), xlab="x", ylab="Value")
-# Add title
-plot(cset) + ggplot2::ggtitle("Example curves")
+# Add labels
+plot(cset, idx=c(1,3)) + ggplot2::labs(x="x", y="Value")
+# and title
+plot(cset) + ggplot2::labs(title="Example curves", x="x", y="Value")
 # A curve_set with one observed function (other simulated)
 if(requireNamespace("mvtnorm", quietly=TRUE)) {
   cset <- create_curve_set(list(obs=c(-1.6, 1.6),
             sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
   plot(cset)
   # Remove legend
-  plot(cset) + ggplot2::guides(col = "none")
+  plot(cset) + ggplot2::theme(legend.position = "none")
 }
 }
 \seealso{

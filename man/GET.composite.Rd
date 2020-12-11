@@ -209,7 +209,7 @@ if(require("fda.usc", quietly=TRUE)) {
   }
   # Perform the adjusted test
   res <- GET.composite(X=cset, X.ls=cset.ls, type='erl')
-  plot(res, xlab="NOx", ylab="Ecdf")
+  plot(res) + ggplot2::labs(x="NOx", y="Ecdf")
 }
 
 # Example of a point pattern data

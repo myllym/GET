@@ -41,8 +41,11 @@ countries for which the GDP was available for 1980-2017 and profit tax for 2010:
 data("GDPtax")
 # Plot data in groups
 for(i in 1:4)
-  print(plot(subset(GDPtax$GDP, GDPtax$Group == i),
-             main=paste("Group ", i, sep=""), ylab="GDP"))
+  assign(paste0("p", i), plot(subset(GDPtax$GDP, GDPtax$Group == i)) +
+    ggplot2::labs(title=paste("Group ", i, sep=""), y="GDP"))
+p4
+if(require("patchwork", quietly=TRUE))
+  p1 + p2 + p3 + p4
 }
 \references{
 World Bank national accounts data, and OECD National Accounts data files. URL: https://data.worldbank.org/indicator/NY.GDP.PCAP.CD

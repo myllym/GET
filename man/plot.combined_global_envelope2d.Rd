@@ -7,7 +7,6 @@
 \method{plot}{combined_global_envelope2d}(
   x,
   fixedscales = 2,
-  main,
   labels,
   what = c("obs", "lo", "hi", "lo.sign", "hi.sign"),
   sign.col = "red",
@@ -20,8 +19,6 @@
 \item{x}{A 'global_envelope' object for two-dimensional functions}
 
 \item{fixedscales}{0, 1 or 2. See details.}
-
-\item{main}{The overall main.}
 
 \item{labels}{A character vector of suitable length giving the labels for the separate plots.
 Default exists. This parameter allows replacing the default.}
@@ -40,8 +37,8 @@ to no coloring.}
 Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
 functions.}
 
-\item{digits}{The number of digits used for printing the p-value or p-interval in the main,
-if using the default main.}
+\item{digits}{The number of digits used for printing the p-value or p-interval
+in the default main.}
 
 \item{...}{Ignored.}
 }

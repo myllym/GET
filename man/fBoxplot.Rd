@@ -39,6 +39,6 @@ if(requireNamespace("fda", quietly=TRUE)) {
              obs = curves[-1,] - curves[-nrow(curves),]))
   csets <- list(Height = cset1, Change = cset2)
   res <- fBoxplot(csets, type = 'area', factor = 1.5)
-  plot(res, xlab = "Age (years)", ylab = "")
+  plot(res) + ggplot2::labs(x = "Age (years)", y = "")
 }
 }

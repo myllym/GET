@@ -7,7 +7,6 @@
 \method{plot}{global_envelope2d}(
   x,
   fixedscales = TRUE,
-  main,
   what = c("obs", "lo", "hi", "lo.sign", "hi.sign"),
   sign.col = "red",
   transparency = 155/255,
@@ -19,8 +18,6 @@
 \item{x}{A 'global_envelope' object for two-dimensional functions}
 
 \item{fixedscales}{Logical. TRUE for the same scales for all images.}
-
-\item{main}{The overall main.}
 
 \item{what}{Character vector specifying what information should be plotted for 2d functions.
 A combination of:
@@ -36,8 +33,8 @@ to no coloring.}
 Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
 functions.}
 
-\item{digits}{The number of digits used for printing the p-value or p-interval in the main,
-if using the default main.}
+\item{digits}{The number of digits used for printing the p-value or p-interval
+in the default main.}
 
 \item{...}{Ignored.}
 }

@@ -223,7 +223,7 @@ boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
 cr <- central_region(boot.cset, coverage=0.95, type="erl")
 
 # Plotting the result
-plot(cr, xlab = expression(italic(x)), ylab = expression(italic(f(x)))) +
+plot(cr) + ggplot2::labs(x = expression(italic(x)), y = expression(italic(f(x)))) +
   ggplot2::geom_point(data = data.frame(id = 1:length(d), points = d),
                       ggplot2::aes(x = id, y = points)) + # data points
   ggplot2::geom_line(data = data.frame(id = 1:length(d), points = f),

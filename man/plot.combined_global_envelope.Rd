@@ -6,27 +6,17 @@
 \usage{
 \method{plot}{combined_global_envelope}(
   x,
-  main,
-  xlab,
-  ylab,
   labels,
   scales,
   sign.col = "red",
   digits = 3,
   level = 1,
   ncol = 2 + 1 * (length(x) == 3),
-  legend = TRUE,
   ...
 )
 }
 \arguments{
 \item{x}{An 'combined_global_envelope' object}
-
-\item{main}{The title for the plot. A sensible default exists.}
-
-\item{xlab}{The label for the x-axis. A sensible default exists.}
-
-\item{ylab}{The label for the y-axis. A sensible default exists.}
 
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
@@ -41,8 +31,8 @@ A sensible default based on r-values exists.}
 (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 to no coloring.}
 
-\item{digits}{The number of digits used for printing the p-value or p-interval in the main,
-if using the default main.}
+\item{digits}{The number of digits used for printing the p-value or p-interval
+in the default main.}
 
 \item{level}{1 or 2. In the case of two-step combined tests (with several test functions),
 two different plots are available:
@@ -52,9 +42,6 @@ two different plots are available:
 \item{ncol}{The maximum number of columns for the figures.
 Default 2 or 3, if the length of x equals 3.
 (Relates to the number of curve_sets that have been combined.)}
-
-\item{legend}{Logical. If FALSE, then the legend is removed from the "ggplot2" style plot.
-Case specific default exists.}
 
 \item{...}{Ignored.}
 }
