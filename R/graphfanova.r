@@ -242,8 +242,11 @@ contrasts.m <- function(x, groups, ...) {
 #'   cset <- create_curve_set(list(r=0:23,
 #'              obs=t(log(poblenou[['nox']][['data']]))))
 #'   # Graphical functional ANOVA
-#'  \dontshow{nsim <- 19}
-#'  \donttest{nsim <- 2999}
+#'   \dontshow{nsim <- 19
+#'   # Decrease the data to reduce time
+#'   cset$funcs <- cset$funcs[, 20:40]
+#'   Type <- Type[20:40]}
+#'   \donttest{nsim <- 2999}
 #'   res.c <- graph.fanova(nsim = nsim, curve_set = cset,
 #'                         groups = Type, variances = "unequal",
 #'                         contrasts = TRUE)
@@ -288,6 +291,11 @@ contrasts.m <- function(x, groups, ...) {
 #'
 #' # Image set examples
 #' data("imageset3")
+#' \dontshow{
+#' # Cut the data to reduce time
+#' imageset3$image_set$r <- imageset3$image_set$r[c(1:10, 52:62, 103:113),]
+#' imageset3$image_set$funcs <- imageset3$image_set$funcs[c(1:10, 52:62, 103:113), ]
+#' }
 #' res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
 #'                     curve_set = imageset3$image_set,
 #'                     groups = imageset3$Group)

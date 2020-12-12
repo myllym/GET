@@ -139,15 +139,19 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
 #' @importFrom gridExtra grid.arrange
 #' @export
 #' @examples
-#' data(abide_9002_23)
-#'
+#' data("abide_9002_23")
+#' iset <- subset(abide_9002_23[['curve_set']], 1:50)
+#' factors <- abide_9002_23[['factors']][1:50,]
+#' \dontshow{
+#' # Cut the data to reduce time
+#' iset$r <- iset$r[1:29,]
+#' iset$funcs <- iset$funcs[1:29, ]
+#' }
 #' res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-#'                  formula.full = Y ~ Group + Sex + Age,
-#'                  formula.reduced = Y ~ Sex + Age,
-#'                  curve_sets = list(Y = subset(abide_9002_23[['curve_set']], 1:50)),
-#'                  factors = abide_9002_23[['factors']][1:50,],
-#'                  contrasts = FALSE,
-#'                  GET.args = list(type = "area"))
+#'   formula.full = Y ~ Group + Sex + Age,
+#'   formula.reduced = Y ~ Sex + Age,
+#'   curve_sets = list(Y = iset), factors = factors,
+#'   contrasts = FALSE, GET.args = list(type = "area"))
 #' plot(res)
 #' plot(res, what=c("obs", "hi"))
 #'

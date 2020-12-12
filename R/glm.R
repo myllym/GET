@@ -377,11 +377,8 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' iset$funcs <- iset$funcs[1:29, ]
 #' }
 #'
-#' # Figure of an image in the group 1 and group 2
-#' plot(iset, idx=c(1, 27))
-#'
 #' # Testing the discrete factor 'group' with contrasts
-#' # (Use contrasts = FALSE for 'means')
+#' # (Use contrasts = FALSE for 'means'; and for continuous factors)
 #' res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
 #'                  formula.full = Y ~ Group + Sex + Age,
 #'                  formula.reduced = Y ~ Sex + Age,
@@ -391,14 +388,6 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'                  GET.args = list(type = "area"))
 #' plot(res)
 #'
-#' # Testing the continuous factor 'age'
-#' res.a <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-#'                  formula.full = Y ~ Group + Sex + Age,
-#'                  formula.reduced = Y ~ Group + Sex,
-#'                  curve_sets = list(Y = iset),
-#'                  factors = abide_9002_23[['factors']],
-#'                  GET.args = list(type = "area"))
-#' plot(res.a)
 graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
                       contrasts = FALSE, savefuns = FALSE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
