@@ -161,11 +161,13 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
 #'   plot(res, what=c("obs", "hi")) + ggplot2::theme_bw()
 #'
 #'   # Edit style (e.g. theme) of "fixedscales = 1 or 0" plots
-#'   gs <- lapply(res, plot, what=c("obs", "hi"), main="")
+#'   gs <- lapply(res, function(x, what) { plot(x, what=what) +
+#'      ggplot2::ggtitle("") }, what=c("obs", "hi"))
 #'   gridExtra::grid.arrange(grobs=gs, ncol=1, top="My main")
 #'
 #'   gs <- outer(res, c("obs", "hi"), FUN=Vectorize(function(res, what)
-#'     list(plot(res, what=what, main="") + ggplot2::theme(axis.ticks=ggplot2::element_blank(),
+#'     list(plot(res, what=what) + ggplot2::ggtitle("") +
+#'       ggplot2::theme(axis.ticks=ggplot2::element_blank(),
 #'       axis.text=ggplot2::element_blank(), axis.title=ggplot2::element_blank()))))
 #'   gridExtra::grid.arrange(grobs=t(gs))
 #' }
