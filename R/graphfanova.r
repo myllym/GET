@@ -231,14 +231,11 @@ contrasts.m <- function(x, groups, ...) {
 #' if(require("fda.usc", quietly=TRUE)) {
 #'   # Prepare data
 #'   data("poblenou")
-#'   Free <- poblenou$df$day.festive == 1 |
-#'     as.integer(poblenou$df$day.week) >= 6
-#'   MonThu <- poblenou$df$day.festive == 0 & poblenou$df$day.week %in% 1:4
-#'   Friday <- poblenou$df$day.festive == 0 & poblenou$df$day.week == 5
-#'   Type <- vector(length=length(Free))
-#'   Type[Free] <- "Free"
-#'   Type[MonThu] <- "MonThu"
-#'   Type[Friday] <- "Fri"
+#'   fest <- poblenou$df$day.festive; week <- as.integer(poblenou$df$day.week)
+#'   Type <- vector(length=length(fest))
+#'   Type[fest == 1 | week >= 6] <- "Free"
+#'   Type[fest == 0 & week %in% 1:4] <- "MonThu"
+#'   Type[fest == 0 & week == 5] <- "Fri"
 #'   Type <- factor(Type, levels = c("MonThu", "Fri", "Free"))
 #'
 #'   # (log) Data as a curve_set
