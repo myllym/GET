@@ -150,8 +150,8 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
 #' res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
 #'   formula.full = Y ~ Group + Sex + Age,
 #'   formula.reduced = Y ~ Sex + Age,
-#'   curve_sets = list(Y = iset), factors = factors,
-#'   contrasts = FALSE, GET.args = list(type = "area"))
+#'   curve_sets = list(Y=iset), factors = factors,
+#'   contrasts = FALSE, GET.args = list(type="area"))
 #' plot(res)
 #' plot(res, what=c("obs", "hi"))
 #'

@@ -338,21 +338,21 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' @examples
 #' data("rimov")
 #' res <- graph.flm(nsim=19, # Increase the number of simulations for serious analysis!
-#'                  formula.full = Y~Year,
-#'                  formula.reduced = Y~1,
-#'                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
+#'   formula.full = Y~Year,
+#'   formula.reduced = Y~1,
+#'   curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014))
 #' plot(res)
 #'
 #' # Test if there is a change in the slope in 1994,
 #' # i.e. the full model is T = a + b*year + c*year:group,
 #' res <- graph.flm(nsim = 19, # Increase the number of simulations for serious analysis!
-#'                  formula.full = Y ~ Year + Year:Group,
-#'                  formula.reduced = Y ~ Year,
-#'                  curve_sets = list(Y=rimov),
-#'                  factors = data.frame(Year = 1979:2014,
-#'                                      Group = factor(c(rep(1,times=24), rep(2,times=12)),
-#'                                                     levels=1:2)),
-#'                  contrasts = FALSE)
+#'   formula.full = Y ~ Year + Year:Group,
+#'   formula.reduced = Y ~ Year,
+#'   curve_sets = list(Y=rimov),
+#'   factors = data.frame(Year = 1979:2014,
+#'                        Group = factor(c(rep(1,times=24), rep(2,times=12)),
+#'                                       levels=1:2)),
+#'   contrasts = FALSE)
 #' plot(res)
 #'
 #' # An example of testing the joint effect of a discrete and a continuous variable
@@ -361,10 +361,10 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' data("GDPtax")
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' res.tax_within_group <- graph.flm(nsim = nsim,
-#'                                   formula.full = Y~Group+Tax+Group:Tax,
-#'                                   formula.reduced = Y~Group+Tax,
-#'                                   curve_sets = list(Y=GDPtax$GDP),
-#'                                   factors = factors.df)
+#'   formula.full = Y~Group+Tax+Group:Tax,
+#'   formula.reduced = Y~Group+Tax,
+#'   curve_sets = list(Y=GDPtax$GDP),
+#'   factors = factors.df)
 #' plot(res.tax_within_group)
 #'
 #' # Image data examples
@@ -380,12 +380,12 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' # Testing the discrete factor 'group' with contrasts
 #' # (Use contrasts = FALSE for 'means'; and for continuous factors)
 #' res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-#'                  formula.full = Y ~ Group + Sex + Age,
-#'                  formula.reduced = Y ~ Sex + Age,
-#'                  curve_sets = list(Y = iset),
-#'                  factors = abide_9002_23[['factors']],
-#'                  contrasts = TRUE,
-#'                  GET.args = list(type = "area"))
+#'   formula.full = Y ~ Group + Sex + Age,
+#'   formula.reduced = Y ~ Sex + Age,
+#'   curve_sets = list(Y = iset),
+#'   factors = abide_9002_23[['factors']],
+#'   contrasts = TRUE,
+#'   GET.args = list(type = "area"))
 #' plot(res)
 #'
 graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
@@ -533,10 +533,10 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' \dontshow{nsim <- 19}
 #' \donttest{nsim <- 999}
 #' res.tax_within_group <- frank.flm(nsim = nsim,
-#'                                   formula.full = Y~Group+Tax+Group:Tax,
-#'                                   formula.reduced = Y~Group+Tax,
-#'                                   curve_sets = list(Y=GDPtax$GDP),
-#'                                   factors = factors.df)
+#'   formula.full = Y~Group+Tax+Group:Tax,
+#'   formula.reduced = Y~Group+Tax,
+#'   curve_sets = list(Y=GDPtax$GDP),
+#'   factors = factors.df)
 #' plot(res.tax_within_group)
 #'
 #' # Image set examples
@@ -548,11 +548,11 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' iset$funcs <- iset$funcs[1:29, ]
 #' }
 #' res.F <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
-#'                    formula.full = Y ~ Group + Age + Sex,
-#'                    formula.reduced = Y ~ Age + Sex,
-#'                    curve_sets = list(Y = iset),
-#'                    factors = abide_9002_23[['factors']],
-#'                    GET.args = list(type = "area"))
+#'   formula.full = Y ~ Group + Age + Sex,
+#'   formula.reduced = Y ~ Age + Sex,
+#'   curve_sets = list(Y = iset),
+#'   factors = abide_9002_23[['factors']],
+#'   GET.args = list(type = "area"))
 #' plot(res.F)
 # Freedman-Lane procedure (Freedman and Lane, 1983, p. 385)
 #' @importFrom parallel mclapply

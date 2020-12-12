@@ -20,15 +20,15 @@
 #'   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
 #'   plot(bp)
 #'   # Use fbplot from fda:
-#'   area_depth <- forder(cset1, measure = "area")
-#'   fda::fbplot(fit = cset1$funcs, x=cset1$r, depth=area_depth, factor=1)
+#'   area_depth <- forder(cset1, measure="area")
+#'   fda::fbplot(fit=cset1$funcs, x=cset1$r, depth=area_depth, factor=1)
 #'
 #'   # Considering simultaneously heights and height differences
 #'   cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
 #'              obs = curves[-1,] - curves[-nrow(curves),]))
-#'   csets <- list(Height = cset1, Change = cset2)
-#'   res <- fBoxplot(csets, type = 'area', factor = 1.5)
-#'   plot(res) + ggplot2::labs(x = "Age (years)", y = "")
+#'   csets <- list(Height=cset1, Change=cset2)
+#'   res <- fBoxplot(csets, type='area', factor=1.5)
+#'   plot(res) + ggplot2::labs(x="Age (years)", y="")
 #' }
 fBoxplot <- function(curve_sets, factor = 1.5, ...) {
   if(factor < 0) stop("factor should be positive.")
@@ -141,9 +141,9 @@ print.combined_fboxplot <- function(x, ...) {
 #'                                  obs = curves))
 #'   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
 #'   plot(bp)
-#'   plot(bp) + ggplot2::theme(legend.position = "bottom")
-#'   plot(bp) + ggplot2::theme(legend.position = "none")
-#'   plot(bp, plot_outliers = FALSE)
+#'   plot(bp) + ggplot2::theme(legend.position="bottom")
+#'   plot(bp) + ggplot2::theme(legend.position="none")
+#'   plot(bp, plot_outliers=FALSE)
 #' }
 plot.fboxplot <- function(x, digits = 3, outliers = TRUE, ...) {
   main <- env_main_default(x, digits=digits)

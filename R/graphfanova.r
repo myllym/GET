@@ -239,8 +239,8 @@ contrasts.m <- function(x, groups, ...) {
 #'   Type <- factor(Type, levels = c("MonThu", "Fri", "Free"))
 #'
 #'   # (log) Data as a curve_set
-#'   cset <- create_curve_set(list(r=0:23,
-#'              obs=t(log(poblenou[['nox']][['data']]))))
+#'   cset <- create_curve_set(list(r = 0:23,
+#'              obs = t(log(poblenou[['nox']][['data']]))))
 #'   # Graphical functional ANOVA
 #'   \dontshow{nsim <- 19
 #'   # Decrease the data to reduce time
@@ -279,14 +279,12 @@ contrasts.m <- function(x, groups, ...) {
 #' # a) using 'means'
 #' res <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
 #'                     groups = cgec$group,
-#'                     variances = "equal",
-#'                     contrasts = FALSE)
+#'                     variances = "equal", contrasts = FALSE)
 #' plot(res)
 #' # b) using 'contrasts'
 #' res2 <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
 #'                      groups = cgec$group,
-#'                      variances = "equal",
-#'                      contrasts = TRUE)
+#'                      variances = "equal", contrasts = TRUE)
 #' plot(res2)
 #'
 #' # Image set examples
@@ -302,8 +300,7 @@ contrasts.m <- function(x, groups, ...) {
 #' plot(res)
 #' # Contrasts
 #' res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-#'                       curve_set = imageset3$image_set,
-#'                       groups = imageset3$Group,
+#'                       curve_set = imageset3$image_set, groups = imageset3$Group,
 #'                       contrasts = TRUE)
 #' plot(res.c)
 graph.fanova <- function(nsim, curve_set, groups, variances="equal",
@@ -405,8 +402,8 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' @examples
 #' data("rimov")
 #' groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-#' \donttest{res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)}
-#' \dontshow{res <- frank.fanova(nsim=4, curve_set=rimov, groups=groups, alpha=0.2)}
+#' \donttest{res <- frank.fanova(nsim = 2499, curve_set = rimov, groups = groups)}
+#' \dontshow{res <- frank.fanova(nsim = 4, curve_set = rimov, groups = groups, alpha = 0.2)}
 #' plot(res, ylab="F-statistic")
 #'
 #' data("imageset3")

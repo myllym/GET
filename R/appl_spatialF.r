@@ -115,16 +115,16 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'   }
 #'   # fitfun for the hardcore process with hardcore radius 0.01
 #'   fitHardcore <- function(X, model, covariates) {
-#'     ppm(X, model, interaction=Hardcore(0.01), covariates = covariates)
+#'     ppm(X, model, interaction=Hardcore(0.01), covariates=covariates)
 #'   }
 #'   }
 #' }
 GET.spatialF <- function(X, formula.full, formula.reduced, fitfun, covariates, nsim,
-                         bw=spatstat::bw.scott(X), bw.S=bw, dimyx=NULL, ...) {
+                         bw = spatstat::bw.scott(X), bw.S = bw, dimyx = NULL, ...) {
   if(!spatstat::is.ppp(X)) stop("X should be a ppp object.")
   check_isnested(formula.full, formula.reduced)
   M.reduced <- fitfun(X, formula.reduced, covariates)
-  sim <- simulate(M.reduced, nsim = nsim)
+  sim <- simulate(M.reduced, nsim=nsim)
   fun <- function(data, returncoef=FALSE) {
     compute_statistics(data, formula.full, formula.reduced, fitfun, covariates, bw, bw.S, returncoef=returncoef, dimyx=dimyx)
   }

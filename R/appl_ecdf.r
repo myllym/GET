@@ -75,14 +75,14 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'   \donttest{
 #'   res_m <- GET.necdf(fm.list)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, contrasts = TRUE)
+#'   res_c <- GET.necdf(fm.list, contrasts=TRUE)
 #'   plot(res_c)
 #'   }
 #'   \dontshow{
 #'   # The test with lower number of simulations
 #'   res_m <- GET.necdf(fm.list, nsim=4, alpha=0.2)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, contrasts = TRUE, nsim=4, alpha=0.2)
+#'   res_c <- GET.necdf(fm.list, contrasts=TRUE, nsim=4, alpha=0.2)
 #'   plot(res_c)
 #'   }
 #'
@@ -97,14 +97,14 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'   \donttest{
 #'   res_m <- GET.necdf(fm.list)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, contrasts = TRUE)
+#'   res_c <- GET.necdf(fm.list, contrasts=TRUE)
 #'   plot(res_c)
 #'   }
 #'   \dontshow{
 #'   # The test with lower number of simulations
 #'   res_m <- GET.necdf(fm.list, nsim=4, alpha=0.2)
 #'   plot(res_m)
-#'   res_c <- GET.necdf(fm.list, contrasts = TRUE, nsim=4, alpha=0.2)
+#'   res_c <- GET.necdf(fm.list, contrasts=TRUE, nsim=4, alpha=0.2)
 #'   plot(res_c)
 #'   }
 #' }

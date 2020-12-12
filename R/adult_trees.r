@@ -29,7 +29,7 @@
 #' @examples
 #' if(require("spatstat", quietly=TRUE)) {
 #'   data("adult_trees")
-#'   adult_trees <- as.ppp(adult_trees, W=square(75))
+#'   adult_trees <- as.ppp(adult_trees, W = square(75))
 #'   plot(adult_trees)
 #' }
 #'

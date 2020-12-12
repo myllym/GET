@@ -54,12 +54,12 @@
 #'   env <- envelope(saplings, nsim=nsim,
 #'    simulate=expression(runifpoint(ex=saplings)), # Simulate CSR
 #'    fun="Lest", correction="translate", # T(r) = estimator of L with translational edge correction
-#'    transform = expression(.-r),        # Take the L(r)-r function instead of L(r)
+#'    transform=expression(.-r),          # Take the L(r)-r function instead of L(r)
 #'    r=r,                                # Specify the distance vector
 #'    savefuns=TRUE)                      # Save the estimated functions
 #'   # Crop the curves to the interval of distances [rmin, rmax]
 #'   # (at the same time create a curve_set from 'env')
-#'   curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
+#'   curve_set <- crop_curves(env, r_min=rmin, r_max=rmax)
 #'   # Perform a global envelope test
 #'   res <- global_envelope_test(curve_set, type="erl") # type="rank" and larger nsim was used in S4.
 #'   # Plot the result.
@@ -74,7 +74,7 @@
 #'   #----------------------------------------#
 #'   # Fit the Matern cluster process to the pattern (using minimum contrast estimation with the pair
 #'   # correction function)
-#'   fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="pcf")
+#'   fitted_model <- kppm(saplings~1, clusters="MatClust", statistic="pcf")
 #'   summary(fitted_model)
 #'
 #'   nsim <- 19 # 19 just for experimenting with the code!!
@@ -82,10 +82,10 @@
 #'
 #'   # Make the adjusted directional quantile global envelope test using the L(r)-r function
 #'   # (For the rank envelope test, choose type = "rank" instead and increase nsim.)
-#'   adjenvL <- GET.composite(X = fitted_model,
+#'   adjenvL <- GET.composite(X=fitted_model,
 #'                      fun="Lest", correction="translate",
-#'                      transform = expression(.-r), r=r,
-#'                      type = "qdir", nsim = nsim, nsimsub = nsim,
+#'                      transform=expression(.-r), r=r,
+#'                      type="qdir", nsim=nsim, nsimsub=nsim,
 #'                      r_min=rmin, r_max=rmax)
 #'   # Plot the test result
 #'   plot(adjenvL, ylab=expression(italic(L(r)-r)))
@@ -95,20 +95,20 @@
 #'   # To further explore the goodness-of-fit of the Matern cluster process, test the
 #'   # model with the J function:
 #'   # This takes quite some time if nsim is reasonably large.
-#'   adjenvJ <- GET.composite(X = fitted_model,
+#'   adjenvJ <- GET.composite(X=fitted_model,
 #'                      fun="Jest", correction="none", r=rJ,
-#'                      type = "qdir", nsim = nsim, nsimsub = nsim,
+#'                      type="qdir", nsim=nsim, nsimsub=nsim,
 #'                      r_min=rminJ, r_max=rmaxJ)
 #'   # Plot the test result
 #'   plot(adjenvJ, ylab=expression(italic(J(r))))
 #'   # -> the Matern cluster process not adequate for the saplings data
 #'
 #'   # Test with the two test functions jointly
-#'   adjenvLJ <- GET.composite(X = fitted_model,
-#'                      testfuns = list(L = list(fun="Lest", correction="translate",
-#'                                          transform = expression(.-r), r=r),
-#'                                      J = list(fun="Jest", correction="none", r=rJ)),
-#'                      type = "erl", nsim = nsim, nsimsub = nsim,
+#'   adjenvLJ <- GET.composite(X=fitted_model,
+#'                      testfuns=list(L=list(fun="Lest", correction="translate",
+#'                                           transform=expression(.-r), r=r),
+#'                                    J=list(fun="Jest", correction="none", r=rJ)),
+#'                      type="erl", nsim=nsim, nsimsub=nsim,
 #'                      r_min=c(rmin, rminJ), r_max=c(rmax, rmaxJ),
 #'                      save.cons.envelope=TRUE)
 #'   plot(adjenvLJ)

@@ -10,7 +10,7 @@ envelope_to_curve_set <- function(env, ...) {
   }
 
   r <- env[['r']]
-  simfuns_fv <- attr(env, 'simfuns', exact = TRUE)
+  simfuns_fv <- attr(env, 'simfuns', exact=TRUE)
   if(is.null(simfuns_fv)) {
     stop('env did not include the simulated curve set. envelope must ',
          'be run with savefuns = TRUE.')
@@ -282,12 +282,12 @@ check_residualness <- function(curve_set) {
 #' @seealso \code{\link{plot.curve_set}}, \code{\link{plot.curve_set2d}}
 #' @examples
 #' # 1d
-#' cset <- create_curve_set(list(r=1:10, obs=matrix(runif(10*5), ncol=5)))
+#' cset <- create_curve_set(list(r = 1:10, obs = matrix(runif(10*5), ncol=5)))
 #' plot(cset)
 #' # 2d
-#' cset <- create_curve_set(list(r=data.frame(x=c(rep(1:3, 3), 4), y=c(rep(1:3, each=3), 1),
+#' cset <- create_curve_set(list(r = data.frame(x=c(rep(1:3, 3), 4), y=c(rep(1:3, each=3), 1),
 #'                                            width=1, height=1),
-#'                               obs=matrix(runif(10*5), ncol=5)))
+#'                               obs = matrix(runif(10*5), ncol=5)))
 #' plot(cset)
 create_curve_set <- function(curve_set, ...) {
   check_curve_set_content(curve_set, ...)
@@ -351,25 +351,25 @@ print.curve_set <- function(x, ...) {
 #' @importFrom ggplot2 ggplot geom_line aes_ scale_color_manual labs
 #' @importFrom viridisLite viridis
 #' @examples
-#' cset <- create_curve_set(list(r=1:10, obs=matrix(runif(10*5), ncol=5)))
+#' cset <- create_curve_set(list(r = 1:10, obs = matrix(runif(10*5), ncol=5)))
 #' plot(cset)
 #' # Highlight some functions
 #' plot(cset, idx=c(1,3))
 #' plot(cset, idx=c(1,3), col_idx=c("black", "red"))
 #' # Change legend
 #' plot(cset, idx=c(1,3), col_idx=c("black", "red"), idx_name="Special functions")
-#' plot(cset, idx=c(1,3)) + ggplot2::theme(legend.position = "bottom")
+#' plot(cset, idx=c(1,3)) + ggplot2::theme(legend.position="bottom")
 #' # Add labels
 #' plot(cset, idx=c(1,3)) + ggplot2::labs(x="x", y="Value")
 #' # and title
 #' plot(cset) + ggplot2::labs(title="Example curves", x="x", y="Value")
 #' # A curve_set with one observed function (other simulated)
 #' if(requireNamespace("mvtnorm", quietly=TRUE)) {
-#'   cset <- create_curve_set(list(obs=c(-1.6, 1.6),
-#'             sim_m=t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
+#'   cset <- create_curve_set(list(obs = c(-1.6, 1.6),
+#'             sim_m = t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
 #'   plot(cset)
 #'   # Remove legend
-#'   plot(cset) + ggplot2::theme(legend.position = "none")
+#'   plot(cset) + ggplot2::theme(legend.position="none")
 #' }
 plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) {
   if(!all(x$r[-1] - x$r[-curve_set_narg(x)] > 0))
@@ -452,7 +452,7 @@ plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) 
 #' @examples
 #' data("abide_9002_23")
 #' plot(abide_9002_23$curve_set, idx=c(1, 27))
-plot.curve_set2d <- function(x, idx=1, ncol = 2 + 1*(length(idx)==3), ...) {
+plot.curve_set2d <- function(x, idx = 1, ncol = 2 + 1*(length(idx)==3), ...) {
   funcs <- curve_set_funcs(x)
   rdf <- curve_set_rdf(x)
   df <- do.call(rbind, lapply(idx, function(i) data.frame(rdf, idx=i, f=funcs[,i])))
