@@ -12,7 +12,7 @@ pick_attributes <- function(curve_set, alternative = "two.sided") {
             greater = {
                 lo.name <- "infinite lower boundary"
             })
-    res <- NULL
+    res <- list()
     if(inherits(curve_set, 'envelope')) {
         names <- c("fname", "argu", "labl", "ylab", "yexp", "desc")
         for(i in 1:length(names)) res[[names[i]]] <- attr(curve_set, names[i])
