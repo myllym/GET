@@ -174,7 +174,7 @@ functions are concatenated together into a one long vector (see again Myllymäki
 \examples{
 ## A central region of a set of functions
 #----------------------------------------
-if(requireNamespace("fda", quietly = TRUE)) {
+if(requireNamespace("fda", quietly=TRUE)) {
   curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
                                      obs=fda::growth$hgtf))
   plot(curve_set, ylab="height")
@@ -223,11 +223,11 @@ boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
 cr <- central_region(boot.cset, coverage=0.95, type="erl")
 
 # Plotting the result
-plot(cr) + ggplot2::labs(x = expression(italic(x)), y = expression(italic(f(x)))) +
-  ggplot2::geom_point(data = data.frame(id = 1:length(d), points = d),
-                      ggplot2::aes(x = id, y = points)) + # data points
-  ggplot2::geom_line(data = data.frame(id = 1:length(d), points = f),
-                     ggplot2::aes(x = id, y = points)) # true function
+plot(cr) + ggplot2::labs(x=expression(italic(x)), y=expression(italic(f(x)))) +
+  ggplot2::geom_point(data=data.frame(id=1:length(d), points=d),
+                      ggplot2::aes(x=id, y=points)) + # data points
+  ggplot2::geom_line(data=data.frame(id=1:length(d), points=f),
+                     ggplot2::aes(x=id, y=points)) # true function
 }
 \references{
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432

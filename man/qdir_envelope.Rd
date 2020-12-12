@@ -58,7 +58,7 @@ if(require("spatstat", quietly=TRUE)) {
   ## Test for complete spatial randomness (CSR)
   # Generate nsim simulations under CSR, calculate centred L-function for the data and simulations
   env <- envelope(X, fun="Lest", nsim=nsim, savefuns=TRUE,
-                  correction="translate", transform = expression(.-r),
+                  correction="translate", transform=expression(.-r),
                   simulate=expression(runifpoint(ex=X)))
   res_qdir <- qdir_envelope(env) # The directional quantile envelope test
   plot(res_qdir)

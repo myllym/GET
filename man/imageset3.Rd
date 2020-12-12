@@ -30,10 +30,10 @@ Consequently, the first two groups (0,1) have the same mean, while a bigger bump
 }
 \examples{
 data("imageset3")
-plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5)
+plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol=5)
 \donttest{
 # Colors can be changed as follows:
-plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol = 5) +
+plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol=5) +
   ggplot2::scale_fill_gradient(low="black", high="white")
 }
 }

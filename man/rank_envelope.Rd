@@ -69,7 +69,7 @@ if(require("spatstat", quietly=TRUE)) {
   \dontshow{nsim <- 19 # Number of simulations for testing}
   # Generate nsim simulations under CSR, calculate centred L-function for the data and simulations
   env <- envelope(X, fun="Lest", nsim=nsim, savefuns=TRUE,
-                  correction="translate", transform = expression(.-r),
+                  correction="translate", transform=expression(.-r),
                   simulate=expression(runifpoint(ex=X)))
   # The rank envelope test
   res <- rank_envelope(env)

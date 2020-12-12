@@ -114,10 +114,10 @@ factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 \dontshow{nsim <- 19}
 \donttest{nsim <- 999}
 res.tax_within_group <- frank.flm(nsim = nsim,
-                                  formula.full = Y~Group+Tax+Group:Tax,
-                                  formula.reduced = Y~Group+Tax,
-                                  curve_sets = list(Y=GDPtax$GDP),
-                                  factors = factors.df)
+  formula.full = Y~Group+Tax+Group:Tax,
+  formula.reduced = Y~Group+Tax,
+  curve_sets = list(Y=GDPtax$GDP),
+  factors = factors.df)
 plot(res.tax_within_group)
 
 # Image set examples
@@ -129,11 +129,11 @@ iset$r <- iset$r[1:29,]
 iset$funcs <- iset$funcs[1:29, ]
 }
 res.F <- frank.flm(nsim = 19, # Increase nsim for serious analysis!
-                   formula.full = Y ~ Group + Age + Sex,
-                   formula.reduced = Y ~ Age + Sex,
-                   curve_sets = list(Y = iset),
-                   factors = abide_9002_23[['factors']],
-                   GET.args = list(type = "area"))
+  formula.full = Y ~ Group + Age + Sex,
+  formula.reduced = Y ~ Age + Sex,
+  curve_sets = list(Y = iset),
+  factors = abide_9002_23[['factors']],
+  GET.args = list(type = "area"))
 plot(res.F)
 }
 \references{

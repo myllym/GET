@@ -50,12 +50,12 @@ if(require("spatstat", quietly=TRUE)) {
   plot(res)
   # Plots can be edited, e.g.
   # Remove legend
-  plot(res) + ggplot2::theme(legend.position = "none")
+  plot(res) + ggplot2::theme(legend.position="none")
   # Change its position
-  plot(res) + ggplot2::theme(legend.position = "right")
+  plot(res) + ggplot2::theme(legend.position="right")
   # Change the outside color
-  plot(res, sign.col = "#5DC863FF")
-  plot(res, sign.col = NULL)
+  plot(res, sign.col="#5DC863FF")
+  plot(res, sign.col=NULL)
   # Change default title and x- and y-labels
   plot(res) + ggplot2::labs(title="95\% global envelope", x="x", y="f(x)")
 

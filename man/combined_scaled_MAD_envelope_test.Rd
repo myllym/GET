@@ -62,9 +62,9 @@ if(require("spatstat", quietly=TRUE)) {
 
   # Perform simulations of CSR and calculate the L-functions
   env_L <- envelope(X, nsim=nsim,
-   simulate=expression(runifpoint(X$n, win=X$window)),
+   simulate=expression(runifpoint(ex=X)),
    fun="Lest", correction="translate",
-   transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+   transform=expression(.-r), # Take the L(r)-r function instead of L(r)
    r=r,                         # Specify the distance vector
    savefuns=TRUE,               # Save the estimated functions
    savepatterns=TRUE)           # Save the simulated patterns
@@ -94,7 +94,7 @@ if(require("spatstat", quietly=TRUE)) {
   res <- combined_scaled_MAD_envelope_test(
              curve_sets=list(L=curve_set_L, F=curve_set_F,
                              G=curve_set_G, J=curve_set_J),
-             type = "qdir")
+             type="qdir")
   plot(res)
 }
 

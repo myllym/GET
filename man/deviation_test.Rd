@@ -100,14 +100,14 @@ the test the very small distances r for which ties occur.
 \examples{
 ## Testing complete spatial randomness (CSR)
 #-------------------------------------------
-if(require("spatstat", quietly = TRUE)) {
+if(require("spatstat", quietly=TRUE)) {
   pp <- unmark(spruces)
   \donttest{nsim <- 999}
   \dontshow{nsim <- 19}
   # Generate nsim simulations under CSR, calculate L-function for the data and simulations
   env <- envelope(pp, fun="Lest", nsim=nsim, savefuns=TRUE, correction="translate")
   # The deviation test using the integral deviation measure
-  res <- deviation_test(env, measure = 'int')
+  res <- deviation_test(env, measure='int')
   res
   # or
   res <- deviation_test(env, r_min=0, r_max=7, measure='int2')

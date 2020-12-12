@@ -48,15 +48,19 @@ If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
 If fixedscales is 2 all images will have common scale.
 }
 \examples{
-data(abide_9002_23)
-
+data("abide_9002_23")
+iset <- subset(abide_9002_23[['curve_set']], 1:50)
+factors <- abide_9002_23[['factors']][1:50,]
+\dontshow{
+# Cut the data to reduce time
+iset$r <- iset$r[1:29,]
+iset$funcs <- iset$funcs[1:29, ]
+}
 res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
-                 formula.full = Y ~ Group + Sex + Age,
-                 formula.reduced = Y ~ Sex + Age,
-                 curve_sets = list(Y = subset(abide_9002_23[['curve_set']], 1:50)),
-                 factors = abide_9002_23[['factors']][1:50,],
-                 contrasts = FALSE,
-                 GET.args = list(type = "area"))
+  formula.full = Y ~ Group + Sex + Age,
+  formula.reduced = Y ~ Sex + Age,
+  curve_sets = list(Y=iset), factors = factors,
+  contrasts = FALSE, GET.args = list(type="area"))
 plot(res)
 plot(res, what=c("obs", "hi"))
 
@@ -70,11 +74,13 @@ if(requireNamespace("gridExtra", quietly=TRUE)) {
   plot(res, what=c("obs", "hi")) + ggplot2::theme_bw()
 
   # Edit style (e.g. theme) of "fixedscales = 1 or 0" plots
-  gs <- lapply(res, plot, what=c("obs", "hi"), main="")
+  gs <- lapply(res, function(x, what) { plot(x, what=what) +
+     ggplot2::ggtitle("") }, what=c("obs", "hi"))
   gridExtra::grid.arrange(grobs=gs, ncol=1, top="My main")
 
   gs <- outer(res, c("obs", "hi"), FUN=Vectorize(function(res, what)
-    list(plot(res, what=what, main="") + ggplot2::theme(axis.ticks=ggplot2::element_blank(),
+    list(plot(res, what=what) + ggplot2::ggtitle("") +
+      ggplot2::theme(axis.ticks=ggplot2::element_blank(),
       axis.text=ggplot2::element_blank(), axis.title=ggplot2::element_blank()))))
   gridExtra::grid.arrange(grobs=t(gs))
 }

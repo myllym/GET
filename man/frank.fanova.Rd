@@ -70,8 +70,8 @@ Unfortunately this test is not able to detect which groups are different from ea
 \examples{
 data("rimov")
 groups <- factor(c(rep(1, times=12), rep(2, times=12), rep(3, times=12)))
-\donttest{res <- frank.fanova(nsim=2499, curve_set=rimov, groups=groups)}
-\dontshow{res <- frank.fanova(nsim=4, curve_set=rimov, groups=groups, alpha=0.2)}
+\donttest{res <- frank.fanova(nsim = 2499, curve_set = rimov, groups = groups)}
+\dontshow{res <- frank.fanova(nsim = 4, curve_set = rimov, groups = groups, alpha = 0.2)}
 plot(res, ylab="F-statistic")
 
 data("imageset3")

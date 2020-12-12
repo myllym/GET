@@ -95,7 +95,7 @@ if(require("spatstat", quietly=TRUE)) {
   }
   # fitfun for the hardcore process with hardcore radius 0.01
   fitHardcore <- function(X, model, covariates) {
-    ppm(X, model, interaction=Hardcore(0.01), covariates = covariates)
+    ppm(X, model, interaction=Hardcore(0.01), covariates=covariates)
   }
   }
 }

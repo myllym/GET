@@ -28,8 +28,8 @@ if(requireNamespace("fda", quietly=TRUE)) {
                                  obs = curves))
   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
   plot(bp)
-  plot(bp) + ggplot2::theme(legend.position = "bottom")
-  plot(bp) + ggplot2::theme(legend.position = "none")
-  plot(bp, plot_outliers = FALSE)
+  plot(bp) + ggplot2::theme(legend.position="bottom")
+  plot(bp) + ggplot2::theme(legend.position="none")
+  plot(bp, plot_outliers=FALSE)
 }
 }

@@ -208,8 +208,8 @@ if(require("fda.usc", quietly=TRUE)) {
     cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2, sim_m = sim2))
   }
   # Perform the adjusted test
-  res <- GET.composite(X=cset, X.ls=cset.ls, type='erl')
-  plot(res) + ggplot2::labs(x="NOx", y="Ecdf")
+  res <- GET.composite(X = cset, X.ls = cset.ls, type = 'erl')
+  plot(res) + ggplot2::labs(x = "NOx", y = "Ecdf")
 }
 
 # Example of a point pattern data
@@ -218,11 +218,11 @@ if(require("fda.usc", quietly=TRUE)) {
 \donttest{
 if(require("spatstat", quietly=TRUE)) {
   data("saplings")
-  saplings <- as.ppp(saplings, W=square(75))
+  saplings <- as.ppp(saplings, W = square(75))
 
   # First choose the r-distances
   rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
-  r <- seq(0, rmax, by=rstep)
+  r <- seq(0, rmax, by = rstep)
 
   # Number of simulations
   nsim <- 19 # Increase nsim for serious analysis!
@@ -233,13 +233,13 @@ if(require("spatstat", quietly=TRUE)) {
   # a point process model of spatstat.
   # 1. Fit the Matern cluster process to the pattern
   # (using minimum contrast estimation with the K-function)
-  M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
+  M1 <- kppm(saplings~1, clusters = "MatClust", statistic = "K")
   summary(M1)
   # 2. Make the adjusted global area rank envelope test using the L(r)-r function
   adjenvL <- GET.composite(X = M1, nsim = nsim,
-              testfuns = list(L = list(fun="Lest", correction="translate",
-                             transform = expression(.-r), r=r)), # passed to envelope
-              type = "area", r_min=rmin, r_max=rmax)
+              testfuns = list(L =list(fun="Lest", correction="translate",
+                            transform=expression(.-r), r=r)), # passed to envelope
+              type = "area", r_min = rmin, r_max = rmax)
   # Plot the test result
   plot(adjenvL)
 
@@ -249,28 +249,28 @@ if(require("spatstat", quietly=TRUE)) {
   # Preferable when you want to have a control
   # on the simulations yourself.
   # 1. Fit the model
-  M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
+  M1 <- kppm(saplings~1, clusters = "MatClust", statistic = "K")
   # 2. Generate nsim simulations by the given function using the fitted model
-  X <- envelope(M1, nsim=nsim, savefuns=TRUE,
-                fun="Lest", correction="translate",
-                transform = expression(.-r), r=r)
+  X <- envelope(M1, nsim = nsim, savefuns = TRUE,
+                fun = "Lest", correction = "translate",
+                transform = expression(.-r), r = r)
   plot(X)
   # 3. Create another set of simulations to be used to estimate
   # the second-state p-value (as proposed by Baddeley et al., 2017).
-  simpatterns2 <- simulate(M1, nsim=nsim)
+  simpatterns2 <- simulate(M1, nsim = nsim)
   # 4. Calculate the functions for each pattern
   simf <- function(rep) {
     # Fit the model to the simulated pattern Xsims[[rep]]
-    sim_fit <- kppm(simpatterns2[[rep]], clusters = "MatClust", statistic="K")
+    sim_fit <- kppm(simpatterns2[[rep]], clusters = "MatClust", statistic = "K")
     # Generate nsim simulations from the fitted model
-    envelope(sim_fit, nsim=nsim, savefuns=TRUE,
-             fun="Lest", correction="translate",
-             transform = expression(.-r), r=r)
+    envelope(sim_fit, nsim = nsim, savefuns = TRUE,
+             fun = "Lest", correction = "translate",
+             transform = expression(.-r), r = r)
   }
-  X.ls <- parallel::mclapply(X=1:nsim, FUN=simf, mc.cores=1) # list of envelope objects
+  X.ls <- parallel::mclapply(X = 1:nsim, FUN = simf, mc.cores = 1) # list of envelope objects
   # 5. Perform the adjusted test
-  res <- GET.composite(X=X, X.ls=X.ls, type="area",
-                      r_min=rmin, r_max=rmax)
+  res <- GET.composite(X = X, X.ls = X.ls, type = "area",
+                      r_min = rmin, r_max = rmax)
   plot(res)
 }}
 }
