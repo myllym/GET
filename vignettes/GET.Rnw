@@ -686,7 +686,7 @@ set.seed(190503)
 %
 <<adulttrees_envelope>>==
 env <- envelope(X, nsim = 999, fun = "Lest", correction = "translate",
-  transform = expression(.-r), simulate = expression(runifpoint(ex=X)),
+  transform = expression(.-r), simulate = expression(runifpoint(ex = X)),
   savefuns = TRUE, verbose = FALSE)
 res <- global_envelope_test(env, type = "erl")
 @
@@ -954,8 +954,8 @@ This scaling is applied to the set of curves given to the function \fct{graph.fa
 Because these test vectors (Equations~\ref{eq:graphfanova_means} and \ref{eq:graphfanova_contrasts}) are asymptotically exchangeable for permutations for the case of unequal variances and the null hypothesis of equal means only under the assumption of normality of stochastic processes $SP(\mu_j,\gamma_j)$ \citep{MrkvickaEtal2020}, the log transformation was applied to the NO$_x$ values prior to the transformation (Equation~\ref{eq:scaling}):
 %
 <<graphfanova_cset>>==
-cset <- create_curve_set(list(r=0:23,
-  obs=t(log(poblenou[['nox']][['data']]))))
+cset <- create_curve_set(list(r = 0:23,
+  obs = t(log(poblenou[['nox']][['data']]))))
 @
 %
 
