@@ -22,9 +22,7 @@ Authors@R: c(
 Maintainer: Mari Myllymäki <mari.myllymaki@luke.fi>
 Imports:
     ggplot2,
-    graphics,
     gridExtra,
-    methods,
     parallel,
     stats,
     utils,
