@@ -33,7 +33,6 @@
 \SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
 <<preliminaries, echo=FALSE, results=hide>>=
 options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
-set.seed(123)
 @
 
 %% -- Article metainformation (author, title, ...) -----------------------------
@@ -83,7 +82,7 @@ as implemented in the \proglang{R} package \pkg{GET}.
 \section{Introduction}
 
 This vignette gives examples of the use of global envelopes for the analysis of spatial point patterns.
-The examples utilize the \proglang{R} \citep{R2020} package \pkg{spatstat} \citep{spatstat2015} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2020}. The plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
+The examples utilize the \proglang{R} \citep{R2020} package \pkg{spatstat} \citep{spatstat2015} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2020}. The envelope plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
 %
 <<r_setup>>=
 library("GET")
@@ -100,7 +99,7 @@ theme_set(theme_bw(base_size = 9))
 In general, it is useful in the point pattern analysis utilize the \pkg{spatstat} package. The workflow utilizing spatstat with the \pkg{GET} package is typically the following:
 Say we have a point pattern, for which we would like to test a hypothesis, as a \code{ppp} object of spatstat. E.g.
 %
-<<workflow1>>=
+<<workflow_data>>=
 X <- spruces
 X
 @
@@ -120,23 +119,26 @@ i.e. an estimator of the $K$-function).
 Making 999 simulations of CSR and estimating $K$-function for each of them and data
 (the argument \code{simulate} specifies how to perform simulations under CSR):
 %
-<<workflow2>>=
-env <- envelope(X, nsim=999, savefuns=TRUE,
+<<setseed1, echo=FALSE>>=
+set.seed(123)
+@
+%
+<<workflow_sims>>=
+env <- envelope(X, nsim=1999, savefuns=TRUE,
                 simulate=expression(runifpoint(ex=X)),
                 verbose=FALSE)
 @
 %
-
 \item Perform the test
 %
-<<workflow3>>=
+<<workflow_test>>=
 res <- global_envelope_test(env)
 @
 %
 
 \item Plot the result
 %
-<<workflow4, fig=TRUE, width=3, height=3>>=
+<<workflow_res, fig=TRUE, width=3, height=3>>=
 plot(res)
 @
 %
@@ -173,35 +175,39 @@ See example in the help file of the \fct{global\_envelope\_test} function.
 
 Let us illustrate the CSR for the spruces data set from the R library \pkg{spatstat}.
 %
-<<spruces>>=
+<<spruces, fig=TRUE, width=4, height=2.5>>=
 X <- unmark(spruces)
-plot(X)
+par(mfrow = c(1,1), mgp = c(0, 0, 0), mar = c(0, 0, 0, 0))
+plot(X, main = "")
 @
 %
+
 Below the function \fct{envelope} of the \pkg{spatstat} package is used to generate point patterns under CSR (specified in the argument \code{simulate}) and to calculate the centred $L$-functions (specified below by the arguments \code{fun}, \code{correction} and \code{transform}), which are used here as the test functions.
+%
+<<setseed2, echo=FALSE>>=
+set.seed(123)
+@
 %
 <<spruces_csr, fig=TRUE, width=3, height=3>>=
 nsim <- 1999 # Number of simulations
-env <- envelope(X, fun="Lest", nsim=nsim,
-                savefuns=TRUE, # save the functions
-                correction="translate", # edge correction for L
-                transform = expression(.-r), # centering
-                simulate=expression(runifpoint(ex=X)), # Simulate CSR
-                verbose=FALSE)
-# The rank envelope test (ERL)
-res <- global_envelope_test(env, type="erl")
-# Plot the result
+env <- envelope(X, fun = "Lest", nsim = nsim,
+  savefuns = TRUE, # save the functions
+  correction = "translate", # edge correction for L
+  transform = expression(.-r), # centering
+  simulate = expression(runifpoint(ex = X)), # Simulate CSR
+  verbose = FALSE)
+res <- global_envelope_test(env, type = "erl")
 plot(res)
 @
 %
 
 It is possible to cut the functions to an interval of distances $[r_{\min}, r_{\max}]$ (at the same time creating a \code{curve_set} from \code{env}) and perform the test on the functions on this interval only:
 %
-<<spruces_csr_continues, fig=TRUE, width=3, height=3>>=
-cset <- crop_curves(env, r_min=1, r_max=7)
+<<spruces_csr_crop, fig=TRUE, width=3, height=3>>=
+cset <- crop_curves(env, r_min = 1, r_max = 7)
 # Do the rank envelope test (erl)
-res <- global_envelope_test(cset, type="erl")
-plot(res, ylab=expression(italic(hat(L)(r)-r)))
+res <- global_envelope_test(cset, type = "erl")
+plot(res) + ylab(expression(italic(hat(L)(r)-r)))
 @
 %
 
@@ -209,32 +215,38 @@ plot(res, ylab=expression(italic(hat(L)(r)-r)))
 
 Let now the studied marked point pattern be the spruces data with marks:
 %
-<<spruces_mpp>>=
+<<spruces_mpp, fig=TRUE, width=4, height=2.5>>=
 mpp <- spruces
-plot(mpp)
+par(mfrow=c(1,1), mgp=c(0, 0, 0), mar=c(0, 0, 0, 0))
+plot(mpp, main = "")
 @
 %
+
 As in the CSR test, to perform the test of random labelling hypothesis, first the \fct{envelope} function of \pkg{spatstat} can be used to generate simulations and calculate the test function $T(r)$ for the data pattern (mpp) and each simulation.
 Below the estimator of the mark-weighted $L$-function, $L_{mm}(r)$, with translational edge correction is used as the test function. The argument \code{simulate} specifies the simulations under the random labeling, i.e., simple permutation of the marks.
 %
+<<setseed3, echo=FALSE>>=
+set.seed(123)
+@
+%
 <<spruces_randomlabeling>>=
 nsim <- 1999 # Number of simulations
-env <- envelope(mpp, fun=Kmark, nsim = nsim, f=function(m1, m2) { m1*m2 },
-        correction="translate", returnL=TRUE,
-        simulate=expression(rlabel(mpp, permute=TRUE)), # Permute the marks
-        savefuns=TRUE, # Save the functions
-        verbose=FALSE)
+env <- envelope(mpp, fun = Kmark, nsim = nsim, f = function(m1, m2) { m1*m2 },
+  correction = "translate", returnL = TRUE,
+  simulate = expression(rlabel(mpp, permute = TRUE)), # Permute the marks
+  savefuns = TRUE, # Save the functions
+  verbose = FALSE)
 @
 Thereafter, the curves can be cropped to the desired $r$-interval and centered by the mean of the simulated functions for better visualization, before making the test.
 %
-<<spruces_randomlabeling2, fig=TRUE, width=3, height=3>>=
+<<spruces_randomlabeling_test, fig=TRUE, width=3, height=3>>=
 # Crop curves to desired r-interval
-curve_set <- crop_curves(env, r_min=1.5, r_max=9.5)
+curve_set <- crop_curves(env, r_min = 1.5, r_max = 9.5)
 # Center the functions, i.e. take \hat{L}_mm(r)-the mean of simulated functions.
 curve_set <- residual(curve_set)
 # The global envelope test
 res <- global_envelope_test(curve_set)
-plot(res, ylab=expression(italic(L[mm](r)-L(r))))
+plot(res) + ylab(expression(italic(L[mm](r)-L(r))))
 @
 %
 
@@ -244,7 +256,7 @@ Sometimes it may be desired to base the test on several test functions \citep{Mr
 Below it is illustrated how the CSR can be tested simultaneously by means of $L$, $F$, $G$ and $J$ functions for the saplings data set available in the \pkg{GET} library.
 First some setup:
 %
-<<combined1>>=
+<<combined_init>>=
 data(saplings)
 X <- as.ppp(saplings, W = square(75))
 
@@ -254,61 +266,61 @@ nsim <- 499 # Number of simulations
 n <- 500 # the number of r-values
 rmin <- 0; rmax <- 20; rstep <- (rmax-rmin)/n
 rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
-r <- seq(0, rmax, by=rstep)    # r-distances for Lest
-rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
+r <- seq(0, rmax, by = rstep)    # r-distances for Lest
+rJ <- seq(0, rmaxJ, by = rstepJ) # r-distances for Fest, Gest, Jest
 @
 %
-Then perform simulations of CSR and calculate the $L$-functions:
+Then perform simulations of CSR and calculate the $L$-functions saving the simulated patterns and functions:
 %
-<<combined2>>=
-env_L <- envelope(X, nsim=nsim,
-          simulate=expression(runifpoint(ex=X)),
-          fun="Lest", correction="translate",
-          transform=expression(.-r), # Take the L(r)-r function instead of L(r)
-          r=r,                       # Specify the distance vector
-          savefuns=TRUE,             # Save the estimated functions
-          savepatterns=TRUE,         # Save the simulated patterns
-          verbose=FALSE)
+<<setseed4, echo=FALSE>>=
+set.seed(123)
 @
 %
-The simulations can be obtained from the returned object:
-%
-<<combined3>>=
-simulations <- attr(env_L, "simpatterns")
+<<combined_simsL>>=
+env_L <- envelope(X, nsim = nsim,
+  simulate = expression(runifpoint(ex = X)),
+  fun = "Lest", correction = "translate",
+  transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+  r = r,                       # Specify the distance vector
+  savefuns = TRUE,             # Save the estimated functions
+  savepatterns = TRUE,         # Save the simulated patterns
+  verbose = FALSE)
+  # The simulations can be obtained from the returned object:
+  simulations <- attr(env_L, "simpatterns")
 @
 %
 And then the other test functions $F$, $G$, $J$ should be calculated for each simulated pattern:
 %
-<<combined4>>=
-env_F <- envelope(X, nsim=nsim,
-                simulate=simulations,
-                fun="Fest", correction="Kaplan", r=rJ,
-                savefuns=TRUE, verbose=FALSE)
-env_G <- envelope(X, nsim=nsim,
-                simulate=simulations,
-                fun="Gest", correction="km", r=rJ,
-                savefuns=TRUE, verbose=FALSE)
-env_J <- envelope(X, nsim=nsim,
-                simulate=simulations,
-                fun="Jest", correction="none", r=rJ,
-                savefuns=TRUE, verbose=FALSE)
+<<combined_simsFGJ>>=
+env_F <- envelope(X, nsim = nsim,
+  simulate = simulations,
+  fun = "Fest", correction = "Kaplan", r = rJ,
+  savefuns = TRUE, verbose = FALSE)
+env_G <- envelope(X, nsim = nsim,
+  simulate = simulations,
+  fun = "Gest", correction = "km", r = rJ,
+  savefuns = TRUE, verbose = FALSE)
+env_J <- envelope(X, nsim = nsim,
+  simulate = simulations,
+  fun = "Jest", correction = "none", r = rJ,
+  savefuns = TRUE, verbose = FALSE)
 @
 %
 All the curves can then be cropped to the desired r-interval $I$, if needed,
 %
-<<combined5>>=
-curve_set_L <- crop_curves(env_L, r_min=rmin, r_max=rmax)
-curve_set_F <- crop_curves(env_F, r_min=rminJ, r_max=rmaxJ)
-curve_set_G <- crop_curves(env_G, r_min=rminJ, r_max=rmaxJ)
-curve_set_J <- crop_curves(env_J, r_min=rminJ, r_max=rmaxJ)
+<<combined_crop>>=
+curve_set_L <- crop_curves(env_L, r_min = rmin, r_max = rmax)
+curve_set_F <- crop_curves(env_F, r_min = rminJ, r_max = rmaxJ)
+curve_set_G <- crop_curves(env_G, r_min = rminJ, r_max = rmaxJ)
+curve_set_J <- crop_curves(env_J, r_min = rminJ, r_max = rmaxJ)
 @
 %
 and finally the combined global envelope calculated and plotted
 %
-<<combined6, fig=TRUE, width=5, height=5>>=
-res <- global_envelope_test(curve_sets=list(curve_set_L, curve_set_F,
+<<combined_test, fig=TRUE, width=5, height=5>>=
+res_combined <- global_envelope_test(curve_sets = list(curve_set_L, curve_set_F,
                                           curve_set_G, curve_set_J))
-plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
+plot(res_combined, labels = c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 @
 %
 
@@ -316,41 +328,45 @@ plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 
 It is possible to perform a one-stage goodness-of-fit test for point process models as follows, accepting that the test may be conservative (or liberal). In literature, it has been recommended that the tests may be used if the test function is not closely related to the estimation procedure that was used to fit the model. However, \fct{GET.composite} can be used for adjusted tests, see the help file of this function and an example below.
 %
-<<goodness-of-fit1>>=
+<<HC_goodness-of-fit_model>>=
 X <- unmark(spruces)
 # Minimum distance between points in the pattern
 min(nndist(X))
 # Fit a model
-fittedmodel <- ppm(X, interaction=Hardcore(hc=1)) # Hardcore process
+fittedmodel <- ppm(X, interaction = Hardcore(hc = 1)) # Hardcore process
 @
 %
 
 Simulating Gibbs process by \fct{envelope} is slow, because it uses an MCMC algorithm
 %
-<<goodness-of-fit2>>=
-#env <- envelope(fittedmodel, fun="Jest", nsim=999, savefuns=TRUE,
-#                correction="none", r=seq(0, 4, length=500))
+<<HC_goodness-of-fit-empty>>=
+#env <- envelope(fittedmodel, fun = "Jest", nsim = 999, savefuns = TRUE,
+#                correction = "none", r = seq(0, 4, length = 500))
 @
 %
 Using direct algorihm can be faster, because the perfect simulation is used here.
 Therefore, in the following we utilize the function \fct{rHardcore}:
 %
-<<goodness-of-fit3, fig=TRUE, width=3, height=3>>=
+<<setseed5, echo=FALSE>>=
+set.seed(123)
+@
+%
+<<HC_goodness-of-fit_test, fig=TRUE, width=3, height=3>>=
 simulations <- NULL
 nsim <- 999 # Number of simulations
 for(j in 1:nsim) {
-   simulations[[j]] <- rHardcore(beta=exp(fittedmodel$coef[1]),
-                                 R=fittedmodel$interaction$par$hc,
-                                 W=X$window)
+   simulations[[j]] <- rHardcore(beta = exp(fittedmodel$coef[1]),
+                         R = fittedmodel$interaction$par$hc,
+                         W = X$window)
 }
-env <- envelope(X, simulate=simulations, fun="Jest",
-                nsim=length(simulations),
-                savefuns=TRUE, correction="none",
-                r=seq(0, 4, length=500),
-                verbose=FALSE)
-curve_set <- crop_curves(env, r_min=1, r_max=3.5)
-res <- global_envelope_test(curve_set, type="erl")
-plot(res, ylab=expression(italic(J(r))))
+env_HC <- envelope(X, simulate = simulations, fun = "Jest",
+  nsim = length(simulations),
+  savefuns = TRUE, correction = "none",
+  r = seq(0, 4, length = 500),
+  verbose = FALSE)
+curve_set <- crop_curves(env_HC, r_min = 1, r_max = 3.5)
+res_HC <- global_envelope_test(curve_set, type = "erl")
+plot(res_HC) + ylab(expression(italic(J(r))))
 @
 %
 
@@ -367,33 +383,35 @@ In the above example conditioning on the number of points was not employed.
 Let us test the fit of a Matern cluster process for the sapling data as an example of a composite hypothesis test.
 The adjusted test of the \pkg{GET} package is described in Section 2.3 of \citet{MyllymakiMrkvicka2020}. The procedure was suggested by \citet{BaddeleyEtal2017} and extended for global envelopes in \citet{MyllymakiMrkvicka2020}.
 %
-<<saplings>>=
+<<saplings, fig=TRUE, width=3, height=3>>=
 data(saplings)
 saplings <- as.ppp(saplings, W = square(75))
-plot(saplings)
+par(mfrow = c(1,1), mgp = c(0, 0, 0), mar = c(0, 0, 0, 0))
+plot(saplings, main = "")
 @
 %
+
 First define the $r$-distances and number of simulations. Here we set the number of simulations just to 19, for fast exploration of the code, but for serious analysis we recommend at least 499 simulations.
 %
 <<saplings_adjusted_init>>=
 rmin <- 0.3; rmax <- 10; rstep <- (rmax-rmin)/500
-r <- seq(0, rmax, by=rstep)
+r <- seq(0, rmax, by = rstep)
 nsim <- 19 # Increase nsim for serious analysis!
 @
 %
 The Matern cluster process can be fitted to the pattern using the \fct{ppm} function of \pkg{spatstat}. This utilizes minimum contrast estimation with the $K$-function.
-%
-<<saplings_adjusted_fit>>=
-M1 <- kppm(saplings~1, clusters = "MatClust", statistic="K")
-@
-%
 Then the adjusted global area rank envelope test can be performed using the function \fct{GET.composite}. Below we use the centred $L(r)$ function as the test function. The argument \code{type} specifies the global envelope test, see the help file of the \fct{global\_envelope\_test} function.
 %
+<<setseed6, echo=FALSE>>=
+set.seed(123)
+@
+%
 <<saplings_adjusted_test, fig=TRUE, width=3, height=3>>=
+M1 <- kppm(saplings~1, clusters = "MatClust", statistic = "K")
 adjenvL <- GET.composite(X = M1, nsim = nsim,
-            testfuns = list(L = list(fun="Lest", correction="translate",
-                 transform = expression(.-r), r=r)), # passed to envelope
-            type = "area", r_min=rmin, r_max=rmax, verbose=FALSE)
+  testfuns = list(L = list(fun="Lest", correction = "translate",
+       transform = expression(.-r), r = r)), # passed to envelope
+  type = "area", r_min = rmin, r_max = rmax, verbose = FALSE)
 plot(adjenvL)
 @
 %
@@ -410,25 +428,38 @@ data(bei)
 %
 Let us study the effect of gradient on the intensity of the trees. We define the full model including this interesting covariate and the reduced model, which is otherwise the same as the full model, but the interesting covariate is excluded. Further the function \fct{fitppm} defines how the (full or reduced) model can be fitted to the point pattern.
 %
-<<spatialF_bei, fig=TRUE, width=6, height=3>>=
+<<setseed7, echo=FALSE>>=
+set.seed(123)
+@
+%
+<<spatialF_bei>>=
 fullmodel <- ~ grad
 reducedmodel <- ~ 1
 fitppm <- function(X, model, covariates) {
-  ppm(X, model, covariates=covariates)
+  ppm(X, model, covariates = covariates)
 }
 
 nsim <- 19 # Increase nsim for serious analysis!
-res <- GET.spatialF(bei, fullmodel, reducedmodel,
+res_sF <- GET.spatialF(bei, fullmodel, reducedmodel,
                     fitppm, bei.extra, nsim)
-
-plot(res$F)
-plot(res$S)
+@
+%
+<<spatialF_bei_F, fig=TRUE, width=6, height=3>>=
+plot(res_sF$F)
+@
+%
+<<spatialF_bei_S, fig=TRUE, width=6, height=3>>=
+plot(res_sF$S)
 @
 %
 
 Another example is the test of the effect of elevation on the point pattern of lightnings.
 %
-<<spatialF_forestfires, fig=TRUE, width=6, height=3>>=
+<<setseed8, echo=FALSE>>=
+set.seed(123)
+@
+%
+<<spatialF_forestfires>>=
 # Example of forest fires
 data("clmfires")
 # Choose the locations of the lightnings in years 2004-2007:
@@ -443,10 +474,16 @@ covariates$forest <-
 fullmodel <- ~ elevation + landuse
 reducedmodel <- ~ landuse
 nsim <- 19 # Increase nsim for serious analysis!
-res <- GET.spatialF(pp.lightning, fullmodel, reducedmodel,
+res_sF2 <- GET.spatialF(pp.lightning, fullmodel, reducedmodel,
                     fitppm, covariates, nsim)
-plot(res$F)
-plot(res$S)
+@
+%
+<<spatialF_forestfires_F, fig=TRUE, width=6, height=3>>=
+plot(res_sF2$F)
+@
+%
+<<spatialF_forestfires_S, fig=TRUE, width=6, height=3>>=
+plot(res_sF2$S)
 @
 %
 
@@ -455,11 +492,11 @@ Above only the inhomogeneous Poisson process was used as the model. Examples of 
 <<spatialF_extra>>=
 # fitfun for the log Gaussian Cox Process with exponential covariance function
 fitLGCPexp <- function(X, model, covariates) {
-  kppm(X, model, clusters="LGCP", model="exponential", covariates=covariates)
+  kppm(X, model, clusters = "LGCP", model = "exponential", covariates = covariates)
 }
 # fitfun for the hardcore process with hardcore radius 0.01
 fitHardcore <- function(X, model, covariates) {
-  ppm(X, model, interaction=Hardcore(0.01), covariates = covariates)
+  ppm(X, model, interaction = Hardcore(0.01), covariates = covariates)
 }
 @
 %
@@ -483,8 +520,8 @@ nr <- 500
 rmin <- 0.3; rminJ <- 0.3
 rmax <- 10; rmaxJ <- 6
 rstep <- (rmax-rmin)/nr; rstepJ <- (rmaxJ-rminJ)/nr
-r <- seq(0, rmax, by=rstep)
-rJ <- seq(0, rmaxJ, by=rstepJ)
+r <- seq(0, rmax, by = rstep)
+rJ <- seq(0, rmaxJ, by = rstepJ)
 @
 %
 
@@ -496,15 +533,19 @@ from the binomial process, i.e. we deal with a simple hypothesis.
 First, the envelope function of the spatstat package can be used to generate nsim simulations under CSR and
 to calculate the centred $L$-function for the data and each simulation.
 %
+<<setseed9, echo=FALSE>>=
+set.seed(123)
+@
+%
 <<saplings_csr_L1>>=
-nsim <- 999 # Number of simulations
-env <- envelope(saplings, nsim=nsim,
-  simulate=expression(runifpoint(saplings$n, win=saplings$window)), # Simulate CSR
-  fun="Lest", correction="translate", # estimator of L with translational edge corr.
-  transform = expression(.-r),        # Take the L(r)-r function instead of L(r)
-  r=r,                                # Specify the distance vector
-  savefuns=TRUE,                      # Save the estimated functions
-  verbose=FALSE)
+nsim <- 1999 # Number of simulations
+env <- envelope(saplings, nsim = nsim,
+  simulate = expression(runifpoint(ex = saplings)), # Simulate CSR
+  fun = "Lest", correction = "translate", # estimator of L with transl. edge corr.
+  transform = expression(.-r), # Take the L(r)-r function instead of L(r)
+  r = r, # Specify the distance vector
+  savefuns = TRUE, # Save the estimated functions
+  verbose = FALSE)
 @
 %
 Then the curves can be cropped to the desired interval of distances $[r_{\min}, r_{\max}]$
@@ -516,35 +557,43 @@ curve_set <- crop_curves(env, r_min = rmin, r_max = rmax)
 And a global envelope test done by means of the \fct{global\_envelope\_test} function (\code{type="rank"} and larger \code{nsim} was used in \citet[][S4]{MyllymakiEtal2017}:
 %
 <<saplings_csr_L3, fig=TRUE, width=3, height=3>>=
-res <- global_envelope_test(curve_set, type="erl")
-plot(res, ylab=expression(italic(hat(L)(r)-r)))
+res_sapl <- global_envelope_test(curve_set, type = "erl")
+plot(res_sapl) + ylab(expression(italic(hat(L)(r)-r)))
 @
 %
+
 The CSR hypothesis is clearly rejected and the rank envelope indicates clear
 clustering of saplings. As a next step, we explore the Matern cluster process as a null model.
 This is a composite hypothesis.
 
 \subsection{Testing the fit of a Matern cluster process}
 
-First we fit the Matern cluster process to the pattern. Here we use the minimum contrast estimation with the $K$-funcion (the pair correction function can be chosen by setting \code{statistic="pcf"}).
+First we fit the Matern cluster process to the pattern. Here we use the minimum contrast estimation with the $K$-funcion (the pair correction function can be chosen by setting \code{statistic = "pcf"}).
 %
 <<saplings_matclust>>=
-fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic="K")
+fitted_model <- kppm(saplings~1, clusters = "MatClust", statistic = "K")
 @
 %
 Next step is to perform the adjusted directional quantile global envelope test using the centred $L$-function.
 (For the rank envelope test, choose \code{type = "rank"} instead and increase \code{nsim}.)
 %
-<<saplings_matclust2, fig=TRUE, width=3, height=3>>=
+<<setseed10, echo=FALSE>>=
+set.seed(123)
+@
+%
+<<saplings_matclust_L>>=
 nsim <- 19 # 19 just for experimenting with the code!!
 #nsim <- 499 # 499 is ok for type = 'qdir' (takes > 1 h)
-adjenvL <- GET.composite(X = fitted_model,
-                      fun="Lest", correction="translate",
-                      transform = expression(.-r), r=r,
-                      type = "qdir", nsim = nsim, nsimsub = nsim,
-                      r_min=rmin, r_max=rmax, verbose=FALSE)
-# Plot the test result
-plot(adjenvL, ylab=expression(italic(L(r)-r)))
+adjenvL_sapl <- GET.composite(X = fitted_model,
+  fun = "Lest", correction = "translate",
+  transform = expression(.-r), r = r,
+  type = "qdir", nsim = nsim, nsimsub = nsim,
+  r_min = rmin, r_max = rmax, verbose = FALSE)
+@
+%
+The result can then be plotted:
+<<saplings_matclust_L_plot, fig=TRUE, width=3, height=3>>=
+plot(adjenvL_sapl) + ylab(expression(italic(L(r)-r)))
 @
 %
 
@@ -554,15 +603,24 @@ To further explore the goodness-of-fit of the Matern cluster process, test the
 model with the $J$-function:
 This takes quite some time if \code{nsim} is reasonably large.
 %
-<<saplings_matclust3, fig=TRUE, width=3, height=3>>=
-adjenvJ <- GET.composite(X = fitted_model,
-                        fun="Jest", correction="none", r=rJ,
-                        type = "qdir", nsim = nsim, nsimsub = nsim,
-                        r_min=rminJ, r_max=rmaxJ, verbose=FALSE)
-# Plot the test result
-plot(adjenvJ, ylab=expression(italic(J(r))))
+<<setseed11, echo=FALSE>>=
+set.seed(123)
 @
 %
+<<saplings_matclust_J>>=
+adjenvJ_sapl <- GET.composite(X = fitted_model,
+  fun = "Jest", correction = "none", r = rJ,
+  type = "qdir", nsim = nsim, nsimsub = nsim,
+  r_min = rminJ, r_max = rmaxJ, verbose = FALSE)
+@
+%
+And, plot the result
+%
+<<saplings_matclust_J_plot, fig=TRUE, width=3, height=3>>=
+plot(adjenvJ_sapl) + ylab(expression(italic(J(r))))
+@
+%
+
 Thus, it appears that the Matern cluster process is not adequate for the saplings data.
 The Matern cluster model might be interpreted as a regeneration process in circular gaps
 between large trees. However, it is possible that the gap openings in the forest were not exactly
@@ -570,15 +628,19 @@ circular, thereby leading to the rejection of the model by the $J$-function.
 
 It is also possible to test the fit of the Matern cluster process simultaneously by the two test functions:
 %
+<<setseed12, echo=FALSE>>=
+set.seed(123)
+@
+%
 <<saplings_matclust4, fig=TRUE, width=5, height=3>>=
-adjenvLJ <- GET.composite(X = fitted_model,
-      testfuns = list(L = list(fun="Lest", correction="translate",
-                          transform = expression(.-r), r=r),
-                      J = list(fun="Jest", correction="none", r=rJ)),
-      type = "erl", nsim = nsim, nsimsub = nsim,
-      r_min=c(rmin, rminJ), r_max=c(rmax, rmaxJ),
-      save.cons.envelope=TRUE, verbose=FALSE)
-plot(adjenvLJ)
+adjenvLJ_sapl <- GET.composite(X = fitted_model,
+  testfuns = list(L = list(fun = "Lest", correction = "translate",
+                      transform = expression(.-r), r = r),
+                  J = list(fun = "Jest", correction = "none", r = rJ)),
+  type = "erl", nsim = nsim, nsimsub = nsim,
+  r_min = c(rmin, rminJ), r_max = c(rmax, rmaxJ),
+  save.cons.envelope = TRUE, verbose = FALSE)
+plot(adjenvLJ_sapl)
 @
 %
 

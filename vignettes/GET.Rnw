@@ -34,7 +34,6 @@
 <<preliminaries, echo=FALSE, results=hide>>=
 options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
 library("ggplot2")
-library("patchwork")
 library("GET")
 theme_set(theme_bw(base_size = 9))
 @
@@ -243,7 +242,6 @@ The \pkg{GET} package also provides functions for specific tasks (see Table~\ref
 The \fct{print} and \fct{plot} methods are available for the objects obtained as
 the output of the global envelope methods of \pkg{GET}. The plots present the results with IGI.
 They are produced using the \pkg{ggplot2} package \citep{Wickham2016}.
-This document further utilizes the \pkg{patchwork} package \citep{patchwork2020} for plot compositions.
 
 After defining the different types of global envelopes in Section \ref{sec:GEdef}, combined global envelopes and adjusted global envelope tests for composite null hypothesis are described in Sections \ref{sec:combinedGE} and \ref{sec:adjustedGE}, respectively. Further, guidance is given for choosing the type of the global envelope in Section \ref{sec:whichmeasure}.
 
@@ -541,8 +539,7 @@ First two \code{curve_set} objects were created containing the raw heights and t
 library("fda")
 years <- paste(1:18)
 curves <- growth[['hgtf']][years,]
-cset1 <- create_curve_set(list(r = as.numeric(years),
-  obs = curves))
+cset1 <- create_curve_set(list(r = as.numeric(years), obs = curves))
 cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
   obs = curves[-1,] - curves[-nrow(curves),]))
 @
@@ -563,19 +560,29 @@ A <- forder(csets, measure = 'area'); order(A)[1:10]
 @
 %
 Figure~\ref{fig:girls_curves} highlights the curves of the three most extreme girls.
+The plots of the two sets of curves were produced using the \pkg{GET} and \pkg{ggplot2} packages and combined by the \pkg{patchwork} package \citep{patchwork2020}:
+%
+<<girls_curves, fig=FALSE, height=3.0625, width=6.125>>==
+library("ggplot2")
+library("patchwork")
+cols <- c("#21908CFF", "#440154FF", "#5DC863FF")
+p1 <- plot(cset1, idx = order(A)[1:3], col_idx = cols) +
+  labs(x = "Age (years)", y = "Height")
+p2 <- plot(cset2, idx = order(A)[1:3], col_idx = cols) +
+  labs(x = "Age (years)", y = "Change")
+p1 + p2 + plot_layout(guides = "collect")
+@
+%
 \begin{figure}[ht!]
 \centering
-<<girls_curves, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
-col3 <- c("#21908CFF", "#440154FF", "#5DC863FF")
-p1 <- plot(cset1, idx = order(A)[1:3], col_idx = col3) +
-  labs(x = "Age (years)", y = "Height")
-p2 <- plot(cset2, idx = order(A)[1:3], col_idx = col3) +
-  labs(x = "Age (years)", y = "Change")
+<<girls_curves_fig, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
 p1 + p2 + plot_layout(guides = "collect")
 @
   \caption{The heights (left) and height differences (right) of the 54 girls of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages from 1 to 18. Three girls having the most extreme curves (joint ordering by the area measure) are highlighted with the colors specified in the legend.}
   \label{fig:girls_curves}
 \end{figure}
+
+The labels were above redefined for the default plots by the function \fct{labs} of the \pkg{ggplot2} package. In general, parts of the default plots of \pkg{GET} can be edited in this manner using \pkg{ggplot2} functions such as \fct{labs}.
 
 By using the functional boxplot \citep{SunGenton2011} with the same measure, an investigation can be made into whether the most extreme girls are outliers with respect to height or its change. Figure~\ref{fig:girls_fboxplot} shows the 50\% central region and the functional boxplot with the inflation factor 1.5 jointly for the heights and their changes obtained by:
 %
@@ -595,10 +602,10 @@ plot(res) + labs(x = "Age (years)", y = "Value")
   \label{fig:girls_fboxplot}
 \end{figure}
 %
-
 One can see that one of the girls (the 15th girl in fact) is an outlier, because she has grown extraordinarily much in her sixth year. However, the highest height curve of Figure~\ref{fig:girls_curves} (left) is not regarded as an outlier with the given specifications.
 
-It is important to note that the combined central region computed using any measure of Table~\ref{tab:GEoverview} has IGI. On the contrary, central regions computed with the use of band depths in the \pkg{fda} package do not satisfy IGI. \citet{NarisettyNair2016} proposed central regions and functional boxplots based on the \code{'erl'} measure (see Table~\ref{tab:GEoverview}) and compared them to those based on band depths.
+It is important to note that the combined central region computed using any measure of Table~\ref{tab:GEoverview} has IGI. On the contrary, central regions computed with the use of band depths in the \pkg{fda} package do not satisfy IGI. \citet{NarisettyNair2016} proposed central regions and functional boxplots based on the ERL measure (see Table~\ref{tab:GEoverview}) and compared them to those based on band depths.
+
 
 
 \subsection{Monte Carlo goodness-of-fit testing for simple hypotheses: complete spatial randomness}\label{sec:GOT} 
@@ -965,11 +972,15 @@ To sample from the null hypotheses, the simple permutation of raw functions amon
 set.seed(190503)
 @
 %
-\begin{figure}[ht!]
-  \centering
-<<graphfanova_logNOx, echo=TRUE, fig=TRUE, height=2.722, width=6.125>>==
+<<graphfanova_logNOx, echo=TRUE, fig=FALSE, height=2.722, width=6.125>>==
 res.c <- graph.fanova(nsim = 2999, curve_set = cset, groups = Type,
   variances = "unequal", contrasts = TRUE)
+plot(res.c)
+@
+%
+\begin{figure}[ht!]
+  \centering
+<<graphfanova_logNOx, echo=FALSE, fig=TRUE, height=2.722, width=6.125>>==
 plot(res.c)
 @
   \caption{The output of the graphical functional ANOVA to test the difference between the type of the day on the log NO$_x$ levels observed each hour ($r$) of the day. The 95\% global envelope (ERL; gray band) accompanied with the observed differences between the group means (solid line with red dots when outside the envelope).}
@@ -988,13 +999,20 @@ When a graphical interpretation for group specific differences is not of interes
 
 Similar type of methods as in the functional one-way ANOVA above can be used in a more general setup of functional general linear models (GLMs).
 The global envelopes for functional GLMs are illustrated here by an example of a small subset of the autism brain imaging data collected by resting state functional magnetic resonance imaging (R-fMRI) \citep{DiMartinoEtal2014}. The preprocessed fMRI data contains measurements from 514 individuals with the autism spectrum disorder (ASD) and 557 typical controls (TC), where subjects with low quality on imaging data or having a large proportion of the missing values were removed. The imaging measurement for local brain activity at resting state was fractional amplitude of low frequency fluctuations \citep{ZouEtal2008}.
-The data considered here and available as the data object \code{abide_9002_23} in the \pkg{GET} package contains data from one of the 116 different anatomical regions in the brain partitioning being based on the anotomical automatic labeling system of \citet{Tzourio-MazoyerEtal2002}. The studied region is the right Crus Cerebellum 1 region of the brain at one slice (23) accompanied with three subject-specific factors, i.e., group (autism and control), sex and age.
-In the examples below, the effect of the group on the images is studied in the presence of nuisance factors sex and age. Figure~\ref{fig:abide_9002_23_subj1and27} shows the data for two subjects, illustrating the small region used as the example.
+The data considered here and available as the data object \code{abide_9002_23} in the \pkg{GET} package contains data from one of the 116 different anatomical regions in the brain partitioning being based on the anotomical automatic labeling system of \citet{Tzourio-MazoyerEtal2002}.
+The studied region is the right Crus Cerebellum 1 region of the brain at one slice (23) accompanied with three subject-specific factors, i.e., group (autism and control), sex and age. Figure~\ref{fig:abide_9002_23_subj1and27} obtained by
+%
+<<abide_9002_23_subj1and27_data, fig=FALSE>>==
+data("abide_9002_23")
+plot(abide_9002_23$curve_set, idx = c(1, 27))
+@
+%
+shows the data for two subjects, illustrating the small region used as the example.
+In the examples below, the effect of the group on the images is studied in the presence of nuisance factors sex and age.
 
 \begin{figure}[ht!]
 \centering
 <<abide_9002_23_subj1and27, echo=FALSE, fig=TRUE, height=2.5, width=5>>==
-data("abide_9002_23")
 plot(abide_9002_23$curve_set, idx = c(1, 27))
 @
   \caption{The example brain image data in the right Crus Cerebellum 1 region at a slice for one subject from the autism group (subject number 1) and one from the control group (subject number 27).}
@@ -1040,7 +1058,7 @@ res <- graph.flm(nsim = 999, formula.full = Y ~ Group + Sex + Age,
 %
 Here the arguments \code{formula.full} and \code{formula.reduced} specify the full GLM and the GLM where the interesting factor has been dropped out, and the number of simulations is given in \code{nsim}. Further arguments to \fct{global\_envelope\_test} can be passed in \code{GET.args}, e.g., the type of the global envelope.
 
-The \code{r} component of the \code{abide_9002_23[['curve_set']]} object is a data frame with columns "x", "y", "width" and "height", where the width and height give the width and height of the pixels placed at x and y. When such two-dimensional argument values are provided in a \code{curve_set} object, the resulting default envelope plots produced by
+The \code{r} component of the \code{abide_9002_23[['curve_set']]} object is a data frame with columns \code{x}, \code{y}, \code{width} and \code{height}, where the \code{width} and \code{height} give the width and height of the pixels placed at \code{x} and \code{y}. When such two-dimensional argument values are provided in a \code{curve_set} object, the resulting default envelope plots produced by
 %
 <<flm_graph_plot>>==
 plot(res)
