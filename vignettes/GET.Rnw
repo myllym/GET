@@ -609,7 +609,7 @@ Figure~\ref{fig:adulttrees} shows the locations of 67 large trees (with height $
 \centering
 <<adulttrees, echo=FALSE, fig=TRUE, height=3.0625, width=3.0625>>==
 data("adult_trees")
-ggplot(adult_trees) + geom_point(aes(x=x, y=y)) +
+ggplot(adult_trees) + geom_point(aes(x = x, y = y)) +
   xlim(c(0, 75)) + ylim(c(0, 75)) + coord_cartesian(expand = FALSE)
 @
   \caption{Locations of 67 trees with height $> 25$ m observed in an area of $75\text{ m}\times 75\text{ m}$.}
@@ -729,7 +729,7 @@ and, using the function \fct{ecdf} of the \proglang{R} package \pkg{stats} \cite
 %
 <<adjtest_sim1>>==
 nsim <- nsimsub <- 199 # The number of simulations
-r <- seq(min(dat), max(dat), length=100)
+r <- seq(min(dat), max(dat), length = 100)
 obs <- stats::ecdf(dat)(r)
 sim <- sapply(1:nsimsub, function(i) {
   x <- rnorm(n, mean = mu, sd = sigma)
@@ -760,7 +760,7 @@ for(rep in 1:nsim) {
 Thus, the list \code{cset.ls} contains all the simulations from the second stage of the algorithm. As a final step, \fct{GET.composite} can be used to prepare the adjusted test:
 %
 <<adjtest_get, fig=FALSE>>==
-res <- GET.composite(X=cset, X.ls=cset.ls, type='erl')
+res <- GET.composite(X = cset, X.ls = cset.ls, type = 'erl')
 plot(res) + labs(x = "NOx", y = "Ecdf")
 @
 %
@@ -801,7 +801,7 @@ for(rep in 1:nsim) {
     sim_m = sim2))
 }
 # Perform the adjusted test
-res <- GET.composite(X=cset, X.ls=cset.ls, type='erl')
+res <- GET.composite(X = cset, X.ls = cset.ls, type = 'erl')
 p2 <- plot(res) + labs(x = "NOx", y = "Ecdf")
 @
 %
@@ -840,15 +840,15 @@ set.seed(190503)
 @
 %
 <<necdfs_10>>==
-fm10.l <- list(Girls=growth$hgtf["10",], Boys=growth$hgtm["10",])
-res10 <- GET.necdf(fm10.l, nsim=1999)
+fm10.l <- list(Girls = growth$hgtf["10",], Boys = growth$hgtm["10",])
+res10 <- GET.necdf(fm10.l, nsim = 1999)
 plot(res10)
 @
 %
 <<necdfs_14, echo=FALSE>>==
 set.seed(190503)
-fm14.l <- list(Girls=growth$hgtf["14",], Boys=growth$hgtm["14",])
-res14 <- GET.necdf(fm14.l, nsim=1999)
+fm14.l <- list(Girls = growth$hgtf["14",], Boys = growth$hgtm["14",])
+res14 <- GET.necdf(fm14.l, nsim = 1999)
 @
 %
 The height distributions at age 10 do not differ from each other significantly, but at age 14 the boys are taller, particularly with a difference that the proportion of girls reaching a height of around 175 cm is much lower (Figure~\ref{fig:necdfs_means_GET}, right).
@@ -858,13 +858,13 @@ The height distributions at age 10 do not differ from each other significantly, 
 <<necdfs, echo=FALSE, fig=TRUE, height=2.8625, width=5.125>>==
 nG <- length(fm10.l$Girls); nB <- length(fm10.l$Boys)
 df <- data.frame(Height = c(fm10.l$Girls, fm14.l$Girls, fm10.l$Boys, fm14.l$Boys),
-  Gender = c(rep("Girls", times=2*nG), rep("Boys", times=2*nB)),
-  Age = c(rep("Age 10", times=nG), rep("Age 14", times=nG),
-          rep("Age 10", times=nB), rep("Age 14", times=nB)))
+  Gender = c(rep("Girls", times = 2*nG), rep("Boys", times = 2*nB)),
+  Age = c(rep("Age 10", times = nG), rep("Age 14", times = nG),
+          rep("Age 10", times = nB), rep("Age 14", times = nB)))
 ggplot(df, aes(Height, colour = Gender)) + facet_wrap("Age") + stat_ecdf() +
   scale_color_manual(values = c("#440154FF", "#5DC863FF")) +
-  xlab(substitute(paste(italic(i), " (", j, ")", sep=""),
-    list(i="x", j="Height in cm")))
+  xlab(substitute(paste(italic(i), " (", j, ")", sep = ""),
+    list(i = "x", j = "Height in cm")))
 @
   \caption{The empirical cumulative distribution functions of the heights of the 54 girls and 39 boys of the \code{growth} data of the \proglang{R} package \pkg{fda} at ages 10 (left) and 14 (right).}
   \label{fig:necdfs}
@@ -892,7 +892,7 @@ The trajectories of the 24 h observations of the NO$_x$ levels for Monday-Thursd
 library("fda.usc")
 data("poblenou")
 fest <- poblenou$df$day.festive; week <- as.integer(poblenou$df$day.week)
-Type <- vector(length=length(fest))
+Type <- vector(length = length(fest))
 Type[fest == 1 | week >= 6] <- "Free"
 Type[fest == 0 & week %in% 1:4] <- "MonThu"
 Type[fest == 0 & week == 5] <- "Fri"
@@ -995,7 +995,7 @@ In the examples below, the effect of the group on the images is studied in the p
 \centering
 <<abide_9002_23_subj1and27, echo=FALSE, fig=TRUE, height=2.5, width=5>>==
 data("abide_9002_23")
-plot(abide_9002_23$curve_set, idx=c(1, 27))
+plot(abide_9002_23$curve_set, idx = c(1, 27))
 @
   \caption{The example brain image data in the right Crus Cerebellum 1 region at a slice for one subject from the autism group (subject number 1) and one from the control group (subject number 27).}
   \label{fig:abide_9002_23_subj1and27}
@@ -1109,7 +1109,7 @@ set.seed(190504)
 # f(x) = 0.8x - 1.8x^2 + 1.05x^3 for x in [0,1]
 par <- c(0,0.8,-1.8,1.05) # Parameters of the true polynomial model
 res <- 100 # Resolution
-x <- seq(0, 1, by=1/res); x2=x^2; x3=x^3;
+x <- seq(0, 1, by = 1/res); x2 = x^2; x3 = x^3;
 f <- par[1] + par[2]*x + par[3]*x^2 + par[4]*x^3 # The true function
 d <- f + rnorm(length(x), 0, 0.04) # Data
 
@@ -1124,7 +1124,7 @@ B <- 2000 # Number of bootstrap samples
 ftheta1 <- array(0, c(B,length(x)))
 s1 <- array(0,B)
 for(i in 1:B) {
-  u <- sample(resid0, size=length(resid0), replace=TRUE)
+  u <- sample(resid0, size = length(resid0), replace = TRUE)
   reg1 <- lm((ftheta+u) ~ x + x2 + x3)
   ftheta1[i,] <- reg1$fitted.values
   s1[i] <- sd(reg1$residuals)
@@ -1136,8 +1136,8 @@ m <- array(0, c(B,length(x)))
 for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
 
 # Central region computation
-boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
-cr <- central_region(boot.cset, coverage=0.95, type="erl")
+boot.cset <- create_curve_set(list(r = 1:length(x), obs = ftheta+s0*t(m)))
+cr <- central_region(boot.cset, coverage = 0.95, type = "erl")
 plot(cr) + labs(x = expression(italic(x)), y = expression(italic(f(x)))) +
   geom_point(data = data.frame(id = 1:length(d), points = d),
     aes(x = id, y = points)) + # data points
