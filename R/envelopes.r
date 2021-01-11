@@ -797,6 +797,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' See Myllymäki and Mrkvička (2020, Section 2.), i.e. \code{vignette("GET")}, for more detailed description of the measures and
 #' the corresponding envelopes.
 #'
+#' See \code{vignette("pointpatterns")} for examples of point pattern analyses.
 #' @section Procedure:
 #' 1) First the curves are ranked from the most extreme one to the least extreme one
 #' by a measure that is specified by the argument \code{type}. The options are
@@ -961,32 +962,6 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   res <- global_envelope_test(cset, type="erl")
 #'   plot(res) + ggplot2::ylab(expression(italic(L(r)-r)))
 #'
-#'   \donttest{
-#'   # Random labeling test
-#'   #=====================
-#'   mpp <- spruces
-#'   # 1) Perform simulations under the random labelling hypothesis and calculate
-#'   # the test function T(r) for the data pattern (mpp) and each simulation.
-#'   # The command below specifies that the test function is T(r) = \hat{L}_mm(r),
-#'   # which is an estimator of the mark-weighted L function, L_mm(r),
-#'   # with translational edge correction.
-#'   nsim <- 1999 # Number of simulations
-#'   env <- envelope(mpp, fun=Kmark, nsim=nsim, f=function(m1, m2) { m1*m2 },
-#'                   correction="translate", returnL=TRUE,
-#'                   simulate=expression(rlabel(mpp, permute=TRUE)), # Permute the marks
-#'                   savefuns=TRUE) # Save the functions
-#'   # 2)
-#'   # Crop curves to desired r-interval
-#'   curve_set <- crop_curves(env, r_min=1.5, r_max=9.5)
-#'   # Center the functions, i.e. take \hat{L}_mm(r)-T_0(r).
-#'   # Below T_0(r) = \hat{L}(r) is the mean of simulated functions.
-#'   # (This is only for visualization, does not affect the test result.)
-#'   curve_set <- residual(curve_set)
-#'   # 3) Do the rank envelope test
-#'   res <- global_envelope_test(curve_set)
-#'   # 4) Plot the test result
-#'   plot(res, ylab=expression(italic(L[mm](r)-L(r))))
-#'
 #'   # A combined global envelope test
 #'   #================================
 #'   # As an example test CSR of the saplings point pattern by means of
@@ -1035,7 +1010,6 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'                                               G=curve_set_G, J=curve_set_J))
 #'   plot(res)
 #'   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
-#'   }
 #' }
 #'
 #' # A test based on a low dimensional random vector
