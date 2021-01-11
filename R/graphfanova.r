@@ -291,8 +291,8 @@ contrasts.m <- function(x, groups, ...) {
 #' data("imageset3")
 #' \dontshow{
 #' # Cut the data to reduce time
-#' imageset3$image_set$r <- imageset3$image_set$r[c(1:10, 52:62, 103:113),]
-#' imageset3$image_set$funcs <- imageset3$image_set$funcs[c(1:10, 52:62, 103:113), ]
+#' imageset3$image_set$r <- imageset3$image_set$r[c(1:3, 52:55, 103),]
+#' imageset3$image_set$funcs <- imageset3$image_set$funcs[c(1:3, 52:55, 103), ]
 #' }
 #' res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
 #'                     curve_set = imageset3$image_set,

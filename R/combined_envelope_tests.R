@@ -75,6 +75,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #'   rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
 #'   r <- seq(0, rmax, by=rstep)    # r-distances for Lest
 #'   rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
+#'   \dontshow{r <- r[1:50]; rJ <- rJ[1:50]}
 #'
 #'   # Perform simulations of CSR and calculate the L-functions
 #'   env_L <- envelope(X, nsim=nsim,
