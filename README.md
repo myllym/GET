@@ -5,9 +5,9 @@ https://cran.r-project.org/package=GET
 
 The `R` package `GET` provides global envelopes which can be used for central regions of functional or multivariate data (e.g. outlier detection, functional boxplot), for graphical Monte Carlo and permutation tests where the test statistic is a multivariate vector or function (e.g. goodness-of-fit testing for point patterns and random sets, functional ANOVA, functional GLM, n-sample test of correspondence of distribution functions), and for global confidence and prediction bands (e.g. confidence band in polynomial regression, Bayesian posterior prediction).
 
-## This is the development version
+## The development version
 
-This repository holds a copy of the current development version of the contributed R package `GET`.
+The github repository holds a copy of the current development version of the contributed R package `GET`.
 
 This development version is as or more recent than the official release of `GET` on the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/package=GET
 
@@ -52,6 +52,21 @@ have MiKTeX on your computer, and install the library with
 install_github('myllym/GET', build_vignettes = TRUE)
 ```
 
+## Vignettes
+
+The package contains two vignettes. The GET vignette describes the package in general. It is available by starting `R` and typing
+```R
+library("GET")
+vignette("GET")
+```
+This vignette corresponds to Myllymäki and Mrkvička (2020).
+
+The package provides also a vignette for global envelopes for point pattern analyses, which is available by starting `R` and typing
+```R
+library("GET")
+vignette("pointpatterns")
+```
+
 ## Branches
 
 The branch for public use is called `master`. There are no other public branches at the moment.
@@ -61,7 +76,7 @@ The branch 'no_fastdepth' of the library `spptest` was taken as the master branc
 
 To cite GET in publications use
 
-Myllymäki, M. and Mrkvička, T. (2019). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME] URL: https://arxiv.org/abs/1911.06583
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).
 Global envelope tests for spatial processes. Journal of the Royal Statistical Society:
