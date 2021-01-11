@@ -16,12 +16,8 @@
 #'   # Heights
 #'   cset1 <- create_curve_set(list(r = as.numeric(years),
 #'                                  obs = curves))
-#'   plot(cset1, ylab="Height")
 #'   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
 #'   plot(bp)
-#'   # Use fbplot from fda:
-#'   area_depth <- forder(cset1, measure="area")
-#'   fda::fbplot(fit=cset1$funcs, x=cset1$r, depth=area_depth, factor=1)
 #'
 #'   # Considering simultaneously heights and height differences
 #'   cset2 <- create_curve_set(list(r = as.numeric(years[-1]),

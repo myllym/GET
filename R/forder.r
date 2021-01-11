@@ -375,10 +375,8 @@ combined_forder <- function(curve_sets, ...) {
 #'   curves <- fda::growth[['hgtf']][years,]
 #'   cset1 <- create_curve_set(list(r = as.numeric(years),
 #'                                  obs = curves))
-#'   plot(cset1, ylab="Height")
 #'   cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
 #'                                  obs = curves[-1,] - curves[-nrow(curves),]))
-#'   plot(cset2)
 #'
 #'   # Order the girls from most extreme one to the least extreme one, below using the 'area' measure
 #'   # a) according to their heights

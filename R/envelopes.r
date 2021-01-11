@@ -655,7 +655,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' if(requireNamespace("fda", quietly=TRUE)) {
 #'   curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
 #'                                      obs=fda::growth$hgtf))
-#'   plot(curve_set, ylab="height")
+#'   plot(curve_set) + ggplot2::ylab("height")
 #'   cr <- central_region(curve_set, coverage=0.50, type="erl")
 #'   plot(cr)
 #' }
@@ -939,7 +939,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   cset <- create_curve_set(list(r=r, obs=obs, sim_m=sim))
 #'   # Perform the test
 #'   res <- global_envelope_test(cset, type="erl")
-#'   plot(res, ylab=expression(italic(hat(L)(r)-r)))
+#'   plot(res) + ggplot2::ylab(expression(italic(hat(L)(r)-r)))
 #'
 #'   # Simple hypothesis for a point pattern utilizing the spatstat package
 #'   #=====================================================================
@@ -959,7 +959,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   cset <- crop_curves(env, r_min=1, r_max=7)
 #'   # Do the rank envelope test (erl)
 #'   res <- global_envelope_test(cset, type="erl")
-#'   plot(res, ylab=expression(italic(L(r)-r)))
+#'   plot(res) + ggplot2::ylab(expression(italic(L(r)-r)))
 #'
 #'   \donttest{
 #'   # Random labeling test
