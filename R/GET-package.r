@@ -23,9 +23,9 @@
 #' from the tested null model. The methods are applicable for any multivariate
 #' vector data and functional data (after discretization).
 #'
-#' To get an overview of the package, start R and type \code{library(GET)} and \code{vignette("GET")}.
+#' To get an overview of the package, start R and type \code{library("GET")} and \code{vignette("GET")}.
 #'
-#' To get examples of point pattern analysis, start R and type \code{library(GET)} and \code{vignette("pointpatterns")}.
+#' To get examples of point pattern analysis, start R and type \code{library("GET")} and \code{vignette("pointpatterns")}.
 #'
 #' @section Key functions in \pkg{GET}:
 #' \itemize{
@@ -144,7 +144,7 @@
 #'       \code{plot(res)}
 #' }
 #'
-#' 2) The workflow utilizing \pkg{spatstat}: start R, type \code{library(GET)} and \code{vignette("pointpatterns")},
+#' 2) The workflow utilizing \pkg{spatstat}: start R, type \code{library("GET")} and \code{vignette("pointpatterns")},
 #' which explains the workflow and gives many examples of point pattern analysis
 #'
 #' @section Functions for modifying sets of functions:
@@ -188,15 +188,15 @@
 #' @section Documentation:
 #' Myllymäki and Mrkvička (2020) provides description of the package.
 #' The material can also be found in the corresponding vignette, which is available by
-#' starting R and typing \code{library(GET)} and \code{vignette("GET")}.
+#' starting R and typing \code{library("GET")} and \code{vignette("GET")}.
 #'
 #' In the special case of spatial processes (spatial point processes, random sets),
 #' the functions are typically estimators of summary functions. The package supports
-#' the use of the R library \pkg{spatstat} for generating simulations and calculating
+#' the use of the R package \pkg{spatstat} for generating simulations and calculating
 #' estimators of the chosen summary function, but alternatively these can be done by
 #' any other way, thus allowing for any user-specified models/functions.
 #' To see examples of global envelopes for analysing point pattern data,
-#' start R, type \code{library(GET)} and \code{vignette("pointpatterns")}.
+#' start R, type \code{library("GET")} and \code{vignette("pointpatterns")}.
 #'
 #' Type citation("GET") to get a full list of references.
 #'

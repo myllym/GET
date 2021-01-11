@@ -62,7 +62,7 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #'   # topsoil zinc concentration, mg kg-1 soil ("ppm")
 #'   bubble(meuse, "zinc",
 #'          col=c("#00ff0088", "#00ff0088"), main="zinc concentrations (ppm)")
-#'   # Variogram can be calculated as follows by the function variogram of the gstat library.
+#'   # Variogram can be calculated as follows by the function variogram of the gstat package.
 #'   # The function variogram takes a formula as its first argument:
 #'   # log(zinc)~1 means that we assume a constant trend for the variable log(zinc).
 #'   lzn.vgm <- variogram(object=log(zinc)~1, data=meuse)
