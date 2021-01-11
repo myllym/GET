@@ -56,7 +56,7 @@ if(require("spatstat", quietly=TRUE)) {
   # Perform a global envelope test
   res <- global_envelope_test(curve_set, type="erl") # type="rank" and larger nsim was used in S4.
   # Plot the result.
-  plot(res, ylab=expression(italic(hat(L)(r)-r)))
+  plot(res) + ggplot2::ylab(expression(italic(hat(L)(r)-r)))
 
   # -> The CSR hypothesis is clearly rejected and the rank envelope indicates clear
   # clustering of saplings. Next we explore the Matern cluster process as a null model.
@@ -81,7 +81,7 @@ if(require("spatstat", quietly=TRUE)) {
                      type="qdir", nsim=nsim, nsimsub=nsim,
                      r_min=rmin, r_max=rmax)
   # Plot the test result
-  plot(adjenvL, ylab=expression(italic(L(r)-r)))
+  plot(adjenvL) + ggplot2::ylab(expression(italic(L(r)-r)))
 
   # From the test with the L(r)-r function, it appears that the Matern cluster model would be
   # a reasonable model for the saplings pattern.
@@ -93,7 +93,7 @@ if(require("spatstat", quietly=TRUE)) {
                      type="qdir", nsim=nsim, nsimsub=nsim,
                      r_min=rminJ, r_max=rmaxJ)
   # Plot the test result
-  plot(adjenvJ, ylab=expression(italic(J(r))))
+  plot(adjenvJ) + ggplot2::ylab(expression(italic(J(r))))
   # -> the Matern cluster process not adequate for the saplings data
 
   # Test with the two test functions jointly

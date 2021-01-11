@@ -177,7 +177,7 @@ functions are concatenated together into a one long vector (see again Myllymäki
 if(requireNamespace("fda", quietly=TRUE)) {
   curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
                                      obs=fda::growth$hgtf))
-  plot(curve_set, ylab="height")
+  plot(curve_set) + ggplot2::ylab("height")
   cr <- central_region(curve_set, coverage=0.50, type="erl")
   plot(cr)
 }

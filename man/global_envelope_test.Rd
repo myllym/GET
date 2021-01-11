@@ -148,6 +148,8 @@ envelope tests available. The unscaled envelope is provided as a reference.
 
 See Myllymäki and Mrkvička (2020, Section 2.), i.e. \code{vignette("GET")}, for more detailed description of the measures and
 the corresponding envelopes.
+
+See \code{vignette("pointpatterns")} for examples of point pattern analyses.
 }
 \section{Procedure}{
 
@@ -233,7 +235,7 @@ if(require("spatstat", quietly=TRUE)) {
   cset <- create_curve_set(list(r=r, obs=obs, sim_m=sim))
   # Perform the test
   res <- global_envelope_test(cset, type="erl")
-  plot(res, ylab=expression(italic(hat(L)(r)-r)))
+  plot(res) + ggplot2::ylab(expression(italic(hat(L)(r)-r)))
 
   # Simple hypothesis for a point pattern utilizing the spatstat package
   #=====================================================================
@@ -253,33 +255,7 @@ if(require("spatstat", quietly=TRUE)) {
   cset <- crop_curves(env, r_min=1, r_max=7)
   # Do the rank envelope test (erl)
   res <- global_envelope_test(cset, type="erl")
-  plot(res, ylab=expression(italic(L(r)-r)))
-
-  \donttest{
-  # Random labeling test
-  #=====================
-  mpp <- spruces
-  # 1) Perform simulations under the random labelling hypothesis and calculate
-  # the test function T(r) for the data pattern (mpp) and each simulation.
-  # The command below specifies that the test function is T(r) = \hat{L}_mm(r),
-  # which is an estimator of the mark-weighted L function, L_mm(r),
-  # with translational edge correction.
-  nsim <- 1999 # Number of simulations
-  env <- envelope(mpp, fun=Kmark, nsim=nsim, f=function(m1, m2) { m1*m2 },
-                  correction="translate", returnL=TRUE,
-                  simulate=expression(rlabel(mpp, permute=TRUE)), # Permute the marks
-                  savefuns=TRUE) # Save the functions
-  # 2)
-  # Crop curves to desired r-interval
-  curve_set <- crop_curves(env, r_min=1.5, r_max=9.5)
-  # Center the functions, i.e. take \hat{L}_mm(r)-T_0(r).
-  # Below T_0(r) = \hat{L}(r) is the mean of simulated functions.
-  # (This is only for visualization, does not affect the test result.)
-  curve_set <- residual(curve_set)
-  # 3) Do the rank envelope test
-  res <- global_envelope_test(curve_set)
-  # 4) Plot the test result
-  plot(res, ylab=expression(italic(L[mm](r)-L(r))))
+  plot(res) + ggplot2::ylab(expression(italic(L(r)-r)))
 
   # A combined global envelope test
   #================================
@@ -296,6 +272,7 @@ if(require("spatstat", quietly=TRUE)) {
   rminJ <- 0; rmaxJ <- 8; rstepJ <- (rmaxJ-rminJ)/n
   r <- seq(0, rmax, by=rstep)    # r-distances for Lest
   rJ <- seq(0, rmaxJ, by=rstepJ) # r-distances for Fest, Gest, Jest
+  \dontshow{r <- r[1:50]; rJ <- rJ[1:50]}
 
   # Perform simulations of CSR and calculate the L-functions
   env_L <- envelope(X, nsim=nsim,
@@ -328,7 +305,6 @@ if(require("spatstat", quietly=TRUE)) {
                                               G=curve_set_G, J=curve_set_J))
   plot(res)
   plot(res, labels=c("L(r)-r", "F(r)", "G(r)", "J(r)"))
-  }
 }
 
 # A test based on a low dimensional random vector

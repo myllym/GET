@@ -53,8 +53,8 @@ iset <- subset(abide_9002_23[['curve_set']], 1:50)
 factors <- abide_9002_23[['factors']][1:50,]
 \dontshow{
 # Cut the data to reduce time
-iset$r <- iset$r[1:29,]
-iset$funcs <- iset$funcs[1:29, ]
+iset$r <- iset$r[1:7,]
+iset$funcs <- iset$funcs[1:7, ]
 }
 res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
   formula.full = Y ~ Group + Sex + Age,
