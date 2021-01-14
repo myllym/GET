@@ -36,7 +36,6 @@ Suggests:
     patchwork,
     spatstat,
     testthat,
-    knitr,
     R.rsp
 Description: Implementation of global envelopes for a set of general d-dimensional vectors T
     in various applications. A 100(1-alpha)% global envelope is a band bounded by two
@@ -59,6 +58,4 @@ Description: Implementation of global envelopes for a set of general d-dimension
     Myllymäki et al. (2020) <doi: 10.1016/j.spasta.2020.100436>.
 License: GPL-3
 RoxygenNote: 7.1.1
-VignetteBuilder:
-    knitr,
-    R.rsp
+VignetteBuilder: R.rsp
