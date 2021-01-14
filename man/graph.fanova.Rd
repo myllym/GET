@@ -116,11 +116,11 @@ if(require("fda.usc", quietly=TRUE)) {
   cset <- create_curve_set(list(r = 0:23,
              obs = t(log(poblenou[['nox']][['data']]))))
   # Graphical functional ANOVA
+  \donttest{nsim <- 2999}
   \dontshow{nsim <- 19
   # Decrease the data to reduce time
   cset$funcs <- cset$funcs[, 20:40]
   Type <- Type[20:40]}
-  \donttest{nsim <- 2999}
   res.c <- graph.fanova(nsim = nsim, curve_set = cset,
                         groups = Type, variances = "unequal",
                         contrasts = TRUE)
@@ -132,8 +132,8 @@ if(require("fda.usc", quietly=TRUE)) {
 data("cgec")
 
 # Number of simulations
-\dontshow{nsim <- 19}
 \donttest{nsim <- 2499 # increase to reduce Monte Carlo error}
+\dontshow{nsim <- 19}
 
 # Test for unequal lag 1 covariances
 res.cov1 <- graph.fanova(nsim = nsim, curve_set = cgec$cgec,
