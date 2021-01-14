@@ -22,7 +22,7 @@ For the most recent official release of `GET`, see https://cran.r-project.org/pa
 To install the official release of `GET` from CRAN, start `R` and type
 
 ```R
-install_packages('GET')
+install.packages('GET')
 ```
 
 ### Installing the development version
