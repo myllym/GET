@@ -34,7 +34,7 @@ Suggests:
     fda.usc,
     mvtnorm,
     patchwork,
-    spatstat,
+    spatstat.geom, spatstat.core, spatstat.linnet, spatstat (>= 2.0-0),
     testthat,
     R.rsp
 Description: Implementation of global envelopes for a set of general d-dimensional vectors T
