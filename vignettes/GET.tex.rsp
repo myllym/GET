@@ -647,7 +647,7 @@ Here the functions \fct{runifpoint} and \fct{Lest} of \pkg{spatstat} are used to
 %
 \begin{Schunk}
 \begin{Sinput}
-R> library("spatstat")
+R> library("spatstat.core")
 R> data("adult_trees")
 R> X <- as.ppp(adult_trees, W = square(75))
 R> nsim <- 999

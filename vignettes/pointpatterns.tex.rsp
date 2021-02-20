@@ -5,7 +5,6 @@
 % \VignettePackage{GET}
 % \VignetteEngine{R.rsp::rsp}
 
-
 %% -- LaTeX packages and custom commands ---------------------------------------
 
 %% recommended packages
@@ -86,7 +85,7 @@ The examples utilize the \proglang{R} \citep{R2020} package \pkg{spatstat} \cite
 \begin{Schunk}
 \begin{Sinput}
 R> library("GET")
-R> library("spatstat")
+R> library("spatstat.core")
 R> library("ggplot2")
 R> theme_set(theme_bw(base_size = 9))
 \end{Sinput}
