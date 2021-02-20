@@ -22,7 +22,7 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
     df <- data.frame(curve_set_rdf(curve_set), central=T_0, lo=LB, hi=UB)
   }
   if(isenvelope) {
-    res <- spatstat::fv(x=df, argu = picked_attr[['argu']],
+    res <- spatstat.core::fv(x=df, argu = picked_attr[['argu']],
                         ylab = picked_attr[['ylab']], valu = "central", fmla = ". ~ r",
                         alim = c(min(curve_set[['r']]), max(curve_set[['r']])),
                         labl = picked_attr[['labl']], desc = picked_attr[['desc']],

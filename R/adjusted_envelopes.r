@@ -17,7 +17,7 @@ funcs_from_X_and_funs <- function(X, nsim, testfuns=NULL, ...,
   X.ls <- NULL
   # Simulations
   # Calculate the first test functions and generate simulations
-  X.ls[[1]] <- do.call(spatstat::envelope, c(list(Y=X, nsim=nsim, simulate=NULL),
+  X.ls[[1]] <- do.call(spatstat.core::envelope, c(list(Y=X, nsim=nsim, simulate=NULL),
                           testfuns[[1]],
                           list(savefuns=TRUE, savepatterns=savepatterns, verbose=verbose),
                           extraargs))
@@ -25,7 +25,7 @@ funcs_from_X_and_funs <- function(X, nsim, testfuns=NULL, ...,
   if(calc_funcs & nfuns > 1) {
     simpatterns <- attr(X.ls[[1]], "simpatterns")
     for(i in 2:nfuns) {
-      X.ls[[i]] <- do.call(spatstat::envelope, c(list(Y=X, nsim=nsim, simulate=simpatterns),
+      X.ls[[i]] <- do.call(spatstat.core::envelope, c(list(Y=X, nsim=nsim, simulate=simpatterns),
                               testfuns[[i]],
                               list(savefuns=TRUE, savepatterns=FALSE, verbose=verbose),
                               extraargs))
@@ -70,8 +70,8 @@ adj.simulate <- function(X, nsim = 499, nsimsub = nsim,
   # b) If X is a model object of spatstat, then spatstat is used for fitting and simulation.
   else {
     # Check if X is a (ppp) model object of spatstat
-    Xispppmodel <- spatstat::is.ppm(X) || spatstat::is.kppm(X) || spatstat::is.lppm(X) || spatstat::is.slrm(X)
-    if(!spatstat::is.ppp(X) & !Xispppmodel) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.")
+    Xispppmodel <- spatstat.core::is.ppm(X) || spatstat.core::is.kppm(X) || spatstat.core::is.lppm(X) || spatstat.core::is.slrm(X)
+    if(!spatstat.geom::is.ppp(X) & !Xispppmodel) stop("fitfun or simfun not provided and X is not a ppp nor a fitted model object of spatstat.")
     if(Xispppmodel) message("X is a fitted model object of spatstat;\n using spatstat to simulate the model and calculate the test functions.")
     else
       message("Note: \'simfun\' and/or \'fitfun\' not provided and \'X\' is a ppp object of spatstat.\n",
@@ -295,7 +295,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' #================================
 #' # Test the fit of a Matern cluster process.
 #' \donttest{
-#' if(require("spatstat", quietly=TRUE)) {
+#' if(require("spatstat.core", quietly=TRUE)) {
 #'   data("saplings")
 #'   saplings <- as.ppp(saplings, W = square(75))
 #'

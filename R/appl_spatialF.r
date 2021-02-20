@@ -4,14 +4,14 @@
 # @param R The radius of the circle.
 maverage2d <- function(x, R) {
   R <- mean(R) # Note: R can be a vector of length 2 corresponding to bandwidths in x and y directions
-  X <- spatstat::fillNA(x, 0)
+  X <- spatstat.geom::fillNA(x, 0)
   # Calculates the sum of values of X in b(i,R) at each pixel i
-  Y <- spatstat::second.moment.calc(X, what="smooth", kernel=function(x, y) x^2 + y^2 < R^2, sigma=0)
+  Y <- spatstat.core::second.moment.calc(X, what="smooth", kernel=function(x, y) x^2 + y^2 < R^2, sigma=0)
   # Calculate the number of pixels in each b(i,R)
   X[!is.na(x$v)] <- 1
-  Yden <- spatstat::second.moment.calc(X, what="smooth", kernel=function(x, y) x^2 + y^2 < R^2, sigma=0)
+  Yden <- spatstat.core::second.moment.calc(X, what="smooth", kernel=function(x, y) x^2 + y^2 < R^2, sigma=0)
   # Calculate the mean
-  Z <- spatstat::eval.im(Y/Yden)
+  Z <- spatstat.geom::eval.im(Y/Yden)
   Z[is.na(x$v)] <- NA
   Z
 }
@@ -24,8 +24,8 @@ compute_statistics <- function(X, formula.full, formula.reduced, fitfun, covaria
   M.reduced <- fitfun(X, formula.reduced, covariates)
   r0 <- residuals(M.reduced)
   r1 <- residuals(M.full)
-  s0 <- spatstat::Smooth(r0, sigma=bw, dimyx=dimyx)
-  s1 <- spatstat::Smooth(r1, sigma=bw, dimyx=dimyx)
+  s0 <- spatstat.core::Smooth(r0, sigma=bw, dimyx=dimyx)
+  s1 <- spatstat.core::Smooth(r1, sigma=bw, dimyx=dimyx)
   sm0 <- maverage2d(s0, bw.S)
   sq0 <- maverage2d(s0^2, bw.S)
   sm1 <- maverage2d(s1, bw.S)
@@ -120,8 +120,8 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'   }
 #' }
 GET.spatialF <- function(X, formula.full, formula.reduced, fitfun, covariates, nsim,
-                         bw = spatstat::bw.scott(X), bw.S = bw, dimyx = NULL, ...) {
-  if(!spatstat::is.ppp(X)) stop("X should be a ppp object.")
+                         bw = spatstat.core::bw.scott(X), bw.S = bw, dimyx = NULL, ...) {
+  if(!spatstat.geom::is.ppp(X)) stop("X should be a ppp object.")
   check_isnested(formula.full, formula.reduced)
   M.reduced <- fitfun(X, formula.reduced, covariates)
   sim <- simulate(M.reduced, nsim=nsim)
