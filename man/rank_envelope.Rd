@@ -63,7 +63,7 @@ function tests, experimented with summary functions for point processes.
 
 ## Testing complete spatial randomness (CSR)
 #-------------------------------------------
-if(require("spatstat", quietly=TRUE)) {
+if(require("spatstat.core", quietly=TRUE)) {
   X <- unmark(spruces)
   \donttest{nsim <- 2499 # Number of simulations}
   \dontshow{nsim <- 19 # Number of simulations for testing}

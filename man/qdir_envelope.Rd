@@ -51,7 +51,7 @@ see \code{\link{global_envelope_test}} for full list of alternatives.
 # See more examples in ?global_envelope_test
 ## Testing complete spatial randomness (CSR)
 #-------------------------------------------
-if(require("spatstat", quietly=TRUE)) {
+if(require("spatstat.core", quietly=TRUE)) {
   X <- spruces
   \donttest{nsim <- 999 # Number of simulations}
   \dontshow{nsim <- 19 # Number of simulations for testing}

@@ -25,7 +25,7 @@ program headed by project leader Prof. O.V. Smirnova.
 # This is an example analysis of the saplings data set
 #=====================================================
 # Example of Myllymaki et al. (2017, Supplement S4).
-if(require("spatstat", quietly=TRUE)) {
+if(require("spatstat.core", quietly=TRUE)) {
   data("saplings")
   saplings <- as.ppp(saplings, W=square(75))
 
@@ -62,7 +62,7 @@ if(require("spatstat", quietly=TRUE)) {
   # clustering of saplings. Next we explore the Matern cluster process as a null model.
 }
 \donttest{
-if(require("spatstat", quietly=TRUE)) {
+if(require("spatstat.core", quietly=TRUE)) {
   #-- Testing the Matern cluster process --# (a composite hypothesis)
   #----------------------------------------#
   # Fit the Matern cluster process to the pattern (using minimum contrast estimation with the pair

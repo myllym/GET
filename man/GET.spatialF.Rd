@@ -11,7 +11,7 @@ GET.spatialF(
   fitfun,
   covariates,
   nsim,
-  bw = spatstat::bw.scott(X),
+  bw = spatstat.core::bw.scott(X),
   bw.S = bw,
   dimyx = NULL,
   ...
@@ -53,7 +53,7 @@ Compute the spatial F- and S-statistics and perform the one-stage global envelop
 proposed by Myllymäki et al. (2020).
 }
 \examples{
-if(require("spatstat", quietly=TRUE)) {
+if(require("spatstat.core", quietly=TRUE)) {
   # Example of tropical rain forest trees
   data("bei")
 

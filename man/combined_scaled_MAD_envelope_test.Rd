@@ -45,7 +45,7 @@ we recommend now instead the use of \code{\link{global_envelope_test}} also for 
 these combined tests are there implemented as described in Myllymäki and Mrkvička (2020).
 }
 \examples{
-if(require("spatstat", quietly=TRUE)) {
+if(require("spatstat.core", quietly=TRUE)) {
   # As an example test CSR of the saplings point pattern from spatstat by means of
   # L, F, G and J functions.
   data("saplings")

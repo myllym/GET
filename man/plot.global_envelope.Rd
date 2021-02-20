@@ -36,7 +36,7 @@ in the default main.}
 Plot method for the class 'global_envelope'
 }
 \examples{
-if(require("spatstat", quietly=TRUE)) {
+if(require("spatstat.core", quietly=TRUE)) {
   X <- unmark(spruces)
   \donttest{nsim <- 1999 # Number of simulations}
   \dontshow{nsim <- 19 # Number of simulations}

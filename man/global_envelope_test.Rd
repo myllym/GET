@@ -208,7 +208,7 @@ functions are concatenated together into a one long vector.
 
 \examples{
 # Goodness-of-fit testing for simple hypothesis
-if(require("spatstat", quietly=TRUE)) {
+if(require("spatstat.core", quietly=TRUE)) {
   # Testing complete spatial randomness (CSR)
   #==========================================
   X <- unmark(spruces)
