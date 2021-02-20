@@ -27,7 +27,7 @@
 #' @docType data
 #' @seealso \code{\link{saplings}}
 #' @examples
-#' if(require("spatstat.geom", quietly=TRUE)) {
+#' if(require("spatstat.core", quietly=TRUE)) {
 #'   data("adult_trees")
 #'   adult_trees <- as.ppp(adult_trees, W = square(75))
 #'   plot(adult_trees)
