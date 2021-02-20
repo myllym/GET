@@ -79,7 +79,7 @@
 #' @examples
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
-#' if(require("spatstat", quietly=TRUE)) {
+#' if(require("spatstat.core", quietly=TRUE)) {
 #'   pp <- unmark(spruces)
 #'   \donttest{nsim <- 999}
 #'   \dontshow{nsim <- 19}

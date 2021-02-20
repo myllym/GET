@@ -61,7 +61,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #' @export
 #' @examples
-#' if(require("spatstat", quietly=TRUE)) {
+#' if(require("spatstat.core", quietly=TRUE)) {
 #'   # As an example test CSR of the saplings point pattern from spatstat by means of
 #'   # L, F, G and J functions.
 #'   data("saplings")

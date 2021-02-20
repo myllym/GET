@@ -392,7 +392,7 @@ print.combined_global_envelope <- function(x, ...) {
 #' @export
 #' @seealso \code{\link{central_region}}, \code{\link{global_envelope_test}}
 #' @examples
-#' if(require("spatstat", quietly=TRUE)) {
+#' if(require("spatstat.core", quietly=TRUE)) {
 #'   X <- unmark(spruces)
 #'   \donttest{nsim <- 1999 # Number of simulations}
 #'   \dontshow{nsim <- 19 # Number of simulations}
@@ -913,7 +913,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' \code{\link{GET.composite}}
 #' @examples
 #' # Goodness-of-fit testing for simple hypothesis
-#' if(require("spatstat", quietly=TRUE)) {
+#' if(require("spatstat.core", quietly=TRUE)) {
 #'   # Testing complete spatial randomness (CSR)
 #'   #==========================================
 #'   X <- unmark(spruces)
@@ -1121,7 +1121,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #'
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
-#' if(require("spatstat", quietly=TRUE)) {
+#' if(require("spatstat.core", quietly=TRUE)) {
 #'   X <- unmark(spruces)
 #'   \donttest{nsim <- 2499 # Number of simulations}
 #'   \dontshow{nsim <- 19 # Number of simulations for testing}
@@ -1173,7 +1173,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 #' # See more examples in ?global_envelope_test
 #' ## Testing complete spatial randomness (CSR)
 #' #-------------------------------------------
-#' if(require("spatstat", quietly=TRUE)) {
+#' if(require("spatstat.core", quietly=TRUE)) {
 #'   X <- spruces
 #'   \donttest{nsim <- 999 # Number of simulations}
 #'   \dontshow{nsim <- 19 # Number of simulations for testing}
