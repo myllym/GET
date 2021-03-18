@@ -522,6 +522,19 @@ curve_set_funcnames <- function(curve_set) {
   colnames(curve_set[['funcs']])
 }
 
+# A helper function to return all the functions from a curve set in a matrix except the 1obs if there is one special one.
+# Each row corresponds to a function.
+data_or_sim_curves <- function(curve_set) {
+  if(curve_set_is1obs(curve_set)) t(curve_set[['funcs']][,-1])
+  else t(curve_set[['funcs']])
+}
+# A helper function to return all the functions from a curve set in a matrix except the 1obs if there is one special one.
+# Each column corresponds to a function.
+curve_set_funcs_no1obs <- function(curve_set) {
+  if(curve_set_is1obs(curve_set)) curve_set[['funcs']][,-1]
+  else curve_set[['funcs']]
+}
+
 # A helper function to obtain the mean of functions in curve_set.
 #
 # Calculate the mean of all the functions in the curve_set.
