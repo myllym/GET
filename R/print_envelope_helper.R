@@ -43,7 +43,7 @@ printhelper_method <- function(x, istest, adj) {
     if(adj)
       cat(" * Adjusted level of the global test: ", attr(x, "alpha_star"), "\n", sep="")
     if(!is.null(level)) cat(" * ", level, "% global envelope\n",
-        " * p-value of the global test: ", attr(x, "p"), sep="")
+        " * p-value of the global test: ", attr(x, "p", exact=TRUE), sep="")
     if(!is.null(attr(x, "ties")))
       cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
     else
@@ -125,7 +125,7 @@ printhelper_contains_combined <- function(x) {
 
 # A helper function for printing global envelopes
 printhelper_ge_base <- function(x, adj=FALSE) {
-  if(is.null(attr(x, "p"))) istest <- FALSE
+  if(is.null(attr(x, "p", exact=TRUE))) istest <- FALSE
   else istest <- TRUE
   printhelper_method(x, istest, adj)
   if(istest)
@@ -137,7 +137,7 @@ printhelper_ge_base <- function(x, adj=FALSE) {
 
 # A helper function for printing combined global envelopes
 printhelper_ge_combined <- function(x, adj=!is.null(attr(x, "alpha_star"))) {
-  if(is.null(attr(x, "p"))) istest <- FALSE
+  if(is.null(attr(x, "p", exact=TRUE))) istest <- FALSE
   else istest <- TRUE
   printhelper_method(x, istest, adj)
   printhelper_contains_combined(x)

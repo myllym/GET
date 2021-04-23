@@ -58,8 +58,8 @@ env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {
                      "Alternative = \"", alternative, "\"\n")
   }
   else {
-    if(!is.null(attr(x, "p"))) {
-      p <- round(attr(x, "p"), digits=digits)
+    if(!is.null(attr(x, "p", exact=TRUE))) {
+      p <- round(attr(x, "p", exact=TRUE), digits=digits)
       if(p > 0) main <- paste(attr(x, "method"), ": p = ", p, sep="")
       else main <- paste0(attr(x, "method"), ": p < ", 10^(-digits))
       if(alternative != "two.sided")
