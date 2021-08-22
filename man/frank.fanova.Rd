@@ -11,6 +11,7 @@ frank.fanova(
   variances = "equal",
   test.equality = c("mean", "var", "cov"),
   cov.lag = 1,
+  savefuns = FALSE,
   ...
 )
 }
@@ -41,6 +42,9 @@ See Mrkvicka et al. (2020) for more details.}
 
 \item{cov.lag}{The lag of the covariance for testing the equality of covariances,
 see \code{test.equality}.}
+
+\item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
+simfuns.}
 
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }
