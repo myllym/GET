@@ -326,7 +326,6 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   # Transform the envelope to a combined envelope
   nfuns <- length(curve_sets)
   nr <- curve_set_narg(curve_sets[[1]]) # all curve sets have the same
-  idx <- lapply(1:nfuns, FUN = function(i) ((i-1)*nr+1):(i*nr))
   # Split the envelopes to the original groups
   res_ls <- split(res, f = rep(1:nfuns, each=nr))
 
