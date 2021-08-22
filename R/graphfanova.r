@@ -413,7 +413,8 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #' plot(res2)
 #' plot(res2, fixedscales=FALSE)
 frank.fanova <- function(nsim, curve_set, groups, variances="equal",
-                         test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
+                         test.equality = c("mean", "var", "cov"), cov.lag = 1,
+                         savefuns = FALSE, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.")
   if(!inherits(curve_set, c("curve_set", "fdata"))) stop("The curve_set does not have a valid class.")
   curve_set <- convert_fdata(curve_set)
@@ -453,5 +454,6 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
   # Perform the global envelope test
   res <- global_envelope_test(cset, alternative="greater", ...)
   res <- envelope_set_labs(res, ylab = expression(italic(F(r))))
+  if(savefuns) attr(res, "simfuns") <- cset
   res
 }
