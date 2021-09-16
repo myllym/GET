@@ -200,6 +200,14 @@ basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main) {
        labs(title = main, x = xlab, y = ylab),
        scale_linetype_manual(values = linetype_values(), name = ''))
 }
+basic_stuff_for_fclustplot <- function(df, xlab, ylab, main, fillcolor = 'grey59', alpha = 0.5, size=0.3) {
+  list(geom_ribbon(data = df, aes_(x = ~r, ymin = ~lo, ymax = ~hi),
+                   fill = fillcolor, alpha = alpha),
+       geom_line(data = df, aes_(x = ~r, y = ~curves, group = ~type,
+                                 linetype = ~type), size = size),
+       labs(title = main, x = xlab, y = ylab),
+       scale_linetype_manual(values = 'solid', name = ''))
+}
 
 # An internal function for making a ggplot2 style "global envelope plot"
 # @param x An 'global_envelope' object or a list of them.
