@@ -6,6 +6,7 @@
 #' This dataset includes population growth, i.e. population at the end of the year divided
 #' by population at the beginning of the year, in 134 countries in years from 1950 to 2015.
 #' The dataset includes only countries over million inhabitants in 1950.
+#' The data were extracted from the supplement of Nagy et al. (2017) distributed under the GPL-2 license.
 #'
 #' @format A matrix, where each row corresponds to a year and each column to a country.
 #' Column names correspond to the countries, and row names to the years.
