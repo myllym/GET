@@ -21,6 +21,7 @@ Authors@R: c(
     )
 Maintainer: Mari Myllymäki <mari.myllymaki@luke.fi>
 Imports:
+    cluster,
     ggplot2,
     gridExtra,
     parallel,
