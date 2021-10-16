@@ -10,7 +10,7 @@ central_region(
   type = "erl",
   coverage = 0.5,
   alternative = c("two.sided", "less", "greater"),
-  probs = c((1 - coverage)/2, 1 - (1 - coverage)/2),
+  probs = c(0.25, 0.75),
   quantile.type = 7,
   central = "median",
   nstep = 2,
