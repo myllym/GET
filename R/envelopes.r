@@ -10,6 +10,26 @@ critical <- function(distance, alpha, Nfunc, small_significant) {
   distancesorted[floor((1-alpha)*Nfunc)]
 }
 
+# Multiple envelopes can be plotted in certain situations.
+# These functions return the names of the lower and upper bounds of the envelopes
+# that exist in global_envelope objects.
+# all = TRUE: names of all envelopes
+# all = FALSE: the maximal envelope corresponding to smallest alpha
+env_loname <- function(alpha, all=TRUE) {
+  if(length(alpha)>1) {
+    if(all) paste0("lo.", 100*(1-alpha))
+    else paste0("lo.", 100*(1-min(alpha)))
+  }
+  else "lo"
+}
+env_hiname <- function(alpha, all=TRUE) {
+  if(length(alpha)>1) {
+    if(all) paste0("hi.", 100*(1-alpha))
+    else paste0("hi.", 100*(1-min(alpha)))
+  }
+  else "hi"
+}
+
 make_envelope_object <- function(type, curve_set, LB, UB, T_0,
                                  picked_attr, isenvelope,
                                  Malpha, alpha, distance) {
@@ -49,12 +69,17 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
 # @param ... Ignored.
 individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       alternative = c("two.sided", "less", "greater"),
-                                      probs = c((1-coverage)/2, 1-(1-coverage)/2),
+                                      probs = c((1-coverage[1])/2, 1-(1-coverage[1])/2),
                                       quantile.type = 7,
                                       central = "median") {
   isenvelope <- inherits(curve_set, "envelope")
-  if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.")
+  if(!is.numeric(coverage) || any(coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.")
+  coverage <- sort(coverage, decreasing = TRUE)
   alpha <- 1 - coverage
+  if(isenvelope & length(alpha)>1) {
+    message("Note: Ignoring envelope object features to employ multiple coverages (not implemented for fv objects currently).")
+    isenvelope <- FALSE
+  }
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
     stop("No such type for global envelope.")
   alternative <- match.arg(alternative)
@@ -100,50 +125,57 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   T_0 <- get_T_0(curve_set)
 
   # Check reasonability of Nfunc vs alpha
-  if(Nfunc*alpha < 1-.Machine$double.eps^0.5)
-    stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha,
-         ". So, s*alpha is ", Nfunc*alpha, ".", sep="")
+  if(any(Nfunc*alpha < 1-.Machine$double.eps^0.5))
+    stop("Number of functions s is only ", Nfunc, ", but smallest alpha is ", min(alpha),
+         ". So, s*alpha is ", Nfunc*min(alpha), ".", sep="")
 
   # The critical value
   Malpha <- critical(distance, alpha, Nfunc, small_significant)
 
   #-- 100(1-alpha)% global envelope
+  LBounds <- UBounds <- vector(mode="list", length=length(alpha))
   switch(type,
          rank = {
-           LB <- array(0, nr)
-           UB <- array(0, nr)
            for(i in 1:nr){
              Hod <- sort(all_curves[,i])
-             LB[i]<- Hod[Malpha]
-             UB[i]<- Hod[Nfunc-Malpha+1]
+             for(ai in 1:length(alpha)) {
+               LBounds[[ai]][i]<- Hod[Malpha[ai]]
+               UBounds[[ai]][i]<- Hod[Nfunc-Malpha[ai]+1]
+             }
            }
          },
          erl =,
          cont =,
          area = {
-           j <- distance >= Malpha
-           LB <- array(0, nr)
-           UB <- array(0, nr)
-           for(i in 1:nr){
-             lu <- range(all_curves[j,i])
-             LB[i]<- lu[1]
-             UB[i]<- lu[2]
+           for(ai in 1:length(alpha)) {
+             j <- distance >= Malpha[ai]
+             for(i in 1:nr){
+               lu <- range(all_curves[j,i])
+               LBounds[[ai]][i]<- lu[1]
+               UBounds[[ai]][i]<- lu[2]
+             }
            }
          },
-         qdir = {
+         qdir = { # Note: All coverage levels use same probs
            curve_set_res <- residual(curve_set, use_theo=TRUE)
            quant_m <- curve_set_quant(curve_set_res, probs=probs, type=quantile.type)
-           LB <- T_0 - Malpha*abs(quant_m[1,])
-           UB <- T_0 + Malpha*abs(quant_m[2,])
+           for(ai in 1:length(alpha)) {
+             LBounds[[ai]] <- T_0 - Malpha[ai]*abs(quant_m[1,])
+             UBounds[[ai]] <- T_0 + Malpha[ai]*abs(quant_m[2,])
+           }
          },
          st = {
            sdX <- curve_set_sd(curve_set)
-           LB <- T_0 - Malpha*sdX
-           UB <- T_0 + Malpha*sdX
+           for(ai in 1:length(alpha)) {
+             LBounds[[ai]] <- T_0 - Malpha[ai]*sdX
+             UBounds[[ai]] <- T_0 + Malpha[ai]*sdX
+           }
          },
          unscaled = {
-           LB <- T_0 - Malpha
-           UB <- T_0 + Malpha
+           for(ai in 1:length(alpha)) {
+             LBounds[[ai]] <- T_0 - Malpha[ai]
+             UBounds[[ai]] <- T_0 + Malpha[ai]
+           }
          })
 
   switch(alternative,
@@ -151,6 +183,15 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          "less" = { UB <- Inf },
          "greater" = { LB <- -Inf })
 
+  if(length(alpha) > 1) { # Multiple envelopes
+    names(LBounds) <- names(UBounds) <- paste0(100*coverage)
+    LB <- do.call(cbind, LBounds)
+    UB <- do.call(cbind, UBounds)
+  }
+  else {
+    LB <- LBounds[[1]]
+    UB <- UBounds[[1]]
+  }
   res <- make_envelope_object(type, curve_set, LB, UB, T_0,
                               picked_attr, isenvelope,
                               Malpha, alpha, distance)
@@ -168,7 +209,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
   tmp <- convert_to_curveset(curve_set)
   if(!curve_set_is1obs(tmp))
     stop("The curve_set does not contain one observed function. Testing does not make sense.\n Did you want to construct a central region of your data? See the function central_region.")
-  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.")
+  if(!is.numeric(alpha) || any(alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.")
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
                                    alternative=alternative,
                                    probs=probs, quantile.type=quantile.type,
@@ -232,6 +273,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
 
 # Functionality for combined_central_region and combined_global_envelope_test (two-step procedure)
 combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
+  if(length(coverage)>1) stop("Multiple coverages not implemented for combined tests.")
   ntests <- length(curve_sets)
   if(ntests < 1) stop("Only one curve_set, no combining to be done.")
   check_curve_set_dimensions(curve_sets) # Do not catch the curve_set here
@@ -315,6 +357,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
 
 # Functionality for combined_central_region and combined_global_envelope_test (one-step procedure)
 combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
+  if(length(coverage)>1) stop("Multiple coverages not implemented for combined tests.")
   curve_set <- combine_curve_sets(curve_sets, equalr=TRUE)
   switch(CR_or_GET,
          CR = {
@@ -707,7 +750,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #'                      ggplot2::aes(x=id, y=points)) # true function
 central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
-                           probs = c((1-coverage)/2, 1-(1-coverage)/2),
+                           probs = c(0.25, 0.75),
                            quantile.type = 7,
                            central = "median", nstep = 2, ...) {
   if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
