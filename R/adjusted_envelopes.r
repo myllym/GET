@@ -487,6 +487,11 @@ GET.composite <- function(X, X.ls = NULL,
     else {
       alpha_star <- quantile(pvals, probs=alpha, type=1)
       res <- global_envelope_test(X, type=type, alpha=alpha_star, alternative=alt)
+      # For the case of multiple alpha, rename the components according to the original levels
+      if(length(alpha) > 1) {
+        names(res)[grep("lo", names(res))] <- env_loname(alpha)
+        names(res)[grep("hi", names(res))] <- env_hiname(alpha)
+      }
       # Original p-value
       attr(res, "p_original") <- attr(res, "p")
       # Adjusted p-value
