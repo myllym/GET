@@ -363,6 +363,7 @@ GET.composite <- function(X, X.ls = NULL,
                          save.cons.envelope = savefuns, savefuns = FALSE,
                          verbose = TRUE, MrkvickaEtal2017 = FALSE, mc.cores = 1L) {
   alt <- match.arg(alternative)
+  if(length(alpha)>1) stop("Multiple coverages (alpha) not implemented for adjusted tests. If you really need this feature, contact the maintainer.")
 
   # Simulations
   #------------
