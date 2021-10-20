@@ -202,7 +202,8 @@ basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main, level=0) {
   pE <- list()
   lonames <- env_loname(level)
   hinames <- env_hiname(level)
-  cols <- paste0('grey', floor(seq(59, 80, length=length(level))))
+  if(length(level) ==  1) cols <- 'grey59'
+  else cols <- paste0('grey', floor(seq(80, 59, length=length(level))))
   for(i in 1:length(level)) {
     pE[[i]] <- geom_ribbon(data = df, aes_string(x = "r", ymin = lonames[i], ymax = hinames[i]),
                      fill = cols[i], alpha = 1)
