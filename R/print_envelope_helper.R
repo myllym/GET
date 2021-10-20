@@ -1,13 +1,14 @@
-how_many_outside <- function(x) {
+how_many_outside <- function(x, alpha=NULL) {
+  if(is.null(alpha)) alpha <- attr(x, "alpha")
   switch(get_alternative(x),
          two.sided = {
-           sum(x[['obs']]<x[[env_loname(attr(x, "alpha"), all=FALSE)]] | x[['obs']]>x[[env_hiname(attr(x, "alpha"), all=FALSE)]])
+           sum(x[['obs']]<x[[env_loname(alpha, all=FALSE)]] | x[['obs']]>x[[env_hiname(alpha, all=FALSE)]])
          },
          less = {
-           sum(x[['obs']]<x[[env_loname(attr(x, "alpha"), all=FALSE)]])
+           sum(x[['obs']]<x[[env_loname(alpha, all=FALSE)]])
          },
          greater = {
-           sum(x[['obs']]>x[[env_hiname(attr(x, "alpha"), all=FALSE)]])
+           sum(x[['obs']]>x[[env_hiname(alpha, all=FALSE)]])
          })
 }
 
@@ -157,7 +158,7 @@ printhelper_ge_combined <- function(x, adj=!is.null(attr(x, "alpha_star"))) {
   printhelper_contains_combined(x)
   if(istest)
     cat(" * Number of r-values with observed function outside the envelope: ",
-        paste0(sapply(x, function(x_part) how_many_outside(x_part), simplify=TRUE), " "), "\n",
+        paste0(sapply(x, function(x_part) how_many_outside(x_part, attr(x, "alpha")), simplify=TRUE), " "), "\n",
         " * Total number of argument values r                             : ",
         paste0(sapply(x, function(x_part) length(x_part[['obs']]), simplify=TRUE), " "), "\n", sep="")
 }
