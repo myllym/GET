@@ -26,8 +26,9 @@
 #'   res <- fBoxplot(csets, type='area', factor=1.5)
 #'   plot(res) + ggplot2::labs(x="Age (years)", y="")
 #' }
-fBoxplot <- function(curve_sets, factor = 1.5, ...) {
+fBoxplot <- function(curve_sets, factor = 1.5, coverage = 0.50, ...) {
   if(factor < 0) stop("factor should be positive.")
+  if(length(coverage) > 1) stop("Multiple coverages not allowed.")
   if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
     if(!all(sapply(curve_sets, FUN=curve_set_is1d)))
       stop("r in curve_sets should be vectors.")
@@ -35,7 +36,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, ...) {
       warning("One of the curves is observed, other simulated.\n Do you want to make a functional boxplot of all these?")
   }
   else { if(!curve_set_is1d(curve_sets)) stop("r in curve_sets should be a vector.") }
-  res <- central_region(curve_sets, alternative = "two.sided", ...)
+  res <- central_region(curve_sets, coverage = coverage, alternative = "two.sided", ...)
   if(inherits(res, "combined_global_envelope")) {
     outliers_id <- NULL
     for(i in 1:length(res)) {
