@@ -179,6 +179,7 @@ plot.combined_global_envelope2d <- function(x, fixedscales = 2, labels,
                                             what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                             sign.col = "red", transparency = 155/255,
                                             digits = 3, ...) {
+  if(length(attr(x, "alpha")) > 1) stop("2d plots implemented currently only for single coverages (alpha).")
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x[[1]], what)
   main <- env_main_default(x, digits=digits)
