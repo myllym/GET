@@ -273,7 +273,6 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
 
 # Functionality for combined_central_region and combined_global_envelope_test (two-step procedure)
 combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
-  if(length(coverage)>1) stop("Multiple coverages not implemented for combined tests.")
   ntests <- length(curve_sets)
   if(ntests < 1) stop("Only one curve_set, no combining to be done.")
   check_curve_set_dimensions(curve_sets) # Do not catch the curve_set here
@@ -303,27 +302,48 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   )
   res_erl <- envelope_set_labs(res_erl, xlab="Function", ylab="ERL measure")
   attr(res_erl, "labels") <- names(curve_sets)
+  coverage <- 1 - attr(res_erl, "alpha") # ordered
 
   # 3) The 100(1-alpha)% global combined ERL envelope
   distance_lexo_sorted <- sort(attr(res_erl, "M"), decreasing=TRUE)
   Malpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
-  # Indices of the curves from which to calculate the convex hull
-  curves_for_envelope_ind <- which(attr(res_erl, "M") >= Malpha)
-  # Curves
-  curve_sets <- lapply(curve_sets, FUN=convert_to_curveset)
-  all_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
-  # Curves from which to calculate the convex hull
-  curves_for_envelope_l <- lapply(all_curves_l, function(x) { x[curves_for_envelope_ind,] })
-  # Bounding curves
-  LB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=min) })
-  UB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
-  # Update the bounding curves (lo, hi) and Malpha to the first level central regions
-  for(i in 1:ntests) {
-    if(get_alternative(res_ls[[i]]) != "greater") res_ls[[i]]$lo <- LB[[i]]
-    if(get_alternative(res_ls[[i]]) != "less") res_ls[[i]]$hi <- UB[[i]]
-    attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL
-    attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of a combined global envelope test")
+
+  LBounds <- UBounds <- list()
+  for(ai in 1:length(coverage)) {
+    # Indices of the curves from which to calculate the convex hull
+    curves_for_envelope_ind <- which(attr(res_erl, "M") >= Malpha[ai])
+    # Curves
+    curve_sets <- lapply(curve_sets, FUN=convert_to_curveset)
+    all_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
+    # Curves from which to calculate the convex hull
+    curves_for_envelope_l <- lapply(all_curves_l, function(x) { x[curves_for_envelope_ind,] })
+    # Bounding curves
+    LBounds[[ai]] <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=min) })
+    UBounds[[ai]] <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
   }
+  # Update the bounding curves (lo, hi) and Malpha to the first level central regions
+  if(length(coverage) == 1) { # Use names 'lo' and 'hi'
+    for(i in 1:ntests) {
+      if(get_alternative(res_ls[[i]]) != "greater") res_ls[[i]]$lo <- LBounds[[1]][[i]]
+      if(get_alternative(res_ls[[i]]) != "less") res_ls[[i]]$hi <- UBounds[[1]][[i]]
+      attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL
+      attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of a combined global envelope test")
+    }
+  }
+  else { # Names according to the coverages, i.e. lo.xx, hi.xx where xx represent the levels
+    for(i in 1:ntests) {
+      if(get_alternative(res_ls[[i]]) != "greater")
+        for(ai in 1:length(coverage))
+          res_ls[[i]][paste0("lo.", 100*coverage[ai])] <- LBounds[[ai]][[i]]
+      if(get_alternative(res_ls[[i]]) != "less")
+        for(ai in 1:length(coverage))
+          res_ls[[i]][paste0("hi.", 100*coverage[ai])] <- UBounds[[ai]][[i]]
+      res_ls[[i]]$lo <- res_ls[[i]]$hi <- NULL
+      attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL
+      attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of a combined global envelope test")
+    }
+  }
+
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
 
   # Return
@@ -357,7 +377,6 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
 
 # Functionality for combined_central_region and combined_global_envelope_test (one-step procedure)
 combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage, ...) {
-  if(length(coverage)>1) stop("Multiple coverages not implemented for combined tests.")
   curve_set <- combine_curve_sets(curve_sets, equalr=TRUE)
   switch(CR_or_GET,
          CR = {
