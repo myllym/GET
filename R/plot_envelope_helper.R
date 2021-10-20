@@ -307,7 +307,7 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
 
   df <- combined_df_construction(x, labels=labels)
   p <- ( ggplot()
-         + basic_stuff_for_env_ggplot(df, xlab, ylab, main)
+         + basic_stuff_for_env_ggplot(df, xlab, ylab, main, attr(x, "alpha"))
          + facet_wrap(~ plotmain, scales=scales,
                       nrow=nrows_of_plots, ncol=ncols_of_plots)
          + set_envelope_legend_position() )
@@ -315,7 +315,12 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
     p <- p + guides(linetype = "none")
   if("Data function" %in% levels(df$type)) {
     if(!is.null(sign.col)) {
-      df.outside <- df[df$type == "Data function",]
+      df.outside <- df[df$type == "Data function",
+                       c("r", "curves",
+                         env_loname(attr(x, "alpha"), all=FALSE),
+                         env_hiname(attr(x, "alpha"), all=FALSE),
+                         "plotmain")]
+      names(df.outside)[3:4] <- c("lo", "hi")
       df.outside <- df.outside[df.outside$curves < df.outside$lo | df.outside$curves > df.outside$hi,]
       p <- p + geom_point(data=df.outside, ggplot2::aes_(x=~r, y=~curves), color=sign.col, size=1)
     }
