@@ -2,13 +2,13 @@ how_many_outside <- function(x, alpha=NULL) {
   if(is.null(alpha)) alpha <- attr(x, "alpha")
   switch(get_alternative(x),
          two.sided = {
-           sum(x[['obs']]<x[[env_loname(alpha, all=FALSE)]] | x[['obs']]>x[[env_hiname(alpha, all=FALSE)]])
+           sum(x[['obs']]<x[[env_loname(alpha, largest=TRUE)]] | x[['obs']]>x[[env_hiname(alpha, largest=TRUE)]])
          },
          less = {
-           sum(x[['obs']]<x[[env_loname(alpha, all=FALSE)]])
+           sum(x[['obs']]<x[[env_loname(alpha, largest=TRUE)]])
          },
          greater = {
-           sum(x[['obs']]>x[[env_hiname(alpha, all=FALSE)]])
+           sum(x[['obs']]>x[[env_hiname(alpha, largest=TRUE)]])
          })
 }
 

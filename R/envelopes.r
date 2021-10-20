@@ -13,19 +13,19 @@ critical <- function(distance, alpha, Nfunc, small_significant) {
 # Multiple envelopes can be plotted in certain situations.
 # These functions return the names of the lower and upper bounds of the envelopes
 # that exist in global_envelope objects.
-# all = TRUE: names of all envelopes
-# all = FALSE: the maximal envelope corresponding to smallest alpha
-env_loname <- function(alpha, all=TRUE) {
+# largest = FALSE: names of all envelopes
+# largest = TRUE: the maximal envelope corresponding to smallest alpha
+env_loname <- function(alpha, largest=FALSE) {
   if(length(alpha)>1) {
-    if(all) paste0("lo.", 100*(1-alpha))
-    else paste0("lo.", 100*(1-min(alpha)))
+    if(largest) paste0("lo.", 100*(1-min(alpha)))
+    else paste0("lo.", 100*(1-alpha))
   }
   else "lo"
 }
-env_hiname <- function(alpha, all=TRUE) {
+env_hiname <- function(alpha, largest=FALSE) {
   if(length(alpha)>1) {
-    if(all) paste0("hi.", 100*(1-alpha))
-    else paste0("hi.", 100*(1-min(alpha)))
+    if(largest) paste0("hi.", 100*(1-min(alpha)))
+    else paste0("hi.", 100*(1-alpha))
   }
   else "hi"
 }

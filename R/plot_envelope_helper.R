@@ -239,8 +239,8 @@ env_ggplot <- function(x, main, xlab, ylab, sign.col="red") {
     if(!is.null(sign.col)) {
       df.outside <- df[df$type == "Data function",
                        c("r", "curves",
-                         env_loname(attr(x, "alpha"), all=FALSE),
-                         env_hiname(attr(x, "alpha"), all=FALSE))]
+                         env_loname(attr(x, "alpha"), largest=TRUE),
+                         env_hiname(attr(x, "alpha"), largest=TRUE))]
       names(df.outside)[3:4] <- c("lo", "hi")
       df.outside <- df.outside[df.outside$curves < df.outside$lo | df.outside$curves > df.outside$hi,]
       p <- p + geom_point(data=df.outside, ggplot2::aes_(x = ~r, y = ~curves), color=sign.col, size=1)
@@ -317,8 +317,8 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
     if(!is.null(sign.col)) {
       df.outside <- df[df$type == "Data function",
                        c("r", "curves",
-                         env_loname(attr(x, "alpha"), all=FALSE),
-                         env_hiname(attr(x, "alpha"), all=FALSE),
+                         env_loname(attr(x, "alpha"), largest=TRUE),
+                         env_hiname(attr(x, "alpha"), largest=TRUE),
                          "plotmain")]
       names(df.outside)[3:4] <- c("lo", "hi")
       df.outside <- df.outside[df.outside$curves < df.outside$lo | df.outside$curves > df.outside$hi,]
