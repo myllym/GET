@@ -76,10 +76,6 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   if(!is.numeric(coverage) || any(coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.")
   coverage <- sort(coverage, decreasing = TRUE)
   alpha <- 1 - coverage
-  if(isenvelope & length(alpha)>1) {
-    message("Note: Ignoring envelope object features to employ multiple coverages (not implemented for fv objects currently).")
-    isenvelope <- FALSE
-  }
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
     stop("No such type for global envelope.")
   alternative <- match.arg(alternative)
@@ -97,6 +93,10 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
     warning("Invalid option fiven for central. Using central = median.")
   }
   picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
+  if(isenvelope & length(alpha)>1) {
+    # Note: no fv object for multiple coverages
+    isenvelope <- FALSE
+  }
   curve_set <- convert_to_curveset(curve_set)
 
   # Measures for functional ordering
