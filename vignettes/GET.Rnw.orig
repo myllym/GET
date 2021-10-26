@@ -103,7 +103,7 @@ When citing the vignette and package please cite Myllym{\"a}ki and Mrkvi\v cka (
 
 \section{Introduction}\label{sec:intro}
 
-Global envelopes are useful for the graphical interpretation of results from tests based on functional or multivariate statistics, for determining central regions of functional or multivariate data, and also for determining confidence or prediction bands. Global envelopes have shown their usefulness already in many areas, e.g., spatial statistics \citep{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2016, MollerWaagepetersen2017, MyllymakiEtal2020, PollingtonEtal2020}, functional data analysis \citep{NarisettyNair2016, MrkvickaEtal2020, DaiGenton2018, DaiEtal2020, MrkvickaEtal2019a}, image analysis \citep{MrkvickaEtal2020b, GotovacEtal2016, KoubekEtal2016} and point pattern analysis \citep{MollerEtal2016a, MollerEtal2016b, RajalaEtal2018} with applications to
+Global envelopes are useful for the graphical interpretation of results from tests based on functional or multivariate statistics, for determining central regions of functional or multivariate data, and also for determining confidence or prediction bands. Global envelopes have shown their usefulness already in many areas, e.g., spatial statistics \citep{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2016, MollerWaagepetersen2017, MyllymakiEtal2020, PollingtonEtal2020}, functional data analysis \citep{NarisettyNair2016, MrkvickaEtal2020, DaiGenton2018, DaiEtal2020, MrkvickaEtal2021a}, image analysis \citep{MrkvickaEtal2021b, GotovacEtal2016, KoubekEtal2016} and point pattern analysis \citep{MollerEtal2016a, MollerEtal2016b, RajalaEtal2018} with applications to
 agriculture \citep{MrkvickaEtal2016, ChaibanEtal2019}, 
 architecture and art \citep{Stoyan2016}, 
 astronomy and astrophysics \citep{KruuseEtal2019, RetterEtal2019}, 
@@ -114,7 +114,7 @@ fisheries \citep{SmejkalEtal2017},
 forestry \citep{ErfanifardEtal2019}, 
 geography \citep{ClarkEtal2018}, 
 material science \citep{HabelEtal2017}, and
-medicine, health and neurosciences \citep{RafatiEtal2016, LeeEtal2017, MollerEtal2019, BiscioMoller2019, MrkvickaEtal2020b, BrownEtal2020}.
+medicine, health and neurosciences \citep{RafatiEtal2016, LeeEtal2017, MollerEtal2019, BiscioMoller2019, MrkvickaEtal2021b, BrownEtal2020}.
 To make these methods easily accessible, the R \citep{R2020} package \pkg{GET} has been developed that is available from the Comprehensive R Archive Network (CRAN) at \url{https://cran.r-project.org/package=GET}. A development version of the package is available via the repository \url{https://github.com/myllym/GET}. The package provides an implementation of global envelopes in various settings.
 
 To be more specific, global envelopes can be used for producing
@@ -163,7 +163,7 @@ The global envelope with IGI provides a solution to the tasks (i)-(iv) in a grap
 
 For tasks (ii) and (iii), the data vector $\TT_1$ is compared with a global envelope constructed from the data vector $\TT_1$ and vectors $\TT_2, \ldots ,\TT_s$ simulated under a null hypothesis $H_0$, 
 in order to decide if the data vector is extreme ($H_0$ is rejected) or not extreme ($H_0$ is not rejected). 
-For these tasks, in addition to a global envelope, a Monte Carlo $p$~value is computed according to the measure $M_i$: $p =  \sum_{i=1}^{s} \1 (M_i \leq M_1)  \big/ s$  \citep[see, e.g.,][]{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2020, MrkvickaEtal2020b, MrkvickaEtal2019a}.
+For these tasks, in addition to a global envelope, a Monte Carlo $p$~value is computed according to the measure $M_i$: $p =  \sum_{i=1}^{s} \1 (M_i \leq M_1)  \big/ s$  \citep[see, e.g.,][]{MyllymakiEtal2017, MrkvickaEtal2017, MrkvickaEtal2020, MrkvickaEtal2021b, MrkvickaEtal2021a}.
 
 In order to obtain an exact Monte Carlo test, i.e., a test that achieves the prescribed family-wise error rate, the exchangeability of the test vectors $\TT_i$ is required. All the examples in Section \ref{sec:illustrations} satisfy exchangeability, except the functional GLM where the permutation of the residuals from the null model \citep{FreedmanLane1983} is used. This permutation scheme is commonly used in univariate permutation GLMs and widely accepted as the best available solution \citep{AndersonRobinson2001, AndersonTerBraak2003, WinklerEtal2014}.
 
@@ -252,8 +252,8 @@ After defining the different types of global envelopes in Section \ref{sec:GEdef
 Type           & Introduced in   & Description \\ \hline
 \code{'rank'}         & \citet{MyllymakiEtal2017}  & Global rank envelope  corresponding to the extreme rank measure (with ties); unique ordering (or $p$~value) provided additionally as specified in the argument \code{ties}, e.g., \code{'erl'} for extreme rank lengths \\
 \code{'erl'}          & \citet{MyllymakiEtal2017, NarisettyNair2016, MrkvickaEtal2020}    & Global rank envelope corresponding to extreme rank length (ERL) measure \\ 
-\code{'cont'}         & \citet{Hahn2015, MrkvickaEtal2020b} & Global rank envelope corresponding to the continuous rank measure \\
-\code{'area'}         & \citet{MrkvickaEtal2020b}    &  Global rank envelope corresponding to the area measure \\
+\code{'cont'}         & \citet{Hahn2015, MrkvickaEtal2021b} & Global rank envelope corresponding to the continuous rank measure \\
+\code{'area'}         & \citet{MrkvickaEtal2021b}    &  Global rank envelope corresponding to the area measure \\
 \code{'qdir'}         & \citet{MyllymakiEtal2017,MyllymakiEtal2015}       & Directional quantile envelope test corresponding to the directional quantile maximum absolute deviation (MAD) measure \\
 \code{'st'}           & \citet{MyllymakiEtal2017, MyllymakiEtal2015}       & Studentized envelope test corresponding to the studentized MAD measure \\
 \code{'unscaled'}     & \citet{Ripley1981}       & Unscaled envelope test corresponding to the classical, unscaled MAD measure. The envelope has a constant width. \\ \hline
@@ -274,8 +274,8 @@ Function name              & Description \\ \hline
 \fct{fBoxplot} & Functional boxplot based on a central region with IGI \\
 \fct{graph.fanova}  & One-way ANOVA tests for functional data with graphical interpretation \citep{MrkvickaEtal2020} \\
 \fct{frank.fanova}  & One-way functional ANOVA tests based on the global envelopes applied to $F$~values \citep{MrkvickaEtal2020} \\
-\fct{graph.flm}  &  Non-parametric graphical tests of significance in functional general linear model (GLM) \citep{MrkvickaEtal2019a} \\
-\fct{frank.flm} & $F$-rank functional GLM, i.e., global envelope tests applied to $F$~values in permutation inference for the GLM \citep{MrkvickaEtal2020b} \\
+\fct{graph.flm}  &  Non-parametric graphical tests of significance in functional general linear model (GLM) \citep{MrkvickaEtal2021a} \\
+\fct{frank.flm} & $F$-rank functional GLM, i.e., global envelope tests applied to $F$~values in permutation inference for the GLM \citep{MrkvickaEtal2021b} \\
 \fct{GET.composite}           & Adjusted global envelope tests for composite null hypotheses \\ 
 \fct{GET.necdf} & Graphical $n$ sample test of correspondence of distribution functions  \\ 
 \fct{GET.spatialF} & Testing global and local covariate effects in point process models \citep{MyllymakiEtal2020}
@@ -359,7 +359,7 @@ see \citet{NarisettyNair2016} and \citet{MrkvickaEtal2020}.
 
 \subsubsection{Global continuous rank envelope}
 
-The ties can alternatively be broken by the continuous rank measure \citep{Hahn2015, MrkvickaEtal2020b} which refines the extreme rank measure by considering instead of the (discrete) pointwise ranks $R_{ik}$ continuous pointwise ranks $C_{ik}$ defined by the ratios of $T_{ik}$ to the closest other $T_{jk}$, $j=1,\dots,s$, $j\neq i$.
+The ties can alternatively be broken by the continuous rank measure \citep{Hahn2015, MrkvickaEtal2021b} which refines the extreme rank measure by considering instead of the (discrete) pointwise ranks $R_{ik}$ continuous pointwise ranks $C_{ik}$ defined by the ratios of $T_{ik}$ to the closest other $T_{jk}$, $j=1,\dots,s$, $j\neq i$.
 
 Formally, the continuous rank measure is
 %
@@ -400,7 +400,7 @@ The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constr
 
 \subsubsection{Global area rank envelope}
 
-Another refinement of rank envelope is the area rank measure \citep{MrkvickaEtal2020b},
+Another refinement of rank envelope is the area rank measure \citep{MrkvickaEtal2021b},
 %
 %$$A_i = \frac{1}{s_A} \sum_k \min(R_i, c_{ik}).$$
 $$A_i = \frac{1}{s}\left(R_i - \frac{1}{d}\sum_{k=1}^d (R_i-C_{ik}) \1(C_{ik} < R_i)\right).$$
@@ -492,7 +492,7 @@ An example of using the one-step combining is when $\TT_i = (T_{i1}, \ldots , T_
 $(t_{i1}^1,\ldots , t_{id}^{1}), \ldots , (t_{i1}^J,\ldots , t_{id}^{J})$,
 and apply the one-step combining procedure. Further, it is possible to add other vectors expressing the correlation between the elements of the vectors,\ e.g., $(t_{i1}^1 t_{i1}^2 - t_{01}^1t_{01}^2,\ldots , t_{id}^1 t_{id}^2-t_{0d}^1t_{0d}^2)$. Here $t_{0k}^j$ denotes the expectation of $t_{\cdot k}^j$.
 
-The graphical functional ANOVA and GLM (see the functions in Table~\ref{tab:FUNCTIONSoverview}) use the one-step combining procedure to merge the mean or contrast vectors under inspection, because in this case all the vectors have the same structure \citep[see Sections~\ref{sec:fANOVA} and \ref{sec:fGLM} and][]{MrkvickaEtal2020, MrkvickaEtal2019a}. On the other hand, for generality, the default combining procedure of global envelope construction functions in \pkg{GET} is the two-step procedure, which is presented for the first time here as an improvement of the combined tests of \citet{MrkvickaEtal2017} (see an example in Section~\ref{sec:cr}). The combined envelopes are implemented in the \fct{central\_region} and \fct{global\_envelope\_test} functions as mentioned above, and the one- or two-step procedure can be specified in the argument \code{nstep} (either 1 or 2).
+The graphical functional ANOVA and GLM (see the functions in Table~\ref{tab:FUNCTIONSoverview}) use the one-step combining procedure to merge the mean or contrast vectors under inspection, because in this case all the vectors have the same structure \citep[see Sections~\ref{sec:fANOVA} and \ref{sec:fGLM} and][]{MrkvickaEtal2020, MrkvickaEtal2021a}. On the other hand, for generality, the default combining procedure of global envelope construction functions in \pkg{GET} is the two-step procedure, which is presented for the first time here as an improvement of the combined tests of \citet{MrkvickaEtal2017} (see an example in Section~\ref{sec:cr}). The combined envelopes are implemented in the \fct{central\_region} and \fct{global\_envelope\_test} functions as mentioned above, and the one- or two-step procedure can be specified in the argument \code{nstep} (either 1 or 2).
 
 \subsection{Adjusted global envelopes for composite null hypotheses}\label{sec:adjustedGE}
 
@@ -1038,7 +1038,7 @@ $$
 where $\beta_i(r)$ are the elements of the $\beta(r)$. For a continuous factor of interest $k=1$ and $\beta(r)$ serves as the test statistic. For a discrete factor of interest, in the default setup, $k$ is equal to the number of groups of the discrete factor, adding the additional condition that $\sum_i \beta_{i}(r)=0$ for all $r\in\{1, \ldots d\}$. Similarly, for interaction of a continuous and a discrete factor, $k$ is also equal to the number of groups of the categorical factor, adding the same additional condition. For the interaction of two discrete factors, $k$ is equal to the product of the numbers of groups of the discrete factors, adding the same additional condition.
 The default test statistic for a discrete factor consist of $\beta_i(r)$ for all $r=1,\ldots,d$ and $i=1,\ldots,k$. This test allows to detect which groups deviate from the zero (mean).
 An alternative test statistic is obtained by the setting the argument \code{contrasts} of the function \fct{graph.flm} to \code{TRUE}: then the test statistic is formed by all the pairwise differences between the group effects, $\beta_i(r) - \beta_j(r)$ for all $r$ and $i\neq j$, $1\leq i < j \leq k$. This test specifies which specific groups are different in the post hoc nature. Note that this also holds for interaction terms.
-Furthermore, all the options allow one to identify which of the components of the vector, $r\in\{1,\ldots,d\}$, lead to the potential rejection of the null hypothesis. Permutations under the null hypothesis are obtained using the Freedman-Lane procedure \citep{FreedmanLane1983, MrkvickaEtal2020b, MrkvickaEtal2019a}.
+Furthermore, all the options allow one to identify which of the components of the vector, $r\in\{1,\ldots,d\}$, lead to the potential rejection of the null hypothesis. Permutations under the null hypothesis are obtained using the Freedman-Lane procedure \citep{FreedmanLane1983, MrkvickaEtal2021b, MrkvickaEtal2021a}.
 
 Often factors are given for the whole function, i.e., they do not depend on argument $r$, and so the matrices $\mathbf X(r)$ and $\mathbf Z(r)$ are identical for every $r$. These kind of constant factors (such as $z$ and group in the considered example) can be provided in the argument \code{factors} of the \fct{graph.flm} function. However, this simplification is not necessary and factors varying in space can be provided in the argument \code{curve_sets}, along with the data curves in a named list.
 
@@ -1067,7 +1067,7 @@ plot(res)
 are two-dimensional as well (Figure~\ref{fig:flm_graph_abide}).
 Here only two groups were compared, and the plot shows that the brain measurements were lower in the autism group than in the control group in a part of the small example region (red locations in Figure~\ref{fig:flm_graph_abide}).
 
-When the basic assumption of the homoscedasticity in the linear model \eqref{eq:GLM} for every argument $r$ is violated, it is important to handle it. One possibility is to apply transformations to the functions a priori as suggested by \citet{MrkvickaEtal2020} and \citet{MrkvickaEtal2019a} (see Equation~\eqref{eq:scaling}). Alternatively weighted least squares might be used for estimation of regression coefficients.
+When the basic assumption of the homoscedasticity in the linear model \eqref{eq:GLM} for every argument $r$ is violated, it is important to handle it. One possibility is to apply transformations to the functions a priori as suggested by \citet{MrkvickaEtal2020} and \citet{MrkvickaEtal2021a} (see Equation~\eqref{eq:scaling}). Alternatively weighted least squares might be used for estimation of regression coefficients.
 
 \begin{figure}[ht!]
 \centering
@@ -1081,7 +1081,7 @@ plot(res)
 
 \subsubsection{$F$-rank GLM}
 
-In the $F$-rank GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2020b}.
+In the $F$-rank GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2021b}.
 However, the test statistic is the classical $F$~statistic \citep[see, e.g.,][]{WinklerEtal2014} which is calculated for the hypothesis that the data follows the simpler reduced model of the two proposed linear models that are nested within each other (given in \code{formula.full} and \code{formula.reduced}).
 The use of the function \fct{frank.flm} is similar to that of \fct{graph.flm}:
 %
@@ -1180,7 +1180,7 @@ We presented the \pkg{GET} package which was designed for global envelopes that 
 Because the global envelopes can be used for so many different purposes specified in cases (i)-(iv) in Section~\ref{sec:intro}, there are several other software, particularly other \proglang{R} packages, that deal with methods that can be used for the same purposes as the methods in \pkg{GET}. However, to the best of our knowledge, \pkg{GET} is the first package specializing to the global envelopes with IGI. 
 
 Besides the graphical interpretation, another advantage of the proposed global rank envelopes is their non-parametric (rank-based) nature, which ensures that the functional or multivariate data coming into the analysis can be inhomogeneous across the domain of their arguments and this phenomenon does not influence the result of the analysis. For example, before the methods discussed in this paper appeared, formal goodness-of-fit testing in spatial statistic was commonly based on the unscaled MAD test \citep{Ripley1981} or its non-graphical integrated counterpart \citep{Diggle1979}. However, the result of these tests is influenced by unequal variability of the test function across its domain leading in general to loss of power \citep{MyllymakiEtal2015, MyllymakiEtal2017}.
-A similar situation appears in the permutation GLM tests which, in the functional data analysis or neuroimage analysis \citep[see, e.g.,][]{WinklerEtal2014}, are commonly based on the $F$~statistic that standardizes the first and second moments of the data but not the high quantiles. Thus, when the data are inhomogeneous across the domain and non-normal, the commonly used $F$-max test (which is similar to the unscaled MAD test) is influenced by the inhomogeneous quantiles. The rank-based tests discussed here can then lead to higher power \citep[for details see][]{MrkvickaEtal2019a}. Similarly, the rank based methods can adjust the shape of the central region to inhomogeneous distribution of the studied functions. Therefore, the global rank envelopes are a valuable tool in all these situations.
+A similar situation appears in the permutation GLM tests which, in the functional data analysis or neuroimage analysis \citep[see, e.g.,][]{WinklerEtal2014}, are commonly based on the $F$~statistic that standardizes the first and second moments of the data but not the high quantiles. Thus, when the data are inhomogeneous across the domain and non-normal, the commonly used $F$-max test (which is similar to the unscaled MAD test) is influenced by the inhomogeneous quantiles. The rank-based tests discussed here can then lead to higher power \citep[for details see][]{MrkvickaEtal2021b}. Similarly, the rank based methods can adjust the shape of the central region to inhomogeneous distribution of the studied functions. Therefore, the global rank envelopes are a valuable tool in all these situations.
 
 A further advantage of the rank tests is that it allows one to give equal weights to the components fed in. Thus, the method is particularly well suited also for multiple testing with several univariate or functional test statistics \citep{MrkvickaEtal2017}, for constructing central regions jointly for various transformations of the functions \citep[for details see][]{DaiEtal2020}, and for combining various dimensions of multidimensional functions or various functional elements of multivariate functions.
 

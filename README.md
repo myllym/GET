@@ -93,12 +93,13 @@ Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020).
 A one-way ANOVA test for functional data with graphical interpretation.
 Kybernetika 56 (3), 432-458. http://doi.org/10.14736/kyb-2020-3-0432
 
-Mrkvička, T., Myllymäki, M. and Narisetty, N. N. (2019).
-New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021).
+New methods for multiple testing in permutation inference for the general linear model.
+Statistics in Medicine. https://doi.org/10.1002/sim.9236
 
-Mrkvička, T., Roskovec, T. and Rost, M. (2019).
+Mrkvička, T., Roskovec, T. and Rost, M. (2021).
 A nonparametric graphical tests of significance in functional GLM.
-Methodology and Computing in Applied Probability, https://doi.org/10.1007/s11009-019-09756-y
+Methodology and Computing in Applied Probability 23, 593-612. https://doi.org/10.1007/s11009-019-09756-y
 
 Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016).
 Monte Carlo testing in spatial statistics, with applications to spatial residuals.
