@@ -58,5 +58,5 @@ Description: Implementation of global envelopes for a set of general d-dimension
     Mrkvička et al. (2016) <doi: 10.1016/j.spasta.2016.04.005>, and
     Myllymäki et al. (2020) <doi: 10.1016/j.spasta.2020.100436>.
 License: GPL-3
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: R.rsp
