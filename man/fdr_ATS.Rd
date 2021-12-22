@@ -6,6 +6,7 @@
 \usage{
 fdr_ATS(
   curve_set,
+  pvalues,
   alpha = 0.05,
   alternative = c("two.sided", "less", "greater")
 )
@@ -13,7 +14,10 @@ fdr_ATS(
 \arguments{
 \item{curve_set}{A \code{curve_set} (see \code{\link{create_curve_set}}) or an
 \code{envelope} object of \pkg{spatstat} containing the observed function
-and the functions from which the envelope is to be constructed.}
+and the resampled functions from which the envelope is to be constructed.
+If provided, resampling p-values will be calculated and used (pvalues then ignored).}
+
+\item{pvalues}{A vector of p-values. An alternative input of curve_set.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
 

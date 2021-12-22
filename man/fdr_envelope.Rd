@@ -5,38 +5,42 @@
 \title{The FDR envelope}
 \usage{
 fdr_envelope(
-  curve_set,
-  curve_set2,
-  type = "rank",
+  curve_sets,
   alpha = 0.05,
+  curve_sets2 = NULL,
   alternative = c("two.sided", "less", "greater"),
-  method = c("IATSGE", "ATSGE")
+  algorithm = c("IATSE", "ATSE"),
+  FDRest = c("ST", "YB", "YBu"),
+  beta = 0.05
 )
 }
 \arguments{
-\item{curve_set}{A \code{curve_set} (see \code{\link{create_curve_set}}) or an
+\item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}}) or an
 \code{envelope} object of \pkg{spatstat} containing the observed function
-and the functions from which the envelope is to be constructed.}
-
-\item{curve_set2}{A \code{curve_set} giving another set of simulations from which
-the numbers of rejections under the null are calculated.}
-
-\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area'.
-See \code{\link{forder}} for description of the measures.}
+and the functions from which the envelope is to be constructed.
+Alternatively, a list of appropriate objects can be given.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
+
+\item{curve_sets2}{A \code{curve_set} giving another set of simulations from which
+the numbers of rejections under the null are calculated. (Alternatively, a list similarly
+as \code{curve_sets}.) If not provided, then expectation under H0 is used instead following
+Storey (2002) and Storey and Tibshirani (2003).}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".
 The last two options only available for types \code{'rank'}, \code{'erl'},
 \code{'cont'} and \code{'area'}.}
 
-\item{method}{Either "ATSGE" or "IATSGE" standing for adaptive two stage
+\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area'.
+See \code{\link{forder}} for description of the measures.}
+
+\item{method}{Either "ATSE" or "IATSE" standing for adaptive two stage
 global envelope, and iteratively adaptive two stage global envelope methods,
 respectively.}
 }
 \description{
-Calculate the FDR envelope based on ATSGE or IATSGE algorithm.
+Calculate the FDR envelope based on ATSE or IATSE algorithm.
 }
 \examples{
 # Just for fun
@@ -51,12 +55,7 @@ if(require("spatstat", quietly=TRUE)) {
                   correction="translate", # edge correction for L
                   transform = expression(.-r), # centering
                   simulate=expression(runifpoint(ex=X))) # Simulate CSR
-  env2 <- envelope(X, fun="Lest", nsim=nsim,
-                  savefuns=TRUE, # save the functions
-                  correction="translate", # edge correction for L
-                  transform = expression(.-r), # centering
-                  simulate=expression(runifpoint(ex=X))) # Simulate CSR
-  res <- fdr_envelope(env1, env2)
+  res <- fdr_envelope(env1)
   plot(res)
 }
 
@@ -69,12 +68,7 @@ sims1 <- graph.flm(nsim=nsim,
                  formula.reduced = Y~1,
                  curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
                  savefuns = TRUE)
-sims2 <- graph.flm(nsim=nsim,
-                 formula.full = Y~Year,
-                 formula.reduced = Y~1,
-                 curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
-                 savefuns = TRUE)
-res <- fdr_envelope(attr(sims1, "simfuns")[[1]], attr(sims2, "simfuns")[[1]])
+res <- fdr_envelope(attr(sims1, "simfuns")[[1]])
 plot(res)
 
 }
