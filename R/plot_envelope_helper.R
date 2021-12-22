@@ -67,16 +67,21 @@ env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {
                        "Alternative = \"", alternative, "\"\n")
     }
     else {
-      if(!is.null(attr(x, "alpha"))) {
-        if(inherits(x, c("fboxplot", "combined_fboxplot")))
-          main <- paste0(attr(x, "method"), " based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
-        else if(inherits(x, c("global_envelope")))
-          main <- paste0(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
-        else
-          main <- NULL
+      if(inherits(x, c("fdr_envelope", "combined_fdr_envelope"))) {
+        main <- paste0(100*(1-attr(x, "alpha")), "% FDR envelope")
       }
-      else
-        main <- paste0(attr(x, "method"), " (", attr(x, "type"), ")")
+      else {
+        if(!is.null(attr(x, "alpha"))) {
+          if(inherits(x, c("fboxplot", "combined_fboxplot")))
+            main <- paste0(attr(x, "method"), " based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
+          else if(inherits(x, c("global_envelope", "combined_global_envelope")))
+            main <- paste0(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
+          else
+            main <- NULL
+        }
+        else
+          main <- paste0(attr(x, "method"), " (", attr(x, "type"), ")")
+      }
     }
   }
   main
