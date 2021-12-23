@@ -41,5 +41,5 @@ the deepest curve of each cluster together with the desired central region and
 all the curves of the group.
 }
 \references{
-Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with joined dissimilarity sources and graphical interpretation. Journal of Multivariate Analysis.
+Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. DOI: 10.5772/intechopen.100124
 }

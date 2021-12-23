@@ -40,7 +40,7 @@
 #' with the dissimilarity matrix (dis). See \code{\link{pam}}.
 #' }
 #' @references
-#' Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. To appear in Computational statistics, Intech open, London, UK.
+#' Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. DOI: 10.5772/intechopen.100124
 #'
 #' @export
 #' @seealso \code{\link{central_region}}, \code{\link{plot.fclust}}
@@ -223,7 +223,7 @@ print.fclust <- function(x, ...) {
 #' where the curves are observed (r) are the same in each set, and 2 otherwise.
 #'
 #' @references
-#' Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with joined dissimilarity sources and graphical interpretation. Journal of Multivariate Analysis.
+#' Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. DOI: 10.5772/intechopen.100124
 #' @export
 #' @importFrom ggplot2 ggplot aes_ geom_line guides facet_wrap facet_grid vars
 plot.fclust <- function(x, plotstyle = c("marginal", "joined"), coverage = 0.5,

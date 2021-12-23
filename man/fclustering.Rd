@@ -97,7 +97,7 @@ if(require("patchwork", quietly=TRUE)) {
 plot(res$pam)
 }
 \references{
-Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. To appear in Computational statistics, Intech open, London, UK.
+Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. DOI: 10.5772/intechopen.100124
 }
 \seealso{
 \code{\link{central_region}}, \code{\link{plot.fclust}}
