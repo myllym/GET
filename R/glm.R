@@ -253,7 +253,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' Non-parametric graphical tests of significance in functional general linear model (GLM)
 #'
 #'
-#' The function \code{graph.flm} performs the graphical functional GLM of Mrkvička et al. (2019),
+#' The function \code{graph.flm} performs the graphical functional GLM of Mrkvička et al. (2021),
 #' described also in Section 3.6 of Myllymäki and Mrkvička (2020) (type \code{vignette("GET")} in R).
 #' This is a nonparametric graphical test of significance of a covariate in functional GLM.
 #' The test is able to find not only if the factor of interest is significant, but also which
@@ -324,7 +324,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' which can be printed and plotted directly.
 #' @export
 #' @references
-#' Mrkvička, T., Roskovec, T. and Rost, M. (2019) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability. doi: 10.1007/s11009-019-09756-y
+#' Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
 #'
 #' Myllymäki, M and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #'
@@ -524,7 +524,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export
 #' @references
-#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine. doi: 10.1002/sim.9236
 #'
 #' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 #' @examples

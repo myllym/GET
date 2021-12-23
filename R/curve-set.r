@@ -525,27 +525,28 @@ curve_set_funcnames <- function(curve_set) {
 # A helper function to obtain the mean of functions in curve_set.
 #
 # Calculate the mean of all the functions in the curve_set.
-curve_set_mean <- function(curve_set) {
-  rowMeans(curve_set[['funcs']])
+curve_set_mean <- function(curve_set, ...) {
+  rowMeans(curve_set[['funcs']], ...)
 }
 
 
 # A helper function to apply the function f to the curve_set functions at all argument values
-applyr <- function(curve_set, f) {
+# @param ... Additional parameters to be passed to f.
+applyr <- function(curve_set, f, ...) {
   funcs <- curve_set[['funcs']]
-  sapply(1:nrow(funcs), function(i) { f(funcs[i,]) })
+  sapply(1:nrow(funcs), function(i) { f(funcs[i,], ...) })
 }
 
 # A helper function to obtain the median of all the functions in curve_set.
 #' @importFrom stats median
-curve_set_median <- function(curve_set) {
-  applyr(curve_set, median)
+curve_set_median <- function(curve_set, ...) {
+  applyr(curve_set, median, ...)
 }
 
 # A helper function to obtain the sd of all the functions in curve_set.
 #' @importFrom stats sd
-curve_set_sd <- function(curve_set) {
-  applyr(curve_set, sd)
+curve_set_sd <- function(curve_set, ...) {
+  applyr(curve_set, sd, ...)
 }
 
 # A helper function to obtain the quantiles of all the functions in curve_set.
