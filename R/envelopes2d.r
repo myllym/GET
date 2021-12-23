@@ -1,3 +1,28 @@
+# A helper function for reducing from multiple envelopes (lo/hi.xx, where xx are the levels)
+# to a single, widest envelope. Currently employed for 2d plotting.
+# Only lo/hi.xx are modified, no other components.
+as_simple_envelope <- function(x) {
+  simplify_lohi <- function(x, lohi="lo") {
+    ind <- grep(lohi, names(x))
+    if(length(ind) > 1) {
+      tmp <- x[,ind[1]]
+      x[,ind] <- NULL
+      x[[lohi]] <- tmp
+    }
+    x
+  }
+  if(inherits(x, c("global_envelope", "global_envelope2d"))) {
+    x <- simplify_lohi(x, "lo")
+    x <- simplify_lohi(x, "hi")
+  }
+  if(inherits(x, c("combined_global_envelope", "combined_global_envelope2d"))) {
+    for(i in 1:length(x)) {
+      x[[i]] <- as_simple_envelope(x[[i]])
+    }
+  }
+  x
+}
+
 # 2d plots with ggplot2
 #----------------------
 # Choose ggplot2 geom based on variables found in df
@@ -110,6 +135,7 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
                                    what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                    sign.col = "red", transparency = 155/255,
                                    digits = 3, ...) {
+  x <- as_simple_envelope(x)
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x, what)
   main <- env_main_default(x, digits=digits)
@@ -179,7 +205,7 @@ plot.combined_global_envelope2d <- function(x, fixedscales = 2, labels,
                                             what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                             sign.col = "red", transparency = 155/255,
                                             digits = 3, ...) {
-  if(length(attr(x, "alpha")) > 1) stop("2d plots implemented currently only for single coverages (alpha).")
+  x <- as_simple_envelope(x)
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x[[1]], what)
   main <- env_main_default(x, digits=digits)
