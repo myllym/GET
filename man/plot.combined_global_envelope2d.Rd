@@ -31,7 +31,8 @@ observed with significantly lower values highlighted (\code{"lo.sign"}).}
 
 \item{sign.col}{The color for the observed curve when outside the global envelope
 (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
-to no coloring.}
+to no coloring. If the object contains several envelopes, the coloring is done for
+the widest one.}
 
 \item{transparency}{A number between 0 and 1 (default 155/255, 60% transparency).
 Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
@@ -46,6 +47,9 @@ in the default main.}
 If fixedscales is FALSE (or 0) all images will have separate scale.
 If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
 If fixedscales is 2 all images will have common scale.
+
+If more than one envelope has been calculated (corresponding to several coverage/alpha),
+only the largest one is plotted.
 }
 \examples{
 data("abide_9002_23")

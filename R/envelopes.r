@@ -443,7 +443,8 @@ print.combined_global_envelope <- function(x, ...) {
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
 #' @param sign.col The color for the observed curve when outside the global envelope
 #' (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
-#' to no coloring.
+#' to no coloring. If the object contains several envelopes, the coloring is done for
+#' the widest one.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
 #' @param digits The number of digits used for printing the p-value or p-interval
@@ -645,6 +646,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' @param type The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 #' 'qdir', 'st' and 'unscaled'. See details.
 #' @param coverage A number between 0 and 1. The 100*coverage\% central region will be calculated.
+#' A vector of values can also be provided, leading to the corresponding number of central regions.
 #' @param central Either "mean" or "median". If the curve sets do not contain the component
 #' \code{theo} for the theoretical central function, then the central function (used for plotting only)
 #' is calculated either as the mean or median of functions provided in the curve sets.
@@ -659,8 +661,10 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' The \code{global_envelope} object is essentially a data frame containing columns
 #' \itemize{
 #' \item r = the vector of values of the argument r at which the test was made
-#' \item lo = the lower envelope based on the simulated functions
-#' \item hi = the upper envelope based on the simulated functions
+#' \item lo = the lower envelope based on the simulated functions;
+#' in case of a vector of coverage values, several 'lo' exist with names paste0("lo.", 100*coverage)
+#' \item hi = the upper envelope based on the simulated functions;
+#' in case of a vector of coverage values, several 'lo' exist with names paste0("hi.", 100*coverage)
 #' \item central = If the \code{curve_set} (or \code{envelope} object) contains a theoretical curve,
 #'       then this function is used as the central curve and returned in this component.
 #'       Otherwise, the central curve is the mean or median (according to the argument \code{central})
@@ -671,7 +675,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' \item obs = the data function, if there is only one data function in the given \code{curve_sets}.
 #' Otherwise not existing.
 #' }
-#' Most often \code{central_region} is directly applied to functional data where all curves are observed.
+#' (Most often \code{central_region} is directly applied to functional data where all curves are observed.)
 #' Additionally, the returned object has some attributes, where
 #' \itemize{
 #'   \item M = A vector of the values of the chosen measure for all the function.
@@ -931,6 +935,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' \code{savefuns = TRUE} when calling the \code{envelope} function.
 #' Alternatively, a list of \code{curve_set} or \code{envelope} objects can be given.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
+#' If a vector of values is provided, the global envelopes are calculated for each value.
 #' @param ties The method to obtain a unique p-value when  \code{type = 'rank'}.
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 #' For 'conservative' the resulting p-value will be the highest possible.
@@ -949,8 +954,8 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' \item the values of the argument r at which the test was made, copied from the argument \code{curve_sets} with the corresponding names
 #' \item obs = values of the data function, copied from the argument \code{curve_sets}
 #' (unlike for central regions, \code{obs} always exists for a global envelope test)
-#' \item lo = the lower envelope
-#' \item hi = the upper envelope
+#' \item lo = the lower envelope; in case of a vector of alpha values, several 'lo' exist with names paste0("lo.", 100*(1-alpha))
+#' \item hi = the upper envelope; in case of a vector of alpha values, several 'lo' exist with names paste0("hi.", 100*(1-alpha))
 #' \item central = a central curve as specified in the argument \code{central}.
 #' }
 #' Moreover, the returned object has the same attributes as the \code{global_envelope} object returned by

@@ -116,6 +116,9 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 
 #' Plotting function for 2d global envelopes
 #'
+#' @description
+#' If more than one envelope has been calculated (corresponding to several coverage/alpha),
+#' only the largest one is plotted.
 #' @param x A 'global_envelope' object for two-dimensional functions
 #' @param fixedscales Logical. TRUE for the same scales for all images.
 #' @param what Character vector specifying what information should be plotted for 2d functions.
@@ -156,6 +159,8 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
 #' If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
 #' If fixedscales is 2 all images will have common scale.
 #'
+#' If more than one envelope has been calculated (corresponding to several coverage/alpha),
+#' only the largest one is plotted.
 #' @inheritParams plot.global_envelope2d
 #' @param fixedscales 0, 1 or 2. See details.
 #' @param labels A character vector of suitable length giving the labels for the separate plots.

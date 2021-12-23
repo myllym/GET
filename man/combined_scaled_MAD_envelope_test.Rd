@@ -24,7 +24,8 @@ Alternatively, a list of \code{curve_set} or \code{envelope} objects can be give
 \item{type}{Either "qdir" for the direction quantile envelope test or
 "st" for the studentized envelope test.}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
+If a vector of values is provided, the global envelopes are calculated for each value.}
 
 \item{probs}{A two-element vector containing the lower and upper
 quantiles for the measure 'q' or 'qdir', in that order and on the interval [0, 1].
