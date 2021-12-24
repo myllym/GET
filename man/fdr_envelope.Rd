@@ -20,7 +20,8 @@ fdr_envelope(
 and the functions from which the envelope is to be constructed.
 Alternatively, a list of appropriate objects can be given.}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
+If a vector of values is provided, the global envelopes are calculated for each value.}
 
 \item{curve_sets2}{A \code{curve_set} giving another set of simulations from which
 the numbers of rejections under the null are calculated. (Alternatively, a list similarly

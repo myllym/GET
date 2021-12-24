@@ -19,7 +19,8 @@ If provided, resampling p-values will be calculated and used (pvalues then ignor
 
 \item{pvalues}{A vector of p-values. An alternative input of curve_set.}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
+If a vector of values is provided, the global envelopes are calculated for each value.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".
