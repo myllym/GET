@@ -10,6 +10,26 @@ critical <- function(distance, alpha, Nfunc, small_significant) {
   distancesorted[floor((1-alpha)*Nfunc)]
 }
 
+# Multiple envelopes can be plotted in certain situations.
+# These functions return the names of the lower and upper bounds of the envelopes
+# that exist in global_envelope objects.
+# largest = FALSE: names of all envelopes
+# largest = TRUE: the maximal envelope corresponding to smallest alpha
+env_loname <- function(alpha, largest=FALSE) {
+  if(length(alpha)>1) {
+    if(largest) paste0("lo.", 100*(1-min(alpha)))
+    else paste0("lo.", 100*(1-alpha))
+  }
+  else "lo"
+}
+env_hiname <- function(alpha, largest=FALSE) {
+  if(length(alpha)>1) {
+    if(largest) paste0("hi.", 100*(1-min(alpha)))
+    else paste0("hi.", 100*(1-alpha))
+  }
+  else "hi"
+}
+
 make_envelope_object <- function(type, curve_set, LB, UB, T_0,
                                  picked_attr, isenvelope,
                                  Malpha, alpha, distance) {
@@ -49,11 +69,12 @@ make_envelope_object <- function(type, curve_set, LB, UB, T_0,
 # @param ... Ignored.
 individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
                                       alternative = c("two.sided", "less", "greater"),
-                                      probs = c((1-coverage)/2, 1-(1-coverage)/2),
+                                      probs = c((1-coverage[1])/2, 1-(1-coverage[1])/2),
                                       quantile.type = 7,
                                       central = "median") {
   isenvelope <- inherits(curve_set, "envelope")
-  if(!is.numeric(coverage) || (coverage < 0 | coverage > 1)) stop("Unreasonable value of coverage.")
+  if(!is.numeric(coverage) || any(coverage <= 0 | coverage > 1)) stop("Unreasonable value of coverage.")
+  coverage <- sort(coverage, decreasing = TRUE)
   alpha <- 1 - coverage
   if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
     stop("No such type for global envelope.")
@@ -72,6 +93,10 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
     warning("Invalid option fiven for central. Using central = median.")
   }
   picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
+  if(isenvelope & length(alpha)>1) {
+    # Note: no fv object for multiple coverages
+    isenvelope <- FALSE
+  }
   curve_set <- convert_to_curveset(curve_set)
 
   # Measures for functional ordering
@@ -100,50 +125,57 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   T_0 <- get_T_0(curve_set)
 
   # Check reasonability of Nfunc vs alpha
-  if(Nfunc*alpha < 1-.Machine$double.eps^0.5)
-    stop("Number of functions s is only ", Nfunc, ", but alpha is ", alpha,
-         ". So, s*alpha is ", Nfunc*alpha, ".", sep="")
+  if(any(Nfunc*alpha < 1-.Machine$double.eps^0.5))
+    stop("Number of functions s is only ", Nfunc, ", but smallest alpha is ", min(alpha),
+         ". So, s*alpha is ", Nfunc*min(alpha), ".", sep="")
 
   # The critical value
   Malpha <- critical(distance, alpha, Nfunc, small_significant)
 
   #-- 100(1-alpha)% global envelope
+  LBounds <- UBounds <- vector(mode="list", length=length(alpha))
   switch(type,
          rank = {
-           LB <- array(0, nr)
-           UB <- array(0, nr)
            for(i in 1:nr){
              Hod <- sort(all_curves[,i])
-             LB[i]<- Hod[Malpha]
-             UB[i]<- Hod[Nfunc-Malpha+1]
+             for(ai in 1:length(alpha)) {
+               LBounds[[ai]][i]<- Hod[Malpha[ai]]
+               UBounds[[ai]][i]<- Hod[Nfunc-Malpha[ai]+1]
+             }
            }
          },
          erl =,
          cont =,
          area = {
-           j <- distance >= Malpha
-           LB <- array(0, nr)
-           UB <- array(0, nr)
-           for(i in 1:nr){
-             lu <- range(all_curves[j,i])
-             LB[i]<- lu[1]
-             UB[i]<- lu[2]
+           for(ai in 1:length(alpha)) {
+             j <- distance >= Malpha[ai]
+             for(i in 1:nr){
+               lu <- range(all_curves[j,i])
+               LBounds[[ai]][i]<- lu[1]
+               UBounds[[ai]][i]<- lu[2]
+             }
            }
          },
-         qdir = {
+         qdir = { # Note: All coverage levels use same probs
            curve_set_res <- residual(curve_set, use_theo=TRUE)
            quant_m <- curve_set_quant(curve_set_res, probs=probs, type=quantile.type)
-           LB <- T_0 - Malpha*abs(quant_m[1,])
-           UB <- T_0 + Malpha*abs(quant_m[2,])
+           for(ai in 1:length(alpha)) {
+             LBounds[[ai]] <- T_0 - Malpha[ai]*abs(quant_m[1,])
+             UBounds[[ai]] <- T_0 + Malpha[ai]*abs(quant_m[2,])
+           }
          },
          st = {
            sdX <- curve_set_sd(curve_set)
-           LB <- T_0 - Malpha*sdX
-           UB <- T_0 + Malpha*sdX
+           for(ai in 1:length(alpha)) {
+             LBounds[[ai]] <- T_0 - Malpha[ai]*sdX
+             UBounds[[ai]] <- T_0 + Malpha[ai]*sdX
+           }
          },
          unscaled = {
-           LB <- T_0 - Malpha
-           UB <- T_0 + Malpha
+           for(ai in 1:length(alpha)) {
+             LBounds[[ai]] <- T_0 - Malpha[ai]
+             UBounds[[ai]] <- T_0 + Malpha[ai]
+           }
          })
 
   switch(alternative,
@@ -151,6 +183,15 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          "less" = { UB <- Inf },
          "greater" = { LB <- -Inf })
 
+  if(length(alpha) > 1) { # Multiple envelopes
+    names(LBounds) <- names(UBounds) <- paste0(100*coverage)
+    LB <- do.call(cbind, LBounds)
+    UB <- do.call(cbind, UBounds)
+  }
+  else {
+    LB <- LBounds[[1]]
+    UB <- UBounds[[1]]
+  }
   res <- make_envelope_object(type, curve_set, LB, UB, T_0,
                               picked_attr, isenvelope,
                               Malpha, alpha, distance)
@@ -168,7 +209,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
   tmp <- convert_to_curveset(curve_set)
   if(!curve_set_is1obs(tmp))
     stop("The curve_set does not contain one observed function. Testing does not make sense.\n Did you want to construct a central region of your data? See the function central_region.")
-  if(!is.numeric(alpha) || (alpha < 0 | alpha > 1)) stop("Unreasonable value of alpha.")
+  if(!is.numeric(alpha) || any(alpha < 0 | alpha >= 1)) stop("Unreasonable value of alpha.")
   res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
                                    alternative=alternative,
                                    probs=probs, quantile.type=quantile.type,
@@ -261,27 +302,48 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   )
   res_erl <- envelope_set_labs(res_erl, xlab="Function", ylab="ERL measure")
   attr(res_erl, "labels") <- names(curve_sets)
+  coverage <- 1 - attr(res_erl, "alpha") # ordered
 
   # 3) The 100(1-alpha)% global combined ERL envelope
   distance_lexo_sorted <- sort(attr(res_erl, "M"), decreasing=TRUE)
   Malpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
-  # Indices of the curves from which to calculate the convex hull
-  curves_for_envelope_ind <- which(attr(res_erl, "M") >= Malpha)
-  # Curves
-  curve_sets <- lapply(curve_sets, FUN=convert_to_curveset)
-  all_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
-  # Curves from which to calculate the convex hull
-  curves_for_envelope_l <- lapply(all_curves_l, function(x) { x[curves_for_envelope_ind,] })
-  # Bounding curves
-  LB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=min) })
-  UB <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
-  # Update the bounding curves (lo, hi) and Malpha to the first level central regions
-  for(i in 1:ntests) {
-    if(get_alternative(res_ls[[i]]) != "greater") res_ls[[i]]$lo <- LB[[i]]
-    if(get_alternative(res_ls[[i]]) != "less") res_ls[[i]]$hi <- UB[[i]]
-    attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL
-    attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of a combined global envelope test")
+
+  LBounds <- UBounds <- list()
+  for(ai in 1:length(coverage)) {
+    # Indices of the curves from which to calculate the convex hull
+    curves_for_envelope_ind <- which(attr(res_erl, "M") >= Malpha[ai])
+    # Curves
+    curve_sets <- lapply(curve_sets, FUN=convert_to_curveset)
+    all_curves_l <- lapply(curve_sets, function(x) { data_and_sim_curves(x) })
+    # Curves from which to calculate the convex hull
+    curves_for_envelope_l <- lapply(all_curves_l, function(x) { x[curves_for_envelope_ind,] })
+    # Bounding curves
+    LBounds[[ai]] <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=min) })
+    UBounds[[ai]] <- lapply(curves_for_envelope_l, FUN = function(x) { apply(x, MARGIN=2, FUN=max) })
   }
+  # Update the bounding curves (lo, hi) and Malpha to the first level central regions
+  if(length(coverage) == 1) { # Use names 'lo' and 'hi'
+    for(i in 1:ntests) {
+      if(get_alternative(res_ls[[i]]) != "greater") res_ls[[i]]$lo <- LBounds[[1]][[i]]
+      if(get_alternative(res_ls[[i]]) != "less") res_ls[[i]]$hi <- UBounds[[1]][[i]]
+      attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL
+      attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of a combined global envelope test")
+    }
+  }
+  else { # Names according to the coverages, i.e. lo.xx, hi.xx where xx represent the levels
+    for(i in 1:ntests) {
+      if(get_alternative(res_ls[[i]]) != "greater")
+        for(ai in 1:length(coverage))
+          res_ls[[i]][paste0("lo.", 100*coverage[ai])] <- LBounds[[ai]][[i]]
+      if(get_alternative(res_ls[[i]]) != "less")
+        for(ai in 1:length(coverage))
+          res_ls[[i]][paste0("hi.", 100*coverage[ai])] <- UBounds[[ai]][[i]]
+      res_ls[[i]]$lo <- res_ls[[i]]$hi <- NULL
+      attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL
+      attr(res_ls[[i]], "method") <- paste0("1/", ntests, "th of a combined global envelope test")
+    }
+  }
+
   if(!is.null(names(curve_sets))) names(res_ls) <- names(curve_sets)
 
   # Return
@@ -326,7 +388,6 @@ combined_CR_or_GET_1step <- function(curve_sets, CR_or_GET = c("CR", "GET"), cov
   # Transform the envelope to a combined envelope
   nfuns <- length(curve_sets)
   nr <- curve_set_narg(curve_sets[[1]]) # all curve sets have the same
-  idx <- lapply(1:nfuns, FUN = function(i) ((i-1)*nr+1):(i*nr))
   # Split the envelopes to the original groups
   res_ls <- split(res, f = rep(1:nfuns, each=nr))
 
@@ -382,7 +443,8 @@ print.combined_global_envelope <- function(x, ...) {
 #' Default: TRUE if the dimension is less than 10, FALSE otherwise.
 #' @param sign.col The color for the observed curve when outside the global envelope
 #' (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
-#' to no coloring.
+#' to no coloring. If the object contains several envelopes, the coloring is done for
+#' the widest one.
 #' @param labels A character vector of suitable length.
 #' If \code{dotplot = TRUE}, then labels for the tests at x-axis.
 #' @param digits The number of digits used for printing the p-value or p-interval
@@ -570,7 +632,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' @references
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #'
-#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine. doi: 10.1002/sim.9236
 #'
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 #'
@@ -584,6 +646,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' @param type The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 #' 'qdir', 'st' and 'unscaled'. See details.
 #' @param coverage A number between 0 and 1. The 100*coverage\% central region will be calculated.
+#' A vector of values can also be provided, leading to the corresponding number of central regions.
 #' @param central Either "mean" or "median". If the curve sets do not contain the component
 #' \code{theo} for the theoretical central function, then the central function (used for plotting only)
 #' is calculated either as the mean or median of functions provided in the curve sets.
@@ -598,8 +661,10 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' The \code{global_envelope} object is essentially a data frame containing columns
 #' \itemize{
 #' \item r = the vector of values of the argument r at which the test was made
-#' \item lo = the lower envelope based on the simulated functions
-#' \item hi = the upper envelope based on the simulated functions
+#' \item lo = the lower envelope based on the simulated functions;
+#' in case of a vector of coverage values, several 'lo' exist with names paste0("lo.", 100*coverage)
+#' \item hi = the upper envelope based on the simulated functions;
+#' in case of a vector of coverage values, several 'lo' exist with names paste0("hi.", 100*coverage)
 #' \item central = If the \code{curve_set} (or \code{envelope} object) contains a theoretical curve,
 #'       then this function is used as the central curve and returned in this component.
 #'       Otherwise, the central curve is the mean or median (according to the argument \code{central})
@@ -610,7 +675,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' \item obs = the data function, if there is only one data function in the given \code{curve_sets}.
 #' Otherwise not existing.
 #' }
-#' Most often \code{central_region} is directly applied to functional data where all curves are observed.
+#' (Most often \code{central_region} is directly applied to functional data where all curves are observed.)
 #' Additionally, the returned object has some attributes, where
 #' \itemize{
 #'   \item M = A vector of the values of the chosen measure for all the function.
@@ -708,7 +773,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #'                      ggplot2::aes(x=id, y=points)) # true function
 central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            alternative = c("two.sided", "less", "greater"),
-                           probs = c((1-coverage)/2, 1-(1-coverage)/2),
+                           probs = c(0.25, 0.75),
                            quantile.type = 7,
                            central = "median", nstep = 2, ...) {
   if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
@@ -852,7 +917,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #'
-#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine. doi: 10.1002/sim.9236
 #'
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 #'
@@ -870,6 +935,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' \code{savefuns = TRUE} when calling the \code{envelope} function.
 #' Alternatively, a list of \code{curve_set} or \code{envelope} objects can be given.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
+#' If a vector of values is provided, the global envelopes are calculated for each value.
 #' @param ties The method to obtain a unique p-value when  \code{type = 'rank'}.
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 #' For 'conservative' the resulting p-value will be the highest possible.
@@ -888,8 +954,8 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' \item the values of the argument r at which the test was made, copied from the argument \code{curve_sets} with the corresponding names
 #' \item obs = values of the data function, copied from the argument \code{curve_sets}
 #' (unlike for central regions, \code{obs} always exists for a global envelope test)
-#' \item lo = the lower envelope
-#' \item hi = the upper envelope
+#' \item lo = the lower envelope; in case of a vector of alpha values, several 'lo' exist with names paste0("lo.", 100*(1-alpha))
+#' \item hi = the upper envelope; in case of a vector of alpha values, several 'lo' exist with names paste0("hi.", 100*(1-alpha))
 #' \item central = a central curve as specified in the argument \code{central}.
 #' }
 #' Moreover, the returned object has the same attributes as the \code{global_envelope} object returned by

@@ -1,3 +1,28 @@
+# A helper function for reducing from multiple envelopes (lo/hi.xx, where xx are the levels)
+# to a single, widest envelope. Currently employed for 2d plotting.
+# Only lo/hi.xx are modified, no other components.
+as_simple_envelope <- function(x) {
+  simplify_lohi <- function(x, lohi="lo") {
+    ind <- grep(lohi, names(x))
+    if(length(ind) > 1) {
+      tmp <- x[,ind[1]]
+      x[,ind] <- NULL
+      x[[lohi]] <- tmp
+    }
+    x
+  }
+  if(inherits(x, c("global_envelope", "global_envelope2d"))) {
+    x <- simplify_lohi(x, "lo")
+    x <- simplify_lohi(x, "hi")
+  }
+  if(inherits(x, c("combined_global_envelope", "combined_global_envelope2d"))) {
+    for(i in 1:length(x)) {
+      x[[i]] <- as_simple_envelope(x[[i]])
+    }
+  }
+  x
+}
+
 # 2d plots with ggplot2
 #----------------------
 # Choose ggplot2 geom based on variables found in df
@@ -91,6 +116,9 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 
 #' Plotting function for 2d global envelopes
 #'
+#' @description
+#' If more than one envelope has been calculated (corresponding to several coverage/alpha),
+#' only the largest one is plotted.
 #' @param x A 'global_envelope' object for two-dimensional functions
 #' @param fixedscales Logical. TRUE for the same scales for all images.
 #' @param what Character vector specifying what information should be plotted for 2d functions.
@@ -110,6 +138,7 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
                                    what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                    sign.col = "red", transparency = 155/255,
                                    digits = 3, ...) {
+  x <- as_simple_envelope(x)
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x, what)
   main <- env_main_default(x, digits=digits)
@@ -130,6 +159,8 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
 #' If fixedscales is TRUE (or 1) each x[[i]] will have a common scale.
 #' If fixedscales is 2 all images will have common scale.
 #'
+#' If more than one envelope has been calculated (corresponding to several coverage/alpha),
+#' only the largest one is plotted.
 #' @inheritParams plot.global_envelope2d
 #' @param fixedscales 0, 1 or 2. See details.
 #' @param labels A character vector of suitable length giving the labels for the separate plots.
@@ -179,6 +210,7 @@ plot.combined_global_envelope2d <- function(x, fixedscales = 2, labels,
                                             what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
                                             sign.col = "red", transparency = 155/255,
                                             digits = 3, ...) {
+  x <- as_simple_envelope(x)
   what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x[[1]], what)
   main <- env_main_default(x, digits=digits)

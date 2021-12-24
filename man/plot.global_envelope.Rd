@@ -22,7 +22,8 @@ Default: TRUE if the dimension is less than 10, FALSE otherwise.}
 
 \item{sign.col}{The color for the observed curve when outside the global envelope
 (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
-to no coloring.}
+to no coloring. If the object contains several envelopes, the coloring is done for
+the widest one.}
 
 \item{labels}{A character vector of suitable length.
 If \code{dotplot = TRUE}, then labels for the tests at x-axis.}

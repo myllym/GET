@@ -29,7 +29,8 @@ A sensible default based on r-values exists.}
 
 \item{sign.col}{The color for the observed curve when outside the global envelope
 (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
-to no coloring.}
+to no coloring. If the object contains several envelopes, the coloring is done for
+the widest one.}
 
 \item{ncol}{The maximum number of columns for the figures.
 Default 2 or 3, if the length of x equals 3.

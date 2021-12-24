@@ -38,7 +38,7 @@ plot(imageset3$image_set, idx=c(1:5, 11:15, 21:25), ncol=5) +
 }
 }
 \references{
-Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine. doi: 10.1002/sim.9236
 }
 \seealso{
 \code{\link{graph.fanova}}, \code{\link{frank.fanova}}

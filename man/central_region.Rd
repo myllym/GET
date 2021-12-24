@@ -10,7 +10,7 @@ central_region(
   type = "erl",
   coverage = 0.5,
   alternative = c("two.sided", "less", "greater"),
-  probs = c((1 - coverage)/2, 1 - (1 - coverage)/2),
+  probs = c(0.25, 0.75),
   quantile.type = 7,
   central = "median",
   nstep = 2,
@@ -23,7 +23,8 @@ central_region(
 \item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 'qdir', 'st' and 'unscaled'. See details.}
 
-\item{coverage}{A number between 0 and 1. The 100*coverage\% central region will be calculated.}
+\item{coverage}{A number between 0 and 1. The 100*coverage\% central region will be calculated.
+A vector of values can also be provided, leading to the corresponding number of central regions.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".
@@ -55,8 +56,10 @@ returned objects (see examples).
 The \code{global_envelope} object is essentially a data frame containing columns
 \itemize{
 \item r = the vector of values of the argument r at which the test was made
-\item lo = the lower envelope based on the simulated functions
-\item hi = the upper envelope based on the simulated functions
+\item lo = the lower envelope based on the simulated functions;
+in case of a vector of coverage values, several 'lo' exist with names paste0("lo.", 100*coverage)
+\item hi = the upper envelope based on the simulated functions;
+in case of a vector of coverage values, several 'lo' exist with names paste0("hi.", 100*coverage)
 \item central = If the \code{curve_set} (or \code{envelope} object) contains a theoretical curve,
       then this function is used as the central curve and returned in this component.
       Otherwise, the central curve is the mean or median (according to the argument \code{central})
@@ -67,7 +70,7 @@ and potentially additionally
 \item obs = the data function, if there is only one data function in the given \code{curve_sets}.
 Otherwise not existing.
 }
-Most often \code{central_region} is directly applied to functional data where all curves are observed.
+(Most often \code{central_region} is directly applied to functional data where all curves are observed.)
 Additionally, the returned object has some attributes, where
 \itemize{
   \item M = A vector of the values of the chosen measure for all the function.
@@ -232,7 +235,7 @@ plot(cr) + ggplot2::labs(x=expression(italic(x)), y=expression(italic(f(x)))) +
 \references{
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 
-Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine. doi: 10.1002/sim.9236
 
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 

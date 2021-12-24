@@ -4,13 +4,16 @@
 \alias{fBoxplot}
 \title{Functional boxplot}
 \usage{
-fBoxplot(curve_sets, factor = 1.5, ...)
+fBoxplot(curve_sets, factor = 1.5, coverage = 0.5, ...)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
 
 \item{factor}{The constant factor to inflate the central region to produce a functional boxplot and
 determine fences for outliers. Default is 1.5 as in a classical boxplot.}
+
+\item{coverage}{A number between 0 and 1. The 100*coverage\% central region will be calculated.
+A vector of values can also be provided, leading to the corresponding number of central regions.}
 
 \item{...}{Additional parameters to be passed to \code{\link{central_region}},
 which is responsible for calculating the central region (global envelope) on which

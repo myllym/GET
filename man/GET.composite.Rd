@@ -75,7 +75,8 @@ hypothesis (if simfun not provided), then also recall to specify how to generate
 \item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 'qdir', 'st' and 'unscaled'. See details.}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
+If a vector of values is provided, the global envelopes are calculated for each value.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".

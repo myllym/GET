@@ -1,13 +1,14 @@
-how_many_outside <- function(x) {
+how_many_outside <- function(x, alpha=NULL) {
+  if(is.null(alpha)) alpha <- attr(x, "alpha")
   switch(get_alternative(x),
          two.sided = {
-           sum(x[['obs']]<x[['lo']] | x[['obs']]>x[['hi']])
+           sum(x[['obs']]<x[[env_loname(alpha, largest=TRUE)]] | x[['obs']]>x[[env_hiname(alpha, largest=TRUE)]])
          },
          less = {
-           sum(x[['obs']]<x[['lo']])
+           sum(x[['obs']]<x[[env_loname(alpha, largest=TRUE)]])
          },
          greater = {
-           sum(x[['obs']]>x[['hi']])
+           sum(x[['obs']]>x[[env_hiname(alpha, largest=TRUE)]])
          })
 }
 
@@ -29,7 +30,7 @@ printhelper_method <- function(x, istest, adj) {
   cat(attr(x, "method"), nstep, xdim, ":\n", sep="")
   if(!istest) { # The case of a central region & fboxplot
     if(!is.null(level)) {
-      cat(" * ", level, "% central region based on the measure \"", attr(x, "type"), "\"\n", sep="")
+      for(i in 1:length(level)) cat(" * ", level[i], "% central region based on the measure \"", attr(x, "type"), "\"\n", sep="")
       if(!is.null(attr(x, "M"))) {
         o <- order(attr(x, "M"))[1:5]
         cat(" * The 5 most extreme functions based on \"", attr(x, "type"), "\": ",
@@ -38,12 +39,14 @@ printhelper_method <- function(x, istest, adj) {
     }
   }
   else { # The case of a global envelope test
-    cat(" * Based on the measure: \"", attr(x, "type"), "\"\n",
-        " * Significance level of the global test: ", attr(x, "alpha"), "\n", sep="")
+    cat(" * Based on the measure: \"", attr(x, "type"), "\"\n", sep="")
+    if(!is.null(level))
+      cat(" * ", paste0(paste(level), collapse=", "), "% global envelope", sep="")
     if(adj)
-      cat(" * Adjusted level of the global test: ", attr(x, "alpha_star"), "\n", sep="")
-    if(!is.null(level)) cat(" * ", level, "% global envelope\n",
-        " * p-value of the global test: ", attr(x, "p", exact=TRUE), sep="")
+      cat("(adjusted levels ", paste0(paste(100*(1-attr(x, "alpha_star"))), collapse=", "), ")\n", sep="")
+    else
+      cat("\n")
+    cat(" * p-value of the global test: ", attr(x, "p", exact=TRUE), sep="")
     if(!is.null(attr(x, "ties")))
       cat(" (ties method: ", attr(x, "ties"), ")\n", sep="")
     else
@@ -51,6 +54,9 @@ printhelper_method <- function(x, istest, adj) {
     if(!is.null(attr(x, "p_interval")))
       cat(" * p-interval       : (", attr(x, "p_interval")[1], ", ",
           attr(x, "p_interval")[2],")\n", sep="")
+    cat(" * Significance level of the global test: ", attr(x, "alpha")[1], "\n", sep="")
+    if(adj)
+      cat(" * Adjusted level of the global test: ", attr(x, "alpha_star")[1], "\n", sep="")
   }
 }
 
@@ -102,13 +108,21 @@ printhelper_contains <- function(x, istest) {
     cat("$central - Central function                : ")
     str(x[['central']])
   }
-  if('lo' %in% names(x)) {
+  lo <- grep('lo', names(x))
+  if(length(lo) == 1) {
     cat("$lo - Lower boundary of the ", n, ": ", sep="")
     str(x[['lo']])
   }
-  if('hi' %in% names(x)) {
+  if(length(lo) > 1) {
+    cat(paste0("$", names(x)[lo], collapse=", "), " - Lower boundaries\n", sep="")
+  }
+  hi <- grep('hi', names(x))
+  if(length(hi) == 1) {
     cat("$hi - Upper boundary of the ", n, ": ", sep="")
     str(x[['hi']])
+  }
+  if(length(hi) > 1) {
+    cat(paste0("$", names(x)[hi], collapse=", "), " - Upper boundaries\n", sep="")
   }
   if('whisker.lo' %in% names(x)) {
     cat("$whisker.lo - Lower boundary of the boxplot: ")
@@ -124,13 +138,14 @@ printhelper_contains_combined <- function(x) {
 }
 
 # A helper function for printing global envelopes
-printhelper_ge_base <- function(x, adj=FALSE) {
+printhelper_ge_base <- function(x, adj=!is.null(attr(x, "alpha_star"))) {
   if(is.null(attr(x, "p", exact=TRUE))) istest <- FALSE
   else istest <- TRUE
   printhelper_method(x, istest, adj)
-  if(istest)
+  if(istest) {
     cat(" * Number of r with observed function outside the envelope: ", how_many_outside(x), "\n",
         " * Total number of argument values r                      : ", length(x[['obs']]), "\n", sep="")
+  }
   cat("The object contains: \n")
   printhelper_contains(x, istest)
 }
@@ -143,7 +158,7 @@ printhelper_ge_combined <- function(x, adj=!is.null(attr(x, "alpha_star"))) {
   printhelper_contains_combined(x)
   if(istest)
     cat(" * Number of r-values with observed function outside the envelope: ",
-        paste0(sapply(x, function(x_part) how_many_outside(x_part), simplify=TRUE), " "), "\n",
+        paste0(sapply(x, function(x_part) how_many_outside(x_part, attr(x, "alpha")), simplify=TRUE), " "), "\n",
         " * Total number of argument values r                             : ",
         paste0(sapply(x, function(x_part) length(x_part[['obs']]), simplify=TRUE), " "), "\n", sep="")
 }

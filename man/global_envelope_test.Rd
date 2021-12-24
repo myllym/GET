@@ -28,7 +28,8 @@ Alternatively, a list of \code{curve_set} or \code{envelope} objects can be give
 \item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 'qdir', 'st' and 'unscaled'. See details.}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.}
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
+If a vector of values is provided, the global envelopes are calculated for each value.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".
@@ -70,8 +71,8 @@ The \code{global_envelope} is essentially a data frame containing columns
 \item the values of the argument r at which the test was made, copied from the argument \code{curve_sets} with the corresponding names
 \item obs = values of the data function, copied from the argument \code{curve_sets}
 (unlike for central regions, \code{obs} always exists for a global envelope test)
-\item lo = the lower envelope
-\item hi = the upper envelope
+\item lo = the lower envelope; in case of a vector of alpha values, several 'lo' exist with names paste0("lo.", 100*(1-alpha))
+\item hi = the upper envelope; in case of a vector of alpha values, several 'lo' exist with names paste0("hi.", 100*(1-alpha))
 \item central = a central curve as specified in the argument \code{central}.
 }
 Moreover, the returned object has the same attributes as the \code{global_envelope} object returned by
@@ -335,7 +336,7 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017). Multiple Monte Carlo testing,
 
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 
-Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2020) New methods for multiple testing in permutation inference for the general linear model. arXiv:1906.09004 [stat.ME]
+Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine. doi: 10.1002/sim.9236
 
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 

@@ -363,6 +363,7 @@ GET.composite <- function(X, X.ls = NULL,
                          save.cons.envelope = savefuns, savefuns = FALSE,
                          verbose = TRUE, MrkvickaEtal2017 = FALSE, mc.cores = 1L) {
   alt <- match.arg(alternative)
+  if(length(alpha)>1) stop("Multiple coverages (alpha) not implemented for adjusted tests. If you really need this feature, contact the maintainer.")
 
   # Simulations
   #------------
@@ -487,6 +488,11 @@ GET.composite <- function(X, X.ls = NULL,
     else {
       alpha_star <- quantile(pvals, probs=alpha, type=1)
       res <- global_envelope_test(X, type=type, alpha=alpha_star, alternative=alt)
+      # For the case of multiple alpha, rename the components according to the original levels
+      if(length(alpha) > 1) {
+        names(res)[grep("lo", names(res))] <- env_loname(alpha)
+        names(res)[grep("hi", names(res))] <- env_hiname(alpha)
+      }
       # Original p-value
       attr(res, "p_original") <- attr(res, "p")
       # Adjusted p-value
