@@ -524,9 +524,9 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' @return A \code{global_envelope} object, which can be printed and plotted directly.
 #' @export
 #' @references
-#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine. doi: 10.1002/sim.9236
+#' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41(2), 276-297. doi: 10.1002/sim.9236
 #'
-#' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
+#' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics 1(4), 292-298. doi:10.2307/1391660
 #' @examples
 #' data("GDPtax")
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)

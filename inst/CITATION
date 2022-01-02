@@ -76,12 +76,13 @@ citEntry(
                         as.person("M. Myllymäki"),
                         as.person("N.N. Narisetty")),
     journal = "Statistics in Medicine",
-    year = "2021",
-    volume = "",
-    pages = "",
+    year = "2022",
+    volume = "41",
+    number = "2",
+    pages = "276-297",
     url = "https://doi.org/10.1002/sim.9236",
-    textVersion = "Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021).
-New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine. https://doi.org/10.1002/sim.9236"
+    textVersion = "Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022).
+New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41 (2), 276-297. https://doi.org/10.1002/sim.9236"
 )
 
 citEntry(
@@ -142,10 +143,10 @@ citEntry(
                         as.person("T. Mrkvička")),
     journal = "Spatial Statistics",
     year = "2020",
-    volume = "",
-    pages = "",
+    volume = "42",
+    pages = "100436",
     url = "https://doi.org/10.1016/j.spasta.2020.100436",
     textVersion = "Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020).
 Testing global and local dependence of point patterns on covariates in parametric models.
-Spatial Statistics. https://doi.org/10.1016/j.spasta.2020.100436",
+Spatial Statistics 42, 100436. https://doi.org/10.1016/j.spasta.2020.100436",
 )

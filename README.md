@@ -93,9 +93,9 @@ Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020).
 A one-way ANOVA test for functional data with graphical interpretation.
 Kybernetika 56 (3), 432-458. http://doi.org/10.14736/kyb-2020-3-0432
 
-Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2021).
+Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022).
 New methods for multiple testing in permutation inference for the general linear model.
-Statistics in Medicine. https://doi.org/10.1002/sim.9236
+Statistics in Medicine 41(2), 276-297. https://doi.org/10.1002/sim.9236
 
 Mrkvička, T., Roskovec, T. and Rost, M. (2021).
 A nonparametric graphical tests of significance in functional GLM.
@@ -112,4 +112,4 @@ patterns. Spatial Statistics 11: 19-34. https://doi.org/10.1016/j.spasta.2014.11
 
 Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020).
 Testing global and local dependence of point patterns on covariates in parametric models.
-Spatial Statistics, https://doi.org/10.1016/j.spasta.2020.100436
+Spatial Statistics 42, 100436, https://doi.org/10.1016/j.spasta.2020.100436
