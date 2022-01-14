@@ -150,3 +150,19 @@ citEntry(
 Testing global and local dependence of point patterns on covariates in parametric models.
 Spatial Statistics 42, 100436. https://doi.org/10.1016/j.spasta.2020.100436",
 )
+
+citEntry(
+    entry = "Article",
+    title = "A new functional clustering method with combined dissimilarity sources and graphical interpretation",
+    author = personList(as.person("W. Dai"),
+                        as.person("S. Athanasiadis"),
+                        as.person("T. Mrkvička")),
+    journal = "Intech open",
+    year = "2022",
+    volume = "",
+    pages = "",
+    url = "https://doi.org/10.5772/intechopen.100124",
+    textVersion = "Dai, W., Athanasiadis, S. and Mrkvička, T. (2022).
+A new functional clustering method with combined dissimilarity sources and graphical interpretation.
+Intech open. https://doi.org/10.5772/intechopen.100124",
+)

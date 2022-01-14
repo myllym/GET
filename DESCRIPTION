@@ -1,6 +1,6 @@
 Package: GET
 Version: 0.2-5
-Date: 2021-12-23
+Date: 2022-1-14
 Title: Global Envelopes
 Encoding: UTF-8
 Authors@R: c(
@@ -53,10 +53,11 @@ Description: Implementation of global envelopes for a set of general d-dimension
     Myllymäki et al. (2017) <doi: 10.1111/rssb.12172>,
     Mrkvička et al. (2017) <doi: 10.1007/s11222-016-9683-9>,
     Mrkvička et al. (2020) <doi: 10.14736/kyb-2020-3-0432>,
-    Mrkvička et al. (2019) <doi: 10.1007/s11009-019-09756-y>,
-    Mrkvička et al. (2019) <arXiv:1902.04926>,
-    Mrkvička et al. (2016) <doi: 10.1016/j.spasta.2016.04.005>, and
-    Myllymäki et al. (2020) <doi: 10.1016/j.spasta.2020.100436>.
+    Mrkvička et al. (2021) <doi: 10.1007/s11009-019-09756-y>,
+    Mrkvička et al. (2022) <doi: 10.1002/sim.9236>,
+    Mrkvička et al. (2016) <doi: 10.1016/j.spasta.2016.04.005>,
+    Myllymäki et al. (2021) <doi: 10.1016/j.spasta.2020.100436>, and
+    Dai et al. (2022) <doi: 10.5772/intechopen.100124>.
 License: GPL-3
 RoxygenNote: 7.1.2
 VignetteBuilder: R.rsp
