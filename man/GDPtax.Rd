@@ -21,7 +21,7 @@ The data includes the GDP per capita (current US$) for years 1980-2017
 (World Bank national accounts data, and OECD National Accounts data files).
 The data have been downloaded from the webpage
 https://datamarket.com/data/set/15c9/gdp-per-capita-current-us#!ds=15c9!hd1&display=line,
-distributed under the CC-BY 4.0 (\url{https://datacatalog.worldbank.org/public-licenses#cc-by}).
+distributed under the CC-BY 4.0 (https://datacatalog.worldbank.org/public-licenses#cc-by).
 From the same webpage the profit tax in 2010 (World Bank, Doing Business Project (http://www.doingbusiness.org/ExploreTopics/PayingTaxes/)
 and Total tax rate (% of commercial profits) (World Bank, Doing Business project (http://www.doingbusiness.org/))
 were downloaded.
