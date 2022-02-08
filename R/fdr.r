@@ -459,6 +459,7 @@ individual_fdr_envelope <- function(curve_set, curve_set2 = NULL, alpha = 0.05,
   alternative <- match.arg(alternative)
   algorithm <- match.arg(algorithm)
   FDRest <- match.arg(FDRest)
+  if(FDRest %in% c("YB", "YBu")) warning("The YB and YBu options are liberal and only meant for experimenting. Use ST instead.\n")
   if(!is.numeric(alpha) || (alpha < 0 | alpha >= 1)) stop("Unreasonable value of alpha.")
   if(!is.numeric(beta) || (beta <= 0 | beta >= 1)) stop("Unreasonable value of beta.")
   picked_attr <- pick_attributes(curve_set, alternative=alternative) # Saving for attributes / plotting purposes
