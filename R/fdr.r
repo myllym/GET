@@ -513,30 +513,19 @@ individual_fdr_envelope <- function(curve_set, curve_set2 = NULL, alpha = 0.05,
 #' the numbers of rejections under the null are calculated. (Alternatively, a list similarly
 #' as \code{curve_sets}.) If not provided, then expectation under H0 is used instead following
 #' Storey (2002) and Storey and Tibshirani (2003).
-#' @param type The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area'.
-#' See \code{\link{forder}} for description of the measures.
+#' @param algorithm Either IATSE or ATSE, see Mrkvicka and Myllymäki (2022).
+#' @param FDRest Different options to estimate FDR. Recommended choice is ST.
+#' The options YB and YBu were found to lead to liberal tests in Mrkvicka and Myllymäki (2022);
+#' they are provided for the experimenting purposes only.
+#' @param beta A quantile for YBu method. Default to 0.05.
 #' @inheritParams global_envelope_test
 #' @param method Either "ATSE" or "IATSE" standing for adaptive two stage
 #'   global envelope, and iteratively adaptive two stage global envelope methods,
 #'   respectively.
 #' @export
+#' @references
+#' Mrkvicka and Myllymäki (2022). False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
 #' @examples
-#' # Just for fun
-#' if(require("spatstat", quietly=TRUE)) {
-#'   # CSR test
-#'   #=========
-#'   X <- unmark(spruces)
-#'   \donttest{nsim <- 2000 # Number of simulations}
-#'   \dontshow{nsim <- 20}
-#'   env1 <- envelope(X, fun="Lest", nsim=nsim,
-#'                   savefuns=TRUE, # save the functions
-#'                   correction="translate", # edge correction for L
-#'                   transform = expression(.-r), # centering
-#'                   simulate=expression(runifpoint(ex=X))) # Simulate CSR
-#'   res <- fdr_envelope(env1)
-#'   plot(res)
-#' }
-#'
 #' # A GLM example
 #' data(rimov)
 #' \donttest{nsim <- 1000 # Number of simulations}
