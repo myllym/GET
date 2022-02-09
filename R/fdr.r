@@ -69,7 +69,6 @@ fdr_rejections_rank <- function(curve_set, alternative, curve_set2=NULL, pi0=1, 
 
   obs_curve <- curve_set_1obs(curve_set)
   sim_curves <- data_or_sim_curves(curve_set) # Exclude the data function
-  #all_curves <- data_and_sim_curves(curve_set) # Include the data function
   nsim <- curve_set_nfunc(curve_set) - 1
   nr <- curve_set_narg(curve_set) # m in the fdr paper
 
@@ -127,12 +126,9 @@ fdr_rejections_rank <- function(curve_set, alternative, curve_set2=NULL, pi0=1, 
       for(i in 1:max_l) {
         rejected <- datasim2ranks <= i
         rejs[,i] <- rowSums(rejected)
-        #Q[,i] <- Qcalc(nr*mult*i/nsim, rejs[-1,i], rejs[1,i], pi0)
       }
       R0 <- apply(rejs[-1,], MARGIN = 2, FUN=mean)
       R.obs <- rejs[1,]
-      #Q0 <- apply(Q, MARGIN = 2, FUN=mean)
-      #Q0_u <- Q0_u_calc(rejs[-1,], rejs[1,], beta)
       Q0all <- Q0_all_calc(rejs[-1,], rejs[1,], beta)
       dataranks <- datasim2ranks[1,] # Save the dataranks for qvalue calculations
     }
@@ -263,20 +259,13 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set, cur
   if(ind == 0) { # The value of gamma is between 0 and 1
     # Find the envelope of rank 1; THE envelope is wider than this
     e2 <- fdr_envelope_rank(1, curve_set)
-    # e2l <- e2u <- array(0, nr)
-    # for(i in 1:nr) {
-    #   Hod <- sort(sim_curves[,i])
-    #   e2l[i] <- Hod[ind+1]
-    #   e2u[i] <- Hod[nsim-ind]
-    # }
     # Define the gamma values
     # Smallest gamma needs to be smaller than nsim * limit / ( nr * mult )
     d <- max(0.0001, min(0.0075, nsim * limit / ( nr * mult )))
     gammas <- seq(0+d/2, 1-d/2, by=d)
-    #gammas <- seq(0, 1, length=130); gammas <- gammas[-c(1, length(gammas))]
     # Calculate rejections for each gamma
     e <- list()
-    R.obs_new <- R0_new <- R0_new_sd <- Q_new <- Qu_new <- vector(length=length(gammas))
+    R.obs_new <- R0_new <- Q_new <- Qu_new <- vector(length=length(gammas))
     for(i in 1:length(gammas)) {
       if(alternative != "greater") LB <- e2$LB + log(gammas[i]) * (e2$UB - e2$LB) else LB <- -Inf
       if(alternative != "less") UB <- e2$UB - log(gammas[i]) * (e2$UB - e2$LB) else UB <- Inf
@@ -317,7 +306,7 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set, cur
     # Calculate rejections for each gamma
     e <- list()
     #rejs_new <- matrix(nrow=nsim2, ncol=length(gammas))
-    R.obs_new <- R0_new <- R0_new_sd <- Q_new <- Qu_new <- vector(length=length(gammas))
+    R.obs_new <- R0_new <- Q_new <- Qu_new <- vector(length=length(gammas))
     for(i in 1:length(gammas)) {
       if(alternative != "greater") LB <- e1l + (gammas[i] - ind)*(e2l-e1l) else LB <- -Inf
       if(alternative != "less") UB <- e1u - (gammas[i] - ind)*(e1u-e2u) else UB <- Inf
@@ -326,7 +315,7 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set, cur
         R0s <- sapply(1:nsim2, FUN = function(j) { noutside(sim_curves2[j,], LB, UB, alternative) })
         #rejs_new[,i] <- R0s
         R0_new[i] <- mean(R0s)
-        R0_new_sd[i] <- sd(R0s)
+        #R0_new_sd[i] <- sd(R0s)
         # Q-calculation for the Yekutieli & Benjamini (1999) FDR estimation
         u1 <- nr*mult*gammas[i]/nsim
         u2 <- quantile(R0s, probs=1-beta) # qnorm(beta, mean=u1, sd=R0_new_sd[i])
@@ -338,7 +327,6 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set, cur
       e[[i]] <- list(LB=LB, UB=UB)
     }
   }
-  #list(gammas=gammas, R0=R0_new, R.obs=R.obs_new, Q0=Q_new, Q0_u=Qu_new)
   #-- Find the gamma
   find_gamma <- function(ind_new) {
     if(ind_new == 0) {
