@@ -396,7 +396,7 @@ general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"),
          IATSE = {
            limit1 <- function(alpha) alpha
            limit2 <- function(alpha, pi0) alpha/vlast(pi0)
-           get_pi0est <- function(r1, gamma) { # r1 & gamma from step1
+           get_pi0est <- function(r1, gamma=NULL) { # r1 & gamma from step1
              if(alternative == "two.sided") gammastar <- 2*gamma/nsim
              else gammastar <- gamma/nsim
              pi0[1] <- min(1, (nr-r1+nr*gammastar)/nr)
@@ -513,18 +513,16 @@ individual_fdr_envelope <- function(curve_set, curve_set2 = NULL, alpha = 0.05,
 #' the numbers of rejections under the null are calculated. (Alternatively, a list similarly
 #' as \code{curve_sets}.) If not provided, then expectation under H0 is used instead following
 #' Storey (2002) and Storey and Tibshirani (2003).
-#' @param algorithm Either IATSE or ATSE, see Mrkvicka and Myllymäki (2022).
+#' @param algorithm Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
+#' envelope and the adaptive two-stage envelope, respectively, see Mrkvicka and Myllymäki (2022).
 #' @param FDRest Different options to estimate FDR. Recommended choice is ST.
 #' The options YB and YBu were found to lead to liberal tests in Mrkvicka and Myllymäki (2022);
 #' they are provided for the experimenting purposes only.
 #' @param beta A quantile for YBu method. Default to 0.05.
 #' @inheritParams global_envelope_test
-#' @param method Either "ATSE" or "IATSE" standing for adaptive two stage
-#'   global envelope, and iteratively adaptive two stage global envelope methods,
-#'   respectively.
 #' @export
 #' @references
-#' Mrkvicka and Myllymäki (2022). False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+#' Mrkvička and Myllymäki (2022). False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
 #' @examples
 #' # A GLM example
 #' data(rimov)
@@ -600,7 +598,6 @@ fdr_envelope <- function(curve_sets, alpha = 0.05, curve_sets2=NULL,
                                    beta=beta, savefdr=FALSE))
   }
 }
-
 
 
 #' Print method for the class 'fdr_envelope'
