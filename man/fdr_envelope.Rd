@@ -33,33 +33,19 @@ Must be one of the following: "two.sided" (default), "less" or "greater".
 The last two options only available for types \code{'rank'}, \code{'erl'},
 \code{'cont'} and \code{'area'}.}
 
-\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area'.
-See \code{\link{forder}} for description of the measures.}
+\item{algorithm}{Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
+envelope and the adaptive two-stage envelope, respectively, see Mrkvicka and Myllymäki (2022).}
 
-\item{method}{Either "ATSE" or "IATSE" standing for adaptive two stage
-global envelope, and iteratively adaptive two stage global envelope methods,
-respectively.}
+\item{FDRest}{Different options to estimate FDR. Recommended choice is ST.
+The options YB and YBu were found to lead to liberal tests in Mrkvicka and Myllymäki (2022);
+they are provided for the experimenting purposes only.}
+
+\item{beta}{A quantile for YBu method. Default to 0.05.}
 }
 \description{
 Calculate the FDR envelope based on ATSE or IATSE algorithm.
 }
 \examples{
-# Just for fun
-if(require("spatstat", quietly=TRUE)) {
-  # CSR test
-  #=========
-  X <- unmark(spruces)
-  \donttest{nsim <- 2000 # Number of simulations}
-  \dontshow{nsim <- 20}
-  env1 <- envelope(X, fun="Lest", nsim=nsim,
-                  savefuns=TRUE, # save the functions
-                  correction="translate", # edge correction for L
-                  transform = expression(.-r), # centering
-                  simulate=expression(runifpoint(ex=X))) # Simulate CSR
-  res <- fdr_envelope(env1)
-  plot(res)
-}
-
 # A GLM example
 data(rimov)
 \donttest{nsim <- 1000 # Number of simulations}
@@ -72,4 +58,7 @@ sims1 <- graph.flm(nsim=nsim,
 res <- fdr_envelope(attr(sims1, "simfuns")[[1]])
 plot(res)
 
+}
+\references{
+Mrkvička and Myllymäki (2022). False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
 }
