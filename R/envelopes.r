@@ -122,7 +122,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   Nfunc <- length(distance) # Number of functions
   nr <- curve_set_narg(curve_set)
   # Define the central curve T_0
-  T_0 <- get_T_0(curve_set)
+  T_0 <- get_T_0(curve_set, central=central)
 
   # Check reasonability of Nfunc vs alpha
   if(any(Nfunc*alpha < 1-.Machine$double.eps^0.5))
