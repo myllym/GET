@@ -33,7 +33,8 @@ The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 20
 
 \item{central}{Either "mean" or "median". If the curve sets do not contain the component
 \code{theo} for the theoretical central function, then the central function (used for plotting only)
-is calculated either as the mean or median of functions provided in the curve sets.}
+is calculated either as the mean or median of functions provided in the curve sets.
+For 'qdir', 'st' and 'unscaled' only the mean is allowed as an option, due to their definition.}
 
 \item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
 }
