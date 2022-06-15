@@ -141,19 +141,18 @@ fdr_rejections_rank <- function(curve_set, alternative, curve_set2=NULL, pi0=1, 
 
       # Calculate ranks for data curve
       all_curves <- rbind(obs_curve, sim_curves)
+      dataranks <- vector(length=nr)
       for(i in 1:nr) {
-        all_curves[,i] <- calc_pointwiserank(all_curves[,i]) # overwriting curves by their ranks. FIXME(for computational reasons)? Only the rank of data needed here.
+        dataranks[i] <- calc_pointwiserank(all_curves[,i])[1]
       }
-      dataranks <- all_curves[1,]
 
       # and all curves from the second set of simulations
       sim2_ranks <- sim_curves2
       for(j in 1:nsim2) {
         all_curves2 <- rbind(sim_curves2[j,], sim_curves)
         for(i in 1:nr) {
-          all_curves2[,i] <- calc_pointwiserank(all_curves2[,i]) # overwriting curves by their ranks. FIXME(for computational reasons)? Only the rank of data needed here.
+          sim2_ranks[j,i] <- calc_pointwiserank(all_curves2[,i])[1]
         }
-        sim2_ranks[j,] <- all_curves2[1,]
       }
 
       # Count the numbers of rejections
@@ -175,10 +174,10 @@ fdr_rejections_rank <- function(curve_set, alternative, curve_set2=NULL, pi0=1, 
 
     # Calculate pointwise ranks for each argument value (r)
     calc_pointwiserank <- find_calc_pointwiserank("rank", alternative)
+    dataranks <- vector(length=nr)
     for(i in 1:nr) {
-      all_curves[,i] <- calc_pointwiserank(all_curves[,i]) # overwriting curves by their ranks. FIXME(for computational reasons)? Only the rank of data needed here.
+      dataranks[i] <- calc_pointwiserank(all_curves[,i])[1]
     }
-    dataranks <- all_curves[1,]
     R.obs <- sapply(1:max_l, FUN = function(i) sum(dataranks <= i))
 
     # The expected numbers of rejections R0 for all envelopes l=1,2,3...,max_l
