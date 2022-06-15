@@ -579,7 +579,7 @@ fdr_envelope <- function(curve_sets, alpha = 0.05, curve_sets2=NULL,
                                      algorithm=algorithm, FDRest=FDRest,
                                      beta=beta, savefdr=FALSE)
       # Transform the envelope to a combined envelope
-      idx <- unlist(lapply(1:nfuns, FUN = function(i) { rep(i, times=nr[i]) } ))
+      idx <- rep(1:nfuns, times=nr)
       # Split the envelopes to the original groups
       res_ls <- split(res, f=idx)
       # Redefine attributes method and rej
