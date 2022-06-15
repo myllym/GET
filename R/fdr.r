@@ -122,7 +122,6 @@ fdr_rejections_rank <- function(curve_set, alternative, curve_set2=NULL, pi0=1, 
       datasim2ranks <- datasim2ranks - (all_curves2 - 1)
 
       rejs <- matrix(nrow=1+nsim2, ncol=max_l)
-      #Q <- matrix(nrow=nsim2, ncol=max_l)
       for(i in 1:max_l) {
         rejected <- datasim2ranks <= i
         rejs[,i] <- rowSums(rejected)
