@@ -446,7 +446,7 @@ general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"),
 
   # Calculate E(R0), R.obs, E(Q)
   if(is.null(rejs1)) rejs1 <- fdr_rejections_rank(curve_set, alternative, curve_set2, pi0=1, beta=beta) # curve_set NULL (ER0) or given (also EQ)
-  # Find the largest rejection region G* for which E(Q) <= alpha/(1+alpha)
+  # Find the largest rejection region G* for which E(Q) <= limit1(alpha) (alpha/(1+alpha) for ATSE; alpha for IATSE)
   ind1 <- find_ind_local(rejs1, limit1(alpha))
   step1 <- fdr_rejections_between_two_rank(ind1, rejs1$R.obs[ind1], limit1(alpha), curve_set, curve_set2, alternative,
                                            pi0=pi0, beta=beta) # pi0=1
@@ -499,7 +499,7 @@ individual_fdr_envelope <- function(curve_set, curve_set2 = NULL, alpha = 0.05,
 
   # Go through the algorithm to find the 'indices' for constructing envelopes
   inds <- general_FDRenvelope_algorithm(algorithm=algorithm, FDRest=FDRest,
-                                alpha, alternative, curve_set, curve_set2=NULL, beta=beta)
+                                        alpha, alternative, curve_set, curve_set2=NULL, beta=beta)
 
   res <- make_envelope_object(type=algorithm, curve_set, LB=inds$step2$e$LB, UB=inds$step2$e$UB,
                               T_0=rowMeans(curve_set[['funcs']][,-1]),
