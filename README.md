@@ -69,8 +69,11 @@ vignette("pointpatterns")
 
 ## Branches
 
-The branch for public use is called `master`. There are no other public branches at the moment.
-The branch 'no_fastdepth' of the library `spptest` was taken as the master branch of `GET` September 21, 2016. The `spptest` package is frozen to that version and no longer developed.
+Currently two branches are provided in the development version. The main branch of GET is called `master`.
+
+The other branch is called `FDR` and it includes the FDR envelopes proposed in
+Mrkvička and Myllymäki (2022, False discovery rate envelopes. arXiv:2008.10108 [stat.ME]).
+
 
 ## References
 
@@ -96,6 +99,9 @@ Kybernetika 56 (3), 432-458. http://doi.org/10.14736/kyb-2020-3-0432
 Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022).
 New methods for multiple testing in permutation inference for the general linear model.
 Statistics in Medicine 41(2), 276-297. https://doi.org/10.1002/sim.9236
+
+Mrkvička and Myllymäki (2022).
+False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
 
 Mrkvička, T., Roskovec, T. and Rost, M. (2021).
 A nonparametric graphical tests of significance in functional GLM.
