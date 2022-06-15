@@ -454,7 +454,7 @@ general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"),
   r1 <- step1[[FDRest]]$r1
   if(!(r1==0 | r1==nr) | (algorithm == "IATSE" & r1==nr)) {
     # Estimate \pi_0
-    pi0 <- get_pi0est(r1, step1[[FDRest]]$gamma)
+    pi0 <- pi0est(r1, step1[[FDRest]]$gamma)
     # Find the largest rejection region G for which E(R0) / max(R.obs, 1) <= alpha/pi0
     if(FDRest != "ST") { # Need to recalculate the Q's again, because they depend on pi0
       rejs1 <- fdr_rejections_rank(curve_set, alternative, curve_set2, pi0=vlast(pi0), beta=beta) # rejs2, but using the same object name
