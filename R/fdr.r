@@ -361,28 +361,38 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set, cur
   list(ST=find_gamma(ind_new_ST), YB=resYB, YBu=resYBu)
 }
 
+# Specifications for the three steps of the ATSE and IATSE algorithms
 
-general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"),
-                                          FDRest= c("ST", "YB", "YBu"),
-                                          alpha, alternative, curve_set, curve_set2 = NULL, beta = 0.05,
-                                          rejs1=NULL) {
-  pi0 <- 1
-  gammastar <- step2 <- NULL
-  nr <- curve_set_narg(curve_set)
-  nsim <- curve_set_nfunc(curve_set) - 1
-
+limit1 <- function(algorithm) {
   switch(algorithm,
          ATSE = {
-           limit1 <- function(alpha) alpha/(1+alpha)
-           limit2 <- function(alpha, pi0) alpha/pi0
-           get_pi0est <- function(r1, gamma=NULL) { # r1 (gamma ignored) from step1
+           function(alpha) alpha/(1+alpha)
+         },
+         IATSE = {
+           function(alpha) alpha
+         })
+}
+
+limit2 <- function(algorithm) {
+  switch(algorithm,
+         ATSE = {
+           function(alpha, pi0) alpha/pi0
+         },
+         IATSE = {
+           function(alpha, pi0) alpha/vlast(pi0)
+         })
+}
+
+get_pi0est <- function(algorithm, alternative, nsim, nr) {
+  switch(algorithm,
+         ATSE = {
+           function(r1, gamma=NULL) { # r1 (gamma ignored) from step1
              (nr-r1)/nr
            }
          },
          IATSE = {
-           limit1 <- function(alpha) alpha
-           limit2 <- function(alpha, pi0) alpha/vlast(pi0)
-           get_pi0est <- function(r1, gamma=NULL) { # r1 & gamma from step1
+           function(r1, gamma=NULL) { # r1 & gamma from step1
+             pi0 <- NULL
              if(alternative == "two.sided") gammastar <- 2*gamma/nsim
              else gammastar <- gamma/nsim
              pi0[1] <- min(1, (nr-r1+nr*gammastar)/nr)
@@ -395,17 +405,41 @@ general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"),
              pi0
            }
          })
+}
+
+find_ind_local <- function(FDRest) {
   switch(FDRest,
          ST = {
-           find_ind_local <- function(rejs, limit) find_ind(rejs$R.obs, rejs$R0, limit)
-           if(!is.null(curve_set2)) warning("Using the second set of simulations for the E(R0) estimation instead of the theoretical formula.")
+           function(rejs, limit) find_ind(rejs$R.obs, rejs$R0, limit)
          },
          YB = {
-           find_ind_local <- function(rejs, limit) find_ind_YB(rejs$Q0$Q_YB, limit)
-           if(is.null(curve_set2)) warning("The second set of simulations not provided for the E(Q) estimation, using an approximation/ratio of expectations.")
+           function(rejs, limit) find_ind_YB(rejs$Q0$Q_YB, limit)
          },
          YBu = {
-           find_ind_local <- function(rejs, limit) find_ind_YB(rejs$Q0$Q_YBu, limit)
+           function(rejs, limit) find_ind_YB(rejs$Q0$Q_YBu, limit)
+         }
+  )
+}
+
+general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"),
+                                          FDRest= c("ST", "YB", "YBu"),
+                                          alpha, alternative, curve_set, curve_set2 = NULL, beta = 0.05,
+                                          rejs1=NULL) {
+  pi0 <- 1
+  gammastar <- step2 <- NULL
+  nr <- curve_set_narg(curve_set)
+  nsim <- curve_set_nfunc(curve_set) - 1
+
+  limit1 <- limit1(algorithm) # Step 1. limit
+  limit2 <- limit2(algorithm) # Step 3. limit
+  pi0est <- get_pi0est(algorithm, alternative, nsim, nr) # Step 2. pi0 estimation
+  find_ind_local <- find_ind_local(FDRest) # Find the index from rejs (R.obs, R0) for which the fdr is below the given limit
+  switch(FDRest,
+         ST = {
+           if(!is.null(curve_set2)) warning("Using the second set of simulations for the E(R0) estimation instead of the theoretical formula.")
+         },
+         YB = ,
+         YBu = {
            if(is.null(curve_set2)) warning("The second set of simulations not provided for the E(Q) estimation, using an approximation/ratio of expectations.")
          }
   )
