@@ -606,17 +606,15 @@ fdr_envelope <- function(curve_sets, alpha = 0.05, curve_sets2=NULL,
     }
     else if(length(curve_sets) == 1) {
       curve_sets <- curve_sets[[1]] # unlist, and call individual_...
-      curve_sets2 <- curve_sets[[1]]
+      curve_sets2 <- curve_sets2[[1]]
     }
     else
       stop("The given list of curve_sets is empty.")
   }
-  else {
-    return(individual_fdr_envelope(curve_sets, curve_set2=curve_sets2, alpha=alpha,
-                                   alternative=alternative,
-                                   algorithm=algorithm, FDRest=FDRest,
-                                   beta=beta, savefdr=FALSE))
-  }
+  return(individual_fdr_envelope(curve_sets, curve_set2=curve_sets2, alpha=alpha,
+                                 alternative=alternative,
+                                 algorithm=algorithm, FDRest=FDRest,
+                                 beta=beta, savefdr=FALSE))
 }
 
 
