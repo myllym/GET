@@ -1,3 +1,16 @@
+check_typeone <- function(typeone = c("fwer", "fdr")) {
+  typeone <- match.arg(typeone)
+  switch(typeone,
+         fwer = {
+           message("You have chosen to control the family wise error rate (typeone = \"fwer\").")
+         },
+         fdr = {
+           message("You have chosen to control the false discovery rate (typeone = \"fdr\").")
+         }
+  )
+  typeone
+}
+
 # auxiliary functions
 #--------------------
 
@@ -192,6 +205,11 @@ contrasts.m <- function(x, groups, ...) {
 #' The curve set should include the argument values for the functions in the component \code{r}, and
 #' the observed functions in the component \code{obs}.
 #' @param groups The original groups (a factor vector representing the assignment to groups).
+#' @param typeone Character string indicating which type I error rate to control,
+#' either the familywise error rate (’fwer’) or false discovery rate ('fdr').
+#' Further arguments to the FWER or FDR envelope can be passed in argument \code{GET.args}.
+#' If 'fwer', the type of the envelope can be chosen by specifying the argument \code{type}
+#' in \code{GET.args}.
 #' @param variances Either "equal" or "unequal". If "unequal", then correction for unequal variances
 #' as explained in details will be done. Only relevant for the case \code{test.equality = "means"} (default).
 #' @param contrasts Logical. FALSE and TRUE specify the two test functions as described in
@@ -217,7 +235,8 @@ contrasts.m <- function(x, groups, ...) {
 #' See Mrkvicka et al. (2020) for more details.
 #' @param cov.lag The lag of the covariance for testing the equality of covariances,
 #' see \code{test.equality}.
-#' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
+#' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}} (if \code{typeone = "fwer"})
+#' or \code{\link{fdr_envelope}} (if \code{typeone = "fdr"}).
 #' @export
 #' @seealso \code{\link{frank.fanova}}
 #' @references
@@ -303,8 +322,8 @@ contrasts.m <- function(x, groups, ...) {
 #'                       curve_set = imageset3$image_set, groups = imageset3$Group,
 #'                       contrasts = TRUE)
 #' plot(res.c)
-graph.fanova <- function(nsim, curve_set, groups, variances="equal",
-                         contrasts = FALSE,
+graph.fanova <- function(nsim, curve_set, groups, typeone = c("fwer", "fdr"),
+                         variances="equal", contrasts = FALSE,
                          n.aver = 1L, mirror = FALSE, savefuns=FALSE,
                          test.equality = c("mean", "var", "cov"), cov.lag = 1, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.")
@@ -317,6 +336,7 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.")
     groups <- as.factor(groups)
   }
+  typeone <- check_typeone(typeone)
   test.equality <- match.arg(test.equality)
   if(test.equality=="cov" && !curve_set_is1d(curve_set)) {
     stop("test.equality='cov' is only available for 1 dimensional functions")
@@ -357,10 +377,17 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
                                         obs = obs[,i],
                                         sim_m = sim[,i,]))
   }
-  res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
+  switch(typeone,
+         fwer = {
+           res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
+         },
+         fdr = {
+           res <- fdr_envelope(csets, alternative="two.sided", ...) # nstep=1 only
+         })
   attr(res, "method") <- "Graphical functional ANOVA" # Change method name
   attr(res, "contrasts") <- contrasts
   attr(res, "labels") <- complabels
+  attr(res, "typeone") <- typeone
   res <- envelope_set_labs(res, ylab=ylab)
   attr(res, "call") <- match.call()
   if(savefuns) attr(res, "simfuns") <- csets
@@ -412,7 +439,8 @@ graph.fanova <- function(nsim, curve_set, groups, variances="equal",
 #'                      groups = imageset3$Group)
 #' plot(res2)
 #' plot(res2, fixedscales=FALSE)
-frank.fanova <- function(nsim, curve_set, groups, variances="equal",
+frank.fanova <- function(nsim, curve_set, groups, typeone = c("fwer", "fdr"),
+                         variances="equal",
                          test.equality = c("mean", "var", "cov"), cov.lag = 1,
                          savefuns = FALSE, ...) {
   if(nsim < 1) stop("Not a reasonable value of nsim.")
@@ -425,6 +453,7 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.")
     groups <- as.factor(groups)
   }
+  typeone <- check_typeone(typeone)
   test.equality <- match.arg(test.equality)
   if(test.equality=="cov" && !curve_set_is1d(curve_set)) {
     stop("test.equality='cov' is only available for 1 dimensional functions")
@@ -452,8 +481,15 @@ frank.fanova <- function(nsim, curve_set, groups, variances="equal",
 
   cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
   # Perform the global envelope test
-  res <- global_envelope_test(cset, alternative="greater", ...)
+  switch(typeone,
+         fwer = {
+           res <- global_envelope_test(cset, alternative="greater", ...)
+         },
+         fdr = {
+           res <- fdr_envelope(cset, alternative="greater", ...)
+         })
   res <- envelope_set_labs(res, ylab = expression(italic(F(r))))
+  attr(res, "typeone") <- typeone
   if(savefuns) attr(res, "simfuns") <- cset
   res
 }

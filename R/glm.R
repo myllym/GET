@@ -388,10 +388,12 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'   GET.args = list(type = "area"))
 #' plot(res)
 #'
-graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
+graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "fdr"),
+                      curve_sets, factors = NULL,
                       contrasts = FALSE, savefuns = FALSE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
                       fast = TRUE) {
+  typeone <- check_typeone(typeone)
   # Set up the contrasts
   op <- options(contrasts = c("contr.sum", "contr.poly"))
   on.exit(options(op))
@@ -458,8 +460,15 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
                                                     obs = obs[,i],
                                                     sim_m = sim[,i,]))
   }
-  res <- do.call(global_envelope_test,
-                 c(list(curve_sets=csets, alternative="two.sided", nstep=1), GET.args))
+  switch(typeone,
+         fwer = {
+           res <- do.call(global_envelope_test,
+                          c(list(curve_sets=csets, alternative="two.sided", nstep=1), GET.args))
+         },
+         fdr = {
+           res <- do.call(fdr_envelope,
+                          c(list(curve_sets=csets, alternative="two.sided"), GET.args))
+         })
   attr(res, "method") <- "Graphical functional GLM" # Change method name
   attr(res, "labels") <- complabels
   # Re-define the default ylab
@@ -558,10 +567,12 @@ graph.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 #' @importFrom parallel mclapply
 #' @importFrom parallel parLapply
 #' @importFrom stats lm
-frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors = NULL,
+frank.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "fdr"),
+                      curve_sets, factors = NULL,
                       savefuns = TRUE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1, mc.args = NULL, cl = NULL,
                       method = c("best", "simple", "mlm", "complex", "lm")) {
+  typeone <- check_typeone(typeone)
   # Preliminary checks and formulation of the data to suitable form for further processing
   method <- match.arg(method)
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
@@ -638,7 +649,13 @@ frank.flm <- function(nsim, formula.full, formula.reduced, curve_sets, factors =
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
   if(savefuns=="return") return(cset)
-  res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
+  switch(typeone,
+         fwer = {
+           res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
+         },
+         fdr = {
+           res <- do.call(fdr_envelope, c(list(curve_sets=cset, alternative="greater"), GET.args))
+         })
   res <- envelope_set_labs(res, ylab = expression(italic(F(r))))
   if(savefuns) attr(res, "simfuns") <- cset
   res
