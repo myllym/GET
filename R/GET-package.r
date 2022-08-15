@@ -219,6 +219,8 @@
 #'
 #' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41(2), 276-297. doi: 10.1002/sim.9236
 #'
+#' Mrkvička, T., Myllymäki, M. False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+#'
 #' Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
 #'
 #' Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016) Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A, 40-53. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005

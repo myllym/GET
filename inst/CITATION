@@ -54,6 +54,21 @@ Statistics and Computing 27 (5): 1239-1255. http://dx.doi.org/10.1007/s11222-016
 
 citEntry(
     entry = "Article",
+    title = "False discovery rate envelopes",
+    author = personList(as.person("T. Mrkvička"),
+                        as.person("M. Myllymäki")),
+    journal = "arXiv:2008.10108 [stat.ME]",
+    year = "2022",
+    volume = "",
+    pages = "",
+    url = "https://arxiv.org/abs/2008.10108",
+    textVersion  =
+    paste("Mrkvička, T. and Myllymäki, M. (2022).",
+          "False discovery rate envelopes. arXiv:2008.10108 [stat.ME]")
+)
+
+citEntry(
+    entry = "Article",
     title = "A one-way ANOVA test for functional data with graphical interpretation",
     author = personList(as.person("T. Mrkvička"),
                         as.person("M. Myllymäki"),
