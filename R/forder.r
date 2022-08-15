@@ -219,7 +219,6 @@ combine_erl_forder <- function(parts) {
 #'
 #' @param curve_set A \code{curve_set} object, usually a part of a larger \code{curve_set}.
 #' @seealso \code{\link{forder}}
-#' @return
 #' @inheritParams forder
 #' @examples
 #' data("abide_9002_23")
