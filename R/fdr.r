@@ -81,8 +81,11 @@ fdr_envelope_rank <- function(ind, curve_set) {
 # Note that anyway only the one for which 'ind' is given is useful and the function using this function
 # should take care of that.
 # Calculates the rejections for the FDRest choice "ST" used in ATSE and IATSE algorithms. No other options.
+# llimit, ulimit = Lower and upper limits between which the functions lie,
+# e.g. local correlation must be between -1 and 1. Affects the case ind = 0.
+# NULL means -Inf and Inf for the lower and upper limits, respectively.
 fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
-                                            alternative) {
+                                            alternative, llimit=NULL, ulimit=NULL) {
   failed <- FALSE
   obs_curve <- curve_set_1obs(curve_set)
   nr <- curve_set_narg(curve_set)
@@ -105,12 +108,23 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     # Calculate rejections for each gamma
     e <- list()
     R.obs_new <- R0_new <- vector(length=length(gammas))
-    for(i in 1:length(gammas)) {
-      if(alternative != "greater") LB <- e2$LB + log(gammas[i]) * (e2$UB - e2$LB) else LB <- -Inf
-      if(alternative != "less") UB <- e2$UB - log(gammas[i]) * (e2$UB - e2$LB) else UB <- Inf
-      R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
-      R0_new[i] <- nr*mult*gammas[i]/nsim
-      e[[i]] <- list(LB=LB, UB=UB)
+    if(is.null(llimit) & is.null(ulimit)) {
+      for(i in 1:length(gammas)) {
+        if(alternative != "greater") LB <- e2$LB + log(gammas[i]) * (e2$UB - e2$LB) else LB <- -Inf
+        if(alternative != "less") UB <- e2$UB - log(gammas[i]) * (e2$UB - e2$LB) else UB <- Inf
+        R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
+        R0_new[i] <- nr*mult*gammas[i]/nsim
+        e[[i]] <- list(LB=LB, UB=UB)
+      }
+    }
+    else { # llimit or ulimit
+      for(i in 1:length(gammas)) {
+        if(alternative != "greater") LB <- llimit + (gammas[i])*(e2$LB-llimit) else LB <- -Inf
+        if(alternative != "less") UB <- ulimit - (gammas[i])*(ulimit-e2$UB) else UB <- Inf
+        R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
+        R0_new[i] <- nr*mult*gammas[i]/nsim
+        e[[i]] <- list(LB=LB, UB=UB)
+      }
     }
   }
   else { # The value of gamma lies between ind and ind + 1
@@ -119,8 +133,10 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     e1l <- e1u <- e2l <- e2u <- array(0, nr)
     for(i in 1:nr) {
       Hod <- sort(sim_curves[,i])
+      # larger envelope
       e1l[i] <- Hod[ind]
       e1u[i] <- Hod[nsim-ind+1]
+      # smaller envelope
       e2l[i] <- Hod[ind+1]
       e2u[i] <- Hod[nsim-ind]
     }
@@ -227,6 +243,7 @@ find_ind_local <- function(FDRest = "ST") {
 
 general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"), FDRest = "ST",
                                           alpha, alternative, curve_set,
+                                          llimit=NULL, ulimit=NULL,
                                           rejs1=NULL) {
   pi0 <- 1
   gammastar <- step2 <- NULL
@@ -242,7 +259,9 @@ general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"), FDRest
   if(is.null(rejs1)) rejs1 <- fdr_rejections_rank(curve_set, alternative)
   # Find the largest rejection region G* for which E(Q) <= limit1(alpha) (alpha/(1+alpha) for ATSE; alpha for IATSE)
   ind1 <- find_ind_local(rejs1, limit1(alpha))
-  step1 <- fdr_rejections_between_two_rank(ind1, rejs1$R.obs[ind1], limit1(alpha), curve_set, alternative) # pi0=1
+  step1 <- fdr_rejections_between_two_rank(ind1, rejs1$R.obs[ind1], limit1(alpha),
+                                           curve_set, alternative,
+                                           llimit, ulimit) # pi0=1
   # Number of rejected hypotheses
   r1 <- step1[[FDRest]]$r1
   if(!(r1==0 | r1==nr) | (algorithm == "IATSE" & r1==nr)) {
@@ -250,7 +269,9 @@ general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"), FDRest
     pi0 <- pi0est(r1, step1[[FDRest]]$gamma)
     # Find the largest rejection region G for which E(R0) / max(R.obs, 1) <= alpha/pi0
     ind2 <- find_ind_local(rejs1, limit2(alpha, pi0))
-    step2 <- fdr_rejections_between_two_rank(ind2, rejs1$R.obs[ind2], limit2(alpha, pi0), curve_set, alternative)
+    step2 <- fdr_rejections_between_two_rank(ind2, rejs1$R.obs[ind2], limit2(alpha, pi0),
+                                             curve_set, alternative,
+                                             llimit, ulimit)
   }
   else # Take the first step envelope as the envelope
     step2 <- step1
@@ -263,7 +284,7 @@ general_FDRenvelope_algorithm <- function(algorithm = c("ATSE", "IATSE"), FDRest
 individual_fdr_envelope <- function(curve_set, alpha = 0.05,
                                     alternative = c("two.sided", "less", "greater"),
                                     algorithm=c("IATSE", "ATSE"),
-                                    savefdr=FALSE) {
+                                    savefdr=FALSE, lower=NULL, upper=NULL) {
   if(!is.numeric(alpha) || (alpha < 0 | alpha >= 1)) stop("Unreasonable value of alpha.")
   alternative <- match.arg(alternative)
   algorithm <- match.arg(algorithm)
@@ -274,9 +295,22 @@ individual_fdr_envelope <- function(curve_set, alpha = 0.05,
   if(!curve_set_is1obs(curve_set)) stop("The curve_set must contain an observed function.")
   obs_curve <- curve_set_1obs(curve_set)
 
+  nr <- curve_set_narg(curve_set)
+  if(!is.null(lower)) {
+    if(!is.numeric(lower) & is.finite(lower)) stop("Invalid lower.")
+    if(length(lower) == 1) lower <- rep(lower, times=nr)
+    else if(length(lower) != nr) stop("Invalid lower.")
+  }
+  if(!is.null(upper)) {
+    if(!is.numeric(upper) & is.finite(upper)) stop("Invalid upper.")
+    if(length(upper) == 1) upper <- rep(upper, times=nr)
+    else if(length(upper) != nr) stop("Invalid upper.")
+  }
+
   # Go through the algorithm to find the 'indices' for constructing envelopes
   inds <- general_FDRenvelope_algorithm(algorithm=algorithm, FDRest="ST",
-                                        alpha, alternative, curve_set)
+                                        alpha, alternative, curve_set,
+                                        llimit=lower, ulimit=upper)
 
   res <- make_envelope_object(type=algorithm, curve_set, LB=inds$step2$e$LB, UB=inds$step2$e$UB,
                               T_0=rowMeans(curve_set[['funcs']][,-1]),
@@ -307,7 +341,11 @@ individual_fdr_envelope <- function(curve_set, alpha = 0.05,
 #'   and the functions from which the envelope is to be constructed.
 #'   Alternatively, a list of appropriate objects can be given.
 #' @param algorithm Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
-#' envelope and the adaptive two-stage envelope, respectively, see Mrkvicka and Myllymäki (2022).
+#' envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2022).
+#' @param lower A single number (or a vector of suitable length) giving a lower bound
+#' for the functions. Used only for the extension, see Mrkvička and Myllymäki (2022, p. 6).
+#' @param upper A single number (or a vector of suitable length) giving an upper bound
+#' for the functions.
 #' @inheritParams global_envelope_test
 #' @export
 #' @references
@@ -327,7 +365,8 @@ individual_fdr_envelope <- function(curve_set, alpha = 0.05,
 #'
 fdr_envelope <- function(curve_sets, alpha = 0.05,
                          alternative = c("two.sided", "less", "greater"),
-                         algorithm = c("IATSE", "ATSE")) {
+                         algorithm = c("IATSE", "ATSE"),
+                         lower = NULL, upper = NULL) {
   # Consider the case of several curves
   if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
     if(length(curve_sets) > 1) { # Combine
@@ -339,7 +378,8 @@ fdr_envelope <- function(curve_sets, alpha = 0.05,
       # Test based on the combined sets
       res <- individual_fdr_envelope(curve_sets, alpha=alpha,
                                      alternative=alternative,
-                                     algorithm=algorithm, savefdr=FALSE)
+                                     algorithm=algorithm, savefdr=FALSE,
+                                     lower=lower, upper=upper)
       # Transform the envelope to a combined envelope
       idx <- rep(1:nfuns, times=nr)
       # Split the envelopes to the original groups
@@ -374,7 +414,8 @@ fdr_envelope <- function(curve_sets, alpha = 0.05,
   }
   return(individual_fdr_envelope(curve_sets, alpha=alpha,
                                  alternative=alternative,
-                                 algorithm=algorithm, savefdr=FALSE))
+                                 algorithm=algorithm, savefdr=FALSE,
+                                 lower=lower, upper=upper))
 }
 
 
