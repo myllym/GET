@@ -164,7 +164,7 @@
 #'  \item \code{\link{fallen_trees}}: a point pattern of fallen trees
 #'  \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
 #'  \item \code{\link{imageset3}}: a simulated set of images
-#'  \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
+#'  \item \code{\link{rimov}}: water temperature curves in 365 days of the 36 years
 #'  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{GET.composite}})
 #' }
 #' The data sets are used to show examples of the functions of the library.
