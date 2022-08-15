@@ -294,7 +294,9 @@ create_curve_set <- function(curve_set, ...) {
   is1obs <- is.vector(curve_set[['obs']])
   if(is1obs) {
     funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']])
-    colnames(funcs) <- c('obs', paste("sim", 1:(ncol(funcs)-1), sep=""))
+    cnames <- 'obs'
+    if(ncol(funcs) > 1) cnames <- c(cnames, paste("sim", 1:(ncol(funcs)-1), sep=""))
+    colnames(funcs) <- cnames
   }
   else funcs <- curve_set[['obs']]
   if(!is.null(curve_set[['r']])) r <- curve_set[['r']]
