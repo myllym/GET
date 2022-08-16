@@ -71,8 +71,10 @@ vignette("pointpatterns")
 
 Currently two branches are provided in the development version. The main branch of GET is called `master`.
 
-The other branch is called `FDR` and it includes the FDR envelopes proposed in
+The other branch is called `FDR` and it includes also the experimental FDR envelopes tested in
 Mrkvička and Myllymäki (2022, False discovery rate envelopes. arXiv:2008.10108 [stat.ME]).
+The main branch includes the FDR envelopes which were found to have good performance in
+Mrkvička and Myllymäki (2022).
 
 
 ## References
