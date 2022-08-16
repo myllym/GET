@@ -92,7 +92,7 @@
 #' @importFrom utils combn
 fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ...) {
   # Check curve_sets. Note: k is checked by pam
-  if(!(length(class(curve_sets)) == 1 && class(curve_sets) == "list")) {
+  if(!(length(class(curve_sets)) == 1 && is.list(curve_sets))) {
     curve_sets <- list(curve_sets) # Make a list of a single curve_set to treat it similarly as several sets of curves
   }
   # Convert (e.g. fdata) to curve_sets and check the content

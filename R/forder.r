@@ -391,7 +391,7 @@ combined_forder <- function(curve_sets, ...) {
 forder <- function(curve_sets, measure = 'erl', scaling = 'qdir',
                    alternative=c("two.sided", "less", "greater"),
                    use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7) {
-  if(length(class(curve_sets)) == 1 && class(curve_sets) == "list") {
+  if(length(class(curve_sets)) == 1 && is.list(curve_sets)) {
     if(length(curve_sets) > 1) {
       res <- combined_forder(curve_sets,
                              measure = measure, scaling = scaling,
