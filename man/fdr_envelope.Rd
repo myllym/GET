@@ -7,11 +7,10 @@
 fdr_envelope(
   curve_sets,
   alpha = 0.05,
-  curve_sets2 = NULL,
   alternative = c("two.sided", "less", "greater"),
   algorithm = c("IATSE", "ATSE"),
-  FDRest = c("ST", "YB", "YBu"),
-  beta = 0.05
+  lower = NULL,
+  upper = NULL
 )
 }
 \arguments{
@@ -23,39 +22,35 @@ Alternatively, a list of appropriate objects can be given.}
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
 If a vector of values is provided, the global envelopes are calculated for each value.}
 
-\item{curve_sets2}{A \code{curve_set} giving another set of simulations from which
-the numbers of rejections under the null are calculated. (Alternatively, a list similarly
-as \code{curve_sets}.) If not provided, then expectation under H0 is used instead following
-Storey (2002) and Storey and Tibshirani (2003).}
-
 \item{alternative}{A character string specifying the alternative hypothesis.
 Must be one of the following: "two.sided" (default), "less" or "greater".
 The last two options only available for types \code{'rank'}, \code{'erl'},
 \code{'cont'} and \code{'area'}.}
 
 \item{algorithm}{Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
-envelope and the adaptive two-stage envelope, respectively, see Mrkvicka and Myllymäki (2022).}
+envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2022).}
 
-\item{FDRest}{Different options to estimate FDR. Recommended choice is ST.
-The options YB and YBu were found to lead to liberal tests in Mrkvicka and Myllymäki (2022);
-they are provided for the experimenting purposes only.}
+\item{lower}{A single number (or a vector of suitable length) giving a lower bound
+for the functions. Used only for the extension, see Mrkvička and Myllymäki (2022, p. 6).}
 
-\item{beta}{A quantile for YBu method. Default to 0.05.}
+\item{upper}{A single number (or a vector of suitable length) giving an upper bound
+for the functions.}
 }
 \description{
-Calculate the FDR envelope based on ATSE or IATSE algorithm.
+Calculate the FDR envelope based on the ATSE or IATSE algorithm
+of Mrkvička and Myllymäki (2022).
 }
 \examples{
 # A GLM example
 data(rimov)
 \donttest{nsim <- 1000 # Number of simulations}
 \dontshow{nsim <- 20}
-sims1 <- graph.flm(nsim=nsim,
+res <- graph.flm(nsim=nsim,
                  formula.full = Y~Year,
                  formula.reduced = Y~1,
-                 curve_sets = list(Y=rimov), factors = data.frame(Year = 1979:2014),
-                 savefuns = TRUE)
-res <- fdr_envelope(attr(sims1, "simfuns")[[1]])
+                 typeone = "fdr",
+                 curve_sets = list(Y=rimov),
+                 factors = data.frame(Year = 1979:2014))
 plot(res)
 
 }

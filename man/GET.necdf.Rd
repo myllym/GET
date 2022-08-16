@@ -23,7 +23,8 @@ description part of this help file.}
 
 \item{nsim}{The number of random permutations.}
 
-\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
+\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}} (if \code{typeone = "fwer"})
+or \code{\link{fdr_envelope}} (if \code{typeone = "fdr"}).}
 }
 \description{
 Compare the distributions of two (or more) samples.

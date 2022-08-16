@@ -27,8 +27,6 @@ The last two options only available for types \code{'rank'}, \code{'erl'},
 \item{ls}{List of objects returned by partial_forder}
 }
 \value{
-
-
 See \code{\link{forder}}
 }
 \description{

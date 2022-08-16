@@ -111,11 +111,19 @@ for the function, see examples in \code{\link{global_envelope_test}}.
   \item Global rank envelope based on F-values: \code{\link{frank.flm}}
   \item For large data (not fitting comfortably in memory): \code{\link{partial_forder}}
  }
+\item \emph{Functional clustering}: \code{\link{fclustering}}
 \item Functions for performing global envelopes for specific purposes:
  \itemize{
   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
-  \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
+  \item Permutation-based tests of independence to samples from any bivariate distribution:
+  \itemize{
+     \item based on cumulative distribution function \code{\link{GET.cdf}}
+     \item in a 2D contingency table \code{\link{GET.contingency}}
+     \item based on the smoothed Q-Q plot \code{\link{GET.qq}}
+  }
   \item Testing global and local dependence of point patterns on covariates: \code{\link{GET.spatialF}}
+  \item Testing local correlations: \code{\link{GET.localcor}}
+  \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
  }
 
 \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no graphical
@@ -177,7 +185,7 @@ Here \eqn{T_0(r)}{T_0(r)} is the expectation of \eqn{T(r)}{T(r)} under the null 
  \item \code{\link{fallen_trees}}: a point pattern of fallen trees
  \item \code{\link{GDPtax}}: GDP per capita with country groups and other covariates
  \item \code{\link{imageset3}}: a simulated set of images
- \item \code{\link{rimov}}: water termperature curves in 365 days of the 36 years
+ \item \code{\link{rimov}}: water temperature curves in 365 days of the 36 years
  \item \code{\link{saplings}}: a point pattern of saplings (see \code{\link{GET.composite}})
 }
 The data sets are used to show examples of the functions of the library.
@@ -222,18 +230,22 @@ Type citation("GET") to get a full list of references.
 
 
 Mikko Kuronen has made substantial contributions of code.
-Additional contributions and suggestions from Pavel Grabarnik, Ute Hahn, Michael Rost and
-Henri Seijo.
+Additional contributions and suggestions from Jiří Dvořák, Pavel Grabarnik,
+Ute Hahn, Michael Rost and Henri Seijo.
 }
 
 \references{
 Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. DOI: 10.5772/intechopen.100124
+
+Dvořák, J. and Mrkvička, T. (2022). Graphical tests of independence for general distributions. Computational Statistics 37, 671--699.
 
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27(5), 1239-1255. doi: 10.1007/s11222-016-9683-9
 
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56(3), 432-458. doi: 10.14736/kyb-2020-3-0432
 
 Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41(2), 276-297. doi: 10.1002/sim.9236
+
+Mrkvička, T., Myllymäki, M. False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
 
 Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
 

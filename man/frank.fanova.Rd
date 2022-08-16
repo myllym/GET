@@ -8,6 +8,7 @@ frank.fanova(
   nsim,
   curve_set,
   groups,
+  typeone = c("fwer", "fdr"),
   variances = "equal",
   test.equality = c("mean", "var", "cov"),
   cov.lag = 1,
@@ -24,6 +25,12 @@ The curve set should include the argument values for the functions in the compon
 the observed functions in the component \code{obs}.}
 
 \item{groups}{The original groups (a factor vector representing the assignment to groups).}
+
+\item{typeone}{Character string indicating which type I error rate to control,
+either the familywise error rate ('fwer') or false discovery rate ('fdr').
+Further arguments to the FWER or FDR envelope can be passed in argument \code{GET.args}.
+If 'fwer', the type of the envelope can be chosen by specifying the argument \code{type}
+in \code{GET.args}.}
 
 \item{variances}{Either "equal" or "unequal". If "equal", then the traditional F-values are used.
 If "unequal", then the corrected F-values are used. The current implementation uses
@@ -46,7 +53,8 @@ see \code{test.equality}.}
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
 
-\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
+\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}} (if \code{typeone = "fwer"})
+or \code{\link{fdr_envelope}} (if \code{typeone = "fdr"}).}
 }
 \description{
 A one-way functional ANOVA based on the rank envelope applied to F values

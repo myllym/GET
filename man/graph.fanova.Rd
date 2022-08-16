@@ -8,6 +8,7 @@ graph.fanova(
   nsim,
   curve_set,
   groups,
+  typeone = c("fwer", "fdr"),
   variances = "equal",
   contrasts = FALSE,
   n.aver = 1L,
@@ -27,6 +28,12 @@ The curve set should include the argument values for the functions in the compon
 the observed functions in the component \code{obs}.}
 
 \item{groups}{The original groups (a factor vector representing the assignment to groups).}
+
+\item{typeone}{Character string indicating which type I error rate to control,
+either the familywise error rate ('fwer') or false discovery rate ('fdr').
+Further arguments to the FWER or FDR envelope can be passed in argument \code{GET.args}.
+If 'fwer', the type of the envelope can be chosen by specifying the argument \code{type}
+in \code{GET.args}.}
 
 \item{variances}{Either "equal" or "unequal". If "unequal", then correction for unequal variances
 as explained in details will be done. Only relevant for the case \code{test.equality = "means"} (default).}
@@ -58,7 +65,8 @@ See Mrkvicka et al. (2020) for more details.}
 \item{cov.lag}{The lag of the covariance for testing the equality of covariances,
 see \code{test.equality}.}
 
-\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
+\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}} (if \code{typeone = "fwer"})
+or \code{\link{fdr_envelope}} (if \code{typeone = "fdr"}).}
 }
 \description{
 One-way ANOVA tests for functional data with graphical interpretation

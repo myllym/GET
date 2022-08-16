@@ -8,6 +8,7 @@ graph.flm(
   nsim,
   formula.full,
   formula.reduced,
+  typeone = c("fwer", "fdr"),
   curve_sets,
   factors = NULL,
   contrasts = FALSE,
@@ -28,6 +29,12 @@ see \code{formula} in \code{\link[stats]{lm}}.}
 
 \item{formula.reduced}{The formula of the reduced model with nuisance factors only. This model
 should be nested within the full model.}
+
+\item{typeone}{Character string indicating which type I error rate to control,
+either the familywise error rate ('fwer') or false discovery rate ('fdr').
+Further arguments to the FWER or FDR envelope can be passed in argument \code{GET.args}.
+If 'fwer', the type of the envelope can be chosen by specifying the argument \code{type}
+in \code{GET.args}.}
 
 \item{curve_sets}{A named list of sets of curves giving the dependent variable (Y), and
 possibly additionally factors whose values vary across the argument values of the functions.

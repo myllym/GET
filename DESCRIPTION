@@ -1,6 +1,6 @@
 Package: GET
-Version: 0.2-5
-Date: 2022-1-14
+Version: 0.3-1
+Date: 2022-8-16
 Title: Global Envelopes
 Encoding: UTF-8
 Authors@R: c(
@@ -29,10 +29,13 @@ Imports:
     utils,
     viridisLite
 Suggests:
+    crayon,
+    geoR,
     gstat,
     sp,
     fda,
     fda.usc,
+    locfit,
     mvtnorm,
     patchwork,
     spatstat.geom, spatstat.core, spatstat.linnet, spatstat (>= 2.0-0),
@@ -59,5 +62,5 @@ Description: Implementation of global envelopes for a set of general d-dimension
     Myllymäki et al. (2021) <doi: 10.1016/j.spasta.2020.100436>, and
     Dai et al. (2022) <doi: 10.5772/intechopen.100124>.
 License: GPL-3
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 VignetteBuilder: R.rsp
