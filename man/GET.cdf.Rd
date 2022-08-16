@@ -57,10 +57,7 @@ plot(data)
 # Compute the CDF test and plot the significant regions
 \donttest{res <- GET.cdf(data, ngrid=c(20,15), nsim=1999)}
 \dontshow{res <- GET.cdf(data, ngrid=c(20,15), nsim=19)}
-
-# Graphical output of GET
 plot(res)
-plot(res, what=c("lo.sign", "hi.sign"))
 
 # Extract the p-value
 attr(res,"p")

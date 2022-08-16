@@ -53,14 +53,13 @@ The test itself is performed using the global envelope test in the chosen versio
 }
 \examples{
 # Generate sample data
-data <- matrix(rnorm(n=200), ncol=2) \%*\% matrix(c(1,1,0,1), ncol=2)
+\donttest{data <- matrix(rnorm(n=200), ncol=2) \%*\% matrix(c(1,1,0,1), ncol=2)}
+\dontshow{data <- matrix(rnorm(n=20), ncol=2) \%*\% matrix(c(1,1,0,1), ncol=2)}
 plot(data)
 
 # Compute the QQ test and plot the significant regions
 \donttest{res <- GET.qq(data, ngrid=c(30,20), nsim=999)}
 \dontshow{res <- GET.qq(data, ngrid=c(30,20), nsim=19)}
-plot(res)
-# Original graphical output of GET
 plot(res)
 # Extract the p-value
 attr(res,"p")
@@ -71,19 +70,14 @@ plot(data)
 \donttest{res <- GET.qq(data, nsim=999, atoms.y=c(1,2,3,4))}
 \dontshow{res <- GET.qq(data, nsim=19, atoms.y=c(1,2,3,4))}
 plot(res)
-# Extract the p-value
-attr(res,"p")
 
+\donttest{
 # With atoms, dependent
 data <- cbind(sort(rnorm(n=100)), sort(sample(4, size=100, replace=TRUE)))
 plot(data)
-\donttest{res <- GET.qq(data, nsim=999, atoms.y=c(1,2,3,4))}
-\dontshow{res <- GET.qq(data, nsim=19, atoms.y=c(1,2,3,4))}
+res <- GET.qq(data, nsim=999, atoms.y=c(1,2,3,4))
 plot(res)
-# Original graphical output of GET
-plot(res)
-# Extract the p-value
-attr(res,"p")
+}
 
 # Atoms in both variables
 data <- cbind(rnorm(n=100), rnorm(n=100)) \%*\% matrix(c(1,1,0,1), ncol=2)
@@ -92,11 +86,9 @@ data[,2][data[,2]<=-0.5] <- -0.5
 plot(data)
 
 # Perform the test
-\donttest{es <- GET.qq(data, nsim=999, atoms.x=c(-1), atoms.y=c(-0.5), sigma=NULL)}
-\dontshow{es <- GET.qq(data, nsim=19, atoms.x=c(-1), atoms.y=c(-0.5), sigma=NULL)}
+\donttest{res <- GET.qq(data, nsim=999, atoms.x=c(-1), atoms.y=c(-0.5), sigma=NULL)}
+\dontshow{res <- GET.qq(data, nsim=19, atoms.x=c(-1), atoms.y=c(-0.5), sigma=NULL)}
 plot(res)
-# Extract the p-value
-attr(res,"p")
 }
 \references{
 Dvořák, J. and Mrkvička, T. (2022). Graphical tests of independence for general distributions. Computational Statistics 37, 671--699.
