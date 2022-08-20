@@ -257,7 +257,10 @@ GET.localcor <- function(data, Delta, nsim = 1000, typeone = c("fdr", "fwer"),
     }
   }
   else {
-    res <- create_curve_set(list(r=data.frame(x=lat, y=long, width=d.x, height=d.y), obs=loc.cor.obs))
+    if(widthheight)
+      res <- create_curve_set(list(r=data.frame(x=lat, y=long, width=d.x, height=d.y), obs=loc.cor.obs))
+    else
+      res <- create_curve_set(list(r=1:length(lat), obs=loc.cor.obs))
   }
   res
 }
