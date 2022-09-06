@@ -184,8 +184,8 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
 
   switch(alternative,
          "two.sided" = {},
-         "less" = { UB <- Inf },
-         "greater" = { LB <- -Inf })
+         "less" = { for(ai in 1:length(alpha)) UBounds[[ai]] <- Inf },
+         "greater" = { for(ai in 1:length(alpha)) LBounds[[ai]] <- -Inf })
 
   if(length(alpha) > 1) { # Multiple envelopes
     names(LBounds) <- names(UBounds) <- paste0(100*coverage)
