@@ -140,7 +140,7 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
     lstats[[j]] <- stats
 
     # Combined
-    jr <- c(jr, curve_sets[[1]][['r']])
+    jr <- c(jr, curve_sets[[j]][['r']])
     jstats <- cbind(jstats, lstats[[j]]) # j = joint
   }
   # Add the zero curve
@@ -158,12 +158,12 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
   b[1:length(b)] <- fo[1:length(b)] # for(i in 1:length(b)) { b[i] <- fo[i] }
   resultpamF <- pam(b, k=k)
   bb <- as.matrix(b)
-  nr1 <- curve_set_narg(curve_sets[[1]])
+  nfunc <- curve_set_nfunc(curve_sets[[1]])
   # Triangular inequality
   r <- NULL # Here r is a logical vector for something
-  for(i in 1:(nr1-2)) {
-    for(j in (i+1):(nr1-1)) {
-      for(kk in (j+1):(nr1)) {
+  for(i in 1:(nfunc-2)) {
+    for(j in (i+1):(nfunc-1)) {
+      for(kk in (j+1):(nfunc)) {
         r <- c(r, bb[i,j] + bb[j,kk] >= bb[i,kk] - 0.00000001)
       }
     }
