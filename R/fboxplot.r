@@ -54,8 +54,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, coverage = 0.50, ...) {
     }
     outliers_id <- unique(outliers_id)
     if(!is.null(outliers_id)) {
-      outliers <- lapply(curve_sets, FUN = function(x) { curve_set_funcs(x)[,outliers_id] })
-      if(is.vector(outliers[[1]])) outliers <- lapply(outliers, FUN = function(x) matrix(x, ncol=1))
+      outliers <- lapply(curve_sets, FUN = function(x) { curve_set_funcs(x)[,outliers_id, drop=FALSE] })
       if(is.null(colnames(outliers[[1]])))
         for(i in 1:length(outliers)) {
           n <- colnames(curve_set_funcs(curve_sets[[i]]))
@@ -82,7 +81,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, coverage = 0.50, ...) {
         outliers_id <- c(outliers_id, j)
     }
     if(!is.null(outliers_id)) {
-      outliers <- funcs[,outliers_id]
+      outliers <- funcs[,outliers_id, drop=FALSE]
       if(is.null(colnames(outliers)))
         colnames(outliers) <- outliers_id
     }
