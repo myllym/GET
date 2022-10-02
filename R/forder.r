@@ -84,8 +84,10 @@ individual_partial_forder <- function(curve_set, measure = c('erl', 'rank', 'con
   curve_set <- convert_envelope(curve_set)
 
   all_curves <- data_and_sim_curves(curve_set)
-  Nfunc <- dim(all_curves)[1]
+  Nfunc <- curve_set_nfunc(curve_set)
   nr <- curve_set_narg(curve_set)
+  if(Nfunc < 3 & measure %in% c('cont', 'area'))
+    stop("At least 3 curves required.")
 
   # Calculate pointwise ranks for each argument value (r)
   calc_pointwiserank <- find_calc_pointwiserank(measure, alternative)
@@ -137,6 +139,11 @@ individual_forder <- function(curve_set,
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!")
 
   curve_set <- convert_to_curveset(curve_set)
+  # Check for the minimal Nfunc
+  Nfunc <- curve_set_nfunc(curve_set)
+  if(Nfunc < 3 & (measure %in% c('cont', 'area') |
+     (measure %in% c('max', 'int', 'int2') & scaling %in% c('st', 'qdir'))))
+    stop("At least 3 curves required.")
 
   if(measure %in% c('max', 'int', 'int2')) {
     curve_set <- residual(curve_set, use_theo = use_theo)
@@ -145,7 +152,6 @@ individual_forder <- function(curve_set,
   }
   else {
     alternative <- match.arg(alternative)
-    Nfunc <- curve_set_nfunc(curve_set)
     nr <- curve_set_narg(curve_set)
     # If the curve_set is larger than 80 MB
     # and nr > 2*6
