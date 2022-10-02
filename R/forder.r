@@ -160,6 +160,7 @@ individual_forder <- function(curve_set,
              distance <- partial_forder
            },
            erl = {
+             if(is.vector(partial_forder)) partial_forder <- matrix(partial_forder, nrow=1) # the case nr == 1
              distance <- rank_matrix_cols(partial_forder)
            },
            cont = {

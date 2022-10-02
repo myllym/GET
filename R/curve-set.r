@@ -374,6 +374,7 @@ print.curve_set <- function(x, ...) {
 #'   plot(cset) + ggplot2::theme(legend.position="none")
 #' }
 plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) {
+  if(curve_set_narg(x) < 2) stop("At least two values of r required.")
   if(!all(x$r[-1] - x$r[-curve_set_narg(x)] > 0))
     warning("r values non-increasing. Plot not valid.")
 
