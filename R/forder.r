@@ -4,16 +4,19 @@
 contrank <- function(y) {
   ordery <- order(y)
   n <- length(y)
+  if(n==1) return(0.5)
   y <- y[ordery]
   ties <- y[1:(n-2)] == y[3:n] # same as j = 1:(n-2); ties <- y[j-1] == y[j+1]
   # If there are two tied values then the tree following expressions magically yield the right result
   # and it's not necessary to handle the ties specially
   RR <- numeric(n)
-  RR[1] <- exp(-(y[1]-y[2])/(y[2]-y[n]))
+  RR[1] <- exp((y[1]-y[2])/(y[n]-y[2])) # The ordering of y's in the denominator is important for getting the sign right if the numbers are equal
   RR[n] <- n - exp(-(y[n]-y[n-1])/(y[n-1]-y[1]))
-  RR[2:(n-1)] <- 1:(n-2)+(y[1:(n-2)]-y[2:(n-1)])/(y[1:(n-2)]-y[3:n])
+  if(n >= 3) {
+    RR[2:(n-1)] <- 1:(n-2)+(y[1:(n-2)]-y[2:(n-1)])/(y[1:(n-2)]-y[3:n])
+  }
 
-  if(any(ties)) { # The case of some ties
+  if(any(ties) || n==2) { # The case of some ties
     ordrank <- rank(y, ties.method = "average")
     # Find all elements occuring at least twice.
     # It would be enough to consider only elements occuring at least three times, but it's okay.
