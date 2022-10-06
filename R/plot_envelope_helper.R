@@ -158,17 +158,18 @@ plotdefaultlabs <- function(x) {
 env_dotplot_ggplot <- function(x, labels=NULL, sign.col="red") {
   if(is.null(labels) && !is.null(x[['r']])) labels <- paste(round(x[['r']], digits=2))
   df <- as.data.frame(x)
+  df$r <- factor(df$r)
   arrow <- arrow(angle=75)
   if(length(attr(x, "alpha")) > 1) message("Note: dotplot shows only the largest envelope.")
   loname <- env_loname(attr(x, "alpha"), largest=TRUE)
   hiname <- env_hiname(attr(x, "alpha"), largest=TRUE)
   g <- ggplot(df) + geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data[[hiname]]), arrow=arrow) +
-    geom_segment(aes(x=factor(.data$r), y=.data$central, xend=.data$r, yend=.data[[loname]]), arrow=arrow)
+    geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data[[loname]]), arrow=arrow)
   if(!is.null(x[['obs']])) {
     if(is.null(sign.col)) sign.col <- "black"
-    g <- g + geom_point(aes(x=factor(.data$r), y=.data$obs, col=ifelse(.data$obs > .data[[hiname]] | .data$obs < .data[[loname]], sign.col, "black")), shape="x", size=5)
+    g <- g + geom_point(aes(x=.data$r, y=.data$obs, col=ifelse(.data$obs > .data[[hiname]] | .data$obs < .data[[loname]], sign.col, "black")), shape="x", size=5)
   }
-  g <- g + geom_point(aes(x=factor(.data$r), y=.data$central)) +
+  g <- g + geom_point(aes(x=.data$r, y=.data$central)) +
     scale_color_identity() +
     scale_x_discrete(breaks=paste(x[['r']]), labels=labels)
 }
