@@ -172,7 +172,7 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
   res <- list(curve_sets=curve_sets, k=k, type=type,
               pam=resultpamF, dis=b,
               triangineq = sum(r)/length(r))
-  class(res) <- "fclust"
+  class(res) <- c("fclust", class(res))
   res
 }
 

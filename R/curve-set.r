@@ -310,8 +310,8 @@ create_curve_set <- function(curve_set, ...) {
   else r <- 1:nrow(funcs)
   cset <- list(r = r, funcs = funcs, is1obs = is1obs)
   if(!is.null(curve_set[['theo']])) cset$theo <- curve_set[['theo']]
-  class(cset) <- 'curve_set'
-  if(!is.vector(r)) class(cset) <- c('curve_set2d', class(cset))
+  class(cset) <- c("curve_set", class(cset))
+  if(!is.vector(r)) class(cset) <- c("curve_set2d", class(cset))
   cset
 }
 
