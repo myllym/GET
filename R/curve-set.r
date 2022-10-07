@@ -374,7 +374,6 @@ print.curve_set <- function(x, ...) {
 #'   plot(cset) + ggplot2::theme(legend.position="none")
 #' }
 plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) {
-  if(curve_set_narg(x) < 2) stop("At least two values of r required.")
   if(!all(x$r[-1] - x$r[-curve_set_narg(x)] > 0))
     warning("r values non-increasing. Plot not valid.")
 
@@ -425,16 +424,18 @@ plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) 
                    id =  factor(rep(id_v, each=nrow(funcs)), levels = id_v_levels))
   if(!is.null(idx)) df$idx = factor(rep(idx_v, each=nrow(funcs)), levels = idx_labs)
 
+  if(curve_set_narg(x) > 1) geom <- geom_line
+  else geom <- geom_point
   p <- ( ggplot() )
   if(!is.null(idx)) {
     col_values <- c(col_idx, col)
     names(col_values) <- idx_labs
-    p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~funcs, group = ~id, col = ~idx))
+    p <- ( p + geom(data=df, aes_(x = ~r, y = ~funcs, group = ~id, col = ~idx))
            + scale_color_manual(values = col_values)
            + labs(col = idx_name) )
   }
   else {
-    p <- ( p + geom_line(data=df, aes_(x = ~r, y = ~funcs, group = ~id), col = col) )
+    p <- ( p + geom(data=df, aes_(x = ~r, y = ~funcs, group = ~id), col = col) )
   }
   p
 }
