@@ -8,7 +8,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   check_isnested(formula.full, formula.reduced)
   if(nsim < 1) stop("Not a reasonable value of nsim.")
   if(vars[1] != "Y") stop("The formula should be off the form Y ~ .... where Y is the response.")
-  if(!(length(class(curve_sets)) == 1 && inherits(curve_sets, "list"))) {
+  if(is_a_single_curveset(curve_sets)) {
     curve_sets <- list(Y=curve_sets)
   }
   available <- unique(c(names(curve_sets), names(factors)))

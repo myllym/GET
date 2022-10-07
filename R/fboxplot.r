@@ -29,7 +29,7 @@
 fBoxplot <- function(curve_sets, factor = 1.5, coverage = 0.50, ...) {
   if(factor < 0) stop("factor should be positive.")
   if(length(coverage) > 1) stop("Multiple coverages not allowed.")
-  if(length(class(curve_sets)) == 1 && inherits(curve_sets, "list")) {
+  if(!is_a_single_curveset(curve_sets)) {
     if(!all(sapply(curve_sets, FUN=curve_set_is1d)))
       stop("r in curve_sets should be vectors.")
     if(any(sapply(curve_sets, FUN=curve_set_is1obs)))

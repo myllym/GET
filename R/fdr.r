@@ -368,7 +368,7 @@ fdr_envelope <- function(curve_sets, alpha = 0.05,
                          algorithm = c("IATSE", "ATSE"),
                          lower = NULL, upper = NULL) {
   # Consider the case of several curves
-  if(length(class(curve_sets)) == 1 && inherits(curve_sets, "list")) {
+  if(!is_a_single_curveset(curve_sets)) {
     if(length(curve_sets) > 1) { # Combine
       nr <- lapply(curve_sets, curve_set_narg)
       nfuns <- length(nr)

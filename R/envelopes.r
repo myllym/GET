@@ -781,7 +781,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
                            probs = c(0.25, 0.75),
                            quantile.type = 7,
                            central = "median", nstep = 2, ...) {
-  if(length(class(curve_sets)) == 1 && inherits(curve_sets, "list")) {
+  if(!is_a_single_curveset(curve_sets)) {
     if(length(curve_sets) > 1) { # Combined test
       if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
       if(nstep == 2) # Two-step combining procedure
@@ -1109,7 +1109,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
                           alternative = c("two.sided", "less", "greater"),
                           ties = "erl", probs = c(0.025, 0.975), quantile.type = 7,
                           central = "mean", nstep = 2, ...) {
-  if(length(class(curve_sets)) == 1 && inherits(curve_sets, "list")) {
+  if(!is_a_single_curveset(curve_sets)) {
     if(length(curve_sets) > 1) { # Combined test
       if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
       if(nstep == 2) # Two-step combining procedure

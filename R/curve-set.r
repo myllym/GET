@@ -212,6 +212,13 @@ convert_fdata <- function(curve_set, ...) {
   curve_set
 }
 
+# Check if the given object is valid as a curve_set.
+# Employed to check if a curve_set (single envelopes) or
+# a list of curve_sets is given (combine envelopes).
+is_a_single_curveset <- function(curve_set) {
+  inherits(curve_set, c('curve_set', 'envelope', 'fdata'))
+}
+
 # Convert an envelope or fdata object to a curve_set object.
 convert_to_curveset <- function(curve_set, ...) {
   if(inherits(curve_set, 'envelope')) {
