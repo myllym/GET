@@ -133,7 +133,13 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
   }
   if(is.null(cl)) sim <- do.call(parallel::mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args))
   else sim <- parLapply(cl, 1:nsim, loopfun2)
-  sim <- simplify2array(sim, except=NULL)
+  dn <- dimnames(sim[[1]])
+  # sim <- simplify2array(sim, except=NULL) # except is only available starting from 4.2.0
+  sim <- simplify2array(sim)
+  if(is.null(dimnames(sim))) {
+    dim(sim) <- c(1,1,length(sim))
+    dimnames(sim) <- c(dn, list(NULL))
+  }
   complabels <- colnames(obs)
 
   csets <- NULL
