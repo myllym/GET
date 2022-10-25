@@ -11,6 +11,7 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
     } else {
       df$response__ <- Y[,i]
     }
+    df <- df[!is.na(df$response__),]
     M.full <- quantreg::rq(formula.full, data=df, tau=taus[i], model=FALSE, ...)
     allcoef <- coef(M.full)
     unlist(allcoef[nameinteresting])
@@ -80,7 +81,7 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #' }
 #'
 graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwer", "fdr"),
-                      data = NULL, contrasts = NULL,
+                      data = NULL, contrasts = NULL, removezeros=0,
                       savefuns = FALSE, rq.args = NULL, GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL) {
   if(!requireNamespace("quantreg", quietly = TRUE)) {
@@ -120,6 +121,21 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
   formula.full[[2]] <- quote(response__)
   Y <- eval(response_variable, data)
   obs <- do.call(genCoef, c(list(Y, data, taus, formula.full, nameinteresting, contrasts=contrasts), rq.args))
+
+  if(removezeros==1) {
+    # Find the indices of the zero residuals that will be removed
+    # Since there can be arbitrarily many zeros, take a random sample
+    zerostoremove <- length(names.reduced) - 1
+    if(zerostoremove >= 1) {
+      zerores <- abs(res.m) < 1e-10
+      stopifnot(all(colSums(zerores) >= zerostoremove))
+      # Set residuals to be removed to NA, any rows with NA are removed in gencoef
+      for(i in seq_along(taus)) {
+        ind <- sample(which(zerores[,i]), zerostoremove, replace=FALSE)
+        res.m[ind, i] <- NA
+      }
+    }
+  }
 
   # Simulations by permuting the residuals + calculate the coefficients
   Yperm <- function() { # Permutation
