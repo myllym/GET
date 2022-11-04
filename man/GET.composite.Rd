@@ -12,7 +12,9 @@ GET.composite(
   nsimsub = nsim,
   simfun = NULL,
   fitfun = NULL,
-  calcfun = function(X) {     X },
+  calcfun = function(X) {
+     X
+ },
   testfuns = NULL,
   ...,
   type = "erl",
