@@ -393,7 +393,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
                       contrasts = FALSE, savefuns = FALSE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
                       fast = TRUE) {
-  typeone <- check_typeone(typeone)
+  typeone <- check_typeone(typeone, missing(typeone))
   # Set up the contrasts
   op <- options(contrasts = c("contr.sum", "contr.poly"))
   on.exit(options(op))
@@ -572,7 +572,7 @@ frank.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
                       savefuns = TRUE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1, mc.args = NULL, cl = NULL,
                       method = c("best", "simple", "mlm", "complex", "lm")) {
-  typeone <- check_typeone(typeone)
+  typeone <- check_typeone(typeone, missing(typeone))
   # Preliminary checks and formulation of the data to suitable form for further processing
   method <- match.arg(method)
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,

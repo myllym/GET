@@ -1,13 +1,14 @@
-check_typeone <- function(typeone = c("fwer", "fdr")) {
+check_typeone <- function(typeone = c("fwer", "fdr"), notgiven) {
   typeone <- match.arg(typeone)
-  switch(typeone,
-         fwer = {
-           message("You have chosen to control the family wise error rate (typeone = \"fwer\").")
-         },
-         fdr = {
-           message("You have chosen to control the false discovery rate (typeone = \"fdr\").")
-         }
-  )
+  if(notgiven)
+    switch(typeone,
+           fwer = {
+             message("Setting to control the family wise error rate (typeone = \"fwer\").")
+           },
+           fdr = {
+             message("Setting to control the false discovery rate (typeone = \"fdr\").")
+           }
+    )
   typeone
 }
 
@@ -336,7 +337,7 @@ graph.fanova <- function(nsim, curve_set, groups, typeone = c("fwer", "fdr"),
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.")
     groups <- as.factor(groups)
   }
-  typeone <- check_typeone(typeone)
+  typeone <- check_typeone(typeone, missing(typeone))
   test.equality <- match.arg(test.equality)
   if(test.equality=="cov" && !curve_set_is1d(curve_set)) {
     stop("test.equality='cov' is only available for 1 dimensional functions")
@@ -453,7 +454,7 @@ frank.fanova <- function(nsim, curve_set, groups, typeone = c("fwer", "fdr"),
     warning("The argument groups is not a factor. Transforming it to a factor by as.factor.")
     groups <- as.factor(groups)
   }
-  typeone <- check_typeone(typeone)
+  typeone <- check_typeone(typeone, missing(typeone))
   test.equality <- match.arg(test.equality)
   if(test.equality=="cov" && !curve_set_is1d(curve_set)) {
     stop("test.equality='cov' is only available for 1 dimensional functions")

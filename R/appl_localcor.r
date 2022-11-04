@@ -106,7 +106,7 @@ GET.localcor <- function(data, Delta, nsim = 1000, typeone = c("fdr", "fwer"),
                          mc.cores = 1L, mc.args = NULL, cl = NULL,
                          notest = FALSE, ...) {
   if(nsim < 2) stop("Not a reasonable value of nsim.")
-  typeone <- check_typeone(typeone)
+  typeone <- check_typeone(typeone, missing(typeone))
   if(!is.logical(varying.bandwidth)) stop("Invalid varying.bandwidth value.")
   if(!is.logical(savefuns)) stop("Invalid savefuns value.")
   if(!(is.numeric(Delta) & length(Delta)>0 & all(Delta>0))) stop("Invalid Delta.")
