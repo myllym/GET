@@ -9,7 +9,7 @@ Authors@R: c(
     person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
     person(given = 'Jiří', family = 'Dvořák', role = 'ctb',
-    email = 'gpya@rambler.ru'),
+    email = 'dvorak@karlin.mff.cuni.cz'),
     person(given = 'Pavel', family = 'Grabarnik', role = 'ctb',
     email = 'gpya@rambler.ru'),
     person(given = 'Ute', family = 'Hahn', role = 'ctb',
