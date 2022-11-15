@@ -6,10 +6,10 @@ maverage2d <- function(x, R) {
   R <- mean(R) # Note: R can be a vector of length 2 corresponding to bandwidths in x and y directions
   X <- spatstat.geom::fillNA(x, 0)
   # Calculates the sum of values of X in b(i,R) at each pixel i
-  Y <- spatstat.core::second.moment.calc(X, what="smooth", kernel=function(x, y) x^2 + y^2 < R^2, sigma=0)
+  Y <- spatstat.explore::second.moment.calc(X, what="smooth", kernel=function(x, y) x^2 + y^2 < R^2, sigma=0)
   # Calculate the number of pixels in each b(i,R)
   X[!is.na(x$v)] <- 1
-  Yden <- spatstat.core::second.moment.calc(X, what="smooth", kernel=function(x, y) x^2 + y^2 < R^2, sigma=0)
+  Yden <- spatstat.explore::second.moment.calc(X, what="smooth", kernel=function(x, y) x^2 + y^2 < R^2, sigma=0)
   # Calculate the mean
   Z <- spatstat.geom::eval.im(Y/Yden)
   Z[is.na(x$v)] <- NA
@@ -24,8 +24,8 @@ compute_statistics <- function(X, formula.full, formula.reduced, fitfun, covaria
   M.reduced <- fitfun(X, formula.reduced, covariates)
   r0 <- residuals(M.reduced)
   r1 <- residuals(M.full)
-  s0 <- spatstat.core::Smooth(r0, sigma=bw, dimyx=dimyx)
-  s1 <- spatstat.core::Smooth(r1, sigma=bw, dimyx=dimyx)
+  s0 <- spatstat.explore::Smooth(r0, sigma=bw, dimyx=dimyx)
+  s1 <- spatstat.explore::Smooth(r1, sigma=bw, dimyx=dimyx)
   sm0 <- maverage2d(s0, bw.S)
   sq0 <- maverage2d(s0^2, bw.S)
   sm1 <- maverage2d(s1, bw.S)
@@ -73,7 +73,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #' Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics 42, 100436. doi: 10.1016/j.spasta.2020.100436
 #' @importFrom stats simulate
 #' @examples
-#' if(require("spatstat.core", quietly=TRUE)) {
+#' if(require("spatstat.model", quietly=TRUE)) {
 #'   # Example of tropical rain forest trees
 #'   data("bei")
 #'
@@ -120,7 +120,7 @@ curve_set_helper <- function(r, obs, sim_m) {
 #'   }
 #' }
 GET.spatialF <- function(X, formula.full, formula.reduced, fitfun, covariates, nsim,
-                         bw = spatstat.core::bw.scott(X), bw.S = bw, dimyx = NULL, ...) {
+                         bw = spatstat.explore::bw.scott(X), bw.S = bw, dimyx = NULL, ...) {
   if(!spatstat.geom::is.ppp(X)) stop("X should be a ppp object.")
   check_isnested(formula.full, formula.reduced)
   M.reduced <- fitfun(X, formula.reduced, covariates)
