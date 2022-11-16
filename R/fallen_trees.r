@@ -28,7 +28,7 @@
 #' @docType data
 #' @examples
 #' data("fallen_trees")
-#' if(require("spatstat.core", quietly=TRUE)) {
+#' if(require("spatstat.geom", quietly=TRUE)) {
 #'   fallen_trees <- as.ppp(fallen_trees$trees, W = owin(poly=fallen_trees$window))
 #'   plot(fallen_trees)
 #' }

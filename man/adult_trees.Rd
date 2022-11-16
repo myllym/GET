@@ -22,7 +22,7 @@ The pattern is a sample part of data collected over 10 ha plot as a part of a re
 program headed by project leader Prof. O.V. Smirnova.
 }
 \examples{
-if(require("spatstat.core", quietly=TRUE)) {
+if(require("spatstat.geom", quietly=TRUE)) {
   data("adult_trees")
   adult_trees <- as.ppp(adult_trees, W = square(75))
   plot(adult_trees)

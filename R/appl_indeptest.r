@@ -224,7 +224,7 @@ qq.estimate <- function(X, ngrid=c(64,64), sigma=NULL, atoms.x=NULL, atoms.y=NUL
   X.pp <- suppressWarnings(spatstat.geom::ppp(x=rank(X[,1])/n, y=rank(X[,2])/n))
 
   # Two-dimensional estimates of the intensity function - observed data
-  X.dens <- spatstat.core::density.ppp(X.pp, dimyx=c(ngrid[2],ngrid[1]), sigma=sigma)
+  X.dens <- spatstat.explore::density.ppp(X.pp, dimyx=c(ngrid[2],ngrid[1]), sigma=sigma)
 
   # One-dimensional estimates - observed data
   if(!is.null(atoms.y)) {
