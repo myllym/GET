@@ -30,6 +30,8 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #' Non-parametric graphical tests of significance in functional general linear model (GLM)
 #'
 #'
+#' "Freedman-Lane+remove zeros" removes zeros as suggested in Cade & Richards DOI: 10.1198/108571106X96835.
+#'
 #'
 #' @inheritParams graph.flm
 #' @param data data.frame where to look for variables.
@@ -53,16 +55,42 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #'   data("stackloss")
 #'   df = stackloss
 #'   df$cat = factor(sample(c("a", "b", "c"), nrow(df), replace=TRUE))
-#'   res <- graph.rq(nsim=19,
+#'   perms <- c("Freedman-Lane", "Freedman-Lane+remove zeros", "simple",
+#'       "within nuisance",
+#'       "linear location", "linear location scale")
+#'   res <- list()
+#'   for(taus in list(seq(0.1,0.9,by=0.2), 0.5)) {
+#'   for(perm in perms) {
+#'   if(perm != "within nuisance") {
+#'   res <- c(res, list(graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
-#'     formula.reduced=stack.loss ~ Air.Flow,
-#'     taus=seq(0.1, 0.9, by=0.2),
-#'     data=stackloss)
-#'   plot(res)
+#'     formula.reduced=stack.loss ~ Water.Temp,
+#'     taus=taus, permutationstrategy=perm,
+#'     data=df)))
+#'   res <- c(res, list(graph.rq(nsim=19,
+#'     formula.full=stack.loss ~ cat + Water.Temp,
+#'     formula.reduced=stack.loss ~ Water.Temp,
+#'     taus=taus, permutationstrategy=perm,
+#'     data=df)))
+#'   res <- c(res, list(graph.rq(nsim=19,
+#'     formula.full=stack.loss ~ cat + Water.Temp,
+#'     formula.reduced=stack.loss ~ cat,
+#'     taus=taus, permutationstrategy=perm,
+#'     data=df)))
+#'    } else {
+#'   res <- c(res, list(graph.rq(nsim=19,
+#'     formula.full=stack.loss ~ cat + Water.Temp,
+#'     formula.reduced=stack.loss ~ Water.Temp,
+#'     taus=taus, permutationstrategy=perm,
+#'     contrasts=list(cat="contr.sum"),
+#'     data=df)))
+#'     }
+#'   }
+#'   }
 #'   res <- graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
 #'     formula.reduced=stack.loss ~ Air.Flow + Water.Temp,
-#'     taus=seq(0.1, 0.9, by=0.2),
+#'     taus=0.1, permutationstrategy="Freeman-Lane",
 #'     data=stackloss)
 #'   plot(res)
 #'   res <- graph.rq(nsim=19,
@@ -77,17 +105,28 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #'     taus=seq(0.1, 0.9, by=0.2),
 #'     data=df,
 #'     contrasts=list(cat="contr.sum"))
+#'   res <- graph.rq(nsim=19,
+#'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
+#'     formula.reduced=stack.loss ~ Air.Flow,
+#'     taus=seq(0.1, 0.9, by=0.2),
+#'     data=df,
+#'     contrasts=list(cat=contr.sum))
 #'   plot(res)
 #' }
 #'
 graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwer", "fdr"),
-                      data = NULL, contrasts = NULL, removezeros=0,
-                      savefuns = FALSE, rq.args = NULL, GET.args = NULL,
-                      mc.cores = 1L, mc.args = NULL, cl = NULL) {
+                     data = NULL, contrasts = NULL,
+                     permutationstrategy = c("Freedman-Lane", "Freedman-Lane+remove zeros",
+                                             "simple",
+                                             "within nuisance",
+                                             "linear location", "linear location scale"),
+                     savefuns = FALSE, rq.args = NULL, lm.args = NULL, GET.args = NULL,
+                     mc.cores = 1L, mc.args = NULL, cl = NULL) {
   if(!requireNamespace("quantreg", quietly = TRUE)) {
     stop("Package 'quantreg' is required, but not installed.")
   }
   typeone <- check_typeone(typeone)
+  permutationstrategy = match.arg(permutationstrategy)
 
   check_isnested(formula.full, formula.reduced)
   if(nsim < 1) stop("Not a reasonable value of nsim.")
@@ -95,53 +134,103 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
   genCoef <- genCoefmeans.rq
   ylab <- expression(italic(hat(beta)[i](tau)))
 
-  #-- Freedman-Lane procedure
-  # Fit the reduced model at each argument value to get the fitted values and residuals
-  # TODO: contrasts for variables not in reduced model will cause warning, but maybe are needed if there are interactions
-  fit <- do.call(quantreg::rq, c(list(formula.reduced, data=data, tau=taus, model=FALSE, contrasts=contrasts), rq.args))
-  fitted.m <- fit$fitted.values
-  res.m <- fit$residuals
-  if(length(taus)==1) {
-    fitted.m <- matrix(fitted.m, ncol=1)
-    res.m <- matrix(res.m, ncol=1)
-  }
-  names.reduced <- if(length(taus)==1) {names(coef(fit))} else {rownames(coef(fit))}
-
-  # Fit the full model for single tau to get coef names
-  fit.full <- do.call(quantreg::rq, c(list(formula.full, data=data, tau=taus[1], model=FALSE, contrasts=contrasts), rq.args))
-
-  nameinteresting <- setdiff(names(coef(fit.full)), names.reduced)
-  fit <- fit.full <- NULL
-
+  nameinteresting <- setdiff(
+    colnames(model.matrix(formula.full, data=data, contrasts.arg=contrasts)),
+    colnames(model.matrix(formula.reduced, data=data, contrasts.arg=contrasts)))
 
   # Fit the full model to the data and obtain the coefficients
   # genCoef will use response__ as the response variable
   response_variable <- formula.full[[2]]
-  # TODO: Check that there is no response__ in data
-  formula.full[[2]] <- quote(response__)
+  formula.full <- update.formula(formula.full, response__ ~ .)
   Y <- eval(response_variable, data)
-  obs <- do.call(genCoef, c(list(Y, data, taus, formula.full, nameinteresting, contrasts=contrasts), rq.args))
 
-  if(removezeros==1) {
-    # Find the indices of the zero residuals that will be removed
-    # Since there can be arbitrarily many zeros, take a random sample
-    zerostoremove <- length(names.reduced) - 1
-    if(zerostoremove >= 1) {
-      zerores <- abs(res.m) < 1e-10
-      stopifnot(all(colSums(zerores) >= zerostoremove))
-      # Set residuals to be removed to NA, any rows with NA are removed in gencoef
-      for(i in seq_along(taus)) {
-        ind <- sample(which(zerores[,i]), zerostoremove, replace=FALSE)
-        res.m[ind, i] <- NA
+  # TODO: contrasts for variables not in reduced model will cause warning, but maybe are needed if there are interactions
+  # Maybe make another contrasts where the extra variables are not included
+
+  if(startsWith(permutationstrategy, "Freedman-Lane")) {
+    #-- Freedman-Lane procedure
+    # Fit the reduced model at each argument value to get the fitted values and residuals
+    fit <- do.call(quantreg::rq, c(list(formula.reduced, data=data, tau=taus, model=FALSE, contrasts=contrasts), rq.args))
+    fitted.m <- fit$fitted.values
+    res.m <- fit$residuals
+    if(length(taus)==1) {
+      fitted.m <- matrix(fitted.m, ncol=1)
+      res.m <- matrix(res.m, ncol=1)
+    }
+    names.reduced <- if(length(taus)==1) {names(coef(fit))} else {rownames(coef(fit))}
+    fit <- NULL
+
+
+    if(permutationstrategy=="Freedman-Lane+remove zeros") {
+      # Find the indices of the zero residuals that will be removed
+      # Since there can be arbitrarily many zeros, take a random sample
+      zerostoremove <- length(names.reduced) - 1
+      if(zerostoremove >= 1) {
+        zerores <- abs(res.m) < 1e-10
+        stopifnot(all(colSums(zerores) >= zerostoremove))
+        # Set residuals to be removed to NA, any rows with NA are removed in gencoef
+        for(i in seq_along(taus)) {
+          ind <- sample(which(zerores[,i]), zerostoremove, replace=FALSE)
+          res.m[ind, i] <- NA
+        }
       }
     }
+  } else if(permutationstrategy=="simple") {
+    fitted.m <- 0
+    res.m <- matrix(Y, ncol=1)
+  } else if(permutationstrategy=="within nuisance") {
+    Nuisance_name = as.character(formula.reduced[[3]])
+    if(length(Nuisance_name) != 1) stop("formula_reduced may only contain 1 variable if 'within nuisance' permutation strategy is used.")
+    Nuisance.levels <- unique(data[[Nuisance_name]])
+    ## TODO: Maybe check that the nuisance has a reasonable amount of data on each level?
+
+    # permutation strategy ( Works only for one categorical covariate )
+    Yperm <- function() {
+      result <- Y_temp <- Y
+      for( i in Nuisance.levels){
+        Index_i = which(data[[Nuisance_name]]==i)
+        permutation <-sample(Index_i,
+                             length(Index_i),
+                             replace=FALSE)
+        result[Index_i] = Y_temp[permutation]
+      }
+      result
+    }
+  } else if(startsWith(permutationstrategy, "linear location")) {
+    # These are implemented by computing the corresponding residuals and
+    # then performing the permutation as simple permutation for the residuals and
+    # the formula where nuisance are removed.
+
+    #simulated data
+    fit <- do.call(lm, c(list(formula.reduced, data = data, contrasts=contrasts),lm.args)) # Fit the reduced model
+
+    res.m <- fit$residuals #residuals
+
+    #NP + permutation
+    if(permutationstrategy == "linear location scale") {
+      data.temp = data
+      data.temp$abs_residuals = abs(res.m)
+      formula.res <- update.formula(formula.reduced, abs_residuals ~ .)
+      fit.abs<- do.call(lm, c(list( formula.res,data = data.temp, contrasts=contrasts),lm.args))
+      fitted.m = fit.abs$fitted.values
+      res.m <- res.m / fitted.m
+    }
+
+    formula.full <- update.formula(formula.full, as.formula(paste("~.-(", as.character(formula.reduced)[3], ")")))
+    Y <- res.m
+    res.m <- matrix(res.m, ncol=1)
+    fitted.m <- 0
   }
 
-  # Simulations by permuting the residuals + calculate the coefficients
-  Yperm <- function() { # Permutation
-    permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
-    # Permute the residuals (rows in res.m) and create new 'y'
-    fitted.m + res.m[permutation, ]
+  obs <- do.call(genCoef, c(list(Y, data, taus, formula.full, nameinteresting, contrasts=contrasts), rq.args))
+
+  if(permutationstrategy != "within nuisance") {
+    # Simulations by permuting the residuals + calculate the coefficients
+    Yperm <- function() { # Permutation
+      permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
+      # Permute the residuals (rows in res.m) and create new 'y'
+      fitted.m + res.m[permutation, ]
+    }
   }
   loopfun2 <- function(i) {
     # Regress the permuted data against the full model and get a new effect of interest
