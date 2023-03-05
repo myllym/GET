@@ -1,0 +1,566 @@
+\documentclass[nojss]{jss}
+
+% \VignetteIndexEntry{GET: FDR envelopes}
+% \VignetteKeywords{false discovery rate, functional linear model, global envelope test, local spatial correlation, multiple testing, resampling, R}
+% \VignettePackage{GET}
+
+%% -- LaTeX packages and custom commands ---------------------------------------
+
+%% recommended packages
+\usepackage{thumbpdf,lmodern}
+
+%% another package (only for this demo article)
+\usepackage{framed}
+
+%% new custom commands
+\newcommand{\class}[1]{`\code{#1}'}
+\newcommand{\fct}[1]{\code{#1()}}
+\newcommand{\TT}{\mathbf{T}}
+\newcommand{\lo}{\mathrm{low}}
+\newcommand{\up}{\mathrm{upp}}
+\providecommand{\1}{\mathbf{1}}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
+
+\usepackage{amsmath,amsfonts,amssymb}
+
+\makeatletter
+\setkeys{Gin}{width=\Gin@nat@width}
+\makeatother
+
+%% For Sweave-based articles about R packages:
+%% need no \usepackage{Sweave}
+\SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
+<<preliminaries, echo=FALSE, results=hide>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+@
+
+%% -- Article metainformation (author, title, ...) -----------------------------
+
+%% - \author{} with primary affiliation
+%% - \Plainauthor{} without affiliations
+%% - Separate authors by \And or \AND (in \author) or by comma (in \Plainauthor).
+%% - \AND starts a new line, \And does not.
+\author{Mari Myllym{\"a}ki\\Natural Resources Institute Finland (Luke)}
+\Plainauthor{Mari Myllym{\"a}ki}
+
+%% - \title{} in title case
+%% - \Plaintitle{} without LaTeX markup (if any)
+%% - \Shorttitle{} with LaTeX markup (if any), used as running title
+\title{\pkg{GET}: FDR envelopes}
+\Plaintitle{GET: FDR envelopes}
+\Shorttitle{\pkg{GET}: FDR envelopes}
+
+%% - \Abstract{} almost as usual
+\Abstract{
+This vignette gives examples of the use of false discoverate rate (FDR) envelopes
+that are proposed in \citep{MrkvickaMyllymaki2022} and implemented in the \proglang{R} package \pkg{GET}.
+When citing the vignette please cite \citet{MrkvickaMyllymaki2022} and
+Myllym{\"a}ki and Mrkvi\v cka (2020, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME])
+available at \url{https://arxiv.org/abs/1911.06583}.
+}
+
+%% - \Keywords{} with LaTeX markup, at least one required
+%% - \Plainkeywords{} without LaTeX markup (if necessary)
+%% - Should be comma-separated and in sentence case.
+\Keywords{false discovery rate, functional linear model, global envelope test, local spatial correlation, multiple testing, resampling, \proglang{R}}
+\Plainkeywords{false discovery rate, functional linear model, global envelope test, local spatial correlation, multiple testing, resampling, R}
+
+%% - \Address{} of at least one author
+%% - May contain multiple affiliations for each author
+%%   (in extra lines, separated by \emph{and}\\).
+%% - May contain multiple authors for the same affiliation
+%%   (in the same first line, separated by comma).
+\Address{
+  Mari Myllym{\"a}ki\\
+  Natural Resources Institute Finland (Luke)\\
+  Latokartanonkaari 9\\
+  FI-00790 Helsinki, Finland\\
+  E-mail: \email{mari.myllymaki@luke.fi}\\
+  URL: \url{https://www.luke.fi/en/experts/mari-myllymaki/} 
+}
+
+\begin{document}
+
+\section{Introduction}
+
+This vignette gives examples of the use of false discovery rate (FDR) envelopes,
+which are implemented in the \proglang{R} \citep{R2020} package \pkg{GET}.
+Three examples given below correspond to those presented in \citet{MrkvickaMyllymaki2022}.
+The envelope plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016},
+where we utilize the theme \code{theme_bw} for this document,
+and also the \pkg{patchwork} package \citep{patchwork2020}.
+%
+<<r_setup>>=
+library("GET")
+library("ggplot2")
+theme_set(theme_bw(base_size = 9))
+library("patchwork")
+library("readxl")
+library(patchwork)
+library(spatstat)
+@
+%
+
+\section{Annual water temperature curves}
+
+The data of annual water temperature curves sampled at the water level of Rimov reservoir in the Czech republic every day from 1979 to 2014
+are available as the data \code{rimov} in the \pkg{GET} package.
+%
+<<example_rimov_data, fig=TRUE, width=5, height=3>>=
+data("rimov")
+plot(rimov) + labs(x="Day", y="Water temperature", title="Data")
+@
+%
+
+Viewing the observations as daily samples of functional data, \citet{MrkvickaMyllymaki2022} fit the model
+\begin{equation}\label{eq:rimovmodel}
+y_i(k) = \beta_0(k) + \beta_1(k) (i-1978) + e(k),
+\end{equation}
+where $y_i(k)$ is the water temperature at day $k$, $k=1, \dots, 365$, in year $i$, $i=1979, \dots, 2014$,
+$\beta_0(k)$ and $\beta_1(k)$ are model parameters, and $e(k)$ denotes the error.
+To test the null hypothesis 
+\begin{equation}\label{eq:rimovH0}
+\beta_1(k) = 0 \quad\text{for all } k = 1, \dots, 365,
+\end{equation}
+they took the estimator of the regression coefficient, i.e.\ $\hat{\beta}_1(k)$, as the test statistic following the methodology proposed in \citet{MrkvickaEtal2021a}.
+
+The function \fct{graph.flm} of \pkg{GET} allows the use of tests in functional general linear models based on regression coefficients. The simulations under the null hypotheses are performed using the \citet{FreedmanLane1983} procedure and, for the multiple testing correction due to the use of multivariate (functional) test statistic, the function \fct{graph.flm} provides both control of FDR (local test) or family-wise error rate (FWER, global test). The multiple testing control is chosen by the argument \code{typeone}. If \code{typeone = "fdr"}, the the FDR envelopes proposed by \citet{MrkvickaMyllymaki2022} are used. The choice \code{typeone = "fwer"} leads to the use of global envelope tests, see \fct{global\_envelope\_test}.
+
+Thus, the test of null hypothesis \eqref{eq:rimovH0} using the $\hat{\beta}_1(k)$ as the test statistic and the FDR control can be performed as follows. Here \code{nsim} specifies the number of permutations of the \citet{FreedmanLane1983} method, \code{formula.full} specifies the full model, \code{formula.reduced} specifies the reduced model where the interesting factor whose significance is to be tested is dropped out in comparison to the \code{formula.full}, and the data are provided in \code{curve_sets} and \code{factors}.
+%
+<<setseed1, echo=FALSE>>=
+set.seed(2021)
+@
+%
+<<example_rimov_FWER>>=
+nsim <- 7000
+res <- graph.flm(nsim=nsim,
+  formula.full = Y~Year,
+  formula.reduced = Y~1,
+  typeone = "fdr",
+  curve_sets = list(Y=rimov),
+  factors = data.frame(Year = 1979:2014-1978))
+@
+%
+The result is plotted using the \fct{plot} function; because the plotting of \pkg{GET} utilizes \pkg{ggplot2} for plotting, e.g., labels can be changed as shown below using the \pkg{ggplot2} style.
+<<example_rimov_FWER_plot, fig=TRUE, width=5, height=3>>=
+plot(res) +
+  labs(x="Day", y=expression(hat(beta)[1]))
+@
+%
+
+Increase (positive $\beta$-coefficient) is observed in some the spring and summer days.
+
+
+\section{Population growth example}
+
+The data
+%
+<<example_pop_data>>=
+data("popgrowthmillion")
+@
+%
+contains population growth, i.e. population at the end of the year divided by population at the beginning of the year, in 134 countries in years from 1950 to 2015. The dataset includes only countries over million inhabitants in 1950. The data were extracted from the supplement of \citet{NagyEtal2017} distributed under the GPL-2 license.
+
+For the population data available in \pkg{GET}, the continents/groups of the countries are as follows and we make a \code{curve_set} object of the data for nicer treatment of it.
+The Oceania group with three countries was left out from the analysis.
+%
+<<example_pop_data_handl, echo=TRUE, eval=TRUE>>=
+POPcset <- create_curve_set(list(r=1950:2014,
+              obs=popgrowthmillion[, -(132:134)])) # Left out Oceania (Australia, New Zealand, Papua New Guinea)
+groups <- c(rep("Africa", times=37),
+            rep("Asia", times=37),
+            rep("Europe and North America", times=35),
+            rep("Latin America", times=20),
+            rep("Europe and North America", times=2))
+@
+%
+
+We further use the GDP data which was obtained from World Bank and prepared as shown in Appendix \ref{sec:GDPpreparation},
+and which is available at \pkg{GET} as a data object \code{GDP}.
+%
+<<example_GDP_data_handl, echo=TRUE, eval=TRUE>>=
+data("GDP")
+GDPcset <- GDP
+@
+%
+
+We only consider those countries that exist in both data and check that the data sets are arranged similarly.
+%
+<<example_pop_data_handl2, echo=TRUE, eval=TRUE>>=
+#- Reduce POPcset to those countries that exist in GDP data
+cond <- colnames(POPcset$funcs) %in% colnames(GDPcset$funcs)
+POPcset <- subset(POPcset, cond)
+groups <- groups[cond]
+
+#- Check that the GDPcset has the same order as the POPcset and groups!
+if(any(colnames(GDPcset$funcs) != colnames(POPcset$funcs)))
+  stop("Order of countries do not match.")
+
+#- Reduce POPcset (and GDPcset) to years 1960-2014
+POPcset <- crop_curves(POPcset, r_min =1960, r_max=2014)
+GDPcset <- crop_curves(GDPcset, r_min =1960, r_max=2014)
+
+groups <- as.factor(groups)
+@
+%
+
+Thus, we have the group (Continent), population growth curves and GDP curves 1960-2014:
+%
+<<example_pop_data_plot, echo=TRUE>>=
+table(groups)
+POPcset
+GDPcset
+@
+%
+
+Plotting the data simply
+
+<<example_pop_data_plot1, fig=TRUE, width=5, height=3, echo=TRUE>>=
+p1 <- plot(POPcset)
+p2 <- plot(GDPcset)
+p1 + p2
+@
+%
+
+The following plot further shows the different continents with different colors.
+
+%
+<<example_pop_data_plot, fig=TRUE, width=5, height=3, echo=FALSE>>=
+POPfuncs <- GET:::curve_set_funcs(POPcset)
+GDPfuncs <- GET:::curve_set_funcs(GDPcset)
+nfunc <- GET:::curve_set_nfunc(POPcset)
+narg <- GET:::curve_set_narg(POPcset)
+POPdf <- data.frame(r = rep(POPcset$r, times=nfunc),
+                 funcs = c(POPfuncs),
+                 id =  factor(rep(1:nfunc, each=nrow(POPfuncs)), levels = 1:nfunc),
+                 Continent = rep(groups, each=narg))
+GDPdf <- data.frame(r = rep(POPcset$r, times=nfunc),
+                    funcs = c(GDPfuncs),
+                    id =  factor(rep(1:nfunc, each=nrow(GDPfuncs)), levels = 1:nfunc),
+                    Continent = rep(groups, each=narg))
+p1 <- ( ggplot() + geom_line(data=POPdf, aes_(x = ~r, y = ~funcs, group = ~id, col = ~Continent))
+       + labs(title="", y="Population growth", x = "Year")
+       + scale_color_manual(values=viridisLite::viridis(4)))#c("#21908CFF", "#440154FF", "#5DC863FF", "grey70")))
+p2 <- ( ggplot() + geom_line(data=GDPdf, aes_(x = ~r, y = ~funcs, group = ~id, col = ~Continent))
+        + labs(title="", y="GDP (in 1960 USD)", x = "Year")
+        + scale_color_manual(values=viridisLite::viridis(4))) #c("#21908CFF", "#440154FF", "#5DC863FF", "grey70")))
+p1 + p2 + plot_layout(guides="collect") & theme(legend.position="bottom")
+@
+%
+
+\citet{MrkvickaMyllymaki2022} explored the functional general linear model (GLM)
+for the population growth across years 1960-2014 with categorical covariate (continent),
+continuous covariate (GDP) and interactions (GDP with respect to the continent).
+For this purpose, they applied three tests, and on each of them, they used their proposed FDR control
+(IATSE) to obtain all years which are significant for the studied covariate.
+We refer the reader to \citet{MrkvickaMyllymaki2022} about the details and show below how these three tests
+can be run using \pkg{GET}.
+
+%
+<<setseed2, echo=FALSE>>=
+set.seed(2021)
+@
+%
+
+First the effect of continent in the main effects model (formula.full) was tested.
+The function \fct{graph.flm} was used to obtain simulations under the null and
+to test the effect under the control of FDR. The result can be directly plotted.
+The functional dependent variable (Y) as well as the functional explanatory variable (GDP)
+are provided as a \code{curve_set} objects in the argument \code{curve_sets}, while
+the factors (here Continent) that are constant for the dependent function can be provided
+in a data frame in the argument \code{factors}.
+%
+<<example_pop_data_testContinent, fig=TRUE, width=5, height=5>>=
+nsim <- 5000
+resC <- graph.flm(nsim = nsim,
+                  formula.full = Y ~ GDP + Continent,
+                  formula.reduced = Y ~ GDP,
+                  typeone = "fdr", # Choose the control
+                  curve_sets = list(Y=POPcset, GDP=GDPcset),
+                  factors = data.frame(Continent = groups),
+                  contrasts = FALSE)
+plot(resC)
+@
+%
+
+For nicer visualization, \citet{MrkvickaMyllymaki2022} further added the fitted curve for every continent, i.e. the intercept $\beta_{i}^0$ and mean effect of GDP, $\beta_{i}^\text{GDP}\cdot \text{mean}(\text{GDP}_i)$, were added to every $\beta_{j,i}^{\text{Cont}}$.
+
+Second, the effect of GDP was tested:
+%
+<<setseed3, echo=FALSE>>=
+set.seed(20212)
+@
+%
+%
+<<example_pop_data_testGDP, fig=TRUE, width=5, height=3>>=
+resG <- graph.flm(nsim = nsim,
+                  formula.full = Y ~ GDP + Continent,
+                  formula.reduced = Y ~ Continent,
+                  typeone = "fdr", # Choose the control
+                  curve_sets = list(Y=POPcset, GDP=GDPcset),
+                  factors = data.frame(Continent = groups),
+                  contrasts = FALSE)
+# Basic plot: 
+plot(resG)
+@
+%
+
+Here we again illustrate that the labels of the default envelope plots can be tuned rather easily:
+%
+<<example_pop_data_testGDP_plot2, fig=TRUE, width=5, height=3>>=
+labTextx <- 'Year'
+plot(resG) +
+  labs(x=bquote(.(labTextx[1]) ~ i),
+       y=expression(hat(beta)[i]^GDP),
+       title="95% FDR envelope for the coeff. of GDP")
+@
+%
+
+Third, the effect of the interaction of continent and GDP was tested:
+%
+<<setseed4, echo=FALSE>>=
+set.seed(20213)
+@
+%
+%
+<<example_pop_data_testContinentGDP, fig=TRUE, width=5, height=5>>=
+resCG <- graph.flm(nsim = nsim,
+                  formula.full = Y ~ GDP + Continent + GDP:Continent,
+                  formula.reduced = Y ~ GDP + Continent,
+                  typeone = "fdr",
+                  curve_sets = list(Y=POPcset, GDP=GDPcset),
+                  factors = data.frame(Continent = groups),
+                  contrasts = FALSE, savefuns = TRUE)
+# Tuned labels
+plot(resCG) +
+  labs(x=bquote(.(labTextx[1]) ~ i),
+       y=expression(hat(beta)[list(j,i)]^I),
+       title="95% FDR envelope for the interaction coeff.")
+@
+%
+
+
+\section{Local spatial correlation}
+
+The soil data in a rain forest plot used also in \citet{MrkvickaMyllymaki2022} are openly available through \url{http://ctfs.si.edu/webatlas/datasets/bci/soilmaps/BCIsoil.html}.
+Please note the copyright and acknowledgement information at the webpage.
+
+The soil data are observed in the tropical forest plot of area $1000\text{ m} \times 500\text{ m}$ in Barro Colorado Island \citep{HubbellEtal2005, HubbellEtal1999, Condit1998}.
+This data set is accompanied with many covariates but here we study only the dependence of the first two covariates, i.e., Aluminium (Al) and Boronium (B) observed on a $50 \times 25$ grid with equally spaced observations.
+
+The data we used was available as an excel file at \url{http://ctfs.si.edu/webatlas/datasets/bci/soilmaps/bci.block20.data.xls}. After downloading the file, it can be read it to R
+
+<<r_data, fig=TRUE, width=5, height=5>>=
+library(openxlsx)
+data <- read_excel("bci.block20.data.xls", sheet=2)
+@
+%
+
+Let us then first plot the data using \pkg{ggplot}. Also preparation of the data to data frames.
+
+<<r_data, fig=TRUE, width=5, height=5>>=
+data <- as.data.frame(data) # Turn into a normal data.frame
+df1 <- data.frame(x=data[,"x"], y=data[,"y"], values=data[,"Al"],
+                  Variable="Aluminum")
+df2 <- data.frame(x=data[,"x"], y=data[,"y"], values=data[,"B"],
+                  Variable="Boronium")
+
+p1 <- ggplot() +
+  GET:::geom_raster_fixed(data=df1, aes(x=.data$x, y=.data$y,
+                                        fill=.data$values),
+                          width=20, height=20) +
+  coord_fixed() + ggtitle("Aluminum")
+p2 <- ggplot() +
+  GET:::geom_raster_fixed(data=df2, aes(x=.data$x, y=.data$y,
+                                        fill=.data$values),
+                          width=20, height=20) +
+  coord_fixed() + ggtitle("Boronium")
+p1 + p2 + plot_layout(ncol=1)
+@
+%
+
+The dataframes \code{df1} and \code{df2} contain our data now. Let's put them into a joint data frame, where the first two columns correspond to the values of the two random fields whose correlations are to be studied, and the third and fourth columns correspond to the x- and y-coordinates where these random fields have been observed.
+Further, width and height gives the sizes of the grid cells that the x- and y-locations represent (here of equal size).
+%
+<<r_data>>=
+# Observations should be at the same locations.
+# (Otherwise some smoothing methods must be applied first
+# to get values on the same coordinates.)
+if(!identical(df1$x, df2$x) || !identical(df1$y, df2$y))
+  message("Data observed on different locations!")
+
+Var1 <- df1[!is.na(df1$values) & !is.na(df2$values),]
+Var2 <- df2[!is.na(df1$values) & !is.na(df2$values),]
+
+dat <- data.frame(Var1 = Var1$values, Var2 = Var2$values,
+                  X = Var1$x, Y = Var1$y,
+                  width = 20, height = 20)
+head(dat)
+@
+%
+
+\citet{ViladomatEtal2014} procedure requires a smoothing parameter \code{Delta} of the local correlation. We use a range of values according to \citet{ViladomatEtal2014}.
+
+Then we can study the local correlations controlling for the false discovery rate (FDR, chosen in the argument \code{typeone}) as follows:
+%
+<<r_seed_cor, echo=FALSE>>=
+set.seed(2022)
+@
+%
+%
+<<r_localcor, fig=TRUE, width=6, height=6>>=
+Delta <- seq(0.1,0.9,0.1)
+
+# nsim = 1000 runs for about 10 minutes (with one kernel)
+res <- GET.localcor(data = dat, Delta = Delta, nsim = 1000, typeone = "fdr",
+                    varying.bandwidth = FALSE, bandwidth.h = 100)
+plot(res)
+@
+%
+
+The output of the test shows us that there are significant negative correlations at the left and right sides of the region, and positive correlations in the middle of the region.
+
+\section*{Acknowledgements}
+
+The soil data comes from the BCI forest dynamics research project that was founded by S.P. Hubbell and R.B. Foster and is now managed by R. Condit, S. Lao, and R. Perez under the Center for Tropical Forest Science and the Smithsonian Tropical Research in Panama. Numerous organizations have provided funding, principally the U.S. National Science Foundation and hundreds of field workers have contributed. The Barro Colorado Island soils data set was collected and analyzed by J. Dalling, R. John, K. Harms, R. Stallard, and J. Yavitt, with support from National Science Foundation, grants DEB021104, DEB021115, DEB0212284, DEB0212818 and OISE 0314581, Smithsonian Tropical Research Institute and Center for Tropical Forest Science. Thanks are also due to Paolo Segre and Juan Di Trani for assistance in the field.
+
+
+%% -- Bibliography -------------------------------------------------------------
+
+\bibliography{GETbibfile}
+
+%% -- Appendices ---------------------------------------------------------------
+
+\appendix
+
+\section{Preparation of GDP data}\label{sec:GDPpreparation}
+
+The GDP data are publicly available at \\
+\url{https://data.worldbank.org/indicator/NY.GDP.PCAP.CD}. \\
+The excel file that we downloaded was called \\
+\code{API_NY.GDP.PCAP.CD_DS2_en_excel_v2_3358980.xls}. \\
+The inflation rates are publicly available at \\
+\url{https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG}.\\
+The excel file that we downloaded was called \\
+\code{API_NY.GDP.DEFL.KD.ZG_DS2_en_excel_v2_3469555.xls},\\
+from there we took only the inflation rates for United States.
+Both are distributed under the CC-BY 4.0 license (see \url{https://datacatalog.worldbank.org/public-licenses#cc-by}).
+%
+<<example_GDP_data, echo=TRUE, eval=FALSE>>=
+GDP <- read_excel("API_NY.GDP.PCAP.CD_DS2_en_excel_v2_3358980.xls",
+                  sheet=1, skip=3) #, detectDates=TRUE)
+Inflation <- read_excel("API_NY.GDP.DEFL.KD.ZG_DS2_en_excel_v2_3469555.xls",
+                        sheet=1, skip=3)
+Inflation <- data.frame(Year=names(Inflation)[-(1:5)],
+      Infl=as.numeric(Inflation[Inflation$`Country Code` == "USA", -(1:5)]))
+Inflation$Infl <- Inflation$Infl/100 + 1
+range(Inflation$Infl)
+@
+%
+
+Then we discounted the GDP of every country in the study to the 1960 USD,
+and we extrapolated the missing values of the GDP of a country using the closest known ratio of the GDP of the country and the median GDP in that year.
+Further, the missing values of GDP were interpolated using linear interpolation of the two closest ratios.
+
+%
+<<example_GDP_data_handl2, echo=TRUE, eval=FALSE>>=
+GDPfuncs <- GDP[, 5:65]
+GDPfuncs <- as.matrix(GDPfuncs)
+rownames(GDPfuncs) <- GDP$`Country Name`
+rownames(GDPfuncs)[rownames(GDPfuncs) == "United States"] <- "United States of America"
+
+# Choose the countries which have more than 1 million, 
+# and that we selected above/here for population growth data
+data("popgrowthmillion")
+POPcset <- create_curve_set(list(r=1950:2014,
+              obs=popgrowthmillion[, -(132:134)])) # Left out Oceania
+GDPfuncs <- GDPfuncs[rownames(GDPfuncs) %in% colnames(POPcset$funcs), ]
+
+GDPcset <- create_curve_set(list(r = 1960:2020, obs=t(GDPfuncs)),
+                            allow_Inf_values=TRUE)
+
+# Discounting (NAs stay NA here)
+for(j in 1:dim(GDPcset$funcs)[2]){
+  for(i in 2:dim(GDPcset$funcs)[1]){
+    Inflat <- prod(Inflation$Infl[1:i-1])
+    GDPcset$funcs[i,j] <- GDPcset$funcs[i,j]/Inflat
+  }
+}
+
+# Median
+GDPmedian <- GET:::curve_set_median(GDPcset, na.rm=TRUE)
+
+# Interpolation and extrapolation of the values for NA's
+for(i in 1:dim(GDPcset$funcs)[2]){
+  j=1
+  while(j <= dim(GDPcset$funcs)[1]) {
+    if(is.na(GDPcset$funcs[j,i])) {
+      k = j # k = first value which has a non-NA value
+      while(k <= dim(GDPcset$funcs)[1] && is.na(GDPcset$funcs[k,i])) {
+        k = k+1
+      }
+      if(j==1) { # j = Year. If j = 1, then missing values in the beginning
+        # Calculate the ratio to the median at Year k
+        ratio <- GDPcset$funcs[k,i]/GDPmedian[k]
+        for(l in j:(k-1)) {
+          GDPcset$funcs[l,i] = GDPmedian[l] * ratio
+        }
+      }
+      if(k>dim(GDPcset$funcs)[1]) { # The case with NA's at the end
+        # Calculate the ratio to the median at Year j-1
+        ratio <- GDPcset$funcs[j-1,i]/GDPmedian[j-1]
+        for(l in j:(k-1)) {
+          GDPcset$funcs[l,i] = GDPmedian[l] * ratio
+        }
+      }
+      if(j>1 && k<=dim(GDPcset$funcs)[1]) {
+        ratio.jm1 <- GDPcset$funcs[j-1,i]/GDPmedian[j-1] # start
+        ratio.k <- GDPcset$funcs[k,i]/GDPmedian[k] # end
+        for(l in j:(k-1)) {
+          GDPcset$funcs[l,i] = GDPmedian[l] * 
+            ( ratio.jm1+(ratio.k-ratio.jm1)/(k-j+1)*(l-j+1) )
+        }
+      }
+    }
+    j=j+1
+  }
+}
+@
+%
+
+Let us then consider only those countries that exist in both data and arrange the data sets similarly.
+
+%
+<<example_GDP_data_handl3, echo=TRUE, eval=FALSE>>=
+#- Reduce POPcset to those countries that exist in GDP data
+cond <- colnames(POPcset$funcs) %in% rownames(GDPfuncs)
+POPcset <- subset(POPcset, cond)
+#groups <- groups[cond]
+
+# Arrange the GDPcset to the same order as the POPcset and groups!
+#----------------------------------------------------------------
+ids <- NULL
+for(i in 1:ncol(POPcset$funcs))
+  ids[i] <- which(colnames(GDPcset$funcs) == colnames(POPcset$funcs)[i])
+GDPcset$funcs <- GDPcset$funcs[,ids]
+# check: colnames(GDPcset$funcs) == colnames(POPcset$funcs)
+
+# Reduce GDPcset and POPcset to those years that exist in both data
+POPcset <- crop_curves(POPcset, r_min =1960, r_max=2014)
+GDPcset <- crop_curves(GDPcset, r_min =1960, r_max=2014)
+
+#groups <- as.factor(groups)
+@
+%
+
+
+This \code{GDPcset} was then saved as \code{GDP} data in \pkg{GET}.
+%
+<<example_GDP_data_handl_save, echo=TRUE, eval=FALSE, echo=FALSE>>=
+#GDP <- GDPcset; save(GDP, file="GDP.RData")
+@
+%
+
+\end{document}
