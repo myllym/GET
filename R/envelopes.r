@@ -140,9 +140,9 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   LBounds <- UBounds <- vector(mode="list", length=length(alpha))
   switch(type,
          rank = {
-           for(i in 1:nr){
+           for(i in 1:nr) {
              Hod <- sort(all_curves[,i])
-             for(ai in 1:length(alpha)) {
+             for(ai in seq_along(alpha)) {
                LBounds[[ai]][i]<- Hod[Malpha[ai]]
                UBounds[[ai]][i]<- Hod[Nfunc-Malpha[ai]+1]
              }
@@ -151,7 +151,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          erl =,
          cont =,
          area = {
-           for(ai in 1:length(alpha)) {
+           for(ai in seq_along(alpha)) {
              j <- distance >= Malpha[ai]
              for(i in 1:nr){
                lu <- range(all_curves[j,i])
@@ -163,20 +163,20 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          qdir = { # Note: All coverage levels use same probs
            curve_set_res <- residual(curve_set, use_theo=TRUE)
            quant_m <- curve_set_quant(curve_set_res, probs=probs, type=quantile.type)
-           for(ai in 1:length(alpha)) {
+           for(ai in seq_along(alpha)) {
              LBounds[[ai]] <- T_0 - Malpha[ai]*abs(quant_m[1,])
              UBounds[[ai]] <- T_0 + Malpha[ai]*abs(quant_m[2,])
            }
          },
          st = {
            sdX <- curve_set_sd(curve_set)
-           for(ai in 1:length(alpha)) {
+           for(ai in seq_along(alpha)) {
              LBounds[[ai]] <- T_0 - Malpha[ai]*sdX
              UBounds[[ai]] <- T_0 + Malpha[ai]*sdX
            }
          },
          unscaled = {
-           for(ai in 1:length(alpha)) {
+           for(ai in seq_along(alpha)) {
              LBounds[[ai]] <- T_0 - Malpha[ai]
              UBounds[[ai]] <- T_0 + Malpha[ai]
            }
