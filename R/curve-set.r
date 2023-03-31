@@ -185,7 +185,6 @@ convert_envelope <- function(curve_set, ...) {
     stop('curve_set must either have class "envelope" (from spatstat) ',
          'or class "curve_set".')
   }
-  check_curve_set_content(curve_set, ...)
   curve_set
 }
 
@@ -208,7 +207,6 @@ convert_fdata <- function(curve_set, ...) {
     stop('curve_set must either have class "fdata" (from fda.usc) ',
          'or class "curve_set".')
   }
-  check_curve_set_content(curve_set, ...)
   curve_set
 }
 
@@ -229,7 +227,6 @@ convert_to_curveset <- function(curve_set, ...) {
     stop('curve_set must either have class "envelope" (from spatstat) ',
          'or "fdata" (from fda.usc) or "curve_set".')
   }
-  check_curve_set_content(curve_set, ...)
   curve_set
 }
 
