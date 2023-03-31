@@ -8,8 +8,9 @@
   x,
   fixedscales = 2,
   labels,
-  what = c("obs", "lo", "hi", "lo.sign", "hi.sign"),
-  sign.col = "red",
+  what = c("obs.sign", "obs", "lo", "hi", "lo.sign", "hi.sign"),
+  sign.type = c("circles", "contour", "col"),
+  sign.col = c("blue", "red"),
   transparency = 155/255,
   digits = 3,
   ...
@@ -27,12 +28,22 @@ Default exists. This parameter allows replacing the default.}
 A combination of:
 Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo"}),
 observed with significantly higher values highlighted (\code{"hi.sign"}),
-observed with significantly lower values highlighted (\code{"lo.sign"}).}
+observed with significantly lower values highlighted (\code{"lo.sign"}),
+observed with significantly (lower and higher) values highlighted (\code{"obs.sign"}).
+Default to the last one. Combination c("obs", "lo", "hi", "lo.sign", "hi.sign") can
+also be of interest (earlier default).}
 
-\item{sign.col}{The color for the observed curve when outside the global envelope
-(significant regions). Default to "red". Setting the color to \code{NULL} corresponds
-to no coloring. If the object contains several envelopes, the coloring is done for
-the widest one.}
+\item{sign.type}{Either \code{"col"} for color showing the significant region, or
+\code{"contour"} for colored contour showing the significant region, or
+\code{"circles"} for plotting circles at locations where the observed function
+exceeds the envelope: diameters proportional to (obs-hi)/(hi-lo) for values
+above the envelope and (lo-obs)/(hi-lo) for values below the envelope.
+In the one-sided (testing) case, the divisors are instead (hi-central) (case 'greater')
+and (central-lo) (case 'less').
+Default to \code{"circles"}.}
+
+\item{sign.col}{A vector of length two giving the colors for significant parts
+below the envelope (first value) and above the envelope (second value).}
 
 \item{transparency}{A number between 0 and 1 (default 155/255, 60% transparency).
 Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d

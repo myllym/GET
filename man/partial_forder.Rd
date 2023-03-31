@@ -14,7 +14,8 @@ partial_forder(
 combine_forder(ls)
 }
 \arguments{
-\item{curve_set}{A \code{curve_set} object, usually a part of a larger \code{curve_set}.}
+\item{curve_set}{A \code{curve_set} object, usually a part of a larger \code{curve_set}.
+(No missing or infinite values allowed.)}
 
 \item{measure}{The measure to use to order the functions from the most extreme to the least extreme
 one. Must be one of the following: 'rank', 'erl', 'cont', 'area', 'max', 'int', 'int2'. Default is 'erl'.}

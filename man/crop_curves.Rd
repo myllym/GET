@@ -2,15 +2,19 @@
 % Please edit documentation in R/crop.r
 \name{crop_curves}
 \alias{crop_curves}
-\title{Crop the curves to a certain interval}
+\title{Crop the curves}
 \usage{
-crop_curves(curve_set, r_min = NULL, r_max = NULL)
+crop_curves(curve_set, allfinite = TRUE, r_min = NULL, r_max = NULL)
 }
 \arguments{
 \item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or
 an \code{envelope} object of \pkg{spatstat}. If an envelope object is given,
 it must contain the summary functions from the simulated patterns which can be
 achieved by setting savefuns = TRUE when calling the \code{envelope} function.}
+
+\item{allfinite}{Logical. TRUE means that the argument values where any of the
+curves have missing or infinite values are removed. FALSE means that only
+\code{r_min} and \code{r_max} apply.}
 
 \item{r_min}{The minimum radius to include.}
 
@@ -21,9 +25,12 @@ A curve_set object containing the cropped summary functions and
   the cropped radius vector.
 }
 \description{
-Crop the curves to a certain interval
+Crop the curves to a certain interval, or crop missing and infinite argument
+values from the curves
 }
 \details{
 The curves can be cropped to a certain interval defined by the arguments r_min and r_max.
+Also the argument values of the sets of curves which have missing or infinite
+values for any of the curves can be removed from the set (\code{allfinite = TRUE}).
 The interval should generally be chosen carefully for classical deviation tests.
 }
