@@ -101,7 +101,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
     # Note: no fv object for multiple coverages
     isenvelope <- FALSE
   }
-  curve_set <- convert_to_curveset(curve_set)
+  curve_set <- convert_to_curveset(curve_set, allfinite=TRUE)
 
   # Measures for functional ordering
   measure <- type
@@ -210,7 +210,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
                                             probs = c(0.025, 0.975), quantile.type = 7,
                                             central = "mean") {
   alternative <- match.arg(alternative)
-  tmp <- convert_to_curveset(curve_set)
+  tmp <- convert_to_curveset(curve_set, allfinite=TRUE, verbose=FALSE)
   if(!curve_set_is1obs(tmp))
     stop("The curve_set does not contain one observed function. Testing does not make sense.\n Did you want to construct a central region of your data? See the function central_region.")
   if(!is.numeric(alpha) || any(alpha < 0 | alpha >= 1)) stop("Unreasonable value of alpha.")
