@@ -388,6 +388,11 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'   GET.args = list(type = "area"))
 #' plot(res)
 #'
+#' # Examples of modifying 2d plots
+#' plot(res, sign.col="white") + scale_fill_viridis_c(option="magma")
+#' plot(res, sign.col="white") + scale_fill_viridis_c(option="magma") + scale_radius(range = 2*c(1, 6))
+#' plot(res, what=c("obs", "lo", "hi", "lo.sign", "hi.sign"))
+#' plot(res, what=c("obs", "lo", "hi", "lo.sign", "hi.sign"), sign.type="col")
 graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "fdr"),
                       curve_sets, factors = NULL,
                       contrasts = FALSE, savefuns = FALSE, lm.args = NULL, GET.args = NULL,
