@@ -441,6 +441,9 @@ print.combined_global_envelope <- function(x, ...) {
 
 #' Plot method for the class 'global_envelope'
 #'
+#' @details If several envelopes have been computed, their are plotted in different
+#' grey scales so that the smallest envelope has the darkest color and the widest
+#' envelope consist of all grey scales with the lightest color in the outskirts.
 #' @param x An 'global_envelope' object
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors.
@@ -768,7 +771,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #'
 #' # Central region computation
 #' boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
-#' cr <- central_region(boot.cset, coverage=0.95, type="erl")
+#' cr <- central_region(boot.cset, coverage=c(0.50, 0.80, 0.95), type="erl")
 #'
 #' # Plotting the result
 #' plot(cr) + ggplot2::labs(x=expression(italic(x)), y=expression(italic(f(x)))) +
