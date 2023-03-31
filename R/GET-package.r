@@ -108,12 +108,7 @@
 #' \item Functions for performing global envelopes for specific purposes:
 #'  \itemize{
 #'   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
-#'   \item Permutation-based tests of independence to samples from any bivariate distribution:
-#'   \itemize{
-#'      \item based on cumulative distribution function \code{\link{GET.cdf}}
-#'      \item in a 2D contingency table \code{\link{GET.contingency}}
-#'      \item based on the smoothed Q-Q plot \code{\link{GET.qq}}
-#'   }
+#'   \item Permutation-based tests of independence to samples from any bivariate distribution: \code{\link{GET.distrindep}}
 #'   \item Testing global and local dependence of point patterns on covariates: \code{\link{GET.spatialF}}
 #'   \item Testing local correlations: \code{\link{GET.localcor}}
 #'   \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
