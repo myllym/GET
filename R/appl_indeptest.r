@@ -321,7 +321,7 @@ GET.qq <- function(X, nsim, ngrid, sigma, atoms.x, atoms.y, ...) {
 #' # Compute the CDF test and plot the significant regions
 #' \donttest{res <- GET.distrindep(data, statistic="cdf", ngrid=c(20,15), nsim=1999)}
 #' \dontshow{res <- GET.distrindep(data, statistic="cdf", ngrid=c(20,15), nsim=19)}
-#' plot(res) + scale_radius(range = 2 * c(1, 6))
+#' plot(res) + ggplot2::scale_radius(range = 2 * c(1, 6))
 #'
 #' # Extract the p-value
 #' attr(res,"p")
@@ -339,7 +339,7 @@ GET.qq <- function(X, nsim, ngrid, sigma, atoms.x, atoms.y, ...) {
 #' \donttest{res <- GET.distrindep(data, statistic="contingency", nsim=999)}
 #' \dontshow{res <- GET.distrindep(data, statistic="contingency", nsim=19)}
 #' res
-#' plot(res) + scale_radius(range = 5 * c(1, 6))
+#' plot(res) + ggplot2::scale_radius(range = 5 * c(1, 6))
 #'
 #' # Extract the p-value
 #' attr(res,"p")
