@@ -25,6 +25,7 @@ Maintainer: Mari Myllymäki <mari.myllymaki@luke.fi>
 Imports:
     cluster,
     ggplot2,
+    grDevices,
     gridExtra,
     parallel,
     stats,
