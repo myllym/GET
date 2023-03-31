@@ -657,5 +657,6 @@ subset.curve_set <- function(x, subset, ...) {
   x$funcs <- x$funcs[i,j,drop=FALSE]
   if(!missing(j) && !(1 %in% j))
     x$is1obs <- FALSE
+  if(!is.null(x$theo)) x$theo <- x$theo[i]
   x
 }
