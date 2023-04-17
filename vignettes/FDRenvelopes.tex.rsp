@@ -520,7 +520,7 @@ R> POPcset <- create_curve_set(list(r=1950:2014,
 +                obs=popgrowthmillion[, -(132:134)])) # Left out Oceania
 R> GDPfuncs <- GDPfuncs[rownames(GDPfuncs) %in% colnames(POPcset$funcs), ]
 R> GDPcset <- create_curve_set(list(r = 1960:2020, obs=t(GDPfuncs)),
-+                              allow_Inf_values=TRUE)
++                              allfinite = FALSE)
 R> # Discounting (NAs stay NA here)
 R> for(j in 1:dim(GDPcset$funcs)[2]){
 +    for(i in 2:dim(GDPcset$funcs)[1]){

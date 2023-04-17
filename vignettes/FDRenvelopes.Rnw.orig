@@ -479,7 +479,7 @@ POPcset <- create_curve_set(list(r=1950:2014,
 GDPfuncs <- GDPfuncs[rownames(GDPfuncs) %in% colnames(POPcset$funcs), ]
 
 GDPcset <- create_curve_set(list(r = 1960:2020, obs=t(GDPfuncs)),
-                            allow_Inf_values=TRUE)
+                            allfinite = FALSE)
 
 # Discounting (NAs stay NA here)
 for(j in 1:dim(GDPcset$funcs)[2]){
@@ -559,7 +559,7 @@ GDPcset <- crop_curves(GDPcset, r_min =1960, r_max=2014)
 This \code{GDPcset} was then saved as \code{GDP} data in \pkg{GET}.
 %
 <<example_GDP_data_handl_save, echo=TRUE, eval=FALSE, echo=FALSE>>=
-#GDP <- GDPcset; save(GDP, file="GDP.RData")
+#GDP <- GDPcset; save(GDP, file="GDP.RData", version=2)
 @
 %
 
