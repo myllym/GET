@@ -312,7 +312,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   distance_lexo_sorted <- sort(attr(res_erl, "M"), decreasing=TRUE)
   Malpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
 
-  LBounds <- UBounds <- list()
+  LBounds <- UBounds <- vector("list", length(coverage))
   for(ai in seq_along(coverage)) {
     # Indices of the curves from which to calculate the convex hull
     curves_for_envelope_ind <- which(attr(res_erl, "M") >= Malpha[ai])

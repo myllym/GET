@@ -209,7 +209,7 @@ linetype_values <- function() { c('dashed', 'solid') }
 #' @importFrom ggplot2 geom_ribbon aes_string geom_line
 #' @importFrom ggplot2 labs scale_linetype_manual
 basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main, level=0) {
-  pE <- list()
+  pE <- vector("list", length(level))
   lonames <- env_loname(level)
   hinames <- env_hiname(level)
   if(length(level) ==  1) cols <- 'grey59'
@@ -297,7 +297,7 @@ fboxplot_ggplot <- function(x, main, xlab, ylab, plot_outliers = TRUE) {
 combined_df_construction <- function(x, labels) {
   n <- names(x[[1]])
 
-  dfs <- list()
+  dfs <- vector("list", length(x))
   for(i in seq_along(x)) {
     dfs[[i]] <- env_df_construction(x[[i]], labels[i])
   }

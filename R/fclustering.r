@@ -122,7 +122,7 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
 
   # Compute the dissimilarity matrix
   # lstats = original statistics, jstats = joined statistics
-  lstats <- list()
+  lstats <- vector("list", n)
   jr <- NULL
   jstats <- NULL
   for(j in 1:n) {

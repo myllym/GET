@@ -106,7 +106,7 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     d <- max(0.0001, min(0.0075, nsim * limit / ( nr * mult )))
     gammas <- seq(0+d/2, 1-d/2, by=d)
     # Calculate rejections for each gamma
-    e <- list()
+    e <- vector("list", length(gammas))
     R.obs_new <- R0_new <- vector(length=length(gammas))
     if(is.null(llimit) & is.null(ulimit)) {
       for(i in seq_along(gammas)) {
@@ -148,7 +148,7 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     gammas <- seq(ind, ind+1, length=18)
     gammas <- gammas[-c(1, length(gammas))]
     # Calculate rejections for each gamma
-    e <- list()
+    e <- vector("list", length(gammas))
     R.obs_new <- R0_new <- vector(length=length(gammas))
     for(i in seq_along(gammas)) {
       if(alternative != "greater") LB <- e1l + (gammas[i] - ind)*(e2l-e1l) else LB <- -Inf

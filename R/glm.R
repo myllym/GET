@@ -224,7 +224,7 @@ Fvalue <- function(Y, X1, X2) {
 genFvaluesObs <- function(dfs, formula.full, formula.reduced) {
   nr <- length(dfs)
   Fvalues <- vector(length=nr)
-  x.full <- x.reduced <- list()
+  x.full <- x.reduced <- vector("list", nr)
   for(i in 1:nr) {
     df <- dfs[[i]]
     # Call lm to obtain the design matrices (x)
