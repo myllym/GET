@@ -27,6 +27,8 @@
 #'
 #' To get examples of point pattern analysis, start R and type \code{library("GET")} and \code{vignette("pointpatterns")}.
 #'
+#' To get examples of Mrkvička and Myllymäki (2022), start R and type \code{library("GET")} and \code{vignette("FDRenvelopes")}.
+#'
 #' @section Key functions in \pkg{GET}:
 #' \itemize{
 #' \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
@@ -93,6 +95,7 @@
 #' \itemize{
 #'   \item \code{\link{GET.composite}}, see a detailed example in \code{\link{saplings}}
 #' }
+#' \item \emph{False discovery rate envelopes} of Mrkvička and Myllymäki (2022): \code{\link{fdr_envelope}}
 #' \item \emph{One-way functional ANOVA}:
 #'  \itemize{
 #'   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
@@ -201,6 +204,10 @@
 #' To see examples of global envelopes for analysing point pattern data,
 #' start R, type \code{library("GET")} and \code{vignette("pointpatterns")}.
 #'
+#' Mrkvička and Myllymäki (2022) developed false discovery rate (FDR) envelopes.
+#' Examples can be found by in associated vignette: start R, and type
+#' \code{library("GET")} and \code{vignette("pointpatterns")}.
+#'
 #' Type citation("GET") to get a full list of references.
 #'
 #' @section Acknowledgements:
@@ -224,7 +231,7 @@
 #'
 #' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41(2), 276-297. doi: 10.1002/sim.9236
 #'
-#' Mrkvička, T., Myllymäki, M. False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+#' Mrkvička, T., Myllymäki, M. (2022) False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
 #'
 #' Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
 #'
