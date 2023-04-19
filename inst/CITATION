@@ -54,21 +54,6 @@ Statistics and Computing 27 (5): 1239-1255. http://dx.doi.org/10.1007/s11222-016
 
 bibentry(
     bibtype = "Article",
-    title = "False discovery rate envelopes",
-    author = c(person("T.", "Mrkvička"),
-               person("M.", "Myllymäki")),
-    journal = "arXiv:2008.10108 [stat.ME]",
-    year = "2022",
-    volume = "",
-    pages = "",
-    url = "https://arxiv.org/abs/2008.10108",
-    textVersion  =
-    paste("Mrkvička, T. and Myllymäki, M. (2022).",
-          "False discovery rate envelopes. arXiv:2008.10108 [stat.ME]")
-)
-
-bibentry(
-    bibtype = "Article",
     title = "A one-way ANOVA test for functional data with graphical interpretation",
     author = c(person("T.", "Mrkvička"),
                person("M.", "Myllymäki"),
@@ -86,6 +71,21 @@ A one-way ANOVA test for functional data with graphical interpretation. Kybernet
 
 bibentry(
     bibtype = "Article",
+    title = "A nonparametric graphical tests of significance in functional GLM",
+    author = c(person("T.", "Mrkvička"),
+               person("T.", "Roskovec"),
+               person("M.", "Rost")),
+    journal = "Methodology and Computing in Applied Probability",
+    year = "2021",
+    volume = "23",
+    pages = "593-61",
+    url = "https://doi.org/10.1007/s11009-019-09756-y",
+    textVersion = "Mrkvička, T., Roskovec, T. and Rost, M. (2021).
+A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. https://doi.org/10.1007/s11009-019-09756-y"
+)
+
+bibentry(
+    bibtype = "Article",
     title = "New methods for multiple testing in permutation inference for the general linear model",
     author = c(person("T.", "Mrkvička"),
                person("M.", "Myllymäki"),
@@ -98,21 +98,6 @@ bibentry(
     url = "https://doi.org/10.1002/sim.9236",
     textVersion = "Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022).
 New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41 (2), 276-297. https://doi.org/10.1002/sim.9236"
-)
-
-bibentry(
-    bibtype = "Article",
-    title = "A nonparametric graphical tests of significance in functional GLM",
-    author = c(person("T.", "Mrkvička"),
-               person("T.", "Roskovec"),
-               person("M.", "Rost")),
-    journal = "Methodology and Computing in Applied Probability",
-    year = "2021",
-    volume = "23",
-    pages = "593-61",
-    url = "https://doi.org/10.1007/s11009-019-09756-y",
-    textVersion = "Mrkvička, T., Roskovec, T. and Rost, M. (2021).
-A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. https://doi.org/10.1007/s11009-019-09756-y"
 )
 
 bibentry(
@@ -180,4 +165,34 @@ bibentry(
     textVersion = "Dai, W., Athanasiadis, S. and Mrkvička, T. (2022).
 A new functional clustering method with combined dissimilarity sources and graphical interpretation.
 Intech open. https://doi.org/10.5772/intechopen.100124",
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "Graphical tests of independence for general distributions",
+    author = c(person("J.", "Dvořák"),
+               person("T.", "Mrkvička")),
+    journal = "Computational Statistics",
+    year = "2022",
+    volume = "37",
+    pages = "671--699",
+    url = "https://doi.org/10.5772/intechopen.100124",
+    textVersion = "Dvořák, J. and Mrkvička, T. (2022).
+Graphical tests of independence for general distributions.
+Computational Statistics 37, 671--699.",
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "False discovery rate envelopes",
+    author = c(person("T.", "Mrkvička"),
+               person("M.", "Myllymäki")),
+    journal = "arXiv:2008.10108 [stat.ME]",
+    year = "2022",
+    volume = "",
+    pages = "",
+    url = "https://arxiv.org/abs/2008.10108",
+    textVersion  =
+    paste("Mrkvička, T. and Myllymäki, M. (2022).",
+          "False discovery rate envelopes. arXiv:2008.10108 [stat.ME]")
 )
