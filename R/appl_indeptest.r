@@ -15,8 +15,8 @@ GET.cdf <- function(X, nsim, ngrid, seq.x, seq.y, ...) {
 
   # Computing cdf values in observed data
   F.obs <- matrix(NA, ncol=length(seq.y),nrow=length(seq.x))
-  for(k in 1:length(seq.x)) {
-    for(j in 1:length(seq.y)) {
+  for(k in seq_along(seq.x)) {
+    for(j in seq_along(seq.y)) {
       F.obs[k,j] <- sum( (X[,1] <= seq.x[k]) & (X[,2] <= seq.y[j]) ) / n
     }
   }
@@ -25,15 +25,15 @@ GET.cdf <- function(X, nsim, ngrid, seq.x, seq.y, ...) {
   F.perm <- array(NA, dim=c(length(seq.x),length(seq.y),nsim))
   for (i in 1:nsim){
     X.perm <- cbind(X[,1],X[sample.int(n),2])
-    for (k in 1:length(seq.x)){
-      for (j in 1:length(seq.y)){
+    for (k in seq_along(seq.x)){
+      for (j in seq_along(seq.y)){
         F.perm[k,j,i] <- sum( (X.perm[,1] <= seq.x[k]) & (X.perm[,2] <= seq.y[j]) ) / n
       }
     }
   }
 
   # Performing 2D global envelope test
-  im.set <- create_image_set(list(r=list(1:length(seq.x),1:length(seq.y)), obs=F.obs, sim_m=F.perm))
+  im.set <- create_image_set(list(r=list(seq_along(seq.x), seq_along(seq.y)), obs=F.obs, sim_m=F.perm))
   erl2d <- global_envelope_test(im.set, ...)
   attr(erl2d, "method") <- "cdf-based permutation test"
 
@@ -99,9 +99,9 @@ print.GET_contingency <- function(x, ...) {
   hi <- matrix(x$hi,nrow=k1)[k1:1,]
   lo <- matrix(x$lo,nrow=k1)[k1:1,]
   len <- 1 + nchar(max(max(obs),max(hi),max(lo)))
-  for(j in 1:length(obs[,1])) {
+  for(j in seq_along(obs[,1])) {
     a <- ""
-    for(i in 1:length(obs[1,])) {
+    for(i in seq_along(obs[1,])) {
       l <- nchar(obs[j,i])
       if(l < len){
         for(k in 1:(len-l)){
@@ -144,19 +144,19 @@ qq.estimate <- function(X, ngrid=c(64,64), sigma, atoms.x, atoms.y) {
   if(!missing(atoms.y)) {
     wh.y <- rep(NA, times=length(atoms.y)) # which row is central
     hm.y <- rep(NA, times=length(atoms.y)) # how many rows
-    for(i in 1:length(atoms.y)) {
+    for(i in seq_along(atoms.y)) {
       wh.y[i] <- X.pp$y[which(X[,2]==atoms.y[i])[1]]*ngrid[2]
       hm.y[i] <- sum(X[,2]==atoms.y[i])/n * ngrid[2]/2
     }
     grid.y <- X.dens$yrow
     bw <- attr(X.dens,"sigma")
     edgewt.y <- pnorm((1-grid.y)/bw) - pnorm((0-grid.y)/bw)
-    for(i in 1:length(atoms.y)) {
+    for(i in seq_along(atoms.y)) {
       y.val <- atoms.y[i]
       ind <- X[,2] == y.val
       pts <- X.pp$x[ind]
       repl <- rep(NA, times=length(grid.y))
-      for(j in 1:length(grid.y)) {
+      for(j in seq_along(grid.y)) {
         t1 <- grid.y[j]
         weights1 <- dnorm(x=pts, mean=t1, sd=bw)
         repl[j] <- sum(weights1)
@@ -170,19 +170,19 @@ qq.estimate <- function(X, ngrid=c(64,64), sigma, atoms.x, atoms.y) {
   if(!missing(atoms.x)) {
     wh.x <- rep(NA, times=length(atoms.x)) # which column is central
     hm.x <- rep(NA, times=length(atoms.x)) # how many columns
-    for(i in 1:length(atoms.x)) {
+    for(i in seq_along(atoms.x)) {
       wh.x[i] <- X.pp$x[which(X[,1]==atoms.x[i])[1]]*ngrid[1]
       hm.x[i] <- sum(X[,1]==atoms.x[i])/n * ngrid[1]/2
     }
     grid.x <- X.dens$xcol
     bw <- attr(X.dens,"sigma")
     edgewt.x <- pnorm((1-grid.x)/bw) - pnorm((0-grid.x)/bw)
-    for(i in 1:length(atoms.x)) {
+    for(i in seq_along(atoms.x)) {
       x.val <- atoms.x[i]
       ind <- X[,1] == x.val
       pts <- X.pp$y[ind]
       repl <- rep(NA, times=length(grid.x))
-      for(j in 1:length(grid.x)) {
+      for(j in seq_along(grid.x)) {
         t1 <- grid.x[j]
         weights1 <- dnorm(x=pts, mean=t1, sd=bw)
         repl[j] <- sum(weights1)
@@ -196,8 +196,8 @@ qq.estimate <- function(X, ngrid=c(64,64), sigma, atoms.x, atoms.y) {
 
   # Zero-dimensional estimates - observed data
   if(!missing(atoms.x) & !missing(atoms.y)) {
-    for(i in 1:length(atoms.x)) {
-      for(j in 1:length(atoms.y)) {
+    for(i in seq_along(atoms.x)) {
+      for(j in seq_along(atoms.y)) {
         x.val <- atoms.x[i]
         y.val <- atoms.y[j]
         npts <- sum((X[,1] == x.val) & (X[,2] == y.val))

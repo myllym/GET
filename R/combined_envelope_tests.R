@@ -157,7 +157,7 @@ combined_scaled_MAD_envelope_test <- function(curve_sets, type = c("qdir", "st")
     bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=res_rank$hi,
                                                            lower_f=envchars$lower_f, upper_f=envchars$upper_f)
     # Update the bounding curves (lo, hi) and Malpha to the first level central regions
-    for(i in 1:length(curve_sets)) {
+    for(i in seq_along(curve_sets)) {
       res_ls[[i]]$lo <- bounding_curves$lower_ls[[i]]
       res_ls[[i]]$hi <- bounding_curves$upper_ls[[i]]
       attr(res_ls[[i]], "M_alpha") <- NULL

@@ -131,10 +131,10 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
     funcs <- curve_set_funcs(curve_sets[[j]])
     co <- combn(nfunc, 2, simplify = FALSE) # All combinations
     stats <- array(0, c(2*length(co), nr))
-    for(i in 1:length(co)) {
+    for(i in seq_along(co)) {
       stats[i,] <- funcs[, co[[i]][1]]-funcs[, co[[i]][2]]
     }
-    for(i in 1:length(co)) {
+    for(i in seq_along(co)) {
       stats[length(co)+i, ] <- funcs[, co[[i]][2]]-funcs[, co[[i]][1]]
     }
     lstats[[j]] <- stats
@@ -155,7 +155,7 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
     fo <- forder(data, measure="max", scaling=scaling)
   else
     fo <- 1 - forder(data, measure=measure, scaling=scaling)
-  b[1:length(b)] <- fo[1:length(b)] # for(i in 1:length(b)) { b[i] <- fo[i] }
+  b[seq_along(b)] <- fo[seq_along(b)] # for(i in 1:length(b)) { b[i] <- fo[i] }
   resultpamF <- pam(b, k=k)
   bb <- as.matrix(b)
   nfunc <- curve_set_nfunc(curve_sets[[1]])
@@ -317,7 +317,7 @@ plot.fclust <- function(x, plotstyle = c("marginal", "joined"), coverage = 0.5,
   #- df: All single functions
   funcs <- lapply(csets, FUN=curve_set_funcs)
   nams <- lapply(funcs, FUN=function(x) { n <- colnames(x); if(!is.null(n)) n else 1:ncol(x) })
-  funcs.df <- do.call(rbind, lapply(1:length(funcs), FUN = function(i) {
+  funcs.df <- do.call(rbind, lapply(seq_along(funcs), FUN = function(i) {
     data.frame(r = rep(cr_all[[1]][[i]][['r']], times=ncol(funcs[[i]])),
                curves = c(funcs[[i]]),
                id = factor(rep(nams[[i]], each=length(cr_all[[1]][[i]][['r']])), levels = nams[[i]]),

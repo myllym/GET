@@ -35,7 +35,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
     if(!inherits(factors, "data.frame")) stop("Invalid factors argument.")
     if(nrow(factors) != Nfunc) stop("The dimensions of Y and factors do not match.")
     # Expand the factors to each argument value
-    for(i in 1:length(vars.factors)) {
+    for(i in seq_along(vars.factors)) {
       data.l[[vars.factors[i]]] <- if(factors_in_curvesets) {
         A <- rep(factors[,vars.factors[i]], times=nr)
         dim(A) <- c(nrow(factors), nr)

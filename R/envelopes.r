@@ -313,7 +313,7 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   Malpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
 
   LBounds <- UBounds <- list()
-  for(ai in 1:length(coverage)) {
+  for(ai in seq_along(coverage)) {
     # Indices of the curves from which to calculate the convex hull
     curves_for_envelope_ind <- which(attr(res_erl, "M") >= Malpha[ai])
     # Curves
@@ -337,10 +337,10 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   else { # Names according to the coverages, i.e. lo.xx, hi.xx where xx represent the levels
     for(i in 1:ntests) {
       if(get_alternative(res_ls[[i]]) != "greater")
-        for(ai in 1:length(coverage))
+        for(ai in seq_along(coverage))
           res_ls[[i]][paste0("lo.", 100*coverage[ai])] <- LBounds[[ai]][[i]]
       if(get_alternative(res_ls[[i]]) != "less")
-        for(ai in 1:length(coverage))
+        for(ai in seq_along(coverage))
           res_ls[[i]][paste0("hi.", 100*coverage[ai])] <- UBounds[[ai]][[i]]
       res_ls[[i]]$lo <- res_ls[[i]]$hi <- NULL
       attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL

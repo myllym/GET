@@ -109,7 +109,7 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     e <- list()
     R.obs_new <- R0_new <- vector(length=length(gammas))
     if(is.null(llimit) & is.null(ulimit)) {
-      for(i in 1:length(gammas)) {
+      for(i in seq_along(gammas)) {
         if(alternative != "greater") LB <- e2$LB + log(gammas[i]) * (e2$UB - e2$LB) else LB <- -Inf
         if(alternative != "less") UB <- e2$UB - log(gammas[i]) * (e2$UB - e2$LB) else UB <- Inf
         R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
@@ -118,7 +118,7 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
       }
     }
     else { # llimit or ulimit
-      for(i in 1:length(gammas)) {
+      for(i in seq_along(gammas)) {
         if(alternative != "greater") LB <- llimit + (gammas[i])*(e2$LB-llimit) else LB <- -Inf
         if(alternative != "less") UB <- ulimit - (gammas[i])*(ulimit-e2$UB) else UB <- Inf
         R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
@@ -150,7 +150,7 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     # Calculate rejections for each gamma
     e <- list()
     R.obs_new <- R0_new <- vector(length=length(gammas))
-    for(i in 1:length(gammas)) {
+    for(i in seq_along(gammas)) {
       if(alternative != "greater") LB <- e1l + (gammas[i] - ind)*(e2l-e1l) else LB <- -Inf
       if(alternative != "less") UB <- e1u - (gammas[i] - ind)*(e1u-e2u) else UB <- Inf
       R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)

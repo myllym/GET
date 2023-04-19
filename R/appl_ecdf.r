@@ -113,7 +113,7 @@ GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapp
   if(!is.list(x) && length(x)<2) stop("At least two groups should be provided.")
   x.lengths <- as.numeric(lapply(x, FUN = length))
   if(!is.null(names(x))) groups <- rep(names(x), times=x.lengths)
-  else groups <- rep(1:length(x), times=x.lengths)
+  else groups <- rep(seq_along(x), times=x.lengths)
   groups <- factor(groups, levels=unique(groups))
   gnames <- levels(groups)
   if(missing(nsim)) {

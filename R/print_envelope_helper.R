@@ -30,7 +30,7 @@ printhelper_method <- function(x, istest, adj) {
   cat(attr(x, "method"), nstep, xdim, ":\n", sep="")
   if(!istest) { # The case of a central region & fboxplot
     if(!is.null(level)) {
-      for(i in 1:length(level)) cat(" * ", level[i], "% central region based on the measure \"", attr(x, "type"), "\"\n", sep="")
+      for(i in seq_along(level)) cat(" * ", level[i], "% central region based on the measure \"", attr(x, "type"), "\"\n", sep="")
       if(!is.null(attr(x, "M"))) {
         o <- order(attr(x, "M"))[1:5]
         cat(" * The 5 most extreme functions based on \"", attr(x, "type"), "\": ",

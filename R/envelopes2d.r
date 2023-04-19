@@ -16,7 +16,7 @@ as_simple_envelope <- function(x) {
     x <- simplify_lohi(x, "hi")
   }
   if(inherits(x, c("combined_global_envelope", "combined_global_envelope2d"))) {
-    for(i in 1:length(x)) {
+    for(i in seq_along(x)) {
       x[[i]] <- as_simple_envelope(x[[i]])
     }
   }
