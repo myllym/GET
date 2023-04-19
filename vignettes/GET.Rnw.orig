@@ -558,7 +558,7 @@ Thereafter, a \class{curve\_set} object can be constructed by the function \fct{
 cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
 @
 %
-In some cases, missing or infinite values can occur for the computed statistic at some chosen $r$ (e.g., for too large $r$ with another spatial summary function $J$). These problematic uninteresting $r$-values can be easily omitted from \code{cset} using the function \fct{crop\_curves}.
+In some cases, missing or infinite values can occur for the computed statistic at some chosen $r$ (e.g., for too large $r$ with another spatial summary function $J$). These problematic, uninteresting $r$-values can be easily omitted from \code{cset} using the function \fct{crop\_curves}.
 The final step is to make the global envelope test on the given set of vectors:
 %
 <<trees_CSR, fig=FALSE, height=3.0625, width=3.0625>>==

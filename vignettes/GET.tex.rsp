@@ -512,7 +512,7 @@ R> cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
 \end{Sinput}
 \end{Schunk}
 %
-In some cases, missing or infinite values can occur for the computed statistic at some chosen $r$ (e.g., for too large $r$ with another spatial summary function $J$). These problematic uninteresting $r$-values can be easily omitted from \code{cset} using the function \fct{crop\_curves}.
+In some cases, missing or infinite values can occur for the computed statistic at some chosen $r$ (e.g., for too large $r$ with another spatial summary function $J$). These problematic, uninteresting $r$-values can be easily omitted from \code{cset} using the function \fct{crop\_curves}.
 The final step is to make the global envelope test on the given set of vectors:
 %
 \begin{Schunk}
