@@ -24,7 +24,8 @@ The inflation rates are publicly available at \\
 The excel file that we downloaded was called \\
 \code{API_NY.GDP.DEFL.KD.ZG_DS2_en_excel_v2_3469555.xls},\\
 from there we took only the inflation rates for United States.
-Both are distributed under the CC-BY 4.0 license (see \url{https://datacatalog.worldbank.org/public-licenses#cc-by}).
+Both are distributed under the CC-BY 4.0 license (see
+\url{https://datacatalog.worldbank.org/public-licenses#cc-by}).
 
 Then we discounted the GDP of every country in the study to the 1960 USD,
 and we extrapolated the missing values of the GDP of a country using the
