@@ -4,7 +4,13 @@
 \alias{fclustering}
 \title{Functional clustering}
 \usage{
-fclustering(curve_sets, k, type = c("area", "st", "erl", "cont"), ...)
+fclustering(
+  curve_sets,
+  k,
+  type = c("area", "st", "erl", "cont"),
+  triangineq = FALSE,
+  ...
+)
 }
 \arguments{
 \item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects to which
@@ -17,6 +23,9 @@ of \code{curve_set} objects, if the \code{curve_set} objects contain the same nu
 
 \item{type}{The measure which is used to compute the dissimilarity matrix. The preferred options
 are \code{"area"} and \code{"st"}, but \code{"erl"} and \code{"cont"} can be also used with caution.}
+
+\item{triangineq}{Logical. Whether or not to compute the proportion of combinations
+of functions which satisfies the triangular inequality, see 'Value'.}
 
 \item{...}{Additional parameters to be passed to \code{\link{central_region}},
 which is responsible for calculating the central region (global envelope)
