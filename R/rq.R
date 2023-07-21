@@ -5,13 +5,16 @@
 # nameinteresting = names of the interesting coefficients
 #' @importFrom stats coef
 genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
+  anyNAY <- anyNA(Y)
   effect.a <- sapply(seq_along(taus), function(i) {
     if(is.vector(Y)) {
       df$response__ <- Y
     } else {
       df$response__ <- Y[,i]
     }
-    df <- df[!is.na(df$response__),]
+    if(anyNAY) {
+      df <- df[!is.na(df$response__),]
+    }
     M.full <- quantreg::rq(formula.full, data=df, tau=taus[i], model=FALSE, ...)
     allcoef <- coef(M.full)
     unlist(allcoef[nameinteresting])
@@ -50,6 +53,7 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #' @importFrom parallel mclapply
 #' @importFrom parallel parLapply
 #' @importFrom parallel clusterEvalQ
+#' @importFrom stats as.formula model.matrix update.formula
 #' @examples
 #' if(require("quantreg", quietly=TRUE)) {
 #'   data("stackloss")
@@ -57,59 +61,67 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #'   df$cat = factor(sample(c("a", "b", "c"), nrow(df), replace=TRUE))
 #'   perms <- c("Freedman-Lane", "Freedman-Lane+remove zeros", "simple",
 #'       "within nuisance",
-#'       "linear location", "linear location scale")
+#'       "remove location", "remove location scale",
+#'       "remove quantile")
 #'   res <- list()
 #'   for(taus in list(seq(0.1,0.9,by=0.2), 0.5)) {
 #'   for(perm in perms) {
-#'   if(perm != "within nuisance") {
+#'   if(perm %in% perms[c(1:3, 5:7)]) {
 #'   res <- c(res, list(graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
 #'     formula.reduced=stack.loss ~ Water.Temp,
 #'     taus=taus, permutationstrategy=perm,
-#'     data=df)))
+#'     data=df, typeone="fwer")))
 #'   res <- c(res, list(graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ cat + Water.Temp,
 #'     formula.reduced=stack.loss ~ Water.Temp,
 #'     taus=taus, permutationstrategy=perm,
-#'     data=df)))
+#'     data=df, typeone="fwer")))
 #'   res <- c(res, list(graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ cat + Water.Temp,
 #'     formula.reduced=stack.loss ~ cat,
 #'     taus=taus, permutationstrategy=perm,
-#'     data=df)))
-#'    } else {
+#'     data=df, typeone="fwer")))
+#'   } else {
 #'   res <- c(res, list(graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ cat + Water.Temp,
 #'     formula.reduced=stack.loss ~ Water.Temp,
 #'     taus=taus, permutationstrategy=perm,
 #'     contrasts=list(cat="contr.sum"),
-#'     data=df)))
+#'     data=df, typeone="fwer")))
 #'     }
 #'   }
 #'   }
 #'   res <- graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
 #'     formula.reduced=stack.loss ~ Air.Flow + Water.Temp,
-#'     taus=0.1, permutationstrategy="Freeman-Lane",
-#'     data=stackloss)
+#'     taus=0.1, permutationstrategy="Freedman-Lane",
+#'     data=stackloss, typeone="fwer")
 #'   plot(res)
 #'   res <- graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
 #'     formula.reduced=stack.loss ~ Air.Flow,
 #'     taus=seq(0.1, 0.9, by=0.2),
-#'     data=df)
+#'     data=df, typeone="fwer")
+#'   plot(res)
+#'   res <- graph.rq(nsim=199,
+#'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
+#'     formula.reduced=stack.loss ~ Air.Flow,
+#'     permutationstrategy="remove location",
+#'     taus=seq(0.1, 0.9, by=0.2),
+#'     data=df, typeone="fwer")
 #'   plot(res)
 #'   res <- graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
 #'     formula.reduced=stack.loss ~ Air.Flow,
 #'     taus=seq(0.1, 0.9, by=0.2),
-#'     data=df,
+#'     data=df, typeone="fwer",
 #'     contrasts=list(cat="contr.sum"))
 #'   res <- graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
 #'     formula.reduced=stack.loss ~ Air.Flow,
 #'     taus=seq(0.1, 0.9, by=0.2),
-#'     data=df,
+#'     data=df, typeone="fwer",
 #'     contrasts=list(cat=contr.sum))
 #'   plot(res)
 #' }
@@ -119,13 +131,14 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
                      permutationstrategy = c("Freedman-Lane", "Freedman-Lane+remove zeros",
                                              "simple",
                                              "within nuisance",
-                                             "linear location", "linear location scale"),
+                                             "remove location", "remove location scale",
+                                             "remove quantile"),
                      savefuns = FALSE, rq.args = NULL, lm.args = NULL, GET.args = NULL,
                      mc.cores = 1L, mc.args = NULL, cl = NULL) {
   if(!requireNamespace("quantreg", quietly = TRUE)) {
     stop("Package 'quantreg' is required, but not installed.")
   }
-  typeone <- check_typeone(typeone)
+  typeone <- check_typeone(typeone, missing(typeone))
   permutationstrategy = match.arg(permutationstrategy)
 
   check_isnested(formula.full, formula.reduced)
@@ -147,7 +160,7 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
   # TODO: contrasts for variables not in reduced model will cause warning, but maybe are needed if there are interactions
   # Maybe make another contrasts where the extra variables are not included
 
-  if(startsWith(permutationstrategy, "Freedman-Lane")) {
+  if(startsWith(permutationstrategy, "Freedman-Lane") || permutationstrategy=="remove quantile") {
     #-- Freedman-Lane procedure
     # Fit the reduced model at each argument value to get the fitted values and residuals
     fit <- do.call(quantreg::rq, c(list(formula.reduced, data=data, tau=taus, model=FALSE, contrasts=contrasts), rq.args))
@@ -157,13 +170,16 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
       fitted.m <- matrix(fitted.m, ncol=1)
       res.m <- matrix(res.m, ncol=1)
     }
-    names.reduced <- if(length(taus)==1) {names(coef(fit))} else {rownames(coef(fit))}
-    fit <- NULL
 
-
-    if(permutationstrategy=="Freedman-Lane+remove zeros") {
+    if(permutationstrategy=="remove quantile") {
+      # Note that formula.full is actually formula.interesting
+      Y <- res.m
+      fitted.m <- 0
+      formula.full <- update.formula(formula.full, as.formula(paste("~.-(", as.character(formula.reduced)[3], ")")))
+    } else if(permutationstrategy=="Freedman-Lane+remove zeros") {
       # Find the indices of the zero residuals that will be removed
       # Since there can be arbitrarily many zeros, take a random sample
+      names.reduced <- if(length(taus)==1) {names(coef(fit))} else {rownames(coef(fit))}
       zerostoremove <- length(names.reduced) - 1
       if(zerostoremove >= 1) {
         zerores <- abs(res.m) < 1e-10
@@ -175,6 +191,7 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
         }
       }
     }
+    fit <- NULL
   } else if(permutationstrategy=="simple") {
     fitted.m <- 0
     res.m <- matrix(Y, ncol=1)
@@ -196,7 +213,7 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
       }
       result
     }
-  } else if(startsWith(permutationstrategy, "linear location")) {
+  } else if(startsWith(permutationstrategy, "remove location")) {
     # These are implemented by computing the corresponding residuals and
     # then performing the permutation as simple permutation for the residuals and
     # the formula where nuisance are removed.
@@ -207,7 +224,7 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
     res.m <- fit$residuals #residuals
 
     #NP + permutation
-    if(permutationstrategy == "linear location scale") {
+    if(permutationstrategy == "remove location scale") {
       data.temp = data
       data.temp$abs_residuals = abs(res.m)
       formula.res <- update.formula(formula.reduced, abs_residuals ~ .)
