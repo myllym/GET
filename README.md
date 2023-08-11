@@ -72,9 +72,9 @@ vignette("pointpatterns")
 Currently two branches are provided in the development version. The main branch of GET is called `master`.
 
 The other branch is called `FDR` and it includes also the experimental FDR envelopes tested in
-Mrkvička and Myllymäki (2022, False discovery rate envelopes. arXiv:2008.10108 [stat.ME]).
+Mrkvička and Myllymäki (2023).
 The main branch includes the FDR envelopes which were found to have good performance in
-Mrkvička and Myllymäki (2022).
+Mrkvička and Myllymäki (2023).
 
 
 ## References
@@ -127,5 +127,5 @@ Dvořák, J. and Mrkvička, T. (2022).
 Graphical tests of independence for general distributions.
 Computational Statistics 37, 671--699.
 
-Mrkvička and Myllymäki (2022).
-False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+Mrkvička and Myllymäki (2023).
+False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7

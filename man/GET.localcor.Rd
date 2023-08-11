@@ -92,7 +92,7 @@ for the data and permuted data in a \code{curve_set} object (see \code{\link{cre
 }
 \description{
 The test of local correlations using Vilodomat et al. (2014) procedure for resamples
-and the FDR envelope of Mrkvička and Myllymäki (2022).
+and the FDR envelope of Mrkvička and Myllymäki (2023).
 }
 \details{
 The code is a modification of the supporting information code of Vilodomat et al. (2014)
@@ -111,6 +111,4 @@ Examples will be provided in a vignette.
 }
 \references{
 Viladomat, J., Mazumder, R., McInturff, A., McCauley, D.J. and Hastie, T. (2014). Assessing the significance of global and local correlations under spatial autocorrelation: A nonparametric approach. Biometrics 70, 409-418. doi: 10.1111/biom.12139
-
-Mrkvička and Myllymäki (2022). False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
 }

@@ -333,7 +333,7 @@ individual_fdr_envelope <- function(curve_set, alpha = 0.05,
 #' The FDR envelope
 #'
 #' Calculate the FDR envelope based on the ATSE or IATSE algorithm
-#' of Mrkvička and Myllymäki (2022).
+#' of Mrkvička and Myllymäki (2023).
 #'
 #'
 #' @param curve_sets A \code{curve_set} (see \code{\link{create_curve_set}}) or an
@@ -341,15 +341,15 @@ individual_fdr_envelope <- function(curve_set, alpha = 0.05,
 #'   and the functions from which the envelope is to be constructed.
 #'   Alternatively, a list of appropriate objects can be given.
 #' @param algorithm Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
-#' envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2022).
+#' envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2023).
 #' @param lower A single number (or a vector of suitable length) giving a lower bound
-#' for the functions. Used only for the extension, see Mrkvička and Myllymäki (2022, p. 6).
+#' for the functions. Used only for the extension, see Mrkvička and Myllymäki (2023, p. 6).
 #' @param upper A single number (or a vector of suitable length) giving an upper bound
 #' for the functions.
 #' @inheritParams global_envelope_test
 #' @export
 #' @references
-#' Mrkvička and Myllymäki (2022). False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+#' Mrkvička and Myllymäki (2023). False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7
 #' @examples
 #' # A GLM example
 #' data(rimov)

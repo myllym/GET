@@ -54,8 +54,8 @@ options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
 %% - \Abstract{} almost as usual
 \Abstract{
 This vignette gives examples of the use of false discoverate rate (FDR) envelopes
-that are proposed in \citep{MrkvickaMyllymaki2022} and implemented in the \proglang{R} package \pkg{GET}.
-When citing the vignette please cite \citet{MrkvickaMyllymaki2022} and
+that are proposed in \citep{MrkvickaMyllymaki2023} and implemented in the \proglang{R} package \pkg{GET}.
+When citing the vignette please cite \citet{MrkvickaMyllymaki2023} and
 Myllym{\"a}ki and Mrkvi\v cka (2020, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME])
 available at \url{https://arxiv.org/abs/1911.06583}.
 }
@@ -86,7 +86,7 @@ available at \url{https://arxiv.org/abs/1911.06583}.
 
 This vignette gives examples of the use of false discovery rate (FDR) envelopes,
 which are implemented in the \proglang{R} \citep{R2020} package \pkg{GET}.
-Three examples given below correspond to those presented in \citet{MrkvickaMyllymaki2022}.
+Three examples given below correspond to those presented in \citet{MrkvickaMyllymaki2023}.
 The envelope plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016},
 where we utilize the theme \code{theme_bw} for this document,
 and also the \pkg{patchwork} package \citep{patchwork2020}.
@@ -113,7 +113,7 @@ plot(rimov) + labs(x="Day", y="Water temperature", title="Data")
 @
 %
 
-Viewing the observations as daily samples of functional data, \citet{MrkvickaMyllymaki2022} fit the model
+Viewing the observations as daily samples of functional data, \citet{MrkvickaMyllymaki2023} fit the model
 \begin{equation}\label{eq:rimovmodel}
 y_i(k) = \beta_0(k) + \beta_1(k) (i-1978) + e(k),
 \end{equation}
@@ -125,7 +125,7 @@ To test the null hypothesis
 \end{equation}
 they took the estimator of the regression coefficient, i.e.\ $\hat{\beta}_1(k)$, as the test statistic following the methodology proposed in \citet{MrkvickaEtal2021a}.
 
-The function \fct{graph.flm} of \pkg{GET} allows the use of tests in functional general linear models based on regression coefficients. The simulations under the null hypotheses are performed using the \citet{FreedmanLane1983} procedure and, for the multiple testing correction due to the use of multivariate (functional) test statistic, the function \fct{graph.flm} provides both control of FDR (local test) or family-wise error rate (FWER, global test). The multiple testing control is chosen by the argument \code{typeone}. If \code{typeone = "fdr"}, the the FDR envelopes proposed by \citet{MrkvickaMyllymaki2022} are used. The choice \code{typeone = "fwer"} leads to the use of global envelope tests, see \fct{global\_envelope\_test}.
+The function \fct{graph.flm} of \pkg{GET} allows the use of tests in functional general linear models based on regression coefficients. The simulations under the null hypotheses are performed using the \citet{FreedmanLane1983} procedure and, for the multiple testing correction due to the use of multivariate (functional) test statistic, the function \fct{graph.flm} provides both control of FDR (local test) or family-wise error rate (FWER, global test). The multiple testing control is chosen by the argument \code{typeone}. If \code{typeone = "fdr"}, the the FDR envelopes proposed by \citet{MrkvickaMyllymaki2023} are used. The choice \code{typeone = "fwer"} leads to the use of global envelope tests, see \fct{global\_envelope\_test}.
 
 Thus, the test of null hypothesis \eqref{eq:rimovH0} using the $\hat{\beta}_1(k)$ as the test statistic and the FDR control can be performed as follows. Here \code{nsim} specifies the number of permutations of the \citet{FreedmanLane1983} method, \code{formula.full} specifies the full model, \code{formula.reduced} specifies the reduced model where the interesting factor whose significance is to be tested is dropped out in comparison to the \code{formula.full}, and the data are provided in \code{curve_sets} and \code{factors}.
 %
@@ -250,12 +250,12 @@ p1 + p2 + plot_layout(guides="collect") & theme(legend.position="bottom")
 @
 %
 
-\citet{MrkvickaMyllymaki2022} explored the functional general linear model (GLM)
+\citet{MrkvickaMyllymaki2023} explored the functional general linear model (GLM)
 for the population growth across years 1960-2014 with categorical covariate (continent),
 continuous covariate (GDP) and interactions (GDP with respect to the continent).
 For this purpose, they applied three tests, and on each of them, they used their proposed FDR control
 (IATSE) to obtain all years which are significant for the studied covariate.
-We refer the reader to \citet{MrkvickaMyllymaki2022} about the details and show below how these three tests
+We refer the reader to \citet{MrkvickaMyllymaki2023} about the details and show below how these three tests
 can be run using \pkg{GET}.
 
 %
@@ -285,7 +285,7 @@ plot(resC)
 @
 %
 
-For nicer visualization, \citet{MrkvickaMyllymaki2022} further added the fitted curve for every continent, i.e. the intercept $\beta_{i}^0$ and mean effect of GDP, $\beta_{i}^\text{GDP}\cdot \text{mean}(\text{GDP}_i)$, were added to every $\beta_{j,i}^{\text{Cont}}$.
+For nicer visualization, \citet{MrkvickaMyllymaki2023} further added the fitted curve for every continent, i.e. the intercept $\beta_{i}^0$ and mean effect of GDP, $\beta_{i}^\text{GDP}\cdot \text{mean}(\text{GDP}_i)$, were added to every $\beta_{j,i}^{\text{Cont}}$.
 
 Second, the effect of GDP was tested:
 %
@@ -344,7 +344,7 @@ plot(resCG) +
 
 \section{Local spatial correlation}
 
-The soil data in a rain forest plot used also in \citet{MrkvickaMyllymaki2022} are openly available through \url{http://ctfs.si.edu/webatlas/datasets/bci/soilmaps/BCIsoil.html}.
+The soil data in a rain forest plot used also in \citet{MrkvickaMyllymaki2023} are openly available through \url{http://ctfs.si.edu/webatlas/datasets/bci/soilmaps/BCIsoil.html}.
 Please note the copyright and acknowledgement information at the webpage.
 
 The soil data are observed in the tropical forest plot of area $1000\text{ m} \times 500\text{ m}$ in Barro Colorado Island \citep{HubbellEtal2005, HubbellEtal1999, Condit1998}.
@@ -410,13 +410,13 @@ set.seed(2022)
 @
 %
 %
-<<r_localcor, fig=TRUE, width=6, height=6>>=
+<<r_localcor, fig=TRUE, width=6, height=5>>=
 Delta <- seq(0.1,0.9,0.1)
 
 # nsim = 1000 runs for about 10 minutes (with one kernel)
 res <- GET.localcor(data = dat, Delta = Delta, nsim = 1000, typeone = "fdr",
                     varying.bandwidth = FALSE, bandwidth.h = 100)
-plot(res)
+plot(res, sign.type = "col", what = c("obs", "lo", "hi", "lo.sign", "hi.sign"))
 @
 %
 

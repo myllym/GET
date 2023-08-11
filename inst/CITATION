@@ -187,12 +187,12 @@ bibentry(
     title = "False discovery rate envelopes",
     author = c(person("T.", "Mrkvička"),
                person("M.", "Myllymäki")),
-    journal = "arXiv:2008.10108 [stat.ME]",
-    year = "2022",
-    volume = "",
-    pages = "",
-    url = "https://arxiv.org/abs/2008.10108",
-    textVersion  =
-    paste("Mrkvička, T. and Myllymäki, M. (2022).",
-          "False discovery rate envelopes. arXiv:2008.10108 [stat.ME]")
+    journal = "Statistics and Computing",
+    year = "2023",
+    volume = "33",
+    pages = "109",
+    url = "https://doi.org/10.1007/s11222-023-10275-7",
+    textVersion  = "Mrkvička, T. and Myllymäki, M. (2023).
+False discovery rate envelopes. Statistics and Computing 33, 109.
+https://doi.org/10.1007/s11222-023-10275-7",
 )

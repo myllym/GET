@@ -102,7 +102,7 @@ for the function, see examples in \code{\link{global_envelope_test}}.
 \itemize{
   \item \code{\link{GET.composite}}, see a detailed example in \code{\link{saplings}}
 }
-\item \emph{False discovery rate envelopes} of Mrkvička and Myllymäki (2022): \code{\link{fdr_envelope}}
+\item \emph{False discovery rate envelopes} of Mrkvička and Myllymäki (2023): \code{\link{fdr_envelope}}
 \item \emph{One-way functional ANOVA}:
  \itemize{
   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
@@ -221,7 +221,7 @@ any other way, thus allowing for any user-specified models/functions.
 To see examples of global envelopes for analysing point pattern data,
 start R, type \code{library("GET")} and \code{vignette("pointpatterns")}.
 
-Mrkvička and Myllymäki (2022) developed false discovery rate (FDR) envelopes.
+Mrkvička and Myllymäki (2023) developed false discovery rate (FDR) envelopes.
 Examples can be found by in associated vignette: start R, and type
 \code{library("GET")} and \code{vignette("pointpatterns")}.
 
@@ -247,7 +247,7 @@ Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA tes
 
 Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41(2), 276-297. doi: 10.1002/sim.9236
 
-Mrkvička, T., Myllymäki, M. (2022) False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+Mrkvička, T., Myllymäki, M. (2023) False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7
 
 Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
 

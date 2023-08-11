@@ -34,7 +34,7 @@ matching <- function( X.randomized, long, lat, Delta, target_variog, prctile, id
 #' The test of local correlations
 #'
 #' The test of local correlations using Vilodomat et al. (2014) procedure for resamples
-#' and the FDR envelope of Mrkvička and Myllymäki (2022).
+#' and the FDR envelope of Mrkvička and Myllymäki (2023).
 #'
 #'
 #' The code is a modification of the supporting information code of Vilodomat et al. (2014)
@@ -97,7 +97,7 @@ matching <- function( X.randomized, long, lat, Delta, target_variog, prctile, id
 #' @references
 #' Viladomat, J., Mazumder, R., McInturff, A., McCauley, D.J. and Hastie, T. (2014). Assessing the significance of global and local correlations under spatial autocorrelation: A nonparametric approach. Biometrics 70, 409-418. doi: 10.1111/biom.12139
 #'
-#' Mrkvička and Myllymäki (2022). False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+#' Mrkvička, T., Myllymäki, M. (2023) False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7
 #'
 GET.localcor <- function(data, Delta, nsim = 1000, typeone = c("fdr", "fwer"),
                          varying.bandwidth = FALSE,
