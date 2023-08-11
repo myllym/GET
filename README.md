@@ -54,7 +54,7 @@ install_github('myllym/GET', build_vignettes = TRUE)
 
 ## Vignettes
 
-The package contains two vignettes. The GET vignette describes the package in general. It is available by starting `R` and typing
+The package contains three vignettes. The GET vignette describes the package in general. It is available by starting `R` and typing
 ```R
 library("GET")
 vignette("GET")
@@ -66,6 +66,14 @@ The package provides also a vignette for global envelopes for point pattern anal
 library("GET")
 vignette("pointpatterns")
 ```
+
+The third vignette describes and provides code for the examples of Mrkvička and Myllymäki (2023).
+```R
+library("GET")
+vignette("FDRenvelopes")
+```
+
+All vignettes are also available at the package webpage https://cran.r-project.org/package=GET
 
 ## Branches
 
