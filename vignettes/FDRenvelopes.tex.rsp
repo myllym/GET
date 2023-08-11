@@ -3,6 +3,7 @@
 % \VignetteIndexEntry{GET: FDR envelopes}
 % \VignetteKeywords{false discovery rate, functional linear model, global envelope test, local spatial correlation, multiple testing, resampling, R}
 % \VignettePackage{GET}
+% \VignetteEngine{R.rsp::rsp}
 
 %% -- LaTeX packages and custom commands ---------------------------------------
 
