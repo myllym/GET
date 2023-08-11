@@ -299,7 +299,7 @@ Type           & Introduced in   & Description \\ \hline
 \code{'cont'}         & \citet{Hahn2015, MrkvickaEtal2022} & Global rank envelope corresponding to the continuous rank measure \\
 \code{'area'}         & \citet{MrkvickaEtal2022}    &  Global rank envelope corresponding to the area measure \\
 \code{'qdir'}         & \citet{MyllymakiEtal2017,MyllymakiEtal2015}       & Directional quantile envelope test corresponding to the directional quantile maximum absolute deviation (MAD) measure \\
-\code{'st'}           & \citet{MyllymakiEtal2017, MyllymakiEtal2015}       & Studentized envelope test corresponding to the studentized MAD measure \\
+\code{'st'}           & \citet{MyllymakiEtal2017, MyllymakiEtal2015}      & Studentized envelope test corresponding to the studentized MAD measure \\
 \code{'unscaled'}     & \citet{Ripley1981}       & Unscaled envelope test corresponding to the classical, unscaled MAD measure. The envelope has a constant width. \\ \hline
 \end{tabular}
 \caption{\label{tab:GEoverview} Overview of different types of global envelopes in the \pkg{GET} package. The types \code{'erl'}, \code{'cont'} and \code{'area'} refine the type \code{'rank'} by breaking the ties in the extreme ranks, for details see Appendix~\ref{app:GEdef}. 
@@ -981,11 +981,17 @@ The authors thank Ji\v{r}\'{i} Dvo\v{r}\'{a}k, Pavel Grabarnik, Ute Hahn, Mikko 
 \section{Definitions of global envelopes}\label{app:GEdef}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Assume the general vectors $\TT_i=(T_{i1},\ldots,T_{id})$, $i=1,\ldots,s$, for which a global envelope is to be constructed.
-If working with functions, assume that they have already been discretized as demanded in practice.
-Here we give definitions of the different global envelopes and the corresponding measures of Table \ref{tab:GEoverview}.
+Here, we provide definitions of the different global envelopes and the corresponding measures, as outlined in Table \ref{tab:GEoverview}.
+When working with functions, it is assumed that they have already been discretized as required in practice.
+Thus, we consider general vectors $\TT_i=(T_{i1},\ldots,T_{id})$, $i=1,\ldots,s$, for which a global envelope is to be constructed.
 
-\subsection{Global rank envelope}
+The measures satisfy the IGI property with probability 1 if there are no pointwise ties, meaning that there are no ties in $T_{1k},\ldots,T_{sk}$ for every $k = 1,\ldots,d$.
+This holds if $\TT_i$ are realizations of an absolutely continuous random vector.
+If pointwise ties do occur, the IGI property may be violated in elements of the vector where ties are present.
+For the measures based on pointwise ranks (Sections \ref{sec:rank}-\ref{sec:area}), we use the pointwise mid-rank for tied values to weigh down the influence of elements ($k$) where many $T_{ik}$, $i=1,\ldots,s$, coincide.
+
+
+\subsection{Global rank envelope}\label{sec:rank}
 
 The extreme rank $R_i$ of the vector $\TT_i$ is defined as the minimum of its pointwise ranks, namely
 %
@@ -1007,7 +1013,7 @@ How the pointwise ranks are determined depends on whether a one-sided or a two-s
 The cases 'less' and 'greater' are most often relevant in a hypothesis testing case (ii) (see Section~\ref{sec:intro}).
 The case 'less' corresponds to the alternative that the values of interesting vector ($\TT_1$) are smaller than under the null hypothesis. 
 The case 'greater' corresponds to the alternative that the values are larger than under the null hypothesis.
-The extreme rank measure $R_i$ induces an ordering of $\TT_i$, $i=1,\ldots,s$, which can be used to detect the extremeness of the vectors among each other. Given that $\TT_1$ is the observed vector in the Monte Carlo of permutation test, the (conservative) $p$~value of the test is equal to $p_+ = \sum_{i=1}^{s} \1 (R_i \leq R_1)  \big/ s$.
+The extreme rank measure $R_i$ induces an ordering of $\TT_i$, $i=1,\ldots,s$, which can be used to detect the extremeness of the vectors among each other. Given that $\TT_1$ is the observed vector in the Monte Carlo or permutation test, the (conservative) $p$~value of the test is equal to $p_+ = \sum_{i=1}^{s} \1 (R_i \leq R_1)  \big/ s$.
 Since the extreme ranks can have many ties, the test is also equipped with the liberal $p$~value, $p_- =  \sum_{i=1}^{s} \1 (R_i < R_1) \big/ s$. Then, when $\alpha$ falls inside the $p$~interval $(p_-,p_+]$, the decision of the test is not defined.
 
 The $100(1-\alpha)$\% global rank envelope induced by this measure is defined through
@@ -1018,18 +1024,18 @@ The $100(1-\alpha)$\% global rank envelope induced by this measure is defined th
 \TT^{\text{local}, l}_{\up \, k}= \underset{i=1,\ldots,s}{{\max}^{l}} T_{i k} \quad \text{for } k = 1, \ldots , d,
 \end{equation}
 %
-by taking $l=R_{(\alpha)}$, according to the point 1.\ of IGI (see Definition~\ref{IGI}), i.e., setting $\TT^{(\alpha))}_{\lo \, k} = \TT^{\text{local}, R_{(\alpha)}}_{\lo \, k}$ and $\TT^{(\alpha))}_{\up \, k} = \TT^{\text{local}, R_{(\alpha)}}_{\up \, k}$. Here $\min^l$ and $\max^l$ denote the $l$-th smallest and largest values, respectively, and $l=1,2,\ldots,\lfloor s/2\rfloor$.
-If $\TT_i$ is strictly outside the envelope for some $k=1,\ldots,d$, then also $M_i < M_{(\alpha)}$, and if $\TT^{(\alpha)}_{\lo \, k}<\TT_{ij}<\TT^{(\alpha)}_{\lo \, k}$ for all $k=1,\ldots,d$, then $M_i > M_{(\alpha)}$. However, if $\TT_i$ coincides either with $\TT^{(\alpha)}_{\lo \, k}$ or $\TT^{(\alpha)}_{\lo \, k}$ for some $k=1,\ldots,d$, then $M_i = M_{(\alpha)}$, and $\alpha \in (p_-,p_+]$ in the testing case.
+by taking $l=R_{(\alpha)}$, according to the point 1.\ of IGI (see Definition~\ref{IGI}), i.e., setting $\TT^{(\alpha)}_{\lo \, k} = \TT^{\text{local}, R_{(\alpha)}}_{\lo \, k}$ and $\TT^{(\alpha)}_{\up \, k} = \TT^{\text{local}, R_{(\alpha)}}_{\up \, k}$. Here $\min^l$ and $\max^l$ denote the $l$-th smallest and largest values, respectively, and $l=1,2,\ldots,\lfloor s/2\rfloor$.
+If $\TT_i$ is strictly outside the envelope for some $k=1,\ldots,d$, then also $R_i < R_{(\alpha)}$, and if $\TT^{(\alpha)}_{\lo \, k}<\TT_{ik}<\TT^{(\alpha)}_{\up \, k}$ for all $k=1,\ldots,d$, then $R_i > R_{(\alpha)}$. However, if $\TT_i$ coincides either with $\TT^{(\alpha)}_{\lo \, k}$ or $\TT^{(\alpha)}_{\up \, k}$ for some $k=1,\ldots,d$, then $R_i = R_{(\alpha)}$, and $\alpha \in (p_-,p_+]$ in the testing case.
 
 Because the extreme rank can achieve many ties \citep[see, e.g.,][]{MrkvickaEtal2022}, it is necessary to use a relatively large $s$ for the global rank envelope.
 The following three refinements of the extreme rank solve the ties problem and enable the use of a smaller $s$.
 
-\subsection{Global extreme rank length (ERL) envelope}
+\subsection{Global extreme rank length (ERL) envelope}\label{sec:erl}
 
 The extreme rank length (ERL) measure \citep{MyllymakiEtal2017, NarisettyNair2016} refines the extreme rank measure by breaking the ties in the extreme ranks $R_i$ by taking into account also the number of $R_{ik}$ which are equal to $R_i$. Further, the numbers of ranks equal to $R_i+1$, $R_i+2$, ... are used to break any remaining ties. 
 
 Formally, the ERL measure of $\TT_i$ is defined based on the vector of the pointwise ordered ranks
-$\mathbf{R}_i=(R_{i[1]}, R_{i[2]}, \ldots , R_{i[d]})$, where the ranks are arranged from smallest to largest, i.e., $R_{i[k]} \leq R_{i[k^\prime]}$ whenever $k \leq k^\prime$. While the extreme rank given in Equation~\ref{eq:minglobalrank} corresponds to $R_i=R_{i[1]}$, the ERL measure takes all these ranks into account by the reverse lexical ordering. 
+$\mathbf{R}_i=(R_{i[1]}, R_{i[2]}, \ldots , R_{i[d]})$, where the ranks are arranged from smallest to largest, i.e., $R_{i[k]} \leq R_{i[k^\prime]}$ whenever $k \leq k^\prime$. While the extreme rank (Equation~\ref{eq:minglobalrank}) corresponds to $R_i=R_{i[1]}$, the ERL measure takes all these ranks into account by the reverse lexical ordering. 
 The ERL measure of $\TT_i$ is
 %
 \begin{equation}
@@ -1059,7 +1065,7 @@ Then the $100(1-\alpha)$\% global ERL envelope induced by $E_i$ is
 %
 see \citet{NarisettyNair2016} and \citet{MrkvickaEtal2020}.
 
-\subsection{Global continuous rank envelope}
+\subsection{Global continuous rank envelope}\label{sec:cont}
 
 The ties can alternatively be broken by the continuous rank measure \citep{Hahn2015, MrkvickaEtal2022} which refines the extreme rank measure by considering instead of the (discrete) pointwise ranks $R_{ik}$ continuous pointwise ranks $C_{ik}$ defined by the ratios of $T_{ik}$ to the closest other $T_{jk}$, $j=1,\ldots,s$, $j\neq i$.
 
@@ -1095,9 +1101,10 @@ If there are ties, $y_{[i-1]} < y_{[i]} = \ldots = y_{[j]} < y_{[j+1]}$, then th
 \end{definition}
 
 The $p$~value of the univariate Monte Carlo test is $p_\text{cont}= \sum_{i=1}^{s} \1 (C_i \leq C_1)  \big/ s$.
-The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constructed in the same way as global ERL envelope (see Equation~\ref{erl_envelope}), i.e., as a hull of $\TT_i$ for which $C_i\geq C_{(\alpha)}$, where $C_{(\alpha)}$ is defined according to the point 1.\ of IGI.
+The $100(1-\alpha)$\% global continuous rank envelope induced by $C_i$ is constructed in the same way as global ERL envelope, i.e., as a hull of $\TT_i$ for which $C_i\geq C_{(\alpha)}$, where $C_{(\alpha)}$ is defined according to the point 1.\ of IGI. This is achieved by having $I_\alpha = \{i\in 1,\ldots, s: C_i \geq C_{(\alpha)} \}$ in Equation~\ref{erl_envelope}.
 
-\subsection{Global area rank envelope}
+
+\subsection{Global area rank envelope}\label{sec:area}
 
 Another refinement of rank envelope is the area rank measure \citep{MrkvickaEtal2022},
 %
@@ -1106,7 +1113,7 @@ $$A_i = \frac{1}{s}\left(R_i - \frac{1}{d}\sum_{k=1}^d (R_i-C_{ik}) \1(C_{ik} < 
 %
 The area measure breaks the ties in the extreme ranks by the sum (area) of the differences between the extreme rank $R_i$ and the pointwise continuous rank $C_{ik}$ from those $k=1,\ldots,d$ where the continuous rank is smaller than the extreme rank.
 The univariate Monte Carlo test is performed based on $A_i$ with $p_\text{area}= \sum_{i=1}^{s} \1 (A_i \leq A_1)  \big/ s$.
-The $100(1-\alpha)$\% global area rank envelope induced by $A_i$ is constructed similarly as the global ERL and continuous rank envelopes (see Equation~\ref{erl_envelope}).
+The $100(1-\alpha)$\% global area rank envelope induced by $A_i$ is constructed similarly as the global ERL and continuous rank envelopes, with $I_\alpha = \{i\in 1,\ldots, s: A_i \geq A_{(\alpha)} \}$ in Equation~\ref{erl_envelope}.
 
 \subsection{Global directional quantile, studentized and unscaled envelope}
 
