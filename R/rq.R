@@ -206,9 +206,7 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
       result <- Y_temp <- Y
       for( i in Nuisance.levels){
         Index_i = which(data[[Nuisance_name]]==i)
-        permutation <-sample(Index_i,
-                             length(Index_i),
-                             replace=FALSE)
+        permutation <- Index_i[sample.int(length(Index_i))]
         result[Index_i] = Y_temp[permutation]
       }
       result
