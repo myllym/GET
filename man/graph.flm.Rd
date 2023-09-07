@@ -176,6 +176,12 @@ res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
   GET.args = list(type = "area"))
 plot(res)
 
+# Examples of modifying 2d plots
+plot(res, sign.col="white") + ggplot2::scale_fill_viridis_c(option="magma")
+plot(res, sign.col="white") + ggplot2::scale_fill_viridis_c(option="magma") +
+  ggplot2::scale_radius(range = 2*c(1, 6))
+plot(res, what=c("obs", "lo", "hi", "lo.sign", "hi.sign"))
+plot(res, what=c("obs", "lo", "hi", "lo.sign", "hi.sign"), sign.type="col")
 }
 \references{
 Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y

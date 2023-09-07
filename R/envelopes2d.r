@@ -16,7 +16,7 @@ as_simple_envelope <- function(x) {
     x <- simplify_lohi(x, "hi")
   }
   if(inherits(x, c("combined_global_envelope", "combined_global_envelope2d"))) {
-    for(i in 1:length(x)) {
+    for(i in seq_along(x)) {
       x[[i]] <- as_simple_envelope(x[[i]])
     }
   }
@@ -58,27 +58,82 @@ choose_geom <- function(df, varfill, ...) {
 
 # Add a part "what" of the envelope2d plot to the given ggplot object g.
 # The ggplot object will have faceting variable "label".
-addplot_global_envelope2d <- function(g, x, what, sign.col, transparency) {
+#' @importFrom ggplot2 geom_point geom_contour scale_color_discrete guides scale_fill_gradient
+#' @importFrom grDevices grey
+addplot_global_envelope2d <- function(g, x, what, sign.col, transparency, sign.type) {
   namelist <- list(obs = "Observed",
                    lo = "Lower envelope" ,
                    hi = "Upper envelope" ,
                    lo.sign = "Sign.: below" ,
-                   hi.sign = "Sign.: above" )
+                   hi.sign = "Sign.: above" ,
+                   obs.sign = "")
   for(w in what) {
+    background <- w
     df <- x
     df$label <- factor(namelist[w])
-    if(w == "lo.sign") {
-      w <- "obs"
-      df$signif <- df$obs < df$lo
-    } else if(w == "hi.sign") {
-      w <- "obs"
-      df$signif <- df$obs > df$hi
+    df$Direction <- NA
+    df$Deviation <- NA
+    df$signif.lo <- df$signif.hi <- FALSE
+    #- Handle the one-sided cases
+    if(all(is.finite(df$hi))) {
+      if(all(is.finite(df$lo))) {
+        df$scaler <- df$hi - df$lo
+        whichenvelopes <- "both"
+      }
+      else {
+        df$scaler <- df$hi - df$central
+        whichenvelopes <- "hi only"
+      }
     }
-    g <- g + choose_geom(df, varfill=w)
-    if(any(df$signif))
-      g <- g + choose_geom(df[df$signif,], fill=sign.col, alpha=transparency)
+    else {
+      if(all(is.finite(df$lo))) {
+        df$scaler <- df$central - df$lo
+        whichenvelopes <- "lo only"
+      }
+      else stop("Something seems to be wrong with lo and hi.")
+    }
+    if(w %in% c("lo.sign", "obs.sign")) {
+      background <- "obs"
+      df$signif.lo <- df$obs < df$lo
+      df$Deviation.lo <- (df$lo - df$obs)/df$scaler
+      if(sign.type == "circles") {
+        df$Deviation[df$signif.lo] <- df$Deviation.lo[df$signif.lo]
+      }
+      df$Direction[df$signif.lo] <- "Below"
+    }
+    if(w %in% c("hi.sign", "obs.sign")) {
+      background <- "obs"
+      df$signif.hi <- df$obs > df$hi
+      df$Deviation.hi <- (df$obs - df$hi)/df$scaler
+      if(sign.type == "circles") {
+        df$Deviation[df$signif.hi] <- df$Deviation.hi[df$signif.hi]
+      }
+      df$Direction[df$signif.hi] <- "Above"
+    }
+    g <- g + choose_geom(df, varfill=background)
+    if(sign.type == "col") {
+      if(any(df$signif.lo))
+        g <- g + choose_geom(df[df$signif.lo,], fill=sign.col[1], alpha=transparency)
+      if(any(df$signif.hi))
+        g <- g + choose_geom(df[df$signif.hi,], fill=sign.col[2], alpha=transparency)
+    } else if(sign.type == "circles") {
+      if(any(df$signif.lo) || any(df$signif.hi)) {
+        g <- g + geom_point(aes(x=.data$x, y=.data$y, size=.data$Deviation, colour=.data$Direction),
+                            data=df[df$signif.lo | df$signif.hi,], shape=1)
+      }
+    } else if(sign.type == "contour") {
+      if(any(df$signif.lo))
+        g <- g + geom_contour(aes(x=.data$x, y=.data$y, z=.data$Deviation.lo), data=df, breaks=0, colour=sign.col[1])
+      if(any(df$signif.hi))
+        g <- g + geom_contour(aes(x=.data$x, y=.data$y, z=.data$Deviation.hi), data=df, breaks=0, colour=sign.col[2])
+    }
   }
-  g
+  g <- g + labs(size="Deviation")
+  if(any(df$signif.lo) & any(df$signif.hi)) g <- g + scale_color_discrete(type = c(Below=sign.col[1], Above=sign.col[2]))
+  else if(any(df$signif.lo)) g <- g + scale_color_discrete(type = c(Below=sign.col[1]))
+  else if(any(df$signif.hi)) g <- g + scale_color_discrete(type = c(Above=sign.col[2]))
+  if(w %in% c("lo.sign", "hi.sign")) g <- g + guides(colour = "none")
+  g + scale_fill_gradient(low = grey(0.5), high = grey(1))
 }
 
 # Drop options that are not relevant to the alternative hypothesis.
@@ -92,24 +147,24 @@ checkarg_envelope2d_what <- function(x, what) {
 # Used also when creating a plot without fixedscales.
 #' @importFrom ggplot2 ggplot facet_wrap labs coord_fixed
 plot_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "lo", "hi.sign", "lo.sign"),
-                                   sign.col = "red", transparency = 85/255) {
+                                   sign.col, transparency = 85/255, sign.type) {
   g <- ggplot()
-  g <- addplot_global_envelope2d(g, x, what, sign.col, transparency)
+  g <- addplot_global_envelope2d(g, x, what, sign.col, transparency, sign.type)
   g + facet_wrap("label") + labs(x="", y="", fill="") + coord_fixed()
 }
 
 # Used also when creating a plot without fixedscales.
-# @param sign.col The color for the significant regions. Default to "red".
+# @param sign.col Two colors for the significant regions (below and above).
 # @param transparency The transparency of the significant regions.
 # A number between 0 and 1 (default 85/255, 33% transparency).
 #' @importFrom ggplot2 ggplot facet_grid labs coord_fixed
 plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "lo", "hi.sign", "lo.sign"),
-                                            sign.col = "red", transparency = 85/255) {
+                                            sign.col, transparency = 85/255, sign.type) {
   g <- ggplot()
   for(i in seq_along(x)) {
     df <- x[[i]]
     df$main <- names(x)[i]
-    g <- addplot_global_envelope2d(g, df, what, sign.col, transparency)
+    g <- addplot_global_envelope2d(g, df, what, sign.col, transparency, sign.type)
   }
   g + facet_grid(main ~ label) + labs(x="", y="", fill="") + coord_fixed()
 }
@@ -125,7 +180,20 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 #' A combination of:
 #' Observed (\code{"obs"}), upper envelope (\code{"hi"}), lower envelope (\code{"lo"}),
 #' observed with significantly higher values highlighted (\code{"hi.sign"}),
-#' observed with significantly lower values highlighted (\code{"lo.sign"}).
+#' observed with significantly lower values highlighted (\code{"lo.sign"}),
+#' observed with significantly (lower and higher) values highlighted (\code{"obs.sign"}).
+#' Default to the last one. Combination c("obs", "lo", "hi", "lo.sign", "hi.sign") can
+#' also be of interest (earlier default).
+#' @param sign.type Either \code{"col"} for color showing the significant region, or
+#' \code{"contour"} for colored contour showing the significant region, or
+#' \code{"circles"} for plotting circles at locations where the observed function
+#' exceeds the envelope: diameters proportional to (obs-hi)/(hi-lo) for values
+#' above the envelope and (lo-obs)/(hi-lo) for values below the envelope.
+#' In the one-sided (testing) case, the divisors are instead (hi-central) (case 'greater')
+#' and (central-lo) (case 'less').
+#' Default to \code{"circles"}.
+#' @param sign.col A vector of length two giving the colors for significant parts
+#' below the envelope (first value) and above the envelope (second value).
 #' @param transparency A number between 0 and 1 (default 155/255, 60% transparency).
 #' Similar to alpha of \code{\link[grDevices]{rgb}}. Used in plotting the significant regions for 2d
 #' functions.
@@ -134,20 +202,25 @@ plot_combined_global_envelope2d_fixedscales <- function(x, what=c("obs", "hi", "
 #' @importFrom ggplot2 ggtitle
 #' @importFrom gridExtra grid.arrange
 #' @export
+#' @seealso \code{\link{graph.flm}}
 plot.global_envelope2d <- function(x, fixedscales = TRUE,
-                                   what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
-                                   sign.col = "red", transparency = 155/255,
+                                   what = c("obs.sign", "obs", "lo", "hi", "lo.sign", "hi.sign"),
+                                   sign.type = c("circles", "contour", "col"),
+                                   sign.col = c("blue", "red"), transparency = 155/255,
                                    digits = 3, ...) {
   x <- as_simple_envelope(x)
-  what <- match.arg(what, several.ok = TRUE)
+  if(missing(what)) what <- "obs.sign"
+  else what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x, what)
   main <- env_main_default(x, digits=digits)
+  sign.type <- match.arg(sign.type)
+  if(length(sign.col)==1) sign.col <- rep(sign.col, times=2)
 
   if(fixedscales) {
-    g <- plot_global_envelope2d_fixedscales(x, what, sign.col, transparency)
+    g <- plot_global_envelope2d_fixedscales(x, what, sign.col, transparency, sign.type)
     g + ggtitle(main)
   } else {
-    gs <- lapply(what, function(w) { plot_global_envelope2d_fixedscales(x, w, sign.col, transparency) })
+    gs <- lapply(what, function(w) { plot_global_envelope2d_fixedscales(x, w, sign.col, transparency, sign.type) })
     grid.arrange(grobs=gs, nrow=ceiling(length(gs)/3), top=main)
   }
 }
@@ -207,31 +280,34 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
 #'   gridExtra::grid.arrange(grobs=t(gs))
 #' }
 plot.combined_global_envelope2d <- function(x, fixedscales = 2, labels,
-                                            what=c("obs", "lo", "hi", "lo.sign", "hi.sign"),
-                                            sign.col = "red", transparency = 155/255,
+                                            what=c("obs.sign", "obs", "lo", "hi", "lo.sign", "hi.sign"),
+                                            sign.type = c("circles", "contour", "col"),
+                                            sign.col = c("blue", "red"), transparency = 155/255,
                                             digits = 3, ...) {
   x <- as_simple_envelope(x)
-  what <- match.arg(what, several.ok = TRUE)
+  if(missing(what)) what <- "obs.sign"
+  else what <- match.arg(what, several.ok = TRUE)
   what <- checkarg_envelope2d_what(x[[1]], what)
   main <- env_main_default(x, digits=digits)
   if(missing('labels')) labels <- default_labels(x, labels)
   names(x) <- labels
+  sign.type <- match.arg(sign.type)
 
   if(fixedscales==2) {
-    g <- plot_combined_global_envelope2d_fixedscales(x, what, sign.col, transparency)
+    g <- plot_combined_global_envelope2d_fixedscales(x, what, sign.col, transparency, sign.type)
     g + ggtitle(main)
   } else if(fixedscales==1) {
     gs <- lapply(seq_along(x), function(i) {
       env <- x[[i]]
       env$main <- names(x)[i]
-      g <- plot_global_envelope2d_fixedscales(env, what, sign.col, transparency)
+      g <- plot_global_envelope2d_fixedscales(env, what, sign.col, transparency, sign.type)
       g + facet_grid(main~label)
     })
     grid.arrange(grobs=gs, ncol=1, top=main)
   } else if(fixedscales==0) {
     f <- function(env, main, what) {
       env$main <- main
-      g <- plot_global_envelope2d_fixedscales(env, what, sign.col, transparency)
+      g <- plot_global_envelope2d_fixedscales(env, what, sign.col, transparency, sign.type)
       g + facet_wrap(c("main", "label"), labeller=function(l) label_value(l, multi_line = FALSE))
       g + theme(axis.title = element_blank(), axis.text = element_blank(), axis.ticks = element_blank())
     }

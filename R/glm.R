@@ -35,7 +35,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
     if(!inherits(factors, "data.frame")) stop("Invalid factors argument.")
     if(nrow(factors) != Nfunc) stop("The dimensions of Y and factors do not match.")
     # Expand the factors to each argument value
-    for(i in 1:length(vars.factors)) {
+    for(i in seq_along(vars.factors)) {
       data.l[[vars.factors[i]]] <- if(factors_in_curvesets) {
         A <- rep(factors[,vars.factors[i]], times=nr)
         dim(A) <- c(nrow(factors), nr)
@@ -224,7 +224,7 @@ Fvalue <- function(Y, X1, X2) {
 genFvaluesObs <- function(dfs, formula.full, formula.reduced) {
   nr <- length(dfs)
   Fvalues <- vector(length=nr)
-  x.full <- x.reduced <- list()
+  x.full <- x.reduced <- vector("list", nr)
   for(i in 1:nr) {
     df <- dfs[[i]]
     # Call lm to obtain the design matrices (x)
@@ -388,6 +388,12 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'   GET.args = list(type = "area"))
 #' plot(res)
 #'
+#' # Examples of modifying 2d plots
+#' plot(res, sign.col="white") + ggplot2::scale_fill_viridis_c(option="magma")
+#' plot(res, sign.col="white") + ggplot2::scale_fill_viridis_c(option="magma") +
+#'   ggplot2::scale_radius(range = 2*c(1, 6))
+#' plot(res, what=c("obs", "lo", "hi", "lo.sign", "hi.sign"))
+#' plot(res, what=c("obs", "lo", "hi", "lo.sign", "hi.sign"), sign.type="col")
 graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "fdr"),
                       curve_sets, factors = NULL,
                       contrasts = FALSE, savefuns = FALSE, lm.args = NULL, GET.args = NULL,

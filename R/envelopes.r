@@ -101,7 +101,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
     # Note: no fv object for multiple coverages
     isenvelope <- FALSE
   }
-  curve_set <- convert_to_curveset(curve_set)
+  curve_set <- convert_to_curveset(curve_set, allfinite=TRUE)
 
   # Measures for functional ordering
   measure <- type
@@ -140,9 +140,9 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   LBounds <- UBounds <- vector(mode="list", length=length(alpha))
   switch(type,
          rank = {
-           for(i in 1:nr){
+           for(i in 1:nr) {
              Hod <- sort(all_curves[,i])
-             for(ai in 1:length(alpha)) {
+             for(ai in seq_along(alpha)) {
                LBounds[[ai]][i]<- Hod[Malpha[ai]]
                UBounds[[ai]][i]<- Hod[Nfunc-Malpha[ai]+1]
              }
@@ -151,7 +151,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          erl =,
          cont =,
          area = {
-           for(ai in 1:length(alpha)) {
+           for(ai in seq_along(alpha)) {
              j <- distance >= Malpha[ai]
              for(i in 1:nr){
                lu <- range(all_curves[j,i])
@@ -163,20 +163,20 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          qdir = { # Note: All coverage levels use same probs
            curve_set_res <- residual(curve_set, use_theo=TRUE)
            quant_m <- curve_set_quant(curve_set_res, probs=probs, type=quantile.type)
-           for(ai in 1:length(alpha)) {
+           for(ai in seq_along(alpha)) {
              LBounds[[ai]] <- T_0 - Malpha[ai]*abs(quant_m[1,])
              UBounds[[ai]] <- T_0 + Malpha[ai]*abs(quant_m[2,])
            }
          },
          st = {
            sdX <- curve_set_sd(curve_set)
-           for(ai in 1:length(alpha)) {
+           for(ai in seq_along(alpha)) {
              LBounds[[ai]] <- T_0 - Malpha[ai]*sdX
              UBounds[[ai]] <- T_0 + Malpha[ai]*sdX
            }
          },
          unscaled = {
-           for(ai in 1:length(alpha)) {
+           for(ai in seq_along(alpha)) {
              LBounds[[ai]] <- T_0 - Malpha[ai]
              UBounds[[ai]] <- T_0 + Malpha[ai]
            }
@@ -184,8 +184,8 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
 
   switch(alternative,
          "two.sided" = {},
-         "less" = { for(ai in 1:length(alpha)) UBounds[[ai]] <- Inf },
-         "greater" = { for(ai in 1:length(alpha)) LBounds[[ai]] <- -Inf })
+         "less" = { for(ai in seq_along(alpha)) UBounds[[ai]] <- Inf },
+         "greater" = { for(ai in seq_along(alpha)) LBounds[[ai]] <- -Inf })
 
   if(length(alpha) > 1) { # Multiple envelopes
     names(LBounds) <- names(UBounds) <- paste0(100*coverage)
@@ -210,7 +210,7 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
                                             probs = c(0.025, 0.975), quantile.type = 7,
                                             central = "mean") {
   alternative <- match.arg(alternative)
-  tmp <- convert_to_curveset(curve_set)
+  tmp <- convert_to_curveset(curve_set, allfinite=TRUE, verbose=FALSE)
   if(!curve_set_is1obs(tmp))
     stop("The curve_set does not contain one observed function. Testing does not make sense.\n Did you want to construct a central region of your data? See the function central_region.")
   if(!is.numeric(alpha) || any(alpha < 0 | alpha >= 1)) stop("Unreasonable value of alpha.")
@@ -312,8 +312,8 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   distance_lexo_sorted <- sort(attr(res_erl, "M"), decreasing=TRUE)
   Malpha <- distance_lexo_sorted[floor(coverage*Nfunc)]
 
-  LBounds <- UBounds <- list()
-  for(ai in 1:length(coverage)) {
+  LBounds <- UBounds <- vector("list", length(coverage))
+  for(ai in seq_along(coverage)) {
     # Indices of the curves from which to calculate the convex hull
     curves_for_envelope_ind <- which(attr(res_erl, "M") >= Malpha[ai])
     # Curves
@@ -337,10 +337,10 @@ combined_CR_or_GET <- function(curve_sets, CR_or_GET = c("CR", "GET"), coverage,
   else { # Names according to the coverages, i.e. lo.xx, hi.xx where xx represent the levels
     for(i in 1:ntests) {
       if(get_alternative(res_ls[[i]]) != "greater")
-        for(ai in 1:length(coverage))
+        for(ai in seq_along(coverage))
           res_ls[[i]][paste0("lo.", 100*coverage[ai])] <- LBounds[[ai]][[i]]
       if(get_alternative(res_ls[[i]]) != "less")
-        for(ai in 1:length(coverage))
+        for(ai in seq_along(coverage))
           res_ls[[i]][paste0("hi.", 100*coverage[ai])] <- UBounds[[ai]][[i]]
       res_ls[[i]]$lo <- res_ls[[i]]$hi <- NULL
       attr(res_ls[[i]], "alpha") <- attr(res_ls[[i]], "M_alpha") <- NULL
@@ -441,6 +441,9 @@ print.combined_global_envelope <- function(x, ...) {
 
 #' Plot method for the class 'global_envelope'
 #'
+#' @details If several envelopes have been computed, their are plotted in different
+#' grey scales so that the smallest envelope has the darkest color and the widest
+#' envelope consist of all grey scales with the lightest color in the outskirts.
 #' @param x An 'global_envelope' object
 #' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
 #' Suitable for low dimensional test vectors.
@@ -768,7 +771,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #'
 #' # Central region computation
 #' boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
-#' cr <- central_region(boot.cset, coverage=0.95, type="erl")
+#' cr <- central_region(boot.cset, coverage=c(0.50, 0.80, 0.95), type="erl")
 #'
 #' # Plotting the result
 #' plot(cr) + ggplot2::labs(x=expression(italic(x)), y=expression(italic(f(x)))) +

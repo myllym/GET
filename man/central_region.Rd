@@ -224,7 +224,7 @@ for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
 
 # Central region computation
 boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
-cr <- central_region(boot.cset, coverage=0.95, type="erl")
+cr <- central_region(boot.cset, coverage=c(0.50, 0.80, 0.95), type="erl")
 
 # Plotting the result
 plot(cr) + ggplot2::labs(x=expression(italic(x)), y=expression(italic(f(x)))) +

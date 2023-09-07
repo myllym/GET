@@ -106,10 +106,10 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     d <- max(0.0001, min(0.0075, nsim * limit / ( nr * mult )))
     gammas <- seq(0+d/2, 1-d/2, by=d)
     # Calculate rejections for each gamma
-    e <- list()
+    e <- vector("list", length(gammas))
     R.obs_new <- R0_new <- vector(length=length(gammas))
     if(is.null(llimit) & is.null(ulimit)) {
-      for(i in 1:length(gammas)) {
+      for(i in seq_along(gammas)) {
         if(alternative != "greater") LB <- e2$LB + log(gammas[i]) * (e2$UB - e2$LB) else LB <- -Inf
         if(alternative != "less") UB <- e2$UB - log(gammas[i]) * (e2$UB - e2$LB) else UB <- Inf
         R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
@@ -118,7 +118,7 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
       }
     }
     else { # llimit or ulimit
-      for(i in 1:length(gammas)) {
+      for(i in seq_along(gammas)) {
         if(alternative != "greater") LB <- llimit + (gammas[i])*(e2$LB-llimit) else LB <- -Inf
         if(alternative != "less") UB <- ulimit - (gammas[i])*(ulimit-e2$UB) else UB <- Inf
         R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
@@ -148,9 +148,9 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     gammas <- seq(ind, ind+1, length=18)
     gammas <- gammas[-c(1, length(gammas))]
     # Calculate rejections for each gamma
-    e <- list()
+    e <- vector("list", length(gammas))
     R.obs_new <- R0_new <- vector(length=length(gammas))
-    for(i in 1:length(gammas)) {
+    for(i in seq_along(gammas)) {
       if(alternative != "greater") LB <- e1l + (gammas[i] - ind)*(e2l-e1l) else LB <- -Inf
       if(alternative != "less") UB <- e1u - (gammas[i] - ind)*(e1u-e2u) else UB <- Inf
       R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
@@ -333,7 +333,7 @@ individual_fdr_envelope <- function(curve_set, alpha = 0.05,
 #' The FDR envelope
 #'
 #' Calculate the FDR envelope based on the ATSE or IATSE algorithm
-#' of Mrkvička and Myllymäki (2022).
+#' of Mrkvička and Myllymäki (2023).
 #'
 #'
 #' @param curve_sets A \code{curve_set} (see \code{\link{create_curve_set}}) or an
@@ -341,15 +341,15 @@ individual_fdr_envelope <- function(curve_set, alpha = 0.05,
 #'   and the functions from which the envelope is to be constructed.
 #'   Alternatively, a list of appropriate objects can be given.
 #' @param algorithm Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
-#' envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2022).
+#' envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2023).
 #' @param lower A single number (or a vector of suitable length) giving a lower bound
-#' for the functions. Used only for the extension, see Mrkvička and Myllymäki (2022, p. 6).
+#' for the functions. Used only for the extension, see Mrkvička and Myllymäki (2023, p. 6).
 #' @param upper A single number (or a vector of suitable length) giving an upper bound
 #' for the functions.
 #' @inheritParams global_envelope_test
 #' @export
 #' @references
-#' Mrkvička and Myllymäki (2022). False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+#' Mrkvička and Myllymäki (2023). False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7
 #' @examples
 #' # A GLM example
 #' data(rimov)

@@ -15,7 +15,7 @@ pick_attributes <- function(curve_set, alternative = "two.sided") {
     res <- list()
     if(inherits(curve_set, 'envelope')) {
         names <- c("fname", "argu", "labl", "ylab", "yexp", "desc")
-        for(i in 1:length(names)) res[[names[i]]] <- attr(curve_set, names[i])
+        for(i in seq_along(names)) res[[names[i]]] <- attr(curve_set, names[i])
         res[['desc']][4] <- lo.name
         res[['desc']][5] <- hi.name
     } else if(inherits(curve_set, 'fdata')) {
@@ -74,8 +74,12 @@ env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {
         if(!is.null(attr(x, "alpha"))) {
           if(inherits(x, c("fboxplot", "combined_fboxplot")))
             main <- paste0(attr(x, "method"), " based on ", 100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
-          else if(inherits(x, c("global_envelope", "combined_global_envelope")))
-            main <- paste0(100*(1-attr(x, "alpha")), "% central region (", attr(x, "type"), ")")
+          else if(inherits(x, c("global_envelope", "combined_global_envelope"))) {
+            main <- NULL
+            for(i in seq_along(attr(x, "alpha")))
+              main <- paste0(main, 100*(1-attr(x, "alpha")[i]), "% ")
+            main <- paste0(main, "central region (", attr(x, "type"), ")")
+          }
           else
             main <- NULL
         }
@@ -205,12 +209,12 @@ linetype_values <- function() { c('dashed', 'solid') }
 #' @importFrom ggplot2 geom_ribbon aes_string geom_line
 #' @importFrom ggplot2 labs scale_linetype_manual
 basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main, level=0) {
-  pE <- list()
+  pE <- vector("list", length(level))
   lonames <- env_loname(level)
   hinames <- env_hiname(level)
   if(length(level) ==  1) cols <- 'grey59'
   else cols <- paste0('grey', floor(seq(80, 59, length=length(level))))
-  for(i in 1:length(level)) {
+  for(i in seq_along(level)) {
     pE[[i]] <- geom_ribbon(data = df, aes_string(x = "r", ymin = lonames[i], ymax = hinames[i]),
                      fill = cols[i], alpha = 1)
   }
@@ -293,7 +297,7 @@ fboxplot_ggplot <- function(x, main, xlab, ylab, plot_outliers = TRUE) {
 combined_df_construction <- function(x, labels) {
   n <- names(x[[1]])
 
-  dfs <- list()
+  dfs <- vector("list", length(x))
   for(i in seq_along(x)) {
     dfs[[i]] <- env_df_construction(x[[i]], labels[i])
   }
@@ -363,7 +367,7 @@ fboxplot_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free
     out <- attr(x, "outliers")
     col_values <- viridis(ncol(out[[1]]))
     names(col_values) <- colnames(out[[1]])
-    out.df <- do.call(rbind, lapply(1:length(out), FUN = function(i) {
+    out.df <- do.call(rbind, lapply(seq_along(out), FUN = function(i) {
       data.frame(r = rep(x[[i]][['r']], times=ncol(out[[i]])),
                  curves = c(out[[i]]),
                  id = factor(rep(colnames(out[[i]]), each=length(x[[i]][['r']])), levels = colnames(out[[i]])),

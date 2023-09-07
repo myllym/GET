@@ -4,13 +4,19 @@
 \alias{create_curve_set}
 \title{Create a curve_set object}
 \usage{
-create_curve_set(curve_set, ...)
+create_curve_set(curve_set, allfinite = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{curve_set}{A list containing the element obs, and optionally
 the elements r, sim_m and theo. See details.}
 
-\item{...}{For expert use only.}
+\item{allfinite}{Logical. TRUE requires that all values of the curves must be
+finite (not infinite and not missing, see \code{\link{is.finite}}). FALSE
+allows for infinite or missing values in the curves. These infinite and missing
+values can have consequences for the subsequent analyses. A warning is given
+if infinite or missing values exists.}
+
+\item{verbose}{Logical flag indicating whether to warn about the content.}
 }
 \value{
 An object of class \code{curve_set} containing the data.

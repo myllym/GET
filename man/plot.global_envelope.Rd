@@ -36,6 +36,11 @@ in the default main.}
 \description{
 Plot method for the class 'global_envelope'
 }
+\details{
+If several envelopes have been computed, their are plotted in different
+grey scales so that the smallest envelope has the darkest color and the widest
+envelope consist of all grey scales with the lightest color in the outskirts.
+}
 \examples{
 if(require("spatstat.explore", quietly=TRUE)) {
   X <- unmark(spruces)

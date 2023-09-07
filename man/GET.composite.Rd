@@ -198,7 +198,7 @@ if(require("fda.usc", quietly=TRUE)) {
   # 4. Fit the null model to each of the patterns,
   #    simulate a sample from the null model,
   #    and compute the test vectors for all.
-  cset.ls <- list()
+  cset.ls <- vector("list", nsim)
   for(rep in 1:nsim) {
     x <- rnorm(n, mean = mu, sd = sigma)
     mu2 <- mean(x)

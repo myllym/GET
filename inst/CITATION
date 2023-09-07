@@ -1,10 +1,10 @@
 citHeader("To cite package ‘GET’ in publications use:")
 
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
     title = "GET: Global envelopes in R",
-    author = personList(as.person("M. Myllymäki"),
-                        as.person("T. Mrkvička")),
+    author = c(person("M.", "Myllymäki"),
+               person("T.", "Mrkvička")),
     journal = "arXiv:1911.06583 [stat.ME]",
     year = "2020",
     volume = "",
@@ -15,14 +15,14 @@ citEntry(
           "GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]")
 )
 
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
     title = "Global envelope tests for spatial processes",
-    author = personList(as.person("M. Myllymäki"),
-                        as.person("T. Mrkvička"),
-                        as.person("P. Grabarnik"),
-                        as.person("H. Seijo"),
-                        as.person("U. Hahn")),
+    author = c(person("M.", "Myllymäki"),
+               person("T.", "Mrkvička"),
+               person("P.", "Grabarnik"),
+               person("H.", "Seijo"),
+               person("U.", "Hahn")),
     journal = "Journal of the Royal Statistical Society: Series B (Statistical Methodology)",
     year = "2017",
     volume = "79",
@@ -31,15 +31,16 @@ citEntry(
     textVersion  =
     paste("Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).",
           "Global envelope tests for spatial processes. Journal of the Royal Statistical Society:",
-          "Series B (Statistical Methodology) 79: 381-404. https://dx.doi.org/10.1111/rssb.12172")
+          "Series B (Statistical Methodology) 79: 381-404. https://dx.doi.org/10.1111/rssb.12172"),
+    header = "and a suitable selection of:"
 )
 
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
     title = "Multiple Monte Carlo testing, with applications in spatial point processes",
-    author = personList(as.person("T. Mrkvička"),
-                        as.person("M. Myllymäki"),
-                        as.person("U. Hahn")),
+    author = c(person("T.", "Mrkvička"),
+               person("M.", "Myllymäki"),
+               person("U.", "Hahn")),
     journal = "Statistics and Computing",
     year = "2017",
     volume = "27",
@@ -48,32 +49,16 @@ citEntry(
     url = "http://dx.doi.org/10.1007/s11222-016-9683-9",
     textVersion = "Mrkvička, T., Myllymäki, M., and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
-Statistics and Computing 27 (5): 1239-1255. http://dx.doi.org/10.1007/s11222-016-9683-9",
-    header = "and a suitable selection of:"
+Statistics and Computing 27 (5): 1239-1255. http://dx.doi.org/10.1007/s11222-016-9683-9"
 )
 
-citEntry(
-    entry = "Article",
-    title = "False discovery rate envelopes",
-    author = personList(as.person("T. Mrkvička"),
-                        as.person("M. Myllymäki")),
-    journal = "arXiv:2008.10108 [stat.ME]",
-    year = "2022",
-    volume = "",
-    pages = "",
-    url = "https://arxiv.org/abs/2008.10108",
-    textVersion  =
-    paste("Mrkvička, T. and Myllymäki, M. (2022).",
-          "False discovery rate envelopes. arXiv:2008.10108 [stat.ME]")
-)
-
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
     title = "A one-way ANOVA test for functional data with graphical interpretation",
-    author = personList(as.person("T. Mrkvička"),
-                        as.person("M. Myllymäki"),
-                        as.person("M. Jilek"),
-                        as.person("U. Hahn")),
+    author = c(person("T.", "Mrkvička"),
+               person("M.", "Myllymäki"),
+               person("M.", "Jilek"),
+               person("U.", "Hahn")),
     journal = "Kybernetika",
     year = "2020",
     volume = "53",
@@ -84,12 +69,27 @@ citEntry(
 A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. https://doi.org/10.14736/kyb-2020-3-0432"
 )
 
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
+    title = "A nonparametric graphical tests of significance in functional GLM",
+    author = c(person("T.", "Mrkvička"),
+               person("T.", "Roskovec"),
+               person("M.", "Rost")),
+    journal = "Methodology and Computing in Applied Probability",
+    year = "2021",
+    volume = "23",
+    pages = "593-61",
+    url = "https://doi.org/10.1007/s11009-019-09756-y",
+    textVersion = "Mrkvička, T., Roskovec, T. and Rost, M. (2021).
+A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. https://doi.org/10.1007/s11009-019-09756-y"
+)
+
+bibentry(
+    bibtype = "Article",
     title = "New methods for multiple testing in permutation inference for the general linear model",
-    author = personList(as.person("T. Mrkvička"),
-                        as.person("M. Myllymäki"),
-                        as.person("N.N. Narisetty")),
+    author = c(person("T.", "Mrkvička"),
+               person("M.", "Myllymäki"),
+               person("N.N.", "Narisetty")),
     journal = "Statistics in Medicine",
     year = "2022",
     volume = "41",
@@ -100,28 +100,13 @@ citEntry(
 New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41 (2), 276-297. https://doi.org/10.1002/sim.9236"
 )
 
-citEntry(
-    entry = "Article",
-    title = "A nonparametric graphical tests of significance in functional GLM",
-    author = personList(as.person("T. Mrkvička"),
-                        as.person("T. Roskovec"),
-                        as.person("M. Rost")),
-    journal = "Methodology and Computing in Applied Probability",
-    year = "2021",
-    volume = "23",
-    pages = "593-61",
-    url = "https://doi.org/10.1007/s11009-019-09756-y",
-    textVersion = "Mrkvička, T., Roskovec, T. and Rost, M. (2021).
-A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. https://doi.org/10.1007/s11009-019-09756-y"
-)
-
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
     title = "Deviation test construction and power comparison for marked spatial point patterns",
-    author = personList(as.person("M. Myllymäki"),
-                        as.person("P. Grabarnik"),
-                        as.person("H. Seijo"),
-                        as.person("D. Stoyan")),
+    author = c(person("M.", "Myllymäki"),
+               person("P.", "Grabarnik"),
+               person("H.", "Seijo"),
+               person("D.", "Stoyan")),
     journal = "Spatial Statistics",
     year = "2015",
     volume = "11",
@@ -132,14 +117,14 @@ Deviation test construction and power comparison for marked spatial point patter
 Spatial Statistics 11: 19-34. https://dx.doi.org/10.1016/j.spasta.2014.11.004"
 )
 
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
     title = "Monte Carlo testing in spatial statistics, with applications to spatial residuals",
-    author = personList(as.person("T. Mrkvička"),
-                        as.person("S. Soubeyrand"),
-                        as.person("M. Myllymäki"),
-                        as.person("P. Grabarnik"),
-                        as.person("U. Hahn")),
+    author = c(person("T.", "Mrkvička"),
+               person("S.", "Soubeyrand"),
+               person("M.", "Myllymäki"),
+               person("P.", "Grabarnik"),
+               person("U.", "Hahn")),
     journal = "Spatial Statistics",
     year = "2016",
     volume = "18, Part A",
@@ -150,12 +135,12 @@ Monte Carlo testing in spatial statistics, with applications to spatial residual
 Spatial Statistics 18, Part A: 40-53. http://dx.doi.org/10.1016/j.spasta.2016.04.005",
 )
 
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
     title = "Testing global and local dependence of point patterns on covariates in parametric models",
-    author = personList(as.person("M. Myllymäki"),
-                        as.person("M. Kuronen"),
-                        as.person("T. Mrkvička")),
+    author = c(person("M.", "Myllymäki"),
+               person("M.", "Kuronen"),
+               person("T.", "Mrkvička")),
     journal = "Spatial Statistics",
     year = "2020",
     volume = "42",
@@ -166,12 +151,12 @@ Testing global and local dependence of point patterns on covariates in parametri
 Spatial Statistics 42, 100436. https://doi.org/10.1016/j.spasta.2020.100436",
 )
 
-citEntry(
-    entry = "Article",
+bibentry(
+    bibtype = "Article",
     title = "A new functional clustering method with combined dissimilarity sources and graphical interpretation",
-    author = personList(as.person("W. Dai"),
-                        as.person("S. Athanasiadis"),
-                        as.person("T. Mrkvička")),
+    author = c(person("W.", "Dai"),
+               person("S.", "Athanasiadis"),
+               person("T.", "Mrkvička")),
     journal = "Intech open",
     year = "2022",
     volume = "",
@@ -180,4 +165,34 @@ citEntry(
     textVersion = "Dai, W., Athanasiadis, S. and Mrkvička, T. (2022).
 A new functional clustering method with combined dissimilarity sources and graphical interpretation.
 Intech open. https://doi.org/10.5772/intechopen.100124",
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "Graphical tests of independence for general distributions",
+    author = c(person("J.", "Dvořák"),
+               person("T.", "Mrkvička")),
+    journal = "Computational Statistics",
+    year = "2022",
+    volume = "37",
+    pages = "671--699",
+    url = "https://doi.org/10.5772/intechopen.100124",
+    textVersion = "Dvořák, J. and Mrkvička, T. (2022).
+Graphical tests of independence for general distributions.
+Computational Statistics 37, 671--699. https://doi.org/10.1007/s00180-021-01134-y",
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "False discovery rate envelopes",
+    author = c(person("T.", "Mrkvička"),
+               person("M.", "Myllymäki")),
+    journal = "Statistics and Computing",
+    year = "2023",
+    volume = "33",
+    pages = "109",
+    url = "https://doi.org/10.1007/s11222-023-10275-7",
+    textVersion  = "Mrkvička, T. and Myllymäki, M. (2023).
+False discovery rate envelopes. Statistics and Computing 33, 109.
+https://doi.org/10.1007/s11222-023-10275-7",
 )

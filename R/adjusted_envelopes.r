@@ -273,7 +273,7 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #'   # 4. Fit the null model to each of the patterns,
 #'   #    simulate a sample from the null model,
 #'   #    and compute the test vectors for all.
-#'   cset.ls <- list()
+#'   cset.ls <- vector("list", nsim)
 #'   for(rep in 1:nsim) {
 #'     x <- rnorm(n, mean = mu, sd = sigma)
 #'     mu2 <- mean(x)
@@ -405,7 +405,7 @@ GET.composite <- function(X, X.ls = NULL,
   if(!is.null(r_min) | !is.null(r_max)) {
     tmpfunc <- function(i, csets) crop_curves(csets[[i]], r_min=r_min[i], r_max=r_max[i])
     X <- lapply(1:nfuns, FUN=tmpfunc, csets=X)
-    for(sim in 1:length(X.ls)) X.ls[[sim]] <- lapply(1:nfuns, FUN=tmpfunc, csets=X.ls[[sim]])
+    for(sim in seq_along(X.ls)) X.ls[[sim]] <- lapply(1:nfuns, FUN=tmpfunc, csets=X.ls[[sim]])
   }
 
   # Take residual
@@ -413,7 +413,7 @@ GET.composite <- function(X, X.ls = NULL,
   if(take_residual) {
     tmpfunc <- function(i, csets) residual(csets[[i]])
     X <- lapply(1:nfuns, FUN=tmpfunc, csets=X)
-    for(sim in 1:length(X.ls)) X.ls[[sim]] <- lapply(1:nfuns, FUN=tmpfunc, csets=X.ls[[sim]])
+    for(sim in seq_along(X.ls)) X.ls[[sim]] <- lapply(1:nfuns, FUN=tmpfunc, csets=X.ls[[sim]])
   }
 
   # Individual tests
@@ -427,7 +427,7 @@ GET.composite <- function(X, X.ls = NULL,
                          probs=probs, MrkvickaEtal2017=MrkvickaEtal2017)
     list(stat = tmp$stat, pval = tmp$pval)
   }
-  mclapply_res <- mclapply(X=1:length(X.ls), FUN=loopfun, mc.cores=mc.cores)
+  mclapply_res <- mclapply(X=seq_along(X.ls), FUN=loopfun, mc.cores=mc.cores)
   stats <- sapply(mclapply_res, function(x) x$stat)
   pvals <- sapply(mclapply_res, function(x) x$pval)
 
@@ -459,7 +459,7 @@ GET.composite <- function(X, X.ls = NULL,
     bounding_curves <- combined_scaled_MAD_bounding_curves(central_curves_ls=central_curves_ls, max_u=UB,
                                                            lower_f=envchars$lower_f, upper_f=envchars$upper_f)
     # Update the first level envelopes for plotting
-    for(i in 1:length(res)) {
+    for(i in seq_along(res)) {
       res[[i]]$lo <- bounding_curves$lower_ls[[i]]
       res[[i]]$hi <- bounding_curves$upper_ls[[i]]
     }

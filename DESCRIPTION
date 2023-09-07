@@ -1,6 +1,6 @@
 Package: GET
-Version: 0.3-2
-Date: 2022-11-16
+Version: 0.4-2
+Date: 2023-08-16
 Title: Global Envelopes
 Encoding: UTF-8
 Authors@R: c(
@@ -25,6 +25,7 @@ Maintainer: Mari Myllymäki <mari.myllymaki@luke.fi>
 Imports:
     cluster,
     ggplot2,
+    grDevices,
     gridExtra,
     parallel,
     stats,
@@ -67,5 +68,5 @@ Description: Implementation of global envelopes for a set of general d-dimension
     Dai et al. (2022) <doi: 10.5772/intechopen.100124>, and
     Dvořák and Mrkvička (2022) <doi: 10.1007/s00180-021-01134-y>.
 License: GPL-3
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 VignetteBuilder: R.rsp

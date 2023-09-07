@@ -54,7 +54,7 @@ install_github('myllym/GET', build_vignettes = TRUE)
 
 ## Vignettes
 
-The package contains two vignettes. The GET vignette describes the package in general. It is available by starting `R` and typing
+The package contains three vignettes. The GET vignette describes the package in general. It is available by starting `R` and typing
 ```R
 library("GET")
 vignette("GET")
@@ -67,14 +67,22 @@ library("GET")
 vignette("pointpatterns")
 ```
 
+The third vignette describes and provides code for the examples of Mrkvička and Myllymäki (2023).
+```R
+library("GET")
+vignette("FDRenvelopes")
+```
+
+All vignettes are also available at the package webpage https://cran.r-project.org/package=GET
+
 ## Branches
 
 Currently two branches are provided in the development version. The main branch of GET is called `master`.
 
 The other branch is called `FDR` and it includes also the experimental FDR envelopes tested in
-Mrkvička and Myllymäki (2022, False discovery rate envelopes. arXiv:2008.10108 [stat.ME]).
+Mrkvička and Myllymäki (2023).
 The main branch includes the FDR envelopes which were found to have good performance in
-Mrkvička and Myllymäki (2022).
+Mrkvička and Myllymäki (2023).
 
 
 ## References
@@ -83,12 +91,12 @@ To cite GET in publications use
 
 Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME] URL: https://arxiv.org/abs/1911.06583
 
+and a suitable selection of:
+
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).
 Global envelope tests for spatial processes. Journal of the Royal Statistical Society:
 Series B (Statistical Methodology) 79: 381-404. doi: 10.1111/rssb.12172 http://dx.doi.org/10.1111/rssb.12172
 (You can find the preprint version of the article here: http://arxiv.org/abs/1307.0239v4)
-
-and a suitable selection of:
 
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017).
 Multiple Monte Carlo testing, with applications in spatial point processes.
@@ -98,25 +106,22 @@ Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020).
 A one-way ANOVA test for functional data with graphical interpretation.
 Kybernetika 56 (3), 432-458. http://doi.org/10.14736/kyb-2020-3-0432
 
-Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022).
-New methods for multiple testing in permutation inference for the general linear model.
-Statistics in Medicine 41(2), 276-297. https://doi.org/10.1002/sim.9236
-
-Mrkvička and Myllymäki (2022).
-False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
-
 Mrkvička, T., Roskovec, T. and Rost, M. (2021).
 A nonparametric graphical tests of significance in functional GLM.
 Methodology and Computing in Applied Probability 23, 593-612. https://doi.org/10.1007/s11009-019-09756-y
 
-Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016).
-Monte Carlo testing in spatial statistics, with applications to spatial residuals.
-Spatial Statistics 18, Part A: 40--53. https://doi.org/10.1016/j.spasta.2016.04.005
+Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022).
+New methods for multiple testing in permutation inference for the general linear model.
+Statistics in Medicine 41(2), 276-297. https://doi.org/10.1002/sim.9236
 
 Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
 Deviation test construction and power comparison for marked spatial point
 patterns. Spatial Statistics 11: 19-34. https://doi.org/10.1016/j.spasta.2014.11.004
 (You can find the preprint version of the article here: http://arxiv.org/abs/1306.1028)
+
+Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016).
+Monte Carlo testing in spatial statistics, with applications to spatial residuals.
+Spatial Statistics 18, Part A: 40--53. https://doi.org/10.1016/j.spasta.2016.04.005
 
 Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020).
 Testing global and local dependence of point patterns on covariates in parametric models.
@@ -125,3 +130,10 @@ Spatial Statistics 42, 100436, https://doi.org/10.1016/j.spasta.2020.100436
 Dai, W., Athanasiadis, S. and Mrkvička, T. (2022).
 A new functional clustering method with combined dissimilarity sources and graphical interpretation.
 Intech open. https://doi.org/10.5772/intechopen.100124
+
+Dvořák, J. and Mrkvička, T. (2022).
+Graphical tests of independence for general distributions.
+Computational Statistics 37, 671--699.
+
+Mrkvička and Myllymäki (2023).
+False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7

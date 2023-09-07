@@ -22,6 +22,8 @@
 #' @param k The number of clusters.
 #' @param type The measure which is used to compute the dissimilarity matrix. The preferred options
 #' are \code{"area"} and \code{"st"}, but \code{"erl"} and \code{"cont"} can be also used with caution.
+#' @param triangineq Logical. Whether or not to compute the proportion of combinations
+#' of functions which satisfies the triangular inequality, see 'Value'.
 #' @param ... Additional parameters to be passed to \code{\link{central_region}},
 #' which is responsible for calculating the central region (global envelope)
 #' on which the functional clustering is based.
@@ -90,7 +92,7 @@
 #' @importFrom stats dist
 #' @importFrom cluster pam
 #' @importFrom utils combn
-fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ...) {
+fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), triangineq = FALSE, ...) {
   # Check curve_sets. Note: k is checked by pam
   if(is_a_single_curveset(curve_sets)) {
     curve_sets <- list(curve_sets) # Make a list of a single curve_set to treat it similarly as several sets of curves
@@ -122,7 +124,7 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
 
   # Compute the dissimilarity matrix
   # lstats = original statistics, jstats = joined statistics
-  lstats <- list()
+  lstats <- vector("list", n)
   jr <- NULL
   jstats <- NULL
   for(j in 1:n) {
@@ -131,10 +133,10 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
     funcs <- curve_set_funcs(curve_sets[[j]])
     co <- combn(nfunc, 2, simplify = FALSE) # All combinations
     stats <- array(0, c(2*length(co), nr))
-    for(i in 1:length(co)) {
+    for(i in seq_along(co)) {
       stats[i,] <- funcs[, co[[i]][1]]-funcs[, co[[i]][2]]
     }
-    for(i in 1:length(co)) {
+    for(i in seq_along(co)) {
       stats[length(co)+i, ] <- funcs[, co[[i]][2]]-funcs[, co[[i]][1]]
     }
     lstats[[j]] <- stats
@@ -155,23 +157,25 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), ..
     fo <- forder(data, measure="max", scaling=scaling)
   else
     fo <- 1 - forder(data, measure=measure, scaling=scaling)
-  b[1:length(b)] <- fo[1:length(b)] # for(i in 1:length(b)) { b[i] <- fo[i] }
+  b[seq_along(b)] <- fo[seq_along(b)] # for(i in 1:length(b)) { b[i] <- fo[i] }
   resultpamF <- pam(b, k=k)
   bb <- as.matrix(b)
   nfunc <- curve_set_nfunc(curve_sets[[1]])
   # Triangular inequality
-  r <- NULL # Here r is a logical vector for something
-  for(i in 1:(nfunc-2)) {
-    for(j in (i+1):(nfunc-1)) {
-      for(kk in (j+1):(nfunc)) {
-        r <- c(r, bb[i,j] + bb[j,kk] >= bb[i,kk] - 0.00000001)
+  if(triangineq) {
+    r <- NULL # Here r is a logical vector for something
+    for(i in 1:(nfunc-2)) {
+      for(j in (i+1):(nfunc-1)) {
+        for(kk in (j+1):(nfunc)) {
+          r <- c(r, bb[i,j] + bb[j,kk] >= bb[i,kk] - 0.00000001)
+        }
       }
     }
   }
 
   res <- list(curve_sets=curve_sets, k=k, type=type,
-              pam=resultpamF, dis=b,
-              triangineq = sum(r)/length(r))
+              pam=resultpamF, dis=b)
+  if(triangineq) res$triangineq <- sum(r)/length(r)
   class(res) <- c("fclust", class(res))
   res
 }
@@ -317,7 +321,7 @@ plot.fclust <- function(x, plotstyle = c("marginal", "joined"), coverage = 0.5,
   #- df: All single functions
   funcs <- lapply(csets, FUN=curve_set_funcs)
   nams <- lapply(funcs, FUN=function(x) { n <- colnames(x); if(!is.null(n)) n else 1:ncol(x) })
-  funcs.df <- do.call(rbind, lapply(1:length(funcs), FUN = function(i) {
+  funcs.df <- do.call(rbind, lapply(seq_along(funcs), FUN = function(i) {
     data.frame(r = rep(cr_all[[1]][[i]][['r']], times=ncol(funcs[[i]])),
                curves = c(funcs[[i]]),
                id = factor(rep(nams[[i]], each=length(cr_all[[1]][[i]][['r']])), levels = nams[[i]]),

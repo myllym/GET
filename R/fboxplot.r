@@ -39,7 +39,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, coverage = 0.50, ...) {
   res <- central_region(curve_sets, coverage = coverage, alternative = "two.sided", ...)
   if(inherits(res, "combined_global_envelope")) {
     outliers_id <- NULL
-    for(i in 1:length(res)) {
+    for(i in seq_along(res)) {
       dist <- factor * (res[[i]]$hi - res[[i]]$lo)
       res[[i]]$whisker.lo <- res[[i]]$lo - dist
       res[[i]]$whisker.hi <- res[[i]]$hi + dist
@@ -56,7 +56,7 @@ fBoxplot <- function(curve_sets, factor = 1.5, coverage = 0.50, ...) {
     if(!is.null(outliers_id)) {
       outliers <- lapply(curve_sets, FUN = function(x) { curve_set_funcs(x)[,outliers_id, drop=FALSE] })
       if(is.null(colnames(outliers[[1]])))
-        for(i in 1:length(outliers)) {
+        for(i in seq_along(outliers)) {
           n <- colnames(curve_set_funcs(curve_sets[[i]]))
           if(!is.null(n))
             colnames(outliers[[i]]) <- n[outliers_id]

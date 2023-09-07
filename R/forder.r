@@ -84,7 +84,7 @@ individual_partial_forder <- function(curve_set, measure = c('erl', 'rank', 'con
                                       alternative, erlhistn=0) {
   measure <- match.arg(measure)
 
-  curve_set <- convert_envelope(curve_set)
+  curve_set <- convert_to_curveset(curve_set, allfinite=TRUE)
 
   all_curves <- data_and_sim_curves(curve_set)
   nr <- curve_set_narg(curve_set)
@@ -138,7 +138,7 @@ individual_forder <- function(curve_set,
   possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!")
 
-  curve_set <- convert_to_curveset(curve_set)
+  curve_set <- convert_to_curveset(curve_set, allfinite=TRUE)
 
   if(measure %in% c('max', 'int', 'int2')) {
     curve_set <- residual(curve_set, use_theo = use_theo)
@@ -221,6 +221,7 @@ combine_erl_forder <- function(parts) {
 #' combining the results with \code{combine_forder}.
 #'
 #' @param curve_set A \code{curve_set} object, usually a part of a larger \code{curve_set}.
+#' (No missing or infinite values allowed.)
 #' @seealso \code{\link{forder}}
 #' @inheritParams forder
 #' @examples

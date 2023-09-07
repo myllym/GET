@@ -58,10 +58,12 @@ fdata_to_curve_set <- function(fdata, ...) {
 # Check the content validity of a potential curve_set object.
 #
 # @param curve_set An object to be checked.
-# @param allow_Inf_values Logical. Can be used to allow infinite or nonnumeric
-# values in an \code{envelope} object of \pkg{spatstat} at the first place, if those are cropped
-# away (in \code{\link{crop_curves}}).
-check_curve_set_content <- function(curve_set, allow_Inf_values = FALSE) {
+# @param allfinite Logical. Can be used to allow infinite or nonnumeric
+# values (allfinite=FALSE), e.g., in an \code{envelope} object of \pkg{spatstat}
+# at the first place, if those are cropped away later (in \code{\link{crop_curves}})
+# for analyses.
+check_curve_set_content <- function(curve_set, allfinite=TRUE) {
+  allow_Inf_values <- !allfinite
   if(inherits(curve_set, "curve_set")) {
     if(!allow_Inf_values) {
       if(!all(is.finite(curve_set[['funcs']]))) {
@@ -185,7 +187,6 @@ convert_envelope <- function(curve_set, ...) {
     stop('curve_set must either have class "envelope" (from spatstat) ',
          'or class "curve_set".')
   }
-  check_curve_set_content(curve_set, ...)
   curve_set
 }
 
@@ -208,7 +209,6 @@ convert_fdata <- function(curve_set, ...) {
     stop('curve_set must either have class "fdata" (from fda.usc) ',
          'or class "curve_set".')
   }
-  check_curve_set_content(curve_set, ...)
   curve_set
 }
 
@@ -229,7 +229,6 @@ convert_to_curveset <- function(curve_set, ...) {
     stop('curve_set must either have class "envelope" (from spatstat) ',
          'or "fdata" (from fda.usc) or "curve_set".')
   }
-  check_curve_set_content(curve_set, ...)
   curve_set
 }
 
@@ -281,7 +280,12 @@ check_residualness <- function(curve_set) {
 #' \code{obs}.
 #' @param curve_set A list containing the element obs, and optionally
 #'   the elements r, sim_m and theo. See details.
-#' @param ... For expert use only.
+#' @param allfinite Logical. TRUE requires that all values of the curves must be
+#' finite (not infinite and not missing, see \code{\link{is.finite}}). FALSE
+#' allows for infinite or missing values in the curves. These infinite and missing
+#' values can have consequences for the subsequent analyses. A warning is given
+#' if infinite or missing values exists.
+#' @param verbose Logical flag indicating whether to warn about the content.
 #' @return An object of class \code{curve_set} containing the data.
 #' If the argument values are two-dimensional, then the \code{curve_set} is additionally
 #' a \code{curve_set2d} object.
@@ -296,8 +300,8 @@ check_residualness <- function(curve_set) {
 #'                                            width=1, height=1),
 #'                               obs = matrix(runif(10*5), ncol=5)))
 #' plot(cset)
-create_curve_set <- function(curve_set, ...) {
-  check_curve_set_content(curve_set, ...)
+create_curve_set <- function(curve_set, allfinite = FALSE, verbose = TRUE) {
+  check_curve_set_content(curve_set, allfinite)
   is1obs <- is.vector(curve_set[['obs']])
   if(is1obs) {
     funcs <- cbind(curve_set[['obs']], curve_set[['sim_m']])
@@ -312,6 +316,15 @@ create_curve_set <- function(curve_set, ...) {
   if(!is.null(curve_set[['theo']])) cset$theo <- curve_set[['theo']]
   class(cset) <- c("curve_set", class(cset))
   if(!is.vector(r)) class(cset) <- c("curve_set2d", class(cset))
+  if(!allfinite & verbose) {
+    fmissing <- 100*sum(curve_set_funcmissing(cset))/curve_set_nfunc(cset)
+    rmissing <- 100*sum(curve_set_argmissing(cset))/curve_set_narg(cset)
+    if(fmissing > 0) {
+      warning(fmissing,
+              "% of functions have elements that are infinite or missing. \n",
+              rmissing, "% of r-values have infinite or missing values.")
+    }
+  }
   cset
 }
 
@@ -590,6 +603,14 @@ curve_set_nfunc <- function(curve_set) {
   ncol(curve_set[['funcs']])
 }
 
+# Curves with non-finite values (NA or infinite)
+curve_set_funcmissing <- function(curve_set) {
+  apply(is.na(curve_set[['funcs']]) | !is.finite(curve_set[['funcs']]), MARGIN=2, FUN=any)
+}
+curve_set_argmissing <- function(curve_set) {
+  apply(is.na(curve_set[['funcs']]) | !is.finite(curve_set[['funcs']]), MARGIN=1, FUN=any)
+}
+
 # Return curve_set$r as a data.frame
 curve_set_rdf <- function(curve_set) {
   r <- curve_set[['r']]
@@ -657,5 +678,6 @@ subset.curve_set <- function(x, subset, ...) {
   x$funcs <- x$funcs[i,j,drop=FALSE]
   if(!missing(j) && !(1 %in% j))
     x$is1obs <- FALSE
+  if(!is.null(x$theo)) x$theo <- x$theo[i]
   x
 }

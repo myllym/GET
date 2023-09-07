@@ -141,7 +141,7 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL,
   sim.s <- lapply(by(sim, INDICES=list(id=obs$id, dir.hor=obs$dir.hor), FUN=identity),
                   as.matrix)
   csets <- NULL
-  for(i in 1:length(obs.s)) {
+  for(i in seq_along(obs.s)) {
     csets[[names(obs.s)[[i]]]] <- create_curve_set(list(r = obs.s[[i]]$dist,
                                                         obs = obs.s[[i]]$gamma,
                                                         sim_m = sim.s[[i]]))

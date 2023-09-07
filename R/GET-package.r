@@ -27,6 +27,8 @@
 #'
 #' To get examples of point pattern analysis, start R and type \code{library("GET")} and \code{vignette("pointpatterns")}.
 #'
+#' To get examples of Mrkvička and Myllymäki (2022), start R and type \code{library("GET")} and \code{vignette("FDRenvelopes")}.
+#'
 #' @section Key functions in \pkg{GET}:
 #' \itemize{
 #' \item \emph{Central regions} or \emph{global envelopes} or \emph{confidence bands}:
@@ -93,6 +95,7 @@
 #' \itemize{
 #'   \item \code{\link{GET.composite}}, see a detailed example in \code{\link{saplings}}
 #' }
+#' \item \emph{False discovery rate envelopes} of Mrkvička and Myllymäki (2023): \code{\link{fdr_envelope}}
 #' \item \emph{One-way functional ANOVA}:
 #'  \itemize{
 #'   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
@@ -108,12 +111,7 @@
 #' \item Functions for performing global envelopes for specific purposes:
 #'  \itemize{
 #'   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
-#'   \item Permutation-based tests of independence to samples from any bivariate distribution:
-#'   \itemize{
-#'      \item based on cumulative distribution function \code{\link{GET.cdf}}
-#'      \item in a 2D contingency table \code{\link{GET.contingency}}
-#'      \item based on the smoothed Q-Q plot \code{\link{GET.qq}}
-#'   }
+#'   \item Permutation-based tests of independence to samples from any bivariate distribution: \code{\link{GET.distrindep}}
 #'   \item Testing global and local dependence of point patterns on covariates: \code{\link{GET.spatialF}}
 #'   \item Testing local correlations: \code{\link{GET.localcor}}
 #'   \item Variogram and residual variogram with global envelopes: \code{\link{GET.variogram}}
@@ -206,6 +204,10 @@
 #' To see examples of global envelopes for analysing point pattern data,
 #' start R, type \code{library("GET")} and \code{vignette("pointpatterns")}.
 #'
+#' Mrkvička and Myllymäki (2023) developed false discovery rate (FDR) envelopes.
+#' Examples can be found by in associated vignette: start R, and type
+#' \code{library("GET")} and \code{vignette("pointpatterns")}.
+#'
 #' Type citation("GET") to get a full list of references.
 #'
 #' @section Acknowledgements:
@@ -229,7 +231,7 @@
 #'
 #' Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41(2), 276-297. doi: 10.1002/sim.9236
 #'
-#' Mrkvička, T., Myllymäki, M. False discovery rate envelopes. arXiv:2008.10108 [stat.ME]
+#' Mrkvička, T., Myllymäki, M. (2023) False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7
 #'
 #' Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
 #'
