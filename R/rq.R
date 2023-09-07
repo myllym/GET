@@ -28,24 +28,25 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 }
 
 
-#' Graphical functional GLM
+#' Graphical functional quantile regression
 #'
-#' Non-parametric graphical tests of significance in functional general linear model (GLM)
+#' Non-parametric graphical tests of significance in quantile regression
 #'
 #'
-#' "Freedman-Lane+remove zeros" removes zeros as suggested in Cade & Richards DOI: 10.1198/108571106X96835.
+#' See the paper (Section 4) for details on the permutation methods.
 #'
 #'
 #' @inheritParams graph.flm
 #' @param data data.frame where to look for variables.
-#' @param taus the quantiles to be used.
-#' @param rq.args additional arguments passed to \code{rq}.
-#' @param contrasts passed directly to \code{rq}.
+#' @param taus The quantiles to be used.
+#' @param permutationstrategy The permutation strategy to be used. See details.
+#' @param rq.args Additional arguments passed to \code{rq}.
+#' @param contrasts Passed directly to \code{rq}.
 #' @return A \code{global_envelope} or \code{combined_global_envelope} object,
 #' which can be printed and plotted directly.
 #' @export
 #' @references
-#' Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
+#' Mrkvička, T., Konstantinou, K., Kuronen, M. and Myllymäki, M. () Global quantile regression.
 #'
 #' Myllymäki, M and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #'
@@ -57,72 +58,11 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #' @examples
 #' if(require("quantreg", quietly=TRUE)) {
 #'   data("stackloss")
-#'   df = stackloss
-#'   df$cat = factor(sample(c("a", "b", "c"), nrow(df), replace=TRUE))
-#'   perms <- c("Freedman-Lane", "Freedman-Lane+remove zeros", "simple",
-#'       "within nuisance",
-#'       "remove location", "remove location scale",
-#'       "remove quantile")
-#'   res <- list()
-#'   for(taus in list(seq(0.1,0.9,by=0.2), 0.5)) {
-#'   for(perm in perms) {
-#'   if(perm %in% perms[c(1:3, 5:7)]) {
-#'   res <- c(res, list(graph.rq(nsim=19,
-#'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
-#'     formula.reduced=stack.loss ~ Water.Temp,
-#'     taus=taus, permutationstrategy=perm,
-#'     data=df, typeone="fwer")))
-#'   res <- c(res, list(graph.rq(nsim=19,
-#'     formula.full=stack.loss ~ cat + Water.Temp,
-#'     formula.reduced=stack.loss ~ Water.Temp,
-#'     taus=taus, permutationstrategy=perm,
-#'     data=df, typeone="fwer")))
-#'   res <- c(res, list(graph.rq(nsim=19,
-#'     formula.full=stack.loss ~ cat + Water.Temp,
-#'     formula.reduced=stack.loss ~ cat,
-#'     taus=taus, permutationstrategy=perm,
-#'     data=df, typeone="fwer")))
-#'   } else {
-#'   res <- c(res, list(graph.rq(nsim=19,
-#'     formula.full=stack.loss ~ cat + Water.Temp,
-#'     formula.reduced=stack.loss ~ Water.Temp,
-#'     taus=taus, permutationstrategy=perm,
-#'     contrasts=list(cat="contr.sum"),
-#'     data=df, typeone="fwer")))
-#'     }
-#'   }
-#'   }
 #'   res <- graph.rq(nsim=19,
 #'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
-#'     formula.reduced=stack.loss ~ Air.Flow + Water.Temp,
-#'     taus=0.1, permutationstrategy="Freedman-Lane",
+#'     formula.reduced=stack.loss ~ Water.Temp,
+#'     taus=seq(0.1, 0.9, length=10), permutationstrategy="remove quantile",
 #'     data=stackloss, typeone="fwer")
-#'   plot(res)
-#'   res <- graph.rq(nsim=19,
-#'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
-#'     formula.reduced=stack.loss ~ Air.Flow,
-#'     taus=seq(0.1, 0.9, by=0.2),
-#'     data=df, typeone="fwer")
-#'   plot(res)
-#'   res <- graph.rq(nsim=199,
-#'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
-#'     formula.reduced=stack.loss ~ Air.Flow,
-#'     permutationstrategy="remove location",
-#'     taus=seq(0.1, 0.9, by=0.2),
-#'     data=df, typeone="fwer")
-#'   plot(res)
-#'   res <- graph.rq(nsim=19,
-#'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
-#'     formula.reduced=stack.loss ~ Air.Flow,
-#'     taus=seq(0.1, 0.9, by=0.2),
-#'     data=df, typeone="fwer",
-#'     contrasts=list(cat="contr.sum"))
-#'   res <- graph.rq(nsim=19,
-#'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc. + cat,
-#'     formula.reduced=stack.loss ~ Air.Flow,
-#'     taus=seq(0.1, 0.9, by=0.2),
-#'     data=df, typeone="fwer",
-#'     contrasts=list(cat=contr.sum))
 #'   plot(res)
 #' }
 #'
@@ -139,6 +79,8 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
     stop("Package 'quantreg' is required, but not installed.")
   }
   typeone <- check_typeone(typeone, missing(typeone))
+
+  if(missing(permutationstrategy)) stop("Permutation strategy has to be specified.")
   permutationstrategy = match.arg(permutationstrategy)
 
   check_isnested(formula.full, formula.reduced)
@@ -279,6 +221,7 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
                           c(list(curve_sets=csets, alternative="two.sided"), GET.args))
          })
   attr(res, "method") <- "Graphical Quantile Regression" # Change method name
+  attr(res, "permutationstrategy") <- permutationstrategy
   attr(res, "labels") <- complabels
   # Re-define the default ylab
   res <- envelope_set_labs(res, ylab=ylab)
