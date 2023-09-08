@@ -2,7 +2,7 @@
 # get an effect of interest at all tau values in a matrix.
 # @param Y True or permuted values of Y.
 # @param df data
-# nameinteresting = names of the interesting coefficients
+# @param nameinteresting Names of the interesting coefficients
 #' @importFrom stats coef
 genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
   anyNAY <- anyNA(Y)
@@ -28,13 +28,15 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 }
 
 
-#' Graphical functional quantile regression
+#' Global quantile regression
 #'
-#' Non-parametric graphical tests of significance in quantile regression
+#' Global tests of significance for the effect of covariates in quantile regression
 #'
 #'
-#' See the paper (Section 4) for details on the permutation methods.
-#'
+#' The possible permutation strategies include
+#' "Freedman-Lane" (FL), "Freedman-Lane+remove zeros" (FL+), "within nuisance" (WN),
+#' "remove location" (RL), "remove location scale" (RLS), "remove quantile" (RQ),
+#' which correspond to those in Mrkvička et al. (Section 4.1-4.6 and Table 1).
 #'
 #' @inheritParams graph.flm
 #' @param data data.frame where to look for variables.
@@ -46,7 +48,7 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #' which can be printed and plotted directly.
 #' @export
 #' @references
-#' Mrkvička, T., Konstantinou, K., Kuronen, M. and Myllymäki, M. () Global quantile regression.
+#' Mrkvička, T., Konstantinou, K., Kuronen, M. and Myllymäki, M. Global quantile regression.
 #'
 #' Myllymäki, M and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #'
@@ -58,18 +60,17 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #' @examples
 #' if(require("quantreg", quietly=TRUE)) {
 #'   data("stackloss")
-#'   res <- graph.rq(nsim=19,
-#'     formula.full=stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
-#'     formula.reduced=stack.loss ~ Water.Temp,
-#'     taus=seq(0.1, 0.9, length=10), permutationstrategy="remove quantile",
-#'     data=stackloss, typeone="fwer")
+#'   res <- global_rq(nsim = 19, # Increase nsim for serious analysis!
+#'     formula.full = stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
+#'     formula.reduced = stack.loss ~ Water.Temp,
+#'     taus = seq(0.1, 0.9, length=10), permutationstrategy = "remove quantile",
+#'     data = stackloss, typeone = "fwer")
 #'   plot(res)
 #' }
 #'
-graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwer", "fdr"),
-                     data = NULL, contrasts = NULL,
+global_rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwer", "fdr"),
+                     data, contrasts = NULL,
                      permutationstrategy = c("Freedman-Lane", "Freedman-Lane+remove zeros",
-                                             "simple",
                                              "within nuisance",
                                              "remove location", "remove location scale",
                                              "remove quantile"),
@@ -220,7 +221,7 @@ graph.rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwe
            res <- do.call(fdr_envelope,
                           c(list(curve_sets=csets, alternative="two.sided"), GET.args))
          })
-  attr(res, "method") <- "Graphical Quantile Regression" # Change method name
+  attr(res, "method") <- "Global quantile regression"
   attr(res, "permutationstrategy") <- permutationstrategy
   attr(res, "labels") <- complabels
   # Re-define the default ylab
