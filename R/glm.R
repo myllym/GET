@@ -52,6 +52,26 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   list(Y=data.l[['Y']], dfs=dfs, r=r, Nfunc=Nfunc, nr=nr)
 }
 
+sim2curse_sets <- function(obs, sim, r) {
+  dn <- dimnames(sim[[1]])
+  # sim <- simplify2array(sim, except=NULL) # except is only available starting from 4.2.0
+  sim <- simplify2array(sim)
+  if(is.null(dimnames(sim))) {
+    dim(sim) <- c(1,1,length(sim))
+    dimnames(sim) <- c(dn, list(NULL))
+  }
+  complabels <- colnames(obs)
+
+  csets <- NULL
+  for(i in 1:ncol(obs)) {
+    simi <- array(sim[,i,], dim=dim(sim)[c(1,3)]) # Extract the slice even if some dimensions are 1
+    csets[[complabels[i]]] <- create_curve_set(list(r = r,
+                                                    obs = obs[,i],
+                                                    sim_m = simi))
+  }
+  csets
+}
+
 # Regress the given data (true or permuted) against the full model and
 # get an effect of interest at all r values in a matrix.
 # @param Y True or permuted values of Y inserted to dfs.
@@ -61,8 +81,8 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' @importFrom stats dummy.coef
 genCoefmeans.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
   # If covariates are constant with respect to location
-  if(length(dfs) == 1) return(genCoefmeans.mlm(Y, dfs[[1]], formula.full, nameinteresting, ...))
   nr <- ncol(Y)
+  if(length(dfs) == 1 && nr > 1) return(genCoefmeans.mlm(Y, dfs[[1]], formula.full, nameinteresting, ...))
   for(i in 1:nr) {
     df <- dfs[[i]]
     df$Y <- Y[,i]
@@ -112,6 +132,13 @@ genCoefmeans.qr <- function(Y, As, nameinteresting) {
   effect.a
 }
 
+genCoefmeans.neCPP <- function(fit, res, perm, As) {
+  effect.a <- GETCPP::genCoefsGraphGLM(fit, res, perm, As)
+  effect.a <- t(effect.a)
+  dimnames(effect.a) <- list(NULL, rownames(As[[1]]))
+  effect.a
+}
+
 # If covariates are constant with respect to location,
 # use a multiple linear model (instead of multiple linear models)
 #' @importFrom stats lm
@@ -120,8 +147,11 @@ genCoefmeans.qr <- function(Y, As, nameinteresting) {
 genCoefmeans.mlm <- function(Y, df, formula.full, nameinteresting, ...) {
   df$Y <- Y
   M.full <- stats::lm(formula.full, data=df, ...)
+  nr <- ncol(Y)
   if(!length(M.full$xlevels)) { # Only continuous factors in the model
-    effect.a <- t(coef(M.full)[nameinteresting,, drop=FALSE])
+    effect.a <- matrix(NA, nr, length(nameinteresting))
+    dimnames(effect.a) <- list(NULL, nameinteresting)
+    effect.a[] <- t(coef(M.full)[nameinteresting,, drop=FALSE])
   } else {
     allcoef <- stats::dummy.coef(M.full)
     effect.a <- do.call(cbind, allcoef[nameinteresting])
@@ -466,6 +496,10 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
     fit <- do.call(lm, c(list(formula.reduced, data=df, model=FALSE), lm.args))
     fitted.m <- fit$fitted.values
     res.m <- fit$residuals
+    if(is.vector(fitted.m)) {
+      fitted.m <- matrix(fitted.m, ncol=1)
+      res.m <- matrix(res.m, ncol=1)
+    }
     fit <- NULL
   } else {
     loopfun1 <- function(i) {
@@ -522,15 +556,10 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
   if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args))
   else sim <- parLapply(cl, 1:nsim, loopfun2)
   time2 <- proc.time()
-  sim <- simplify2array(sim)
+  csets <- sim2curse_sets(obs, sim, X$r)
+
   complabels <- colnames(obs)
 
-  csets <- NULL
-  for(i in 1:ncol(obs)) {
-    csets[[complabels[i]]] <- create_curve_set(list(r = X$r,
-                                                    obs = obs[,i],
-                                                    sim_m = sim[,i,]))
-  }
   switch(typeone,
          fwer = {
            res <- do.call(global_envelope_test,
