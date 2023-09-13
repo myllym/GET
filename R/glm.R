@@ -413,7 +413,6 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
   time0 <- proc.time()
   typeone <- check_typeone(typeone, missing(typeone))
   use.dummy.coef <- is.logical(contrasts)
-  #fast != FALSE && fast != "mlm" &&
   if(all(sapply(factors, Negate(is.factor)))) {
     use.dummy.coef <- FALSE # No factors, no need for dummy.coef
   }
@@ -425,14 +424,21 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
       clusterEvalQ(cl, { op <- options(contrasts = c("contr.sum", "contr.poly")) })
       on.exit({ clusterEvalQ(cl, { options(op) }) }, add=TRUE)
     }
-  } else {
-    if(isTRUE(fast)) {
-      fast <- "ne"
-    }
   }
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
                   curve_sets=curve_sets, factors=factors, fast=fast != FALSE)
+
+  if(isTRUE(fast)) {
+    if(use.dummy.coef || !is.null(lm.args)) {
+      if(length(X$dfs) == 1)
+        fast <- "mlm"
+      else
+        fast <- FALSE
+    } else {
+        fast <- "ne"
+    }
+  }
 
   if(use.dummy.coef && fast == "ne") {
     stop("contrasts should be NULL when using 'ne' method.")
@@ -441,7 +447,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
   nameinteresting <- labels_interesting(formula.full, formula.reduced)
 
   ylab <- expression(italic(hat(beta)[i](r)))
-  if(fast != "ne") {
+  if(fast == FALSE || fast=="mlm") {
     # setting that 'fun' is a function
     if(!contrasts) {
       genCoef <- genCoefmeans.m
