@@ -132,13 +132,6 @@ genCoefmeans.qr <- function(Y, As, nameinteresting) {
   effect.a
 }
 
-genCoefmeans.neCPP <- function(fit, res, perm, As) {
-  effect.a <- GETCPP::genCoefsGraphGLM(fit, res, perm, As)
-  effect.a <- t(effect.a)
-  dimnames(effect.a) <- list(NULL, rownames(As[[1]]))
-  effect.a
-}
-
 # If covariates are constant with respect to location,
 # use a multiple linear model (instead of multiple linear models)
 #' @importFrom stats lm
