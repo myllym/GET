@@ -378,7 +378,7 @@ graph.fanova <- function(nsim, curve_set, groups, typeone = c("fwer", "fdr"),
   # simulations by permuting to which groups the functions belong to
   sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)), simplify=FALSE)
 
-  csets <- sim2curse_sets(obs, sim, r)
+  csets <- sim2curve_sets(obs, sim, r)
   # labels for comparisons (rownames(sim) is the same as names(obs))
   complabels <- colnames(obs)
 

@@ -52,7 +52,7 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   list(Y=data.l[['Y']], dfs=dfs, r=r, Nfunc=Nfunc, nr=nr)
 }
 
-sim2curse_sets <- function(obs, sim, r) {
+sim2curve_sets <- function(obs, sim, r) {
   dn <- dimnames(sim[[1]])
   # sim <- simplify2array(sim, except=NULL) # except is only available starting from 4.2.0
   sim <- simplify2array(sim)
@@ -549,7 +549,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
   if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args))
   else sim <- parLapply(cl, 1:nsim, loopfun2)
   time2 <- proc.time()
-  csets <- sim2curse_sets(obs, sim, X$r)
+  csets <- sim2curve_sets(obs, sim, X$r)
 
   complabels <- colnames(obs)
 
