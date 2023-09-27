@@ -427,6 +427,6 @@ fdr_envelope <- function(curve_sets, alpha = 0.05,
 print.fdr_envelope <- function(x, ...) {
   cat(attr(x, "method"), "based on", attr(x, "einfo")$nsim, "simulations:\n",
       "Number of rejected hypotheses:", sum(attr(x, "rej")), "\n",
-      "Number of accepted hypotheses:", length(x[['r']]) - sum(attr(x, "rej")), "\n",
-      "Total number of hypotheses:", length(x[['r']]), "\n")
+      "Number of accepted hypotheses:", length(attr(x, "rej")) - sum(attr(x, "rej")), "\n",
+      "Total number of hypotheses:", length(attr(x, "rej")), "\n")
 }
