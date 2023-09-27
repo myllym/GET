@@ -41,7 +41,7 @@ Suggests:
     locfit,
     mvtnorm,
     patchwork,
-    spatstat.geom, spatstat.explore, spatstat.model,
+    spatstat.geom, spatstat.explore, spatstat.model, spatstat.linnet,
     testthat,
     R.rsp
 Description: Implementation of global envelopes for a set of general d-dimensional vectors T
