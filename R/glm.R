@@ -320,18 +320,19 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #' \itemize{
 #' \item If all the covariates are continuous or \code{contrasts = NULL} and \code{lm.args = NULL}
 #' the regression coefficients are computed using the normal equation approach instead of using \code{\link{lm}}.
-#' \item If all the covariates are constant across the functions, i.e. they can be provided in the
+#' \item Otherwise, if all the covariates are constant across the functions, i.e. they can be provided in the
 #' argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
 #' the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
 #' The possible extra arguments passed in \code{lm.args} to \code{\link[stats]{lm}} must be of the form that
 #' \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
 #' needed.
-#' \item If some of the covariates vary across the space and there are user specified extra arguments given in
+#' \item Otherwise, if some of the covariates vary across the space and there are user specified extra arguments given in
 #' \code{lm.args}, then the implementation fits a linear model at each argument value of the functions using
 #' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{lm.args} are passed to \code{\link[stats]{lm}}
 #' for fitting each linear model.
 #' }
-#' By setting \code{fast = FALSE}, it is possible to use the slow version for any case. Usually this is not desired.
+#' By setting \code{fast = FALSE}, it is possible to use the slow version (third option)
+#' for any case. Usually this is not desired.
 #'
 #' @inheritParams graph.fanova
 #' @inheritParams GET.composite
@@ -347,6 +348,8 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #' @param factors A data frame of factors. An alternative way to specify factors when they
 #' are constant for all argument values of the functions. The number of rows of the data frame should be equal
 #' to the number of curves. Each column should specify the values of a factor.
+#' @param contrasts Logical or NULL. FALSE, TRUE and NULL specify the three test functions
+#' as described in description part of this help file.
 #' @param lm.args A named list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @param mc.args A named list of additional arguments to be passed to \code{\link{mclapply}}.
