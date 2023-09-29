@@ -17,7 +17,7 @@ frank.flm(
   mc.cores = 1,
   mc.args = NULL,
   cl = NULL,
-  method = c("best", "simple", "mlm", "complex", "lm")
+  method = c("best", "mlm", "lm", "ne")
 )
 }
 \arguments{
@@ -93,26 +93,21 @@ model the interesting factors whose effects are under investigation.
 
 There are different versions of the implementation depending on the application.
 \itemize{
-\item If all the covariates are constant across the functions, i.e. they can be provided in the
-argument \code{factors}, and there are no extra arguments given by the user in \code{lm.args}, then a
-fast implementation is used to directly compute the F-statistics.
+\item If there are no extra arguments given by the user in \code{lm.args}, then a
+fast implementation by solving the normal equations is used to directly compute the F-statistics.
 \item If all the covariates are constant across the functions, but there are some extra arguments,
 then a linear model is fitted separately by least-squares estimation to
 the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
 The possible extra arguments passed in \code{lm.args} to \code{\link[stats]{lm}} must be of the form that
 \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
 needed.
-\item If some of the covariates vary across the space, i.e. they are provided in the list of curve sets in
-the argument \code{curve_sets} together with the dependent functions, but there are no extra arguments given
-by the user in \code{lm.args}, there is a rather fast implementation of the F-value calculation (which does not
-use \code{\link[stats]{lm}}).
 \item If some of the covariates vary across the space and there are user specified extra arguments given in
 \code{lm.args}, then the implementation fits a linear model at each argument value of the functions using
 \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{lm.args} are passed to \code{\link[stats]{lm}}
 for fitting each linear model.
 }
 By default the fastest applicable method is used. This can be changed by setting \code{method} argument.
-The cases above correspond to "simple", "mlm", "complex" and "lm". Changing the default can be useful for
+The cases above correspond to "ne", "mlm" and "lm". Changing the default can be useful for
 checking the validity of the implementation.
 }
 \examples{

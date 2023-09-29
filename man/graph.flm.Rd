@@ -46,8 +46,8 @@ Also \code{\link[fda.usc]{fdata}} objects allowed.}
 are constant for all argument values of the functions. The number of rows of the data frame should be equal
 to the number of curves. Each column should specify the values of a factor.}
 
-\item{contrasts}{Logical. FALSE and TRUE specify the two test functions as described in
-description part of this help file.}
+\item{contrasts}{Logical or NULL. FALSE, TRUE and NULL specify the three test functions
+as described in description part of this help file.}
 
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
@@ -99,29 +99,33 @@ The implementation to find the coefficients of the interesting factors is based 
 
 The regression coefficients serve as test functions in the graphical functional GLM.
 For a continuous interesting factor, the test function is its regression coefficient across the
-functional domain. For a discrete factor, there are two possibilities that are controlled by
+functional domain. For a discrete factor, there are three possibilities that are controlled by
 the arguments \code{contrasts}. If \code{contrasts = FALSE}, then the test statistic is
 the function/long vector where the coefficients related to all levels of the factor are joined
 together. If \code{contrasts = TRUE}, then the differences between the same coefficients are
 considered instead. Given the coefficients in a specific order that is obtained through the use
 of \code{\link{lm}} and \code{\link{dummy.coef}}, the differences are taken for couples i and j
 where i < j and reducing j from i (e.g. for three groups 1,2,3, the constrasts are 1-2, 1-3, 2-3).
+If \code{contrasts = NULL} the coefficients given by \code{\link{lm}} are used directly.
 
 There are different versions of the implementation depending on the application.
 Given that the argument \code{fast} is TRUE, then
 \itemize{
-\item If all the covariates are constant across the functions, i.e. they can be provided in the
+\item If all the covariates are continuous or \code{contrasts = NULL} and \code{lm.args = NULL}
+the regression coefficients are computed using the normal equation approach instead of using \code{\link{lm}}.
+\item Otherwise, if all the covariates are constant across the functions, i.e. they can be provided in the
 argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
 the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
 The possible extra arguments passed in \code{lm.args} to \code{\link[stats]{lm}} must be of the form that
 \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
 needed.
-\item If some of the covariates vary across the space and there are user specified extra arguments given in
+\item Otherwise, if some of the covariates vary across the space and there are user specified extra arguments given in
 \code{lm.args}, then the implementation fits a linear model at each argument value of the functions using
 \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{lm.args} are passed to \code{\link[stats]{lm}}
 for fitting each linear model.
 }
-By setting \code{fast = FALSE}, it is possible to use the slow version for any case. Usually this is not desired.
+By setting \code{fast = FALSE}, it is possible to use the slow version (third option)
+for any case. Usually this is not desired.
 }
 \examples{
 data("rimov")
