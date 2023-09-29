@@ -1,0 +1,7 @@
+Changes in GET 0.5
+
+- Faster versions of graph.flm and frank.flm.
+- Added new option contrasts = NULL to graph.flm.
+- New vignette on HotSpots added.
+- Add argument triangineq for fclustering (to allow faster computation, when it is fine not to check the triangineq condition).
+- Other minor changes
