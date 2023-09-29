@@ -26,15 +26,23 @@ vsum <- function(x) if (is.matrix(x)) colSums(x) else x
 #' @importFrom stats var
 vvar <- function(x) if (is.matrix(x)) apply(x, 2, stats::var) else 0*x
 
-groupmeans <- function(x, groups) t(sapply(levels(groups), function(g) vmean(x[groups==g,])))
-
-groupvar <- function(x, groups) t(sapply(levels(groups), function(g) vvar(x[groups==g,])))
+groupstat <- function(x, groups, fun) {
+  ng <- nlevels(groups)
+  lev <- levels(groups)
+  y <- matrix(NA, ng, dim(x)[2])
+  for(i in 1:ng) {
+    g <- lev[i]
+    y[i,] <- fun(x[groups==g,,drop=FALSE])
+  }
+  rownames(y) <- lev
+  y
+}
+groupmeans <- function(x, groups) groupstat(x, groups, vmean)
+groupvar <- function(x, groups) groupstat(x, groups, vvar)
+groupSX <- function(x, groups) groupstat(x, groups, vsum)
+groupSXX <- function(x, groups) groupstat(x, groups, function(x) vsum(x^2))
 
 groupn <- function(groups) sapply(levels(groups), function(g) sum(groups == g))
-
-groupSX <- function(x, groups) t(sapply(levels(groups), function(g) vsum(x[groups==g,])))
-
-groupSXX <- function(x, groups) t(sapply(levels(groups), function(g) vsum(x[groups==g,]^2)))
 
 grouperror <- function(x, groups) groupvar(x, groups) / groupn(groups)
 
@@ -368,16 +376,12 @@ graph.fanova <- function(nsim, curve_set, groups, typeone = c("fwer", "fdr"),
 
   obs <- fun(x, groups)
   # simulations by permuting to which groups the functions belong to
-  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)), simplify = "array")
+  sim <- replicate(nsim, fun(x, sample(groups, size=length(groups), replace=FALSE)), simplify=FALSE)
+
+  csets <- sim2curve_sets(obs, sim, r)
   # labels for comparisons (rownames(sim) is the same as names(obs))
   complabels <- colnames(obs)
 
-  csets <- NULL
-  for(i in 1:ncol(obs)) {
-    csets[[complabels[i]]] <- create_curve_set(list(r = r,
-                                        obs = obs[,i],
-                                        sim_m = sim[,i,]))
-  }
   switch(typeone,
          fwer = {
            res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)

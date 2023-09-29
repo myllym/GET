@@ -52,6 +52,26 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
   list(Y=data.l[['Y']], dfs=dfs, r=r, Nfunc=Nfunc, nr=nr)
 }
 
+sim2curve_sets <- function(obs, sim, r) {
+  dn <- dimnames(sim[[1]])
+  # sim <- simplify2array(sim, except=NULL) # except is only available starting from 4.2.0
+  sim <- simplify2array(sim)
+  if(is.null(dimnames(sim))) {
+    dim(sim) <- c(1,1,length(sim))
+    dimnames(sim) <- c(dn, list(NULL))
+  }
+  complabels <- colnames(obs)
+
+  csets <- NULL
+  for(i in 1:ncol(obs)) {
+    simi <- array(sim[,i,], dim=dim(sim)[c(1,3)]) # Extract the slice even if some dimensions are 1
+    csets[[complabels[i]]] <- create_curve_set(list(r = r,
+                                                    obs = obs[,i],
+                                                    sim_m = simi))
+  }
+  csets
+}
+
 # Regress the given data (true or permuted) against the full model and
 # get an effect of interest at all r values in a matrix.
 # @param Y True or permuted values of Y inserted to dfs.
@@ -61,22 +81,55 @@ flm.checks <- function(nsim, formula.full, formula.reduced, curve_sets, factors 
 #' @importFrom stats dummy.coef
 genCoefmeans.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
   # If covariates are constant with respect to location
-  if(length(dfs) == 1) return(genCoefmeans.mlm(Y, dfs[[1]], formula.full, nameinteresting, ...))
   nr <- ncol(Y)
-  effect.a <- sapply(1:nr, function(i) {
+  if(length(dfs) == 1 && nr > 1) return(genCoefmeans.mlm(Y, dfs[[1]], formula.full, nameinteresting, ...))
+  for(i in 1:nr) {
     df <- dfs[[i]]
     df$Y <- Y[,i]
     M.full <- stats::lm(formula.full, data=df, ...)
     allcoef <- stats::dummy.coef(M.full)
-    unlist(allcoef[nameinteresting])
-  })
-  # Special case for when there is only 1 coefficient of interest
-  if(is.vector(effect.a)) {
-    name <- names(effect.a)[1]
-    dim(effect.a) <- c(length(effect.a), 1)
-    dimnames(effect.a) = list(NULL, name)
-    effect.a
-  } else t(effect.a)
+    coef <- unlist(allcoef[nameinteresting])
+    if(i == 1) { effect.a <- matrix(NA, nr, length(coef)) }
+    effect.a[i,] <- coef
+  }
+  dimnames(effect.a) <- list(NULL, names(coef))
+  effect.a
+}
+
+# Use the normal equations approach to solve the linear regression problem.
+# Although this is fast, it may be inaccurate in some circumstances.
+genCoefmeans.ne <- function(Y, As) {
+  nr <- ncol(Y)
+  effect.a <- matrix(NA, nr, dim(As[[1]])[1])
+  # If covariates are constant with respect to location
+  if(length(As) == 1) {
+    effect.a[] <- t(As[[1]] %*% Y)
+  } else {
+    for( i in 1:nr) {
+      # df <- dfs[[i]]
+      # df$Y <- 0
+      # X <- model.matrix(formula.full, data=df)
+      # A <- (solve(t(X)%*%X) %*% t(X))[nameinteresting,,drop=FALSE]
+      effect.a[i,] <- As[[i]] %*% Y[,i]
+    }
+  }
+  dimnames(effect.a) <- list(NULL, rownames(As[[1]]))
+  effect.a
+}
+
+genCoefmeans.qr <- function(Y, As, nameinteresting) {
+  nr <- ncol(Y)
+  effect.a <- matrix(NA, nr, length(nameinteresting))
+  # If covariates are constant with respect to location
+  if(length(As) == 1) {
+    effect.a[] <- t(solve(As[[1]], Y)[nameinteresting,])
+  } else {
+    for( i in 1:nr) {
+      effect.a[i,] <- solve(As[[i]], Y[,i,drop=FALSE])[nameinteresting,1]
+    }
+  }
+  dimnames(effect.a) <- list(NULL, nameinteresting)
+  effect.a
 }
 
 # If covariates are constant with respect to location,
@@ -87,8 +140,11 @@ genCoefmeans.m <- function(Y, dfs, formula.full, nameinteresting, ...) {
 genCoefmeans.mlm <- function(Y, df, formula.full, nameinteresting, ...) {
   df$Y <- Y
   M.full <- stats::lm(formula.full, data=df, ...)
+  nr <- ncol(Y)
   if(!length(M.full$xlevels)) { # Only continuous factors in the model
-    effect.a <- t(coef(M.full)[nameinteresting,, drop=FALSE])
+    effect.a <- matrix(NA, nr, length(nameinteresting))
+    dimnames(effect.a) <- list(NULL, nameinteresting)
+    effect.a[] <- t(coef(M.full)[nameinteresting,, drop=FALSE])
   } else {
     allcoef <- stats::dummy.coef(M.full)
     effect.a <- do.call(cbind, allcoef[nameinteresting])
@@ -170,8 +226,8 @@ genFvaluesMLM <- function(Y, df, formula.full, formula.reduced, ...) {
 # Compute F-statistics for several pixels at a time in the simplest case of no extra arguments
 # and no curve sets in factors.
 #' @importFrom stats lm df.residual
-genFvaluesSimple <- function(Y, df, formula.full, formula.reduced, partsize=200, ...) {
-  df$Y <- Y[,1]
+genFvaluesSimplePreCalc <- function(Y, df, formula.full, formula.reduced, partsize=256) {
+  df$Y <- 0 #Y[,1]
   fx <- function(fit) {
     X <- fit$x
     list(X1 = X %*% solve(t(X)%*%X), X2 = t(X), dof=df.residual(fit))
@@ -180,10 +236,38 @@ genFvaluesSimple <- function(Y, df, formula.full, formula.reduced, partsize=200,
   x.red <- fx(lm(formula.reduced, df, model=FALSE, x=TRUE))
 
   nr <- ncol(Y)
-  Fstat <- numeric(nr)
-
   nparts <- ceiling(nr/partsize)
   i0 <- round(seq(1, nr+1, length=nparts+1))
+
+  list(full=x.full, red=x.red, i0=i0)
+}
+genFvaluesSimplePreCalced <- function(Y, precalc) {
+  if(length(precalc) == 1) return(genFvaluesSimplePreCalcedBatched(Y, precalc[[1]]))
+
+  nr <- ncol(Y)
+  Fstat <- numeric(nr)
+
+  for(i in 1:nr) {
+    x.full <- precalc[[i]][['full']]
+    x.red <- precalc[[i]][['red']]
+    y <- Y[,i]
+    rssf <- sum((y - x.full[[1]] %*% (x.full[[2]] %*% y))^2)
+    rssr <- sum((y - x.red[[1]] %*% (x.red[[2]] %*% y))^2)
+
+    Fstat[i] <- (rssf - rssr)/(x.full[[3]] - x.red[[3]])/(rssf/x.full[[3]])
+  }
+  Fstat
+}
+
+genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
+  x.full <- precalc[['full']]
+  x.red <- precalc[['red']]
+  i0 <- precalc[['i0']]
+
+  nr <- ncol(Y)
+  Fstat <- numeric(nr)
+
+  nparts <- length(i0)-1
   for(i in 1:nparts) {
     ii <- i0[i]:(i0[i+1]-1)
     y <- Y[,ii]
@@ -193,59 +277,6 @@ genFvaluesSimple <- function(Y, df, formula.full, formula.reduced, partsize=200,
     Fstat[ii] <- (rssf - rssr)/(x.full[[3]] - x.red[[3]])/(rssf/x.full[[3]])
   }
   Fstat
-}
-
-# Parameter estimate b for lm
-bcoef <- function(Y, X) {
-  solve(a = t(X)%*%X, b = t(X)%*%Y)
-}
-
-# Y = observed data
-# X1 = design matrix of the full model
-# X2 = design matrix of the reduced model
-# This F is the same as obtained by (but faster):
-# M.full <- stats::lm(formula = formula.full, data = df, ...)
-# M.reduced <- stats::lm(formula = formula.reduced, data = df, ...)
-# Anova.res <- stats::anova(M.reduced, M.full); Anova.res$F[2]
-Fvalue <- function(Y, X1, X2) {
-  # Parameter estimates b
-  b1 <- bcoef(Y, X1)
-  b2 <- bcoef(Y, X2)
-  # Errors
-  e1 <- c(Y - X1%*%b1)
-  e2 <- c(Y - X2%*%b2)
-  # F-statistic
-  (length(Y)-length(b1))*(sum(e2^2)-sum(e1^2))/((length(b1)-length(b2))*sum(e1^2))
-}
-
-# General F-values from lm-model together with the design matrices
-#' @importFrom stats lm
-#' @importFrom stats anova
-genFvaluesObs <- function(dfs, formula.full, formula.reduced) {
-  nr <- length(dfs)
-  Fvalues <- vector(length=nr)
-  x.full <- x.reduced <- vector("list", nr)
-  for(i in 1:nr) {
-    df <- dfs[[i]]
-    # Call lm to obtain the design matrices (x)
-    x.full[[i]] <- stats::lm(formula = formula.full, data = df, x = TRUE)$x
-    x.reduced[[i]] <- stats::lm(formula = formula.reduced, data = df, x = TRUE)$x
-    Fvalues[i] <- Fvalue(Y = df$Y, X1 = x.full[[i]], X2 = x.reduced[[i]])
-  }
-  list(Fvalues = Fvalues, full.X = x.full, reduced.X = x.reduced)
-}
-
-# General F-value from lm-model
-# Y = data, the dependent
-# designX.full = design matrix of the full model
-# designX.reduced = design matrix of the reduced model
-genFvaluesSim <- function(Y, designX.full, designX.reduced) {
-  nr <- ncol(Y)
-  Fvalues <- vector(length=nr)
-  for(i in 1:nr) {
-    Fvalues[i] <- Fvalue(Y = Y[,i], X1 = designX.full[[i]], X2 = designX.reduced[[i]])
-  }
-  Fvalues
 }
 
 #' Graphical functional GLM
@@ -275,17 +306,20 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #'
 #' The regression coefficients serve as test functions in the graphical functional GLM.
 #' For a continuous interesting factor, the test function is its regression coefficient across the
-#' functional domain. For a discrete factor, there are two possibilities that are controlled by
+#' functional domain. For a discrete factor, there are three possibilities that are controlled by
 #' the arguments \code{contrasts}. If \code{contrasts = FALSE}, then the test statistic is
 #' the function/long vector where the coefficients related to all levels of the factor are joined
 #' together. If \code{contrasts = TRUE}, then the differences between the same coefficients are
 #' considered instead. Given the coefficients in a specific order that is obtained through the use
 #' of \code{\link{lm}} and \code{\link{dummy.coef}}, the differences are taken for couples i and j
 #' where i < j and reducing j from i (e.g. for three groups 1,2,3, the constrasts are 1-2, 1-3, 2-3).
+#' If \code{contrasts = NULL} the coefficients given by \code{\link{lm}} are used directly.
 #'
 #' There are different versions of the implementation depending on the application.
 #' Given that the argument \code{fast} is TRUE, then
 #' \itemize{
+#' \item If all the covariates are continuous or \code{contrasts = NULL} and \code{lm.args = NULL}
+#' the regression coefficients are computed using the normal equation approach instead of using \code{\link{lm}}.
 #' \item If all the covariates are constant across the functions, i.e. they can be provided in the
 #' argument \code{factors}, then a linear model is fitted separately by least-squares estimation to
 #' the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
@@ -329,7 +363,7 @@ genFvaluesSim <- function(Y, designX.full, designX.reduced) {
 #' Myllymäki, M and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
 #'
 #' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
-#' @importFrom stats lm
+#' @importFrom stats lm model.matrix
 #' @importFrom stats predict.lm
 #' @importFrom stats dummy.coef
 #' @importFrom parallel mclapply
@@ -399,32 +433,53 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
                       contrasts = FALSE, savefuns = FALSE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
                       fast = TRUE) {
+  time0 <- proc.time()
   typeone <- check_typeone(typeone, missing(typeone))
-  # Set up the contrasts
-  op <- options(contrasts = c("contr.sum", "contr.poly"))
-  on.exit(options(op))
-  if(!is.null(cl)) {
-    clusterEvalQ(cl, { op <- options(contrasts = c("contr.sum", "contr.poly")) })
-    on.exit({ clusterEvalQ(cl, { options(op) }) }, add=TRUE)
+  use.dummy.coef <- is.logical(contrasts)
+  if(all(sapply(factors, Negate(is.factor)))) {
+    use.dummy.coef <- FALSE # No factors, no need for dummy.coef
+  }
+  if(use.dummy.coef) {
+    # Set up the contrasts
+    op <- options(contrasts = c("contr.sum", "contr.poly"))
+    on.exit(options(op))
+    if(!is.null(cl)) {
+      clusterEvalQ(cl, { op <- options(contrasts = c("contr.sum", "contr.poly")) })
+      on.exit({ clusterEvalQ(cl, { options(op) }) }, add=TRUE)
+    }
   }
   # Preliminary checks and formulation of the data to suitable form for further processing
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
-                  curve_sets=curve_sets, factors=factors, fast=fast)
+                  curve_sets=curve_sets, factors=factors, fast=fast != FALSE)
+
+  if(isTRUE(fast)) {
+    if(use.dummy.coef || !is.null(lm.args)) {
+      if(length(X$dfs) == 1)
+        fast <- "mlm"
+      else
+        fast <- FALSE
+    } else {
+        fast <- "ne"
+    }
+  }
+
+  if(use.dummy.coef && fast == "ne") {
+    stop("contrasts should be NULL when using 'ne' method.")
+  }
 
   nameinteresting <- labels_interesting(formula.full, formula.reduced)
 
-  # setting that 'fun' is a function
-  if(!contrasts) {
-    genCoef <- genCoefmeans.m
-    ylab <- expression(italic(hat(beta)[i](r)))
+  ylab <- expression(italic(hat(beta)[i](r)))
+  if(fast == FALSE || fast=="mlm") {
+    # setting that 'fun' is a function
+    if(!contrasts) {
+      genCoef <- genCoefmeans.m
+    }
+    else {
+      genCoef <- genCoefcontrasts.m
+      ylab <- expression(italic(hat(beta)[i](r)-hat(beta)[j](r)))
+    }
   }
-  else {
-    genCoef <- genCoefcontrasts.m
-    ylab <- expression(italic(hat(beta)[i](r)-hat(beta)[j](r)))
-  }
-
-  # Fit the full model to the data and obtain the coefficients
-  obs <- do.call(genCoef, c(list(X$Y, X$dfs, formula.full, nameinteresting), lm.args))
 
   #-- Freedman-Lane procedure
   # Fit the reduced model at each argument value to get the fitted values and residuals
@@ -434,6 +489,10 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
     fit <- do.call(lm, c(list(formula.reduced, data=df, model=FALSE), lm.args))
     fitted.m <- fit$fitted.values
     res.m <- fit$residuals
+    if(is.vector(fitted.m)) {
+      fitted.m <- matrix(fitted.m, ncol=1)
+      res.m <- matrix(res.m, ncol=1)
+    }
     fit <- NULL
   } else {
     loopfun1 <- function(i) {
@@ -445,27 +504,55 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
     fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
     res.m <- sapply(mclapply_res, function(x) x$res.m)
   }
+
+  obs <- NULL
+  if(fast %in% c("ne", "qr")) {
+    df <- X$dfs[[1]]
+    df$Y <- 0
+    X1 <- model.matrix(formula.full, data=df)
+    X0 <- model.matrix(formula.reduced, data=df)
+    nameinteresting <- setdiff(colnames(X1), colnames(X0))
+
+    As <- lapply(X$dfs, function(df) {
+      df$Y <- 0
+      X <- model.matrix(formula.full, data=df)
+      # This should have been already checked, but just to make sure
+      if(!all(nameinteresting %in% colnames(X))) stop("'ne' doesn't work with factors.")
+      if(fast=="qr")
+        A <- qr(X)
+      else
+        A <- (solve(t(X)%*%X) %*% t(X))[nameinteresting,,drop=FALSE]
+      A
+    })
+    if(fast == "ne") {
+      genCoef <- function(Y, dfs, formula.full, nameinteresting) genCoefmeans.ne(Y, As)
+    } else {
+      genCoef <- function(Y, dfs, formula.full, nameinteresting) genCoefmeans.qr(Y, As, nameinteresting)
+    }
+  }
+
+  # Fit the full model to the data and obtain the coefficients
+  if(is.null(obs))
+    obs <- do.call(genCoef, c(list(X$Y, X$dfs, formula.full, nameinteresting), lm.args))
+
   # Simulations by permuting the residuals + calculate the coefficients
   Yperm <- function() { # Permutation
     permutation <- sample(1:nrow(res.m), size=nrow(res.m), replace=FALSE)
     # Permute the residuals (rows in res.m) and create new 'y'
     fitted.m + res.m[permutation, ]
   }
+  time1 <- proc.time()
   loopfun2 <- function(i) {
     # Regress the permuted data against the full model and get a new effect of interest
     do.call(genCoef, c(list(Yperm(), X$dfs, formula.full, nameinteresting), lm.args))
   }
   if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args))
   else sim <- parLapply(cl, 1:nsim, loopfun2)
-  sim <- simplify2array(sim)
+  time2 <- proc.time()
+  csets <- sim2curve_sets(obs, sim, X$r)
+
   complabels <- colnames(obs)
 
-  csets <- NULL
-  for(i in 1:ncol(obs)) {
-    csets[[complabels[i]]] <- create_curve_set(list(r = X$r,
-                                                    obs = obs[,i],
-                                                    sim_m = sim[,i,]))
-  }
   switch(typeone,
          fwer = {
            res <- do.call(global_envelope_test,
@@ -481,6 +568,8 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
   res <- envelope_set_labs(res, ylab=ylab)
   attr(res, "call") <- match.call()
   if(savefuns) attr(res, "simfuns") <- csets
+  time3 <- proc.time()
+  attr(res, "runtime") <- list(pre=time1-time0, teststatistics=time2-time1, envelope=time3-time2)
   res
 }
 
@@ -509,26 +598,21 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
 #'
 #' There are different versions of the implementation depending on the application.
 #' \itemize{
-#' \item If all the covariates are constant across the functions, i.e. they can be provided in the
-#' argument \code{factors}, and there are no extra arguments given by the user in \code{lm.args}, then a
-#' fast implementation is used to directly compute the F-statistics.
+#' \item If there are no extra arguments given by the user in \code{lm.args}, then a
+#' fast implementation by solving the normal equations is used to directly compute the F-statistics.
 #' \item If all the covariates are constant across the functions, but there are some extra arguments,
 #' then a linear model is fitted separately by least-squares estimation to
 #' the data at each argument value of the functions fitting a multiple linear model by \code{\link[stats]{lm}}.
 #' The possible extra arguments passed in \code{lm.args} to \code{\link[stats]{lm}} must be of the form that
 #' \code{\link[stats]{lm}} accepts for fitting a multiple linear model. In the basic case, no extra arguments are
 #' needed.
-#' \item If some of the covariates vary across the space, i.e. they are provided in the list of curve sets in
-#' the argument \code{curve_sets} together with the dependent functions, but there are no extra arguments given
-#' by the user in \code{lm.args}, there is a rather fast implementation of the F-value calculation (which does not
-#' use \code{\link[stats]{lm}}).
 #' \item If some of the covariates vary across the space and there are user specified extra arguments given in
 #' \code{lm.args}, then the implementation fits a linear model at each argument value of the functions using
 #' \code{\link[stats]{lm}}, which can be rather slow. The arguments \code{lm.args} are passed to \code{\link[stats]{lm}}
 #' for fitting each linear model.
 #' }
 #' By default the fastest applicable method is used. This can be changed by setting \code{method} argument.
-#' The cases above correspond to "simple", "mlm", "complex" and "lm". Changing the default can be useful for
+#' The cases above correspond to "ne", "mlm" and "lm". Changing the default can be useful for
 #' checking the validity of the implementation.
 #'
 #' @inheritParams graph.flm
@@ -577,62 +661,69 @@ frank.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
                       curve_sets, factors = NULL,
                       savefuns = TRUE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1, mc.args = NULL, cl = NULL,
-                      method = c("best", "simple", "mlm", "complex", "lm")) {
+                      method = c("best", "mlm", "lm", "ne")) {
+  time0 <- proc.time()
   typeone <- check_typeone(typeone, missing(typeone))
   # Preliminary checks and formulation of the data to suitable form for further processing
   method <- match.arg(method)
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
-                   curve_sets=curve_sets, factors=factors, fast=method %in% c("mlm", "simple", "best"))
+                   curve_sets=curve_sets, factors=factors, fast=method != "lm")
 
   if(method == "best") {
     method <- if(length(lm.args) > 0) {
       if(length(X$dfs) > 1) "lm"
       else "mlm"
     } else {
-      if(length(X$dfs) > 1) "complex"
-      else "simple"
+      method <- "ne"
     }
   }
   if(length(lm.args) > 0) {
     # This is only a warning because the user might know that the extra args in lm.args are ok.
-    if(method %in% c("simple", "complex")) warning("Method ", method, " doesn't work with extra arguments (lm.args).")
+    if(method %in% c("ne")) warning("Method ", method, " doesn't work with extra arguments (lm.args).")
   }
-  if(length(X$dfs) > 1 && method %in% c("mlm", "simple")) {
+  if(length(X$dfs) > 1 && method %in% c("mlm")) {
     stop("Curvesets in factors not allowed with method='", method, "'")
   }
   # Calculate the F-statistic for the data, and, if method="complex", obtain also the design matrices
   obs <- switch(method,
-                complex=genFvaluesObs(X$dfs, formula.full, formula.reduced),
-                simple=genFvaluesSimple(X$Y, X$dfs[[1]], formula.full, formula.reduced),
+                ne=NULL,
                 lm=,
                 mlm=do.call(genFvaluesLM, c(list(X$Y, X$dfs, formula.full, formula.reduced), lm.args)))
   # Freedman-Lane procedure
   # Fit the reduced model at each argument value to get fitted values and residuals
-  if(method %in% c("mlm", "simple")) {
+  if(method %in% c("mlm")) {
     df <- X$dfs[[1]]
     df$Y <- X$Y
     fit <- do.call(lm, c(list(formula.reduced, data=df, model=FALSE), lm.args))
     fitted.m <- fit$fitted.values
     res.m <- fit$residuals
     fit <- NULL
-  } else {
-    if(method == "complex") {
-      loopfun1 <- function(i) {
-        b <- bcoef(Y = X$dfs[[i]]$Y, X = obs$reduced.X[[i]])
-        fit <- obs$reduced.X[[i]]%*%b
-        list(fitted.m = fit, res.m = X$dfs[[i]]$Y - fit)
-      }
-    } else { # method == "lm"
-      loopfun1 <- function(i) {
-        mod.red <- do.call(lm, c(list(formula.reduced, data=X$dfs[[i]]), lm.args))
-        list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
-      }
+  } else if(method=="lm") {
+    loopfun1 <- function(i) {
+      mod.red <- do.call(lm, c(list(formula.reduced, data=X$dfs[[i]]), lm.args))
+      list(fitted.m = mod.red$fitted.values, res.m = mod.red$residuals)
     }
     if(is.null(cl)) mclapply_res <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args))
     else mclapply_res <- parLapply(cl, 1:X$nr, loopfun1)
     fitted.m <- sapply(mclapply_res, function(x) x$fitted.m)
     res.m <- sapply(mclapply_res, function(x) x$res.m)
+  } else if(method %in% c("ne")) {
+    precalc <- lapply(seq_along(X$dfs), function(i) {
+      genFvaluesSimplePreCalc(X$Y, X$dfs[[i]], formula.full, formula.reduced)
+      })
+    fitted.m <- matrix(nrow=dim(X$Y)[1], ncol=dim(X$Y)[2])
+    res.m <- matrix(nrow=dim(X$Y)[1], ncol=dim(X$Y)[2])
+    for(i in 1:X$nr) {
+      ii <- min(i, length(X$dfs))
+      y <- X$Y[,i]
+      x.red <- precalc[[ii]][['red']]
+      fit <- x.red[[1]] %*% (x.red[[2]] %*% y)
+      fitted.m[,i] <- fit
+      res.m[,i] <- y - fit
+    }
+    obs <- genFvaluesSimplePreCalced(X$Y, precalc)
   }
+
   # Original data is not needed anymore
   X$Y <- NULL
   # Simulations by permuting the residuals + F-values for each permutation
@@ -641,17 +732,17 @@ frank.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
     # Permute the residuals (rows in res.m) and create new 'y'
     fitted.m + res.m[permutation, ]
   }
+  time1 <- proc.time()
   # Regress the permuted data against the full model and get a new effect of interest
   loopfun2 <- switch(method,
                      lm=,
                      mlm=function(i) do.call(genFvaluesLM, c(list(Yperm(), X$dfs, formula.full, formula.reduced), lm.args)),
-                     complex=function(i) genFvaluesSim(Yperm(), obs$full.X, obs$reduced.X),
-                     simple=function(i) genFvaluesSimple(Yperm(), X$dfs[[1]], formula.full, formula.reduced))
+                     ne=function(i) genFvaluesSimplePreCalced(Yperm(), precalc))
 
   if(is.null(cl)) sim <- do.call(mclapply, c(list(X=1:nsim, FUN=loopfun2, mc.cores=mc.cores), mc.args))
   else sim <- parLapply(cl, 1:nsim, loopfun2)
+  time2 <- proc.time()
   sim <- simplify2array(sim)
-  if(method == "complex") obs <- obs$Fvalues
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
   if(savefuns=="return") return(cset)
@@ -664,5 +755,7 @@ frank.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
          })
   res <- envelope_set_labs(res, ylab = expression(italic(F(r))))
   if(savefuns) attr(res, "simfuns") <- cset
+  time3 <- proc.time()
+  attr(res, "runtime") <- list(pre=time1-time0, teststatistics=time2-time1, envelope=time3-time2)
   res
 }
