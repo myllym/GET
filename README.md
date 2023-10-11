@@ -77,12 +77,15 @@ All vignettes are also available at the package webpage https://cran.r-project.o
 
 ## Branches
 
-Currently two branches are provided in the development version. The main branch of GET is called `master`.
+Currently three branches are provided in the development version. The main branch of GET is called `master`.
 
-The other branch is called `FDR` and it includes also the experimental FDR envelopes tested in
+The other branches are called `FDR` and `quantileregression`.
+The `FDR` branch includes also the experimental FDR envelopes tested in
 Mrkvička and Myllymäki (2023).
 The main branch includes the FDR envelopes which were found to have good performance in
 Mrkvička and Myllymäki (2023).
+The `quantileregression` branch includes implementation of the global quantile
+regression proposed in Mrkvička et al. (2023).
 
 
 ## References
@@ -137,3 +140,6 @@ Computational Statistics 37, 671--699.
 
 Mrkvička and Myllymäki (2023).
 False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7
+
+Mrkvička, T., Konstantinou, K., Kuronen, M. and Myllymäki, M. (2023).
+Global quantile regression. arXiv:2309.04746 [stat.ME] https://doi.org/10.48550/arXiv.2309.04746
