@@ -8,7 +8,7 @@ create_cr <- function(x, y, curveid, coverage=0.50, type="erl") {
 
   obs <- matrix(y, nrow = curve_len[1])
 
-  if(IsNfuncLargeEnough(Nfunc=ncol(obs), alpha=1-coverage)) {
+  if(IsNfuncTooSmall(Nfunc=ncol(obs), alpha=1-coverage)) {
     return(NULL)
     #return(data.frame(x=x, y=y, curveid=curveid))
   }
