@@ -1,6 +1,5 @@
-
 #' @importFrom stats ave
-create_cr <- function(x, y, curveid, coverage=0.95, type="erl") {
+create_cr <- function(x, y, curveid, coverage=0.50, type="erl") {
   y <- y[order(curveid, x)]
   curve_len <- stats::ave(curveid, curveid, FUN = length)
   if (!all(curve_len == curve_len[1])) {
@@ -9,8 +8,7 @@ create_cr <- function(x, y, curveid, coverage=0.95, type="erl") {
 
   obs <- matrix(y, nrow = curve_len[1])
 
-
-  if(ncol(obs) <= 20) {
+  if(IsNfuncLargeEnough(Nfunc=ncol(obs), alpha=1-coverage)) {
     return(NULL)
     #return(data.frame(x=x, y=y, curveid=curveid))
   }
@@ -36,7 +34,7 @@ create_cr <- function(x, y, curveid, coverage=0.95, type="erl") {
 #' @export
 StatCentralRegion <- ggproto("StatCentralRegion", Stat,
   compute_group = function(data, scales,
-                           coverage = 0.95,
+                           coverage = 0.50,
                            type = "erl") {
     cols_to_keep <- setdiff(names(data), c("x", "y", "curveid"))
     #rows_to_drop <- data$curveid %in% data$curveid[!is.finite(data$y)]
@@ -74,7 +72,7 @@ StatCentralRegion <- ggproto("StatCentralRegion", Stat,
 GeomCentralRegion <- ggproto("GeomCentralRegion", Geom,
   draw_panel = function(data, panel_params, coord,
                         na.rm = FALSE,
-                        coverage = 0.95,
+                        coverage = 0.50,
                         type = "erl",
                         filled=TRUE,
                         drawcenterline=TRUE) {
@@ -139,7 +137,6 @@ GeomCentralRegion <- ggproto("GeomCentralRegion", Geom,
   )
 )
 
-#
 #' @importFrom grid gList
 #' @importFrom ggplot2 Geom GeomRibbon GeomLine
 #' @importFrom grDevices grey.colors
@@ -229,9 +226,18 @@ GeomCentralRegionMulti <- ggproto("GeomCentralRegionMulti", Geom,
 
 #' Central region plot
 #'
-#' \code{geom_central_region} and \code{stat_central_region} can be used to plot \code{central_region} from
-#' data arranged in a \code{data.frame}.
+#' \code{geom_central_region} and \code{stat_central_region} can be used to compute
+#' and plot \code{central_region} from data arranged in a \code{data.frame}.
 #'
+#'
+#' Plots of central regions (global envelopes) with the specified \code{coverage}
+#' and \code{type} (see \code{\link{central_region}}).
+#' When splitting the set of functions to groups by aesthetics or facets, see
+#' examples, the central regions are constructed separately for each group,
+#' each having the specified \code{coverage}.
+#'
+#' If Nfunc*(1-coverage) < 1, where Nfunc is the number of functions/curves,
+#' the curves are plotted instead of any region.
 #'
 #' @section Aesthetics:
 #' \code{geom_central_region} requires \code{x}, \code{y} and \code{curveid}.
@@ -252,9 +258,10 @@ GeomCentralRegionMulti <- ggproto("GeomCentralRegionMulti", Geom,
 #'
 #' @inheritParams ggplot2::geom_ribbon
 #' @inheritParams central_region
-#' @param filled boolean Should the ribbon be filled?
-#' @param drawcenterline boolean Should the center line be drawn?
-#' @param colours colours for different coverage levels
+#' @param type The options and details for \code{type} are given in \code{\link{central_region}}.
+#' @param filled Boolean. Should the ribbon be filled?
+#' @param drawcenterline Boolean. Should the center line be drawn?
+#' @param colours Colours for different coverage levels
 #' @examples
 #' require("ggplot2")
 #' ## Generate some data
@@ -284,16 +291,22 @@ GeomCentralRegionMulti <- ggproto("GeomCentralRegionMulti", Geom,
 #' }
 #'
 #' ggplot(df) + geom_line(aes(x, y, group=i))
-#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i))
-#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i), filled=FALSE)
-#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i, col=g, fill=g))
-#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i, col=g), filled=FALSE)
-#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i, col=g2), filled=FALSE)
-#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i)) + facet_wrap(vars(g))
-#' ggplot(df[df$i < 10,]) + geom_central_region(aes(x=x, y=y, curveid=i))
+#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i), coverage=0.50)
+#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i), coverage=0.50, filled=FALSE)
+#' # Central regions for two groups as specified by 'g2'
+#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i, col=g2), coverage=0.90, filled=FALSE)
+#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i), coverage=0.90) + facet_wrap(vars(g2))
+#' \dontshow{
+#' # If nr. of functions < 20, then the functions are drawn; otherwise the 100*coverage% central region
+#' ggplot(df[df$i < 10,]) + geom_central_region(aes(x=x, y=y, curveid=i), coverage=0.90)
+#' # Central regions for two groups split by 'g'; <20 functions in the first group
+#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i, col=g, fill=g), coverage=0.90)
+#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i, col=g), coverage=0.90, filled=FALSE)
+#' }
 #'
 #' # Central regions with multiple coverage levels
-#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i), coverage=c(0.2,0.4,0.6))
+#' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i), coverage=c(0.2,0.4,0.6)) +
+#'   theme_minimal()
 #' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i), coverage=seq(0.1, 0.9, length=20),
 #'   colours=rainbow(20))
 #'
@@ -301,24 +314,24 @@ GeomCentralRegionMulti <- ggproto("GeomCentralRegionMulti", Geom,
 #' ggplot(df) + geom_central_region(aes(x=x, y=y+0.1*(g2=="B"),
 #'   curveid=i, col=as.factor(g2)), coverage=c(0.05, 0.2,0.4,0.6))
 #' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i),
-#'   coverage=c(0.05, 0.2,0.4,0.6)) + facet_wrap(vars(g))
+#'   coverage=c(0.05, 0.2,0.4,0.6)) + facet_wrap(vars(g2))
 #'
 #' # Using stat_central_region with geom_linerange and geom_rect
 #' ggplot(df) +
 #'   geom_linerange(aes(curveid=i, x=x, y=y, ymax=after_stat(ymax), ymin=after_stat(ymin),
-#'   group=g2, col=factor(g2)),
-#'                stat="central_region", position=position_dodge(0.01))
+#'                group=g2, col=factor(g2)),
+#'                stat="central_region", coverage = 0.90, position=position_dodge(0.01))
 #' ggplot(within(df, {x = x+0.004*(g2=="B")})) +
 #'   geom_rect(aes(curveid=i, x=x, y=y, xmax=after_stat(x), xmin=after_stat(x+0.004),
 #'               ymax=after_stat(ymax), ymin=after_stat(ymin), group=g2, fill=factor(g2)),
-#'           stat="central_region")
+#'               stat="central_region", coverage = 0.90)
 #' # Non-finite values are not supported
 #' ggplot(within(df, {y = ifelse(runif(length(y)) < 0.001, Inf, y)})) +
 #'   geom_central_region(aes(x=x, y=y, curveid=i))
 #' @export
 geom_central_region <- function(mapping = NULL, data = NULL, stat = "CentralRegion",
                         position = "identity", ...,
-                        coverage = 0.95,
+                        coverage = 0.50,
                         type = "erl",
                         filled = TRUE,
                         drawcenterline = TRUE,
@@ -354,7 +367,7 @@ geom_central_region <- function(mapping = NULL, data = NULL, stat = "CentralRegi
 #' @export
 stat_central_region <- function(mapping = NULL, data = NULL,
                                 position = "identity", ...,
-                                coverage = 0.95,
+                                coverage = 0.50,
                                 type = "erl",
                                 na.rm = FALSE,
                                 show.legend = NA, inherit.aes = TRUE) {
