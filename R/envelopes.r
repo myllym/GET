@@ -133,7 +133,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   T_0 <- get_T_0(curve_set, central=central)
 
   # Check reasonability of Nfunc vs alpha
-  if(any(Nfunc*alpha < 1-.Machine$double.eps^0.5))
+  if(IsNfuncLargeEnough(Nfunc, alpha))
     stop("Number of functions s is only ", Nfunc, ", but smallest alpha is ", min(alpha),
          ". So, s*alpha is ", Nfunc*min(alpha), ".", sep="")
 

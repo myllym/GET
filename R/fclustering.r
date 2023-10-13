@@ -269,7 +269,7 @@ plot.fclust <- function(x, plotstyle = c("marginal", "joined"), coverage = 0.5,
       for(i in 1:k) { # For all groups (within each set of curves)
         # Calculate the central regions for each cluster
         clusteri <- subset(csets[[j]], resultpamT==i)
-        if(nis[i] > 3) { # At least 3 functions
+        if(nis[i] > 3 && IsNfuncLargeEnough(Nfunc=nis[i], alpha=1-coverage)) { # At least 3 functions
           cr[[i]] <- central_region(clusteri, type=type, coverage=coverage)
         }
         else {
@@ -285,7 +285,7 @@ plot.fclust <- function(x, plotstyle = c("marginal", "joined"), coverage = 0.5,
     cr <- vector("list", k)
     ff <- vector("list", k)
     for(i in 1:k) { # Calculate the central regions for each cluster
-      if(nis[i] > 3) {
+      if(nis[i] > 3 && IsNfuncLargeEnough(Nfunc=nis[i], alpha=1-coverage)) {
         clusteri <- lapply(csets, FUN=subset, subset=resultpamT==i) # Curves for the group i
         cr[[i]] <- central_region(clusteri, type=type, coverage=coverage, nstep=nstep) # Joint central region for the group i
         # Redefine the central curve to be the medoid
