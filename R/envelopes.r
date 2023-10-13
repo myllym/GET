@@ -1,3 +1,7 @@
+IsNfuncLargeEnough <- function(Nfunc, alpha) {
+  any(Nfunc*alpha < 1-.Machine$double.eps^0.5)
+}
+
 get_alternative <- function(global_envelope) {
   attr(global_envelope, "alternative")
 }
