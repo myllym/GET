@@ -100,7 +100,8 @@ regression proposed in Mrkvička et al. (2023a).
 
 To cite GET in publications use
 
-Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME] URL: https://arxiv.org/abs/1911.06583
+Myllymäki, M. and Mrkvička, T. (2023). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+https://doi.org/10.48550/arXiv.1911.06583
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).
 Global envelope tests for spatial processes. Journal of the Royal Statistical Society:
@@ -128,7 +129,7 @@ Kybernetika 56 (3), 432-458. http://doi.org/10.14736/kyb-2020-3-0432
 
 Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020).
 Testing global and local dependence of point patterns on covariates in parametric models.
-Spatial Statistics 42, 100436, https://doi.org/10.1016/j.spasta.2020.100436
+Spatial Statistics 42, 100436. https://doi.org/10.1016/j.spasta.2020.100436
 
 Mrkvička, T., Roskovec, T. and Rost, M. (2021).
 A nonparametric graphical tests of significance in functional GLM.
@@ -140,7 +141,7 @@ Intech open. https://doi.org/10.5772/intechopen.100124
 
 Dvořák, J. and Mrkvička, T. (2022).
 Graphical tests of independence for general distributions.
-Computational Statistics 37, 671--699.
+Computational Statistics 37, 671--699. https://doi.org/10.1007/s00180-021-01134-y
 
 Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022).
 New methods for multiple testing in permutation inference for the general linear model.

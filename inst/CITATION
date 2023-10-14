@@ -6,12 +6,12 @@ bibentry(
     author = c(person("M.", "Myllymäki"),
                person("T.", "Mrkvička")),
     journal = "arXiv:1911.06583 [stat.ME]",
-    year = "2020",
+    year = "2023",
     volume = "",
     pages = "",
-    url = "https://arxiv.org/abs/1911.06583",
+    url = "https://doi.org/10.48550/arXiv.1911.06583",
     textVersion  =
-    paste("Myllymäki, M. and Mrkvička, T. (2020).",
+    paste("Myllymäki, M. and Mrkvička, T. (2023).",
           "GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]")
 )
 
@@ -31,8 +31,43 @@ bibentry(
     textVersion  =
     paste("Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017).",
           "Global envelope tests for spatial processes. Journal of the Royal Statistical Society:",
-          "Series B (Statistical Methodology) 79: 381-404. https://dx.doi.org/10.1111/rssb.12172"),
+          "Series B (Statistical Methodology) 79: 381-404. https://dx.doi.org/10.1111/rssb.12172")
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "Deviation test construction and power comparison for marked spatial point patterns",
+    author = c(person("M.", "Myllymäki"),
+               person("P.", "Grabarnik"),
+               person("H.", "Seijo"),
+               person("D.", "Stoyan")),
+    journal = "Spatial Statistics",
+    year = "2015",
+    volume = "11",
+    pages = "19--34",
+    url = "https://dx.doi.org/10.1016/j.spasta.2014.11.004",
+    textVersion = "Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
+Deviation test construction and power comparison for marked spatial point patterns.
+Spatial Statistics 11: 19-34. https://dx.doi.org/10.1016/j.spasta.2014.11.004",
     header = "and a suitable selection of:"
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "Monte Carlo testing in spatial statistics, with applications to spatial residuals",
+    author = c(person("T.", "Mrkvička"),
+               person("S.", "Soubeyrand"),
+               person("M.", "Myllymäki"),
+               person("P.", "Grabarnik"),
+               person("U.", "Hahn")),
+    journal = "Spatial Statistics",
+    year = "2016",
+    volume = "18, Part A",
+    pages = "40--53",
+    url = "http://dx.doi.org/10.1016/j.spasta.2016.04.005",
+    textVersion = "Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P. and Hahn, U. (2016).
+Monte Carlo testing in spatial statistics, with applications to spatial residuals.
+Spatial Statistics 18, Part A: 40-53. http://dx.doi.org/10.1016/j.spasta.2016.04.005"
 )
 
 bibentry(
@@ -71,6 +106,22 @@ A one-way ANOVA test for functional data with graphical interpretation. Kybernet
 
 bibentry(
     bibtype = "Article",
+    title = "Testing global and local dependence of point patterns on covariates in parametric models",
+    author = c(person("M.", "Myllymäki"),
+               person("M.", "Kuronen"),
+               person("T.", "Mrkvička")),
+    journal = "Spatial Statistics",
+    year = "2020",
+    volume = "42",
+    pages = "100436",
+    url = "https://doi.org/10.1016/j.spasta.2020.100436",
+    textVersion = "Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020).
+Testing global and local dependence of point patterns on covariates in parametric models.
+Spatial Statistics 42, 100436. https://doi.org/10.1016/j.spasta.2020.100436"
+)
+
+bibentry(
+    bibtype = "Article",
     title = "A nonparametric graphical tests of significance in functional GLM",
     author = c(person("T.", "Mrkvička"),
                person("T.", "Roskovec"),
@@ -82,6 +133,37 @@ bibentry(
     url = "https://doi.org/10.1007/s11009-019-09756-y",
     textVersion = "Mrkvička, T., Roskovec, T. and Rost, M. (2021).
 A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. https://doi.org/10.1007/s11009-019-09756-y"
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "A new functional clustering method with combined dissimilarity sources and graphical interpretation",
+    author = c(person("W.", "Dai"),
+               person("S.", "Athanasiadis"),
+               person("T.", "Mrkvička")),
+    journal = "Intech open",
+    year = "2022",
+    volume = "",
+    pages = "",
+    url = "https://doi.org/10.5772/intechopen.100124",
+    textVersion = "Dai, W., Athanasiadis, S. and Mrkvička, T. (2022).
+A new functional clustering method with combined dissimilarity sources and graphical interpretation.
+Intech open. https://doi.org/10.5772/intechopen.100124"
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "Graphical tests of independence for general distributions",
+    author = c(person("J.", "Dvořák"),
+               person("T.", "Mrkvička")),
+    journal = "Computational Statistics",
+    year = "2022",
+    volume = "37",
+    pages = "671--699",
+    url = "https://doi.org/10.5772/intechopen.100124",
+    textVersion = "Dvořák, J. and Mrkvička, T. (2022).
+Graphical tests of independence for general distributions.
+Computational Statistics 37, 671--699. https://doi.org/10.1007/s00180-021-01134-y"
 )
 
 bibentry(
@@ -102,88 +184,6 @@ New methods for multiple testing in permutation inference for the general linear
 
 bibentry(
     bibtype = "Article",
-    title = "Deviation test construction and power comparison for marked spatial point patterns",
-    author = c(person("M.", "Myllymäki"),
-               person("P.", "Grabarnik"),
-               person("H.", "Seijo"),
-               person("D.", "Stoyan")),
-    journal = "Spatial Statistics",
-    year = "2015",
-    volume = "11",
-    pages = "19--34",
-    url = "https://dx.doi.org/10.1016/j.spasta.2014.11.004",
-    textVersion = "Myllymäki, M., Grabarnik, P., Seijo, H., and Stoyan, D. (2015).
-Deviation test construction and power comparison for marked spatial point patterns.
-Spatial Statistics 11: 19-34. https://dx.doi.org/10.1016/j.spasta.2014.11.004"
-)
-
-bibentry(
-    bibtype = "Article",
-    title = "Monte Carlo testing in spatial statistics, with applications to spatial residuals",
-    author = c(person("T.", "Mrkvička"),
-               person("S.", "Soubeyrand"),
-               person("M.", "Myllymäki"),
-               person("P.", "Grabarnik"),
-               person("U.", "Hahn")),
-    journal = "Spatial Statistics",
-    year = "2016",
-    volume = "18, Part A",
-    pages = "40--53",
-    url = "http://dx.doi.org/10.1016/j.spasta.2016.04.005",
-    textVersion = "Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P. and Hahn, U. (2016).
-Monte Carlo testing in spatial statistics, with applications to spatial residuals.
-Spatial Statistics 18, Part A: 40-53. http://dx.doi.org/10.1016/j.spasta.2016.04.005",
-)
-
-bibentry(
-    bibtype = "Article",
-    title = "Testing global and local dependence of point patterns on covariates in parametric models",
-    author = c(person("M.", "Myllymäki"),
-               person("M.", "Kuronen"),
-               person("T.", "Mrkvička")),
-    journal = "Spatial Statistics",
-    year = "2020",
-    volume = "42",
-    pages = "100436",
-    url = "https://doi.org/10.1016/j.spasta.2020.100436",
-    textVersion = "Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020).
-Testing global and local dependence of point patterns on covariates in parametric models.
-Spatial Statistics 42, 100436. https://doi.org/10.1016/j.spasta.2020.100436",
-)
-
-bibentry(
-    bibtype = "Article",
-    title = "A new functional clustering method with combined dissimilarity sources and graphical interpretation",
-    author = c(person("W.", "Dai"),
-               person("S.", "Athanasiadis"),
-               person("T.", "Mrkvička")),
-    journal = "Intech open",
-    year = "2022",
-    volume = "",
-    pages = "",
-    url = "https://doi.org/10.5772/intechopen.100124",
-    textVersion = "Dai, W., Athanasiadis, S. and Mrkvička, T. (2022).
-A new functional clustering method with combined dissimilarity sources and graphical interpretation.
-Intech open. https://doi.org/10.5772/intechopen.100124",
-)
-
-bibentry(
-    bibtype = "Article",
-    title = "Graphical tests of independence for general distributions",
-    author = c(person("J.", "Dvořák"),
-               person("T.", "Mrkvička")),
-    journal = "Computational Statistics",
-    year = "2022",
-    volume = "37",
-    pages = "671--699",
-    url = "https://doi.org/10.5772/intechopen.100124",
-    textVersion = "Dvořák, J. and Mrkvička, T. (2022).
-Graphical tests of independence for general distributions.
-Computational Statistics 37, 671--699. https://doi.org/10.1007/s00180-021-01134-y",
-)
-
-bibentry(
-    bibtype = "Article",
     title = "False discovery rate envelopes",
     author = c(person("T.", "Mrkvička"),
                person("M.", "Myllymäki")),
@@ -194,5 +194,39 @@ bibentry(
     url = "https://doi.org/10.1007/s11222-023-10275-7",
     textVersion  = "Mrkvička, T. and Myllymäki, M. (2023).
 False discovery rate envelopes. Statistics and Computing 33, 109.
-https://doi.org/10.1007/s11222-023-10275-7",
+https://doi.org/10.1007/s11222-023-10275-7"
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "Global quantile regression",
+    author = c(person("T.", "Mrkvička"),
+               person("K.", "Konstantinou"),
+               person("M.", "Kuronen"),
+               person("M.", "Myllymäki")),
+    journal = "arXiv:2309.04746 [stat.ME]",
+    year = "2023",
+    volume = "",
+    pages = "",
+    url = "https://doi.org/10.48550/arXiv.2309.04746",
+    textVersion  = "Mrkvička, T., Konstantinou, K., Kuronen, M. and Myllymäki, M. (2023).
+Global quantile regression. arXiv:2309.04746 [stat.ME]
+https://doi.org/10.48550/arXiv.2309.04746"
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "Hotspot detection on a linear network in the presence of covariates: a case study on road crash data",
+    author = c(person("T.", "Mrkvička"),
+               person("S.", "Kraft"),
+               person("V.", "Blažek"),
+               person("M.", "Myllymäki")),
+    journal = "arXiv:1911.06583 [stat.ME]",
+    year = "2020",
+    volume = "",
+    pages = "",
+    url = "https://arxiv.org/abs/1911.06583",
+    textVersion = "Mrkvička T., Kraft S., Blažek V. and Myllymäki M. (2023).
+Hotspot detection on a linear network in the presence of covariates: a case study on road crash data.
+Submitted."
 )
