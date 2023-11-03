@@ -289,8 +289,7 @@ combined_forder <- function(curve_sets, ...) {
 #' from the most extreme to least extreme one
 #'
 #'
-#' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
-#' or an \code{envelope} object of \pkg{spatstat},
+#' Given a \code{\link{curve_set}} object or an \code{envelope} object of \pkg{spatstat},
 #' which contains curves \eqn{T_1(r),\dots,T_s(r)}{T_1(r),...,T_s(r)},
 #' the functions are ordered from the most extreme one to the least extreme one
 #' by one of the following measures (specified by the argument \code{measure}).
@@ -376,10 +375,10 @@ combined_forder <- function(curve_sets, ...) {
 #'   # for the differences within the years
 #'   years <- paste(1:18)
 #'   curves <- fda::growth[['hgtf']][years,]
-#'   cset1 <- create_curve_set(list(r = as.numeric(years),
-#'                                  obs = curves))
-#'   cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
-#'                                  obs = curves[-1,] - curves[-nrow(curves),]))
+#'   cset1 <- curve_set(r = as.numeric(years),
+#'                      obs = curves)
+#'   cset2 <- curve_set(r = as.numeric(years[-1]),
+#'                      obs = curves[-1,] - curves[-nrow(curves),])
 #'
 #'   # Order the girls from most extreme one to the least extreme one, below using the 'area' measure
 #'   # a) according to their heights

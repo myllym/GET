@@ -336,10 +336,10 @@ individual_fdr_envelope <- function(curve_set, alpha = 0.05,
 #' of Mrkvička and Myllymäki (2023).
 #'
 #'
-#' @param curve_sets A \code{curve_set} (see \code{\link{create_curve_set}}) or an
-#'   \code{envelope} object of \pkg{spatstat} containing the observed function
-#'   and the functions from which the envelope is to be constructed.
-#'   Alternatively, a list of appropriate objects can be given.
+#' @param curve_sets A \code{\link{curve_set}} object, or an \code{envelope} object of
+#' \pkg{spatstat}, containing the observed function and the functions from which
+#' the envelope is to be constructed. Alternatively, a list of appropriate objects
+#' can be given.
 #' @param algorithm Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
 #' envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2023).
 #' @param lower A single number (or a vector of suitable length) giving a lower bound

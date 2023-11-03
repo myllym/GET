@@ -577,9 +577,9 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' Provides central regions or global envelopes or confidence bands
 #'
 #'
-#' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
+#' Given a \code{\link{curve_set}} object,
 #' or an \code{envelope} object of \pkg{spatstat} or \code{fdata} object of \pkg{fda.usc},
-#' the function \code{central_region} construcst a central region, i.e. a global envelope,
+#' the function \code{central_region} constructs a central region, i.e. a global envelope,
 #' from the given set of functions (or vectors).
 #'
 #' Generally an envelope is a band bounded by the vectors (or functions)
@@ -730,10 +730,10 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' ## A central region of a set of functions
 #' #----------------------------------------
 #' if(requireNamespace("fda", quietly=TRUE)) {
-#'   curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
-#'                                      obs=fda::growth$hgtf))
-#'   plot(curve_set) + ggplot2::ylab("height")
-#'   cr <- central_region(curve_set, coverage=0.50, type="erl")
+#'   cset <- curve_set(r=as.numeric(row.names(fda::growth$hgtf)),
+#'                     obs=fda::growth$hgtf)
+#'   plot(cset) + ggplot2::ylab("height")
+#'   cr <- central_region(cset, coverage=0.50, type="erl")
 #'   plot(cr)
 #' }
 #'
@@ -774,7 +774,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
 #'
 #' # Central region computation
-#' boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
+#' boot.cset <- curve_set(r=1:length(x), obs=ftheta+s0*t(m))
 #' cr <- central_region(boot.cset, coverage=c(0.50, 0.80, 0.95), type="erl")
 #'
 #' # Plotting the result
@@ -820,7 +820,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' Global envelope test, global envelopes and p-values
 #'
 #'
-#' Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
+#' Given a \code{\link{curve_set}} object,
 #' or an \code{envelope} object of \pkg{spatstat},
 #' which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)}
 #' (in the component \code{obs}) and
@@ -940,8 +940,8 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 #'
 #' @inheritParams central_region
-#' @param curve_sets A \code{curve_set} (see \code{\link{create_curve_set}})
-#' or an \code{envelope} object of \pkg{spatstat} containing a data function and simulated functions.
+#' @param curve_sets A \code{\link{curve_set}} or an \code{envelope} object
+#' of \pkg{spatstat} containing a data function and simulated functions.
 #' If an envelope object is given, it must contain the summary
 #' functions from the simulated patterns which can be achieved by setting
 #' \code{savefuns = TRUE} when calling the \code{envelope} function.
@@ -1015,7 +1015,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'     sim[, i] <- Lest(sim.X, correction="translate", r=r)[['trans']] - r
 #'   }
 #'   # Create a curve_set containing argument values, observed and simulated functions
-#'   cset <- create_curve_set(list(r=r, obs=obs, sim_m=sim))
+#'   cset <- curve_set(r=r, obs=obs, sim=sim)
 #'   # Perform the test
 #'   res <- global_envelope_test(cset, type="erl")
 #'   plot(res) + ggplot2::ylab(expression(italic(hat(L)(r)-r)))
@@ -1102,13 +1102,13 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #'   # Test the null hypothesis is that X is from the distribution of Y's (or if it is an outlier).
 #'
 #'   # Case 1. The test vector is (X_1, X_2)
-#'   cset1 <- create_curve_set(list(r=1:2, obs=as.vector(X), sim_m=t(Y)))
+#'   cset1 <- curve_set(r=1:2, obs=as.vector(X), sim=t(Y))
 #'   res1 <- global_envelope_test(cset1)
 #'   plot(res1)
 #'
 #'   # Case 2. The test vector is (X_1, X_2, (X_1-mean(Y_1))*(X_2-mean(Y_2))).
 #'   t3 <- function(x, y) { (x[,1]-mean(y[,1]))*(x[,2]-mean(y[,2])) }
-#'   cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
+#'   cset2 <- curve_set(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim=rbind(t(Y), t3(Y,Y)))
 #'   res2 <- global_envelope_test(cset2)
 #'   plot(res2)
 #' }
@@ -1180,8 +1180,8 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
 #'
 #' Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432
 #'
-#' @param curve_set A curve_set (see \code{\link{create_curve_set}}) or an \code{envelope}
-#'  object of \pkg{spatstat}. If an envelope object is given, it must contain the summary
+#' @param curve_set A \code{\link{curve_set}} object, or an \code{envelope} object of
+#' \pkg{spatstat}. If an envelope object is given, it must contain the summary
 #'  functions from the simulated patterns which can be achieved by setting
 #'  savefuns = TRUE when calling the function of \pkg{spatstat}.
 #' @param type The type of the global envelope with current options for "rank", "erl", "cont" and "area".

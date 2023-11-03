@@ -407,7 +407,7 @@ print.curve_set <- function(x, ...) {
 #' @importFrom ggplot2 ggplot geom_line aes_ scale_color_manual labs
 #' @importFrom viridisLite viridis
 #' @examples
-#' cset <- create_curve_set(list(r = 1:10, obs = matrix(runif(10*5), ncol=5)))
+#' cset <- curve_set(r = 1:10, obs = matrix(runif(10*5), ncol=5))
 #' plot(cset)
 #' # Highlight some functions
 #' plot(cset, idx=c(1,3))
@@ -421,8 +421,8 @@ print.curve_set <- function(x, ...) {
 #' plot(cset) + ggplot2::labs(title="Example curves", x="x", y="Value")
 #' # A curve_set with one observed function (other simulated)
 #' if(requireNamespace("mvtnorm", quietly=TRUE)) {
-#'   cset <- create_curve_set(list(obs = c(-1.6, 1.6),
-#'             sim_m = t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2)))))
+#'   cset <- curve_set(obs = c(-1.6, 1.6),
+#'     sim = t(mvtnorm::rmvnorm(200, c(0,0), matrix(c(1,0.5,0.5,1), 2, 2))))
 #'   plot(cset)
 #'   # Remove legend
 #'   plot(cset) + ggplot2::theme(legend.position="none")
@@ -694,8 +694,7 @@ curve_set_1obs <- function(curve_set) {
 #'   Friday <- poblenou$df$day.festive == 0 & poblenou$df$day.week == 5
 #'
 #'   # Data as a curve_set
-#'   cset <- create_curve_set(list(r=0:23,
-#'              obs=t(poblenou[['nox']][['data']])))
+#'   cset <- curve_set(r=0:23, obs=t(poblenou[['nox']][['data']]))
 #'   plot(subset(cset, MonThu))
 #'   plot(subset(cset, Friday))
 #'   plot(subset(cset, Free))

@@ -131,8 +131,8 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' The specification of X, X.ls, fitfun, simfun is important:
 #' \itemize{
 #' \item If \code{X.ls} is provided, then the global envelope test is calculated based on
-#' functions in these objects. \code{X} should be a \code{curve_set} (see \code{\link{create_curve_set}})
-#' or an \code{envelope} object of \pkg{spatstat} including the observed function and simulations
+#' functions in these objects. \code{X} should be a \code{\link{curve_set}} object,
+#' or an \code{envelope} object of \pkg{spatstat}, including the observed function and simulations
 #' from the tested model. \code{X.ls} should be a list of \code{curve_set} or
 #' envelope (of R package \pkg{spatstat}) objects, where each component contains an "observed"
 #' function f that has been simulated from the model fitted to the data and the simulations
@@ -172,8 +172,8 @@ adj.GET_helper <- function(curve_sets, type, alpha, alternative, ties, probs, Mr
 #' See examples also in \code{\link{saplings}}.
 #'
 #' @param X An object containing the data in some form.
-#' A \code{curve_set} (see \code{\link{create_curve_set}}) or an \code{envelope}
-#' object (of the \pkg{spatstat} package), as the \code{curve_sets} argument of \code{\link{global_envelope_test}}
+#' A \code{\link{curve_set}} object, or an \code{envelope} object of the \pkg{spatstat} package,
+#' as the \code{curve_sets} argument of \code{\link{global_envelope_test}}
 #' (need to provide \code{X.ls}), or
 #' a fitted point process model of \pkg{spatstat} (e.g. object of class \code{ppm} or
 #' \code{kppm}), or a point pattern object of class \code{ppp} of \pkg{spatstat},

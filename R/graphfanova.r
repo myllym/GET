@@ -209,8 +209,8 @@ contrasts.m <- function(x, groups, ...) {
 #' This scaling of the test functions can be obtained by giving the argument \code{variances = "unequal"}.
 #'
 #' @param nsim The number of random permutations.
-#' @param curve_set The original data (an array of functions) provided as a \code{curve_set} object
-#' (see \code{\link{create_curve_set}}) or a fdata object (see \code{\link[fda.usc]{fdata}}).
+#' @param curve_set The original data (an array of functions) provided as a
+#' \code{\link{curve_set}} object or a \code{fdata} object of \pkg{fda.usc}.
 #' The curve set should include the argument values for the functions in the component \code{r}, and
 #' the observed functions in the component \code{obs}.
 #' @param groups The original groups (a factor vector representing the assignment to groups).
@@ -267,8 +267,8 @@ contrasts.m <- function(x, groups, ...) {
 #'   Type <- factor(Type, levels = c("MonThu", "Fri", "Free"))
 #'
 #'   # (log) Data as a curve_set
-#'   cset <- create_curve_set(list(r = 0:23,
-#'              obs = t(log(poblenou[['nox']][['data']]))))
+#'   cset <- curve_set(r = 0:23,
+#'      obs = t(log(poblenou[['nox']][['data']])))
 #'   # Graphical functional ANOVA
 #'   \donttest{nsim <- 2999}
 #'   \dontshow{nsim <- 19
