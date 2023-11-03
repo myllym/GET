@@ -28,14 +28,14 @@ if(requireNamespace("fda", quietly=TRUE)) {
   years <- paste(1:18)
   curves <- fda::growth[['hgtf']][years,]
   # Heights
-  cset1 <- create_curve_set(list(r = as.numeric(years),
-                                 obs = curves))
+  cset1 <- curve_set(r = as.numeric(years),
+                     obs = curves)
   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
   plot(bp)
 
   # Considering simultaneously heights and height differences
-  cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
-             obs = curves[-1,] - curves[-nrow(curves),]))
+  cset2 <- curve_set(r = as.numeric(years[-1]),
+                     obs = curves[-1,] - curves[-nrow(curves),])
   csets <- list(Height=cset1, Change=cset2)
   res <- fBoxplot(csets, type='area', factor=1.5)
   plot(res) + ggplot2::labs(x="Age (years)", y="")

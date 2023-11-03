@@ -18,8 +18,8 @@ global_envelope_test(
 )
 }
 \arguments{
-\item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}})
-or an \code{envelope} object of \pkg{spatstat} containing a data function and simulated functions.
+\item{curve_sets}{A \code{\link{curve_set}} or an \code{envelope} object
+of \pkg{spatstat} containing a data function and simulated functions.
 If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 \code{savefuns = TRUE} when calling the \code{envelope} function.
@@ -97,7 +97,7 @@ The 2d classes are attached as described in \code{\link{central_region}}.
 Global envelope test, global envelopes and p-values
 }
 \details{
-Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
+Given a \code{\link{curve_set}} object,
 or an \code{envelope} object of \pkg{spatstat},
 which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)}
 (in the component \code{obs}) and
@@ -234,7 +234,7 @@ if(require("spatstat.explore", quietly=TRUE)) {
     sim[, i] <- Lest(sim.X, correction="translate", r=r)[['trans']] - r
   }
   # Create a curve_set containing argument values, observed and simulated functions
-  cset <- create_curve_set(list(r=r, obs=obs, sim_m=sim))
+  cset <- curve_set(r=r, obs=obs, sim=sim)
   # Perform the test
   res <- global_envelope_test(cset, type="erl")
   plot(res) + ggplot2::ylab(expression(italic(hat(L)(r)-r)))
@@ -321,13 +321,13 @@ if(requireNamespace("mvtnorm", quietly=TRUE)) {
   # Test the null hypothesis is that X is from the distribution of Y's (or if it is an outlier).
 
   # Case 1. The test vector is (X_1, X_2)
-  cset1 <- create_curve_set(list(r=1:2, obs=as.vector(X), sim_m=t(Y)))
+  cset1 <- curve_set(r=1:2, obs=as.vector(X), sim=t(Y))
   res1 <- global_envelope_test(cset1)
   plot(res1)
 
   # Case 2. The test vector is (X_1, X_2, (X_1-mean(Y_1))*(X_2-mean(Y_2))).
   t3 <- function(x, y) { (x[,1]-mean(y[,1]))*(x[,2]-mean(y[,2])) }
-  cset2 <- create_curve_set(list(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim_m=rbind(t(Y), t3(Y,Y))))
+  cset2 <- curve_set(r=1:3, obs=c(X[,1],X[,2],t3(X,Y)), sim=rbind(t(Y), t3(Y,Y)))
   res2 <- global_envelope_test(cset2)
   plot(res2)
 }

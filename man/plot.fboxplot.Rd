@@ -24,8 +24,8 @@ if(requireNamespace("fda", quietly=TRUE)) {
   years <- paste(1:18)
   curves <- fda::growth[['hgtf']][years,]
   # Heights
-  cset1 <- create_curve_set(list(r = as.numeric(years),
-                                 obs = curves))
+  cset1 <- curve_set(r = as.numeric(years),
+                     obs = curves))
   bp <- fBoxplot(cset1, coverage=0.50, type="area", factor=1)
   plot(bp)
   plot(bp) + ggplot2::theme(legend.position="bottom")

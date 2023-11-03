@@ -14,8 +14,8 @@ combined_scaled_MAD_envelope_test(
 )
 }
 \arguments{
-\item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}})
-or an \code{envelope} object of \pkg{spatstat} containing a data function and simulated functions.
+\item{curve_sets}{A \code{\link{curve_set}} or an \code{envelope} object
+of \pkg{spatstat} containing a data function and simulated functions.
 If an envelope object is given, it must contain the summary
 functions from the simulated patterns which can be achieved by setting
 \code{savefuns = TRUE} when calling the \code{envelope} function.
@@ -39,7 +39,7 @@ For 'qdir', 'st' and 'unscaled' only the mean is allowed as an option, due to th
 \item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
 }
 \description{
-Given a list of 'curve_set' objects (see \code{\link{create_curve_set}}), a combined global scaled (directional quantile
+Given a list of \code{\link{curve_set}} objects, a combined global scaled (directional quantile
 or studentized) MAD envelope test is performed with the test functions saved in the curve set objects.
 Details of this combined test can be found in Mrkvicka et al. (2017).
 The implementation of this test is provided here for historical reasons:

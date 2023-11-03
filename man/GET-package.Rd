@@ -45,8 +45,8 @@ E.g. 50\% central region of growth curves of girls \code{\link[fda]{growth}}.
            \item First create a curve_set of the growth curves, e.g.
 
                  \code{
-                   cset <- create_curve_set(list(r = as.numeric(row.names(growth$hgtf)),
-                                                 obs = growth$hgtf))
+                   cset <- curve_set(r = as.numeric(row.names(growth$hgtf)),
+                                     obs = growth$hgtf)
                  }
            \item Then calculate 50\% central region (see \code{\link{central_region}} for further arguments)
 
@@ -127,9 +127,9 @@ for the function, see examples in \code{\link{global_envelope_test}}.
 \item Deviation tests (for simple hypothesis): \code{\link{deviation_test}} (no graphical
 interpretation)
 \item Most functions accept the curves provided in a \code{curve_set} object.
-Use \code{\link{create_curve_set}} to create a \code{curve_set} object from the
-functions. Other formats to provide the curves to the above functions are also accepted,
-see the information on the help pages.
+Use \code{\link{curve_set}} to create a \code{curve_set} object from the
+functions. Other formats to provide the curves to the above functions are
+also accepted, see the information on the help pages.
 }
 See the help files of the functions for examples.
 }
@@ -148,7 +148,7 @@ you can perform a test by \code{\link{global_envelope_test}}.
 \itemize{
 \item (Fit the model and) Create \eqn{s}{s} simulations from the (fitted) null model.
 \item Calculate the functions \eqn{T_1(r), T_2(r), \dots, T_{s+1}(r)}{T_1(r), T_2(r), ..., T_{s+1}(r)}.
-\item Use \code{\link{create_curve_set}} to create a \code{curve_set} object
+\item Use \code{\link{curve_set}} to create a \code{curve_set} object
       from the functions \eqn{T_i(r), i=1, \dots, s+1}{T_i(r), i=1,...,s+1}.
 \item Perform the test
 

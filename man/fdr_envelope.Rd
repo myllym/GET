@@ -14,10 +14,10 @@ fdr_envelope(
 )
 }
 \arguments{
-\item{curve_sets}{A \code{curve_set} (see \code{\link{create_curve_set}}) or an
-\code{envelope} object of \pkg{spatstat} containing the observed function
-and the functions from which the envelope is to be constructed.
-Alternatively, a list of appropriate objects can be given.}
+\item{curve_sets}{A \code{\link{curve_set}} object, or an \code{envelope} object of
+\pkg{spatstat}, containing the observed function and the functions from which
+the envelope is to be constructed. Alternatively, a list of appropriate objects
+can be given.}
 
 \item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
 If a vector of values is provided, the global envelopes are calculated for each value.}

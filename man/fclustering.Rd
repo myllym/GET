@@ -88,8 +88,8 @@ r <- 1951:2015
 \dontshow{
 r <- r[1:10]
 }
-cset1 <- create_curve_set(list(r = r, obs = popgrowthmillion))
-cset2 <- create_curve_set(list(r = r, obs = spopgrowthmillion))
+cset1 <- curve_set(r = r, obs = popgrowthmillion)
+cset2 <- curve_set(r = r, obs = spopgrowthmillion)
 csets <- list(Raw = cset1, Shape = cset2)
 
 # Functional clustering with respect to joined "st" difference measure

@@ -7,7 +7,7 @@
 residual(curve_set, use_theo = TRUE)
 }
 \arguments{
-\item{curve_set}{A curve_set (see \code{\link{create_curve_set}}) or
+\item{curve_set}{A \code{\link{curve_set}} object, or
 an \code{envelope} object of \pkg{spatstat}. If an envelope object is given,
 it must contain the summary functions from the simulated patterns which can be
 achieved by setting savefuns = TRUE when calling the \code{envelope} function.}

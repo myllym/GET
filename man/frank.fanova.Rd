@@ -19,8 +19,8 @@ frank.fanova(
 \arguments{
 \item{nsim}{The number of random permutations.}
 
-\item{curve_set}{The original data (an array of functions) provided as a \code{curve_set} object
-(see \code{\link{create_curve_set}}) or a fdata object (see \code{\link[fda.usc]{fdata}}).
+\item{curve_set}{The original data (an array of functions) provided as a
+\code{\link{curve_set}} object or a \code{fdata} object of \pkg{fda.usc}.
 The curve set should include the argument values for the functions in the component \code{r}, and
 the observed functions in the component \code{obs}.}
 

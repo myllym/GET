@@ -26,8 +26,7 @@ if(require("fda.usc", quietly=TRUE)) {
   Friday <- poblenou$df$day.festive == 0 & poblenou$df$day.week == 5
 
   # Data as a curve_set
-  cset <- create_curve_set(list(r=0:23,
-             obs=t(poblenou[['nox']][['data']])))
+  cset <- curve_set(r=0:23, obs=t(poblenou[['nox']][['data']]))
   plot(subset(cset, MonThu))
   plot(subset(cset, Friday))
   plot(subset(cset, Free))

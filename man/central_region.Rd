@@ -112,9 +112,9 @@ Otherwise the 1d and 2d objects are similar.
 Provides central regions or global envelopes or confidence bands
 }
 \details{
-Given a \code{curve_set} (see \code{\link{create_curve_set}} for how to create such an object)
+Given a \code{\link{curve_set}} object,
 or an \code{envelope} object of \pkg{spatstat} or \code{fdata} object of \pkg{fda.usc},
-the function \code{central_region} construcst a central region, i.e. a global envelope,
+the function \code{central_region} constructs a central region, i.e. a global envelope,
 from the given set of functions (or vectors).
 
 Generally an envelope is a band bounded by the vectors (or functions)
@@ -179,10 +179,10 @@ functions are concatenated together into a one long vector (see again Myllymäki
 ## A central region of a set of functions
 #----------------------------------------
 if(requireNamespace("fda", quietly=TRUE)) {
-  curve_set <- create_curve_set(list(r=as.numeric(row.names(fda::growth$hgtf)),
-                                     obs=fda::growth$hgtf))
-  plot(curve_set) + ggplot2::ylab("height")
-  cr <- central_region(curve_set, coverage=0.50, type="erl")
+  cset <- curve_set(r=as.numeric(row.names(fda::growth$hgtf)),
+                    obs=fda::growth$hgtf)
+  plot(cset) + ggplot2::ylab("height")
+  cr <- central_region(cset, coverage=0.50, type="erl")
   plot(cr)
 }
 
@@ -223,7 +223,7 @@ m <- array(0, c(B,length(x)))
 for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
 
 # Central region computation
-boot.cset <- create_curve_set(list(r=1:length(x), obs=ftheta+s0*t(m)))
+boot.cset <- curve_set(r=1:length(x), obs=ftheta+s0*t(m))
 cr <- central_region(boot.cset, coverage=c(0.50, 0.80, 0.95), type="erl")
 
 # Plotting the result
