@@ -948,7 +948,7 @@ central_region <- function(curve_sets, type = "erl", coverage = 0.50,
 #' Alternatively, a list of \code{curve_set} or \code{envelope} objects can be given.
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated.
 #' If a vector of values is provided, the global envelopes are calculated for each value.
-#' @param ties The method to obtain a unique p-value when  \code{type = 'rank'}.
+#' @param ties The method to obtain a unique p-value when \code{type = 'rank'}.
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 #' For 'conservative' the resulting p-value will be the highest possible.
 #' For 'liberal' the p-value will be the lowest possible.
@@ -1126,7 +1126,7 @@ global_envelope_test <- function(curve_sets, type = "erl", alpha = 0.05,
                                   central=central, ...))
       else # One-step combining procedure
         return(combined_CR_or_GET_1step(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
-                                        alternative=alternative,
+                                        alternative=alternative, ties=ties,
                                         probs=probs, quantile.type=quantile.type,
                                         central=central, ...))
     }
