@@ -341,6 +341,42 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
   }
   p
 }
+# An internal function for making a dotplot style "combined global envelope plot"
+env_combined_dotplot <- function(x, main, xlab, ylab, labels, scales = "free",
+                                max_ncols_of_plots = 2, sign.col="red") {
+  if(!inherits(x, "list")) stop("Internal error. x is not a list.")
+
+  n_of_plots <- as.integer(length(x))
+  ncols_of_plots <- min(n_of_plots, max_ncols_of_plots)
+  nrows_of_plots <- ceiling(n_of_plots / ncols_of_plots)
+
+  df <- NULL
+  plot_labels <- default_labels(x)
+  for(i in 1:length(x))
+    df <- rbind(df, data.frame(x[[i]], plotmain=plot_labels[i]))
+
+  arrow <- arrow(angle=75)
+  if(length(attr(x, "alpha")) > 1) message("Note: dotplot shows only the largest envelope.")
+  loname <- env_loname(attr(x, "alpha"), largest=TRUE)
+  hiname <- env_hiname(attr(x, "alpha"), largest=TRUE)
+  df$r <- factor(df$r)
+
+  g <- ( ggplot(df)
+         + geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data[[hiname]]), arrow=arrow)
+         + geom_segment(aes(x=.data$r, y=.data$central, xend=.data$r, yend=.data[[loname]]), arrow=arrow)
+         + set_envelope_legend_position()
+         + scale_color_identity()
+         + facet_wrap(~ plotmain, scales=scales,
+                      nrow=nrows_of_plots, ncol=ncols_of_plots) )
+  if(!is.null(x[[1]][['obs']])) {
+    if(is.null(sign.col)) sign.col <- "black"
+    g <- g + geom_point(aes(x=.data$r, y=.data$obs, col=ifelse(.data$obs > .data[[hiname]] | .data$obs < .data[[loname]], sign.col, "black")), shape="x", size=5)
+  }
+  g <- g + geom_point(aes(x=.data$r, y=.data$central))
+  if(!missing(labels) && all(sapply(x, FUN = function(y) { length(y$r) == length(x[[1]]$r) }, simplify=TRUE)))
+    g <- g + scale_x_discrete(breaks=paste(x[[1]][['r']]), labels=labels)
+  g
+}
 
 # An internal function for making a ggplot2 style "combined functional boxplot"
 #' @importFrom viridisLite viridis

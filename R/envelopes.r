@@ -527,12 +527,15 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10, sign.col = "red",
 #' @param x An 'combined_global_envelope' object
 #' @inheritParams plot.global_envelope
 #' @param labels A character vector of suitable length.
-#' If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
+#' If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis;
+#' only valid/used when all components of \code{x} have the same dimension.
 #' Otherwise labels for the separate plots.
 #' @param scales See \code{\link[ggplot2]{facet_wrap}}.
 #' Use \code{scales = "free"} when the scales of the functions in the global envelope
 #' vary. \code{scales = "fixed"} is a good choice, when you want the same y-axis for all components.
 #' A sensible default based on r-values exists.
+#' @param dotplot Logical. If TRUE, then instead of envelopes a dot plot is done.
+#' Suitable for low dimensional test vectors.
 #' @param ncol The maximum number of columns for the figures.
 #' Default 2 or 3, if the length of x equals 3.
 #' (Relates to the number of curve_sets that have been combined.)
@@ -543,6 +546,7 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10, sign.col = "red",
 #' @export
 #' @seealso \code{\link{central_region}}
 plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
+                                          dotplot = length(x[[1]]$obs) < 5,
                                           ncol = 2 + 1*(length(x)==3),
                                           digits = 3, level = 1, ...) {
   if(!(level %in% c(1,2))) stop("Unreasonable value for level.")
@@ -559,10 +563,17 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
   d <- plotdefaultlabs(x)
 
   if(level == 1) {
-    if(missing(labels)) labels <- default_labels(x, labels)
-    env_combined_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
-                        labels=labels, scales=scales,
-                        max_ncols_of_plots=ncol, sign.col=sign.col)
+    if(dotplot) {
+      env_combined_dotplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
+                           labels=labels, scales=scales,
+                           max_ncols_of_plots=ncol, sign.col=sign.col)
+    }
+    else {
+      if(missing(labels)) labels <- default_labels(x, labels)
+      env_combined_ggplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
+                          labels=labels, scales=scales,
+                          max_ncols_of_plots=ncol, sign.col=sign.col)
+    }
   }
   else {
     if(attr(x, "nstep") != 2)
