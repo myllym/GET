@@ -222,12 +222,12 @@ bibentry(
                person("S.", "Kraft"),
                person("V.", "Blažek"),
                person("M.", "Myllymäki")),
-    journal = "",
+    journal = "SSRN",
     year = "2023",
     volume = "",
     pages = "",
     url = "http://dx.doi.org/10.2139/ssrn.4627591",
     textVersion = "Mrkvička T., Kraft S., Blažek V. and Myllymäki M. (2023).
 Hotspot detection on a linear network in the presence of covariates: a case study on road crash data.
-http://dx.doi.org/10.2139/ssrn.4627591"
+Available at SSRN: http://dx.doi.org/10.2139/ssrn.4627591"
 )
