@@ -12,7 +12,8 @@ bibentry(
     url = "https://doi.org/10.48550/arXiv.1911.06583",
     textVersion  =
     paste("Myllymäki, M. and Mrkvička, T. (2023).",
-          "GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]")
+          "GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+          https://doi.org/10.48550/arXiv.1911.06583")
 )
 
 bibentry(
@@ -216,17 +217,17 @@ https://doi.org/10.48550/arXiv.2309.04746"
 
 bibentry(
     bibtype = "Article",
-    title = "Hotspot detection on a linear network in the presence of covariates: a case study on road crash data",
+    title = "Hotspot detection on a linear network in the presence of covariates: A case study on road crash data",
     author = c(person("T.", "Mrkvička"),
                person("S.", "Kraft"),
                person("V.", "Blažek"),
                person("M.", "Myllymäki")),
-    journal = "arXiv:1911.06583 [stat.ME]",
-    year = "2020",
+    journal = "",
+    year = "2023",
     volume = "",
     pages = "",
-    url = "https://arxiv.org/abs/1911.06583",
+    url = "http://dx.doi.org/10.2139/ssrn.4627591",
     textVersion = "Mrkvička T., Kraft S., Blažek V. and Myllymäki M. (2023).
 Hotspot detection on a linear network in the presence of covariates: a case study on road crash data.
-Submitted."
+http://dx.doi.org/10.2139/ssrn.4627591"
 )
