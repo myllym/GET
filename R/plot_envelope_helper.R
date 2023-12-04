@@ -176,6 +176,7 @@ env_dotplot_ggplot <- function(x, labels=NULL, sign.col="red") {
   g <- g + geom_point(aes(x=.data$r, y=.data$central)) +
     scale_color_identity() +
     scale_x_discrete(breaks=paste(x[['r']]), labels=labels)
+  g
 }
 
 # Global envelope plots
