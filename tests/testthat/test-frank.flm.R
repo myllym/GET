@@ -9,7 +9,7 @@ test_that("frank.flm-methods", {
   # X = curve set
   f <- function(method) {
     set.seed(1)
-    r <- frank.flm(nperm, Y ~ X, Y ~ 1, curve_sets = list(Y=iset, X=xset), typeone="fwer", savefuns=TRUE, method=method)
+    r <- frank.flm(nperm, Y ~ X, Y ~ 1, curve_sets = list(Y=iset, X=xset), GET.args=list(typeone="fwer"), savefuns=TRUE, method=method)
     attr(r, "runtime") <- NULL
     r
   }
@@ -21,7 +21,7 @@ test_that("frank.flm-methods", {
   # X = constant
   f <- function(method) {
     set.seed(1)
-    r <- frank.flm(nperm, Y ~ X, Y ~ 1, curve_sets = list(Y=iset), factors=x, typeone="fwer", savefuns=TRUE, method=method)
+    r <- frank.flm(nperm, Y ~ X, Y ~ 1, curve_sets = list(Y=iset), factors=x, GET.args=list(typeone="fwer"), savefuns=TRUE, method=method)
     attr(r, "runtime") <- NULL
     r
   }
@@ -33,7 +33,7 @@ test_that("frank.flm-methods", {
   # X = curve_set + constant
   f <- function(method) {
     set.seed(1)
-    r <- frank.flm(nperm, Y ~ X + Z, Y ~ 1, curve_sets = list(Y=iset, Z=xset), factors=x, typeone="fwer", savefuns=TRUE, method=method)
+    r <- frank.flm(nperm, Y ~ X + Z, Y ~ 1, curve_sets = list(Y=iset, Z=xset), factors=x, GET.args=list(typeone="fwer"), savefuns=TRUE, method=method)
     attr(r, "runtime") <- NULL
     r
   }
@@ -53,7 +53,7 @@ test_that("graph.flm-methods", {
 
   f <- function(method) {
     set.seed(1)
-    r <- graph.flm(nperm, Y ~ X, Y ~ 1, curve_sets = list(Y=iset, X=xset), typeone="fwer", savefuns=TRUE, fast=method)
+    r <- graph.flm(nperm, Y ~ X, Y ~ 1, curve_sets = list(Y=iset, X=xset), GET.args=list(typeone="fwer"), savefuns=TRUE, fast=method)
     attr(r, "runtime") <- NULL
     r
   }
@@ -65,7 +65,7 @@ test_that("graph.flm-methods", {
 
   f <- function(method) {
     set.seed(1)
-    r <- graph.flm(nperm, Y ~ X, Y ~ 1, curve_sets = list(Y=iset), factors=x, typeone="fwer", savefuns=TRUE, fast=method)
+    r <- graph.flm(nperm, Y ~ X, Y ~ 1, curve_sets = list(Y=iset), factors=x, GET.args=list(typeone="fwer"), savefuns=TRUE, fast=method)
     attr(r, "runtime") <- NULL
     r
   }
@@ -77,7 +77,7 @@ test_that("graph.flm-methods", {
 
   f <- function(method) {
     set.seed(1)
-    r <- graph.flm(nperm, Y ~ X + Z, Y ~ 1, curve_sets = list(Y=iset), factors=x, typeone="fwer", savefuns=TRUE, fast=method)
+    r <- graph.flm(nperm, Y ~ X + Z, Y ~ 1, curve_sets = list(Y=iset), factors=x, GET.args=list(typeone="fwer"), savefuns=TRUE, fast=method)
     attr(r, "runtime") <- NULL
     r
   }
@@ -89,7 +89,7 @@ test_that("graph.flm-methods", {
 
   f <- function(method) {
     set.seed(1)
-    r <- graph.flm(nperm, Y ~ X + Z, Y ~ 1, curve_sets = list(Y=iset, Z=xset), factors=x, typeone="fwer", savefuns=TRUE, fast=method)
+    r <- graph.flm(nperm, Y ~ X + Z, Y ~ 1, curve_sets = list(Y=iset, Z=xset), factors=x, GET.args=list(typeone="fwer"), savefuns=TRUE, fast=method)
     attr(r, "runtime") <- NULL
     r
   }
