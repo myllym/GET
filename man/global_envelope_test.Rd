@@ -101,7 +101,7 @@ The \code{global_envelope} is essentially a data frame containing columns
 Moreover, the returned object has the same attributes as the \code{global_envelope} object returned by
 \code{\link{central_region}} and in addition
 \itemize{
-  \item p = A point estimate for the p-value (default is the mid-rank p-value).
+  \item p = the p-value of the test
 }
 and in the case that \code{type = 'rank'} also
 \itemize{
@@ -125,9 +125,20 @@ which contains both the data curve (or function or vector) \eqn{T_1(r)}{T_1(r)}
 (in the component \code{obs}) and
 the simulated curves \eqn{T_2(r),\dots,T_{s+1}(r)}{T_2(r),...,T_(s+1)(r)}
 (in the component \code{sim_m}),
-the function \code{global_envelope_test} performs a global envelope test.
-The functionality of the function is rather similar to the function
-\code{\link{central_region}}, but in addition to ordering the functions from
+the function \code{global_envelope_test} performs a global envelope test,
+either under the control of family-wise error rate (FWER) or false discovery rate (FDR),
+as specified by the argument \code{typeone}.
+The function \code{global_envelope_test} is the main function for global envelope tests
+(for simple hypotheses).
+
+The case \code{typeone = "fdr"} corresponds to the FDR envelopes proposed by
+Mrkvička and Myllymäki (2023). See details in \code{\link{fdr_envelope}} and
+in the vignette \code{vignette("FDRenvelopes")}. Note there also the arguments that are
+the relevant ones for the FDR envelope specification.
+The descriptions below concern the FWER envelopes.
+
+If \code{typeone = "fwer"}, the functionality of the function is rather similar to the
+function \code{\link{central_region}}, but in addition to ordering the functions from
 the most extreme one to the least extreme one using different measures
 and providing the global envelopes with intrinsic
 graphical interpretation, p-values are calculated for the test.
@@ -135,20 +146,18 @@ Thus, while \code{\link{central_region}} can be used to construct global
 envelopes in a general setting, the function \code{\link{global_envelope_test}}
 is devoted to testing as its name suggests.
 
-The function \code{global_envelope_test} is the main function for global envelope tests
-(for simple hypotheses).
-Different \code{type} of global envelope tests can be performed.
+Different \code{type} of global envelope tests under the control of FWER can be computed.
 We use such ordering of the functions for which we are able to construct global
-envelopes with intrinsic graphical interpretation.
+envelopes with intrinsic graphical interpretation (IGI, see Myllymäki and Mrkvička, 2023).
 \itemize{
   \item \code{'rank'}: the completely non-parametric rank envelope test (Myllymäki et al., 2017)
   based on minimum of pointwise ranks
   \item \code{'erl'}: the completely non-parametric rank envelope test based on extreme rank lengths
   (Myllymäki et al., 2017; Mrkvička et al., 2018) based on number of minimal pointwise ranks
  \item \code{'cont'}: the completely non-parametric rank envelope test based on continuous rank
- (Hahn, 2015; Mrkvička et al., 2019) based on minimum of continuous pointwise ranks
+ (Hahn, 2015; Mrkvička et al., 2022) based on minimum of continuous pointwise ranks
  \item \code{'area'}: the completely non-parametric rank envelope test based on area rank
- (Mrkvička et al., 2019) based on area between continuous pointwise ranks and minimum
+ (Mrkvička et al., 2022) based on area between continuous pointwise ranks and minimum
  pointwise ranks for those argument (r) values for which pointwise ranks achieve the minimum
  (it is a combination of erl and cont)
   \item "qdir", the directional quantile envelope test, protected against unequal variance and
@@ -160,7 +169,7 @@ envelopes with intrinsic graphical interpretation.
 }
 The first four types are global rank envelopes.
 The \code{'rank'} envelope test is a completely non-parametric test,
-which provides the 100(1-alpha)% global envelope for the chosen test function
+which provides the 100(1-alpha)\% global envelope for the chosen test function
 T(r) on the chosen interval of distances and associated p-values.
 The other three are modifications of \code{'rank'} to treat the ties in
 the extreme rank ordering on which the \code{'rank'} test is based on.
@@ -170,10 +179,12 @@ distances r. Thus, it suffers from unequal variance of T(r) over the distances r
 from the asymmetry of distribution of T(r). We recommend to use the other global
 envelope tests available. The unscaled envelope is provided as a reference.
 
-See Myllymäki and Mrkvička (2020, Section 2.), i.e. \code{vignette("GET")}, for more detailed description of the measures and
-the corresponding envelopes.
+See Myllymäki and Mrkvička (2023, Appendix.), i.e. \code{vignette("GET")}, for more detailed
+description of the measures and the corresponding envelopes.
 
 See \code{vignette("pointpatterns")} for examples of point pattern analyses.
+See \code{vignette("FDRenvelopes")} for examples of FDR envelopes obtained by
+\code{typeone = "fdr"}.
 }
 \section{Procedure}{
 
@@ -361,11 +372,13 @@ Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA tes
 
 Mrkvička, T., Myllymäki, M., Kuronen, M. and Narisetty, N. N. (2022) New methods for multiple testing in permutation inference for the general linear model. Statistics in Medicine 41(2), 276-297. doi: 10.1002/sim.9236
 
+Mrkvička and Myllymäki (2023). False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7
+
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology) 79, 381–404. doi: 10.1111/rssb.12172
 
-Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+Myllymäki, M. and Mrkvička, T. (2023). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME] https://doi.org/10.48550/arXiv.1911.06583
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
