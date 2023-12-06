@@ -158,7 +158,8 @@ plotdefaultlabs <- function(x) {
 }
 
 # An inner function for a 'dotplot' style envelope plot with ggplot2.
-#' @importFrom ggplot2 arrow ggplot geom_segment aes .data geom_point scale_color_identity scale_x_discrete
+#' @importFrom ggplot2 ggplot geom_segment aes .data geom_point scale_color_identity scale_x_discrete
+#' @importFrom grid arrow
 env_dotplot_ggplot <- function(x, labels=NULL, sign.col="red") {
   if(is.null(labels) && !is.null(x[['r']])) labels <- paste(round(x[['r']], digits=2))
   df <- as.data.frame(x)
@@ -343,8 +344,10 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
   p
 }
 # An internal function for making a dotplot style "combined global envelope plot"
+#' @importFrom ggplot2 ggplot geom_segment scale_color_identity facet_wrap geom_point scale_x_discrete
+#' @importFrom grid arrow
 env_combined_dotplot <- function(x, main, xlab, ylab, labels, scales = "free",
-                                max_ncols_of_plots = 2, sign.col="red") {
+                                max_ncols_of_plots = 2, sign.col="red", ...) {
   if(!inherits(x, "list")) stop("Internal error. x is not a list.")
 
   n_of_plots <- as.integer(length(x))
@@ -356,7 +359,7 @@ env_combined_dotplot <- function(x, main, xlab, ylab, labels, scales = "free",
   for(i in 1:length(x))
     df <- rbind(df, data.frame(x[[i]], plotmain=plot_labels[i]))
 
-  arrow <- arrow(angle=75)
+  arrow <- arrow(angle=75, ...)
   if(length(attr(x, "alpha")) > 1) message("Note: dotplot shows only the largest envelope.")
   loname <- env_loname(attr(x, "alpha"), largest=TRUE)
   hiname <- env_hiname(attr(x, "alpha"), largest=TRUE)

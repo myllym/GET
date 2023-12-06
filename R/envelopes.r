@@ -543,6 +543,8 @@ plot.global_envelope <- function(x, dotplot = length(x$r)<10, sign.col = "red",
 #' two different plots are available:
 #' 1 for plotting the combined global envelopes (default and most often wanted) or
 #' 2 for plotting the second level test result.
+#' @param ... Ignored in most cases. If \code{dotplot = TRUE}, then parameters
+#' can be passed to \code{\link{arrow}}, e.g. length = unit(0.25, "cm").
 #' @export
 #' @seealso \code{\link{central_region}}
 plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
@@ -566,7 +568,7 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
     if(dotplot) {
       env_combined_dotplot(x, main=main, xlab=d$xlab, ylab=d$ylab,
                            labels=labels, scales=scales,
-                           max_ncols_of_plots=ncol, sign.col=sign.col)
+                           max_ncols_of_plots=ncol, sign.col=sign.col, ...)
     }
     else {
       if(missing(labels)) labels <- default_labels(x, labels)
