@@ -1,6 +1,6 @@
 Package: GET
 Version: 0.5
-Date: 2023-09-29
+Date: 2023-12-06
 Title: Global Envelopes
 Encoding: UTF-8
 Authors@R: c(
@@ -8,14 +8,14 @@ Authors@R: c(
     email = 'mari.myllymaki@luke.fi'),
     person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
+    person(given = 'Mikko', family = 'Kuronen', role = 'ctb',
+    email = 'mikko.kuronen@luke.fi'),
     person(given = 'Jiří', family = 'Dvořák', role = 'ctb',
     email = 'dvorak@karlin.mff.cuni.cz'),
     person(given = 'Pavel', family = 'Grabarnik', role = 'ctb',
     email = 'gpya@rambler.ru'),
     person(given = 'Ute', family = 'Hahn', role = 'ctb',
     email = 'ute@math.au.dk'),
-    person(given = 'Mikko', family = 'Kuronen', role = 'ctb',
-    email = 'mikko.kuronen@luke.fi'),
     person(given = 'Michael', family = 'Rost', role = 'ctb',
     email = 'rost@ef.jcu.cz'),
     person(given = 'Henri', family = 'Seijo', role = 'ctb',
