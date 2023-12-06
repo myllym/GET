@@ -1,3 +1,10 @@
+Changes in GET
+
+- Add argument 'typeone' to global_envelope_test: the default 'fwer' corresponds to the previously available global envelope tests,
+as specified by the argument 'type', while 'fdr' allows computation of FDR envelopes
+- The argument 'typeone' was removed from graph.flm and frank.flm; it should be now passed to global_envelope_test in GET.args.
+- Add curve_set function, with functionality similar to create_curve_set
+
 Changes in GET 0.5
 
 - Faster versions of graph.flm and frank.flm.
