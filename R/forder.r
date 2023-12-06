@@ -335,7 +335,9 @@ combined_forder <- function(curve_sets, ...) {
 #' in the curve set. If the component \code{obs} in the curve set is a vector, then its measure
 #' will be the first component (named 'obs') in the returned vector.
 #'
-#' @param curve_sets A \code{curve_set} object or a list of \code{curve_set} objects.
+#' @param curve_sets A \code{\link{curve_set}} object or a list of \code{\link{curve_set}} objects.
+#' Also \code{envelope} objects of \pkg{spatstat} and \code{fdata} of \pkg{fda.usc}
+#' are accepted instead of curve_set objects.
 #' @param measure The measure to use to order the functions from the most extreme to the least extreme
 #' one. Must be one of the following: 'rank', 'erl', 'cont', 'area', 'max', 'int', 'int2'. Default is 'erl'.
 #' @param scaling The name of the scaling to use if measure is 'max', 'int' or 'int2'.
