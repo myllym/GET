@@ -38,9 +38,10 @@ matching <- function( X.randomized, long, lat, Delta, target_variog, prctile, id
 #'
 #'
 #' The code is a modification of the supporting information code of Vilodomat et al. (2014)
-#' available at https://doi.org/10.1111/biom.12139. The modification includes the FDR (or FWER,
-#' if specified by the argument \code{typeone}) envelopes for the test of local correlations,
-#' i.e. multiple testing correction and graphical illustration of the test results.
+#' available at https://doi.org/10.1111/biom.12139. The modification includes the FDR or FWER envelopes
+#' (as specified by the argument \code{typeone} in \code{...}, passed to \code{\link{global_envelope_test}})
+#' for the test of local correlations, i.e. multiple testing correction and
+#' graphical illustration of the test results.
 #'
 #' Variograms are calculated using the package \pkg{geoR} and the local correlations using the R
 #' package \pkg{locfit}. These packages should be installed to use \code{GET.localcor}.
@@ -49,7 +50,7 @@ matching <- function( X.randomized, long, lat, Delta, target_variog, prctile, id
 #' Additionally width and height of area represented by a data point can be provided, see the argument \code{data}.
 #' This information is used for plotting purposes when plotting the output by \code{plot()}.
 #'
-#' Examples will be provided in a vignette.
+#' Examples are provided in the vignette 'FDRenvelopes', see e.g. https://cran.r-project.org/package=GET.
 #'
 #' @param data A data.frame where the first two columns correspond to the values of the two random fields,
 #' whose correlations are to be studied, and the third and fourth columns correspond to the x- and y-coordinates
@@ -77,8 +78,10 @@ matching <- function( X.randomized, long, lat, Delta, target_variog, prctile, id
 #' @param notest Logical. FALSE means that the test is done. TRUE allows to calculate only local
 #' correlation for the data, which can be beneficial for choosing the bandwidths before running
 #' the test. If TRUE, then only the observed local correlations will be returned.
-#' @param ... Additional parameters to be passed to \code{\link{fdr_envelope}} (if typeone = "fdr") or
-#' to \code{\link{global_envelope_test}} (if typeone = "fwer").
+#' @param ... Additional parameters to be passed to \code{\link{global_envelope_test}}.
+#' Note that for testing local correlations, it may often be preferable to use FDR control.
+#' This can be specified by setting \code{typeone = "fdr"}, while the default is FWER control.
+#' See \code{\link{global_envelope_test}} for defaults and available options.
 #' @inheritParams graph.fanova
 #' @inheritParams graph.flm
 #' @importFrom stats cor
@@ -99,14 +102,13 @@ matching <- function( X.randomized, long, lat, Delta, target_variog, prctile, id
 #'
 #' Mrkvička, T., Myllymäki, M. (2023) False discovery rate envelopes. Statistics and Computing 33, 109. https://doi.org/10.1007/s11222-023-10275-7
 #'
-GET.localcor <- function(data, Delta, nsim = 1000, typeone = c("fdr", "fwer"),
+GET.localcor <- function(data, Delta, nsim = 1000, ...,
                          varying.bandwidth = FALSE,
                          bandwidth.nn = 0.1, bandwidth.h = 5.281, maxk = 300,
                          savefuns = FALSE, N_s = 1000,
                          mc.cores = 1L, mc.args = NULL, cl = NULL,
-                         notest = FALSE, ...) {
+                         notest = FALSE) {
   if(nsim < 2) stop("Not a reasonable value of nsim.")
-  typeone <- check_typeone(typeone, missing(typeone))
   if(!is.logical(varying.bandwidth)) stop("Invalid varying.bandwidth value.")
   if(!is.logical(savefuns)) stop("Invalid savefuns value.")
   if(!(is.numeric(Delta) & length(Delta)>0 & all(Delta>0))) stop("Invalid Delta.")
@@ -239,14 +241,7 @@ GET.localcor <- function(data, Delta, nsim = 1000, typeone = c("fdr", "fwer"),
     else
       cset <- create_curve_set(list(obs=loc.cor.obs, sim_m=loc.cor))
 
-    switch(typeone,
-      fwer = {
-        res <- global_envelope_test(curve_sets=cset, ...)
-      },
-      fdr = {
-        res <- fdr_envelope(curve_sets=cset, lower=-1, upper=1, ...)
-      }
-    )
+    res <- global_envelope_test(cset, ..., lower=-1, upper=1)
 
     attr(res, "p_global") <- p.value.global
     attr(res, "cor_global") <- cor.global.obs

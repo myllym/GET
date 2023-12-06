@@ -334,6 +334,7 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #' By setting \code{fast = FALSE}, it is possible to use the slow version (third option)
 #' for any case. Usually this is not desired.
 #'
+#' @inheritParams global_envelope_test
 #' @inheritParams graph.fanova
 #' @inheritParams GET.composite
 #' @param formula.full The formula specifying the general linear model,
@@ -351,7 +352,9 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #' @param contrasts Logical or NULL. FALSE, TRUE and NULL specify the three test functions
 #' as described in description part of this help file.
 #' @param lm.args A named list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.
-#' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
+#' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}},
+#' e.g. \code{typeone} specifies the type of multiple testing control, FWER or FDR.
+#' See \code{\link{global_envelope_test}} for the defaults and available options.
 #' @param mc.args A named list of additional arguments to be passed to \code{\link{mclapply}}.
 #' Only relevant if \code{mc.cores} is more than 1.
 #' @param cl Allows parallelization through the use of \code{\link{parLapply}} (works also
@@ -431,13 +434,13 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #'   ggplot2::scale_radius(range = 2*c(1, 6))
 #' plot(res, what=c("obs", "lo", "hi", "lo.sign", "hi.sign"))
 #' plot(res, what=c("obs", "lo", "hi", "lo.sign", "hi.sign"), sign.type="col")
-graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "fdr"),
+graph.flm <- function(nsim, formula.full, formula.reduced,
                       curve_sets, factors = NULL,
-                      contrasts = FALSE, savefuns = FALSE, lm.args = NULL, GET.args = NULL,
+                      contrasts = FALSE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
+                      savefuns = FALSE,
                       fast = TRUE) {
   time0 <- proc.time()
-  typeone <- check_typeone(typeone, missing(typeone))
   use.dummy.coef <- is.logical(contrasts)
   if(all(sapply(factors, Negate(is.factor)))) {
     use.dummy.coef <- FALSE # No factors, no need for dummy.coef
@@ -556,15 +559,10 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
 
   complabels <- colnames(obs)
 
-  switch(typeone,
-         fwer = {
-           res <- do.call(global_envelope_test,
-                          c(list(curve_sets=csets, alternative="two.sided", nstep=1), GET.args))
-         },
-         fdr = {
-           res <- do.call(fdr_envelope,
-                          c(list(curve_sets=csets, alternative="two.sided"), GET.args))
-         })
+  res <- do.call(global_envelope_test, c(list(curve_sets=csets,
+                                              alternative="two.sided",
+                                              nstep=1), # nstep=1 concerns only 'fwer'
+                                  GET.args))
   attr(res, "method") <- "Graphical functional GLM" # Change method name
   attr(res, "labels") <- complabels
   # Re-define the default ylab
@@ -632,8 +630,8 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
 #' @examples
 #' data("GDPtax")
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-#' \dontshow{nsim <- 19}
 #' \donttest{nsim <- 999}
+#' \dontshow{nsim <- 19}
 #' res.tax_within_group <- frank.flm(nsim = nsim,
 #'   formula.full = Y~Group+Tax+Group:Tax,
 #'   formula.reduced = Y~Group+Tax,
@@ -660,13 +658,12 @@ graph.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
 #' @importFrom parallel mclapply
 #' @importFrom parallel parLapply
 #' @importFrom stats lm
-frank.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "fdr"),
+frank.flm <- function(nsim, formula.full, formula.reduced,
                       curve_sets, factors = NULL,
                       savefuns = TRUE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1, mc.args = NULL, cl = NULL,
                       method = c("best", "mlm", "lm", "ne")) {
   time0 <- proc.time()
-  typeone <- check_typeone(typeone, missing(typeone))
   # Preliminary checks and formulation of the data to suitable form for further processing
   method <- match.arg(method)
   X <- flm.checks(nsim=nsim, formula.full=formula.full, formula.reduced=formula.reduced,
@@ -749,13 +746,9 @@ frank.flm <- function(nsim, formula.full, formula.reduced, typeone = c("fwer", "
 
   cset <- create_curve_set(list(r = X$r, obs = obs, sim_m = sim))
   if(savefuns=="return") return(cset)
-  switch(typeone,
-         fwer = {
-           res <- do.call(global_envelope_test, c(list(curve_sets=cset, alternative="greater"), GET.args))
-         },
-         fdr = {
-           res <- do.call(fdr_envelope, c(list(curve_sets=cset, alternative="greater"), GET.args))
-         })
+  res <- do.call(global_envelope_test, c(list(curve_sets=cset,
+                                              alternative="greater"),
+                                  GET.args))
   res <- envelope_set_labs(res, ylab = expression(italic(F(r))))
   if(savefuns) attr(res, "simfuns") <- cset
   time3 <- proc.time()

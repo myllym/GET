@@ -1244,8 +1244,8 @@ global_envelope_test <- function(curve_sets, typeone = c("fwer", "fdr"),
 #'
 #' @param curve_set A \code{\link{curve_set}} object, or an \code{envelope} object of
 #' \pkg{spatstat}. If an envelope object is given, it must contain the summary
-#'  functions from the simulated patterns which can be achieved by setting
-#'  savefuns = TRUE when calling the function of \pkg{spatstat}.
+#' functions from the simulated patterns which can be achieved by setting
+#' savefuns = TRUE when calling the function of \pkg{spatstat}.
 #' @param type The type of the global envelope with current options for "rank", "erl", "cont" and "area".
 #' If "rank", the global rank envelope accompanied by the p-interval is given (Myllymäki et al., 2017).
 #' If "erl", the global rank envelope based on extreme rank lengths accompanied by the extreme rank
@@ -1282,7 +1282,7 @@ global_envelope_test <- function(curve_sets, typeone = c("fwer", "fdr"),
 #' }
 rank_envelope <- function(curve_set, type = "rank", ...) {
   if(!(type %in% c("rank", "erl", "cont", "area"))) stop("No such type for the global rank envelope.")
-  global_envelope_test(curve_set, type=type, ...)
+  global_envelope_test(curve_set, typeone="fwer", type=type, ...)
 }
 
 #' Global scaled maximum absolute difference (MAD) envelope tests
@@ -1338,7 +1338,7 @@ rank_envelope <- function(curve_set, type = "rank", ...) {
 qdir_envelope <- function(curve_set, ...) {
   args <- list(...)
   if("type" %in% names(args)) warning("type is hardcoded to be qdir here. No other options.")
-  global_envelope_test(curve_set, type="qdir", ...)
+  global_envelope_test(curve_set, typeone="fwer", type="qdir", ...)
 }
 
 #' Studentised envelope test
@@ -1352,7 +1352,7 @@ qdir_envelope <- function(curve_set, ...) {
 st_envelope <- function(curve_set, ...) {
   args <- list(...)
   if("type" %in% names(args)) warning("type is hardcoded to be st here. No other options.")
-  global_envelope_test(curve_set, type="st", ...)
+  global_envelope_test(curve_set, typeone="fwer", type="st", ...)
 }
 
 #' Unscaled envelope test
@@ -1370,5 +1370,5 @@ st_envelope <- function(curve_set, ...) {
 unscaled_envelope <- function(curve_set, ...) {
   args <- list(...)
   if("type" %in% names(args)) warning("type is hardcoded to be unscaled here. No other options.")
-  global_envelope_test(curve_set, type="unscaled", ...)
+  global_envelope_test(curve_set, typeone="fwer", type="unscaled", ...)
 }

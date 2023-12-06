@@ -57,10 +57,10 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #' (n*(n-1)/2)*1000 - 1 for the case \code{contrasts = TRUE},
 #' where n is the length of x.
 #'
+#' @inheritParams graph.fanova
 #' @param x A list of numeric vectors, one for each sample.
 #' @param r The sequence of argument values at which the distribution functions are to be compared.
 #' The default is 100 equally spaced values between the minimum and maximum over all groups.
-#' @inheritParams graph.fanova
 #' @export
 #' @examples
 #' if(require(fda, quietly=TRUE)) {
@@ -143,7 +143,7 @@ GET.necdf <- function(x, r = seq(min(unlist((lapply(x, min)))), max(unlist((lapp
                                         sim_m = sim[,i,]))
   }
   names(csets) <- complabels
-  # GET
+  # FWER or FDR envelope
   res <- global_envelope_test(csets, alternative="two.sided", ..., nstep=1)
   if(!contrasts)
     res <- envelope_set_labs(res, xlab = expression(italic(x)),
