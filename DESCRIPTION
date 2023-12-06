@@ -26,6 +26,7 @@ Imports:
     cluster,
     ggplot2,
     grDevices,
+    grid,
     gridExtra,
     parallel,
     stats,
