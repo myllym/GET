@@ -55,6 +55,8 @@ options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
 \Abstract{
 This vignette gives examples of the use of global envelopes for point pattern analysis,
 as implemented in the \proglang{R} package \pkg{GET}.
+When citing the vignette and package please cite \citet{MyllymakiMrkvicka2023}
+and references given by typing \code{citation("GET")} in \proglang{R}.
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
@@ -82,7 +84,7 @@ as implemented in the \proglang{R} package \pkg{GET}.
 \section{Introduction}
 
 This vignette gives examples of the use of global envelopes for the analysis of spatial point patterns.
-The examples utilize the \proglang{R} \citep{R2020} package \pkg{spatstat} \citep{spatstat2015} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2020}. The envelope plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
+The examples utilize the \proglang{R} \citep{R2020} package \pkg{spatstat} \citep{spatstat2015} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2023}. The envelope plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
 %
 <<r_setup>>=
 library("GET")
@@ -285,8 +287,8 @@ env_L <- envelope(X, nsim = nsim,
   savefuns = TRUE,             # Save the estimated functions
   savepatterns = TRUE,         # Save the simulated patterns
   verbose = FALSE)
-  # The simulations can be obtained from the returned object:
-  simulations <- attr(env_L, "simpatterns")
+# The simulations can be obtained from the returned object:
+simulations <- attr(env_L, "simpatterns")
 @
 %
 And then the other test functions $F$, $G$, $J$ should be calculated for each simulated pattern:
@@ -323,6 +325,30 @@ res_combined <- global_envelope_test(curve_sets = list(curve_set_L, curve_set_F,
 plot(res_combined, labels = c("L(r)-r", "F(r)", "G(r)", "J(r)"))
 @
 %
+
+
+\section{The problem of NA values in the curve set}
+
+With some functions in spatial statistics, missing NA values often appear for some distances $r$, which typically are not of interest, e.g., for the $J$-function with too large distances and for the pair-correlation function at zero. There is currently no automatic way to compute the envelopes with NA values existing in the \code{curve\_set} object: when such distances are present, they should be removed before computation of the envelope. This can be done using the function \fct{crop\_curves}. The function allows 1) to crop the curves to a user-specified interval $[r_{\min}, r_{\max}]$ (arguments \code{r_min} and \code{r_max}), or 2) to crop away all $r$-distances with NA (or infinite) values.
+
+Consider the example of adult trees from \pkg{GET} \citep[][Section 3.2]{MyllymakiMrkvicka2023}
+replacing the $L$-function with the $J$-function.
+The \fct{envelope} function returns some NAs for the range of $r$-values specified below.
+Without cropping away these, the function \fct{global\_envelope\_test} returns an error.
+A working example is as follows (instead of \code{allfinite} one could specify cropping through \code{r_max}):
+%
+<<problem_of_NAs, eval=FALSE, show=TRUE>>=
+data("adult_trees")
+X <- as.ppp(adult_trees, W = square(75))
+
+env <- envelope(X, nsim = 999, fun = "Jest", correction = "km",
+  simulate = expression(runifpoint(ex = X)),
+  savefuns = TRUE, verbose = FALSE, r = seq(0, 10, length = 512))
+cset <- crop_curves(env, allfinite=TRUE)
+res <- global_envelope_test(cset)
+@
+%
+
 
 \section{A one-stage goodness-of-fit test (typically conservative!)}
 
@@ -381,7 +407,7 @@ In the above example conditioning on the number of points was not employed.
 \section{Adjusted global envelope test for composite hypotheses}
 
 Let us test the fit of a Matern cluster process for the sapling data as an example of a composite hypothesis test.
-The adjusted test of the \pkg{GET} package is described in Section 2.3 of \citet{MyllymakiMrkvicka2020}. The procedure was suggested by \citet{BaddeleyEtal2017} and extended for global envelopes in \citet{MyllymakiMrkvicka2020}.
+The adjusted test of the \pkg{GET} package is described in Section 2.3 of \citet{MyllymakiMrkvicka2023}. The procedure was suggested by \citet{BaddeleyEtal2017} and extended for global envelopes in \citet{MyllymakiMrkvicka2023}.
 %
 <<saplings, fig=TRUE, width=3, height=3>>=
 data(saplings)
@@ -445,11 +471,11 @@ res_sF <- GET.spatialF(bei, fullmodel, reducedmodel,
 @
 %
 <<spatialF_bei_F, fig=TRUE, width=6, height=3>>=
-plot(res_sF$F)
+plot(res_sF$F, what = c("obs", "hi", "hi.sign"), sign.type = "col")
 @
 %
 <<spatialF_bei_S, fig=TRUE, width=6, height=3>>=
-plot(res_sF$S)
+plot(res_sF$S, what = c("obs", "hi", "hi.sign"), sign.type = "col")
 @
 %
 
@@ -479,11 +505,11 @@ res_sF2 <- GET.spatialF(pp.lightning, fullmodel, reducedmodel,
 @
 %
 <<spatialF_forestfires_F, fig=TRUE, width=6, height=3>>=
-plot(res_sF2$F)
+plot(res_sF2$F, what = c("obs", "hi", "hi.sign"), sign.type = "col")
 @
 %
 <<spatialF_forestfires_S, fig=TRUE, width=6, height=3>>=
-plot(res_sF2$S)
+plot(res_sF2$S, what = c("obs", "hi", "hi.sign"), sign.type = "col")
 @
 %
 
