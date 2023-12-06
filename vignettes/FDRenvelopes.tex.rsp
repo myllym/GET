@@ -54,7 +54,7 @@
 This vignette gives examples of the use of false discoverate rate (FDR) envelopes
 that are proposed in \citep{MrkvickaMyllymaki2023} and implemented in the \proglang{R} package \pkg{GET}.
 When citing the vignette please cite \citet{MrkvickaMyllymaki2023} and
-Myllym{\"a}ki and Mrkvi\v cka (2020, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME])
+Myllym{\"a}ki and Mrkvi\v cka (2023, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME])
 available at \url{https://arxiv.org/abs/1911.06583}.
 }
 
@@ -96,8 +96,7 @@ R> library("ggplot2")
 R> theme_set(theme_bw(base_size = 9))
 R> library("patchwork")
 R> library("readxl")
-R> library(patchwork)
-R> library(spatstat)
+R> library("spatstat")
 \end{Sinput}
 \end{Schunk}
 %
@@ -128,7 +127,7 @@ To test the null hypothesis
 \end{equation}
 they took the estimator of the regression coefficient, i.e.\ $\hat{\beta}_1(k)$, as the test statistic following the methodology proposed in \citet{MrkvickaEtal2021a}.
 
-The function \fct{graph.flm} of \pkg{GET} allows the use of tests in functional general linear models based on regression coefficients. The simulations under the null hypotheses are performed using the \citet{FreedmanLane1983} procedure and, for the multiple testing correction due to the use of multivariate (functional) test statistic, the function \fct{graph.flm} provides both control of FDR (local test) or family-wise error rate (FWER, global test). The multiple testing control is chosen by the argument \code{typeone}. If \code{typeone = "fdr"}, the the FDR envelopes proposed by \citet{MrkvickaMyllymaki2023} are used. The choice \code{typeone = "fwer"} leads to the use of global envelope tests, see \fct{global\_envelope\_test}.
+The function \fct{graph.flm} of \pkg{GET} allows the use of tests in functional general linear models based on regression coefficients. The simulations under the null hypotheses are performed using the \citet{FreedmanLane1983} procedure and, for the multiple testing correction due to the use of multivariate (functional) test statistic, the function \fct{graph.flm} provides both control of FDR (local test) or family-wise error rate (FWER, global test). The multiple testing control is chosen by the argument \code{typeone} that must be passed to the function \fct{global\_envelope\_test} in the argument \code{GET.args}. If \code{typeone = "fdr"} is specified, the the FDR envelopes proposed by \citet{MrkvickaMyllymaki2023} are used. The choice \code{typeone = "fwer"} leads to the use of global envelope tests controlling FWER. See \fct{global\_envelope\_test} for details on the arguments.
 
 Thus, the test of null hypothesis \eqref{eq:rimovH0} using the $\hat{\beta}_1(k)$ as the test statistic and the FDR control can be performed as follows. Here \code{nsim} specifies the number of permutations of the \citet{FreedmanLane1983} method, \code{formula.full} specifies the full model, \code{formula.reduced} specifies the reduced model where the interesting factor whose significance is to be tested is dropped out in comparison to the \code{formula.full}, and the data are provided in \code{curve_sets} and \code{factors}.
 %
@@ -139,9 +138,9 @@ R> nsim <- 7000
 R> res <- graph.flm(nsim=nsim,
 +    formula.full = Y~Year,
 +    formula.reduced = Y~1,
-+    typeone = "fdr",
 +    curve_sets = list(Y=rimov),
-+    factors = data.frame(Year = 1979:2014-1978))
++    factors = data.frame(Year = 1979:2014-1978),
++    GET.args = list(typeone = "fdr"))
 \end{Sinput}
 \end{Schunk}
 %
@@ -299,9 +298,9 @@ R> nsim <- 5000
 R> resC <- graph.flm(nsim = nsim,
 +                    formula.full = Y ~ GDP + Continent,
 +                    formula.reduced = Y ~ GDP,
-+                    typeone = "fdr", # Choose the control
 +                    curve_sets = list(Y=POPcset, GDP=GDPcset),
 +                    factors = data.frame(Continent = groups),
++                    GET.args = list(typeone = "fdr"), # Choose the control
 +                    contrasts = FALSE)
 R> plot(resC)
 \end{Sinput}
@@ -320,9 +319,9 @@ Second, the effect of GDP was tested:
 R> resG <- graph.flm(nsim = nsim,
 +                    formula.full = Y ~ GDP + Continent,
 +                    formula.reduced = Y ~ Continent,
-+                    typeone = "fdr", # Choose the control
 +                    curve_sets = list(Y=POPcset, GDP=GDPcset),
 +                    factors = data.frame(Continent = groups),
++                    GET.args = list(typeone = "fdr"), # Choose the control
 +                    contrasts = FALSE)
 R> # Basic plot: 
 R> plot(resG)
@@ -354,9 +353,9 @@ Third, the effect of the interaction of continent and GDP was tested:
 R> resCG <- graph.flm(nsim = nsim,
 +                    formula.full = Y ~ GDP + Continent + GDP:Continent,
 +                    formula.reduced = Y ~ GDP + Continent,
-+                    typeone = "fdr",
 +                    curve_sets = list(Y=POPcset, GDP=GDPcset),
 +                    factors = data.frame(Continent = groups),
++                    GET.args = list(typeone = "fdr"), # Choose the control
 +                    contrasts = FALSE, savefuns = TRUE)
 R> # Tuned labels
 R> plot(resCG) +
@@ -381,7 +380,6 @@ The data we used was available as an excel file at \url{http://ctfs.si.edu/webat
 
 \begin{Schunk}
 \begin{Sinput}
-R> library(openxlsx)
 R> data <- read_excel("bci.block20.data.xls", sheet=2)
 \end{Sinput}
 \end{Schunk}
