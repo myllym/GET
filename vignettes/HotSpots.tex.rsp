@@ -52,7 +52,7 @@
 
 %% - \Abstract{} almost as usual
 \Abstract{
-This vignette shows how the methodology proposed by \citet{MrkvickaEtal2023} for detecting hotspots on a linear network can be performed using the \proglang{R} package \pkg{GET}.
+This vignette shows how the methodology proposed by \citet{MrkvickaEtal2023} for detecting hotspots on a linear network can be performed using the \proglang{R} package \pkg{GET} \citep{MyllymakiMrkvicka2023}.
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
