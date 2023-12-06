@@ -18,7 +18,8 @@
 \item{x}{an 'combined_fboxplot' object}
 
 \item{labels}{A character vector of suitable length.
-If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
+If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis;
+only valid/used when all components of \code{x} have the same dimension.
 Otherwise labels for the separate plots.}
 
 \item{scales}{See \code{\link[ggplot2]{facet_wrap}}.

@@ -8,7 +8,7 @@ GET.localcor(
   data,
   Delta,
   nsim = 1000,
-  typeone = c("fdr", "fwer"),
+  ...,
   varying.bandwidth = FALSE,
   bandwidth.nn = 0.1,
   bandwidth.h = 5.281,
@@ -18,8 +18,7 @@ GET.localcor(
   mc.cores = 1L,
   mc.args = NULL,
   cl = NULL,
-  notest = FALSE,
-  ...
+  notest = FALSE
 )
 }
 \arguments{
@@ -35,11 +34,10 @@ values to find one suitable for their data.}
 
 \item{nsim}{The number of resamples.}
 
-\item{typeone}{Character string indicating which type I error rate to control,
-either the familywise error rate ('fwer') or false discovery rate ('fdr').
-Further arguments to the FWER or FDR envelope can be passed in argument \code{GET.args}.
-If 'fwer', the type of the envelope can be chosen by specifying the argument \code{type}
-in \code{GET.args}.}
+\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.
+Note that for testing local correlations, it may often be preferable to use FDR control.
+This can be specified by setting \code{typeone = "fdr"}, while the default is FWER control.
+See \code{\link{global_envelope_test}} for defaults and available options.}
 
 \item{varying.bandwidth}{Logical, whether to use a varying bandwidth to calculate the local correlations or not.
 See Vilodomat et al. (2014).}
@@ -77,9 +75,6 @@ in Windows), see the argument \code{cl} there, and examples.}
 \item{notest}{Logical. FALSE means that the test is done. TRUE allows to calculate only local
 correlation for the data, which can be beneficial for choosing the bandwidths before running
 the test. If TRUE, then only the observed local correlations will be returned.}
-
-\item{...}{Additional parameters to be passed to \code{\link{fdr_envelope}} (if typeone = "fdr") or
-to \code{\link{global_envelope_test}} (if typeone = "fwer").}
 }
 \value{
 A global envelope object (with possible additional classes), see description of main components 
@@ -96,9 +91,10 @@ and the FDR envelope of Mrkvička and Myllymäki (2023).
 }
 \details{
 The code is a modification of the supporting information code of Vilodomat et al. (2014)
-available at https://doi.org/10.1111/biom.12139. The modification includes the FDR (or FWER,
-if specified by the argument \code{typeone}) envelopes for the test of local correlations,
-i.e. multiple testing correction and graphical illustration of the test results.
+available at https://doi.org/10.1111/biom.12139. The modification includes the FDR or FWER envelopes
+(as specified by the argument \code{typeone} in \code{...}, passed to \code{\link{global_envelope_test}})
+for the test of local correlations, i.e. multiple testing correction and
+graphical illustration of the test results.
 
 Variograms are calculated using the package \pkg{geoR} and the local correlations using the R
 package \pkg{locfit}. These packages should be installed to use \code{GET.localcor}.
@@ -107,7 +103,7 @@ Currently the data is provided in the format of Vilodomat et al. (2014, Supporti
 Additionally width and height of area represented by a data point can be provided, see the argument \code{data}.
 This information is used for plotting purposes when plotting the output by \code{plot()}.
 
-Examples will be provided in a vignette.
+Examples are provided in the vignette 'FDRenvelopes', see e.g. https://cran.r-project.org/package=GET.
 }
 \references{
 Viladomat, J., Mazumder, R., McInturff, A., McCauley, D.J. and Hastie, T. (2014). Assessing the significance of global and local correlations under spatial autocorrelation: A nonparametric approach. Biometrics 70, 409-418. doi: 10.1111/biom.12139

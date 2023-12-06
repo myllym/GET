@@ -8,7 +8,6 @@ frank.flm(
   nsim,
   formula.full,
   formula.reduced,
-  typeone = c("fwer", "fdr"),
   curve_sets,
   factors = NULL,
   savefuns = TRUE,
@@ -29,12 +28,6 @@ see \code{formula} in \code{\link[stats]{lm}}.}
 \item{formula.reduced}{The formula of the reduced model with nuisance factors only. This model
 should be nested within the full model.}
 
-\item{typeone}{Character string indicating which type I error rate to control,
-either the familywise error rate ('fwer') or false discovery rate ('fdr').
-Further arguments to the FWER or FDR envelope can be passed in argument \code{GET.args}.
-If 'fwer', the type of the envelope can be chosen by specifying the argument \code{type}
-in \code{GET.args}.}
-
 \item{curve_sets}{A named list of sets of curves giving the dependent variable (Y), and
 possibly additionally factors whose values vary across the argument values of the functions.
 The dimensions of the elements should match with each other.
@@ -51,7 +44,9 @@ this can be used by \code{\link{partial_forder}}.}
 
 \item{lm.args}{A named list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
 
-\item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.}
+\item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}},
+e.g. \code{typeone} specifies the type of multiple testing control, FWER or FDR.
+See \code{\link{global_envelope_test}} for the defaults and available options.}
 
 \item{mc.cores}{The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
@@ -113,8 +108,8 @@ checking the validity of the implementation.
 \examples{
 data("GDPtax")
 factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
-\dontshow{nsim <- 19}
 \donttest{nsim <- 999}
+\dontshow{nsim <- 19}
 res.tax_within_group <- frank.flm(nsim = nsim,
   formula.full = Y~Group+Tax+Group:Tax,
   formula.reduced = Y~Group+Tax,

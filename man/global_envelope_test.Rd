@@ -6,29 +6,35 @@
 \usage{
 global_envelope_test(
   curve_sets,
-  type = "erl",
+  typeone = c("fwer", "fdr"),
   alpha = 0.05,
   alternative = c("two.sided", "less", "greater"),
+  type = "erl",
+  algorithm = c("IATSE", "ATSE"),
   ties = "erl",
   probs = c(0.025, 0.975),
   quantile.type = 7,
   central = "mean",
   nstep = 2,
-  ...
+  ...,
+  lower = NULL,
+  upper = NULL
 )
 }
 \arguments{
-\item{curve_sets}{A \code{\link{curve_set}} or an \code{envelope} object
-of \pkg{spatstat} containing a data function and simulated functions.
+\item{curve_sets}{A \code{\link{curve_set}} object or a list of \code{\link{curve_set}}
+objects containing a data function and simulated functions from which the envelope is
+to be constructed.
+Also \code{envelope} objects of \pkg{spatstat} are accepted instead of curve_set objects.
 If an envelope object is given, it must contain the summary
-functions from the simulated patterns which can be achieved by setting
-\code{savefuns = TRUE} when calling the \code{envelope} function.
-Alternatively, a list of \code{curve_set} or \code{envelope} objects can be given.}
+functions from simulated patterns which can be achieved by setting
+\code{savefuns = TRUE} when calling the \code{envelope} function.}
 
-\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
-'qdir', 'st' and 'unscaled'. See details.}
+\item{typeone}{Character string indicating which type I error rate to control,
+either the family-wise error rate ('fwer') or false discovery rate ('fdr').}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated
+under the 'fwer' or 'fdr' control.
 If a vector of values is provided, the global envelopes are calculated for each value.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
@@ -36,7 +42,14 @@ Must be one of the following: "two.sided" (default), "less" or "greater".
 The last two options only available for types \code{'rank'}, \code{'erl'},
 \code{'cont'} and \code{'area'}.}
 
-\item{ties}{The method to obtain a unique p-value when  \code{type = 'rank'}.
+\item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
+'qdir', 'st' and 'unscaled'. See details.}
+
+\item{algorithm}{The algorithm for the computation of the FDR envelope.
+Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
+envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2023).}
+
+\item{ties}{The method to obtain a unique p-value when \code{typeone = 'fwer'} and \code{type = 'rank'}.
 Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 For 'conservative' the resulting p-value will be the highest possible.
 For 'liberal' the p-value will be the lowest possible.
@@ -61,11 +74,20 @@ For 'qdir', 'st' and 'unscaled' only the mean is allowed as an option, due to th
 \item{nstep}{1 or 2 for how to contruct a combined global envelope if list of curve sets
 is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
 
-\item{...}{Additional parameters to be passed to \code{\link{central_region}}.}
+\item{...}{Additional parameters to be passed to \code{\link{central_region}} for the computation
+of the 'fwer' envelope.}
+
+\item{lower}{A single number (or a vector of suitable length) giving a lower bound
+for the functions. Used only for the extension of the FDR envelope.}
+
+\item{upper}{A single number (or a vector of suitable length) giving an upper bound
+for the functions. Used only for the extension of the FDR envelope.}
 }
 \value{
 Either an object of class "global_envelope" or "combined_global_envelope",
 similarly as the objects returned by \code{\link{central_region}}.
+Further, if \code{typeone = "fdr"}, the objects have the further class
+"fdr_envelope" or "combined_fdr_envelope".
 
 The \code{global_envelope} is essentially a data frame containing columns
 \itemize{

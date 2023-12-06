@@ -9,6 +9,7 @@
   labels,
   scales,
   sign.col = "red",
+  dotplot = length(x[[1]]$obs) < 5,
   ncol = 2 + 1 * (length(x) == 3),
   digits = 3,
   level = 1,
@@ -19,7 +20,8 @@
 \item{x}{An 'combined_global_envelope' object}
 
 \item{labels}{A character vector of suitable length.
-If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis.
+If \code{dotplot = TRUE} (for the level 2 test), then labels for the tests at x-axis;
+only valid/used when all components of \code{x} have the same dimension.
 Otherwise labels for the separate plots.}
 
 \item{scales}{See \code{\link[ggplot2]{facet_wrap}}.
@@ -31,6 +33,9 @@ A sensible default based on r-values exists.}
 (significant regions). Default to "red". Setting the color to \code{NULL} corresponds
 to no coloring. If the object contains several envelopes, the coloring is done for
 the widest one.}
+
+\item{dotplot}{Logical. If TRUE, then instead of envelopes a dot plot is done.
+Suitable for low dimensional test vectors.}
 
 \item{ncol}{The maximum number of columns for the figures.
 Default 2 or 3, if the length of x equals 3.
@@ -44,7 +49,8 @@ two different plots are available:
 1 for plotting the combined global envelopes (default and most often wanted) or
 2 for plotting the second level test result.}
 
-\item{...}{Ignored.}
+\item{...}{Ignored in most cases. If \code{dotplot = TRUE}, then parameters
+can be passed to \code{\link{arrow}}, e.g. length = unit(0.25, "cm").}
 }
 \description{
 This function provides plots for combined global envelopes.

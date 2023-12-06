@@ -14,12 +14,16 @@ fdr_envelope(
 )
 }
 \arguments{
-\item{curve_sets}{A \code{\link{curve_set}} object, or an \code{envelope} object of
-\pkg{spatstat}, containing the observed function and the functions from which
-the envelope is to be constructed. Alternatively, a list of appropriate objects
-can be given.}
+\item{curve_sets}{A \code{\link{curve_set}} object or a list of \code{\link{curve_set}}
+objects containing a data function and simulated functions from which the envelope is
+to be constructed.
+Also \code{envelope} objects of \pkg{spatstat} are accepted instead of curve_set objects.
+If an envelope object is given, it must contain the summary
+functions from simulated patterns which can be achieved by setting
+\code{savefuns = TRUE} when calling the \code{envelope} function.}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated
+under the 'fwer' or 'fdr' control.
 If a vector of values is provided, the global envelopes are calculated for each value.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
@@ -27,18 +31,26 @@ Must be one of the following: "two.sided" (default), "less" or "greater".
 The last two options only available for types \code{'rank'}, \code{'erl'},
 \code{'cont'} and \code{'area'}.}
 
-\item{algorithm}{Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
+\item{algorithm}{The algorithm for the computation of the FDR envelope.
+Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
 envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2023).}
 
 \item{lower}{A single number (or a vector of suitable length) giving a lower bound
-for the functions. Used only for the extension, see Mrkvička and Myllymäki (2023, p. 6).}
+for the functions. Used only for the extension of the FDR envelope.}
 
 \item{upper}{A single number (or a vector of suitable length) giving an upper bound
-for the functions.}
+for the functions. Used only for the extension of the FDR envelope.}
 }
 \description{
 Calculate the FDR envelope based on the ATSE or IATSE algorithm
 of Mrkvička and Myllymäki (2023).
+}
+\details{
+Typical use of this function is through other functions.
+\code{fdr_envelope(cset)} is the same as \code{global_envelope_test(cset, typeone = "fdr")}.
+Functions such as \code{\link{graph.fanova}}, \code{\link{graph.flm}}, \code{\link{frank.flm}}
+allow to use the FDR control by specifying \code{typeone = "fdr"} appropriately
+(passing this to \code{global_envelope_test}).
 }
 \examples{
 # A GLM example
@@ -48,9 +60,9 @@ data(rimov)
 res <- graph.flm(nsim=nsim,
                  formula.full = Y~Year,
                  formula.reduced = Y~1,
-                 typeone = "fdr",
                  curve_sets = list(Y=rimov),
-                 factors = data.frame(Year = 1979:2014))
+                 factors = data.frame(Year = 1979:2014),
+                 GET.args = list(typeone = "fdr"))
 plot(res)
 
 }

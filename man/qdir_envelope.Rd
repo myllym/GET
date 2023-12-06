@@ -15,8 +15,8 @@ unscaled_envelope(curve_set, ...)
 \arguments{
 \item{curve_set}{A \code{\link{curve_set}} object, or an \code{envelope} object of
 \pkg{spatstat}. If an envelope object is given, it must contain the summary
- functions from the simulated patterns which can be achieved by setting
- savefuns = TRUE when calling the function of \pkg{spatstat}.}
+functions from the simulated patterns which can be achieved by setting
+savefuns = TRUE when calling the function of \pkg{spatstat}.}
 
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.}
 }

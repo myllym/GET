@@ -14,17 +14,19 @@ combined_scaled_MAD_envelope_test(
 )
 }
 \arguments{
-\item{curve_sets}{A \code{\link{curve_set}} or an \code{envelope} object
-of \pkg{spatstat} containing a data function and simulated functions.
+\item{curve_sets}{A \code{\link{curve_set}} object or a list of \code{\link{curve_set}}
+objects containing a data function and simulated functions from which the envelope is
+to be constructed.
+Also \code{envelope} objects of \pkg{spatstat} are accepted instead of curve_set objects.
 If an envelope object is given, it must contain the summary
-functions from the simulated patterns which can be achieved by setting
-\code{savefuns = TRUE} when calling the \code{envelope} function.
-Alternatively, a list of \code{curve_set} or \code{envelope} objects can be given.}
+functions from simulated patterns which can be achieved by setting
+\code{savefuns = TRUE} when calling the \code{envelope} function.}
 
 \item{type}{Either "qdir" for the direction quantile envelope test or
 "st" for the studentized envelope test.}
 
-\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated.
+\item{alpha}{The significance level. The 100(1-alpha)\% global envelope will be calculated
+under the 'fwer' or 'fdr' control.
 If a vector of values is provided, the global envelopes are calculated for each value.}
 
 \item{probs}{A two-element vector containing the lower and upper

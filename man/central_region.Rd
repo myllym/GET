@@ -18,7 +18,9 @@ central_region(
 )
 }
 \arguments{
-\item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
+\item{curve_sets}{A \code{\link{curve_set}} object or a list of \code{\link{curve_set}} objects.
+Also \code{envelope} objects of \pkg{spatstat} and \code{fdata} of \pkg{fda.usc}
+are accepted instead of curve_set objects.}
 
 \item{type}{The type of the global envelope with current options for 'rank', 'erl', 'cont', 'area',
 'qdir', 'st' and 'unscaled'. See details.}

@@ -15,7 +15,9 @@ forder(
 )
 }
 \arguments{
-\item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
+\item{curve_sets}{A \code{\link{curve_set}} object or a list of \code{\link{curve_set}} objects.
+Also \code{envelope} objects of \pkg{spatstat} and \code{fdata} of \pkg{fda.usc}
+are accepted instead of curve_set objects.}
 
 \item{measure}{The measure to use to order the functions from the most extreme to the least extreme
 one. Must be one of the following: 'rank', 'erl', 'cont', 'area', 'max', 'int', 'int2'. Default is 'erl'.}

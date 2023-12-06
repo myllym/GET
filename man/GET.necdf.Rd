@@ -23,8 +23,13 @@ description part of this help file.}
 
 \item{nsim}{The number of random permutations.}
 
-\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}} (if \code{typeone = "fwer"})
-or \code{\link{fdr_envelope}} (if \code{typeone = "fdr"}).}
+\item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.
+For example, the type of multiple testing control, FWER or FDR must be set by \code{typeone}.
+And, if \code{typeone = "fwer"}, the type of the global envelope can be chosen by
+specifying the argument \code{type}. See \code{\link{global_envelope_test}}
+for the defaults and available options.
+(The test here uses \code{alternative="two.sided"} and \code{nstep=1} (when relevant),
+but all the other specifications are to be given in \code{...}.)}
 }
 \description{
 Compare the distributions of two (or more) samples.

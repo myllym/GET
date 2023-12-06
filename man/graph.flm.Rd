@@ -8,16 +8,15 @@ graph.flm(
   nsim,
   formula.full,
   formula.reduced,
-  typeone = c("fwer", "fdr"),
   curve_sets,
   factors = NULL,
   contrasts = FALSE,
-  savefuns = FALSE,
   lm.args = NULL,
   GET.args = NULL,
   mc.cores = 1L,
   mc.args = NULL,
   cl = NULL,
+  savefuns = FALSE,
   fast = TRUE
 )
 }
@@ -29,12 +28,6 @@ see \code{formula} in \code{\link[stats]{lm}}.}
 
 \item{formula.reduced}{The formula of the reduced model with nuisance factors only. This model
 should be nested within the full model.}
-
-\item{typeone}{Character string indicating which type I error rate to control,
-either the familywise error rate ('fwer') or false discovery rate ('fdr').
-Further arguments to the FWER or FDR envelope can be passed in argument \code{GET.args}.
-If 'fwer', the type of the envelope can be chosen by specifying the argument \code{type}
-in \code{GET.args}.}
 
 \item{curve_sets}{A named list of sets of curves giving the dependent variable (Y), and
 possibly additionally factors whose values vary across the argument values of the functions.
@@ -49,12 +42,11 @@ to the number of curves. Each column should specify the values of a factor.}
 \item{contrasts}{Logical or NULL. FALSE, TRUE and NULL specify the three test functions
 as described in description part of this help file.}
 
-\item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
-simfuns.}
-
 \item{lm.args}{A named list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
 
-\item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.}
+\item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}},
+e.g. \code{typeone} specifies the type of multiple testing control, FWER or FDR.
+See \code{\link{global_envelope_test}} for the defaults and available options.}
 
 \item{mc.cores}{The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
@@ -66,6 +58,9 @@ Only relevant if \code{mc.cores} is more than 1.}
 
 \item{cl}{Allows parallelization through the use of \code{\link{parLapply}} (works also
 in Windows), see the argument \code{cl} there, and examples.}
+
+\item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
+simfuns.}
 
 \item{fast}{Logical. See details.}
 }

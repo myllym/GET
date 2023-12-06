@@ -7,7 +7,9 @@
 fBoxplot(curve_sets, factor = 1.5, coverage = 0.5, ...)
 }
 \arguments{
-\item{curve_sets}{A \code{curve_set} object or a list of \code{curve_set} objects.}
+\item{curve_sets}{A \code{\link{curve_set}} object or a list of \code{\link{curve_set}} objects.
+Also \code{envelope} objects of \pkg{spatstat} and \code{fdata} of \pkg{fda.usc}
+are accepted instead of curve_set objects.}
 
 \item{factor}{The constant factor to inflate the central region to produce a functional boxplot and
 determine fences for outliers. Default is 1.5 as in a classical boxplot.}
