@@ -55,17 +55,32 @@ theme_set(theme_bw(base_size = 9))
 %% - \Plaintitle{} without LaTeX markup (if any)
 %% - \Shorttitle{} with LaTeX markup (if any), used as running title
 \title{\pkg{GET}: Global Envelopes in \proglang{R}}
-\Plaintitle{GET: Global envelopes in R}
+\Plaintitle{GET: Global Envelopes in R}
 \Shorttitle{\pkg{GET}: Global Envelopes in \proglang{R}}
 
 %% - \Abstract{} almost as usual
 \Abstract{
-This work describes the \proglang{R} package \pkg{GET} that implements global envelopes
-for a general set of $d$-dimensional vectors $T$ in various applications. A $100(1-\alpha)$\% global envelope is a band bounded by two vectors such that the probability that $T$ falls outside this envelope in any of the $d$ points is equal to $\alpha$. Global means that the probability is controlled simultaneously for all the $d$ elements of the vectors. The global envelopes
-can be employed for central regions of functional or multivariate data, for graphical Monte Carlo and permutation tests where the test statistic is multivariate or functional, and for global confidence and prediction bands.
+This work describes the \proglang{R} package \pkg{GET} that implements global
+envelopes for a general set of $d$-dimensional vectors $T$ in various applications.
+A $100(1-\alpha)$\% global envelope is a band bounded by two vectors such that
+the probability that $T$ falls outside this envelope in any of the $d$ points is
+equal to $\alpha$.
+The term 'global' means that this probability is controlled simultaneously
+for all the $d$ elements of the vectors.
+The global envelopes can be employed for central regions of functional or multivariate data,
+for graphical Monte Carlo and permutation tests where the test statistic is multivariate or functional,
+and for global confidence and prediction bands.
 Intrinsic graphical interpretation property is introduced for global envelopes.
-The global envelopes included in the \pkg{GET} package have the property, which particularly helps to interpret the test results, by having a graphical interpretation that shows the reasons of rejection of the tested hypothesis.
-Examples of different uses of global envelopes and their implementation in the \pkg{GET} package are presented, including global envelopes for single and several one- or two-dimensional functions, Monte Carlo goodness-of-fit tests for simple and composite hypotheses, comparison of distributions, functional analysis of variance, and functional linear model, and confidence bands in polynomial regression.
+The global envelopes included in the \pkg{GET} package have this property,
+which particularly helps to interpret test results, by providing a graphical interpretation
+that shows the reasons of rejection of the tested hypothesis.
+Examples of different uses of global envelopes and their implementation in the \pkg{GET} package are presented,
+including global envelopes for single and several one- or two-dimensional functions,
+Monte Carlo goodness-of-fit tests for simple and composite hypotheses,
+comparison of distributions,
+functional analysis of variance,
+and functional linear model,
+and confidence bands in polynomial regression.
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
@@ -101,8 +116,8 @@ Examples of different uses of global envelopes and their implementation in the \
 
 \section*{Preface}
 
-This vignette corresponds to Myllym{\"a}ki and Mrkvi\v cka (2020, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME]) available at \url{https://arxiv.org/abs/1911.06583}.
-When citing the vignette and package please cite Myllym{\"a}ki and Mrkvi\v cka (2020) and references given by typing \code{citation("GET")} in \proglang{R}.
+This vignette corresponds to Myllym{\"a}ki and Mrkvi\v cka (2023, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME]) available at \url{https://doi.org/10.48550/arXiv.1911.06583}.
+When citing the vignette and package please cite Myllym{\"a}ki and Mrkvi\v cka (2023) and references given by typing \code{citation("GET")} in \proglang{R}.
 
 %% -- Introduction -------------------------------------------------------------
 
@@ -130,25 +145,25 @@ To make these methods easily accessible, the R \citep{R2020} package \pkg{GET} h
 Because there are many other methods that can be used for the same purposes as global envelopes, we first give a motivating example of functional analysis of covariance (ANCOVA) to demonstrate the main features and advantages of global envelope tests (Section~\ref{sec:motivating_example}). Other possible usages are also discussed in more detail.
 The second part of this introductory section describes the competing and complementary methods and software for these same usages.
 Thereafter, in Section~\ref{sec:implementation}, we give an overview of global envelopes including the formal definition of their graphical interpretation, summary of the types of global envelopes and their implementation in \pkg{GET}.
-In Section~\ref{sec:illustrations}, the usage of global envelopes is shown for several examples of applications illustrating main features of the \pkg{GET} package, namely 1) the computation of central regions and functional boxplots for a set of functions or jointly for several sets of functions (Section~\ref{sec:cr}); 2) the Monte Carlo goodness-of-fit test for simple hypotheses with application to spatial statistics (Section~\ref{sec:GOT}); 3) the Monte Carlo goodness-of-fit test for composite hypotheses with application to graphical normality testing (Section~\ref{sec:GOTcomposite}); 4) the graphical $n$-sample test of correspondence of distribution functions, $n\geq 2$ (Section~\ref{sec:CDF}); 5) the graphical functional one-way ANOVA (Section~\ref{sec:fANOVA}); 6) the functional GLM for images (Section~\ref{sec:fGLM}); and 7) the computation of the confidence band in polynomial regression (Section~\ref{sec:confband}).
+In Section~\ref{sec:illustrations}, the usage of global envelopes is shown for several examples of applications illustrating main features of the \pkg{GET} package, namely 1) the computation of central regions and functional boxplots for a set of functions or jointly for several sets of functions (Section~\ref{sec:cr}); 2) the Monte Carlo goodness-of-fit test for simple hypotheses with application to spatial statistics (Section~\ref{sec:GOT}); 3) the Monte Carlo goodness-of-fit test for composite hypotheses with application to graphical normality testing (Section~\ref{sec:GOTcomposite}); 4) the graphical $n$-sample test of correspondence of distribution functions, $n\geq 2$ (Section~\ref{sec:CDF}); 5) the graphical functional one-way analysis of variance (ANOVA) (Section~\ref{sec:fANOVA}); 6) the functional general linear model (GLM) for images (Section~\ref{sec:fGLM}); and 7) the computation of the confidence band in polynomial regression (Section~\ref{sec:confband}).
 The final section, Section~\ref{sec:summary}, is left for discussion.
 
 
 \subsection{A motivating example and possible usages}\label{sec:motivating_example}
 
 Let us study the differences between population growth accumulated in different continents over the period of 55 years. We assume that GDP (gross domestic product) can be the main driver of population growth in different countries, therefore we add GDP into the model as a nuisance factor.
-Figure~\ref{fig:popgrowth} (left) shows population growth, defined here as the population at the end of the year divided by the population at the beginning of the year, in years from 1960 to 2014 in Africa, Asia, Europe and North America, and Latin America, total in 112 countries with more than one million inhabitants in 1950 \citep{NagyEtal2017,DaiEtal2020}. Figure~\ref{fig:popgrowth} (right) shows the GDP of every country in the study discounted to the 1960 USD. The discounting was performed according to USD inflation. The data was obtained from the World Bank. The missing values of the GDP of a country were extrapolated using the closest known ratio of the GDP of the country and the median GDP in that year. The missing values of GDP were interpolated using linear interpolation of the two closest ratios.
+Figure~\ref{fig:popgrowth} (left) shows population growth, defined here as the population at the end of the year divided by the population at the beginning of the year, in years from 1960 to 2014 in Africa, Asia, Europe and North America, and Latin America, total in 112 countries with more than one million inhabitants in 1950 \citep{NagyEtal2017,DaiEtal2020}. Figure~\ref{fig:popgrowth} (right) shows the GDP of every country in the study discounted to the 1960 USD, according to USD inflation. The data was obtained from the World Bank. The missing values of the GDP of a country were extrapolated using the closest known ratio of the GDP of the country and the median GDP in that year, and interpolated using linear interpolation of the two closest ratios.
 
 \begin{figure}[ht!]
 \centering
 <<example_pop_data, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
 data("popgrowthmillion")
-POP <- create_curve_set(list(r=1950:2014,
-           obs=popgrowthmillion[, -(132:134)])) # Left out Oceania
-groups <- c(rep("Africa", times=37),
-            rep("Asia", times=37),
-            rep("Europe and North America", times=37),
-            rep("Latin America", times=20))
+POP <- curve_set(r = 1950:2014,
+           obs = popgrowthmillion[, -(132:134)]) # Left out Oceania
+groups <- c(rep("Africa", times = 37),
+            rep("Asia", times = 37),
+            rep("Europe and North America", times = 37),
+            rep("Latin America", times = 20))
 data("GDP")
 
 cond <- colnames(POP$funcs) %in% colnames(GDP$funcs)
@@ -158,35 +173,35 @@ groups <- groups[cond]
 #- Check that the GDPcset has the same order as the POP and groups!
 if(any(colnames(GDP$funcs) != colnames(POP$funcs))) stop("Order of countries do not match.")
 #- Reduce POP (and GDP) to years 1960-2014
-POP <- crop_curves(POP, r_min =1960, r_max=2014)
-GDP <- crop_curves(GDP, r_min =1960, r_max=2014)
+POP <- crop_curves(POP, r_min = 1960, r_max = 2014)
+GDP <- crop_curves(GDP, r_min = 1960, r_max = 2014)
 
 groups <- as.factor(groups)
 
 #- Plot with colors
 nfunc <- GET:::curve_set_nfunc(POP)
 narg <- GET:::curve_set_narg(POP)
-POPdf <- data.frame(r = rep(POP$r, times=nfunc),
+POPdf <- data.frame(r = rep(POP$r, times = nfunc),
                  funcs = c(GET:::curve_set_funcs(POP)),
-                 id =  factor(rep(1:nfunc, each=narg), levels = 1:nfunc),
-                 Continent = rep(groups, each=narg))
-GDPdf <- data.frame(r = rep(POP$r, times=nfunc),
+                 id =  factor(rep(1:nfunc, each = narg), levels = 1:nfunc),
+                 Continent = rep(groups, each = narg))
+GDPdf <- data.frame(r = rep(POP$r, times = nfunc),
                     funcs = c(GET:::curve_set_funcs(GDP)),
-                    id =  factor(rep(1:nfunc, each=narg), levels = 1:nfunc),
-                    Continent = rep(groups, each=narg))
-p1 <- ( ggplot() + geom_line(data=POPdf, aes(x = r, y = funcs, group = id, col = Continent))
+                    id =  factor(rep(1:nfunc, each = narg), levels = 1:nfunc),
+                    Continent = rep(groups, each = narg))
+p1 <- ( ggplot() + geom_line(data = POPdf, aes(x = r, y = funcs, group = id, col = Continent))
        + labs(title="", y="Population growth", x = "Year")
        + scale_color_manual(values=viridisLite::viridis(4))) #c("#21908CFF", "#440154FF", "#5DC863FF", "grey70")))
-p2 <- ( ggplot() + geom_line(data=GDPdf, aes(x = r, y = funcs, group = id, col = Continent))
-        + labs(title="", y="GDP (in 1960 USD)", x = "Year")
-        + scale_color_manual(values=viridisLite::viridis(4))) #c("#21908CFF", "#440154FF", "#5DC863FF", "grey70")))
-p1 + p2 + plot_layout(guides="collect") & theme(legend.position="bottom")
+p2 <- ( ggplot() + geom_line(data = GDPdf, aes(x = r, y = funcs, group = id, col = Continent))
+        + labs(title = "", y = "GDP (in 1960 USD)", x = "Year")
+        + scale_color_manual(values = viridisLite::viridis(4))) #c("#21908CFF", "#440154FF", "#5DC863FF", "grey70")))
+p1 + p2 + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 @
   \caption{Population growth and GDP (in 1960 USD) curves for 1960--2014 for 112 countries from the four continents.}
   \label{fig:popgrowth}
 \end{figure}
 
-Since the global envelopes are a nonparametric tool, we can use as a test statistic any multivariate or functional test statistic without the worry of breaking assumptions of normality or homogeneity of the distribution of the test statistic in different years. Also, since we can use any test statistic, we can combine several functional test statistic into one (for more details about combining test statistics see Appendix~\ref{app:combinedGE}). Here, we combine four functional test statistics, each representing a coefficient in our ANCOVA model attached to a continent, i.e., our test statistic is
+Since the global envelopes are a nonparametric tool, we can use as a test statistic any multivariate or functional test statistic without the worry of breaking assumptions of normality or homogeneity of the distribution of the test statistic in different years. Also, since we can use any test statistic, we can combine several functional test statistic into one (for more details about combining test statistics see Appendix~\ref{app:combinedGE}). Here, we combine four functional test statistics, each representing a coefficient vector attached to a continent in our ANCOVA model, i.e., our test statistic is
 %
 \begin{eqnarray}\label{TT1}
 \nonumber &\Bbeta^{\text{Cont}} = (\underbrace{\beta_{1, 1960}^{\text{Cont}}, \ldots , \beta_{1, 2014}^{\text{Cont}}}_{1:\, \text{Africa}}, 
@@ -197,8 +212,8 @@ Since the global envelopes are a nonparametric tool, we can use as a test statis
 %
 where $\beta_{1,i}^{\text{Cont}}, \ldots \beta_{4,i}^{\text{Cont}}$ are the parameters of the univariate ANCOVA model for year $i$, computed with condition $\sum_{j=1}^4 \beta_{j,i}^{\text{Cont}} = 0$. This model parametrization enables that the parameter  $\beta_{j,i}^{\text{Cont}}$ is the difference between the $j$-th continent's growth rate and the overall mean.
 
-This test statistic allows for a direct comparison of each continent's growth rate with the world's mean growth rate. Figure~\ref{fig:popgrowth_flm} shows the test statistic (Equation~\ref{TT1}) computed for the data together with 95\% global envelope computed under the null model of no continent effect but with nuisance effect of GDP. This output shows, first, the formal global $p$~value, which indicates that the effect of the continent is significant after applying an adjustment for multiple comparisons for the 55 years, and four continents. Second, it shows the reasons of rejections, i.e., which years had led to the significant test result. Due to the intrinsic graphical interpretation (IGI, see Definition~\ref{IGI}) of the global envelope, we have a one-to-one correspondence between the formal global test and its graphical interpretation, i.e., the data function lies outside the envelope for some point (here years and continents) if and only if the global test is significant. This allows for direct identification of the significant years. Third, the output shows the direction and amount of deviation from the null hypothesis. For example, the growth rate in Europe and North America is significantly lower than the world's average in all years, whereas Asia's growth rate is slightly significantly higher than the world's average only up to the year 1966. Fourth, due to the free choice of the test statistic, the test output shows here the comparison individually for every continent (level of the categorical predictor). The \pkg{GET} package allows also for the choice of comparison between all pairs of continents in the style of the post hoc test. Note that usually, the two tests are applied - global AN(C)OVA and multiple comparison post hoc test.
-Note also that we can calculate results also for continuous GDP effect and interaction effect between the GDP and all continents (all levels of the categorical effect) in the same way.
+This test statistic allows for a direct comparison of each continent's growth rate with the world's mean growth rate. Figure~\ref{fig:popgrowth_flm} shows the test statistic (Equation~\ref{TT1}) computed for the data together with 95\% global envelope computed under the null model of no continent effect but with nuisance effect of GDP. This output shows, first, the formal global $p$~value, which indicates that the effect of the continent is significant after applying an adjustment for multiple comparisons for the 55 years, and four continents. Second, it shows the reasons of rejections, i.e., which years have led to the significant test result. Due to the intrinsic graphical interpretation (IGI, see Definition~\ref{IGI}) of the global envelope, we have a one-to-one correspondence between the formal global test and its graphical interpretation, i.e., the data function lies outside the envelope for some point (here years and continents) if and only if the global test is significant. This allows for direct identification of the significant years. Third, the output shows the direction and amount of deviation from the null hypothesis. For example, the growth rate in Europe and North America is significantly lower than the world's average in all years, whereas Asia's growth rate is slightly significantly higher than the world's average only up to the year 1966. Fourth, due to the free choice of the test statistic, the test output shows here the comparison individually for every continent (level of the categorical predictor). The \pkg{GET} package also allows for the choice of comparison between all pairs of continents in the style of the post hoc test. Note that usually, the two tests are applied - global AN(C)OVA and multiple comparison post hoc test.
+Note also that we can calculate results also for continuous GDP effect and interaction effect between the GDP and all continents (all levels of the categorical effect) in the same way \citep[see][Section 6]{MrkvickaMyllymaki2023}.
 %
 <<example_pop_seed, echo=FALSE>>==
 set.seed(202304)
@@ -211,10 +226,10 @@ nsim <- 5000
 res <- graph.flm(nsim = nsim,
                  formula.full = Y ~ GDP + Continent,
                  formula.reduced = Y ~ GDP,
-                 curve_sets = list(Y=POP, GDP=GDP),
+                 curve_sets = list(Y = POP, GDP = GDP),
                  factors = data.frame(Continent = groups),
                  contrasts = FALSE,
-                 GET.args = list(type = "area"))
+                 GET.args = list(type = 'area'))
 plot(res) + xlab(substitute(paste(italic(i), " (", j, ")", sep = ""),
     list(i = "r", j = "Year")))
 @
@@ -229,11 +244,13 @@ The usage of global envelopes is however more versatile. They can be used for pr
 %
 \begin{enumerate}
 \item[(i)] a central region: a central region is constructed for a set of vectors or functions in order to find central or outlying vectors or functions (e.g., outlier detection, functional boxplot);
-\item[(ii)] a global envelope test: a Monte Carlo goodness-of-fit test or a permution test where the test statistic is multivariate or a function of any dimension (e.g., goodness-of-fit test for point patterns or random sets, for a family of distributions, functional analysis of variance (ANOVA), functional general linear model (GLM), $n$-sample test of correspondence of distribution functions);
+\item[(ii)] a global envelope test: a Monte Carlo goodness-of-fit test or a permution test where the test statistic is multivariate or a function of any dimension (e.g., goodness-of-fit test for point patterns, random sets, or for a family of distributions, functional ANOVA, functional GLM, $n$-sample test of correspondence of distribution functions);
 \item[(iii)] global confidence or prediction bands: a confidence or prediction band is produced from a set of vectors or functions obtained by bootstrap or sampling from Bayesian posterior distribution (e.g., confidence band in polynomial regression, Bayesian posterior prediction).
 \end{enumerate}
 %
-In fact, the global envelope test uses the 95\% central region (case (i) usage) computed under the null hypothesis for determining the test results. The global confidence bands (case (iii) usage) also uses the 95\% central region computed under the full model. Thus in core of all applications lies the central region. Central regions can be constructed based on any functional ordering, but we concentrate only in those satisfying the IGI, the one-to-one correspondence of a functional ordering and its graphical interpretation. In fact, when central region is not satisfying IGI and we see a function which is not contained completely inside the central region, we still do not know if such a function can be considered as extremal. On the contrary, when we use IGI ordering, we know that such a function is among the most, say 5\%, extremal functions.
+In fact, the global envelope test uses the 95\% central region (case (i) usage) computed under the null hypothesis for determining the test results. The global confidence bands (case (iii) usage) also uses the 95\% central region computed under the full model. Thus in core of all applications lies the central region. Central regions can be constructed based on any functional ordering, but we concentrate only in those satisfying the IGI, the one-to-one correspondence of a functional ordering and its graphical interpretation. In fact, when central region is not satisfying IGI and we see a function which is not contained completely inside the central region, we still do not know if such a function can be regarded as extremal. On the contrary, when we use IGI ordering, we know that such a function is among the most, say 5\%, extremal functions.
+
+In this article, we mainly deal with global envelopes for testing the global hypothesis under the control of FWER, i.e., to test if the test statistic can be considered significant at least at one argument. Alternatively, one can be interested in the local test, where the interest is to distinguish between the domain where the test statistic should be rejected and where it should not be rejected. For this purpose, the false discovery rate (FDR) is generally more suitable for controlling the global level of the multiple test, and we have recently developed the FDR envelope \citep{MrkvickaMyllymaki2023} which does this task with an envelope which has the IGI interpretation under the FDR control: the test is rejected if and only if the data statistic is outside the envelope. Examples of the FDR envelopes are given in the vignette which is available by typing \code{library("GET")} and \code{vignette("FDRenvelopes")} in \proglang{R}.
 
 
 \subsection{Competing and complementary methods and software}\label{sec:intro_software}
@@ -253,7 +270,7 @@ Further, as already mentioned, the problems (i)-(iii) can be solved by other met
 \item There are other \proglang{R} packages with the ability to compute simultaneous confidence bands for various models, e.g., \pkg{excursions} \citep{BolinLindgren2015,BolinLindgren2017,BolinLindgren2018} % simconf
 for Gaussian processes, \pkg{AdaptFitOS} \citep{WiesenfarthEtal2012} for semiparametric regression models and \pkg{SCBmeanfd} \citep{SCBmeanfd2016} for nonparametric regression models with functional data using a functional asymptotic normality result.
 Instead, the global envelopes of the \pkg{GET} package (see Table~\ref{tab:GEoverview}) are constructed non-parametrically from a set of vectors.
-Apparently, the package \pkg{excursions} allows also for a non-parametric version with the same shape as the global rank envelope (\code{'rank'} in Table~\ref{tab:GEoverview}) similarly as \pkg{boot}.
+Apparently, the package \pkg{excursions} allows also for a non-parametric version with the same shape as the global rank envelope (\code{'rank'} in Table~\ref{tab:GEoverview}), similarly as \pkg{boot}.
 \end{itemize}
 
 
@@ -280,16 +297,16 @@ The global envelope tests can also be used for functional GLM using a permutatio
 
 \section[Overview of global envelopes in GET]{Overview of global envelopes in \pkg{GET}}\label{sec:implementation}
 
-\subsection{Global envelope and intrinsic graphical interpretation (IGI)}
+\subsection{Global envelopes and intrinsic graphical interpretation (IGI)}
 
 Global envelopes are constructed for general multivariate statistics, so in the case when the data are purely functional, they first have to be discretized. The discretization of the functions can be arbitrary, as long as it is the same for each function.
 Therefore, let $\TT_1, \TT_2, \ldots, \TT_{s}$ be $d$-dimensional vectors, 
 $\TT_i = (T_{i1}, T_{i2}, \ldots, T_{id})$ for $i=1,\ldots, s$.
-In the case (i), the vectors $\TT_i$ are observed functions assumed to follow the same distribution and the aim is to find the least extreme $100(1-\alpha)$\% of the $s$ vectors to construct the central region, with $\alpha\in(0,1)$.
+In the case (i) (see Section~\ref{sec:motivating_example}), the vectors $\TT_i$ are observed functions assumed to follow the same distribution and the aim is to find the least extreme $100(1-\alpha)$\% of the $s$ vectors to construct the central region, with $\alpha\in(0,1)$.
 In the case (ii), the vector $\TT_1$ is an observed function and $\TT_2,\ldots,\TT_s$ are vectors simulated under the tested null hypothesis. 
 The key idea of a global envelope test is the same as a general Monte Carlo or permutation test:
 the rank of the data vector $\TT_1$ among all the vectors $\TT_1,\ldots,\TT_s$ determines the result and the $p$~value of the test \citep{Barnard1963}. And, in the case (iii), $\TT_i$ are generated under the given bootstrap or Bayesian scheme.
-As mentioned already, in the core of all cases (i)-(iii) (see Section~\ref{sec:motivating_example}) lies the central region and, for the purpose of ordering the $d$-dimensional vectors $\TT_i$ (or functions) from the most extreme to the least extreme and finding the central region, many different measures exist. The \pkg{GET} package focuses on such measures for which it is possible to construct the global envelope with a practically interesting graphical interpretation, which we call IGI.
+As mentioned already, in the core of all cases (i)-(iii) lies the central region and, for the purpose of ordering the $d$-dimensional vectors $\TT_i$ (or functions) from the most extreme to the least extreme and finding the central region, many different measures exist. The \pkg{GET} package focuses on such measures for which it is possible to construct the global envelope with a practically interesting graphical interpretation, which we call IGI.
 
 In general, an {\em envelope} is considered to be a band bounded by two vectors.
 A $100(1-\alpha)$\% {\em global envelope} is a set $(\TT_{\text{low}}^{(\alpha)}, \TT_{\text{upp}}^{(\alpha)})$ of envelope vectors with
@@ -312,7 +329,7 @@ We define the IGI property for global envelopes as follows.
 \begin{definition}\label{IGI} 
 Assume that a general ordering $\prec$ of the vectors $\TT_i, i=1, \ldots , s$, is induced by a univariate measure $M_i$. That is,
 $M_i \geq M_j$ iff  $\TT_i \prec \TT_j$, which means that $\TT_i$ is less extreme or as extreme as $\TT_j$. (The smaller the measure $M_i$, the more extreme the $\TT_i$ is.) 
-The $100(1-\alpha)$\% global envelope $[\TT_{\lo\,k}^{(\alpha)}, \TT_{\up\,k}^{(\alpha)}]$ has intrinsic graphical interpretation (IGI) with respect to the ordering $\prec$ if 
+The $100(1-\alpha)$\% global envelope $[\TT_{\lo\,k}^{(\alpha)}, \TT_{\up\,k}^{(\alpha)}]$ has intrinsic graphical interpretation (IGI) with respect to the ordering $\prec$ if
 \begin{enumerate}
   \item $M_{(\alpha)} \in \mathbb{R}$ is the largest of the $M_i$ such that the number of those $i$ for which $M_i< M_{(\alpha)}$
 is less or equal to $\alpha s$;
@@ -341,13 +358,13 @@ Note here that if a global FWER control is provided within other packages, it is
 
 In a typical application one needs to choose one of the measures with IGI (Table~\ref{tab:GEoverview}).
 In general, the first five types of Table~\ref{tab:GEoverview} instead of the last two, \code{'st'} and \code{'unscaled'}, can be recommended based on previous studies \citep{MyllymakiEtal2015, MyllymakiEtal2017}.
-Regarding the choice between the first five types, when one can afford a large number of simulations in cases (ii)-(iii) of Section~\ref{sec:motivating_example}, one can very well use the type \code{'erl'} that is based only on the ranks, thus also suiting particularly well for combined tests where the test statistic is a combination of several functional test statistics (see Appendix~\ref{app:combinedGE} and examples in Sections~\ref{sec:motivating_example} and \ref{sec:cr}). 
+Regarding the choice between the first five types, when one can afford a large number of simulations in cases (ii)-(iii) of Section~\ref{sec:motivating_example}, one can well use type \code{'erl'} that is based only on the ranks, thus also suiting particularly well for combined tests where the test statistic is a combination of several functional test statistics (see Appendix~\ref{app:combinedGE} and examples in Sections~\ref{sec:motivating_example} and \ref{sec:cr}). 
 On the other hand, any other choice is also fine, because the \code{'rank'}, \code{'erl'}, \code{'cont'} and \code{'area'} measures lead to an equivalent outcome for a large number of simulations or permutations. However, the definition of {\em large} depends on the situation.
-A simulation study presented in \citet{MyllymakiMrkvicka2020b} supplements this article, giving guidance on the required number of simulations under different scenarios \citep[see also the supplement S2 of][]{MyllymakiEtal2017}.
+A simulation study presented in \citet{MyllymakiMrkvicka2020b} supplements this article, giving guidance on the required number of simulations under different scenarios.
 
 Another situation arises in case (i) with a low number of vectors or functions, or in cases (ii)-(iii) where the simulations or permutations are too time consuming to have a large number of them. Then the choice of the measure plays a role. Based on our experience supported by the simulation study presented in \citet{MyllymakiMrkvicka2020b}, the \code{'erl'} and \code{'area'} measures are typically good choices for detecting integral type of extremeness where the vector $\TT_i$ is extreme in the set of vectors for a large range of its components. On the other hand, the \code{'cont'} and \code{'qdir'} measures are most sensitive to the maximum type of extremeness, i.e., the case where $\TT_i$ is extreme only for a few of its components, but also the \code{'area'} measure performs well. Thus, if no particular type of extremeness is expected a priori, the \code{'area'} measure is often a good compromise, since it is sensitive to the amount of outlyingness (similarly as \code{'erl'}) and to the value of outlyingness (similarly as \code{'cont'} and \code{'qdir'}). Illustration of the different measures can be found in \citet[][Section 2.4]{MrkvickaEtal2022}.
 
-To conclude, for testing, if just possible, we recommend to use a large number of simulations and one of the first five measures of Table~\ref{tab:GEoverview}. If large number of simulations is not possible, then still Barnard's Monte Carlo test is valid. For testing and ordering functional data, use then the measure which is sensitive to the type of extremeness that you regard as important \citep[see illustration of the different measures in][Section 2.4]{MrkvickaEtal2022}.
+To conclude, for testing, if just possible, we recommend to use a large number of simulations and one of the first five measures of Table~\ref{tab:GEoverview}. If large number of simulations is not possible, then still Barnard's Monte Carlo test is valid. For testing and ordering functional data, use then the measure which is sensitive to the type of extremeness that you regard as important.
 
 \begin{table}[t!]
 \centering
@@ -381,11 +398,15 @@ central_region(curve_sets, type = 'erl', coverage = 0.50, ...)
 global_envelope_test(curve_sets, type = 'erl', alpha = 0.05, ...)
 \end{Code}
 %
-where the multivariate or functional data are provided in \code{curve_sets}, \code{type} specifies type of the global envelope (see Table~\ref{tab:GEoverview} and descriptions in Appendix~\ref{app:GEdef}), and the coverage or level of the global envelope is specified by \code{coverage} or \code{alpha} ($=1-$\code{coverage}), respectively. Additionally, one can, for example, specify the one or two-sided \code{alternative}, i.e., whether only small or large values of $\TT_i$ or both should be considered extreme.
+where the multivariate or functional data are provided in \code{curve_sets},
+\code{type} specifies type of the global envelope (see Table~\ref{tab:GEoverview} and descriptions in Appendix~\ref{app:GEdef}), and the coverage or level of the global envelope is specified by \code{coverage} or \code{alpha} ($=1-$\code{coverage}), respectively.
+Additionally, one can, for example, specify the one or two-sided \code{alternative}, i.e., whether only small or large values of $\TT_i$ or both should be considered extreme.
 These two functions are the core functions for global envelopes in the package \pkg{GET}: given an appropriate set of curves, or, in fact vectors, they can be used for producing global envelopes of Table~\ref{tab:GEoverview} in all tasks (i)-(iii) listed in Section~\ref{sec:motivating_example}.
 
+Recently, the argument \code{typeone} was added to \fct{global\_envelope\_test}. This argument can be used to specify the control for the global test, FWER or FDR, where the former (default) leads to the tests of Table~\ref{tab:GEoverview}, as further specified by the argument \code{type}, and the latter to the FDR envelopes proposed in \citet{MrkvickaMyllymaki2023}.
+
 Different objects are supported for the data in \code{curve_sets} (see help files of the functions and examples below),
-but the basic form provided by the \pkg{GET} package is a \class{curve\_set} object that can be constructed by the function \fct{create\_curve\_set} simply providing a list containing the observed and/or simulated curves, and optionally the (one- or two-dimensional) argument values where the curves have been observed (see Section~\ref{sec:GOT} for an example). The function \fct{create\_curve\_set} takes care of checking the appropriateness of the data, and saving the data in the form that contains the relevant information of the curves for global envelope methods, in particular for plotting the results with graphical interpretation (see examples in Section~\ref{sec:illustrations}).
+but the basic form provided by the \pkg{GET} package is a \class{curve\_set} object that can be constructed by the function \fct{curve\_set} simply providing the observed and/or simulated curves, and optionally the (one- or two-dimensional) argument values where the curves have been observed (see Section~\ref{sec:GOT} for an example). The function \fct{curve\_set} takes care of checking the appropriateness of the data, and saving the data in the form that contains the relevant information of the curves for global envelope methods, in particular for plotting the results with graphical interpretation (see examples in Section~\ref{sec:illustrations}).
 
 In addition to constructing global envelopes from a set of curves, the \fct{central\_region} and \fct{global\_envelope\_test} functions provide combined central regions or combined global envelope tests if the user provides a list consisting of (appropriate) sets of curves in the argument \code{curve_sets}.
 Details of the combining methodology is given in Appendix~\ref{app:combinedGE} and examples are given in Sections~\ref{sec:motivating_example} and \ref{sec:illustrations}.
@@ -400,11 +421,11 @@ They are produced using the \pkg{ggplot2} package \citep{Wickham2016}.
 \begin{tabular}{lp{10.0cm}}
 \hline
 Function name              & Description \\ \hline
-\fct{create\_curve\_set} & Create a \class{curve\_set} out of data given in the right form \\
+\fct{curve\_set} & Create a \class{curve\_set} out of data given in the right form \\
 \fct{crop\_curves} & Crop curves \\
 \fct{forder} & Different measures for ordering the multivariate statistics from the most extreme to least extreme one \\
 \fct{central\_region} & Central regions or global envelopes or confidence bands with IGI (see types in Table~\ref{tab:GEoverview}) \\
-\fct{global\_envelope\_test} & Global envelope tests (see types in Table~\ref{tab:GEoverview}) \\ 
+\fct{global\_envelope\_test} & Global envelope tests \\ 
 \fct{GET.composite}          & Adjusted global envelope tests for composite null hypotheses \\ 
 \fct{fBoxplot} & Functional boxplot based on a central region with IGI \\
 \fct{graph.fanova}  & One-way ANOVA tests for functional data with graphical interpretation \citep{MrkvickaEtal2020} \\
@@ -414,9 +435,9 @@ Function name              & Description \\ \hline
 \fct{fclustering} & Functional clustering based on a specified measure \citep{DaiEtal2022} \\
 \fct{GET.necdf} & Graphical $n$ sample test of correspondence of distribution functions \\ 
 \fct{GET.distrindep} & Permutation-based tests of independence to samples from any bivariate distribution \citep{DvorakMrkvicka2022} \\
-\fct{GET.spatialF} & Testing global and local covariate effects in point process models \citep{MyllymakiEtal2020} \\ \hline
+\fct{GET.spatialF} & Testing global and local covariate effects in point process models \citep{MyllymakiEtal2020} \\
 \end{tabular}
-\caption{\label{tab:FUNCTIONSoverview} Key and special purpose functions in the \pkg{GET} package. The complete list of functions can be found from the main help page of the package available by typing \code{help(`GET-package`)} in \proglang{R}.}
+\caption{\label{tab:FUNCTIONSoverview} Key and special purpose functions in the \pkg{GET} package. More complete list of functions can be found from the main help page of the package available by typing \code{help('GET-package')} in \proglang{R}.}
 \end{table}
 
 
@@ -434,9 +455,9 @@ First two \class{curve\_set} objects were created containing the raw heights and
 library("fda")
 years <- paste(1:18)
 curves <- growth[['hgtf']][years,]
-cset1 <- create_curve_set(list(r = as.numeric(years), obs = curves))
-cset2 <- create_curve_set(list(r = as.numeric(years[-1]),
-  obs = curves[-1,] - curves[-nrow(curves),]))
+cset1 <- curve_set(r = as.numeric(years), obs = curves)
+cset2 <- curve_set(r = as.numeric(years[-1]),
+  obs = curves[-1,] - curves[-nrow(curves),])
 @
 %
 
@@ -498,14 +519,14 @@ plot(res) + labs(x = "Age (years)", y = "Value")
   \label{fig:girls_fboxplot}
 \end{figure}
 %
-One can see that one of the girls (the 15th girl in fact) is an outlier, because she has grown extraordinarily much in her sixth year. However, the highest height curve of Figure~\ref{fig:girls_curves} (left) is not regarded as an outlier with the given specifications.
+One can see that one of the girls (the 15th girl) is an outlier, because she has grown extraordinarily much in her sixth year. However, the highest height curve of Figure~\ref{fig:girls_curves} (left) is not regarded as an outlier with the given specifications.
 
 Note that the combined central region computed using any measure of Table~\ref{tab:GEoverview} has IGI.
 On the contrary, central regions computed with the use of band depths implemented in the \pkg{fda} package do not satisfy IGI. \citet{NarisettyNair2016} proposed central regions and functional boxplots based on the ERL measure (see Table~\ref{tab:GEoverview}) and compared them to those based on band depths, claiming more reasonable behavior.
 Note also that IGI is not a property of the functional boxplot.
 
 
-\subsection{Monte Carlo goodness-of-fit testing for simple hypotheses: complete spatial randomness}\label{sec:GOT} 
+\subsection{Monte Carlo goodness-of-fit testing for simple hypotheses: The example of testing complete spatial randomness}\label{sec:GOT}
 
 Figure~\ref{fig:trees} shows the locations of 67 large trees (with height $> 25$ m) in an area of size $75\text{ m}\times 75\text{ m}$ from an uneven aged multi-species broadleaf nonmanaged forest in Kaluzhskie Zaseki, Russia \citep{GrabarnikChiu2002, Lieshout2010}. The $x$- and $y$-coordinates of the locations are available in the data \code{adult_trees} in the \pkg{GET} package.
 
@@ -528,7 +549,7 @@ The testing of a simple hypothesis does not require the estimation of any model 
 In the case of a composite null hypothesis, the level of the test needs to be adjusted, see Section~\ref{sec:GOTcomposite} and Appendix~\ref{app:adjustedGE}.
 
 
-\subsubsection{General setup for simple hypotheses}
+\subsubsection{General setup for testing simple hypotheses}
 
 The first step of a Monte Carlo test is to generate \code{nsim} simulations under the null hypothesis and to calculate the chosen test function (vector) for the data and simulations. 
 Here the functions \fct{runifpoint} and \fct{Lest} of \pkg{spatstat} are used to generate a simulation from the binomial process (CSR with the number of points fixed to the observed number of points in the pattern \code{X}) and to estimate the centred $L$-function for a pattern, respectively:
@@ -552,17 +573,17 @@ for(i in 1:nsim) {
 }
 @
 %
-Thereafter, a \class{curve\_set} object can be constructed by the function \fct{create\_curve\_set} providing a list of the argument values where the test vectors were evaluated (\code{r}), the observed vector (\code{obs}) and the simulated vectors (\code{sim_m}):
+Thereafter, the function \fct{curve\_set} can be used to construct a \class{curve\_set} object from the argument values where the test vectors were evaluated (\code{r}), the observed vector (\code{obs}) and the simulated vectors (\code{sim}):
 %
 <<trees_curve_set>>==
-cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
+cset <- curve_set(r = r, obs = obs, sim = sim)
 @
 %
 In some cases, missing or infinite values can occur for the computed statistic at some chosen $r$ (e.g., for too large $r$ with another spatial summary function $J$). These problematic, uninteresting $r$-values can be easily omitted from \code{cset} using the function \fct{crop\_curves}.
 The final step is to make the global envelope test on the given set of vectors:
 %
 <<trees_CSR, fig=FALSE, height=3.0625, width=3.0625>>==
-res <- global_envelope_test(cset, type = "erl")
+res <- global_envelope_test(cset, type = 'erl')
 plot(res) + ylab(expression(italic(hat(L)(r)-r)))
 @
 %
@@ -573,15 +594,15 @@ plot(res) + ylab(expression(italic(hat(L)(r)-r)))
 plot(res) + ylab(expression(italic(hat(L)(r)-r)))
 @
 %
-  \caption{The global envelope test for the CSR of the tree pattern of Figure~\ref{fig:trees} using the centred $L$-function. The gray band represents the 95\% global envelope (ERL).}
+  \caption{The global envelope test for the CSR of the tree pattern of Figure~\ref{fig:trees} using the centred $L$-function. The gray band represents the 95\% global envelope (\code{'erl'}).}
   \label{fig:trees_CSR}
 \end{figure}
 %
-In this manner, the global envelope test can be constructed for any simple hypothesis and any test vector, as long as one can generate the simulations and calculate the test vectors.
+In this manner, the global envelope test can be constructed for any simple hypothesis and any test vector, as long as one can generate the required simulations and calculate the test vectors.
 
 The test output is shown in Figure~\ref{fig:trees_CSR} (left), which shows no evidence against CSR \citep[see more detailed description in][Section~S4]{MyllymakiEtal2017}.
 
-\subsubsection[Simple hypothesis for a point pattern utilizing the R package spatstat]{Simple hypothesis for a point pattern utilizing the \proglang{R} package \pkg{spatstat}}
+\subsubsection[Testing simple hypotheses for a point pattern utilizing the R package spatstat]{Testing simple hypotheses for a point pattern utilizing the \proglang{R} package \pkg{spatstat}}
 
 For point process testing, the \pkg{GET} package and \fct{global\_envelope\_test} support the use of the \proglang{R} package \pkg{spatstat} \citep{spatstat2015} for the simulations and calculations of the summary functions by the function \fct{envelope}. Namely, the object returned by \fct{envelope} can simply be given to the function \fct{global\_envelope\_test} in the argument \code{curve_sets}. Importantly, the functions must be saved setting \code{savefuns = TRUE} in the \fct{envelope} call:
 %
@@ -593,7 +614,7 @@ set.seed(190503)
 env <- envelope(X, nsim = 999, fun = "Lest", correction = "translate",
   transform = expression(.-r), simulate = expression(runifpoint(ex = X)),
   savefuns = TRUE, verbose = FALSE)
-res <- global_envelope_test(env, type = "erl")
+res <- global_envelope_test(env, type = 'erl')
 @
 %
 Above the arguments \code{fun}, \code{correction} and \code{transform} define the summary function to be calculated (the latter two parameters are passed to the function \fct{Lest}) and \code{simulate} specifies how the patterns are simulated under the null hypothesis (here CSR). The result can be plotted similarly as above.
@@ -601,7 +622,7 @@ Above the arguments \code{fun}, \code{correction} and \code{transform} define th
 Further examples of use of the \pkg{GET} package for point pattern analysis are given in an accompanying vignette available in \proglang{R} by typing \code{library("GET")} and \code{vignette("pointpatterns")}.
 
 
-\subsection{Monte Carlo goodness-of-fit testing for composite hypotheses: graphical normality test}\label{sec:GOTcomposite}
+\subsection{Monte Carlo goodness-of-fit testing for composite hypotheses: The example of graphical normality test}\label{sec:GOTcomposite}
 
 \cite{AldorNoimanEtal2013} provided a graphical test for normality for simple hypotheses (i.e., known parameters of sample distribution) based on a qq-plot envelope, whose shape was derived from theoretical properties of quantiles of the uniform distribution. They also provided a version of this algorithm for composite hypotheses (i.e., unknown parameters of sample distribution). However, according to our unpublished study, this test does not achieve the required significance level. Therefore, the example of the exact adjustment for the composite hypothesis is provided here, based on the two-stage procedure of \cite{BaddeleyEtal2017} (see Appendix~\ref{app:adjustedGE}). For simplicity, in this example, this adjustment is applied directly to the empirical distribution functions. Apparently, the adjustment could also be applied to the qq-plot envelopes of \cite{AldorNoimanEtal2013}.
 
@@ -638,7 +659,7 @@ sim <- replicate(nsimsub, {
   x <- rnorm(n, mean = mu, sd = sigma)
   stats::ecdf(x)(r)
 })
-cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
+cset <- curve_set(r = r, obs = obs, sim = sim)
 @
 %
 Here the last command creates a \class{curve\_set} object of the observed and simulated empirical cumulative distribution functions.
@@ -655,8 +676,8 @@ for(rep in 1:nsim) {
     x2 <- rnorm(n, mean = mu2, sd = sigma2)
     stats::ecdf(x2)(r)
   })
-  cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2,
-    sim_m = sim2))
+  cset.ls[[rep]] <- curve_set(r = r, obs = obs2,
+    sim = sim2)
 }
 @
 %
@@ -679,13 +700,13 @@ sigma <- sd(dat)
 # 2. Simulate a sample from the fitted null model and
 #    compute the test vectors for data (obs) and each simulation (sim)
 nsim <- nsimsub <- 199
-r <- seq(min(dat), max(dat), length=100)
+r <- seq(min(dat), max(dat), length = 100)
 obs <- stats::ecdf(dat)(r)
 sim <- replicate(nsimsub, {
   x <- rnorm(n, mean = mu, sd = sigma)
   stats::ecdf(x)(r)
 })
-cset <- create_curve_set(list(r = r, obs = obs, sim_m = sim))
+cset <- curve_set(r = r, obs = obs, sim = sim)
 # 3. Simulate another sample from the fitted null model.
 # 4. Fit the null model to each of the patterns,
 #    simulate a sample from the null model,
@@ -700,8 +721,8 @@ for(rep in 1:nsim) {
     x2 <- rnorm(n, mean = mu2, sd = sigma2)
     stats::ecdf(x2)(r)
   })
-  cset.ls[[rep]] <- create_curve_set(list(r = r, obs = obs2,
-    sim_m = sim2))
+  cset.ls[[rep]] <- curve_set(r = r, obs = obs2,
+    sim = sim2)
 }
 # Perform the adjusted test
 res <- GET.composite(X = cset, X.ls = cset.ls, type = 'erl')
@@ -718,7 +739,7 @@ combined <- p1 + p2 & theme(legend.position = "bottom")
 combined + plot_layout(guides = "collect")
 @
   \caption{Graphical normality test for the NO$_x$ (left) and logarithm of the NO$_x$ (right) levels at 10 am.
-  The gray band represents the 95\% global envelope (ERL). Red dots are attached to the data function outside the envelope.}
+  The gray band represents the 95\% global envelope (\code{'erl'}). Red dots are attached to the data function outside the envelope.}
   \label{fig:normalitytest}
 \end{figure}
 
@@ -726,7 +747,7 @@ combined + plot_layout(guides = "collect")
 \subsection{Graphical $n$-sample test of correspondence of distribution functions}\label{sec:CDF}
 
 The graphical $n$-sample test of correspondence of distribution functions serves as a simple example of permutation tests.
-Figure~\ref{fig:necdfs} shows the empirical cumulative distribution functions (ECDFs) obtained by the \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020} for the heights of the 54 girls and 39 boys of the \code{growth} data \citep[see above, and][]{RamsaySilverman2005} at ages 10 (left) and 14 (right).
+Figure~\ref{fig:necdfs} shows the empirical cumulative distribution functions (ECDFs) obtained by the function \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020} for the heights of the 54 girls and 39 boys of the \code{growth} data \citep[see above, and][]{RamsaySilverman2005} at ages 10 (left) and 14 (right).
 A global envelope test can be performed to investigate whether the two (or more generally $n$) distribution functions differ from each other significantly and how they differ. This test is a generalization of the two-sample Kolmogorov-Smirnov test with a graphical interpretation. The generalization is provided in two ways, in the number of samples and in the variable width of the envelopes. Namely, the Kolmogorov-Smirnov test provides an envelope of constant width which suffers in determining differences in extreme quantiles.
 Here it is assumed that the heights in the sample $i$ are an i.i.d.\ sample from the distribution $F_i(r)$, $i=1, \ldots, n$, and the hypothesis $F_1(r)=\ldots = F_n(r)$ is to be tested.
 The simulations under the null hypothesis that the distributions are the same can be obtained by permuting the individuals of the groups. The \pkg{GET} package provides the wrapper function \fct{GET.necdf} that can be used to compare $n$ distribution functions graphically, $n=2,3,\ldots$. The (default) test vector is
@@ -785,7 +806,7 @@ p2 <- plot(res14) + xlab(myxlab)
 combined <- p1 + p2 & theme(legend.position = "bottom")
 combined + plot_layout(guides = "collect")
 @
-  \caption{Global envelope tests for comparison of the empirical cumulative distribution functions of the heights of the girls and boys (see Figure~\ref{fig:necdfs}). Red color indicates the heights where the observed distribution functions go outside the 95\% global envelope (ERL; gray bands). Left: Age 10; Right: Age 14.}
+  \caption{Global envelope tests for comparison of the empirical cumulative distribution functions of the heights of the girls and boys (see Figure~\ref{fig:necdfs}). Red color indicates the heights where the observed distribution functions go outside the 95\% global envelope (\code{'erl'}; gray bands). Left: Age 10; Right: Age 14.}
   \label{fig:necdfs_means_GET}
 \end{figure}
 
@@ -852,8 +873,7 @@ The latter test statistic (Equation~\ref{eq:graphfanova_contrasts}) can be obtai
 Because the ANOVA design assumes equal covariance functions, we first tested for the homoscedasticity using the test proposed by \citet[][Section 2.3]{MrkvickaEtal2020} and implemented in \pkg{GET}. We created the \class{curve\_set} object
 %
 <<graphfanova_cset>>==
-cset <- create_curve_set(list(r = 0:23,
-  obs = t(poblenou[['nox']][['data']])))
+cset <- curve_set(obs = t(poblenou[['nox']][['data']]), r = 0:23)
 @
 %
 and we used the function \fct{graph.fanova} with the option \code{test.equality = "var"} to test the equality of variances (Figure~\ref{fig:graphfanova_NOx_var_plot}):
@@ -875,7 +895,7 @@ plot(res.v) + xlab(myxlab)
 <<graphfanova_NOx_var_plot, echo=FALSE, fig=TRUE, height=2.722, width=6.125>>==
 plot(res.v) + xlab(myxlab)
 @
-  \caption{The test for the equality of variances of the NO$_x$ levels observed each hour ($r$) of the day. The 95\% global envelope (ERL; gray band) representing the null hypothesis of equal variances and the observed test statistic, the mean of functions $Z_{ij}(r) = | T_{ij}(r) - \overline{T}_j(r) |$ in each group (solid line with red dots when outside the envelope).}
+  \caption{The test for the equality of variances of the NO$_x$ levels observed each hour ($r$) of the day. The 95\% global envelope (\code{'erl'}; gray band) representing the null hypothesis of equal variances and the observed test statistic, the mean of functions $Z_{ij}(r) = | T_{ij}(r) - \overline{T}_j(r) |$ in each group (solid line with red dots when outside the envelope).}
   \label{fig:graphfanova_NOx_var_plot}
 \end{figure}
 %
@@ -892,8 +912,7 @@ This scaling is applied to the set of curves given to the function \fct{graph.fa
 When using the rescaled functions, the test vectors (Equations~\ref{eq:graphfanova_means} and \ref{eq:graphfanova_contrasts}) are asymptotically exchangeable under the null hypothesis of equal means only under the assumption of normality of stochastic processes $SP(\mu_j,\gamma_j)$ \citep{MrkvickaEtal2020}. Therefore, the log transformation was applied to the NO$_x$ values prior to the transformation (Equation~\ref{eq:scaling}):
 %
 <<graphfanova_lcset>>==
-lcset <- create_curve_set(list(r = 0:23,
-  obs = t(log(poblenou[['nox']][['data']]))))
+lcset <- curve_set(obs = t(log(poblenou[['nox']][['data']])), r = 0:23)
 @
 %
 
@@ -914,12 +933,12 @@ plot(res.c) + xlab(myxlab)
 <<graphfanova_logNOx_plot, echo=FALSE, fig=TRUE, height=2.722, width=6.125>>==
 plot(res.c) + xlab(myxlab)
 @
-  \caption{The output of the graphical functional ANOVA to test the difference between the type of the day on the log NO$_x$ levels observed each hour ($r$) of the day. The 95\% global envelope (ERL; gray band) accompanied with the observed differences between the group means (solid line with red dots when outside the envelope).}
+  \caption{The output of the graphical functional ANOVA to test the difference between the type of the day on the log NO$_x$ levels observed each hour ($r$) of the day. The 95\% global envelope (\code{'erl'}; gray band) accompanied with the observed differences between the group means (solid line with red dots when outside the envelope).}
   \label{fig:graphfanova_logNOx}
 \end{figure}
 %
 
-Thus, the test rejects the null hypothesis $H'_0$ that the differences between the groups would be zero and shows that on Monday-Thursday and Friday the (log) NO$_x$ levels are significantly larger than on free days basically during the whole day with peaks around 8 am and 4 pm. The difference between Monday-Thursday and Friday was not significant.
+Thus, the test rejects the null hypothesis $H'_0$ that the differences between the groups would be zero and shows that on Monday-Thursday and Friday the (log) NO$_x$ levels are significantly higher than on free days basically during the whole day with peaks around 8 am and 4 pm. The difference between Monday-Thursday and Friday was not significant.
 
 The graphical functional ANOVA allows one to detect either a) which groups deviate from the mean (default) or b) which specific groups are different (option \code{contrasts = TRUE}). The example above was for the latter. Note that this test directly has the nature of a post hoc test. Furthermore, both versions of the test allow one to identify which $r$ values lead to the potential rejection of the null hypothesis.
 
@@ -967,8 +986,8 @@ H_0: \beta_i(r) = 0, \quad\forall\, r = 1, \ldots, d, \quad\forall\, i = 1, \ldo
 $$
 %
 where $\beta_i(r)$ are the elements of the $\Bbeta(r)$. For a continuous factor of interest $k=1$ and $\Bbeta(r)$ serves as the test statistic. For a discrete factor of interest, in the default setup, $k$ is equal to the number of groups of the discrete factor, adding the additional condition that $\sum_i \beta_{i}(r)=0$ for all $r\in\{1, \ldots d\}$. Similarly, for interaction of a continuous and a discrete factor, $k$ is also equal to the number of groups of the categorical factor, adding the same additional condition. For the interaction of two discrete factors, $k$ is equal to the product of the numbers of groups of the discrete factors, adding the same additional condition.
-The default test statistic for a discrete factor consist of $\beta_i(r)$ for all $r=1,\ldots,d$ and $i=1,\ldots,k$. This test allows to detect which groups deviate from the zero (mean).
-An alternative test statistic is obtained by the setting the argument \code{contrasts} of the function \fct{graph.flm} to \code{TRUE}: then the test statistic is formed by all the pairwise differences between the group effects, $\beta_i(r) - \beta_j(r)$ for all $r$ and $i\neq j$, $1\leq i < j \leq k$. This test specifies which specific groups are different in the post hoc nature. Note that this also holds for interaction terms.
+If the argument \code{contrasts} of the function \fct{graph.flm} is set to \code{FALSE}, the test statistic for a discrete factor consist of $\beta_i(r)$ for all $r=1,\ldots,d$ and $i=1,\ldots,k$. This test allows to detect which groups deviate from the zero (mean).
+An alternative test statistic is obtained by setting \code{contrasts = TRUE}: then the test statistic is formed by all the pairwise differences between the group effects, $\beta_i(r) - \beta_j(r)$ for all $r$ and $i\neq j$, $1\leq i < j \leq k$. This test specifies which specific groups are different in the post hoc nature. Note that this also holds for interaction terms.
 Furthermore, all the options allow one to identify which of the components of the vector, $r\in\{1,\ldots,d\}$, lead to the potential rejection of the null hypothesis. Permutations under the null hypothesis are obtained using the Freedman-Lane procedure \citep{FreedmanLane1983, MrkvickaEtal2022, MrkvickaEtal2021a}.
 
 Often factors are given for the whole function, i.e., they do not depend on argument $r$, and so the matrices $\mathbf X(r)$ and $\mathbf Z(r)$ are identical for every $r$. These kind of constant factors (such as sex and age in the considered example) can be provided in the argument \code{factors} of the \fct{graph.flm} function. However, this simplification is not necessary and factors varying in space can be provided in the argument \code{curve_sets}, along with the data curves in a named list.
@@ -984,7 +1003,7 @@ res <- graph.flm(nsim = 999, formula.full = Y ~ Group + Sex + Age,
   formula.reduced = Y ~ Sex + Age,
   curve_sets = list(Y = abide_9002_23[['curve_set']]),
   factors = abide_9002_23[['factors']], contrasts = TRUE,
-  GET.args = list(type = "area"))
+  GET.args = list(type = 'area'))
 @
 %
 Here the arguments \code{formula.full} and \code{formula.reduced} specify the full GLM and the GLM where the interesting factor has been dropped out, and the number of simulations is given in \code{nsim}. Further arguments to \fct{global\_envelope\_test} can be passed in \code{GET.args}, e.g., the type of the global envelope.
@@ -1010,9 +1029,9 @@ plot(res) + scale_radius(range = 1.5 * c(1, 6))
 \end{figure}
 
 
-\subsubsection{$F$-rank GLM}
+\subsubsection{Functional GLM based on $F$-statistics}
 
-In the $F$-rank GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2022}.
+In the $F$-rank functional GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2022}.
 However, the test statistic is the classical $F$~statistic \citep[see, e.g.,][]{WinklerEtal2014} which is calculated for the hypothesis that the data follows the simpler reduced model of the two proposed linear models that are nested within each other (given in \code{formula.full} and \code{formula.reduced}).
 The use of the function \fct{frank.flm} is similar to that of \fct{graph.flm}:
 %
@@ -1024,14 +1043,14 @@ set.seed(202001)
 res.F <- frank.flm(nsim = 999, formula.full = Y ~ Group + Age + Sex,
   formula.reduced = Y ~ Age + Sex,
   curve_sets = list(Y = abide_9002_23[['curve_set']]),
-  factors = abide_9002_23[['factors']], GET.args = list(type = "area"))
+  factors = abide_9002_23[['factors']], GET.args = list(type = 'area'))
 plot(res.F, what = c("obs", "hi", "hi.sign"), sign.type = "contour")
 @
 %
 For illustration of different options, we plot here the observed function (\code{what = "obs"}), the upper envelope (\code{what = "hi"}) and the observed function with the significant region (\code{what = "hi.sign"}). The significant region is here shown by contour lines, as chosen in the argument \code{sign.type}. Contours do not indicate the size of deviation from the bounds of the global envelope, but contours or colored regions (\code{sign.type = "col"}) can be preferable if the observed function exceeds the envelope on large parts of the domain.
 
 Figure~\ref{fig:flm_frank_abide} shows that the $F$-rank GLM found significant differences between the groups approximately at the same pixels $r\in\{1,\ldots,d\}$ of the brain image as the graphical functional GLM above.
-In general, for a factor with more than two groups, the $F$-rank GLM is however not able to tell between which specific groups of a discrete factor the differences occur (or which of the groups deviate from the mean).
+In general, for a factor with more than two groups, the $F$-rank GLM is however not able to tell between which specific groups of the factor the differences occur (or which of the groups deviate from the mean).
 In the case of heteroscedasticy, the weighted least squares test statistics can be used instead \citep{Christensen2002}.
 
 \begin{figure}[ht!]
@@ -1046,8 +1065,7 @@ plot(res.F, what = c("obs", "hi", "hi.sign"), sign.type = "contour")
 
 \subsection{Confidence band in polynomial regression}\label{sec:confband}
 
-The bootstrap procedure described in \citet{NarisettyNair2016} can be used to compute global confidence bands for the fitted curve in the linear or polynomial regression. In this example, regression data was simulated according to the cubic model $f(x) = 0.8x - 1.8x^2 + 1.05x^3$ for $x\in [0,1]$ with i.i.d.\ random noise (dots in Figure~\ref{fig:polynomial}). Then the data was fitted with cubic regression (black solid line in Figure~\ref{fig:polynomial}) and by permuting the residuals 2000 bootstrap samples were obtained and functions fitted \citep[see more details about the bootstrap procedure in][]{NarisettyNair2016}. Finally a \class{curve\_set} object was constructed of these bootstrapped functions by the \fct{create\_curve\_set} function
-and the \fct{central\_region} function was applied to this set to obtain the 95\%, 80\% and 50\% global confidence bands.
+The bootstrap procedure described in \citet{NarisettyNair2016} can be used to compute global confidence bands for the fitted curve in the linear or polynomial regression. In this example, regression data was simulated according to the cubic model $f(x) = 0.8x - 1.8x^2 + 1.05x^3$ for $x\in [0,1]$ with i.i.d.\ random noise (dots in Figure~\ref{fig:polynomial}). Then the data was fitted with cubic regression (black solid line in Figure~\ref{fig:polynomial}) and by permuting the residuals 2000 bootstrap samples were obtained and functions fitted \citep[see more details about the bootstrap procedure in][]{NarisettyNair2016}. Finally a \class{curve\_set} object was constructed of these bootstrapped functions and the \fct{central\_region} function was applied to this set to obtain the 95\%, 80\% and 50\% global confidence bands.
 The multiple global bands were obtained by setting the argument \code{coverage = c(0.95, 0.80, 0.50)}.
 
 The result of the procedure is shown in Figure~\ref{fig:polynomial}. The code can be found in the help file of the function \fct{central\_region} in \proglang{R}.
@@ -1059,7 +1077,7 @@ set.seed(190504)
 # Polynomial regression from Narisetty & Nair (2016)
 # Simulate regression data according to the cubic model
 # f(x) = 0.8x - 1.8x^2 + 1.05x^3 for x in [0,1]
-par <- c(0,0.8,-1.8,1.05) # Parameters of the true polynomial model
+par <- c(0, 0.8, -1.8, 1.05) # Parameters of the true polynomial model
 res <- 100 # Resolution
 x <- seq(0, 1, by = 1/res); x2 = x^2; x3 = x^3;
 f <- par[1] + par[2]*x + par[3]*x^2 + par[4]*x^3 # The true function
@@ -1073,8 +1091,8 @@ s0 <- sd(resid0)
 
 # Bootstrap regression
 B <- 2000 # Number of bootstrap samples
-ftheta1 <- array(0, c(B,length(x)))
-s1 <- array(0,B)
+ftheta1 <- array(0, c(B, length(x)))
+s1 <- array(0, B)
 for(i in 1:B) {
   u <- sample(resid0, size = length(resid0), replace = TRUE)
   reg1 <- lm((ftheta+u) ~ x + x2 + x3)
@@ -1084,19 +1102,19 @@ for(i in 1:B) {
 
 # Centering and scaling
 meanftheta <- apply(ftheta1, 2, mean)
-m <- array(0, c(B,length(x)))
+m <- array(0, c(B, length(x)))
 for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
 
 # Central region computation
-boot.cset <- create_curve_set(list(r = 1:length(x), obs = ftheta+s0*t(m)))
-cr <- central_region(boot.cset, coverage = c(0.95, 0.80, 0.50), type = "erl")
+boot.cset <- curve_set(r = 1:length(x), obs = ftheta+s0*t(m))
+cr <- central_region(boot.cset, coverage = c(0.95, 0.80, 0.50), type = 'erl')
 plot(cr) + labs(x = expression(italic(x)), y = expression(italic(f(x)))) +
   geom_point(data = data.frame(id = 1:length(d), points = d),
     aes(x = id, y = points)) + # data points
   geom_line(data = data.frame(id = 1:length(d), points = f),
     aes(x = id, y = points)) # true function
 @
-  \caption{The global 95\%, 80\% and 50\% confidence bands (ERL) for the cubic regression (nested gray bands; widest is 95\%), the true function (solid line) from which the data points (dots) were simulated and the median computed from the simulations (dashed line).}
+  \caption{The global 95\%, 80\% and 50\% confidence bands (\code{'erl'}) for the cubic regression (nested gray bands; widest is 95\%), the true function (solid line) from which the data points (dots) were simulated and the median computed from the simulations (dashed line).}
   \label{fig:polynomial}
 \end{figure}
 
@@ -1115,15 +1133,16 @@ A similar situation appears in the permutation GLM tests which, in the functiona
 
 A further advantage of the rank tests is that it allows one to give equal weights to the components fed in. Thus, the method is particularly well suited also for multiple testing with several univariate or functional test statistics \citep{MrkvickaEtal2017}, for constructing central regions jointly for various transformations of the functions \citep[for details see][]{DaiEtal2020}, and for combining various dimensions of multidimensional functions or various functional elements of multivariate functions. Further, it can be used for functional cluster analysis so that various transformations of the functions have the same impact on the clustering algorithm \citep{DaiEtal2022}.
 
-Finally, the good properties of the methods presented here are retained also in the case of testing a composite hypothesis: the two-stage Monte Carlo test is applicable to these graphical methods.
+Finally, the good properties of the methods presented here are retained also in the case of testing a composite hypothesis: the two-stage Monte Carlo test is applicable to these graphical methods (Appendix \ref{app:adjustedGE}).
 
 We are committed to developing the \pkg{GET} package further. For example, new types of global envelopes can be added, if such are invented, and support for specific applications or different type of data will be extended.
 
 
 \section*{Acknowledgments}
 
-MM was financially supported by the Academy of Finland (project numbers 295100, 306875, 327211 and 348154) and TM by the Grant Agency of Czech Republic (Project No.\ 19-04412S and 24-11096S).
+MM was financially supported by the Research Council of Finland (project numbers 295100, 306875, 327211) and TM by the Grant Agency of Czech Republic (Project No.\ 19-04412S and 24-11096S).
 The authors thank Ji\v{r}\'{i} Dvo\v{r}\'{a}k, Pavel Grabarnik, Ute Hahn, Mikko Kuronen, Michael Rost and Henri Seijo for their contributions and suggestions of code, as well as Stavros Athanasiadis, Wenlin Dai, Marc G.\ Genton, Milan J\'ilek, Naveen Naidu Narisetty, Tom\'a\v s Roskovec, Samuel Soubeyrand and Ying Sun for their collaboration on developing global envelope methods.
+The authors wish to acknowledge CSC -- IT Center for Science, Finland, for computational resources.
 
 %% -- Bibliography -------------------------------------------------------------
 
