@@ -433,7 +433,7 @@ Function name              & Description \\ \hline
 \fct{graph.flm}  &  Non-parametric graphical tests of significance in functional general linear model (GLM) \citep{MrkvickaEtal2021a} \\
 \fct{frank.flm} & Global envelope tests applied to $F$~values in permutation inference for the GLM \citep{MrkvickaEtal2022} \\
 \fct{fclustering} & Functional clustering based on a specified measure \citep{DaiEtal2022} \\
-\fct{GET.necdf} & Graphical $n$ sample test of correspondence of distribution functions \\ 
+\fct{GET.distrequal} & Graphical $n$ sample test of correspondence of distribution functions \\
 \fct{GET.distrindep} & Permutation-based tests of independence to samples from any bivariate distribution \citep{DvorakMrkvicka2022} \\
 \fct{GET.spatialF} & Testing global and local covariate effects in point process models \citep{MyllymakiEtal2020} \\
 \end{tabular}
@@ -750,14 +750,14 @@ The graphical $n$-sample test of correspondence of distribution functions serves
 Figure~\ref{fig:necdfs} shows the empirical cumulative distribution functions (ECDFs) obtained by the function \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020} for the heights of the 54 girls and 39 boys of the \code{growth} data \citep[see above, and][]{RamsaySilverman2005} at ages 10 (left) and 14 (right).
 A global envelope test can be performed to investigate whether the two (or more generally $n$) distribution functions differ from each other significantly and how they differ. This test is a generalization of the two-sample Kolmogorov-Smirnov test with a graphical interpretation. The generalization is provided in two ways, in the number of samples and in the variable width of the envelopes. Namely, the Kolmogorov-Smirnov test provides an envelope of constant width which suffers in determining differences in extreme quantiles.
 Here it is assumed that the heights in the sample $i$ are an i.i.d.\ sample from the distribution $F_i(r)$, $i=1, \ldots, n$, and the hypothesis $F_1(r)=\ldots = F_n(r)$ is to be tested.
-The simulations under the null hypothesis that the distributions are the same can be obtained by permuting the individuals of the groups. The \pkg{GET} package provides the wrapper function \fct{GET.necdf} that can be used to compare $n$ distribution functions graphically, $n=2,3,\ldots$. The (default) test vector is
+The simulations under the null hypothesis that the distributions are the same can be obtained by permuting the individuals of the groups. The \pkg{GET} package provides the wrapper function \fct{GET.distrequal} that can be used to compare $n$ distribution functions graphically, $n=2,3,\ldots$. The (default) test vector is
 %
 \begin{equation*}
 \mathbf{T} = (\hat{F}_1(r), \ldots, \hat{F}_n(r)),
 \end{equation*}
 %
 where $\hat{F}_i(r) = (\hat{F}_i(r_1), \ldots, \hat{F}_i(r_d))$ is the ECDF of the $i$th sample evaluated at argument values $r = (r_1,\ldots,r_d)$.
-To test the equality of distributions, one simply needs to provide the samples as a list (code for age 10 shown here) for \fct{GET.necdf} and plot the object returned by \fct{GET.necdf} (Figure~\ref{fig:necdfs_means_GET}, left):
+To test the equality of distributions, one simply needs to provide the samples as a list (code for age 10 shown here) for \fct{GET.distrequal} and plot the object returned by \fct{GET.distrequal} (Figure~\ref{fig:necdfs_means_GET}, left):
 %
 <<necdfs_10_seed, echo=FALSE>>==
 set.seed(190503)
@@ -766,7 +766,7 @@ set.seed(190503)
 <<necdfs_10>>==
 fm10.l <- list('Girls, 10 yr.' = growth$hgtf["10",],
                'Boys, 10 yr.' = growth$hgtm["10",])
-res10 <- GET.necdf(fm10.l, nsim = 1999)
+res10 <- GET.distrequal(fm10.l, nsim = 1999)
 myxlab <- substitute(paste(italic(i), " (", j, ")", sep = ""),
     list(i = "x", j = "Height in cm"))
 plot(res10) + xlab(myxlab)
@@ -776,7 +776,7 @@ plot(res10) + xlab(myxlab)
 set.seed(190503)
 fm14.l <- list('Girls, 14 yr.' = growth$hgtf["14",],
                'Boys, 14 yr.' = growth$hgtm["14",])
-res14 <- GET.necdf(fm14.l, nsim = 1999)
+res14 <- GET.distrequal(fm14.l, nsim = 1999)
 @
 %
 The height distributions at age 10 do not differ from each other significantly, but at age 14 the boys are taller, particularly with a difference that the proportion of girls reaching a height of around 175 cm is much lower (Figure~\ref{fig:necdfs_means_GET}, right).
