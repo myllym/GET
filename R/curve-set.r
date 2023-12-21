@@ -62,7 +62,8 @@ fdata_to_curve_set <- function(fdata, ...) {
 # values (allfinite=FALSE), e.g., in an \code{envelope} object of \pkg{spatstat}
 # at the first place, if those are cropped away later (in \code{\link{crop_curves}})
 # for analyses.
-check_curve_set_content <- function(curve_set, allfinite=TRUE) {
+# @param ... Ignored.
+check_curve_set_content <- function(curve_set, allfinite=TRUE, ...) {
   allow_Inf_values <- !allfinite
   if(inherits(curve_set, "curve_set")) {
     if(!allow_Inf_values) {
