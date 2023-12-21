@@ -29,7 +29,7 @@ create_curve_set(curve_set, allfinite = FALSE, verbose = TRUE)
 finite (not infinite and not missing, see \code{\link{is.finite}}). FALSE
 allows for infinite or missing values in the curves. These infinite and missing
 values can have consequences for the subsequent analyses. A warning is given
-if infinite or missing values exists.}
+if infinite or missing values exists (when \code{verbose = TRUE}).}
 
 \item{verbose}{Logical flag indicating whether to warn about the content.}
 
