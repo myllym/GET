@@ -1185,12 +1185,12 @@ global_envelope_test <- function(curve_sets, typeone = c("fwer", "fdr"),
                                  lower = NULL, upper = NULL) {
   typeone <- match.arg(typeone)
   if(typeone == "fwer") {
-    if(!missing(algorithm)) stop("The algorithm cannot be specified under the FWER control.")
+    if(!missing(algorithm)) warning("The algorithm cannot be specified under the FWER control.")
     if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
       stop("No such type for global envelope.")
   }
   else {
-    if(!missing(type)) stop("The type cannot be specified under the FWER control.")
+    if(!missing(type)) warning("The type cannot be specified under the FDR control.")
     algorithm <- match.arg(algorithm)
   }
   if(!(typeone == "fwer" && type == "rank")) if(!missing(ties))
