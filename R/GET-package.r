@@ -110,7 +110,7 @@
 #' \item \emph{Functional clustering}: \code{\link{fclustering}}
 #' \item Functions for performing global envelopes for specific purposes:
 #'  \itemize{
-#'   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.necdf}}
+#'   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.distrequal}}
 #'   \item Permutation-based tests of independence to samples from any bivariate distribution: \code{\link{GET.distrindep}}
 #'   \item Testing global and local dependence of point patterns on covariates: \code{\link{GET.spatialF}}
 #'   \item Testing local correlations: \code{\link{GET.localcor}}
