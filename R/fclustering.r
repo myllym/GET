@@ -98,7 +98,7 @@ fclustering <- function(curve_sets, k, type = c("area", "st", "erl", "cont"), tr
     curve_sets <- list(curve_sets) # Make a list of a single curve_set to treat it similarly as several sets of curves
   }
   # Convert (e.g. fdata) to curve_sets and check the content
-  curve_sets <- lapply(curve_sets, FUN=convert_to_curveset)
+  curve_sets <- lapply(curve_sets, FUN=as.curve_set)
   if(any(sapply(curve_sets, FUN=curve_set_is1obs))) stop("Some or all sets of curves have one observed function.")
   # Check consistency of the given curve sets
   checkequal <- function(f) {

@@ -219,8 +219,22 @@ is_a_single_curveset <- function(curve_set) {
   inherits(curve_set, c('curve_set', 'envelope', 'fdata'))
 }
 
-# Convert an envelope or fdata object to a curve_set object.
-convert_to_curveset <- function(curve_set, ...) {
+#' Convert an envelope or fdata object to a curve_set object
+#'
+#' If given an envelope object of \pkg{spatstat} or a \code{fdata} object of
+#' \pkg{fda.usc}, convert it into a curve_set object. If given a curve_set
+#' object, check its correctness and give it back.
+#'
+#' @param curve_set An object to be converted to a \code{\link{curve_set}} object.
+#' The \code{envelope} objects of \pkg{spatstat} and \code{fdata} objects of
+#' \pkg{fda.usc} are supported currently, besides curve_set objects.
+#' @param ... Allows passing arguments to \code{\link{create_curve_set}}.
+#' @return If an \code{envelope} object of \pkg{spatstat} or an
+#' \code{\link[fda.usc]{fdata}} object is given, return a corresponding
+#' curve_set object. If a curve_set object was given, check it and return it
+#' unharmed.
+#' @export
+as.curve_set <- function(curve_set, ...) {
   if(inherits(curve_set, 'envelope')) {
     curve_set <- envelope_to_curve_set(curve_set, ...)
   } else if(inherits(curve_set, 'fdata')) {
@@ -228,6 +242,8 @@ convert_to_curveset <- function(curve_set, ...) {
   } else if(!inherits(curve_set, 'curve_set')) {
     stop('curve_set must either have class "envelope" (from spatstat) ',
          'or "fdata" (from fda.usc) or "curve_set".')
+  } else {
+    curve_set <- check_curve_set_content(curve_set, ...)
   }
   curve_set
 }
@@ -548,7 +564,7 @@ combine_curve_sets <- function(x, equalr = TRUE) {
 # Check that the curve sets have same elements and dimensions of them (numbers of r-values can differ for equalr=FALSE).
 # @inheritParams combine_curve_sets
 check_curve_set_dimensions <- function(x, equalr=FALSE) {
-  x <- lapply(x, FUN=convert_to_curveset)
+  x <- lapply(x, FUN=as.curve_set)
   checkequal <- function(f) {
     all(sapply(x, FUN=function(curve_set) { f(curve_set) == f(x[[1]]) }))
   }
