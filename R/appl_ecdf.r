@@ -59,7 +59,7 @@ ecdfcontrasts.m <- function(x, groups, r) {
 #'
 #' @inheritParams graph.fanova
 #' @param x A list of numeric vectors, one for each sample.
-#' @param r The sequence of argument values at which the distribution functions are to be compared.
+#' @param r The sequence of argument values at which the test functions are to be compared.
 #' The default is 100 equally spaced values between the minimum and maximum over all groups.
 #' @export
 #' @examples
