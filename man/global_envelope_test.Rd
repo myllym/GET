@@ -49,7 +49,8 @@ The last two options only available for types \code{'rank'}, \code{'erl'},
 Either "IATSE" or "ATSE" standing for the iteratively adaptive two-stage
 envelope and the adaptive two-stage envelope, respectively, see Mrkvička and Myllymäki (2023).}
 
-\item{ties}{The method to obtain a unique p-value when \code{typeone = 'fwer'} and \code{type = 'rank'}.
+\item{ties}{The method to obtain a unique p-value when \code{typeone = 'fwer'} and \code{type = 'rank'};
+otherwise ignored.
 Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 For 'conservative' the resulting p-value will be the highest possible.
 For 'liberal' the p-value will be the lowest possible.
