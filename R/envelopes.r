@@ -1010,7 +1010,8 @@ fwer_envelope <- function(curve_sets, type = "erl", alpha = 0.05,
 #' @param alpha The significance level. The 100(1-alpha)\% global envelope will be calculated
 #' under the 'fwer' or 'fdr' control.
 #' If a vector of values is provided, the global envelopes are calculated for each value.
-#' @param ties The method to obtain a unique p-value when \code{typeone = 'fwer'} and \code{type = 'rank'}.
+#' @param ties The method to obtain a unique p-value when \code{typeone = 'fwer'} and \code{type = 'rank'};
+#' otherwise ignored.
 #' Possible values are 'midrank', 'random', 'conservative', 'liberal' and 'erl'.
 #' For 'conservative' the resulting p-value will be the highest possible.
 #' For 'liberal' the p-value will be the lowest possible.
@@ -1193,12 +1194,6 @@ global_envelope_test <- function(curve_sets, typeone = c("fwer", "fdr"),
     if(!missing(type)) warning("The type cannot be specified under the FDR control.")
     algorithm <- match.arg(algorithm)
   }
-  if(!(typeone == "fwer" && type == "rank")) if(!missing(ties))
-    warning("The argument ties is only relevant for the global envelope of type \'rank\' (fwer).")
-  if(!(typeone == "fwer" && type == "qdir")) if(!missing(probs))
-    warning("The argument probs is only relevant for the global envelope of type \'qdir\' (fwer).")
-  if(!(typeone == "fwer" && type == "qdir")) if(!missing(quantile.type))
-    warning("The argument quantile.type is only relevant for the global envelope of type \'qdir\' (fwer).")
   if(typeone == "fdr" && central != "mean")
     warning("For the FDR envelope \'central\' is always the mean of the simulated functions. No other options available.")
 
