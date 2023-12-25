@@ -59,7 +59,7 @@ The package contains four vignettes. The GET vignette describes the package in g
 library("GET")
 vignette("GET")
 ```
-This vignette corresponds to Myllymäki and Mrkvička (2020).
+This vignette corresponds to Myllymäki and Mrkvička (2023).
 
 The package provides also a vignette for global envelopes for point pattern analyses, which is available by starting `R` and typing
 ```R
