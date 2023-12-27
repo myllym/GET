@@ -320,7 +320,7 @@ GET.qq <- function(X, nsim, ngrid, sigma, atoms.x, atoms.y, ...) {
 #'
 #' # Compute the CDF test and plot the significant regions
 #' \donttest{res <- GET.distrindep(data, statistic="cdf", ngrid=c(20,15), nsim=1999)}
-#' \dontshow{res <- GET.distrindep(data, statistic="cdf", ngrid=c(20,15), nsim=19)}
+#' \dontshow{res <- GET.distrindep(data, statistic="cdf", ngrid=c(20,15), nsim=4, alpha=0.20)}
 #' plot(res) + ggplot2::scale_radius(range = 2 * c(1, 6))
 #'
 #' # Extract the p-value
@@ -337,7 +337,7 @@ GET.qq <- function(X, nsim, ngrid, sigma, atoms.x, atoms.y, ...) {
 #'
 #' # Permutation-based envelope test
 #' \donttest{res <- GET.distrindep(data, statistic="contingency", nsim=999)}
-#' \dontshow{res <- GET.distrindep(data, statistic="contingency", nsim=19)}
+#' \dontshow{res <- GET.distrindep(data, statistic="contingency", nsim=4, alpha=0.20)}
 #' res
 #' plot(res) + ggplot2::scale_radius(range = 5 * c(1, 6))
 #'
@@ -353,7 +353,7 @@ GET.qq <- function(X, nsim, ngrid, sigma, atoms.x, atoms.y, ...) {
 #'
 #' # Compute the QQ test and plot the significant regions
 #' \donttest{res <- GET.distrindep(data, statistic="qq", ngrid=c(30,20), nsim=999)}
-#' \dontshow{res <- GET.distrindep(data, statistic="qq", ngrid=c(30,20), nsim=19)}
+#' \dontshow{res <- GET.distrindep(data, statistic="qq", ngrid=c(30,20), nsim=4, alpha=0.20)}
 #' plot(res)
 #' # Extract the p-value
 #' attr(res,"p")
@@ -362,7 +362,7 @@ GET.qq <- function(X, nsim, ngrid, sigma, atoms.x, atoms.y, ...) {
 #' data <- cbind(rnorm(n=100), sample(4, size=100, replace=TRUE))
 #' plot(data)
 #' \donttest{res <- GET.distrindep(data, statistic="qq", nsim=999, atoms.y=c(1,2,3,4))}
-#' \dontshow{res <- GET.distrindep(data, statistic="qq", nsim=19, atoms.y=c(1,2,3,4))}
+#' \dontshow{res <- GET.distrindep(data, statistic="qq", nsim=4, alpha=0.20, atoms.y=c(1,2,3,4))}
 #' plot(res)
 #'
 #' \donttest{
@@ -381,7 +381,7 @@ GET.qq <- function(X, nsim, ngrid, sigma, atoms.x, atoms.y, ...) {
 #'
 #' # Perform the test
 #' \donttest{res <- GET.distrindep(data, statistic="qq", nsim=999, atoms.x=c(-1), atoms.y=c(-0.5))}
-#' \dontshow{res <- GET.distrindep(data, statistic="qq", nsim=19, atoms.x=c(-1), atoms.y=c(-0.5))}
+#' \dontshow{res <- GET.distrindep(data, statistic="qq", nsim=4, alpha=0.20, atoms.x=c(-1), atoms.y=c(-0.5))}
 #' plot(res, sign.type="col", what=c("obs", "lo", "hi", "lo.sign", "hi.sign"))
 GET.distrindep <- function(X, nsim = 999, statistic = c("cdf", "contingency", "qq"),
                            ngrid, seq.x, seq.y,
