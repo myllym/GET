@@ -396,8 +396,8 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #' plot(res)
 #'
 #' # An example of testing the joint effect of a discrete and a continuous variable
-#' \dontshow{nsim <- 19}
 #' \donttest{nsim <- 999}
+#' \dontshow{nsim <- 19}
 #' data("GDPtax")
 #' factors.df <- data.frame(Group = GDPtax$Group, Tax = GDPtax$Profittax)
 #' res.tax_within_group <- graph.flm(nsim = nsim,
