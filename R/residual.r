@@ -1,8 +1,8 @@
 #' Residual form of the functions
 #'
-#' Subtract the theoretical function S_{H_0} or the mean of the functions
+#' Subtract the theoretical function \eqn{S_{H_0}}{S_{H_0}} or the mean of the functions
 #' in the curve set. If the \code{curve_set} object contains already residuals
-#' T_i(r) - T_0(r), use_theo ignored and the same object returned.
+#' \eqn{T_i(r) - T_0(r)}{T_i(r) - T_0(r)}, \code{use_theo} ignored and the same object returned.
 #'
 #'
 #' The mean of the functions in the \code{curve_set} is the mean of all functions.
