@@ -213,7 +213,7 @@ Since the global envelopes are a nonparametric tool, we can use as a test statis
 where $\beta_{1,i}^{\text{Cont}}, \ldots \beta_{4,i}^{\text{Cont}}$ are the parameters of the univariate ANCOVA model for year $i$, computed with condition $\sum_{j=1}^4 \beta_{j,i}^{\text{Cont}} = 0$. This model parametrization enables that the parameter  $\beta_{j,i}^{\text{Cont}}$ is the difference between the $j$-th continent's growth rate and the overall mean.
 
 This test statistic allows for a direct comparison of each continent's growth rate with the world's mean growth rate. Figure~\ref{fig:popgrowth_flm} shows the test statistic (Equation~\ref{TT1}) computed for the data together with 95\% global envelope computed under the null model of no continent effect but with nuisance effect of GDP. This output shows, first, the formal global $p$~value, which indicates that the effect of the continent is significant after applying an adjustment for multiple comparisons for the 55 years, and four continents. Second, it shows the reasons of rejections, i.e., which years have led to the significant test result. Due to the intrinsic graphical interpretation (IGI, see Definition~\ref{IGI}) of the global envelope, we have a one-to-one correspondence between the formal global test and its graphical interpretation, i.e., the data statistic lies outside the envelope for some point (here years and continents) if and only if the global test is significant. This allows for direct identification of the significant years. Third, the output shows the direction and amount of deviation from the null hypothesis. For example, the growth rate in Europe and North America is significantly lower than the world's average in all years, whereas Asia's growth rate is slightly significantly higher than the world's average only up to the year 1966. Fourth, due to the free choice of the test statistic, the test output shows here the comparison individually for every continent (level of the categorical predictor). The \pkg{GET} package also allows for the choice of comparison between all pairs of continents in the style of the post hoc test. Note that usually, the two tests are applied - global AN(C)OVA and multiple comparison post hoc test.
-Note also that we can calculate results also for continuous GDP effect and interaction effect between the GDP and all continents (all levels of the categorical effect) in the same way \citep[see][Section~6]{MrkvickaMyllymaki2023}.
+Note also that we can calculate results also for continuous GDP effect and interaction effect between the GDP and all continents (all levels of the categorical effect) in the same way \citep[see]{MrkvickaMyllymaki2023}.
 %
 <<example_pop_seed, echo=FALSE>>==
 set.seed(202304)
@@ -1029,9 +1029,9 @@ plot(res) + scale_radius(range = 1.5 * c(1, 6))
 \end{figure}
 
 
-\subsubsection{Functional GLM based on $F$-statistics}
+\subsubsection[Functional GLM based on $F$ statistics]{Functional GLM based on $F$~statistics}
 
-In the $F$-rank functional GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2022}.
+In the $F$~rank functional GLM, the same linear model (Equation~\ref{eq:GLM}) is fitted at each $r\in\{1,\ldots,d\}$ and permutations under the null hypothesis are obtained similarly by the Freedman-Lane procedure as in the graphical functional GLM \citep{FreedmanLane1983, MrkvickaEtal2022}.
 However, the test statistic is the classical $F$~statistic \citep[see, e.g.,][]{WinklerEtal2014} which is calculated for the hypothesis that the data follows the simpler reduced model of the two proposed linear models that are nested within each other (given in \code{formula.full} and \code{formula.reduced}).
 The use of the function \fct{frank.flm} is similar to that of \fct{graph.flm}:
 %
@@ -1049,8 +1049,8 @@ plot(res.F, what = c("obs", "hi", "hi.sign"), sign.type = "contour")
 %
 For illustration of different options, we plot here the observed function (\code{what = "obs"}), the upper envelope (\code{what = "hi"}) and the observed function with the significant region (\code{what = "hi.sign"}). The significant region is here shown by contour lines, as chosen in the argument \code{sign.type}. Contours do not indicate the size of deviation from the bounds of the global envelope, but contours or colored regions (\code{sign.type = "col"}) can be preferable if the observed function exceeds the envelope on large parts of the domain.
 
-Figure~\ref{fig:flm_frank_abide} shows that the $F$-rank GLM found significant differences between the groups approximately at the same pixels $r\in\{1,\ldots,d\}$ of the brain image as the graphical functional GLM above.
-In general, for a factor with more than two groups, the $F$-rank GLM is however not able to tell between which specific groups of the factor the differences occur (or which of the groups deviate from the mean).
+Figure~\ref{fig:flm_frank_abide} shows that the $F$~rank GLM found significant differences between the groups approximately at the same pixels $r\in\{1,\ldots,d\}$ of the brain image as the graphical functional GLM above.
+In general, for a factor with more than two groups, the $F$~rank GLM is however not able to tell between which specific groups of the factor the differences occur (or which of the groups deviate from the mean).
 In the case of heteroscedasticy, the weighted least squares test statistics can be used instead \citep{Christensen2002}.
 
 \begin{figure}[ht!]
@@ -1058,7 +1058,7 @@ In the case of heteroscedasticy, the weighted least squares test statistics can 
 <<flm_frank_abide, echo=FALSE, fig=TRUE, height=3.0625, width=6.125>>==
 plot(res.F, what = c("obs", "hi", "hi.sign"), sign.type = "contour")
 @
-  \caption{$F$-rank functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed $F$~statistic, the upper bound of the one-sided 95\% global envelope (area), and the significant region (red contour lines) where the observed $F$~statistic exceeds the envelope.}
+  \caption{$F$~rank functional GLM for testing the effect of the group (autism, control) in the brain image example: the observed $F$~statistic, the upper bound of the one-sided 95\% global envelope (area), and the significant region (red contour lines) where the observed $F$~statistic exceeds the envelope.}
   \label{fig:flm_frank_abide}
 \end{figure}
 
@@ -1080,7 +1080,7 @@ set.seed(190504)
 par <- c(0, 0.8, -1.8, 1.05) # Parameters of the true polynomial model
 res <- 100 # Resolution
 x <- seq(0, 1, by = 1/res); x2 = x^2; x3 = x^3;
-f <- par[1] + par[2]*x + par[3]*x^2 + par[4]*x^3 # The true function
+f <- par[1] + par[2] * x + par[3] * x^2 + par[4] * x^3 # The true function
 d <- f + rnorm(length(x), 0, 0.04) # Data
 
 # Estimate polynomial regression model
@@ -1106,7 +1106,7 @@ m <- array(0, c(B, length(x)))
 for(i in 1:B) { m[i,] <- (ftheta1[i,]-meanftheta)/s1[i] }
 
 # Central region computation
-boot.cset <- curve_set(r = 1:length(x), obs = ftheta + s0*t(m))
+boot.cset <- curve_set(r = 1:length(x), obs = ftheta + s0 * t(m))
 cr <- central_region(boot.cset, coverage = c(0.95, 0.80, 0.50), type = 'erl')
 plot(cr) + labs(x = expression(italic(x)), y = expression(italic(f(x)))) +
   geom_point(data = data.frame(id = 1:length(d), points = d),
