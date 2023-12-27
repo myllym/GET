@@ -123,10 +123,12 @@ if(require("fda.usc", quietly=TRUE)) {
      obs = t(log(poblenou[['nox']][['data']])))
   # Graphical functional ANOVA
   \donttest{nsim <- 2999}
-  \dontshow{nsim <- 19
+  \dontshow{
+  nsim <- 19
   # Decrease the data to reduce time
   cset$funcs <- cset$funcs[, 20:40]
-  Type <- Type[20:40]}
+  Type <- Type[20:40]
+  }
   res.c <- graph.fanova(nsim = nsim, curve_set = cset,
                         groups = Type, variances = "unequal",
                         contrasts = TRUE)
@@ -177,12 +179,8 @@ imageset3$image_set$funcs <- imageset3$image_set$funcs[c(1:3, 52:55, 103), ]
 res <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
                     curve_set = imageset3$image_set,
                     groups = imageset3$Group)
-plot(res)
-# Contrasts
-res.c <- graph.fanova(nsim = 19, # Increase nsim for serious analysis!
-                      curve_set = imageset3$image_set, groups = imageset3$Group,
-                      contrasts = TRUE)
-plot(res.c)
+plot(res, what = c("obs", "lo.sign", "hi.sign"), sign.type = "col")
+
 }
 \references{
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56 (3), 432-458. doi: 10.14736/kyb-2020-3-0432

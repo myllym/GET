@@ -77,6 +77,7 @@ res <- graph.flm(nsim = 19, # Increase nsim for serious analysis!
   curve_sets = list(Y=iset), factors = factors,
   contrasts = FALSE, GET.args = list(type="area"))
 plot(res)
+\donttest{
 plot(res, what=c("obs", "hi"))
 
 plot(res, what=c("hi", "lo"), fixedscales=1)
@@ -98,5 +99,6 @@ if(requireNamespace("gridExtra", quietly=TRUE)) {
       ggplot2::theme(axis.ticks=ggplot2::element_blank(),
       axis.text=ggplot2::element_blank(), axis.title=ggplot2::element_blank()))))
   gridExtra::grid.arrange(grobs=t(gs))
+}
 }
 }

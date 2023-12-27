@@ -100,7 +100,7 @@ plot(data)
 
 # Compute the CDF test and plot the significant regions
 \donttest{res <- GET.distrindep(data, statistic="cdf", ngrid=c(20,15), nsim=1999)}
-\dontshow{res <- GET.distrindep(data, statistic="cdf", ngrid=c(20,15), nsim=19)}
+\dontshow{res <- GET.distrindep(data, statistic="cdf", ngrid=c(20,15), nsim=4, alpha=0.20)}
 plot(res) + ggplot2::scale_radius(range = 2 * c(1, 6))
 
 # Extract the p-value
@@ -117,7 +117,7 @@ table(data[,1], data[,2])
 
 # Permutation-based envelope test
 \donttest{res <- GET.distrindep(data, statistic="contingency", nsim=999)}
-\dontshow{res <- GET.distrindep(data, statistic="contingency", nsim=19)}
+\dontshow{res <- GET.distrindep(data, statistic="contingency", nsim=4, alpha=0.20)}
 res
 plot(res) + ggplot2::scale_radius(range = 5 * c(1, 6))
 
@@ -133,7 +133,7 @@ plot(data)
 
 # Compute the QQ test and plot the significant regions
 \donttest{res <- GET.distrindep(data, statistic="qq", ngrid=c(30,20), nsim=999)}
-\dontshow{res <- GET.distrindep(data, statistic="qq", ngrid=c(30,20), nsim=19)}
+\dontshow{res <- GET.distrindep(data, statistic="qq", ngrid=c(30,20), nsim=4, alpha=0.20)}
 plot(res)
 # Extract the p-value
 attr(res,"p")
@@ -142,7 +142,7 @@ attr(res,"p")
 data <- cbind(rnorm(n=100), sample(4, size=100, replace=TRUE))
 plot(data)
 \donttest{res <- GET.distrindep(data, statistic="qq", nsim=999, atoms.y=c(1,2,3,4))}
-\dontshow{res <- GET.distrindep(data, statistic="qq", nsim=19, atoms.y=c(1,2,3,4))}
+\dontshow{res <- GET.distrindep(data, statistic="qq", nsim=4, alpha=0.20, atoms.y=c(1,2,3,4))}
 plot(res)
 
 \donttest{
@@ -161,7 +161,7 @@ plot(data)
 
 # Perform the test
 \donttest{res <- GET.distrindep(data, statistic="qq", nsim=999, atoms.x=c(-1), atoms.y=c(-0.5))}
-\dontshow{res <- GET.distrindep(data, statistic="qq", nsim=19, atoms.x=c(-1), atoms.y=c(-0.5))}
+\dontshow{res <- GET.distrindep(data, statistic="qq", nsim=4, alpha=0.20, atoms.x=c(-1), atoms.y=c(-0.5))}
 plot(res, sign.type="col", what=c("obs", "lo", "hi", "lo.sign", "hi.sign"))
 }
 \references{
