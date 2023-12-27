@@ -257,6 +257,7 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
 #'   curve_sets = list(Y=iset), factors = factors,
 #'   contrasts = FALSE, GET.args = list(type="area"))
 #' plot(res)
+#' \donttest{
 #' plot(res, what=c("obs", "hi"))
 #'
 #' plot(res, what=c("hi", "lo"), fixedscales=1)
@@ -278,6 +279,7 @@ plot.global_envelope2d <- function(x, fixedscales = TRUE,
 #'       ggplot2::theme(axis.ticks=ggplot2::element_blank(),
 #'       axis.text=ggplot2::element_blank(), axis.title=ggplot2::element_blank()))))
 #'   gridExtra::grid.arrange(grobs=t(gs))
+#' }
 #' }
 plot.combined_global_envelope2d <- function(x, fixedscales = 2, labels,
                                             what=c("obs.sign", "obs", "lo", "hi", "lo.sign", "hi.sign"),
