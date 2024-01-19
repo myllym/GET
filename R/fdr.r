@@ -218,17 +218,9 @@ get_pi0est <- function(algorithm, alternative, nsim, nr) {
          },
          IATSE = {
            function(r1, gamma=NULL) { # r1 & gamma from step1
-             pi0 <- NULL
              if(alternative == "two.sided") gammastar <- 2*gamma/nsim
              else gammastar <- gamma/nsim
-             pi0[1] <- min(1, (nr-r1+nr*gammastar)/nr)
-             pi0[2] <- min(1, (nr-r1+pi0[1]*nr*gammastar)/nr)
-             j <- 2
-             while(pi0[j-1]-pi0[j] > 10^-10) {
-               j <- j+1
-               pi0[j] <- min(1, (nr-r1+pi0[j-1]*nr*gammastar)/nr)
-             }
-             pi0
+             min(1, ((nr-r1)/nr) / (1-gammastar))
            }
          })
 }
