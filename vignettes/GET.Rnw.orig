@@ -213,7 +213,7 @@ Since the global envelopes are a nonparametric tool, we can use as a test statis
 where $\beta_{1,i}^{\text{Cont}}, \ldots \beta_{4,i}^{\text{Cont}}$ are the parameters of the univariate ANCOVA model for year $i$, computed with condition $\sum_{j=1}^4 \beta_{j,i}^{\text{Cont}} = 0$. This model parametrization enables that the parameter  $\beta_{j,i}^{\text{Cont}}$ is the difference between the $j$-th continent's growth rate and the overall mean.
 
 This test statistic allows for a direct comparison of each continent's growth rate with the world's mean growth rate. Figure~\ref{fig:popgrowth_flm} shows the test statistic (Equation~\ref{TT1}) computed for the data together with 95\% global envelope computed under the null model of no continent effect but with nuisance effect of GDP. This output shows, first, the formal global $p$~value, which indicates that the effect of the continent is significant after applying an adjustment for multiple comparisons for the 55 years, and four continents. Second, it shows the reasons of rejections, i.e., which years have led to the significant test result. Due to the intrinsic graphical interpretation (IGI, see Definition~\ref{IGI}) of the global envelope, we have a one-to-one correspondence between the formal global test and its graphical interpretation, i.e., the data statistic lies outside the envelope for some point (here years and continents) if and only if the global test is significant. This allows for direct identification of the significant years. Third, the output shows the direction and amount of deviation from the null hypothesis. For example, the growth rate in Europe and North America is significantly lower than the world's average in all years, whereas Asia's growth rate is slightly significantly higher than the world's average only up to the year 1966. Fourth, due to the free choice of the test statistic, the test output shows here the comparison individually for every continent (level of the categorical predictor). The \pkg{GET} package also allows for the choice of comparison between all pairs of continents in the style of the post hoc test. Note that usually, the two tests are applied - global AN(C)OVA and multiple comparison post hoc test.
-Note also that we can calculate results also for continuous GDP effect and interaction effect between the GDP and all continents (all levels of the categorical effect) in the same way \citep[see]{MrkvickaMyllymaki2023}.
+Note also that we can calculate results also for continuous GDP effect and interaction effect between the GDP and all continents (all levels of the categorical effect) in the same way \citep[see][]{MrkvickaMyllymaki2023}.
 %
 <<example_pop_seed, echo=FALSE>>==
 set.seed(202304)
@@ -882,7 +882,7 @@ and we used the function \fct{graph.fanova} with the option \code{test.equality 
 set.seed(190503)
 @
 %
-<<graphfanova_logNOx, echo=TRUE, fig=FALSE, height=2.722, width=6.125>>==
+<<graphfanova_NOx_var, echo=TRUE, fig=FALSE, height=2.722, width=6.125>>==
 res.v <- graph.fanova(nsim = 2999, curve_set = cset, groups = Type,
                       test.equality = "var")
 myxlab <- substitute(paste(italic(i), " (", j, ")", sep = ""),
