@@ -3,6 +3,7 @@
 % \VignetteIndexEntry{GET: Global envelopes in R}
 % \VignetteKeywords{functional linear model, central region, goodness-of-fit, graphical normality test, Monte Carlo test, multiple testing, permutation test, R, spatial point pattern}
 % \VignettePackage{GET}
+% \VignetteEngine{R.rsp::rsp}
 
 %% -- LaTeX packages and custom commands ---------------------------------------
 
