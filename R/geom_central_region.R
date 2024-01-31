@@ -310,9 +310,11 @@ GeomCentralRegionMulti <- ggproto("GeomCentralRegionMulti", Geom,
 #' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i), coverage=seq(0.1, 0.9, length=20),
 #'   colours=rainbow(20))
 #'
+#' \donttest{
 #' # Colors for multiregions are not supported
 #' ggplot(df) + geom_central_region(aes(x=x, y=y+0.1*(g2=="B"),
 #'   curveid=i, col=as.factor(g2)), coverage=c(0.05, 0.2,0.4,0.6))
+#' }
 #' ggplot(df) + geom_central_region(aes(x=x, y=y, curveid=i),
 #'   coverage=c(0.05, 0.2,0.4,0.6)) + facet_wrap(vars(g2))
 #'
@@ -325,9 +327,11 @@ GeomCentralRegionMulti <- ggproto("GeomCentralRegionMulti", Geom,
 #'   geom_rect(aes(curveid=i, x=x, y=y, xmax=after_stat(x), xmin=after_stat(x+0.004),
 #'               ymax=after_stat(ymax), ymin=after_stat(ymin), group=g2, fill=factor(g2)),
 #'               stat="central_region", coverage = 0.90)
+#' \donttest{
 #' # Non-finite values are not supported
 #' ggplot(within(df, {y = ifelse(runif(length(y)) < 0.001, Inf, y)})) +
 #'   geom_central_region(aes(x=x, y=y, curveid=i))
+#' }
 #' @export
 geom_central_region <- function(mapping = NULL, data = NULL, stat = "CentralRegion",
                         position = "identity", ...,
