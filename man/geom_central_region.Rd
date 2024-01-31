@@ -123,7 +123,7 @@ For multiple coverage values additional aesthetics are not currently supported.
 \code{after_stat(ymax)} and \code{after_stat(ymin)} for the high and low value of the central region.
 
 For multiple coverages the variables use the same names as \code{\link{central_region}},
-i.e. \code{hi.95} and \code{lo.95} for the region with 95% coverage.
+i.e. \code{hi.95} and \code{lo.95} for the region with 95\% coverage.
 }
 
 \examples{
