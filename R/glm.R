@@ -384,15 +384,18 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #' plot(res)
 #'
 #' # Test if there is a change in the slope in 1994,
-#' # i.e. the full model is T = a + b*year + c*year:group,
+#' # i.e. the full model is T = a + b*year + c*year:Interv,
+#' # where Interv is a dummy variable indicating the pre-intervention
+#' # period (coded 0) or the post-intervention period (coded 1)
+#' Year <- 1979:2014
 #' res <- graph.flm(nsim = 19, # Increase the number of simulations for serious analysis!
-#'   formula.full = Y ~ Year + Year:Group,
+#'   formula.full = Y ~ Year + Year:Interv,
 #'   formula.reduced = Y ~ Year,
 #'   curve_sets = list(Y=rimov),
-#'   factors = data.frame(Year = 1979:2014,
-#'                        Group = factor(c(rep(1,times=24), rep(2,times=12)),
-#'                                       levels=1:2)),
-#'   contrasts = FALSE)
+#'   factors = data.frame(Year = Year,
+#'                        Interv = factor(c(rep(0,times=1994-1979+1), rep(1,times=2014-1994)),
+#'                                       levels=0:1)),
+#'   contrasts = NULL)
 #' plot(res)
 #'
 #' # An example of testing the joint effect of a discrete and a continuous variable
