@@ -62,8 +62,8 @@ and references given by typing \code{citation("GET")} in \proglang{R}.
 %% - \Keywords{} with LaTeX markup, at least one required
 %% - \Plainkeywords{} without LaTeX markup (if necessary)
 %% - Should be comma-separated and in sentence case.
-\Keywords{global envelope test, goodness-of-fit, Monte Carlo test, \proglang{R}, spatial point pattern, spatial point pattern}
-\Plainkeywords{global envelope test, goodness-of-fit, Monte Carlo test, R, spatial point pattern, spatial point pattern}
+\Keywords{global envelope test, goodness-of-fit, Monte Carlo test, \proglang{R}, spatial point pattern}
+\Plainkeywords{global envelope test, goodness-of-fit, Monte Carlo test, R, spatial point pattern}
 
 %% - \Address{} of at least one author
 %% - May contain multiple affiliations for each author
