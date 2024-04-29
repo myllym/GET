@@ -125,7 +125,7 @@ forestry, % \citep{ErfanifardEtal2019},
 geography, % \citep{ClarkEtal2018}, 
 material science, and %\citep{HabelEtal2017}, and
 medicine, health and neurosciences \citep[e.g.,][]{Stoyan2016, Murrell2018, HabelEtal2017, ChaibanEtal2019, PollingtonEtal2020}. %\citep{RafatiEtal2016, LeeEtal2017, MollerEtal2019, BiscioMoller2019, MrkvickaEtal2022, BrownEtal2020}.
-To make these methods easily accessible, the R \citep{R2020} package \pkg{GET} has been developed that is available from the Comprehensive R Archive Network (CRAN) at \url{https://cran.r-project.org/package=GET}. A development version of the package is available via the repository \url{https://github.com/myllym/GET}. The package provides an implementation of global envelopes in various settings.
+To make these methods easily accessible, the R \citep{R2023} package \pkg{GET} has been developed that is available from the Comprehensive R Archive Network (CRAN) at \url{https://cran.r-project.org/package=GET}. A development version of the package is available via the repository \url{https://github.com/myllym/GET}. The package provides an implementation of global envelopes in various settings.
 
 Because there are many other methods that can be used for the same purposes as global envelopes, we first give a motivating example of functional analysis of covariance (ANCOVA) to demonstrate the main features and advantages of global envelope tests (Section~\ref{sec:motivating_example}). Other possible usages are also discussed in more detail.
 The second part of this introductory section describes the competing and complementary methods and software for these same usages.
@@ -265,7 +265,7 @@ The few packages mentioned below have a link to the methods of \pkg{GET}:
 %
 \begin{itemize}
 \item The \proglang{R} packages \pkg{coin} \citep{coin2008, HothornEtal2006} and \pkg{multtest} \citep{PollardEtal2005} enable one to compute the $p$~value adjusted for multiple testing in a multiple permutation test based on the minimum $p$~value computed from all individual tests. The null distribution of the minimum $p$~values or the maximum of a test statistic is obtained from permutations. The minimum $p$~value method corresponds to the conservative rank test based on the $p_+$~value (see global rank envelope in Appendix~\ref{app:GEdef}).
-\item General multiple test procedures are also provided by the package \pkg{sgof} \citep{sgof2016} for goodness-of-fit testing and by the package \pkg{stats} \citep{R2020} for adjusting the $p$~values for multiple comparisons by Bonferroni type methods (the function \fct{p.adjust}).
+\item General multiple test procedures are also provided by the package \pkg{sgof} \citep{sgof2016} for goodness-of-fit testing and by the package \pkg{stats} \citep{R2023} for adjusting the $p$~values for multiple comparisons by Bonferroni type methods (the function \fct{p.adjust}).
 \end{itemize}
 
 {\bf Functional GLM:}
@@ -628,7 +628,7 @@ mu <- mean(dat)
 sigma <- sd(dat)
 @
 %
-and, using the function \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020}, the empirical cumulative distribution functions are calculated for the data and for \code{nsimsub} replicates of $n$ simulations from the fitted normal distribution (2.\ step):
+and, using the function \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2023}, the empirical cumulative distribution functions are calculated for the data and for \code{nsimsub} replicates of $n$ simulations from the fitted normal distribution (2.\ step):
 %
 <<adjtest_sim1>>==
 nsim <- nsimsub <- 199 # The number of simulations
@@ -726,7 +726,7 @@ combined + plot_layout(guides = "collect")
 \subsection{Graphical $n$-sample test of correspondence of distribution functions}\label{sec:CDF}
 
 The graphical $n$-sample test of correspondence of distribution functions serves as a simple example of permutation tests.
-Figure~\ref{fig:necdfs} shows the empirical cumulative distribution functions (ECDFs) obtained by the \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2020} for the heights of the 54 girls and 39 boys of the \code{growth} data \citep[see above, and][]{RamsaySilverman2005} at ages 10 (left) and 14 (right).
+Figure~\ref{fig:necdfs} shows the empirical cumulative distribution functions (ECDFs) obtained by the \fct{ecdf} of the \proglang{R} package \pkg{stats} \citep{R2023} for the heights of the 54 girls and 39 boys of the \code{growth} data \citep[see above, and][]{RamsaySilverman2005} at ages 10 (left) and 14 (right).
 A global envelope test can be performed to investigate whether the two (or more generally $n$) distribution functions differ from each other significantly and how they differ. This test is a generalization of the two-sample Kolmogorov-Smirnov test with a graphical interpretation. The generalization is provided in two ways, in the number of samples and in the variable width of the envelopes. Namely, the Kolmogorov-Smirnov test provides an envelope of constant width which suffers in determining differences in extreme quantiles.
 Here it is assumed that the heights in the sample $i$ are an i.i.d.\ sample from the distribution $F_i(r)$, $i=1, \ldots, n$, and the hypothesis $F_1(r)=\ldots = F_n(r)$ is to be tested.
 The simulations under the null hypothesis that the distributions are the same can be obtained by permuting the individuals of the groups. The \pkg{GET} package provides the wrapper function \fct{GET.necdf} that can be used to compare $n$ distribution functions graphically, $n=2,3,\ldots$. The (default) test vector is

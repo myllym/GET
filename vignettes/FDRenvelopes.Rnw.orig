@@ -85,7 +85,7 @@ available at \url{https://arxiv.org/abs/1911.06583}.
 \section{Introduction}
 
 This vignette gives examples of the use of false discovery rate (FDR) envelopes,
-which are implemented in the \proglang{R} \citep{R2020} package \pkg{GET}.
+which are implemented in the \proglang{R} \citep{R2023} package \pkg{GET}.
 Three examples given below correspond to those presented in \citet{MrkvickaMyllymaki2023}.
 The envelope plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016},
 where we utilize the theme \code{theme_bw} for this document,
