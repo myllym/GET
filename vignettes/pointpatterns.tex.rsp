@@ -80,7 +80,7 @@ as implemented in the \proglang{R} package \pkg{GET}.
 \section{Introduction}
 
 This vignette gives examples of the use of global envelopes for the analysis of spatial point patterns.
-The examples utilize the \proglang{R} \citep{R2020} package \pkg{spatstat} \citep{spatstat2015} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2020}. The envelope plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
+The examples utilize the \proglang{R} \citep{R2023} package \pkg{spatstat} \citep{spatstat2015} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2023}. The envelope plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
 %
 \begin{Schunk}
 \begin{Sinput}
@@ -418,7 +418,7 @@ In the above example conditioning on the number of points was not employed.
 \section{Adjusted global envelope test for composite hypotheses}
 
 Let us test the fit of a Matern cluster process for the sapling data as an example of a composite hypothesis test.
-The adjusted test of the \pkg{GET} package is described in Section 2.3 of \citet{MyllymakiMrkvicka2020}. The procedure was suggested by \citet{BaddeleyEtal2017} and extended for global envelopes in \citet{MyllymakiMrkvicka2020}.
+The adjusted test of the \pkg{GET} package is described in Section 2.3 of \citet{MyllymakiMrkvicka2023}. The procedure was suggested by \citet{BaddeleyEtal2017} and extended for global envelopes in \citet{MyllymakiMrkvicka2023}.
 %
 \begin{Schunk}
 \begin{Sinput}
