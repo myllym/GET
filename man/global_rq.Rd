@@ -34,12 +34,6 @@ should be nested within the full model.}
 
 \item{taus}{The quantiles to be used.}
 
-\item{typeone}{Character string indicating which type I error rate to control,
-either the familywise error rate ('fwer') or false discovery rate ('fdr').
-Further arguments to the FWER or FDR envelope can be passed in argument \code{GET.args}.
-If 'fwer', the type of the envelope can be chosen by specifying the argument \code{type}
-in \code{GET.args}.}
-
 \item{data}{data.frame where to look for variables.}
 
 \item{contrasts}{Passed directly to \code{rq}.}
@@ -53,7 +47,9 @@ simfuns.}
 
 \item{lm.args}{A named list of additional arguments to be passed to \code{\link[stats]{lm}}. See details.}
 
-\item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.}
+\item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}},
+e.g. \code{typeone} specifies the type of multiple testing control, FWER or FDR.
+See \code{\link{global_envelope_test}} for the defaults and available options.}
 
 \item{mc.cores}{The number of cores to use, i.e. at most how many child processes will be run simultaneously.
 Must be at least one, and parallelization requires at least two cores. On a Windows computer mc.cores must be 1
