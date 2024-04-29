@@ -64,11 +64,11 @@ genCoefmeans.rq <- function(Y, df, taus, formula.full, nameinteresting, ...) {
 #'     formula.full = stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
 #'     formula.reduced = stack.loss ~ Water.Temp,
 #'     taus = seq(0.1, 0.9, length=10), permutationstrategy = "remove quantile",
-#'     data = stackloss, typeone = "fwer")
+#'     data = stackloss, GET.args = list(typeone = "fwer"))
 #'   plot(res)
 #' }
 #'
-global_rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fwer", "fdr"),
+global_rq <- function(nsim, formula.full, formula.reduced, taus,
                      data, contrasts = NULL,
                      permutationstrategy = c("Freedman-Lane", "Freedman-Lane+remove zeros",
                                              "within nuisance",
@@ -79,7 +79,6 @@ global_rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fw
   if(!requireNamespace("quantreg", quietly = TRUE)) {
     stop("Package 'quantreg' is required, but not installed.")
   }
-  typeone <- check_typeone(typeone, missing(typeone))
 
   if(missing(permutationstrategy)) stop("Permutation strategy has to be specified.")
   permutationstrategy = match.arg(permutationstrategy)
@@ -212,15 +211,11 @@ global_rq <- function(nsim, formula.full, formula.reduced, taus, typeone = c("fw
                                                     obs = obs[,i],
                                                     sim_m = simi))
   }
-  switch(typeone,
-         fwer = {
-           res <- do.call(global_envelope_test,
-                          c(list(curve_sets=csets, alternative="two.sided", nstep=1), GET.args))
-         },
-         fdr = {
-           res <- do.call(fdr_envelope,
-                          c(list(curve_sets=csets, alternative="two.sided"), GET.args))
-         })
+  res <- do.call(global_envelope_test, c(list(curve_sets=csets,
+                                              alternative="two.sided",
+                                              nstep=1), # nstep=1 concerns only 'fwer'
+                                         GET.args))
+
   attr(res, "method") <- "Global quantile regression"
   attr(res, "permutationstrategy") <- permutationstrategy
   attr(res, "labels") <- complabels

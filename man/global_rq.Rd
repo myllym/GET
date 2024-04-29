@@ -9,7 +9,6 @@ global_rq(
   formula.full,
   formula.reduced,
   taus,
-  typeone = c("fwer", "fdr"),
   data,
   contrasts = NULL,
   permutationstrategy = c("Freedman-Lane", "Freedman-Lane+remove zeros",
@@ -82,7 +81,7 @@ if(require("quantreg", quietly=TRUE)) {
     formula.full = stack.loss ~ Air.Flow + Water.Temp + Acid.Conc.,
     formula.reduced = stack.loss ~ Water.Temp,
     taus = seq(0.1, 0.9, length=10), permutationstrategy = "remove quantile",
-    data = stackloss, typeone = "fwer")
+    data = stackloss, GET.args = list(typeone = "fwer"))
   plot(res)
 }
 
