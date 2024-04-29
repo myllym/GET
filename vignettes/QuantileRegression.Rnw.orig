@@ -1,0 +1,231 @@
+\documentclass[nojss]{jss}
+
+% \VignetteIndexEntry{GET: Quantile regression}
+% \VignetteKeywords{global envelope test, Monte Carlo test, R, quantile regression}
+% \VignettePackage{GET}
+
+%% -- LaTeX packages and custom commands ---------------------------------------
+
+%% recommended packages
+\usepackage{thumbpdf,lmodern}
+
+%% another package (only for this demo article)
+\usepackage{framed}
+
+%% new custom commands
+\newcommand{\class}[1]{`\code{#1}'}
+\newcommand{\fct}[1]{\code{#1()}}
+\newcommand{\TT}{\mathbf{T}}
+\newcommand{\lo}{\mathrm{low}}
+\newcommand{\up}{\mathrm{upp}}
+\providecommand{\1}{\mathbf{1}}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
+
+\usepackage{amsmath,amsfonts,amssymb}
+
+\makeatletter
+\setkeys{Gin}{width=\Gin@nat@width}
+\makeatother
+
+%% For Sweave-based articles about R packages:
+%% need no \usepackage{Sweave}
+\SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
+<<preliminaries, echo=FALSE, results=hide>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+@
+
+%% -- Article metainformation (author, title, ...) -----------------------------
+
+%% - \author{} with primary affiliation
+%% - \Plainauthor{} without affiliations
+%% - Separate authors by \And or \AND (in \author) or by comma (in \Plainauthor).
+%% - \AND starts a new line, \And does not.
+\author{Mari Myllym{\"a}ki
+and Mikko Kuronen\\Natural Resources Institute Finland (Luke)}
+\Plainauthor{Mari Myllym{\"a}ki and Mikko Kuronen}
+
+%% - \title{} in title case
+%% - \Plaintitle{} without LaTeX markup (if any)
+%% - \Shorttitle{} with LaTeX markup (if any), used as running title
+\title{\pkg{GET}: Quantile regression}
+\Plaintitle{GET: Quantile regression}
+\Shorttitle{\pkg{GET}: Quantile regression}
+
+%% - \Abstract{} almost as usual
+\Abstract{
+This vignette gives examples of global quantile regression, as proposed in
+\citet{MrkvickaEtal2023b} and as implemented in the \proglang{R} package
+\pkg{GET}.
+When citing the vignette and package please cite \citet{MyllymakiMrkvicka2023}
+and \citet{MrkvickaEtal2023b}, and further relevant references given by typing
+\code{citation("GET")} in \proglang{R}.
+}
+
+%% - \Keywords{} with LaTeX markup, at least one required
+%% - \Plainkeywords{} without LaTeX markup (if necessary)
+%% - Should be comma-separated and in sentence case.
+\Keywords{global envelope test, goodness-of-fit, Monte Carlo test, \proglang{R}, quantile regression}
+\Plainkeywords{global envelope test, goodness-of-fit, Monte Carlo test, R, quantile regression}
+
+%% - \Address{} of at least one author
+%% - May contain multiple affiliations for each author
+%%   (in extra lines, separated by \emph{and}\\).
+%% - May contain multiple authors for the same affiliation
+%%   (in the same first line, separated by comma).
+\Address{
+  Mari Myllym{\"a}ki\\
+  Natural Resources Institute Finland (Luke)\\
+  Latokartanonkaari 9\\
+  FI-00790 Helsinki, Finland\\
+  E-mail: \email{mari.myllymaki@luke.fi}\\
+  URL: \url{https://www.luke.fi/en/experts/mari-myllymaki/} \\
+\emph{and}\\
+  Mikko Kuronen\\
+  Natural Resources Institute Finland (Luke)\\
+  Latokartanonkaari 9\\
+  FI-00790 Helsinki, Finland\\
+  E-mail: \email{mikko.kuronen@luke.fi}\\
+  URL: \url{https://www.luke.fi/en/experts/mikko-kuronen/}
+}
+
+\begin{document}
+
+\section{Introduction}
+
+This vignette gives examples of the use of global quantile regression \citep{MrkvickaEtal2023b}.
+The examples utilize the \proglang{R} \citep{R2023} package \pkg{quantreg} \citep{quantreg} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2023}. The plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
+%
+<<r_setup>>=
+library("GET")
+library("quantreg")
+library("ggplot2")
+theme_set(theme_bw(base_size = 9))
+@
+%
+
+\section{Data}
+
+The \pkg{GET} package contains \emph{simulated} data which mimics the example of
+distribution comparison of natural, near-natural and non-natural forests of
+\citet{MrkvickaEtal2023b} \citep[see also][]{MyllymakiEtal2023}.
+The simulated data is available in the data object \code{naturalness}.
+The data contains simulated stand ages in the three groups of categorical
+variables \code{Naturalness} and \code{DominantSpecies}.
+
+%
+<<workflow_data>>=
+data("naturalness")
+str(naturalness)
+@
+%
+
+We use this simulated data to show the workflow of global quantile regression.
+Let us specify the quantiles, which we will inspect below. We use 100 quantiles,
+which are equidistant from each other, with the smallest quantile equal to 0.051
+and the largest quantile equal to 0.949.
+
+The number of permutations we set to 2499. For experimenting only, you may like
+to use a smaller value though.
+
+%
+<<workflow_data>>=
+taus <- seq(0.051, 0.949, length=100)
+nperm <- 2499
+@
+%
+
+\section{Quantile regression}
+
+Our interest is first in the naturalness, while the dominant species is the nuisance.
+The quantile regression model is
+$$
+Age \sim constant + naturalness + species.
+$$
+
+We first fit the quantile regression model.
+We use the \fct{rq} to fit the quantile regression model for each quantile, and
+the function \fct{summary} to compute the 95\% pointwise confidence intervals.
+
+%
+<<setseed1, echo=FALSE>>=
+set.seed(123)
+@
+
+%
+<<workflow_rq, fig=TRUE, width=6, height=6>>=
+r1 <- rq(Age ~ DominantSpecies + Naturalness, data=naturalness, tau = taus)
+s1 <- summary(r1)
+plot(s1)
+@
+%
+
+According to the quantile regression fit, the effect of the nuisance effect,
+i.e., dominant species, appears to be location-scale shift, since the estimated
+coefficients of the mixed and broadleaf stands appear to be linear in $\tau$.
+Therefore, to test for the differences between the distributions of stand age
+in the natural, near-natural and non-natural forests, we choose the permutation
+algorithm "remove location scale" (RLS) \citep{MrkvickaEtal2023b}.
+We use the function \fct{global\_rq} for the global quantile regression to test
+the difference between the three naturalness groups.
+
+%
+<<workflow_test>>=
+res <- global_rq(nperm,
+         formula.full = Age ~ DominantSpecies + Naturalness,
+         formula.reduced = Age ~ DominantSpecies,
+         data = naturalness,
+         typeone = "fwer",
+         permutationstrategy = "remove location scale",
+         taus = taus)
+@
+%
+We can directly plot the result.
+%
+<<workflow_res, fig=TRUE, width=6, height=3>>=
+plot(res)
+@
+%
+
+The grey zone shows the global envelope, while the estimated coefficients are
+shown by a black solid line, overlaid with red dots when outside the envelope.
+Note here that the global test of naturalness contains both functional coefficients
+shown in the plot.
+The test identifies both the significant quantiles and the corresponding coefficient
+under the global test. Here, the coefficients of near-natural and natural stands
+show the difference to non-natural reference group for all quantiles:
+both the near-natural and natural stands are uniformly (for all quantiles) older
+than non-natural stands.
+
+Secondly, we change the role of naturalness and dominant species,
+keeping now the dominant species as the interesting factor.
+Because the effect of the naturalness groups does not seem to be linear (see the
+plot of the quantile regression above), the location-scale shift can not be assumed
+and we choose the "remove quantile" (RQ) permutation strategy.
+The test for the effect of the dominant species is as follows:
+
+<<workflow_test2, fig=TRUE, width=6, height=3>>=
+res2 <- global_rq(nperm,
+         formula.full = Age ~ DominantSpecies + Naturalness,
+         formula.reduced = Age ~ Naturalness,
+         data = naturalness,
+         typeone = "fwer",
+         permutationstrategy = "remove quantile",
+         taus = taus)
+res2
+plot(res2)
+@
+
+Here we observe differences between the groups for specific quantiles.
+The negative coefficient suggest that the stand age distribution of broadleaf
+dominated forests is more skewed to the left than the distribution of conifer
+dominated forests, but the ranges of stand ages are equal in the different categories.
+The difference of mixed and broadleaf stands is similar, but the significant
+effect occurs for smaller number of quantiles.
+
+%% -- Bibliography -------------------------------------------------------------
+
+\bibliography{GETbibfile}
+
+
+\end{document}
