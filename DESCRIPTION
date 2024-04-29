@@ -44,7 +44,8 @@ Suggests:
     patchwork,
     spatstat.geom, spatstat.explore, spatstat.model, spatstat.linnet,
     testthat,
-    R.rsp
+    R.rsp,
+    quantreg
 Description: Implementation of global envelopes for a set of general d-dimensional vectors T
     in various applications. A 100(1-alpha)% global envelope is a band bounded by two
     vectors such that the probability that T falls outside this envelope in any of the d
@@ -68,7 +69,7 @@ Description: Implementation of global envelopes for a set of general d-dimension
     Dai et al. (2022) <doi: 10.5772/intechopen.100124>, and
     Dvořák and Mrkvička (2022) <doi: 10.1007/s00180-021-01134-y>.
 License: GPL-3
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 URL: https://github.com/myllym/GET
 BugReports: https://github.com/myllym/GET/issues
 VignetteBuilder: R.rsp

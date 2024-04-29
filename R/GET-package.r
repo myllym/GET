@@ -245,6 +245,5 @@
 #'
 #' Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics 42, 100436. doi: 10.1016/j.spasta.2020.100436
 #' @name GET-package
-#' @docType package
 #' @aliases GET GET-package
 NULL

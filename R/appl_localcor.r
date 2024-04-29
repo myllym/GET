@@ -186,7 +186,7 @@ GET.localcor <- function(data, Delta, nsim = 1000, ...,
     cor.global <- cor(permutations,Y)
 
     # p-value:
-    p.value.global <- estimate_p_value(abs(cor.global.obs), as.numeric(abs(cor.global)))
+    p.value.global <- estimate_p_value(x=abs(cor.global.obs), sim_vec=as.numeric(abs(cor.global)))
     # Same as 1 - sum(abs(cor.global) < abs(cor.global.obs)) / (nsim+1) = (1 + sum(abs(cor.global) >= abs(cor.global.obs))) / (nsim+1)
     #Vilodomat: p.value.global <- sum(abs(cor.global) > abs(cor.global.obs)) / nsim
   }
