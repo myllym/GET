@@ -88,6 +88,7 @@ E.g. A test of complete spatial randomness (CSR) for a point pattern \code{X}:
 }
 It is also possible to do combined global envelope tests for several sets of curves provided in a list
 for the function, see examples in \code{\link{global_envelope_test}}.
+To obtain false discovery rate envelopes of Mrkvička and Myllymäki (2023) use the argument \code{typeone = "fdr"}.
 }
 
 \itemize{
@@ -101,7 +102,6 @@ for the function, see examples in \code{\link{global_envelope_test}}.
 \itemize{
   \item \code{\link{GET.composite}}, see a detailed example in \code{\link{saplings}}
 }
-\item \emph{False discovery rate envelopes} of Mrkvička and Myllymäki (2023): \code{\link{fdr_envelope}}
 \item \emph{One-way functional ANOVA}:
  \itemize{
   \item \emph{Graphical} functional ANOVA tests: \code{\link{graph.fanova}}
@@ -114,7 +114,8 @@ for the function, see examples in \code{\link{global_envelope_test}}.
   \item For large data (not fitting comfortably in memory): \code{\link{partial_forder}}
  }
 \item \emph{Functional clustering}: \code{\link{fclustering}}
-\item Functions for performing global envelopes for specific purposes:
+\item \emph{Global quantile regression}: \code{\link{global_rq}}
+\item Functions for performing global envelopes for other specific purposes:
  \itemize{
   \item Graphical n sample test of correspondence of distribution functions: \code{\link{GET.distrequal}}
   \item Permutation-based tests of independence to samples from any bivariate distribution: \code{\link{GET.distrindep}}
