@@ -1,3 +1,7 @@
+Changes in GET 1.0-2
+
+- Citation updates required by CRAN (refer to arXiv e-prints via their arXiv DOI)
+
 Changes in GET 1.0-1
 
 - Add function global_rq.
