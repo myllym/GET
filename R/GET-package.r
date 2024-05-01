@@ -209,6 +209,12 @@
 #' Examples can be found by in associated vignette: start R, and type
 #' \code{library("GET")} and \code{vignette("pointpatterns")}.
 #'
+#' Mrkvička et al. (2023a) proposed global quantile regression. An example of
+#' global quantile regression is given in the vignette \code{vignette("QuantileRegression")}.
+#'
+#' The vignette \code{vignette("HotSpots")} illustrates the methodology proposed by
+#' Mrkvička et al. (2023b) for detecting hotspots on a linear network.
+#'
 #' Type citation("GET") to get a full list of references.
 #'
 #' @section Acknowledgements:
@@ -249,6 +255,7 @@
 #' Myllymäki, M. and Mrkvička, T. (2023). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]. https://doi.org/10.48550/arXiv.1911.06583
 #'
 #' Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics 42, 100436. doi: 10.1016/j.spasta.2020.100436
+#'
 #' @name GET-package
 #' @aliases GET GET-package
 NULL
