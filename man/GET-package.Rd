@@ -209,7 +209,7 @@ Mrkvička et al. (2017) discussed the number of simulations for tests based on m
 
 \section{Documentation}{
 
-Myllymäki and Mrkvička (2020) provides description of the package.
+Myllymäki and Mrkvička (2023) provides description of the package.
 The material can also be found in the corresponding vignette, which is available by
 starting R and typing \code{library("GET")} and \code{vignette("GET")}.
 
@@ -224,6 +224,12 @@ start R, type \code{library("GET")} and \code{vignette("pointpatterns")}.
 Mrkvička and Myllymäki (2023) developed false discovery rate (FDR) envelopes.
 Examples can be found by in associated vignette: start R, and type
 \code{library("GET")} and \code{vignette("pointpatterns")}.
+
+Mrkvička et al. (2023a) proposed global quantile regression. An example of
+global quantile regression is given in the vignette \code{vignette("QuantileRegression")}.
+
+The vignette \code{vignette("HotSpots")} illustrates the methodology proposed by
+Mrkvička et al. (2023b) for detecting hotspots on a linear network.
 
 Type citation("GET") to get a full list of references.
 }
@@ -241,6 +247,10 @@ Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering meth
 
 Dvořák, J. and Mrkvička, T. (2022). Graphical tests of independence for general distributions. Computational Statistics 37, 671--699.
 
+Mrkvička, T., Konstantinou, K., Kuronen, M. and Myllymäki, M. (2023a) Global quantile regression. arXiv:2309.04746 [stat.ME]. https://doi.org/10.48550/arXiv.2309.04746
+
+Mrkvička, T., Kraft, S., Blažek, V. and Myllymäki, M. (2023b) Hotspots detection on a linear network with presence of covariates: a case study on road crash data. Available at SSRN: http://dx.doi.org/10.2139/ssrn.4598454
+
 Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes. Statistics & Computing 27(5), 1239-1255. doi: 10.1007/s11222-016-9683-9
 
 Mrkvička, T., Myllymäki, M., Jilek, M. and Hahn, U. (2020) A one-way ANOVA test for functional data with graphical interpretation. Kybernetika 56(3), 432-458. doi: 10.14736/kyb-2020-3-0432
@@ -257,7 +267,7 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015) Deviation test co
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017) Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology) 79, 381-404. doi: 10.1111/rssb.12172
 
-Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]
+Myllymäki, M. and Mrkvička, T. (2023). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]. https://doi.org/10.48550/arXiv.1911.06583
 
 Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics 42, 100436. doi: 10.1016/j.spasta.2020.100436
 }
