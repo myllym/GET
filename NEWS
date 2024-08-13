@@ -1,3 +1,7 @@
+Changes in GET 1.0-3
+
+- Update GET.distrequal by adding methods of Konstantinou et al. (https://doi.org/10.48550/arXiv.2403.01838)
+
 Changes in GET 1.0-2
 
 - Citation updates required by CRAN (refer to arXiv e-prints via their arXiv DOI)
