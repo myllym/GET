@@ -242,8 +242,8 @@ GeomCentralRegionMulti <- ggproto("GeomCentralRegionMulti", Geom,
 #' @section Aesthetics:
 #' \code{geom_central_region} requires \code{x}, \code{y} and \code{curveid}.
 #' Additionally \code{geom_central_region} uses the same aesthetics as
-#' \code{\link{geom_ribbon}} if \code{filled==TRUE} and
-#' \code{\link{geom_line}} otherwise.
+#' \code{\link[ggplot2]{geom_ribbon}} if \code{filled==TRUE} and
+#' \code{\link[ggplot2]{geom_line}} otherwise.
 #' For multiple coverage values additional aesthetics are not currently supported.
 #'
 #' @section Computed variables:
@@ -254,7 +254,7 @@ GeomCentralRegionMulti <- ggproto("GeomCentralRegionMulti", Geom,
 #' i.e. \code{hi.95} and \code{lo.95} for the region with 95\% coverage.
 #'
 #' @seealso \code{\link{central_region}} for the basic computation and,
-#' \code{\link{geom_ribbon}} for the default base geom.
+#' \code{\link[ggplot2]{geom_ribbon}} for the default base geom.
 #'
 #' @inheritParams ggplot2::geom_ribbon
 #' @inheritParams central_region

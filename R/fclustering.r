@@ -39,7 +39,7 @@
 #' with the ‘area’ measure. The triangineq must be 1 to ensure the inequality holds for all functions.
 #' \item dis = The joined dissimilarity matrix
 #' \item pam = Results of the partitioning around medoids (pam) method applied on the joined functions
-#' with the dissimilarity matrix (dis). See \code{\link{pam}}.
+#' with the dissimilarity matrix (dis). See \code{\link[cluster]{pam}}.
 #' }
 #' @references
 #' Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. DOI: 10.5772/intechopen.100124
