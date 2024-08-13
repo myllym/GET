@@ -159,3 +159,6 @@ Global quantile regression. arXiv:2309.04746 [stat.ME] https://doi.org/10.48550/
 Mrkvička T., Kraft S., Blažek V., Myllymäki M. (2023b).
 Hotspot detection on a linear network in the presence of covariates: a case study on road crash data.
 Available at SSRN: http://dx.doi.org/10.2139/ssrn.4627591
+
+Konstantinou, K., Mrkvička, T. and Myllymäki, M. (2024).
+Graphical n-sample tests of correspondence of distributions. arXiv:2403.01838 [stat.ME] https://doi.org/10.48550/arXiv.2403.01838
