@@ -7,22 +7,50 @@
 \usage{
 GET.distrequal(
   x,
-  r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x, max)))), length = 100),
-  contrasts = FALSE,
+  stat = "ECDF",
   nsim,
+  r = seq(min(unlist((lapply(x, min)))), max(unlist((lapply(x, max)))), length = 100),
+  tau = seq(0.1, 0.9, length = 100),
+  contrasts = FALSE,
+  GET.args = NULL,
+  density.args = NULL,
+  approxfun.args = NULL,
+  rq.args = NULL,
+  savefuns = FALSE,
   ...
 )
 }
 \arguments{
 \item{x}{A list of numeric vectors, one for each sample.}
 
+\item{stat}{Character string indicating which test statistic to be used. See details.}
+
+\item{nsim}{The number of random permutations.}
+
 \item{r}{The sequence of argument values at which the test functions are to be compared.
 The default is 100 equally spaced values between the minimum and maximum over all groups.}
+
+\item{tau}{The sequence of argument values for the QR test statistic.
+The default values are 100 equally spaced values between 0.1 and 0.9.}
 
 \item{contrasts}{Logical. FALSE and TRUE specify the two test functions as described in
 description part of this help file.}
 
-\item{nsim}{The number of random permutations.}
+\item{GET.args}{A named list of additional arguments to be passed to \code{\link{global_envelope_test}},
+e.g. \code{typeone} specifies the type of multiple testing control, FWER or FDR.
+See \code{\link{global_envelope_test}} for the defaults and available options.}
+
+\item{density.args}{A named list of additional arguments to be passed for the estimation of the test statistic \code{"DEN"}.
+For more details see \code{\link[stats]{density}}.}
+
+\item{approxfun.args}{A named list of additional arguments to be passed for the estimation of the the test statistic \code{"QQ"}.
+For more details see \code{\link[stats]{approxfun}}.}
+
+\item{rq.args}{A named list of additional arguments to be passed for the estimation of the test statistic \code{"QR"}.
+For more details see the function \code{rq} of \pkg{quantreq}.}
+
+\item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
+simfuns.}
 
 \item{...}{Additional parameters to be passed to \code{\link{global_envelope_test}}.
 For example, the type of multiple testing control, FWER or FDR must be set by \code{typeone}.
@@ -43,24 +71,38 @@ We assume that the observations in the sample \eqn{i}{i} are an i.i.d. sample fr
 \eqn{F_i(r), i=1, \dots, n,}{F_i(r), i=1, ..., n,}
 and we want to test the hypothesis
 \deqn{F_1(r)= \dots = F_n(r).}{F_1(r)= ... = F_n(r).}
-If \code{contrasts = FALSE} (default), then the test statistic is taken to be
+If \code{contrasts = FALSE} (default), then the default test statistic ("ECDF") is taken to be
 \deqn{\mathbf{T} = (\hat{F}_1(r), \dots, \hat{F}_n(r))}{T = (\hat{F}_1(r), \dots, \hat{F}_n(r))}
 where \eqn{\hat{F}_i(r) = (\hat{F}_i(r_1), \dots, \hat{F}_i(r_k))}{\hat{F}_i(r) = (\hat{F}_i(r_1), ..., \hat{F}_i(r_k))}
 is the ecdf of the \eqn{i}{i}th sample evaluated at argument values
 \eqn{r = (r_1,\dots,r_k)}{r = (r_1, ...,r_k)}.
-This is our recommended test function for the test.
-Another possibility is given by \code{contrasts = TRUE}, and then the test statistic is contructed from
-all pairwise differences,
+
+Another possibility is given by \code{stat = "DIFF"}, and then the test statistic is
+still based on the ECDFs and constructed from all pairwise differences,
 \deqn{\mathbf{T} = (\hat{F}_1(r)-\hat{F}_2(r), \hat{F}_1(r)-\hat{F}_3(r), \dots, \hat{F}_{n-1}(r)-\hat{F}_n(r))}{T = (\hat{F}_1(r)-\hat{F}_2(r), ..., \hat{F}_{n-1}(r)-\hat{F}_n(r))}
+The choices \code{contrasts = TRUE} and \code{stat = "ECDF"} lead to the same test statistic.
+For other (or multiple) values of \code{stat}, the argument \code{contrasts} is ignored.
+
+All the options as the test statistics are the following:
+\enumerate{
+\item \code{"ECDF"}: The ECDFs of the n-samples, as specified above
+\item \code{"DIFF"}: The pairwise differences between the ECDFs, as specified above
+\item \code{"DEN"}: The kernel estimated density functions of the n-samples as the test statistic
+\item \code{"QQ"}: The pairwise comparisons of empirical quantiles
+\item \code{"SHIFT"} The de-trended QQ-plot (shift plot)
+\item \code{"QR"}: The quantile regression process, i.e. the \eqn{\beta}{beta}-coefficients of the quantile regression.
+By default, the reference category of this test statistic is the first sample.
+}
+The test statistics are described in detail in Konstantinou et al. (2024).
 
 The simulations under the null hypothesis that the distributions are the same are obtained
-by permuting the individuals of the groups. The default number of permutation, if nsim is not specified,
-is n*1000 - 1 for the case \code{contrasts = FALSE} and
-(n*(n-1)/2)*1000 - 1 for the case \code{contrasts = TRUE},
-where n is the length of x.
+by permuting the individuals of the groups. The default number of permutation, if \code{nsim} is not specified,
+is \eqn{n \cdot 1000-1}{n*1000-1} for the case \code{contrasts = FALSE} and
+\eqn{(n \cdot (n-1)/2) \cdot 1000 - 1}{(n*(n-1)/2)*1000 - 1} for the case \code{contrasts = TRUE},
+where \eqn{n}{n} is the length of \eqn{x}{x}.
 }
 \examples{
-if(require(fda, quietly=TRUE)) {
+if(require("fda", quietly=TRUE)) {
   # Heights of boys and girls at age 10
   f.a <- growth$hgtf["10",] # girls at age 10
   m.a <- growth$hgtm["10",] # boys at age 10
@@ -70,17 +112,25 @@ if(require(fda, quietly=TRUE)) {
   # Create a list of the data
   fm.list <- list(Girls=f.a, Boys=m.a)
   \donttest{
-  res_m <- GET.distrequal(fm.list)
-  plot(res_m)
-  res_c <- GET.distrequal(fm.list, contrasts=TRUE)
-  plot(res_c)
+  res <- GET.distrequal(fm.list)
+  plot(res)
+  # If you want to change the labels:
+  plot(res, scales = "free", labels = c("Girls", "Boys"))
+  # If you want to change the x-label (y-label similarly):
+  require("ggplot2")
+  myxlab <- substitute(paste(italic(i), " (", j, ")", sep = ""),
+                       list(i = "x", j = "Height in cm"))
+  plot(res, scales = "free") + xlab(myxlab)
+  # Use instead the test statistics QQ and DEN
+  res <- GET.distrequal(fm.list, stat = c("QQ", "DEN"))
+  plot(res, scales = "free")
   }
   \dontshow{
-  # The test with lower number of simulations
-  res_m <- GET.distrequal(fm.list, nsim=4, alpha=0.2)
-  plot(res_m)
-  res_c <- GET.distrequal(fm.list, contrasts=TRUE, nsim=4, alpha=0.2)
-  plot(res_c)
+  # The test with a lower number of simulations
+  res <- GET.distrequal(fm.list, nsim=4, alpha=0.2)
+  plot(res)
+  res <- GET.distrequal(fm.list, stat = c("QQ", "DEN"), nsim=4, alpha=0.2)
+  plot(res, scales = "free")
   }
 
   # Heights of boys and girls at age 14
@@ -92,17 +142,40 @@ if(require(fda, quietly=TRUE)) {
   # Create a list of the data
   fm.list <- list(Girls=f.a, Boys=m.a)
   \donttest{
-  res_m <- GET.distrequal(fm.list)
-  plot(res_m)
-  res_c <- GET.distrequal(fm.list, contrasts=TRUE)
-  plot(res_c)
+  res <- GET.distrequal(fm.list)
+  plot(res) + xlab(myxlab)
+  res <- GET.distrequal(fm.list, stat = c("QQ", "DEN"))
+  plot(res, scales = "free") + xlab(myxlab)
   }
   \dontshow{
-  # The test with lower number of simulations
+  # The test with a lower number of simulations
   res_m <- GET.distrequal(fm.list, nsim=4, alpha=0.2)
   plot(res_m)
-  res_c <- GET.distrequal(fm.list, contrasts=TRUE, nsim=4, alpha=0.2)
-  plot(res_c)
+  res_c <- GET.distrequal(fm.list, stat = c("QQ", "DEN"), nsim=4, alpha=0.2)
+  plot(res_c, scales = "free")
   }
 }
+if(require("datasets", quietly=TRUE)) {
+  data("iris")
+  virginica <- subset(iris, Species == "virginica")
+  setosa <- subset(iris, Species == "setosa")
+  versicolor <- subset(iris, Species == "versicolor")
+  \donttest{
+  res <- GET.distrequal(x = list(virginica = virginica$Sepal.Length,
+                                 setosa = setosa$Sepal.Length,
+                                 versicolor = versicolor$Sepal.Length),
+                        stat =  c("QQ", "DEN"))
+  plot(res, scales = "free", ncol = 3)
+  }
+  \dontshow{
+  res <- GET.distrequal(x = list(virginica = virginica$Sepal.Length,
+                                 setosa = setosa$Sepal.Length,
+                                 versicolor = versicolor$Sepal.Length),
+                        stat =  c("QQ", "DEN"), nsim=4, alpha=0.2)
+  plot(res, scales = "free", ncol = 3)
+  }
+}
+}
+\references{
+Konstantinou K., Mrkvička T. and Myllymäki M. (2024) Graphical n-sample tests of correspondence of distributions. arXiv:2403.01838 [stat.ME] https://doi.org/10.48550/arXiv.2403.01838
 }
