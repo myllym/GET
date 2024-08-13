@@ -151,8 +151,8 @@ the curves are plotted instead of any region.
 
 \code{geom_central_region} requires \code{x}, \code{y} and \code{curveid}.
 Additionally \code{geom_central_region} uses the same aesthetics as
-\code{\link{geom_ribbon}} if \code{filled==TRUE} and
-\code{\link{geom_line}} otherwise.
+\code{\link[ggplot2]{geom_ribbon}} if \code{filled==TRUE} and
+\code{\link[ggplot2]{geom_line}} otherwise.
 For multiple coverage values additional aesthetics are not currently supported.
 }
 
@@ -238,5 +238,5 @@ ggplot(within(df, {y = ifelse(runif(length(y)) < 0.001, Inf, y)})) +
 }
 \seealso{
 \code{\link{central_region}} for the basic computation and,
-\code{\link{geom_ribbon}} for the default base geom.
+\code{\link[ggplot2]{geom_ribbon}} for the default base geom.
 }

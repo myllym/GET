@@ -43,7 +43,7 @@ it does not hold for ‘area’ measure, therefore this check is provided to ens
 with the ‘area’ measure. The triangineq must be 1 to ensure the inequality holds for all functions.
 \item dis = The joined dissimilarity matrix
 \item pam = Results of the partitioning around medoids (pam) method applied on the joined functions
-with the dissimilarity matrix (dis). See \code{\link{pam}}.
+with the dissimilarity matrix (dis). See \code{\link[cluster]{pam}}.
 }
 }
 \description{
