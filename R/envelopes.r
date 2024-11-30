@@ -181,7 +181,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
          },
          unscaled = {
            if(alternative %in% c("greater", "less")) {
-             T_0 <- 0
+             T_0 <- rep(0, times=length(T_0))
            }
            for(ai in seq_along(alpha)) {
              LBounds[[ai]] <- T_0 - Malpha[ai]
