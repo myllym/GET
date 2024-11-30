@@ -11,6 +11,7 @@ deviation_test(
   use_theo = TRUE,
   scaling = "qdir",
   measure = "max",
+  alternative = c("two.sided", "less", "greater"),
   savedevs = FALSE
 )
 }
@@ -31,12 +32,16 @@ mean of the functions in the curve_set.}
 \item{measure}{The deviation measure to use. Default is 'max'. Must be
 one of the following: 'max', 'int' or 'int2'.}
 
+\item{alternative}{A character string specifying the alternative hypothesis
+when \code{measure = 'max'}; otherwise ignored. Must be one of the following:
+"two.sided" (default), "less" or "greater".}
+
 \item{savedevs}{Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.}
 }
 \value{
 If 'savedevs=FALSE' (default), the p-value is returned.
 If 'savedevs=TRUE', then a list containing the p-value and calculated deviation measures
-\eqn{u_i}{u_i}, \eqn{i=1,...,nsim+1}{i=1,...,nsim+1} (where \eqn{u_1}{u_1} corresponds to the data pattern) is returned.
+\eqn{u_i}{u_i}, \eqn{i=1,...,\text{nsim}+1}{i=1,...,nsim+1} (where \eqn{u_1}{u_1} corresponds to the data pattern) is returned.
 }
 \description{
 Crop the curve set to the interval of distances [r_min, r_max],
@@ -79,6 +84,20 @@ and given to the deviation_test function.
           \deqn{u_i = \max_{r \in [r_{\min}, r_{\max}]} | w(r)(T_i(r) - T_0(r))|}{%
                 u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
 
+          If \code{alternative = "greater"}, then instead
+
+          \deqn{u_i = \max_{r \in [r_{\min}, r_{\max}]} [ w(r)(T_i(r) - T_0(r)) ] }{%
+                u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
+
+          i.e. the largest values will have the largest \eqn{u_i}{u_i}.
+
+          If \code{alternative = "less"}, then instead
+
+          \deqn{u_i = \max_{r \in [r_{\min}, r_{\max}]} [- w(r)(T_i(r) - T_0(r)) ] }{%
+                u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
+
+          i.e. the smallest values will have the largest \eqn{u_i}{u_i}.
+
           \item 'int2' is the integral deviation measure
 
           \deqn{u_i = \int_{r_{\min}}^{r_{\max}} ( w(r)(T_i(r) - T_0(r)) )^2 dr}{%
@@ -92,10 +111,6 @@ and given to the deviation_test function.
         }
   \item Calculates the p-value.
 }
-
-Currently, there is no special way to take care of the same values of \eqn{T_i(r)}{T_i(r)}
-occuring possibly for small distances. Thus, it is preferable to exclude from
-the test the very small distances r for which ties occur.
 }
 \examples{
 ## Testing complete spatial randomness (CSR)

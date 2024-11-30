@@ -40,6 +40,20 @@
 #'           \deqn{u_i = \max_{r \in [r_{\min}, r_{\max}]} | w(r)(T_i(r) - T_0(r))|}{%
 #'                 u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
 #'
+#'           If \code{alternative = "greater"}, then instead
+#'
+#'           \deqn{u_i = \max_{r \in [r_{\min}, r_{\max}]} [ w(r)(T_i(r) - T_0(r)) ] }{%
+#'                 u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
+#'
+#'           i.e. the largest values will have the largest \eqn{u_i}{u_i}.
+#'
+#'           If \code{alternative = "less"}, then instead
+#'
+#'           \deqn{u_i = \max_{r \in [r_{\min}, r_{\max}]} [- w(r)(T_i(r) - T_0(r)) ] }{%
+#'                 u_i = max_(r in [r_min, r_max]) | w(r)(T_i(r) - T_0(r)) |}
+#'
+#'           i.e. the smallest values will have the largest \eqn{u_i}{u_i}.
+#'
 #'           \item 'int2' is the integral deviation measure
 #'
 #'           \deqn{u_i = \int_{r_{\min}}^{r_{\max}} ( w(r)(T_i(r) - T_0(r)) )^2 dr}{%
@@ -54,10 +68,6 @@
 #'   \item Calculates the p-value.
 #'}
 #'
-#' Currently, there is no special way to take care of the same values of \eqn{T_i(r)}{T_i(r)}
-#' occuring possibly for small distances. Thus, it is preferable to exclude from
-#' the test the very small distances r for which ties occur.
-#'
 #'
 #' @inheritParams crop_curves
 #' @inheritParams residual
@@ -67,10 +77,13 @@
 #'   one of the following: 'max', 'int' or 'int2'.
 #' @param scaling The name of the scaling to use. Options include 'none',
 #'   'q', 'qdir' and 'st'. 'qdir' is default.
+#' @param alternative A character string specifying the alternative hypothesis
+#' when \code{measure = 'max'}; otherwise ignored. Must be one of the following:
+#' "two.sided" (default), "less" or "greater".
 #' @param savedevs Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.
 #' @return If 'savedevs=FALSE' (default), the p-value is returned.
 #' If 'savedevs=TRUE', then a list containing the p-value and calculated deviation measures
-#' \eqn{u_i}{u_i}, \eqn{i=1,...,nsim+1}{i=1,...,nsim+1} (where \eqn{u_1}{u_1} corresponds to the data pattern) is returned.
+#' \eqn{u_i}{u_i}, \eqn{i=1,...,\text{nsim}+1}{i=1,...,nsim+1} (where \eqn{u_1}{u_1} corresponds to the data pattern) is returned.
 #' @references
 #' Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11: 19-34. doi: 10.1016/j.spasta.2014.11.004
 #'
@@ -93,12 +106,18 @@
 #' }
 #'
 deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
-        use_theo = TRUE, scaling = 'qdir',
-        measure = 'max', savedevs=FALSE) {
+        use_theo = TRUE, scaling = 'qdir', measure = 'max',
+        alternative = c("two.sided", "less", "greater"),
+        savedevs=FALSE) {
+  alternative <- match.arg(alternative)
   curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
+  if(alternative %in% c("greater", "less")) {
+    curve_set[['theo']] <- 0
+    use_theo <- TRUE
+  }
   curve_set <- residual(curve_set, use_theo = use_theo)
   curve_set <- scale_curves(curve_set, scaling = scaling)
-  devs <- deviation(curve_set, measure = measure)
+  devs <- deviation(curve_set, measure = measure, alternative = alternative)
   p <- estimate_p_value(devs[1], devs[-1])
   if(savedevs) res <- list(p=p, devs=devs, call=match.call())
   else res <- list(p=p, call=match.call())

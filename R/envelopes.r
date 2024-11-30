@@ -86,10 +86,10 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   small_significant <- TRUE
   if(type %in% c("qdir", "st", "unscaled")) {
     small_significant <- FALSE
-    if(alternative != "two.sided") {
-      warning("For qdir, st and unscaled envelopes only the two.sided alternative is valid.")
-      alternative <- "two.sided"
-    }
+  }
+  if(type %in% c("qdir", "st") && alternative != "two.sided") {
+    warning("For qdir and st envelopes only the two.sided alternative is valid.")
+    alternative <- "two.sided"
   }
   check_probs(probs)
   if(!(central %in% c("mean", "median"))) {
@@ -180,6 +180,9 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
            }
          },
          unscaled = {
+           if(alternative %in% c("greater", "less")) {
+             T_0 <- 0
+           }
            for(ai in seq_along(alpha)) {
              LBounds[[ai]] <- T_0 - Malpha[ai]
              UBounds[[ai]] <- T_0 + Malpha[ai]

@@ -137,16 +137,20 @@ individual_forder <- function(curve_set,
                               probs = c(0.025, 0.975), quantile.type = 7) {
   possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!")
+  alternative <- match.arg(alternative)
 
   curve_set <- as.curve_set(curve_set, allfinite=TRUE)
 
   if(measure %in% c('max', 'int', 'int2')) {
+    if(alternative %in% c("greater", "less")) {
+      curve_set[['theo']] <- 0
+      use_theo <- TRUE
+    }
     curve_set <- residual(curve_set, use_theo = use_theo)
     curve_set <- scale_curves(curve_set, scaling = scaling, probs = probs, type = quantile.type)
-    distance <- deviation(curve_set, measure = measure)
+    distance <- deviation(curve_set, measure = measure, alternative = alternative)
   }
   else {
-    alternative <- match.arg(alternative)
     Nfunc <- curve_set_nfunc(curve_set)
     nr <- curve_set_narg(curve_set)
     # If the curve_set is larger than 80 MB

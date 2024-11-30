@@ -4,11 +4,13 @@
 #   residual().
 # @param measure The deviation measure to use. Default is 'max'. Must be
 #   one of the following: 'max', 'int' or 'int2'.
-# @param ... Arguments to be passed to the measure function, if applicable.
+# @param alternative Only used for measure = 'max'!
 # @return A deviation_set object. The list has two elements: obs and sim.
 #   obs is scalar while sim is a vector with at least one element.
-deviation <- function(curve_set, measure = 'max', ...) {
+deviation <- function(curve_set, measure = 'max',
+                      alternative = c("two.sided", "greater", "less")) {
   possible_measures <- c('max', 'int', 'int2')
+  alternative <- match.arg(alternative)
 
   # deviation() should not accept envelope objects as they are not in
   # residual form.
@@ -26,7 +28,16 @@ deviation <- function(curve_set, measure = 'max', ...) {
 
   switch(measure,
          'max' = {
-           res <- apply(abs(all_curves), 1, max)
+           switch(alternative,
+                  two.sided = {
+                    res <- apply(abs(all_curves), 1, max)
+                  },
+                  greater = {
+                    res <- apply(all_curves, 1, max)
+                  },
+                  less = {
+                    res <- apply(-all_curves, 1, max)
+                  })
          },
          'int' = {
            res <- rowSums(abs(all_curves))
