@@ -209,7 +209,7 @@ Mrkvička et al. (2017) discussed the number of simulations for tests based on m
 
 \section{Documentation}{
 
-Myllymäki and Mrkvička (2023) provides description of the package.
+Myllymäki and Mrkvička (2024) provides description of the package.
 The material can also be found in the corresponding vignette, which is available by
 starting R and typing \code{library("GET")} and \code{vignette("GET")}.
 
@@ -243,9 +243,11 @@ Ute Hahn, Michael Rost and Henri Seijo.
 }
 
 \references{
-Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. DOI: 10.5772/intechopen.100124
+Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. doi: 10.5772/intechopen.100124
 
 Dvořák, J. and Mrkvička, T. (2022). Graphical tests of independence for general distributions. Computational Statistics 37, 671--699.
+
+Konstantinou, K., Mrkvička, T. and Myllymäki, M. (2024) The power of visualizing distributional differences: formal graphical n-sample tests. Computational Statistics. doi: 10.1007/s00180-024-01569-z
 
 Mrkvička, T., Konstantinou, K., Kuronen, M. and Myllymäki, M. (2023a) Global quantile regression. arXiv:2309.04746 [stat.ME]. https://doi.org/10.48550/arXiv.2309.04746
 
@@ -261,13 +263,13 @@ Mrkvička, T., Myllymäki, M. (2023) False discovery rate envelopes. Statistics 
 
 Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
 
-Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016) Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A, 40-53. doi: http://dx.doi.org/10.1016/j.spasta.2016.04.005
+Mrkvička, T., Soubeyrand, S., Myllymäki, M., Grabarnik, P., and Hahn, U. (2016) Monte Carlo testing in spatial statistics, with applications to spatial residuals. Spatial Statistics 18, Part A, 40-53. doi: 10.1016/j.spasta.2016.04.005
 
 Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015) Deviation test construction and power comparison for marked spatial point patterns. Spatial Statistics 11, 19-34. doi: 10.1016/j.spasta.2014.11.004
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017) Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology) 79, 381-404. doi: 10.1111/rssb.12172
 
-Myllymäki, M. and Mrkvička, T. (2023). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]. https://doi.org/10.48550/arXiv.1911.06583
+Myllymäki, M. and Mrkvička, T. (2024). GET: Global envelopes in R. Journal of Statistical Software 111(3), 1-40. doi: 10.18637/jss.v111.i03
 
 Myllymäki, M., Kuronen, M. and Mrkvička, T. (2020). Testing global and local dependence of point patterns on covariates in parametric models. Spatial Statistics 42, 100436. doi: 10.1016/j.spasta.2020.100436
 }

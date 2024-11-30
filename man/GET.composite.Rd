@@ -163,7 +163,7 @@ is used for simulations and model fitting and the complete spatial randomness (C
 For the rank envelope test, the global envelope test is the test described in
 Myllymäki et al. (2017) with the adjustment of Baddeley et al. (2017).
 For other test types, the test (also) uses the two-stage procedure of Dao and Genton (2014) with
-the adjustment of Baddeley et al. (2017) as descripbed in Myllymäki and Mrkvička (2020).
+the adjustment of Baddeley et al. (2017) as descripbed in Myllymäki and Mrkvička (2024).
 
 See examples also in \code{\link{saplings}}.
 }
@@ -287,7 +287,7 @@ Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, 
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 79: 381-404. doi: 10.1111/rssb.12172
 
-Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]. https://doi.org/10.48550/arXiv.1911.06583
+Myllymäki, M. and Mrkvička, T. (2024). GET: Global envelopes in R. Journal of Statistical Software 111(3), 1-40. doi: 10.18637/jss.v111.i03
 }
 \seealso{
 \code{\link{global_envelope_test}}, \code{\link{plot.global_envelope}}, \code{\link{saplings}}

@@ -89,7 +89,7 @@ if(require("quantreg", quietly=TRUE)) {
 \references{
 Mrkvička, T., Konstantinou, K., Kuronen, M. and Myllymäki, M. (2023) Global quantile regression. arXiv:2309.04746 [stat.ME]. https://doi.org/10.48550/arXiv.2309.04746
 
-Myllymäki, M and Mrkvička, T. (2023). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]. https://doi.org/10.48550/arXiv.1911.06583
+Myllymäki, M. and Mrkvička, T. (2024). GET: Global envelopes in R. Journal of Statistical Software 111(3), 1-40. doi: 10.18637/jss.v111.i03
 
 Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 }

@@ -285,7 +285,7 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #'
 #'
 #' The function \code{graph.flm} performs the graphical functional GLM of Mrkvička et al. (2021),
-#' described also in Section 3.6 of Myllymäki and Mrkvička (2020) (type \code{vignette("GET")} in R).
+#' described also in Section 3.6 of Myllymäki and Mrkvička (2024) (type \code{vignette("GET")} in R).
 #' This is a nonparametric graphical test of significance of a covariate in functional GLM.
 #' The test is able to find not only if the factor of interest is significant, but also which
 #' functional domain is responsible for the potential rejection.
@@ -366,7 +366,7 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #' @references
 #' Mrkvička, T., Roskovec, T. and Rost, M. (2021) A nonparametric graphical tests of significance in functional GLM. Methodology and Computing in Applied Probability 23, 593-612. doi: 10.1007/s11009-019-09756-y
 #'
-#' Myllymäki, M and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]. https://doi.org/10.48550/arXiv.1911.06583
+#' Myllymäki, M. and Mrkvička, T. (2024). GET: Global envelopes in R. Journal of Statistical Software 111(3), 1-40. doi: 10.18637/jss.v111.i03
 #'
 #' Freedman, D., & Lane, D. (1983) A nonstochastic interpretation of reported significance levels. Journal of Business & Economic Statistics, 1(4), 292-298. doi:10.2307/1391660
 #' @importFrom stats lm model.matrix

@@ -48,7 +48,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' Details of this combined test can be found in Mrkvicka et al. (2017).
 #' The implementation of this test is provided here for historical reasons:
 #' we recommend now instead the use of \code{\link{global_envelope_test}} also for combined tests;
-#' these combined tests are there implemented as described in Myllymäki and Mrkvička (2020).
+#' these combined tests are there implemented as described in Myllymäki and Mrkvička (2024).
 #'
 #' @inheritParams global_envelope_test
 #' @param type Either "qdir" for the direction quantile envelope test or
@@ -58,7 +58,7 @@ combined_scaled_MAD_bounding_curves <- function(central_curves_ls, max_u, lower_
 #' Mrkvička, T., Myllymäki, M. and Hahn, U. (2017) Multiple Monte Carlo testing, with applications in spatial point processes.
 #' Statistics & Computing 27(5): 1239–1255. DOI: 10.1007/s11222-016-9683-9
 #'
-#' Myllymäki, M. and Mrkvička, T. (2020). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]. https://doi.org/10.48550/arXiv.1911.06583
+#' Myllymäki, M. and Mrkvička, T. (2024). GET: Global envelopes in R. Journal of Statistical Software 111(3), 1-40. doi: 10.18637/jss.v111.i03
 #' @export
 #' @examples
 #' if(require("spatstat.explore", quietly=TRUE)) {

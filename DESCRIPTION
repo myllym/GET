@@ -58,7 +58,7 @@ Description: Implementation of global envelopes for a set of general d-dimension
     of distribution functions), for central regions of functional or multivariate data (e.g.
     outlier detection, functional boxplot) and for global confidence and prediction bands
     (e.g. confidence band in polynomial regression, Bayesian posterior prediction). See
-    Myllymäki and Mrkvička (2023) <doi:10.48550/arXiv.1911.06583>,
+    Myllymäki and Mrkvička (2024) <doi:10.18637/jss.v111.i03>,
     Myllymäki et al. (2017) <doi:10.1111/rssb.12172>,
     Mrkvička and Myllymäki (2023) <doi:10.1007/s11222-023-10275-7>,
     Mrkvička et al. (2016) <doi:10.1016/j.spasta.2016.04.005>,

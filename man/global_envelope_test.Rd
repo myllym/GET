@@ -236,7 +236,7 @@ preferably be higher.
 
 If a list of (suitable) objects are provided in the argument \code{curve_sets},
 then by default (\code{nstep = 2}) the two-step combining procedure is used to
-perform the combined global test as described in Myllymäki and Mrkvička (2020).
+perform the combined global test as described in Myllymäki and Mrkvička (2024).
 If \code{nstep = 1} and the lengths of the multivariate vectors in each component
 of the list are equal, then the one-step combining procedure is used where the
 functions are concatenated together into a one long vector.
@@ -379,7 +379,7 @@ Myllymäki, M., Grabarnik, P., Seijo, H. and Stoyan. D. (2015). Deviation test c
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H. and Hahn, U. (2017). Global envelope tests for spatial point patterns. Journal of the Royal Statistical Society: Series B (Statistical Methodology) 79, 381–404. doi: 10.1111/rssb.12172
 
-Myllymäki, M. and Mrkvička, T. (2023). GET: Global envelopes in R. arXiv:1911.06583 [stat.ME]. https://doi.org/10.48550/arXiv.1911.06583
+Myllymäki, M. and Mrkvička, T. (2024). GET: Global envelopes in R. Journal of Statistical Software 111(3), 1-40. doi: 10.18637/jss.v111.i03
 
 Ripley, B.D. (1981). Spatial statistics. Wiley, New Jersey.
 }
