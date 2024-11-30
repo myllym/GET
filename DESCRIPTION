@@ -70,7 +70,7 @@ Description: Implementation of global envelopes for a set of general d-dimension
     Dai et al. (2022) <doi:10.5772/intechopen.100124>,
     Dvořák and Mrkvička (2022) <doi:10.1007/s00180-021-01134-y>,
     Mrkvička et al. (2023) <doi:10.48550/arXiv.2309.04746>, and
-    Konstantinou et al. (2024) <doi: 10.48550/arXiv.2403.01838>.
+    Konstantinou et al. (2024) <doi: 10.1007/s00180-024-01569-z>.
 License: GPL-3
 RoxygenNote: 7.3.1
 URL: https://github.com/myllym/GET
