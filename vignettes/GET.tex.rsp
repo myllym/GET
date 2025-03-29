@@ -109,7 +109,7 @@ and confidence bands in polynomial regression.
 
 \section*{Preface}
 
-This vignette corresponds to Myllym{\"a}ki and Mrkvi\v cka (2023, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME]) available at \url{https://doi.org/10.48550/arXiv.1911.06583}.
+This vignette corresponds to Myllym{\"a}ki and Mrkvi\v cka (2024, \pkg{GET}: Global envelopes in \proglang{R}. \emph{Journal of Statistical Software}, 111(3), 1-40) available at \url{https://doi.org/10.18637/jss.v111.i03}.
 When citing the vignette and package please cite Myllym{\"a}ki and Mrkvi\v cka (2023) and references given by typing \code{citation("GET")} in \proglang{R}.
 
 %% -- Introduction -------------------------------------------------------------

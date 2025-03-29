@@ -54,8 +54,7 @@
 This vignette gives examples of the use of false discoverate rate (FDR) envelopes
 that are proposed in \citep{MrkvickaMyllymaki2023} and implemented in the \proglang{R} package \pkg{GET}.
 When citing the vignette please cite \citet{MrkvickaMyllymaki2023} and
-Myllym{\"a}ki and Mrkvi\v cka (2023, \pkg{GET}: Global envelopes in \proglang{R}. arXiv:1911.06583 [stat.ME])
-available at \url{https://doi.org/10.48550/arXiv.1911.06583}.
+Myllym{\"a}ki and Mrkvi\v cka (2024, \pkg{GET}: Global envelopes in \proglang{R}. \emph{Journal of Statistical Software}, 111(3), 1-40) available at \url{https://doi.org/10.18637/jss.v111.i03}.
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
