@@ -33,7 +33,7 @@
 \SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
 <<preliminaries, echo=FALSE, results=hide>>=
 #options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
-options(prompt = " ", continue = " ", width = 70, useFancyQuotes = FALSE)
+options(prompt = "R> ", continue = " ", width = 70, useFancyQuotes = FALSE)
 @
 
 %% -- Article metainformation (author, title, ...) -----------------------------
@@ -44,8 +44,10 @@ options(prompt = " ", continue = " ", width = 70, useFancyQuotes = FALSE)
 %% - \AND starts a new line, \And does not.
 \author{Mari Myllym{\"a}ki\\Natural Resources Institute Finland (Luke)
    \AND Tom\'a\v s Mrkvi\v cka\\University of South Bohemia %, \v{C}esk\'e Bud\v{e}jovice, Czech Republic
-   \AND Mikko Kuronen\\Natural Resources Institute Finland (Luke)}
-\Plainauthor{Mari Myllym{\"a}ki, Tom\'a\v s Mrkvi\v cka, Mikko Kuronen}
+   \AND Stanislav Kraft \\University of South Bohemia
+   \AND Vojt\v ech Bla\v zek \\University of South Bohemia
+   \AND Michal Konopa \\University of South Bohemia}
+\Plainauthor{Mari Myllym{\"a}ki et al.}
 
 %% - \title{} in title case
 %% - \Plaintitle{} without LaTeX markup (if any)
@@ -56,7 +58,7 @@ options(prompt = " ", continue = " ", width = 70, useFancyQuotes = FALSE)
 
 %% - \Abstract{} almost as usual
 \Abstract{
-This vignette shows how the methodology proposed by \citet{MrkvickaEtal2023} for detecting hotspots on a linear network can be performed using the \proglang{R} package \pkg{GET} \citep{MyllymakiMrkvicka2024}.
+This vignette describes and shows how the methodology proposed by \citet{MrkvickaEtal2023} for detecting hotspots on a linear network can be performed using the \proglang{R} package \pkg{GET} \citep{MyllymakiMrkvicka2024}.
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
@@ -89,6 +91,32 @@ This vignette shows how the methodology proposed by \citet{MrkvickaEtal2023} for
 
 \begin{document}
 
+\section{Practical description of hotspots computation}
+
+The first step involves import data to \proglang{R}. The crashes are recorded as a point pattern, thus x and y coordinates together with window range must be provided. The same holds for crossroads that forms the vertices of the linear network. The edges of the linear network are provided in the form of matrix, where first column corresponds to the order of the crossroad where the edge starts and the second column corresponds to the order of the ending crossroad. Further, the covariate can be imported to R from tiff or raster format.
+
+When all files are prepared, the analysis can move to \proglang{R} with use of \pkg{spatstat}, \pkg{GET} and \pkg{parallel} packages. This vignette provides an example of hotspots detection that can be easily customized.
+
+\subsection{Estimating Poisson point pattern}
+
+The function \fct{pois.lppm}, can be used to estimate the inhomogeneous Poisson point process model on linear network. This function provides the \code{firstordermodel}, i.e. the regression model of dependence of crashes on the spatial covariates, \code{EIP}, i.e. estimated inhomogeneous intensity from the data and \code{secondorder}, i.e. estimation of the inhomogeneous $K$-function. The \code{plot} of the \code{secondorder} provides diagnostics, if the model is adequate for the data. If the estimated $K$-function lies close to the theoretical line, the data does not report any clustering, and the function \fct{hotspots.poislpp} can be used for final hotspots detection. If the estimated $K$-function does not lie close to the theoretical line, and it is above, the data report clustering, and the a clustered point pattern model must be fitted to the data and hotspots detected using this clustered model instead. The important input parameters to be specified for the function \fct{hotspots.poislpp} are \code{PP}, i.e., the point pattern used for estimation, \code{formula}, i.e., the linear regression formula specified as usually in \proglang{R} having \code{PP} on the right hand side of the formula (i.e., as the response variable), data, i.e., the object from which the formula takes the data.
+
+\subsection{Estimating Mat{\'e}rn cluster point pattern}
+
+The function \fct{MatClust.lppm}, can be used to estimate the Mat{\'e}rn cluster point pattern with inhomogeneous cluster centers on linear network. This function provides the same outputs as the \fct{pois.lppm} and further estimated parameters $\alpha$ and $R$. The \code{secondorder} provides again the diagnostics for checking if the clustered model is appropriate. The sample $K$-function must be close to the $K$-function of the estimated model (green line). If it is not the case the searching grid for parameters $\alpha$ and $R$ that is input in the function must be manipulated to get the a closer result. If the estimated model is adequate one can proceed to the hotspot detection with the use of the function \fct{hotspots.MatClustlpp}. Remark here, that for the estimation of the second order structure a smaller data can be used than for the estimation of the first order structure in order to save the computation time, since the second order is a local characteristics. Thus the input to this function can contain, in addition to the full data in PP that is used for first order estimation, a subwindow \code{subwin} to specify a smaller part of the full data for second order estimation. Furthermore, \code{valpha}, i.e., vector of proposed alphas which should be considered in the optimization, \code{vR}, i.e., vector of proposed Rs which should be considered in the optimization must be provided. The user can also specify how many cores should be used in the computation by parameter \code{ncores}.
+
+\subsection{Hotspot detection under the Poisson assumption}
+
+If the Poisson assumption is checked, the hotspots can be detected using the function \fct{hotspots.poislpp}. The plot of results contains the locations of determined hotspots together with their sizes. A parameter \code{sigma} must be provided in this function. It determines the bandwidth of the kernel used in the inhomogeneous intensity estimation. This parameter should be carefully selected with respect to the size of the window. It represents how much smoothing is applied on the intensity, it is too big, the inhomogeneity will be blurred away. If it is too small, the intensity will react on every event and the inhomogeneity will be too crazy. The \code{nsim} parameter specifies the number of simulations to perform the envelope. It should be as large as possible. Usually, the default of 10000 is fine. The argument \code{ncores} can be used to specify how many cores should be used for the computation.
+
+\subsection{Hotspot detection under the Mat{\'e}rn cluster assumption}
+
+If the Matérn cluster process was estimated and the Mat{\'e}rn cluster assumption was checked, the hotspots can be detected using the function \fct{hotspots.MatClustlpp}. This function has the same parameters as the previous one. Moreover, the estimated parameters $\alpha$ and $R$ from \fct{MatClust.lppm} must be provided.
+
+
+
+\section{R preparations}
+
 Loading required packages and setting a \pkg{ggplot2} theme for images.
 
 %
@@ -103,215 +131,10 @@ theme_set(theme_bw(base_size = 9))
 @
 %
 
-Defining functions for the later use below:
-
-%
-<<r_functions>>=
-# Fitting the inhomogeneous Poisson process
-# @param PP Input, a point pattern.
-# @param formul An R formula to estimate the first order model.
-#  This formula can contain objects of full size.
-# @param data Data from where the formula takes objects.
-#  Must be acceptable by the function lppm of spatstat.linnet.
-lpoisppm <- function(PP, formul, data) {
-  M <- lppm(formul, data = data)
-  EIP <- predict(M)
-  maxr <- sqrt(area(PP))/10
-  r <- seq(0, maxr, length.out=100) # Up to 5 km
-  PP_K <- Knetinhom(PP, lambda = update(M, PP), r=r)
-  list(EIP=EIP, firstordermodel=M, secondorder=PP_K)
-}
-
-# Simulating the Matern cluster process on a linear network
-# @param Centers The (x,y)-coordinates of parent points
-# @param R The R parameter of the Matern cluster process
-# @param alpha The alpha parameter of the Matern cluster process
-# @param LL The linear network on which the point pattern should be simulated.
-# @check_vol Logical. TRUE for checking if the ball producing the cluster
-#  has any intersection with linear network.
-rMatClustlpp <- function(Centers, R, alpha, LL, check_vol=FALSE) {
-  e <- as.matrix(LL$lines$ends)
-  e2 <- list()
-  for(i in 1:nrow(e)) {
-    e2[[i]] <- sf::st_linestring(matrix(e[i,], 2,2, byrow=TRUE))
-  }
-  LN <- sf::st_sfc(e2)
-  X <- array(0,0)
-  Y <- array(0,0)
-  cs <- sf::st_sfc(apply(cbind(Centers$data$x, Centers$data$y), 1,
-                         sf::st_point, simplify=FALSE))
-  bufs <- sf::st_buffer(cs, R, nQuadSegs = 8)
-  LN1s <- sf::st_intersection(bufs, sf::st_union(LN))
-  stopifnot(length(LN1s)==length(Centers$data$x))
-  for(p in 1:length(Centers$data$x)) {
-    LN1 <- LN1s[p]
-    LN1 <- unlist(LN1) # LN1 contains line segments with exactly 4 numbers each
-    LL1 <- psp(LN1[1:4 == 1], LN1[1:4 == 3],
-               LN1[1:4 == 2], LN1[1:4 == 4],
-               window=Window(LL), check=FALSE)
-    vol <- sum(lengths_psp(LL1))
-    if(check_vol) {
-      BBCOutD_ss <- disc(radius=R, centre=c(Centers$data$x[p],
-                                            Centers$data$y[p]),
-                         npoly = 32)
-      vol2 <- volume(LL[BBCOutD_ss])
-      if(abs(vol-vol2) > 1e-4) stop("vol")
-    }
-    Xp <- rpoisppOnLines(alpha/vol, L=LL1)
-    X <- append(X, as.numeric(Xp$x))
-    Y <- append(Y, as.numeric(Xp$y))
-  }
-  lpp(cbind(X,Y), LL)
-}
-
-# Fitting the Matern cluster pp - parallel version
-lmcppm_par <- function(PP, formul, valpha, vR, data,
-                       nsim = 10, ncores=NULL) {
-  lmcppm_par_inner <- function(fakeArg, valpha, EIP, PP, vR, M, r) {
-    # Centers from a Poisson process
-    Centers <- rpoislpp(EIP/valpha, L=PP[['domain']])
-    XX <- rMatClustlpp(Centers, vR, valpha, PP[['domain']])
-    return(Knetinhom(XX, lambda = update(M, XX), r=r)$est)
-  }
-
-  if(!is.vector(valpha)) { stop("valpha is not a vector") }
-  if(!is.vector(vR)) { stop("vR is not a vector") }
-  M <- lppm(formul, data = data)
-  EIP <- predict(M)
-  maxr <- sqrt(area(PPfull))/10
-  r <- seq(0, maxr, length.out=100) # Up to 5 km
-  PP_K <- Knetinhom(PP, lambda = update(M, PP), r=r)
-  Contrast <- array(0, c(length(valpha), length(vR)))
-  Karray <- array(0, c(length(valpha), length(vR),length(r)))
-
-  fakeArgs <- rep(1, times=nsim)
-
-  # if the number of cores has not been set by ncores function parameter,
-  # try to detect it on the host
-  if ( is.null(ncores) ) {
-    # detect number of cores
-    ncores <- detectCores()
-    ncores <- max(1L, detectCores()-1, na.rm = TRUE)
-  }
-
-  # create cluster with ncores nodes
-  cl <- makeCluster(ncores, type = "SOCK")
-  clusterEvalQ(cl, library("spatstat"))
-  clusterEvalQ(cl, library("spatstat.Knet"))
-  clusterExport(cl=cl, c("rMatClustlpp", "PPfull"))
-
-  for(i in 1:length(valpha)) {
-    for(j in 1:length(vR)) {
-      # Compute the average K of 10 simulation from the model
-      KMC_sim_results <-clusterApplyLB(cl, fakeArgs, lmcppm_par_inner,
-                                       valpha[i], EIP, PP, vR, M, r)
-
-      # summarize result of all simulations into one array
-      KMC <- array(0,length(r))
-      for(s in 1:length(KMC_sim_results)) {
-        KMC <- KMC + KMC_sim_results[[s]]
-      }
-
-      # Compute the difference between estimated and average K
-      Contrast[i,j] <- sqrt(sum((PP_K$est-KMC/nsim)^2))
-      Karray[i,j,] <- KMC/nsim
-    }
-  }
-
-  # stop the cluster
-  stopCluster(cl)
-
-  # Finding the minimum value of the contrast
-  id <- which(Contrast == min(Contrast), arr.ind = TRUE)
-  alpha <- valpha[id[,1]]
-  R <- vR[id[,2]]
-  EIP <- EIP/alpha
-
-  list(EIP=EIP, alpha=alpha, R=R, firstordermodel=M,
-       secondorder=PP_K, MCsecondorder=Karray[id[,1], id[,2],])
-}
-
-# Hot spots detection from Poisson or Matern Cluster point pattern
-# - parallel version
-# @param PP The point pattern living in a network.
-# @param formul A formula for the intensity
-# @param clusterparam NULL if the model to be used is the Poisson point process.
-# A named list with components 'alpha' and 'R' for the Matern cluster process.
-# @param sigma To be passed to density.lpp.
-# @param nsim Number of simulations to be performed.
-# @param ncores Number of cores used for computations.
-hotspots_par <- function(PP, formul, clusterparam, data,
-                         sigma=250, nsim = 10000,
-                         ncores=NULL) {
-  if(is.null(clusterparam)) {
-    model <- "Pois"
-    hotspots_par_inner <- function(fakeArg, clusterparam, EIP, PP, sigma) {
-      simss <- rpoislpp(EIP, L=PP[['domain']])
-      return(density.lpp(simss, sigma = sigma, distance="euclidean"))
-    }
-  }
-  else {
-    model <- "MC"
-    if(!("alpha" %in% names(clusterparam) & "R" %in% names(clusterparam)))
-      stop("clusterparam should be a named list with components ",
-      "R and alpha (or NULL for Poisson process).")
-    hotspots_par_inner <- function(fakeArg, clusterparam, EIP, PP, sigma) {
-      Centers <- rpoislpp(EIP, L=PP[['domain']])
-      simss <- rMatClustlpp(Centers, clusterparam[['R']],
-                            clusterparam[['alpha']], PP[['domain']])
-      return(density.lpp(simss, sigma = sigma, distance="euclidean"))
-    }
-  }
-
-  M <- lppm(formul, data = data)
-  if(model == "Pois") EIP <- predict(M)
-  else EIP <- predict(M)/clusterparam[['alpha']]
-  densi <- density.lpp(PP, sigma = sigma, distance="euclidean")
-  sims.densi <- vector(mode = "list", length = nsim)
-  fakeArgs <- rep(1, times=nsim)
-
-  # if the number of cores has not been set by ncores function parameter,
-  # try to detect it on the host
-  if(is.null(ncores)) {
-    # detect number of cores
-    ncores <- detectCores()
-    ncores <- max(1L, detectCores()-1, na.rm = TRUE)
-  }
-
-  # create cluster with ncores nodes
-  cl <- makeCluster(ncores, type = "SOCK")
-  clusterEvalQ(cl, library("spatstat"))
-  clusterExport(cl=cl,  c("rMatClustlpp"))
-
-  sims.densi <-clusterApplyLB(cl, fakeArgs, hotspots_par_inner,
-                              clusterparam, EIP, PP, sigma)
-
-  # stop the cluster
-  stopCluster(cl)
-
-  yx <- expand.grid(densi$yrow, densi$xcol)
-
-  noNA_id <- which(!is.na(densi$v))
-  noNA_idsim <- which(!is.na(sims.densi[[1]]$v))
-  noNA_id <- intersect(noNA_id, noNA_idsim)
-  #max(densi[noNA_id]); summary(sapply(sims.densi, FUN=max))
-
-  cset <- create_curve_set(list(
-    r=data.frame(x=yx[,2], y=yx[,1],
-                 width=densi$xstep, height=densi$ystep)[noNA_id,],
-    obs=as.vector(densi$v)[noNA_id],
-    sim_m=sapply(sims.densi, FUN=function(x){ as.vector(x$v)[noNA_id] },
-                 simplify=TRUE)))
-  res <- fdr_envelope(cset, alternative = "greater")
-  res
-}
-@
-%
 
 \section{Data}
 
 \citet{MrkvickaEtal2023} worked with the database of road crashes reported to the Police in the Czech Republic from 1 January 2016 to 31 December 2020. Here we show the methodology for a subpattern of this full data set. The \pkg{GET} package provides a data object \code{roadcrash} that has 7700 road crashes lying on a linear network with 269 vertices and 354 lines.
-Because the computations of inhomogeneous $K$-function and density are rather computational, for illustration of the methodology below, we use a subset of the \code{roadcrash} data.
 
 Load the road crash data from \pkg{GET}:
 %
@@ -338,18 +161,30 @@ roadcrash$BuildingDensity <- im(roadcrash$BuildingDensity,
 @
 %
 
-Define a subpattern:
-%
-<<data_crashes_thin, fig=TRUE, height=4.125, width=3.0625>>=
-subwin <- owin(c(-760000, -740000), c(-1160000, -1140000))
-PP <- PPfull[, subwin]
+A part of the analysis, as will be described below, uses a subset of the
+\code{roadcrash} data, because the computations of inhomogeneous $K$-function
+and density can be rather computational.
 
-plot(PP, main="Road crashes")
+Here we define the subwindow and plot the full pattern as well as the pattern
+living in the subwindow.
+%
+<<data_crashes_thin, fig=TRUE, height=4.125, width=6.125>>=
+subwin <- owin(c(-760000, -740000), c(-1160000, -1140000))
+
+par(mfrow=c(1,2))
+plot(PPfull, main="Road crashes: full pattern")
+plot(PPfull[, subwin], main="Road crashes: subpattern")
 @
 %
 
 \citet{MrkvickaEtal2023} had a total of 9 spatially defined covariates.
-In our example here and available in \code{roadcrash} in \pkg{GET} are three covariates, namely average traffic volume (number of vehicles per 24 hours), forest density and building density in the cell.
+In our example here and available in \code{roadcrash} in \pkg{GET} are three covariates,
+namely average traffic volume (number of vehicles per 24 hours), forest density
+and building density in the cell.
+
+The following plots show these covariates in the full observation window and
+in the subwindow defined above.
+
 %
 <<data_covariates, fig=TRUE, height=3.0625, width=6.125>>=
 par(mfrow=c(1,3))
@@ -370,10 +205,26 @@ plot(roadcrash$BuildingDensity[subwin], main="Building density")
 \section{Non-parametric intensity estimate}
 
 A non-parametric density estimate of the point pattern on a linear network can be obtained using the function \fct{density.lpp} of the \pkg{spatstat} package.
+
+A parameter \code{sigma} must be provided in this function. It is the same parameter \code{sigma} that was already discussed above in Section 1.3, i.e., it determines the bandwidth of the kernel used in the inhomogeneous intensity estimation. 
+The argument \code{distance} specifies what type of kernel to use in the linear network.
+In our hotspot detection, we use here a two-dimension kernel specified by
+\code{distance="euclidean"} because computation of the density with this kernel
+is relatively fast.
+We set the smoothing bandwidth \code{sigma} that small that two roads are very
+unlikely closer than two times \code{sigma} apart from each other.
+Thus, the intensity estimate at a certain location on the linear network is
+computed merely from the crashes at that location.
+
+
 %
-<<data_density, fig=TRUE, height=4.125, width=3.0625>>=
-densi <- density.lpp(PP, sigma = 250, distance="euclidean")
-plot(densi, main="Intensity of crashes")
+<<data_density, fig=TRUE, height=4.125, width=6.125>>=
+densi <- density.lpp(PPfull, sigma = 250, distance="euclidean")
+densi2 <- density.lpp(PPfull[, subwin], sigma = 250, distance="euclidean")
+
+par(mfrow=c(1,3))
+plot(densi, main="Intensity of crashes: full window")
+plot(densi2, main="Intensity of crashes: subwindow")
 @
 %
 
@@ -388,77 +239,81 @@ $\beta=(\beta_1, \ldots , \beta_k)$ is a regression parameter.
 This process can be fitted using the \pkg{spatstat} package.
 We fit the model using the full \code{roadcrash} data.
 
-The function lpoisppm (see above) both fits the model for the intensity as well
-as provides predicted point process intensity and the inhomogeneous K-function
-estimated from a given point pattern (here the sub-point pattern PP) using
-the estimated intensity surface.
+The function \fct{pois.lppm} both fits the model for the intensity as well
+as provides predicted point process intensity and the inhomogeneous $K$-function
+estimated from a given point pattern \code{PP} using the estimated intensity
+surface. (This is rather fast, taking a bit more than 10 seconds on a normal
+laptop; system.time is used to take the time only.)
 
 %
 <<data_poisson>>=
-myformula <- PPfull ~ Traffic + ForestDensity + BuildingDensity
+myformula <- PP ~ Traffic + ForestDensity + BuildingDensity
 system.time(
-  Poi <- lpoisppm(PP, myformula, roadcrash)
+  Poi <- pois.lppm(PP=PPfull, formula=myformula, data=roadcrash)
 )
 @
 %
 
-The predicted point process intensity can then be plotted:
+Both the predicted point process intensity and the inhomogeneous $K$-function with
+theoretical Poisson $K$ function can be plotted:
 
 %
-<<data_poisson_EIP, fig=TRUE, height=4.125, width=3.0625>>=
-plot(Poi$EIP)
+<<data_poisson_EIP, fig=TRUE, height=4.125, width=6.125>>=
+par(mfrow=c(1,2))
+plot(Poi$EIP, main="Predicted intensity")
+plot(Poi$secondorder, main="Inhomog. K function")
 @
 %
 
-The inhomogeneous K-function with theoretical Poisson $K$ function can be plotted, too:
-
-%
-<<data_poisson_K, fig=TRUE, height=4.125, width=3.0625>>=
-plot(Poi$secondorder)
-@
-%
-
-Here the inhomogeneous K-function estimated from the data lies above the theoretical line for the Poisson process and suggests clustering of points.
+Here the inhomogeneous $K$-function estimated from the data lies above the theoretical line for the Poisson process and suggests clustering of points.
 
 
 \section{Fitting the Matern cluster process on a linear network}
 
 \citet{MrkvickaEtal2023} considered instead of the Poisson process the Matern cluster point process with inhomogeneous cluster centers.
 This process is more suitable for clustered data. It can be estimated in two steps according to its construction following \citet{MrkvickaEtal2014}.
-In first step, the first order intensity function is estimated through Poisson likelihood. This was done above, i.e., the object \code{EIP} contains the estimated intensity. In second step, the second order interaction parameters $\alpha$ (mean number of points in a cluster) and $R$ (cluster radius) are estimated through minimum contrast method. Unfortunately, working with cluster processes on linear networks is rather consuming and therefore they are currently not covered by the \pkg{spatstat} package. Thus, we have used the inhomogeneous $K$-function and the minimum contrast and grid search methods to find the optimal parameters. We implemented functions for simulating the Matern cluster process on a linear network \code{LL} with pre-specified centers (function \code{rMatClustlpp}) and for fitting the Matern cluster process on a point pattern on a linear network (function \code{lmcppm_par}).
+In first step, the first order intensity function is estimated through Poisson likelihood. This was done above, i.e., the object \code{EIP} contains the estimated intensity. In second step, the second order interaction parameters $\alpha$ (mean number of points in a cluster) and $R$ (cluster radius) are estimated through minimum contrast method. Unfortunately, working with cluster processes on linear networks is rather consuming and therefore they are currently not covered by the \pkg{spatstat} package. Thus, we have used the inhomogeneous $K$-function and the minimum contrast and grid search methods to find the optimal parameters. We implemented functions for simulating the Matern cluster process on a linear network \code{LL} with pre-specified centers (function \code{rMatClustlpp}) and for fitting the Matern cluster process on a point pattern on a linear network (function \code{MatClust.lppm}).
 
-In the procedure, we estimate the parameters $R$ and $\alpha$ of the Matern cluster process using the inhomogeneous $K$-function (with the estimated Poisson process intensity). We consider a range of possible values of the parameters $R$ and $\alpha$. For each value of $R$ and $\alpha$, we compute the difference of the observed $K$-function from the "theoretical" $K$-function of the model, computed from the average of \code{nsim} (here 5) simulation from the model. (Note that this computation takes some time.) Simulations are used, because the theoretical $K$-function is not known for the Matern cluster process on the linear network. We then find out which of these possible values of parameters $R$ and $\alpha$ lead to the smallest difference between the observed and "theoretical" $K$-functions.
+In the procedure, we estimate the parameters $R$ and $\alpha$ of the Matern cluster process using the inhomogeneous $K$-function (with the estimated Poisson process intensity). We consider a range of possible values of the parameters $R$ and $\alpha$. For each value of $R$ and $\alpha$, we compute the difference of the observed $K$-function from the "theoretical" $K$-function of the model, computed from the average of \code{nsim} (by default 10) simulation from the model. Simulations are used, because the theoretical $K$-function is not known for the Matern cluster process on the linear network. We then find out which of these possible values of parameters $R$ and $\alpha$ lead to the smallest difference between the observed and "theoretical" $K$-functions.
 
-Remark here that the first order structure is estimated below from the full pattern \code{PPfull}, whereas the second order structure is estimated from the pattern \code{PP} observed in the subwindow. The second order structure has a limited range; therefore, estimating it only from the subpattern is useful for time saving.
+Remark here that the first order structure is estimated below from the full pattern \code{PPfull} (provided to the \fct{MatClust.lppm} function in the argument \code{PP}), whereas the second order structure is estimated from the pattern observed in the subwindow that is provided in the argument \code{subwin}. The second order structure has a limited range; therefore, estimating it only from the subpattern is useful for time saving.
 
 %
-<<data_crashes_thin_seed, eval=TRUE, show=FALSE>>=
+<<data_crashes_thin_seed, eval=TRUE, echo=FALSE>>=
 set.seed(2023)
 @
 %
 
 %
-<<data_MatClust_param_save, eval=TRUE, show=TRUE>>=
+<<data_MatClust_param_save, eval=TRUE, echo=TRUE>>=
 valpha <- seq(5, 30, by=5)
 vR <- seq(250, 2500, by=500)
-myformula <- PPfull ~ Traffic + ForestDensity + BuildingDensity
+myformula <- PP ~ Traffic + ForestDensity + BuildingDensity
 system.time( # Took about 1,2 minutes with 4 cores on a laptop
-  MatCl <- lmcppm_par(PP, myformula, valpha, vR, roadcrash, ncores = 4)
+  MatCl <- MatClust.lppm(PP=PPfull, formula=myformula, subwin=subwin,
+                         valpha=valpha, vR=vR, data=roadcrash, ncores = 4)
 )
 @
 %
 
-These results can be viewed:
+These results can be viewed, by plotting the observed $K$ (solid line) and
+theoretical Poisson line (dashed line) and adding the K-function of the estimated
+Matern cluster process estimated from \code{nsim} (here 10) simulations.
 
 %
 <<data_MatClust_param_sim, fig=TRUE, height=4.0625, width=4.0625>>=
 # The observed K, and theoretical Poisson line
-plot(MatCl$secondorder)
-# The Matern Cluster process K from nsim (here 5) simulations
+plot(MatCl$secondorder, main="Inhomog. K function")
+# The Matern Cluster process K from nsim (here 10) simulations
 #  with chosen values of alpha and R
 lines(x=MatCl$secondorder$r, y=MatCl$MCsecondorder, col=3)
+@
+%
 
-# Chosen values
+The chosen parameter values are given in \code{alpha} and \code{R}.
+
+%
+<<data_MatClust_param, eval=TRUE, echo=TRUE>>=
 MatCl$alpha
 MatCl$R
 @
@@ -468,30 +323,36 @@ MatCl$R
 \section{False discovery rate envelopes}
 
 To find the hotspots of road crashes that are not explained by the covariates,
-we first generate \code{nsim} simulations from the fitted Matern cluster process
+we first generate \code{nsim} simulations from the fitted Mat{\'e}rn cluster process
 and estimate the intensity for each of the simulated patterns.
 We note that we estimate the intensity here similarly as above for the observed pattern.
-This computation takes a bit of time (using 7 cores on a laptop this took 18 minutes).
+This computation takes a bit of time
+(using 4 cores on a normal laptop took about 25-30 minutes).
 
 %
-<<fdrenvelope_cset, eval=TRUE, show=TRUE>>=
+<<fdrenvelope_cset, eval=FALSE, echo=TRUE>>=
 nsim <- 10000
 system.time(
-  res <- hotspots_par(PPfull, myformula,
-                      clusterparam=list(alpha=MatCl$alpha, R=MatCl$R),
-                      data = roadcrash, sigma=250, nsim=nsim, ncores=4)
+  res <- hotspots.MatClustlpp(PP=PPfull, formula=myformula,
+                    R=MatCl$R, alpha=MatCl$alpha,
+                    data = roadcrash, sigma=250, nsim=nsim, ncores=4)
 )
 @
 %
 
 %
-<<fdrenvelope_res_load, eval=FALSE, show=FALSE>>=
+<<fdrenvelope_res_load, eval=TRUE, echo=FALSE>>=
 #save(res, file="roadcrash_res.Rdata")
 load(file="roadcrash_res.Rdata")
 @
 %
 
-Then the FDR envelope \citep{MrkvickaMyllymaki2023} can be computed using the function \fct{fdr\_envelope} of the \pkg{GET} package. We set the alternative to \code{"greater"}, because we are only interested in locations where the intensity is higher than expected.
+The FDR envelope \citep{MrkvickaMyllymaki2023} is computed within
+\fct{hotspots.MatClustlpp} using the function \fct{fdr\_envelope} of the
+\pkg{GET} package.
+Because we are only interested in locations where the intensity is higher than
+expected, the test is done alternative to \code{"greater"}.
+
 %
 <<fdrenvelope, fig=TRUE, height=4.125, width=6.125>>=
 plot(res) + scale_radius(range = 0.5 * c(1, 6))
@@ -499,9 +360,15 @@ plot(res) + scale_radius(range = 0.5 * c(1, 6))
 %
 
 The size of the cluster is indicated by the circles.
-The circle radius is proportional to the size of the deviation of the observed intensity from the upper bound of the FDR envelope divided by the difference of the upper FDR envelope and the centre of the envelope.
+The circle radius is proportional to the size of the deviation of the observed
+intensity from the upper bound of the FDR envelope divided by the difference of
+the upper FDR envelope and the centre of the envelope.
 Thus, the size is a measure of relative exceedance.
 
+
+\section*{Acknowledgements}
+
+We thank Mikko Kuronen for helping to make the code faster.
 
 
 %% -- Bibliography -------------------------------------------------------------
