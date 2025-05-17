@@ -5,11 +5,11 @@
 #'
 #' The data here was constructed based on the following data:
 #' The GDP data are publicly available at
-#' \url{https://data.worldbank.org/indicator/NY.GDP.PCAP.CD}.
+#' https://data.worldbank.org/indicator/NY.GDP.PCAP.CD.
 #' The excel file that we downloaded was called
 #' \code{API_NY.GDP.PCAP.CD_DS2_en_excel_v2_3358980.xls}.
 #' The inflation rates are publicly available at
-#' \url{https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG}.
+#' https://data.worldbank.org/indicator/NY.GDP.DEFL.KD.ZG.
 #' The excel file that we downloaded was called
 #' \code{API_NY.GDP.DEFL.KD.ZG_DS2_en_excel_v2_3469555.xls},
 #' from there we took only the inflation rates for United States.
