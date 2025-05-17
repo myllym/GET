@@ -1,3 +1,8 @@
+Changes in GET 1.0-6
+
+- Added hotspots.poislpp, hotspots.MatClustlpp, and updated associated
+vignette 'GET: Hotspot detection on a linear network'
+
 Changes in GET 1.0-4
 
 - Reference updates

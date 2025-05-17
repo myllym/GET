@@ -1,6 +1,6 @@
 Package: GET
-Version: 1.0-5
-Date: 2025-03-29
+Version: 1.0-6
+Date: 2025-05-15
 Title: Global Envelopes
 Encoding: UTF-8
 Authors@R: c(
@@ -44,8 +44,14 @@ Suggests:
     patchwork,
     quantreg,
     R.rsp,
+    sf,
     sp,
-    spatstat.geom, spatstat.explore, spatstat.model, spatstat.linnet,
+    spatstat.explore,
+    spatstat.geom,
+    spatstat.Knet,
+    spatstat.linnet,
+    spatstat.model,
+    spatstat.random,
     testthat
 Description: Implementation of global envelopes for a set of general d-dimensional vectors T
     in various applications. A 100(1-alpha)% global envelope is a band bounded by two
