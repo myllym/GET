@@ -167,46 +167,59 @@ MatClust.lppm <- function(PP, formula, subwin = NULL, valpha, vR, data,
   Karray <- array(0, c(length(valpha), length(vR),length(r)))
 
   fakeArgs <- rep(1, times=nsim)
+  # Summarize result of all simulations into one array
+  comp_KMC <- function(sim_results, r) {
+    KMC <- array(0,length(r))
+    for(s in 1:length(sim_results)) {
+      KMC <- KMC + sim_results[[s]]
+    }
+    KMC
+  }
 
-  # if the number of cores has not been set by ncores function parameter,
+  # If the number of cores has not been set by ncores function parameter,
   # try to detect it on the host
   if ( is.null(ncores) ) {
     # detect number of cores
     ncores <- max(1L, detectCores()-1, na.rm = TRUE)
   }
 
-  # create cluster with ncores nodes
-  cl <- makeCluster(ncores, type = "SOCK")
-  clusterEvalQ(cl, library("spatstat"))
-  clusterEvalQ(cl, library("spatstat.Knet"))
-  #clusterExport(cl=cl, "rMatClustlpp")
-  print(clusterEvalQ(cl, ls(all.names = TRUE)))
-
-  for(i in 1:length(valpha)) {
-    for(j in 1:length(vR)) {
-      # Compute the average K of 10 simulation from the model
-      KMC_sim_results <- clusterApplyLB(cl, fakeArgs, lmcppm_par_inner,
-                                       valpha[i], EIP, PPsub, vR[j], M, r)
-      # DO THIS FOR CASE ncores=1
-      # KMC_sim_results <- lapply(fakeArgs, lmcppm_par_inner,
-      #                           valpha[i], EIP, PPsub, vR[j], M, r)
-
-      # summarize result of all simulations into one array
-      KMC <- array(0,length(r))
-      for(s in 1:length(KMC_sim_results)) {
-        KMC <- KMC + KMC_sim_results[[s]]
+  if(ncores == 1) {
+    for(i in 1:length(valpha)) {
+      for(j in 1:length(vR)) {
+        # Compute the average K of 10 simulation from the model
+        KMC_sim_results <- lapply(fakeArgs, lmcppm_par_inner,
+                                  valpha[i], EIP, PPsub, vR[j], M, r)
+        KMC <- comp_KMC(KMC_sim_results, r)
+        # Compute the difference between estimated and average K
+        Contrast[i,j] <- sqrt(sum((PPsub_K$est-KMC/nsim)^2))
+        Karray[i,j,] <- KMC/nsim
       }
-
-      # Compute the difference between estimated and average K
-      Contrast[i,j] <- sqrt(sum((PPsub_K$est-KMC/nsim)^2))
-      Karray[i,j,] <- KMC/nsim
     }
   }
+  else {
+    # create cluster with ncores nodes
+    cl <- makeCluster(ncores, type = "SOCK")
+    clusterEvalQ(cl, library("spatstat"))
+    clusterEvalQ(cl, library("spatstat.Knet"))
+    #print(clusterEvalQ(cl, ls(all.names = TRUE)))
 
-  # stop the cluster
-  stopCluster(cl)
+    for(i in 1:length(valpha)) {
+      for(j in 1:length(vR)) {
+        # Compute the average K of 10 simulation from the model
+        KMC_sim_results <- clusterApplyLB(cl, fakeArgs, lmcppm_par_inner,
+                                         valpha[i], EIP, PPsub, vR[j], M, r)
+        KMC <- comp_KMC(KMC_sim_results, r)
+        # Compute the difference between estimated and average K
+        Contrast[i,j] <- sqrt(sum((PPsub_K$est-KMC/nsim)^2))
+        Karray[i,j,] <- KMC/nsim
+      }
+    }
 
-  # Finding the minimum value of the contrast
+    # stop the cluster
+    stopCluster(cl)
+  }
+
+  # Find the minimum value of the contrast
   id <- which(Contrast == min(Contrast), arr.ind = TRUE)
   alpha <- valpha[id[,1]]
   R <- vR[id[,2]]
@@ -255,16 +268,19 @@ hotspots_par <- function(model=c("pois", "MatClust"),
     ncores <- max(1L, detectCores()-1, na.rm = TRUE)
   }
 
-  # create cluster with ncores nodes
-  cl <- makeCluster(ncores, type = "SOCK")
-  clusterEvalQ(cl, library("spatstat"))
-  #clusterExport(cl=cl, "rMatClustlpp")
-
-  sims.densi <- clusterApplyLB(cl, fakeArgs, hotspots_par_inner,
-                              clusterparam, EIP, PP, sigma)
-
-  # stop the cluster
-  stopCluster(cl)
+  if(ncores == 1) {
+    sims.densi <- lapply(fakeArgs, hotspots_par_inner,
+                         clusterparam, EIP, PP, sigma)
+  }
+  else {
+    # create cluster with ncores nodes
+    cl <- makeCluster(ncores, type = "SOCK")
+    clusterEvalQ(cl, library("spatstat"))
+    sims.densi <- clusterApplyLB(cl, fakeArgs, hotspots_par_inner,
+                                 clusterparam, EIP, PP, sigma)
+    # stop the cluster
+    stopCluster(cl)
+  }
 
   yx <- expand.grid(densi$yrow, densi$xcol)
 
@@ -285,12 +301,16 @@ hotspots_par <- function(model=c("pois", "MatClust"),
 
 #' Hot spots detection for Poisson point process
 #' - parallel version
+#'
+#' See the hotspots vignette available by starting R, typing
+#' \code{library("GET")} and \code{vignette("GET")}.
 #' @param PP The point pattern living in a network.
 #' @param formula A formula for the intensity.
 #' @param sigma To be passed to density.lpp.
 #' @param nsim Number of simulations to be performed.
 #' @param ... Additional parameters to be passed to \code{\link{fdr_envelope}}.
 #' @inheritParams MatClust.lppm
+#' @references Mrkvička et al. (2023). Hotspot detection on a linear network in the presence of covariates: A case study on road crash data. DOI: 10.2139/ssrn.4627591
 #' @export
 hotspots.poislpp <- function(PP, formula, data,
                              sigma=250, nsim = 10000,
@@ -302,9 +322,13 @@ hotspots.poislpp <- function(PP, formula, data,
 
 #' Hot spots detection for Matern point process
 #' - parallel version
+#'
+#' See the hotspots vignette available by starting R, typing
+#' \code{library("GET")} and \code{vignette("GET")}.
 #' @inheritParams pois.lppm
 #' @inheritParams hotspots.poislpp
 #' @inheritParams rMatClustlpp
+#' @references Mrkvička et al. (2023). Hotspot detection on a linear network in the presence of covariates: A case study on road crash data. DOI: 10.2139/ssrn.4627591
 #' @export
 hotspots.MatClustlpp <- function(PP, formula, R, alpha, data,
                                  sigma = 250, nsim = 10000,
