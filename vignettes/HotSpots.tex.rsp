@@ -309,7 +309,7 @@ R> vR <- seq(250, 2500, by=500)
 R> myformula <- PP ~ Traffic + ForestDensity + BuildingDensity
 R> system.time( # Took about 1,2 minutes with 4 cores on a laptop
    MatCl <- MatClust.lppm(PP=PPfull, formula=myformula, subwin=subwin,
-                          valpha=valpha, vR=vR, data=roadcrash, ncores = 4)
+                          valpha=valpha, vR=vR, data=roadcrash, ncores = 1)
  )
 \end{Sinput}
 \begin{Soutput}

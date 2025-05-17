@@ -289,9 +289,9 @@ set.seed(2023)
 valpha <- seq(5, 30, by=5)
 vR <- seq(250, 2500, by=500)
 myformula <- PP ~ Traffic + ForestDensity + BuildingDensity
-system.time( # Took about 1,2 minutes with 4 cores on a laptop
+system.time( # Took about 1,2 minutes on a laptop
   MatCl <- MatClust.lppm(PP=PPfull, formula=myformula, subwin=subwin,
-                         valpha=valpha, vR=vR, data=roadcrash, ncores = 4)
+                         valpha=valpha, vR=vR, data=roadcrash, ncores = 1)
 )
 @
 %

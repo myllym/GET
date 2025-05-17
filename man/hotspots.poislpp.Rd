@@ -33,6 +33,9 @@ If NULL, all available cores are used.}
 \item{...}{Additional parameters to be passed to \code{\link{fdr_envelope}}.}
 }
 \description{
-Hot spots detection for Poisson point process
-- parallel version
+See the hotspots vignette available by starting R, typing
+\code{library("GET")} and \code{vignette("GET")}.
+}
+\references{
+Mrkvička et al. (2023). Hotspot detection on a linear network in the presence of covariates: A case study on road crash data. DOI: 10.2139/ssrn.4627591
 }
