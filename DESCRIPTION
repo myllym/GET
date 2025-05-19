@@ -1,6 +1,6 @@
 Package: GET
-Version: 1.0-7
-Date: 2025-05-19
+Version: 1.0-8
+Date: 2025-05-20
 Title: Global Envelopes
 Encoding: UTF-8
 Authors@R: c(
