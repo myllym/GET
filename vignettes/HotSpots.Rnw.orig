@@ -165,14 +165,11 @@ A part of the analysis, as will be described below, uses a subset of the
 \code{roadcrash} data, because the computations of inhomogeneous $K$-function
 and density can be rather computational.
 
-Here we define the subwindow and plot the full pattern as well as the pattern
-living in the subwindow.
+Here we define the subwindow and plot the pattern living in the subwindow.
 %
 <<data_crashes_thin, fig=TRUE, height=4.125, width=6.125>>=
 subwin <- owin(c(-760000, -740000), c(-1160000, -1140000))
 
-par(mfrow=c(1,2))
-plot(PPfull, main="Road crashes: full pattern")
 plot(PPfull[, subwin], main="Road crashes: subpattern")
 @
 %
@@ -182,17 +179,8 @@ In our example here and available in \code{roadcrash} in \pkg{GET} are three cov
 namely average traffic volume (number of vehicles per 24 hours), forest density
 and building density in the cell.
 
-The following plots show these covariates in the full observation window and
-in the subwindow defined above.
+The following plots show these covariates in the subwindow defined above.
 
-%
-<<data_covariates, fig=TRUE, height=3.0625, width=6.125>>=
-par(mfrow=c(1,3))
-plot(roadcrash$Traffic, main="Traffic")
-plot(roadcrash$ForestDensity, main="Forest density")
-plot(roadcrash$BuildingDensity, main="Building density")
-@
-%
 %
 <<data_covariates_subwin, fig=TRUE, height=3.0625, width=6.125>>=
 par(mfrow=c(1,3))

@@ -166,14 +166,11 @@ A part of the analysis, as will be described below, uses a subset of the
 \code{roadcrash} data, because the computations of inhomogeneous $K$-function
 and density can be rather computational.
 
-Here we define the subwindow and plot the full pattern as well as the pattern
-living in the subwindow.
+Here we define the subwindow and plot the pattern living in the subwindow.
 %
 \begin{Schunk}
 \begin{Sinput}
 R> subwin <- owin(c(-760000, -740000), c(-1160000, -1140000))
-R> par(mfrow=c(1,2))
-R> plot(PPfull, main="Road crashes: full pattern")
 R> plot(PPfull[, subwin], main="Road crashes: subpattern")
 \end{Sinput}
 \end{Schunk}
@@ -185,20 +182,8 @@ In our example here and available in \code{roadcrash} in \pkg{GET} are three cov
 namely average traffic volume (number of vehicles per 24 hours), forest density
 and building density in the cell.
 
-The following plots show these covariates in the full observation window and
-in the subwindow defined above.
+The following plots show these covariates in the subwindow defined above.
 
-%
-\begin{Schunk}
-\begin{Sinput}
-R> par(mfrow=c(1,3))
-R> plot(roadcrash$Traffic, main="Traffic")
-R> plot(roadcrash$ForestDensity, main="Forest density")
-R> plot(roadcrash$BuildingDensity, main="Building density")
-\end{Sinput}
-\end{Schunk}
-\includegraphics{HotSpots-data_covariates}
-%
 %
 \begin{Schunk}
 \begin{Sinput}
@@ -266,7 +251,7 @@ R> system.time(
 \end{Sinput}
 \begin{Soutput}
    user  system elapsed 
-  11.67    0.04   11.72 
+  12.83    0.05   12.92 
 \end{Soutput}
 \end{Schunk}
 %
@@ -307,14 +292,14 @@ Remark here that the first order structure is estimated below from the full patt
 R> valpha <- seq(5, 30, by=5)
 R> vR <- seq(250, 2500, by=500)
 R> myformula <- PP ~ Traffic + ForestDensity + BuildingDensity
-R> system.time( # Took about 1,2 minutes with 4 cores on a laptop
+R> system.time( # Took about 1,2 minutes on a laptop
    MatCl <- MatClust.lppm(PP=PPfull, formula=myformula, subwin=subwin,
                           valpha=valpha, vR=vR, data=roadcrash, ncores = 1)
  )
 \end{Sinput}
 \begin{Soutput}
    user  system elapsed 
-  10.84    8.62   76.41 
+  65.30    1.67   67.21 
 \end{Soutput}
 \end{Schunk}
 %
