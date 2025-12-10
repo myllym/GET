@@ -359,6 +359,7 @@ genFvaluesSimplePreCalcedBatched <- function(Y, precalc) {
 #' Only relevant if \code{mc.cores} is more than 1.
 #' @param cl Allows parallelization through the use of \code{\link{parLapply}} (works also
 #' in Windows), see the argument \code{cl} there, and examples.
+#' @param savelm Logical. If TRUE, the lm model fits are returned in the attribute 'lmfits' (list).
 #' @param fast Logical. See details.
 #' @return A \code{global_envelope} or \code{combined_global_envelope} object,
 #' which can be printed and plotted directly.
@@ -441,7 +442,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced,
                       curve_sets, factors = NULL,
                       contrasts = FALSE, lm.args = NULL, GET.args = NULL,
                       mc.cores = 1L, mc.args = NULL, cl = NULL,
-                      savefuns = FALSE,
+                      savefuns = FALSE, savelm = FALSE,
                       fast = TRUE) {
   time0 <- proc.time()
   use.dummy.coef <- is.logical(contrasts)
@@ -489,6 +490,46 @@ graph.flm <- function(nsim, formula.full, formula.reduced,
       ylab <- expression(italic(hat(beta)[i](r)-hat(beta)[j](r)))
     }
   }
+  if(fast %in% c("ne", "qr")) { # Setting fast = "qr" allows using qr decomposition, but only if contrasts=NULL.
+    df <- X$dfs[[1]]
+    df$Y <- 0
+    X1 <- model.matrix(formula.full, data=df)
+    X0 <- model.matrix(formula.reduced, data=df)
+    nameinteresting <- setdiff(colnames(X1), colnames(X0))
+
+    As <- lapply(X$dfs, function(df) {
+      df$Y <- 0
+      X <- model.matrix(formula.full, data=df)
+      # This should have been already checked, but just to make sure
+      if(!all(nameinteresting %in% colnames(X))) stop("'ne' doesn't work with factors.")
+      if(fast=="qr")
+        A <- qr(X)
+      else
+        A <- (solve(t(X)%*%X) %*% t(X))[nameinteresting,,drop=FALSE]
+      A
+    })
+    if(fast == "ne") {
+      genCoef <- function(Y, dfs, formula.full, nameinteresting) genCoefmeans.ne(Y, As)
+    } else {
+      genCoef <- function(Y, dfs, formula.full, nameinteresting) genCoefmeans.qr(Y, As, nameinteresting)
+    }
+  }
+
+  #-- The full model fit to data
+  if(savelm) {
+    loopfun1 <- function(i) {
+      if(length(X$dfs) == 1) { # This holds if method = "lm"
+        df <- X$dfs[[1]]
+        df$Y <- X$Y[,i]
+      }
+      else { # This otherwise
+        df <- X$dfs[[i]]
+      }
+      do.call(lm, c(list(formula.full, data=df), lm.args))
+    }
+    if(is.null(cl)) fit_full <- do.call(mclapply, c(list(X=1:X$nr, FUN=loopfun1, mc.cores=mc.cores), mc.args))
+    else fit_full <- parLapply(cl, 1:X$nr, loopfun1)
+  }
 
   #-- Freedman-Lane procedure
   # Fit the reduced model at each argument value to get the fitted values and residuals
@@ -514,35 +555,8 @@ graph.flm <- function(nsim, formula.full, formula.reduced,
     res.m <- sapply(mclapply_res, function(x) x$res.m)
   }
 
-  obs <- NULL
-  if(fast %in% c("ne", "qr")) {
-    df <- X$dfs[[1]]
-    df$Y <- 0
-    X1 <- model.matrix(formula.full, data=df)
-    X0 <- model.matrix(formula.reduced, data=df)
-    nameinteresting <- setdiff(colnames(X1), colnames(X0))
-
-    As <- lapply(X$dfs, function(df) {
-      df$Y <- 0
-      X <- model.matrix(formula.full, data=df)
-      # This should have been already checked, but just to make sure
-      if(!all(nameinteresting %in% colnames(X))) stop("'ne' doesn't work with factors.")
-      if(fast=="qr")
-        A <- qr(X)
-      else
-        A <- (solve(t(X)%*%X) %*% t(X))[nameinteresting,,drop=FALSE]
-      A
-    })
-    if(fast == "ne") {
-      genCoef <- function(Y, dfs, formula.full, nameinteresting) genCoefmeans.ne(Y, As)
-    } else {
-      genCoef <- function(Y, dfs, formula.full, nameinteresting) genCoefmeans.qr(Y, As, nameinteresting)
-    }
-  }
-
   # Fit the full model to the data and obtain the coefficients
-  if(is.null(obs))
-    obs <- do.call(genCoef, c(list(X$Y, X$dfs, formula.full, nameinteresting), lm.args))
+  obs <- do.call(genCoef, c(list(X$Y, X$dfs, formula.full, nameinteresting), lm.args))
 
   # Simulations by permuting the residuals + calculate the coefficients
   Yperm <- function() { # Permutation
@@ -571,6 +585,7 @@ graph.flm <- function(nsim, formula.full, formula.reduced,
   # Re-define the default ylab
   res <- envelope_set_labs(res, ylab=ylab)
   attr(res, "call") <- match.call()
+  if(savelm) attr(res, "lmfits") <- fit_full
   if(savefuns) attr(res, "simfuns") <- csets
   time3 <- proc.time()
   attr(res, "runtime") <- list(pre=time1-time0, teststatistics=time2-time1, envelope=time3-time2)
