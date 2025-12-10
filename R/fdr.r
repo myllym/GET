@@ -119,8 +119,16 @@ fdr_rejections_between_two_rank <- function(ind, ind_Robs, limit, curve_set,
     }
     else { # llimit or ulimit
       for(i in seq_along(gammas)) {
-        if(alternative != "greater") LB <- llimit + (gammas[i])*(e2$LB-llimit) else LB <- -Inf
-        if(alternative != "less") UB <- ulimit - (gammas[i])*(ulimit-e2$UB) else UB <- Inf
+        if(alternative != "greater") {
+          if(is.null(llimit)) LB <- e2$LB + log(gammas[i]) * (e2$UB - e2$LB)
+          else LB <- llimit + (gammas[i])*(e2$LB-llimit)
+        }
+        else LB <- -Inf
+        if(alternative != "less") {
+          if(is.null(ulimit)) UB <- e2$UB - log(gammas[i]) * (e2$UB - e2$LB)
+          else UB <- ulimit - (gammas[i])*(ulimit-e2$UB)
+        }
+        else UB <- Inf
         R.obs_new[i] <- noutside(obs_curve, LB, UB, alternative)
         R0_new[i] <- nr*mult*gammas[i]/nsim
         e[[i]] <- list(LB=LB, UB=UB)
