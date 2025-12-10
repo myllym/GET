@@ -78,7 +78,7 @@ Description: Implementation of global envelopes for a set of general d-dimension
     Mrkvička et al. (2023) <doi:10.48550/arXiv.2309.04746>, and
     Konstantinou et al. (2024) <doi: 10.1007/s00180-024-01569-z>.
 License: GPL-3
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 URL: https://github.com/myllym/GET
 BugReports: https://github.com/myllym/GET/issues
 VignetteBuilder: R.rsp

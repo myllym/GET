@@ -17,6 +17,7 @@ graph.flm(
   mc.args = NULL,
   cl = NULL,
   savefuns = FALSE,
+  savelm = FALSE,
   fast = TRUE
 )
 }
@@ -61,6 +62,8 @@ in Windows), see the argument \code{cl} there, and examples.}
 
 \item{savefuns}{Logical. If TRUE, then the functions from permutations are saved to the attribute
 simfuns.}
+
+\item{savelm}{Logical. If TRUE, the lm model fits are returned in the attribute 'lmfits' (list).}
 
 \item{fast}{Logical. See details.}
 }
