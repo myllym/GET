@@ -160,6 +160,7 @@ plotdefaultlabs <- function(x) {
 # An inner function for a 'dotplot' style envelope plot with ggplot2.
 #' @importFrom ggplot2 ggplot geom_segment aes .data geom_point scale_color_identity scale_x_discrete
 #' @importFrom grid arrow
+#' @importFrom rlang .data
 env_dotplot_ggplot <- function(x, labels=NULL, sign.col="red") {
   if(is.null(labels) && !is.null(x[['r']])) labels <- paste(round(x[['r']], digits=2))
   df <- as.data.frame(x)
@@ -208,7 +209,7 @@ linetype_values <- function() { c('dashed', 'solid') }
 # level = The significance level(s) of the data that are found in df.
 # If 0 (or other single number), then "lo" and "hi" should be found in df.
 # Otherwise several lo.xx and hi.xx, where xx represent different levels.
-#' @importFrom ggplot2 geom_ribbon aes_string geom_line
+#' @importFrom ggplot2 geom_ribbon aes geom_line
 #' @importFrom ggplot2 labs scale_linetype_manual
 basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main, level=0) {
   pE <- vector("list", length(level))
@@ -217,20 +218,20 @@ basic_stuff_for_env_ggplot <- function(df, xlab, ylab, main, level=0) {
   if(length(level) ==  1) cols <- 'grey59'
   else cols <- paste0('grey', floor(seq(80, 59, length=length(level))))
   for(i in seq_along(level)) {
-    pE[[i]] <- geom_ribbon(data = df, aes_string(x = "r", ymin = lonames[i], ymax = hinames[i]),
+    pE[[i]] <- geom_ribbon(data = df, aes(x = .data$r, ymin = .data[[lonames[i]]], ymax = .data[[hinames[i]]]),
                      fill = cols[i], alpha = 1)
   }
   c(pE, list(
-       geom_line(data = df, aes_(x = ~r, y = ~curves, group = ~type,
-                                 linetype = ~type)), # , size = 0.2
+       geom_line(data = df, aes(x = .data$r, y = .data$curves, group = .data$type,
+                                 linetype = .data$type)), # , size = 0.2
        labs(title = main, x = xlab, y = ylab),
        scale_linetype_manual(values = linetype_values(), name = '')))
 }
 basic_stuff_for_fclustplot <- function(df, xlab, ylab, main, fillcolor = 'grey59', alpha = 0.5, size=0.3) {
-  list(geom_ribbon(data = df, aes_(x = ~r, ymin = ~lo, ymax = ~hi),
+  list(geom_ribbon(data = df, aes(x = .data$r, ymin = .data$lo, ymax = .data$hi),
                    fill = fillcolor, alpha = alpha),
-       geom_line(data = df, aes_(x = ~r, y = ~curves, group = ~type,
-                                 linetype = ~type), size = size),
+       geom_line(data = df, aes(x = .data$r, y = .data$curves, group = .data$type,
+                                 linetype = .data$type), size = size),
        labs(title = main, x = xlab, y = ylab),
        scale_linetype_manual(values = 'solid', name = ''))
 }
@@ -243,7 +244,7 @@ basic_stuff_for_fclustplot <- function(df, xlab, ylab, main, fillcolor = 'grey59
 # @param ylab See \code{\link{plot.default}}.
 # @param color_outside Logical, whether to use sign.col.
 # @param sign.col Color for the observed curve outside the envelope.
-#' @importFrom ggplot2 ggplot theme guides geom_point aes_
+#' @importFrom ggplot2 ggplot theme guides geom_point aes
 env_ggplot <- function(x, main, xlab, ylab, sign.col="red") {
   if(!inherits(x, "global_envelope")) stop("Internal error.")
   df <- env_df_construction(x, NULL)
@@ -259,7 +260,7 @@ env_ggplot <- function(x, main, xlab, ylab, sign.col="red") {
                          env_hiname(attr(x, "alpha"), largest=TRUE))]
       names(df.outside)[3:4] <- c("lo", "hi")
       df.outside <- df.outside[df.outside$curves < df.outside$lo | df.outside$curves > df.outside$hi,]
-      p <- p + geom_point(data=df.outside, ggplot2::aes_(x = ~r, y = ~curves), color=sign.col, size=1)
+      p <- p + geom_point(data=df.outside, ggplot2::aes(x = .data$r, y = .data$curves), color=sign.col, size=1)
     }
   }
   p
@@ -267,14 +268,14 @@ env_ggplot <- function(x, main, xlab, ylab, sign.col="red") {
 
 # An internal function for making a ggplot2 style "functional boxplot"
 #' @importFrom viridisLite viridis
-#' @importFrom ggplot2 ggplot geom_ribbon aes_ guides geom_line scale_color_identity
+#' @importFrom ggplot2 ggplot geom_ribbon aes guides geom_line scale_color_identity
 fboxplot_ggplot <- function(x, main, xlab, ylab, plot_outliers = TRUE) {
     if(!inherits(x, "fboxplot")) stop("x should have class fboxplot. Possibly internal error.")
 
     # Basic df
     df <- env_df_construction(x, NULL)
     p <- ( ggplot2::ggplot()
-           + ggplot2::geom_ribbon(data = df, ggplot2::aes_(x = ~r, ymin = ~whisker.lo, ymax = ~whisker.hi),
+           + ggplot2::geom_ribbon(data = df, ggplot2::aes(x = .data$r, ymin = .data$whisker.lo, ymax = .data$whisker.hi),
                                   fill = 'grey80', alpha = 1)
            + basic_stuff_for_env_ggplot(df, xlab, ylab, main)
            + guides(linetype = "none") )
@@ -286,7 +287,7 @@ fboxplot_ggplot <- function(x, main, xlab, ylab, plot_outliers = TRUE) {
                            curves = c(out),
                            id = rep(colnames(out), each=length(x[['r']])),
                            col = rep(col, each=length(x[['r']])))
-      p <- ( p + geom_line(data = out.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id, col=~col))
+      p <- ( p + geom_line(data = out.df, ggplot2::aes(x = .data$r, y = .data$curves, group = .data$id, col=.data$col))
                + scale_color_identity("", labels = colnames(out), guide = "legend") )
     }
     p
@@ -311,7 +312,7 @@ combined_df_construction <- function(x, labels) {
 # An internal function for making a ggplot2 style "combined global envelope plot"
 # @param labels Labels for components of the combined tests.
 # @param max_ncols_of_plots The maximum number of columns for figures. Default 2.
-#' @importFrom ggplot2 ggplot facet_wrap guides geom_point aes_ theme
+#' @importFrom ggplot2 ggplot facet_wrap guides geom_point aes theme
 env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
                        max_ncols_of_plots = 2, sign.col="red") {
   if(!inherits(x, "list")) stop("Internal error. x is not a list.")
@@ -338,7 +339,7 @@ env_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
                          "plotmain")]
       names(df.outside)[3:4] <- c("lo", "hi")
       df.outside <- df.outside[df.outside$curves < df.outside$lo | df.outside$curves > df.outside$hi,]
-      p <- p + geom_point(data=df.outside, ggplot2::aes_(x=~r, y=~curves), color=sign.col, size=1)
+      p <- p + geom_point(data=df.outside, ggplot2::aes(x=.data$r, y=.data$curves), color=sign.col, size=1)
     }
   }
   p
@@ -384,7 +385,7 @@ env_combined_dotplot <- function(x, main, xlab, ylab, labels, scales = "free",
 
 # An internal function for making a ggplot2 style "combined functional boxplot"
 #' @importFrom viridisLite viridis
-#' @importFrom ggplot2 ggplot geom_ribbon aes_ facet_wrap guides geom_line scale_color_identity
+#' @importFrom ggplot2 ggplot geom_ribbon aes facet_wrap guides geom_line scale_color_identity
 fboxplot_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free",
                                 max_ncols_of_plots = 2, plot_outliers = TRUE) {
   if(!inherits(x, "list")) stop("Internal error. x is not a list.")
@@ -397,7 +398,7 @@ fboxplot_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free
   df <- combined_df_construction(x, labels=labels)
   p <- ( ggplot2::ggplot()
          + ggplot2::geom_ribbon(data = df,
-                                ggplot2::aes_(x = ~r, ymin = ~whisker.lo, ymax = ~whisker.hi),
+                                ggplot2::aes(x = .data$r, ymin = .data$whisker.lo, ymax = .data$whisker.hi),
                                 fill = 'grey80', alpha = 1)
          + basic_stuff_for_env_ggplot(df, xlab, ylab, main)
          + facet_wrap(~ plotmain, scales=scales,
@@ -414,7 +415,7 @@ fboxplot_combined_ggplot <- function(x, main, xlab, ylab, labels, scales = "free
                  col = rep(col_values, each=length(x[[i]][['r']])),
                  plotmain = factor(rep(labels[i], each=length(x[[i]][['r']])), levels=labels))
     }))
-    p <- ( p + ggplot2::geom_line(data = out.df, ggplot2::aes_(x = ~r, y = ~curves, group = ~id, col = ~col))
+    p <- ( p + ggplot2::geom_line(data = out.df, ggplot2::aes(x = .data$r, y = .data$curves, group = .data$id, col = .data$col))
              + scale_color_identity("Outliers", labels = colnames(out[[1]]), guide = "legend") )
   }
   p

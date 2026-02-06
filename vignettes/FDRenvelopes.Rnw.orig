@@ -238,10 +238,10 @@ GDPdf <- data.frame(r = rep(POPcset$r, times=nfunc),
                     funcs = c(GDPfuncs),
                     id =  factor(rep(1:nfunc, each=nrow(GDPfuncs)), levels = 1:nfunc),
                     Continent = rep(groups, each=narg))
-p1 <- ( ggplot() + geom_line(data=POPdf, aes_(x = ~r, y = ~funcs, group = ~id, col = ~Continent))
+p1 <- ( ggplot() + geom_line(data=POPdf, aes(x = r, y = funcs, group = id, col = Continent))
        + labs(title="", y="Population growth", x = "Year")
        + scale_color_manual(values=viridisLite::viridis(4)))#c("#21908CFF", "#440154FF", "#5DC863FF", "grey70")))
-p2 <- ( ggplot() + geom_line(data=GDPdf, aes_(x = ~r, y = ~funcs, group = ~id, col = ~Continent))
+p2 <- ( ggplot() + geom_line(data=GDPdf, aes(x = r, y = funcs, group = id, col = Continent))
         + labs(title="", y="GDP (in 1960 USD)", x = "Year")
         + scale_color_manual(values=viridisLite::viridis(4))) #c("#21908CFF", "#440154FF", "#5DC863FF", "grey70")))
 p1 + p2 + plot_layout(guides="collect") & theme(legend.position="bottom")

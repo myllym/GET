@@ -421,7 +421,7 @@ print.curve_set <- function(x, ...) {
 #' @seealso \code{\link{create_curve_set}}
 #'
 #' @export
-#' @importFrom ggplot2 ggplot geom_line aes_ scale_color_manual labs
+#' @importFrom ggplot2 ggplot geom_line aes scale_color_manual labs
 #' @importFrom viridisLite viridis
 #' @examples
 #' cset <- curve_set(r = 1:10, obs = matrix(runif(10*5), ncol=5))
@@ -501,12 +501,12 @@ plot.curve_set <- function(x, idx, col_idx, idx_name = "", col = 'grey70', ...) 
   if(!is.null(idx)) {
     col_values <- c(col_idx, col)
     names(col_values) <- idx_labs
-    p <- ( p + geom(data=df, aes_(x = ~r, y = ~funcs, group = ~id, col = ~idx))
+    p <- ( p + geom(data=df, aes(x = .data$r, y = .data$funcs, group = .data$id, col = .data$idx))
            + scale_color_manual(values = col_values)
            + labs(col = idx_name) )
   }
   else {
-    p <- ( p + geom(data=df, aes_(x = ~r, y = ~funcs, group = ~id), col = col) )
+    p <- ( p + geom(data=df, aes(x = .data$r, y = .data$funcs, group = .data$id), col = col) )
   }
   p
 }

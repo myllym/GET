@@ -204,7 +204,7 @@ print.fclust <- function(x, ...) {
 #' The clusters are shown respectively for each \code{curve_set}. Thus for each \code{curve_set}
 #' the panel with all the medoids is shown followed by all clusters represented by central region,
 #' medoid and all curves belonging to it.
-#' 
+#'
 #' For all sources, the function plots the deepest curves for all clusters and
 #' the deepest curve of each cluster together with the desired central region and
 #' all the curves of the group.
@@ -229,7 +229,7 @@ print.fclust <- function(x, ...) {
 #' @references
 #' Dai, W., Athanasiadis, S., Mrkvička, T. (2021) A new functional clustering method with combined dissimilarity sources and graphical interpretation. Intech open, London, UK. DOI: 10.5772/intechopen.100124
 #' @export
-#' @importFrom ggplot2 ggplot aes_ geom_line guides facet_wrap facet_grid vars
+#' @importFrom ggplot2 ggplot aes geom_line guides facet_wrap facet_grid vars
 plot.fclust <- function(x, plotstyle = c("marginal", "joined"), coverage = 0.5,
                         nstep, ncol, ...) {
   csets <- x$curve_sets
@@ -332,8 +332,8 @@ plot.fclust <- function(x, plotstyle = c("marginal", "joined"), coverage = 0.5,
   size <- 0.3
   df$Group <- df$plotmain
   p1 <- ( ggplot()
-          + geom_line(data = df, aes_(x = ~r, y = ~curves, group = ~Group,
-                                    linetype = ~Group), size = size, col='black')
+          + geom_line(data = df, aes(x = .data$r, y = .data$curves, group = .data$Group,
+                                    linetype = .data$Group), size = size, col='black')
           + set_envelope_legend_position()
           + labs(title = "", x = d$xlab, y = d$ylab)
   )
@@ -341,7 +341,7 @@ plot.fclust <- function(x, plotstyle = c("marginal", "joined"), coverage = 0.5,
   else p1 <- ( p1 + facet_wrap(~type, scales="free_y") )
 
   p2 <- ( ggplot()
-         + geom_line(data = funcs.df, aes_(x = ~r, y = ~curves, group = ~id), col='grey70')
+         + geom_line(data = funcs.df, aes(x = .data$r, y = .data$curves, group = .data$id), col='grey70')
          + basic_stuff_for_fclustplot(df, d$xlab, d$ylab, main="", size=size)
          + guides(linetype = "none")
   )

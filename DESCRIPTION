@@ -29,6 +29,7 @@ Imports:
     grid,
     gridExtra,
     parallel,
+    rlang,
     stats,
     utils,
     viridisLite
