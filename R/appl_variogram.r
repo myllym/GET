@@ -48,6 +48,8 @@ permvariogram <- function(object, data, vars, perm=TRUE, ...) {
 #' @param nsim The number of permutations.
 #' @param data A data frame where the names in formula are to be found. If NULL,
 #' the data are assumed to be found in the \code{object}.
+#' Possibly a 'SpatialPointsDataFrame', and then coordinates variables can be
+#' found in coordinates(data).
 #' @param ... Additional parameters to be passed to \code{\link[gstat]{variogram}}.
 #' @param GET.args A named list of additional arguments to be passed to \code{\link{global_envelope_test}}.
 #' @inheritParams graph.fanova
@@ -113,7 +115,11 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL,
     if(is.null(data)) data <- object$data[[1]]$data
     vars <- all.vars(object$data[[1]]$formula)
   }
-  if(!all(vars %in% names(data))) stop("The variables found in the given gstat object do not exist in the first \"data\" component.")
+  provided_variables <- names(data)
+  if(inherits(data, "SpatialPointsDataFrame")) {
+    provided_variables <- c(provided_variables, colnames(coordinates(data)))
+  }
+  if(!all(vars %in% provided_variables)) stop("The variables found in the given gstat object do not exist in the first \"data\" component.")
   # The case of regression model(s):
   if(inherits(object, "formula") & object[[3]] != 1) { # there is a regression model:
     data$resid <- stats::residuals(stats::lm(formula=object, data=data, na.action = stats::na.exclude))

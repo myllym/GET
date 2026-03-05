@@ -23,7 +23,9 @@ in case of absence of regressors, use e.g. z~1. See \code{\link[gstat]{variogram
 \item{nsim}{The number of permutations.}
 
 \item{data}{A data frame where the names in formula are to be found. If NULL,
-the data are assumed to be found in the \code{object}.}
+the data are assumed to be found in the \code{object}.
+Possibly a 'SpatialPointsDataFrame', and then coordinates variables can be
+found in coordinates(data).}
 
 \item{...}{Additional parameters to be passed to \code{\link[gstat]{variogram}}.}
 
