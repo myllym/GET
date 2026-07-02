@@ -1,8 +1,8 @@
 Changes in GET 1.0-8
 
-- Removed hotspots.poislpp, hotspots.MatClustlpp, and updated associated
-vignette 'GET: Hotspot detection on a linear network'. These were moved to a
-separate R package called pphotspot.
+- Removed hotspots.poislpp, hotspots.MatClustlpp, roadcrash data and updated
+associated vignette 'GET: Hotspot detection on a linear network'. These were
+moved to a separate R package called pphotspot.
 
 Changes in GET 1.0-7
 
