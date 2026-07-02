@@ -117,7 +117,7 @@ GET.variogram <- function(object, nsim = 999, data = NULL, ..., GET.args = NULL,
   }
   provided_variables <- names(data)
   if(inherits(data, "SpatialPointsDataFrame")) {
-    provided_variables <- c(provided_variables, colnames(coordinates(data)))
+    provided_variables <- c(provided_variables, colnames(sp::coordinates(data)))
   }
   if(!all(vars %in% provided_variables)) stop("The variables found in the given gstat object do not exist in the first \"data\" component.")
   # The case of regression model(s):
