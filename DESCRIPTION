@@ -5,7 +5,8 @@ Title: Global Envelopes
 Encoding: UTF-8
 Authors@R: c(
     person(given = 'Mari', family = 'Myllymäki', role = c('aut', 'cre'),
-    email = 'mari.myllymaki@luke.fi'),
+    email = 'mari.myllymaki@luke.fi',
+    comment = c(ORCID = "0000-0002-2713-7088")),
     person(given = 'Tomáš', family = 'Mrkvička', role = 'aut',
     email = 'mrkvicka.toma@gmail.com'),
     person(given = 'Mikko', family = 'Kuronen', role = 'ctb',
