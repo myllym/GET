@@ -55,7 +55,7 @@ and Mikko Kuronen\\Natural Resources Institute Finland (Luke)}
 This vignette gives examples of global quantile regression, as proposed in
 \citet{MrkvickaEtal2023b} and as implemented in the \proglang{R} package
 \pkg{GET}.
-When citing the vignette and package please cite \citet{MyllymakiMrkvicka2023}
+When citing the vignette and package please cite \citet{MyllymakiMrkvicka2024}
 and \citet{MrkvickaEtal2023b}, and further relevant references given by typing
 \code{citation("GET")} in \proglang{R}.
 }
@@ -92,7 +92,7 @@ and \citet{MrkvickaEtal2023b}, and further relevant references given by typing
 \section{Introduction}
 
 This vignette gives examples of the use of global quantile regression \citep{MrkvickaEtal2023b}.
-The examples utilize the \proglang{R} \citep{R2023} package \pkg{quantreg} \citep{quantreg} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2023}. The plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
+The examples utilize the \proglang{R} \citep{R2023} package \pkg{quantreg} \citep{quantreg} in addition to the \pkg{GET} package \citep{MyllymakiMrkvicka2024}. The plots are produced by the use of the \pkg{ggplot2} package \citep{Wickham2016}, where we utilize the theme \code{theme_bw} for this document.
 %
 \begin{Schunk}
 \begin{Sinput}
