@@ -58,7 +58,7 @@ find_calc_pointwiserank <- function(measure, alternative) {
 rank_matrix_cols <- function(x) {
   n <- dim(x)[2]
   ranks <- numeric(n)
-  perm <- do.call("order", split(x, row(x))) # indices! of the functions from the most extreme to least extreme one
+  perm <- do.call("order", lapply(1:nrow(x), function(i) x[i,])) # indices! of the functions from the most extreme to least extreme one
   v <- x[,perm[1]]
 
   s <- 1
@@ -129,6 +129,25 @@ scale_ranks <- function(distance, measure) {
   else distance/length(distance)
 }
 
+
+distance_from_partial_forder <- function(measure, partial_forder, nr) {
+  switch(measure,
+         rank = {
+           distance <- partial_forder
+         },
+         erl = {
+           if(is.vector(partial_forder)) partial_forder <- matrix(partial_forder, nrow=1) # the case nr == 1
+           distance <- rank_matrix_cols(partial_forder)
+         },
+         cont = {
+           distance <- partial_forder
+         },
+         area = {
+           distance <- partial_forder[1,] - partial_forder[2,] / nr
+         })
+  distance <- scale_ranks(distance, measure)
+}
+
 # Functionality for functional ordering based on a curve set
 individual_forder <- function(curve_set,
                               measure = 'erl', scaling = 'qdir',
@@ -161,21 +180,7 @@ individual_forder <- function(curve_set,
       erlhistn <- 6
     }
     partial_forder <- individual_partial_forder(curve_set, measure, alternative, erlhistn)
-    switch(measure,
-           rank = {
-             distance <- partial_forder
-           },
-           erl = {
-             if(is.vector(partial_forder)) partial_forder <- matrix(partial_forder, nrow=1) # the case nr == 1
-             distance <- rank_matrix_cols(partial_forder)
-           },
-           cont = {
-             distance <- partial_forder
-           },
-           area = {
-             distance <- partial_forder[1,] - partial_forder[2,] / nr
-           })
-    distance <- scale_ranks(distance, measure)
+    distance <- distance_from_partial_forder(measure, partial_forder, nr)
   }
   names(distance) <- curve_set_funcnames(curve_set)
   list(distance = distance, measure = measure)

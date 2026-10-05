@@ -6,6 +6,15 @@ get_alternative <- function(global_envelope) {
   attr(global_envelope, "alternative")
 }
 
+is_valid_envelope <- function(type, class) {
+  types <- character()
+  if(class %in% c("any", "singlestep"))
+    types <- c(types, c("rank", "erl", "cont", "area", "qdir", "st", "unscaled"))
+  if(class %in% c("any", "stepdown"))
+    types <- c(types, c("srank", "serl", "scont", "sarea", "sqdir", "sunscaled"))
+  type %in% types
+}
+
 # It should be:
 # small_significant=TRUE for 'rank', 'erl', 'cont' and 'area' -> ordering decreasing
 # small_significant=FALSE for 'qdir', 'st', 'unscaled' -> ordering increasing (decreasing=FALSE)
@@ -80,7 +89,7 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   if(!is.numeric(coverage) || any(coverage <= 0 | coverage > 1)) stop("Unreasonable value of coverage.")
   coverage <- sort(coverage, decreasing = TRUE)
   alpha <- 1 - coverage
-  if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
+  if(!is_valid_envelope(type, "singlestep"))
     stop("No such type for global envelope.")
   alternative <- match.arg(alternative)
   small_significant <- TRUE
@@ -210,6 +219,27 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
   res
 }
 
+individual_stepdown_envelope <- function(curve_set, type, alpha, alternative, probs) {
+  nf <- dim(curve_set$funcs)[2]
+  envtype <- "functional"
+  if(type == "sqdir") envtype <- "qdir"
+  if(type == "sunscaled") envtype <- "unscaled"
+  picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
+  curve_set <- as.curve_set(curve_set, allfinite=TRUE)
+
+  res0 <- internal_stepdown_envelope(curve_set, sub("^s", "", type), envtype, alpha, alternative)
+  T_0 <- get_T_0(curve_set, central="mean")
+  pvalue <- res0$padj
+  res <- make_envelope_object(type, curve_set, res0$lo, res0$hi, T_0,
+                              picked_attr, isenvelope=FALSE,
+                              Malpha=NULL, alpha, distance=NULL)#rep(NA,nf))
+  res$pvalue <- pvalue
+  attr(res, "call") <- match.call()
+  attr(res, "p") <- min(pvalue)
+  res
+  #attr(res, "padj0") <- res0$padj_not_correct
+}
+
 # Functionality for global envelope tests based on a curve set (individual central region + p-values)
 individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.05,
                                             alternative = c("two.sided", "less", "greater"),
@@ -221,53 +251,63 @@ individual_global_envelope_test <- function(curve_set, type = "erl", alpha = 0.0
   if(!curve_set_is1obs(tmp))
     stop("The curve_set does not contain one observed function. Testing does not make sense.\n Did you want to construct a central region of your data? See the function central_region.")
   if(!is.numeric(alpha) || any(alpha < 0 | alpha >= 1)) stop("Unreasonable value of alpha.")
-  res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
-                                   alternative=alternative,
-                                   probs=probs, quantile.type=quantile.type,
-                                   central=central)
-  # The type of the p-value
-  possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
-  if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!")
 
-  # Measures for functional ordering
-  distance <- attr(res, "M")
+  if(is_valid_envelope(type, "stepdown")) {
+    res <- individual_stepdown_envelope(curve_set, type = type, alpha = alpha,
+                                        alternative = alternative,
+                                        probs = probs)
+    p <- attr(res, "p")
+    stopifnot(!is.null(p))
+  }
+  else {
+    res <- individual_central_region(curve_set, type=type, coverage=1-alpha,
+                                     alternative=alternative,
+                                     probs=probs, quantile.type=quantile.type,
+                                     central=central)
+    # The type of the p-value
+    possible_ties <- c('midrank', 'random', 'conservative', 'liberal', 'erl')
+    if(!(ties %in% possible_ties)) stop("Unreasonable ties argument!")
 
-  #-- Calculate the p-values
-  switch(type,
-         rank = {
-           u <- -distance
-           #-- p-interval
-           p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
-           p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
-           #-- unique p-value
-           if(ties == "erl") {
-             distance_lexo <- forder(curve_set, measure="erl", alternative=alternative)
-             u_lexo <- -distance_lexo
+    # Measures for functional ordering
+    distance <- attr(res, "M")
+
+    #-- Calculate the p-values
+    switch(type,
+           rank = {
+             u <- -distance
+             #-- p-interval
+             p_low <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='liberal')
+             p_upp <- estimate_p_value(x=u[1], sim_vec=u[-1], ties='conservative')
+             #-- unique p-value
+             if(ties == "erl") {
+               distance_lexo <- forder(curve_set, measure="erl", alternative=alternative)
+               u_lexo <- -distance_lexo
+               p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
+             }
+             else p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties)
+           },
+           erl = {
+             u_lexo <- -distance
              p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
-           }
-           else p <- estimate_p_value(x=u[1], sim_vec=u[-1], ties=ties)
-         },
-         erl = {
-           u_lexo <- -distance
-           p <- estimate_p_value(x=u_lexo[1], sim_vec=u_lexo[-1], ties="conservative")
-         },
-         cont = {
-           u_cont <- -distance
-           p <- estimate_p_value(x=u_cont[1], sim_vec=u_cont[-1], ties="conservative")
-         },
-         area = {
-           u_area <- -distance
-           p <- estimate_p_value(x=u_area[1], sim_vec=u_area[-1], ties="conservative")
-         },
-         qdir = {
-           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-         },
-         st = {
-           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-         },
-         unscaled = {
-           p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
-         })
+           },
+           cont = {
+             u_cont <- -distance
+             p <- estimate_p_value(x=u_cont[1], sim_vec=u_cont[-1], ties="conservative")
+           },
+           area = {
+             u_area <- -distance
+             p <- estimate_p_value(x=u_area[1], sim_vec=u_area[-1], ties="conservative")
+           },
+           qdir = {
+             p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+           },
+           st = {
+             p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+           },
+           unscaled = {
+             p <- estimate_p_value(x=distance[1], sim_vec=distance[-1])
+           })
+  }
 
   # Change the "method" attribute
   attr(res, "method") <- paste(attr(res, "method"), " test", sep="")
@@ -838,11 +878,15 @@ fwer_envelope <- function(curve_sets, type = "erl", alpha = 0.05,
   if(!is_a_single_curveset(curve_sets)) {
     if(length(curve_sets) > 1) { # Combined test
       if(!(nstep %in% c(1,2))) stop("Invalid number of steps (nstep) for combining. Should be 1 or 2.")
-      if(nstep == 2) # Two-step combining procedure
+      if(nstep == 2) { # Two-step combining procedure
+        if(is_valid_envelope(type, "stepdown")) {
+          stop("Two-step combining procedure is not available for step-down envelopes.")
+        }
         return(combined_CR_or_GET(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
                                   alternative=alternative,
                                   probs=probs, quantile.type=quantile.type,
                                   central=central, ...))
+      }
       else # One-step combining procedure
         return(combined_CR_or_GET_1step(curve_sets, CR_or_GET="GET", type=type, coverage=1-alpha,
                                         alternative=alternative, ties=ties,
@@ -1190,7 +1234,7 @@ global_envelope_test <- function(curve_sets, typeone = c("fwer", "fdr"),
   typeone <- match.arg(typeone)
   if(typeone == "fwer") {
     if(!missing(algorithm)) warning("The algorithm cannot be specified under the FWER control.")
-    if(!(type %in% c("rank", "erl", "cont", "area", "qdir", "st", "unscaled")))
+    if(!is_valid_envelope(type, "any"))
       stop("No such type for global envelope.")
   }
   else {

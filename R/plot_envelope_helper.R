@@ -92,7 +92,7 @@ env_main_default <- function(x, digits=3, alternative=get_alternative(x)) {
 }
 
 # Labels for n plots or for a dotplot style envelope plot
-default_labels <- function(x, labels) {
+default_labels <- function(x, labels, digits=3) {
   if(inherits(x, "list")) { # Case: n plots
     n <- length(x)
     # Define labels
@@ -129,6 +129,9 @@ default_labels <- function(x, labels) {
       else
         labels <- NULL
     }
+  }
+  if("pvalue" %in% names(x[[1]])) {
+    labels <- paste0(labels, ", p=", sapply(x, function(x) round(min(x$pvalue), digits=digits)))
   }
   labels
 }
