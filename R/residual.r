@@ -1,21 +1,32 @@
 #' Residual form of the functions
 #'
-#' Subtract the theoretical function \eqn{S_{H_0}}{S_{H_0}} or the mean of the functions
+#' Subtract the theoretical function \eqn{S_{H_0}}{S_{H_0}} or the mean (or median) of the functions
 #' in the curve set. If the \code{curve_set} object contains already residuals
 #' \eqn{T_i(r) - T_0(r)}{T_i(r) - T_0(r)}, \code{use_theo} ignored and the same object returned.
 #'
 #'
-#' The mean of the functions in the \code{curve_set} is the mean of all functions.
+#' The mean of the functions in the \code{curve_set} is the pointwise mean of all functions.
+#' The median of the functions in the \code{curve_set} is the pointwise median of all functions.
 #' If \code{use_theo = TRUE}, but the component \code{theo} does not exist in the
-#' \code{curve_set}, the mean of the functions is used silently.
+#' \code{curve_set}, the mean/median of the functions is used silently.
 #' @inheritParams crop_curves
 #' @param use_theo Whether to use the theoretical summary function or the
-#' mean of the functions in the curve_set.
+#' central of the functions in the curve_set.
+#' @param central Either "mean" (default) or "median". If the curve sets do not contain
+#' the component \code{theo} for the theoretical central function, or \code{use_theo=FALSE},
+#' then the central function is calculated either as the mean or median of functions
+#' provided in the curve sets. Default is the mean.
+#' @param ... Additional parameters passed to \code{\link[base]{rowMeans}} if
+#' \code{central="mean"} or \code{\link[stats]{median}} if \code{central="median"}.
 #' @return A curve set object containing residual summary functions. theo is
 #'   no longer included.
 #' @export
-residual <- function(curve_set, use_theo = TRUE) {
+residual <- function(curve_set, use_theo = TRUE, central=c("mean", "median"), ...) {
     curve_set <- convert_envelope(curve_set)
+    central <- match.arg(central)
+    switch(central,
+           mean = { centralf <- curve_set_mean },
+           median = { centralf <- curve_set_median })
 
     if(curve_set_isresidual(curve_set)) {
         # "The curve_set object contains already residuals T_i(r) - T_0(r), use_theo ignored.
@@ -35,7 +46,7 @@ residual <- function(curve_set, use_theo = TRUE) {
         }
 
         if(use_theo) mid <- theo
-        else mid <- curve_set_mean(curve_set)
+        else mid <- centralf(curve_set, ...)
 
         curve_set[['funcs']] <- curve_set[['funcs']] - mid
         curve_set[['is_residual']] <- TRUE

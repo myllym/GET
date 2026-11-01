@@ -108,16 +108,17 @@
 deviation_test <- function(curve_set, r_min = NULL, r_max = NULL,
         use_theo = TRUE, scaling = 'qdir', measure = 'max',
         alternative = c("two.sided", "less", "greater"),
-        savedevs=FALSE) {
+        savedevs=FALSE, central = c("mean", "median")) {
   alternative <- match.arg(alternative)
+  central <- match.arg(central)
   curve_set <- crop_curves(curve_set, r_min = r_min, r_max = r_max)
   if(alternative %in% c("greater", "less")) {
     curve_set[['theo']] <- 0
     use_theo <- TRUE
   }
-  curve_set <- residual(curve_set, use_theo = use_theo)
-  curve_set <- scale_curves(curve_set, scaling = scaling)
-  devs <- deviation(curve_set, measure = measure, alternative = alternative)
+  curve_set <- residual(curve_set, use_theo=use_theo, central=central)
+  curve_set <- scale_curves(curve_set, scaling=scaling)
+  devs <- deviation(curve_set, measure=measure, alternative=alternative)
   p <- estimate_p_value(devs[1], devs[-1])
   if(savedevs) res <- list(p=p, devs=devs, call=match.call())
   else res <- list(p=p, call=match.call())

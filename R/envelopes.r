@@ -96,9 +96,12 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
     central <- "median"
     warning("Invalid option fiven for central. Using central = median.")
   }
-  if(central == "median" && type %in% c("qdir", "st", "unscaled")) {
-    central <- "mean"
-    warning("Using the mean as the central function. qdir, st and unscaled envelopes are defined with the mean.")
+  if(central == "median" && type %in% c("st", "unscaled")) {
+      warning(paste0("Setting the median as the central function, even though this may seem not very sensible with the ",
+                     type, " envelope. Consider setting central = \"mean\".\n"))
+  }
+  if(central == "median" && type == "qdir") {
+    message(paste0("Note setting the median as the central function for the ", type, " envelope.\n"))
   }
   picked_attr <- pick_attributes(curve_set, alternative=alternative) # saving for attributes / plotting purposes
   if(isenvelope & length(alpha)>1) {
@@ -124,7 +127,8 @@ individual_central_region <- function(curve_set, type = "erl", coverage = 0.50,
            scaling <- "none"
          })
   distance <- forder(curve_set, measure=measure, scaling=scaling,
-                     alternative=alternative, probs=probs, quantile.type=quantile.type)
+                     alternative=alternative, probs=probs, quantile.type=quantile.type,
+                     central=central)
 
   all_curves <- data_and_sim_curves(curve_set) # all the functions
   Nfunc <- length(distance) # Number of functions
@@ -675,9 +679,12 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' @param coverage A number between 0 and 1. The 100*coverage\% central region will be calculated.
 #' A vector of values can also be provided, leading to the corresponding number of central regions.
 #' @param central Either "mean" or "median". If the curve sets do not contain the component
-#' \code{theo} for the theoretical central function, then the central function (used for plotting only)
+#' \code{theo} for the theoretical central function, then the central function
 #' is calculated either as the mean or median of functions provided in the curve sets.
-#' For 'qdir', 'st' and 'unscaled' only the mean is allowed as an option, due to their definition.
+#' This central function is used for plotting.
+#' For 'qdir', 'st' and 'unscaled', it also affects the computation of the measure.
+#' Note that all these measures were originally defined with the mean, and for 'st' and 'unscaled'
+#' the median may not be that sensible.
 #' @param nstep 1 or 2 for how to contruct a combined global envelope if list of curve sets
 #' is provided. 2 (default) for a two-step combining procedure, 1 for one-step.
 #' @param ... Ignored.
@@ -694,9 +701,10 @@ plot.combined_global_envelope <- function(x, labels, scales, sign.col = "red",
 #' \item hi = the upper envelope based on the simulated functions;
 #' in case of a vector of coverage values, several 'lo' exist with names paste0("hi.", 100*coverage)
 #' \item central = If the \code{curve_set} (or \code{envelope} object) contains a theoretical curve,
-#'       then this function is used as the central curve and returned in this component.
-#'       Otherwise, the central curve is the mean or median (according to the argument \code{central})
-#'       of the test functions T_i(r), i=2, ..., s+1. Used for visualization only.
+#' then this function is used as the central curve and returned in this component.
+#' Otherwise, the central curve is the mean or median (according to the argument \code{central})
+#' of the test functions T_i(r), i=2, ..., s+1. Used for visualization and
+#' also for computing 'qdir', 'st' and 'unscaled' envelopes.
 #' }
 #' and potentially additionally
 #' \itemize{

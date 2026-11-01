@@ -134,7 +134,8 @@ individual_forder <- function(curve_set,
                               measure = 'erl', scaling = 'qdir',
                               alternative=c("two.sided", "less", "greater"),
                               use_theo = TRUE,
-                              probs = c(0.025, 0.975), quantile.type = 7) {
+                              probs = c(0.025, 0.975), quantile.type = 7,
+                              central = "mean") {
   possible_measures <- c('rank', 'erl', 'cont', 'area', 'max', 'int', 'int2')
   if(!(measure %in% possible_measures)) stop("Unreasonable measure argument!")
   alternative <- match.arg(alternative)
@@ -146,7 +147,7 @@ individual_forder <- function(curve_set,
       curve_set[['theo']] <- 0
       use_theo <- TRUE
     }
-    curve_set <- residual(curve_set, use_theo = use_theo)
+    curve_set <- residual(curve_set, use_theo = use_theo, central = central)
     curve_set <- scale_curves(curve_set, scaling = scaling, probs = probs, type = quantile.type)
     distance <- deviation(curve_set, measure = measure, alternative = alternative)
   }
@@ -358,6 +359,10 @@ combined_forder <- function(curve_sets, ...) {
 #'   The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 2017).
 #' @param quantile.type As type argument of \code{\link[stats]{quantile}}, how to
 #' calculate quantiles for 'q' or 'qdir'.
+#' @param central Either "mean" (default) or "median". If the curve sets do not contain the component theo
+#' for the theoretical central function, then the central function is calculated either as the
+#' mean or median of functions provided in the curve sets. For 'st' and 'unscaled' only the mean
+#' may seem sensible, while for 'qdir' both options. Yet, all combinations are allowed.
 #' @export
 #' @seealso \code{\link{partial_forder}}
 #' @references
@@ -399,14 +404,16 @@ combined_forder <- function(curve_sets, ...) {
 #' }
 forder <- function(curve_sets, measure = 'erl', scaling = 'qdir',
                    alternative=c("two.sided", "less", "greater"),
-                   use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7) {
+                   use_theo = TRUE, probs = c(0.025, 0.975), quantile.type = 7,
+                   central = "mean") {
   if(!is_a_single_curveset(curve_sets)) {
     if(length(curve_sets) > 1) {
       res <- combined_forder(curve_sets,
                              measure = measure, scaling = scaling,
                              alternative = alternative,
                              use_theo = use_theo,
-                             probs = probs, quantile.type = quantile.type)
+                             probs = probs, quantile.type = quantile.type,
+                             central = central)
       return(res$distance)
     }
     else if(length(curve_sets) == 1)
@@ -418,6 +425,7 @@ forder <- function(curve_sets, measure = 'erl', scaling = 'qdir',
                            measure = measure, scaling = scaling,
                            alternative = alternative,
                            use_theo = use_theo,
-                           probs = probs, quantile.type = quantile.type)
+                           probs = probs, quantile.type = quantile.type,
+                           central = central)
   return(res$distance)
 }
