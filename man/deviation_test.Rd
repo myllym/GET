@@ -12,7 +12,8 @@ deviation_test(
   scaling = "qdir",
   measure = "max",
   alternative = c("two.sided", "less", "greater"),
-  savedevs = FALSE
+  savedevs = FALSE,
+  central = c("mean", "median")
 )
 }
 \arguments{
@@ -24,7 +25,7 @@ residual().}
 \item{r_max}{The maximum radius to include.}
 
 \item{use_theo}{Whether to use the theoretical summary function or the
-mean of the functions in the curve_set.}
+central of the functions in the curve_set.}
 
 \item{scaling}{The name of the scaling to use. Options include 'none',
 'q', 'qdir' and 'st'. 'qdir' is default.}
@@ -37,6 +38,11 @@ when \code{measure = 'max'}; otherwise ignored. Must be one of the following:
 "two.sided" (default), "less" or "greater".}
 
 \item{savedevs}{Logical. Should the global rank values k_i, i=1,...,nsim+1 be returned? Default: FALSE.}
+
+\item{central}{Either "mean" (default) or "median". If the curve sets do not contain
+the component \code{theo} for the theoretical central function, or \code{use_theo=FALSE},
+then the central function is calculated either as the mean or median of functions
+provided in the curve sets. Default is the mean.}
 }
 \value{
 If 'savedevs=FALSE' (default), the p-value is returned.

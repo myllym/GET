@@ -610,9 +610,13 @@ curve_set_funcs_no1obs <- function(curve_set) {
   else curve_set[['funcs']]
 }
 
-# A helper function to obtain the mean of functions in curve_set.
+# Pointwise mean of a curve_set.
 #
-# Calculate the mean of all the functions in the curve_set.
+# Calculated the pointwise (elementwise) mean of all the functions in a \code{curve_set}.
+#
+# @param curve_set A 'curve_set' object.
+# @param ... Additional parameters passed to \code{\link[stats]{rowMeans}}.
+# @return A vector containing the pointwise mean.
 curve_set_mean <- function(curve_set, ...) {
   rowMeans(curve_set[['funcs']], ...)
 }
@@ -625,7 +629,13 @@ applyr <- function(curve_set, f, ...) {
   sapply(1:nrow(funcs), function(i) { f(funcs[i,], ...) })
 }
 
-# A helper function to obtain the median of all the functions in curve_set.
+# Pointwise median of a curve_set.
+#
+# Calculated the pointwise (elementwise) median of all the functions in a \code{curve_set}.
+#
+# @param curve_set A 'curve_set' object.
+# @param ... Additional parameters passed to \code{\link[stats]{median}}.
+# @return A vector containing the pointwise median.
 #' @importFrom stats median
 curve_set_median <- function(curve_set, ...) {
   applyr(curve_set, median, ...)

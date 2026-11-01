@@ -11,7 +11,8 @@ forder(
   alternative = c("two.sided", "less", "greater"),
   use_theo = TRUE,
   probs = c(0.025, 0.975),
-  quantile.type = 7
+  quantile.type = 7,
+  central = "mean"
 )
 }
 \arguments{
@@ -40,6 +41,11 @@ The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 20
 
 \item{quantile.type}{As type argument of \code{\link[stats]{quantile}}, how to
 calculate quantiles for 'q' or 'qdir'.}
+
+\item{central}{Either "mean" (default) or "median". If the curve sets do not contain the component theo
+for the theoretical central function, then the central function is calculated either as the
+mean or median of functions provided in the curve sets. For 'st' and 'unscaled' only the mean
+may seem sensible, while for 'qdir' both options. Yet, all combinations are allowed.}
 }
 \value{
 A vector containing one of the above mentioned measures k for each of the functions

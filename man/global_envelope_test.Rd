@@ -67,10 +67,10 @@ The default values are 0.025 and 0.975, suggested by Myllymäki et al. (2015, 20
 \item{quantile.type}{As type argument of \code{\link[stats]{quantile}}, how to
 calculate quantiles for 'q' or 'qdir'.}
 
-\item{central}{Either "mean" or "median". If the curve sets do not contain the component
-\code{theo} for the theoretical central function, then the central function (used for plotting only)
-is calculated either as the mean or median of functions provided in the curve sets.
-For 'qdir', 'st' and 'unscaled' only the mean is allowed as an option, due to their definition.}
+\item{central}{Either "mean" (default) or "median". If the curve sets do not contain the component theo
+for the theoretical central function, then the central function is calculated either as the
+mean or median of functions provided in the curve sets. For 'st' and 'unscaled' only the mean
+may seem sensible, while for 'qdir' both options. Yet, all combinations are allowed.}
 
 \item{nstep}{1 or 2 for how to contruct a combined global envelope if list of curve sets
 is provided. 2 (default) for a two-step combining procedure, 1 for one-step.}
