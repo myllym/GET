@@ -361,7 +361,9 @@ combined_forder <- function(curve_sets, ...) {
 #' calculate quantiles for 'q' or 'qdir'.
 #' @param central Either "mean" (default) or "median". If the curve sets do not contain the component theo
 #' for the theoretical central function, then the central function is calculated either as the
-#' mean or median of functions provided in the curve sets. For 'st' and 'unscaled' only the mean
+#' mean or median of functions provided in the curve sets. This concerns only the cases
+#' \code{measure = "max"} and \code{scaling} is either 'qdir', 'st', and 'unscaled'.
+#' For 'st' and 'unscaled' only the mean
 #' may seem sensible, while for 'qdir' both options. Yet, all combinations are allowed.
 #' @export
 #' @seealso \code{\link{partial_forder}}
